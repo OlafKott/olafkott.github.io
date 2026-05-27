@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Kann-Liste: Matrizenrechnung – Jahrgang 12 (BG)</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 10mm 10mm 10mm 10mm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 10pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  /* ---------- KOPFBEREICH ---------- */
+  .kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 6mm;
+    margin-bottom: 6mm;
+  }
+  .kopf-links { flex: 1; }
+  .kopf-titel {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #C8102E;
+    margin: 0 0 2mm 0;
+    letter-spacing: 0.3pt;
+  }
+  .kopf-untertitel {
+    font-size: 11pt;
+    color: #444;
+    margin: 0 0 4mm 0;
+    font-style: italic;
+  }
+  .kopf-felder {
+    display: flex;
+    gap: 8mm;
+    font-size: 9.5pt;
+  }
+  .kopf-feld { border-bottom: 1px solid #999; min-width: 50mm; padding: 0 0 1mm 0; }
+  .kopf-feld-label { font-weight: bold; color: #555; }
+  .kopf-rechts {
+    text-align: right;
+    margin-left: 8mm;
+  }
+  .kopf-logo {
+    height: 22mm;
+    margin-bottom: 3mm;
+  }
+  .kopf-fach {
+    font-size: 9pt;
+    color: #666;
+  }
+
+  /* ---------- ANLEITUNG ---------- */
+  .anleitung {
+    background: #fdf2f3;
+    border-left: 4px solid #C8102E;
+    padding: 3mm 4mm;
+    font-size: 9pt;
+    margin-bottom: 5mm;
+    line-height: 1.45;
+  }
+  .anleitung-titel {
+    font-weight: bold;
+    color: #C8102E;
+    margin-bottom: 1mm;
+  }
+  .ampel-legende {
+    display: inline-flex;
+    gap: 4mm;
+    margin-left: 3mm;
+  }
+  .ampel-eintrag { display: inline-flex; align-items: center; gap: 1mm; }
+  .ampel-kreis {
+    display: inline-block;
+    width: 3mm; height: 3mm;
+    border-radius: 50%;
+    border: 1px solid #555;
+  }
+
+  /* ---------- BEREICHS-HEADER ---------- */
+  .bereich-titel {
+    background: #C8102E;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12pt;
+    padding: 2mm 4mm;
+    margin: 6mm 0 0 0;
+    page-break-after: avoid;
+    letter-spacing: 0.3pt;
+  }
+  .bereich-titel:first-of-type { margin-top: 0; }
+
+  /* ---------- TABELLE ---------- */
+  table.kannliste {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 0;
+  }
+  table.kannliste th {
+    background: #f5e6e8;
+    color: #C8102E;
+    font-weight: bold;
+    text-align: left;
+    padding: 2mm 2mm;
+    border: 1px solid #C8102E;
+    font-size: 9pt;
+    vertical-align: middle;
+  }
+  table.kannliste th.th-ampel-qr {
+    text-align: center;
+    line-height: 1.25;
+  }
+  table.kannliste th.th-ampel-qr div + div {
+    margin-top: 0.5mm;
+  }
+  table.kannliste td {
+    border: 1px solid #c4a8ad;
+    padding: 2.5mm 2mm;
+    vertical-align: top;
+    font-size: 9pt;
+    line-height: 1.4;
+    page-break-inside: avoid;
+  }
+
+  /* Spaltenbreiten (A4 hoch = 190 mm nutzbar) */
+  col.col-nr        { width: 9mm; }
+  col.col-kann      { width: 42mm; }
+  col.col-beispiel  { width: 60mm; }
+  col.col-formel    { width: 60mm; }
+  col.col-ampel-qr  { width: 19mm; }
+
+  /* Zell-Inhalte */
+  .nr {
+    font-weight: bold;
+    color: #C8102E;
+    text-align: center;
+    font-size: 9.5pt;
+  }
+  .kann-text { }
+  .kann-text b, .kann-text strong { font-weight: bold; }
+
+  .beispiel {
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-size: 9pt;
+  }
+  .beispiel-zeile { margin: 0.3mm 0; }
+
+  .formel {
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-size: 9pt;
+  }
+  .formel ol {
+    margin: 0;
+    padding-left: 4mm;
+  }
+  .formel ol li {
+    margin: 0.5mm 0;
+  }
+  .formel p { margin: 0.5mm 0; }
+
+  /* Kombinierte Ampel-QR-Zelle (Ampel oben, QR drunter) */
+  .ampel-qr-zelle {
+    text-align: center;
+    vertical-align: middle;
+    padding: 2mm 1mm !important;
+  }
+  .ampel-set {
+    display: flex;
+    justify-content: center;
+    gap: 1.5mm;
+    margin-bottom: 2mm;
+  }
+  .ampel-feld {
+    width: 5mm; height: 5mm;
+    border-radius: 50%;
+    border: 1.2px solid #333;
+    background: #fff;
+  }
+  .ampel-feld.gruen  { border-color: #2e7d32; }
+  .ampel-feld.gelb   { border-color: #c79100; }
+  .ampel-feld.rot    { border-color: #c62828; }
+
+  /* QR-Codes — echte Bilder */
+  .qr-box {
+    display: inline-block;
+    width: 14mm; height: 14mm;
+    margin: 0 auto 0.5mm auto;
+    padding: 0;
+    line-height: 0;
+  }
+  .qr-box img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .qr-label {
+    font-size: 7pt;
+    color: #666;
+    display: block;
+    margin-top: 0.5mm;
+  }
+
+  /* Matrix-Schriftbild */
+  .var { font-style: italic; }
+  .matrix {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 1mm;
+    border-left: 1.2px solid #1a1a1a;
+    border-right: 1.2px solid #1a1a1a;
+    margin: 0 0.5mm;
+  }
+  .matrix table {
+    border-collapse: collapse;
+    margin: 0;
+  }
+  .matrix td {
+    border: none !important;
+    padding: 0.3mm 1.5mm !important;
+    text-align: center;
+    font-size: 9pt;
+    vertical-align: middle;
+  }
+  .frac {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 8.5pt;
+    line-height: 1.1;
+  }
+  .frac > .z { display: block; border-bottom: 1px solid #1a1a1a; padding: 0 1mm; }
+  .frac > .n { display: block; padding: 0 1mm; }
+
+  /* TR-Eingaben (CASIO) – grün hervorgehoben */
+  .tr-box {
+    display: inline-block;
+    background: #e8f5e9;
+    border: 1px solid #2e7d32;
+    color: #1b5e20;
+    padding: 0.5mm 1.5mm;
+    margin: 0.3mm 0;
+    border-radius: 1mm;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 8.5pt;
+    line-height: 1.4;
+  }
+  .tr-box b { font-weight: bold; color: #1b5e20; }
+
+  /* Formel-Box – golden hervorgehoben */
+  .formel-box {
+    display: block;
+    background: #fff8e1;
+    border: 1px solid #c79100;
+    color: #6d4c00;
+    padding: 1.5mm 3mm;
+    margin: 1mm 0;
+    border-radius: 1mm;
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+    line-height: 1.4;
+  }
+  .formel-box .var { color: #6d4c00; font-style: italic; }
+  .formel-box sub, .formel-box sup { font-weight: bold; color: #6d4c00; }
+
+  /* Pfeil-Layout für Gauß-Block (Matrix → Stufenform) */
+  .gauss-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1mm;
+    margin: 1mm 0;
+  }
+  .gauss-pfeil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 8pt;
+    color: #555;
+    line-height: 1.1;
+    margin: 0.5mm 0;
+  }
+  .gauss-pfeil-text {
+    font-style: italic;
+    margin-bottom: 0.3mm;
+  }
+  .gauss-pfeil-symbol {
+    font-size: 14pt;
+    color: #C8102E;
+    line-height: 1;
+  }
+
+  /* Falksches Schema – mit echten Trennstrichen */
+  .falk {
+    display: inline-block;
+    margin: 1mm 0;
+  }
+  .falk table {
+    border-collapse: collapse;
+    margin: 0;
+  }
+  .falk td {
+    border: none !important;
+    padding: 0.5mm 2mm !important;
+    text-align: center;
+    font-size: 9pt;
+    vertical-align: middle;
+    min-width: 5mm;
+  }
+  /* Leere Ecke oben links: KEIN Trennstrich (weder horizontal noch vertikal) */
+  .falk td.ecke {
+    border: none !important;
+  }
+  /* Vertikaler Trennstrich zwischen A-Block und Produktblock */
+  .falk td.trenn-v { border-right: 1.5px solid #1a1a1a !important; }
+  /* Horizontaler Trennstrich zwischen B-Block und Produktblock */
+  .falk tr.trenn-h td.dat { border-bottom: 1.5px solid #1a1a1a !important; }
+
+  /* SVG-Container für Diagramme */
+  .diagramm-svg {
+    display: block;
+    margin: 1mm auto;
+  }
+
+  /* Hervorhebungen */
+  b, strong { font-weight: bold; }
+  em { font-style: italic; }
+
+  /* Druck-Verhalten */
+  @media print {
+    .bereich-titel { page-break-after: avoid; }
+    table.kannliste tr { page-break-inside: avoid; }
+  }
+
+  /* Hilfklassen */
+  .center { text-align: center; }
+  .small { font-size: 8.5pt; color: #555; }
+</style>
+</head>
+<body>
+
+<!-- ============== KOPFBEREICH ============== -->
+<div class="kopf">
+  <div class="kopf-links">
+    <h1 class="kopf-titel">Kann-Liste: Matrizenrechnung</h1>
+    <p class="kopf-untertitel">Selbsteinschätzung – Was kann ich schon? Was muss ich noch üben?</p>
+    <div class="kopf-felder">
+      <div class="kopf-feld"><span class="kopf-feld-label">Name:</span></div>
+      <div class="kopf-feld"><span class="kopf-feld-label">Klasse:</span></div>
+      <div class="kopf-feld"><span class="kopf-feld-label">Datum:</span></div>
+    </div>
+  </div>
+  <div class="kopf-rechts">
+    <img src="data:image/png;base64,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" alt="RWB Berufskolleg – Berufliches Gymnasium" class="kopf-logo">
+  </div>
+</div>
+
+<!-- ============== ANLEITUNG ============== -->
+<div class="anleitung" style="display: flex; gap: 6mm; align-items: stretch;">
+  <div style="flex: 1;">
+    <div class="anleitung-titel">So nutzt du diese Liste</div>
+    <p style="margin: 0 0 1.5mm 0;">Lies dir jede Kompetenz („Ich kann …") in Ruhe durch und schätze ehrlich ein, wie sicher du dich fühlst. Markiere in der Ampel-Spalte:</p>
+    <p style="margin: 0 0 1.5mm 0;">
+      <span class="ampel-legende" style="margin-left: 0;">
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#2e7d32;"></span><b style="color:#2e7d32;">grün</b> = sicher</span>
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#c79100;"></span><b style="color:#c79100;">gelb</b> = unsicher</span>
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#c62828;"></span><b style="color:#c62828;">rot</b> = noch nicht</span>
+      </span>
+    </p>
+    <p style="margin: 0;">Bei <b>gelb</b> und <b>rot</b>: Übungsaufgaben über den QR-Code in der letzten Spalte aufrufen und gezielt nacharbeiten.</p>
+  </div>
+  <div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-left: 4mm; border-left: 1px solid #e8c5c8;">
+    <div style="font-weight: bold; color: #C8102E; font-size: 9pt; margin-bottom: 1.5mm; text-align: center;">Übersicht &amp;<br>Schnellzugriff</div>
+    <div class="qr-box" style="width: 22mm; height: 22mm;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAAC3UlEQVR4nO2cTYrjMBBGX40EWSowB+ijODfoIw1zM/souYG9DMh8s5DkJDN0moZ0xoKqhbGjtygo6kelUkx8RaYfX8LBeeed/1Z+sSqnJWKn8vtqAOWzrcfX6OP8k/kgSRLFqksEloOYzEwjwCBJml+lj/PP5qtzEsR0hPIgZZgsUlz89EJ9nH8WH28/UgbSDINW+3vxNfo4/438EpHOEbMjQJKqzf+TPs4/iZeUgZSxE8AwgzTXIguSVDLxTvV3/hG/lvK4llYALAfZaTnIfp0jTGZWfXqP+jv/sURI1xbHxSBdDFJG01uG6S1z2wLZm/7OfyLSHFrwJag9QGOLytJcFzTuTX/nP+VTxk5J0phyTb3jlolLkcVqDMqv0cf5J/IRlmN5teEcsyBjcBAshlhiLaAnC3l/+jv/iZTe1ZhyLaKHOYhBuQbuuioxzB6f++M3q0KpqrYg3XZFQfUtye3bHY80Qyuj2La+QaXrPEKzudy+/fGtOE4tNJO2swRq9C6lldu3R37bHwVdPblVzdXwzbE9//bH3+bf4erJxWulO879tz++5t+bJKxMOw7e4rP3N3rlmy1Tc9gShq8F803jw+3bH18ddrzbC7W1lpM9/3bLt7xK2xAVW5a3UB9jypQSzO3bGb+1qVrDqvaq4Hq+3xKz11f98bdW3WY16nZJ7bOEcPffDvn7XlU7GtyCdD01Inj/uV9+tTohmWqlxXQM0lgmZetMh8/ndMnXvKpWWrV2pe4OkbbGpftvf/z1/gK00WeAyQ5lHLoslJprh/o7/0AiEEodZRCyDW33q+l9xgDEsk1S7k1/5x9Lya5WjbyaYI0M4xoZzgb1JlLIsPz0+Y3O+XY/BYL0+1h/1ZguPh/bJ39/P+ViKqeCZSar+HQsFxum0yv0cf65fLHv3SXvtebk6X0GCDIAe40+zj+f//f+wjCvVgrmyeJdO2uP+jv/sZj/P4PzznfL/wGwVTts1rhQMAAAAABJRU5ErkJggg==" alt="QR Übersicht aller Übungen"></div>
+    <div style="font-size: 7.5pt; color: #666; margin-top: 1mm; text-align: center;">Alle Übungen</div>
+  </div>
+</div>
+<div class="bereich-titel">1. Lineare Gleichungssysteme (LGS)</div>
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center th-ampel-qr"><div>🟢 🟡 🔴</div><div>Übung</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="nr">1.1</td>
+      <td class="kann-text">… aus vorgegebenen Punkten eine <b>Funktionsgleichung über ein LGS aufstellen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Quadratische Funktion durch <span class="var">P</span><sub>1</sub>(0|1), <span class="var">P</span><sub>2</sub>(1|2), <span class="var">P</span><sub>3</sub>(2|7)</div><div class="beispiel-zeile"><b>Ansatz:</b> <span class="var">f</span>(<span class="var">x</span>) = <span class="var">a</span><span class="var">x</span>² + <span class="var">b</span><span class="var">x</span> + <span class="var">c</span></div><div class="beispiel-zeile"><span class="var">P</span><sub>1</sub>: 0<span class="var">a</span> + 0<span class="var">b</span> + <span class="var">c</span> = 1</div><div class="beispiel-zeile"><span class="var">P</span><sub>2</sub>: 1<span class="var">a</span> + 1<span class="var">b</span> + <span class="var">c</span> = 2</div><div class="beispiel-zeile"><span class="var">P</span><sub>3</sub>: 4<span class="var">a</span> + 2<span class="var">b</span> + <span class="var">c</span> = 7</div><div class="beispiel-zeile small">→ Lösung in 1.2.</div></td>
+      <td class="formel"><ol><li><b>Ansatz</b> der Funktion wählen (Grad festlegen).</li><li>Jeden <b>Punkt einsetzen</b> → eine Gleichung pro Punkt.</li><li><b>LGS</b> aufstellen und lösen.</li><li>Lösungen in den Funktionsterm einsetzen.</li></ol><p class="small">Anzahl der Gleichungen muss zur Anzahl der Unbekannten passen.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADNklEQVR4nO2cUY7iMAyGf28j7WOQ9gAcpb3ZaG8WjsIN0kekIO+D7STwMKsBiZbgPiBo82ka1eP4t50S48fH6dfPGcAhhxx6U2glPRZciehwJZwogJY1AKcDAKwBNii8+vYcei0E5jwxMzNj5gL5QGTmFItcBTAxZmaWwWnnc3LoeUj/99ffjBMFMJ8DxDMssYATAPElyya359Bm0JX6b5EZWIn+Az30lxzaKxRufk0FAECIDAJC4dOxBMz5z0a359BGEDOLLYAWQJeJmS9EX+cAomONLTa5PYdeDF1FReiZNYC+zhZWSFB5DsCJiIgOr789h14Kgbsjm6RImERrmGeY+mGuNUaGqr4EzBj0G4CJgVig39qQnc/JoWcgaCoiT8ycAfUMdsGSEvVCdIsYHDIfEQswZ0A058yWnNJzBZyguSq3iKEhcwBAfeZmJZLClIxmsXjDc5ajQyI8NXrIdRExH6Fy067CfcTwkD34WB0Amt+YTGbcDdn5nBx6BqqRJUxhtMgyo3oGG5zcR3wAZJULcw/qKKTI9fcwiRJBJ0b3PyeHHoYsjoh9nrplqGT90Bz3xK4+x4eqU6hNEhlQCXoXPcQC+ekWMTJUVSVwk3YAzCxsXKr5bLeIkSGYMejjlnMpcm8WUu7KVXXsfE4OPQN1hXDxEWIg6PPZXUbT6xrDQ2YRkdlyVb24aM2WXeLSLWJkqFcTc22/1eKGffSDfdUYHDJjaLqiJbAjm/4w9elaY3yoq2BZFAnzFhk3tY7stc9PgG7yEZ1ZWNNUAjoP4pHl+FC/gwewtEPLUYgJYLpZOnY+J4eegTqLaGbRuiJsrQCAWgp1ixgfosU2f+qqES+kvdjx0u3qoWWT23Nog8iyhpcSSma7mlpYkeH5iA+AuqcvnVNiArGg06FqKq41PgWqkeXa7/mjZQ2gBW2f15U0wfkGc3LoUejmfQC5Nt3WtHVqe8O9P+IjIe2cOhaoj5CtfrBK19nfKDI4dO8j+iOW2pqt6W14HPEhkBVAW2TJzMniCE4riRjVMPQt5uTQ41DdGy7bwok4ybtFJpYd4Yt0SlxJX0v1BnNy6FGI/O2FDjnk0DfHPxwJRnMTovkRAAAAAElFTkSuQmCC" alt="QR Übung 1.1"></div>
+  <span class="qr-label">Übung 1.1</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">1.2</td>
+      <td class="kann-text">… ein <b>LGS</b> mit dem <b>Gauß-Verfahren</b> und mit dem <b>CASIO</b> lösen.</td>
+      <td class="beispiel"><div class="beispiel-zeile small">LGS aus 1.1 in Matrixschreibweise:</div><div class="gauss-flow"><span class="matrix"><table><tr><td>0</td><td>0</td><td>1</td><td>|</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td><td>|</td><td>2</td></tr><tr><td>4</td><td>2</td><td>1</td><td>|</td><td>7</td></tr></table></span><div class="gauss-pfeil"><div class="gauss-pfeil-text">Gauß-Verfahren&nbsp; oder&nbsp; CASIO</div><div class="gauss-pfeil-symbol">↓</div></div><span class="matrix"><table><tr><td>1</td><td>1</td><td>1</td><td>|</td><td>2</td></tr><tr><td>0</td><td>−2</td><td>−3</td><td>|</td><td>−1</td></tr><tr><td>0</td><td>0</td><td>1</td><td>|</td><td>1</td></tr></table></span></div><div class="beispiel-zeile small">Stufenform → <b>Rückwärtsrechnung</b>:</div><div class="beispiel-zeile"><span class="var">c</span> = 1; &nbsp; −2<span class="var">b</span> − 3 = −1 → <span class="var">b</span> = −1; &nbsp; <span class="var">a</span> − 1 + 1 = 2 → <span class="var">a</span> = 2</div><div class="beispiel-zeile">→ <b><span class="var">f</span>(<span class="var">x</span>) = 2<span class="var">x</span>² − <span class="var">x</span> + 1</b></div></td>
+      <td class="formel"><p><b>Gauß-Verfahren:</b></p><ol><li>Erweiterte Koeffizientenmatrix aufstellen.</li><li>Durch geschicktes <b>Zeilenumformen</b> (Addieren, Subtrahieren, mit Zahl multiplizieren, Tauschen) Nullen unter der Diagonalen erzeugen.</li><li><b>Stufenform</b> erreichen, dann von unten nach oben <b>rückwärts rechnen</b>.</li></ol><p><b>CASIO:</b></p><div class="tr-box">Menü → <b>Gleichung</b> → <b>Simult. Gleichung</b><br>Anzahl Unbekannte wählen (2/3/4)<br>Koeffizienten und rechte Seite eingeben<br>EXE</div></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADZElEQVR4nO2cwW3sOAyGP64MzNEDvAJSitPaK2k7sEtJB9ZxARncAynJs4cFXgbwOB7qZI31ARLCUORPyaL8cVv++nMGAgoooB8KZfH2ySYs9gTymQdY7gB5oA4ajp5eQMdCA5AKAAIgk24DALp8/CM6fQ1FIME0A+Rfh04voBdB/r+fb8pyB53zgHmGz7GgM2C+5PMl0wvoZdAmkIf6NKpCFjnN9AI6ABoeeqkA2yCMisBQdPkoA9P660XTC+hwyGOG1hcLFwCmeROmrwFhLMCoQD52egG9BNosi/Bf8k2ZvmpYAcm7i4iI3I+fXkCHQuiuraCqBZ1JqrN7BrVub/PJ1xTQMxCqa/JNY1JViyftiaTYhsF+SFjEpSH27mGlZprtxTyW+qK7jJOvKaBnIPMR9ueetPqDSYs7j2kFGH0nAVJYxLUhcwD1yTcHNwYtMK1JLbZwXxIWcXGohZK1O1scUarzaAPNW4SPeAMo3yyedB+RRUzFtiIXyT3D7w+PN37CmgL6NuS7hu0QlmuUhxfrw+A5fMQbQM0EZjbpYYUVuX7fkzKt6SEZPf+aAvo2VJNMoGsPXaHqqhVuEZF9Xhxqm0NSnccqQFh42X5rCaoPOfmaAnoGGmoFaxNAUEgqILB8FGT6snqHqPmIPJTTrymgZ6CqR9TyhatRo9Zy6Fj1bFMmQo+4OtSCBDBj6ILVPO5fWNYRdY3LQ3sf0bWqllzU8PJBuAyLuDLUsommVFp9qxZAvQraB8eucXFoV9Byf9DLF6N3egksco3rQ/vaZ1Mc3D2sWPTgZrFG7fMdoBokrN1bVIWqS1dNmYjI8voQfYfYVTzbKZpuIPut4+RrCugZqJ6KGGs86ZmmJxf0A3U7efvkawroGWh/VKopDvszVF2tsBYWcXFoMF3KrmzkVIR8R8l3BBBd7quKXe3J93qv4+RrCugZaCdSuj9o5S7tYcWaItd4J8hDScg31Zlt97UAf6KdntA4H3FxyG75Sb3yadf6mP6+KVAG+2TAYntIKsK4Hjq9gA6H2gnsKlyatxirQuUZBl7rmELFvjr0X4vYH6ysorbpUhp6xFtAO0nKcs65H54DL383RTMqXe8BtbvhFkpuojObAEn9s1RW9djET+z/gDUF9F1I4uuFAQUU0P+0fwGLMBycWgN+tQAAAABJRU5ErkJggg==" alt="QR Übung 1.2"></div>
+  <span class="qr-label">Übung 1.2</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">1.3</td>
+      <td class="kann-text">… bei einem LGS in <b>Stufenform die Lösbarkeit beurteilen</b> (eindeutig / keine / unendlich viele Lösungen).</td>
+      <td class="beispiel"><div class="beispiel-zeile"><b>Eindeutig</b> (aus 1.2):</div><div class="beispiel-zeile"><span class="matrix"><table><tr><td>1</td><td>1</td><td>1</td><td>|</td><td>2</td></tr><tr><td>0</td><td>−2</td><td>−3</td><td>|</td><td>−1</td></tr><tr><td>0</td><td>0</td><td>1</td><td>|</td><td>1</td></tr></table></span></div><div class="beispiel-zeile small">In jeder Spalte (vor dem Trennstrich) eine führende Zahl → eindeutig.</div><div class="beispiel-zeile" style="margin-top:1.5mm;"><b>Keine Lösung:</b> letzte Zeile <b>0 = 5</b></div><div class="beispiel-zeile"><span class="matrix"><table><tr><td>1</td><td>2</td><td>1</td><td>|</td><td>3</td></tr><tr><td>0</td><td>1</td><td>2</td><td>|</td><td>1</td></tr><tr><td>0</td><td>0</td><td>0</td><td>|</td><td>5</td></tr></table></span></div><div class="beispiel-zeile" style="margin-top:1.5mm;"><b>Unendlich viele:</b> letzte Zeile <b>0 = 0</b></div><div class="beispiel-zeile"><span class="matrix"><table><tr><td>1</td><td>2</td><td>1</td><td>|</td><td>3</td></tr><tr><td>0</td><td>1</td><td>2</td><td>|</td><td>1</td></tr><tr><td>0</td><td>0</td><td>0</td><td>|</td><td>0</td></tr></table></span></div></td>
+      <td class="formel"><p>Die <b>letzte Zeile</b> (oder die unteren Nullzeilen) der Stufenform entscheiden:</p><ol><li>Form <b>0 = <span class="var">c</span></b> mit <span class="var">c</span> ≠ 0 → <b>keine</b> Lösung.</li><li>Form <b>0 = 0</b> → mindestens eine <b>freie Variable</b> → <b>unendlich viele</b> Lösungen.</li><li>Keine Nullzeile, in jeder Spalte vor dem Trennstrich eine <b>führende Zahl</b> ≠ 0 → <b>eindeutige</b> Lösung.</li></ol><p class="small">Anzahl freier Variablen = Anzahl Variablen − Anzahl führender Zahlen.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADSklEQVR4nO2cUW7bMAyGP84G+qgCO0CP4lxtR9oN7KP0BvLjAAXcAynJ6YYBWzE3VaiHoorzoTLCUvp/0hHlr8f25e8ZCCiggD4ptIuPC1dhExHYZ+Syz7A9g019zGcvL6BzIVTzpKqqyqIFSAUWVdU1FbsKTGqvaZ5U1zu/p4DeD/n//v6ksM/ous94okgFXQHLJZcPWV5AHwZdhSXX30iqsIv8j78U0L1C85u5giIkRWAuur2UmSV//aDlBXQ6ZBHxWwm6rFdheZ0RUgGSAvu5ywvoQ6CrqQhgUlMYy2s7VjCpTTcREXk+f3kBnQqhh5GrpFiZTGtAqtM+QmuMDDV9CSxa6J8+MKmJUfvN3hIRMTiEaouDNRVYMiY3PR+YKQHHlHHn9xTQe6CaI1I1p0juVfkmkrELuuJeVUTE0JAnAM8Ct8GgBRZzNEs9b4RnOTpku8ZhehsWblcC1bqKiHgAaKpqIk9mUpqLbUWuekG/vaiq5vOXF9CpUDsuuPCs4sJ3kpoZ6pvXyBEPAFkIXEVXrtLFqBW5vj3XeDmI0fu/p4D+Gaois37cngWqGPVzpzZTItTn6NBRa3SFYRI0T6pragojFTt3RkQMDc1ewQJk+X4V3WRSYRfYXgqyvFoxXNRyxD6Xu7+ngN4D+QGylS/cyk5ay6Gp+tnmTIQfMTp040fUg4NdWNPxgqmOqGsMD7UQqNXNFejiojdbHozLiIiRoVYNL7htbaaEuj1h0/7m2DVGhw5GlNc+WzXDZEZv0qa+FhExMnSohvsLPT1kPFQsLHLUPh8BqoeE3BsiXFy8OVbUEljkiMEhei+dTdte4dtJczQPW8ed31NA74E4dlfWQnjviqA31PUaaUTEyNBh1/Dxm7aZ44iIGBz6tRc7c2tTtWNFJvyIB4AOn37vj3BfqjVS9RaKyBEPAbV2/N0f4wFALvuMXMB+ePeERn/E4JA95ScwFWAqsqzXmeX1SYEy6/byQ3R7RuwqKZ+6vIBOh26+ISKDV0FTdahcYeC1jiVc7NGhXyLiIC5SqXZlK33EOWJ46O13zNQHeppdWb2qfsaMiBgeas+G21HSe3CBSe2J8EttzvWO/U9wTwH9KyTx7YUBBRTQH8ZPuvlEMj6Ob9AAAAAASUVORK5CYII=" alt="QR Übung 1.3"></div>
+  <span class="qr-label">Übung 1.3</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">1.4</td>
+      <td class="kann-text">… bei <b>unendlich vielen Lösungen</b> den <b>Lösungsvektor</b> mit Parameter <b>bestimmen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Aus 1.3 (unendlich viele): <span class="matrix"><table><tr><td>1</td><td>2</td><td>1</td><td>|</td><td>3</td></tr><tr><td>0</td><td>1</td><td>2</td><td>|</td><td>1</td></tr><tr><td>0</td><td>0</td><td>0</td><td>|</td><td>0</td></tr></table></span></div><div class="beispiel-zeile">Setze <span class="var">z</span> = <span class="var">t</span></div><div class="beispiel-zeile"><span class="var">y</span> = 1 − 2<span class="var">t</span>; &nbsp; <span class="var">x</span> = 3 − 2(1−2<span class="var">t</span>) − <span class="var">t</span> = 1 + 3<span class="var">t</span></div><div class="beispiel-zeile"><span class="matrix"><table><tr><td><span class="var">x</span></td></tr><tr><td><span class="var">y</span></td></tr><tr><td><span class="var">z</span></td></tr></table></span> = <span class="matrix"><table><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>0</td></tr></table></span> + <span class="var">t</span> · <span class="matrix"><table><tr><td>3</td></tr><tr><td>−2</td></tr><tr><td>1</td></tr></table></span></div><div class="beispiel-zeile small">→ Probe für <span class="var">t</span> = 1 in 1.5.</div></td>
+      <td class="formel"><ol><li>Freie Variable als <b>Parameter <span class="var">t</span></b> setzen (z. B. <span class="var">z</span> = <span class="var">t</span>).</li><li>Übrige Variablen durch <b>Einsetzen von unten nach oben</b> in <span class="var">t</span> ausdrücken.</li><li>Lösungsvektor in <b>Stütz- + Richtungsvektor</b>-Form schreiben.</li></ol><p class="small">Bei zwei freien Variablen: zwei Parameter <span class="var">s</span>, <span class="var">t</span>.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADRUlEQVR4nO2cQW7jMAxFP8cGulSAHKBHsW9WzM3ko+QG1rKAjD8LipI8BQZoMkgTh14UcaQHSAhLkV+ihPj2s/z6PgM45JBDTwolKc+MTex1hMxpBJYTAKQR1mm89/Acui8Ech1IksTEDCBkABjIGLK2AhiIiaR2jg8+J4duh8r/fnrTqIJcAfUMc8hgBKDOY/6R4Tn0Y9AmmC5j+YRAAknkYYbn0B2gcfc2ZACEIBACjJnLex4xrecfGp5DPwSRzACwaXipy8TET5GPywiR9wwgkGX9eIo5OXQ9tGkWAWAgkN4oH5cWVgzUlWQREZHT/Yfn0F0hsHtWSymi5RrmGYa+m+caR4ZqfglgIrtMUz/VZLR1cYs4NFR8RGwCBEu6WRpUlAB6l/Hgc3LoFqgqVNm+CEWrKovICgAqShStyi3i0FBRo6YVYAxUE7CIIgOT2UsLNdwiDg11y4S+xp2PaA3FW7iPODo0ogSQK4B0zkASEOkELPMAqGqVzhnLOwGk812H59DdIbScs2QYgf3mRvEM1jm6j3ghqCiVa9EsdZPr92kgproBqsno88zJoe8/Fi4M7HXqbje8ady1y4PPyaFbINv5xmCiBFrWMZAx1AwjZG1wizg0hHJYZt296hN2DbHq2W4RR4bMR5gr0MQzhp1ZqLK9Dq5HvABUgwTApElrUNnaGtRb+L7G4aE+jqg7HC25aIctO+HSLeLIUNEsO9m6ihKdRtE6+6pxdMgiS40eMnoBO3B3SBv2nVvEkaG/9Qj9cqr5h258kbuV5MHn5NAt0Je9T9RN7xJWAE2Z8Mjy+JCdoQpUiboV9JipmAfplo4Hn5NDt0B7E/hyKmIXWVZZ88Hn5ND/gJLVfS6ngUD4FDuLvdUKns1rul4A2p/FhrmH1VprbGF7Xh5HHBxC+/WtEpj9GVyadu25xgtBVhuOVEs+AcicRsgM6B9GbFIk7yeYk0PXQrv7AGoFT5OtY7fX4ecjXg/ahDGVQs/iI+wGgSJYXfxGkYNDex+xbwq5atwk6XrEC0Hl526FOoFUbzEDYEyiyWgJQ59iTg5dD9Xa8DRCPvTk7VZKxRcRkTmUuwTKtVRPMCeHroXEby90yCGH/vH8AX9BL9FA7IAfAAAAAElFTkSuQmCC" alt="QR Übung 1.4"></div>
+  <span class="qr-label">Übung 1.4</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">1.5</td>
+      <td class="kann-text">… durch Einsetzen <b>prüfen, ob ein Vektor Lösung</b> eines LGS ist (<b>Probe</b>).</td>
+      <td class="beispiel"><div class="beispiel-zeile">LGS aus 1.4: <span class="var">x</span> + 2<span class="var">y</span> + <span class="var">z</span> = 3;</div><div class="beispiel-zeile">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">y</span> + 2<span class="var">z</span> = 1</div><div class="beispiel-zeile small">Lösung aus 1.4 mit <span class="var">t</span> = 1: <span class="var">v</span> = (4; −1; 1)</div><div class="beispiel-zeile">Zeile 1: 4 + 2·(−1) + 1 = 4 − 2 + 1 = 3 ✓</div><div class="beispiel-zeile">Zeile 2: −1 + 2·1 = 1 ✓</div><div class="beispiel-zeile">→ <b><span class="var">v</span> ist Lösung.</b></div></td>
+      <td class="formel"><ol><li>Komponenten des Vektors in <b>jede Gleichung</b> einsetzen.</li><li>Linke Seite ausrechnen und mit <b>rechter Seite vergleichen</b>.</li><li>Alle Gleichungen erfüllt → Lösung; eine nicht erfüllt → keine Lösung.</li></ol><p class="small">Bei Parameter-Lösungen: Spezialwerte für <span class="var">t</span> einsetzen und prüfen.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADW0lEQVR4nO2cS26jQBCGvxqQsmykHMBHwTeLcjM4CjeApSVQzaKqoclipNgaP3CxiOw0n9ItOvX4qxpRfn31f37PQEABBfSi0CR+nVkEJhH6BuQ81dA3AFNNvqm+9/QCui+E6lipqqrS6oz9gEq1S7ONApXSqqrd3D35mgK6HfL//elD6aVGdQSzDOc0ox1gtuT8kOkF9DBokfJTUjUn8h/+UkDPCtU/visstZAUgXrW/jTXtOPng6YX0IMg1Rw9YCEEQKsXka+hRuQ0A0l94DXWFND10GJZBOAZhnwNOaywoHKooRcRkeb+0wvorhBaXKNbC+1yrpEtQ1XeFrnGkaE1v8QST+2SP3fMiaTNnYCloLEjjgy5UTDzMELeAtl4uCgBpcl48jUFdAvkNsLEqRFwNSqLU/a75J4EizuffE0B3QJlA8DqP1al0ndJpW5GQrN8C2hNPPPXLmlhIzzdhMKCxI44OjR95GxirEyk1G4rcuUB/T55OvIKawroasjjyXbEEgnXrvcD281d2Ii3gValcvSwwopc302ltGsB1DKRV1lTQNdcZbiQzQNlNXyvcUf2+Q6QVzxLN5Fm5Gv4UPqTqoca6SJR1zg+hDfLjLjD2CRMUh4AT0Iijjg+tCqVqoUe0W3+I2U925SJ0COODu30iK1filW2zgNbOhI74tDQzkbksueWXGzNloVwGTviyFB+3CNe+/T6llqrrWsU+5tjRxwZcq/hhfB5DTQrLeriZX922IiDQ7lFxkrdOXBof+QfeZcQdY3DQ4UKUbRKlZ9gMxkRWR4f2p3gGSl6qHJs4RukdB1PvqaAboFysLjTI7auiF1kWYVC9QaQndeQdvBWbNoOFdJFlOlTBZb1SMd6vufJ1xTQLVBtuhQoMDXA9DkrU4MAon0zqkA1w9Sg955eQHeHskIFa3/Eloeu4tRYRa7xTlCOLJlqSzjkTD7LY58A7VjEJe8XWFNA10IeR5hfYBHaoZ7Vj3PNtfani2hvPqSahTTedXoBPR7qG6A/zbiNsL1BrnQN8UaRg0O7d4aMUAiXbKK2eh2MiCPeBPLHnWZUh4/cPJfjCO0mEWukil7st4DWs+FTjUiziHamPVRqJ8LPZjcW8Y79F1hTQNdCEm8vDCiggP5x/QVgTgvQ+h/HLwAAAABJRU5ErkJggg==" alt="QR Übung 1.5"></div>
+  <span class="qr-label">Übung 1.5</span>
+</td>
+    </tr>
+  </tbody>
+</table>
+<div class="bereich-titel">2. Matrizen — Grundlagen und Verknüpfungen</div>
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center th-ampel-qr"><div>🟢 🟡 🔴</div><div>Übung</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="nr">2.1</td>
+      <td class="kann-text">… das <b>Format einer Matrix bestimmen</b> und <b>Elemente benennen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">A</span> = <span class="matrix"><table><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></table></span></div><div class="beispiel-zeile">Format: <b>2 × 3</b> (2 Zeilen, 3 Spalten)</div><div class="beispiel-zeile"><span class="var">a</span><sub>1,2</sub> = 2; &nbsp; <span class="var">a</span><sub>2,3</sub> = 6</div></td>
+      <td class="formel"><p><b>Format:</b> Zeilenzahl × Spaltenzahl.</p><p><b>Element <span class="var">a</span><sub><span class="var">i</span>,<span class="var">j</span></sub>:</b></p><ol><li><span class="var">i</span> = Zeilennummer (von oben).</li><li><span class="var">j</span> = Spaltennummer (von links).</li></ol><p class="small">Quadratisch: Zeilen- = Spaltenzahl. Zeilenvektor: 1×<span class="var">n</span>. Spaltenvektor: <span class="var">n</span>×1.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADWklEQVR4nO2cTY6jMBCFX42RsnRLfYAcBW42miP1DeAouQEsWzJ6s6gqMLMYqYOUEFIsojj2J9nq6vrHQvz4GX79nAECCiigF4UmsafDLMAkAkwNpJsaYPgAdGhP8+jtBfRYCOSYSJJEy+K/ZpJ9LjoLIBEtSV3cH/xMAe2H7H9/uqhYkCNgiiIXsAeguqR7yvYCeho0q8HAICJAJs2IHGR7AT0Aav4ZEyAEeYQATeFwLQ3a8fNJ2wvoSRCpLkSidJhFzUTLb5HftwYi1wLzLZ6yvYAerCPmjV2YPintrSn6DUhF2q+mYNBV6aHbC+jhEFg9S9QBJI01XDOkelnEGmeGlvgS0DCjzwVoXSyAbObEl4REnBxSF4IcoUFm9aH6IC+zq8o4+JkC2gOZjmhZYB8+tIkRADQpkdycHPxMAe2BPBsFgH3mRhhcQEyNRM7yLSCzGn01rMVinTBtETriHSC3BhwTMUgD9muRyyf450qaQnmBMwV0L+RKYYQHEl7I0L++aQZf3IeOeBsokT1mWUVAi1x/PhLV26yC0Vc5U0D3PHVoqXmpOkOls0uOO6LP80PeHzFi40pmqmZgn5cIIxcNR0IiTg01QC6Q9gsQ5G+hlj0nAYZrgbQ3LWcIVUdMTTn8mQLaAy1Ww1SB/mamA7AmCZgzEfmI80OLkwDU7VNYfQtA/ckqHDn4mQLaA7lE5KWwCWANLtZmyypxGRJxZmipdFlvrSclWA3rxWE1zg55IsrlwBNWaTNkHZuGRJwaqoreOlz7I9RxGNe0ZtQ+3wHyHNS4pKi3TVM9gFVlhGd5fsh7qDzcXG1FbU6QNqbj4GcKaA9UvdNlWYhcd0W4rQBgpY+QiJND+r6GtF8fgOUnEy17OX3qN1+79Gwf/EwB7YG2vdhw9TD67Fr4sppX+BEnh6okpeUe3HRwbcm1jsuINd4FWt7SmBpgMQ7STQ2kw1LrwCyW4HyBMwV0L2R+BJA0IUFgBjFdCKA0HK7fwqGDAEhFkMeHbi+gJ0OzYJALtRCuOkJlA17pusWNIieHNneGjIC/xGXfPItNkpGPeCPIC6DLizqZZK9+BMBebyK6MHqx3wOa9YYpv31KRHtwgUQMIiKd6o1ZrGP/Bc4U0L2QxO2FAQUU0H+evwioLrOXs7ZIAAAAAElFTkSuQmCC" alt="QR Übung 2.1"></div>
+  <span class="qr-label">Übung 2.1</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">2.2</td>
+      <td class="kann-text">… Matrizen <b>addieren</b> und mit einem <b>Skalar multiplizieren</b> (auch mit dem TR).</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">A</span> = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table></span>, <span class="var">B</span> = <span class="matrix"><table><tr><td>0</td><td>5</td></tr><tr><td>1</td><td>−1</td></tr></table></span></div><div class="beispiel-zeile">2·<span class="var">A</span> + <span class="var">B</span> = <span class="matrix"><table><tr><td>2</td><td>4</td></tr><tr><td>6</td><td>8</td></tr></table></span> + <span class="matrix"><table><tr><td>0</td><td>5</td></tr><tr><td>1</td><td>−1</td></tr></table></span> = <span class="matrix"><table><tr><td>2</td><td>9</td></tr><tr><td>7</td><td>7</td></tr></table></span></div></td>
+      <td class="formel"><p><b>Voraussetzung Addition:</b> beide Matrizen haben dasselbe Format.</p><ol><li><b>Skalar</b> in jedes Element der Matrix multiplizieren.</li><li><b>Addition</b> komponentenweise: (<span class="var">A</span>+<span class="var">B</span>)<sub><span class="var">i</span>,<span class="var">j</span></sub> = <span class="var">a</span><sub><span class="var">i</span>,<span class="var">j</span></sub> + <span class="var">b</span><sub><span class="var">i</span>,<span class="var">j</span></sub>.</li></ol><p><b>CASIO:</b></p><div class="tr-box">Menü → <b>Matrix</b><br>MatA, MatB definieren<br><b>2·MatA + MatB</b> → EXE</div></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADaklEQVR4nO2cTW7jMAxGH0cCunSAHKBHkW82V5OPkhtIywIyOAv9xOkAA7TBOKlDL1I40kMlVKXIT6RE+fKz/Po6AwYZZNAPhbK0Z2ZtH3ICmbOH5QSQPb2T33t4Bu0LoZqcqqoqQUv7MqiqxqnUVsBp/U6TU41PPieD7ofa/35+U0ICjUC1DPNUxquIzA8ZnkEPg1apPxcRgUkVssj/+E0GPSvkP70rFC9MCQFfdHkvnpDODxqeQbtDdUX0ENQVCdFptQohrkK4eISpAJMCed/hGfQQaK1RRPsmewiX7lZUp/Li604ictp/eAbtCqGbJ0EPOFyNNWBS1YjbdrNY48jQiC/ZLAaCajMPdcPg2sVWxMEhVLVASE41AlWFiHTj0USJ1tBMxpPPyaB7IA/5rMCHENIJCQmVoKuHfC7SPUsP+U2F7MvTz8mgeyAPrKLLDAqKwOqVfFYJ8UMAV4AVgoKSz7sOz6DdobprVFWyypVT07ObYj06hgRUl/PJ52TQPZCnuY2uQHYFsi9KPsEyO3rDubC8K5iNODzEJua8nm/Fa0O66RzNRhwdatFn2OoNm2BUI04J/QBUo8UaR4f+cheGALEJPHUIFRZ9Hh5qmwPQ7YGW7l6mbhTqoplag62IQ0O0ZJnUX+PQJ5luG4aebSviyNAQJJspgG4KWvvU9eyQnOVQvQA0nAToKkRvqLI1UH2LkLBzjReA+hKYxsHm5+CijFTM0s86nnxOBt0DNc1yiBLNZFThUscp6Ohsu8bRoe5Z1gij3ByFdrtxkzNhNuLgUN8Srk7lyI+ojkO6hiNjJ3nyORl0D9RjDVxPlRp/+OZWsDEZ5lkeH9qo2JsTz02SXXJ6la4wG3F4qGfVDZ8BaOtgo13Xp5sRWxEvAIVLK+tswcX0Ia3ESz9GBc9qNV0vAPnqT9aSjXwC8rnmRwggupySSkuSOPW6jiefk0H3QBuRsudHjHxbHWefyVms8UpQrw0ftb7tI3tk7n6ERlZpvsUPmJNB34Vu7gNIN5cC6FCtYu1q+RGvB63CIh6R90KzEbXUj37SdbEbRQ4O3doIRmEXVJdT++HGNRg1G3Fo6PMdMy1jZhpyZdeqrmq3rYjDQ6M2PHvkd1pFY71bxGmtCJ9rpsQq7VqqHzAng74Lid1eaJBBBv3j+QOa9xp4wmWPiwAAAABJRU5ErkJggg==" alt="QR Übung 2.2"></div>
+  <span class="qr-label">Übung 2.2</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">2.3</td>
+      <td class="kann-text">… <b>entscheiden, wann zwei Matrizen multipliziert</b> werden können, und das <b>Ergebnisformat</b> angeben.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">A</span><sub>2×3</sub> · <span class="var">B</span><sub>3×4</sub> → möglich, Ergebnis <b>2×4</b> ✓</div><div class="beispiel-zeile"><span class="var">A</span><sub>2×3</sub> · <span class="var">B</span><sub>2×4</sub> → <b>nicht möglich</b> ✗</div><div class="beispiel-zeile"><span class="var">A</span><sub>3×3</sub> · <span class="var">B</span><sub>3×1</sub> → möglich, Ergebnis <b>3×1</b> (Spaltenvektor)</div></td>
+      <td class="formel"><p>Format <span class="var">m</span>×<span class="var">n</span> · <span class="var">p</span>×<span class="var">q</span> → Produkt nur möglich, wenn <b><span class="var">n</span> = <span class="var">p</span></b>.</p><ol><li>„Innere" Dimensionen müssen <b>übereinstimmen</b>.</li><li>„Äußere" Dimensionen ergeben das <b>Ergebnisformat <span class="var">m</span>×<span class="var">q</span></b>.</li></ol><p class="small">Achtung: <span class="var">A</span>·<span class="var">B</span> ≠ <span class="var">B</span>·<span class="var">A</span> im Allgemeinen.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADW0lEQVR4nO2cXYrbMBCAv6kF++hAD5CjKDfrmXoD+yi5gfVYkJk+jCQr21LoBhLHGT1kUawPJDQ7/44o/z3mb//PgEMOOfSiUJIyLqz2wSwBuaQA8wkgBeqi8OjtOfRYKABDBkDsm3RCooLO51+i8RqywABxAkjfH7o9h54Elf/99KEwZnQCTDNcuqmIXJ6yPYeeBhWDwSwiMKpCEtnN9hx6ABRuZs1+jAsCIet8zoG4fH/S9hx6OGQSUUPQVRTWIiVxWoV4DQhjBkYF0mO359BToNWiCGBQuaQPJV6bW8FQprOIiJwevz2HHgqh3VgG+wsMqlPRDKoTQ79s2vmZHLoHQnUZitGIqqrTqJ1YYAaD2yU7P5ND90DU2wdVzRA1dw90GjOqC/QqY+dncuhOKAWTgy4pYWKRAvLjGhA55/KA5DnLg0OmAIgL6FSNg1mSqBmi+Ra5+hvL4Dri2FCxFUAVi1FNGMrtt4VxAczl3PmZHLoHqhc/NgXAoMVxYJveLtn5mRy6B6oWwsxEdSUnenPSLZ5cRxwdahe/ZRyaEdFcfItoAWpVFC4RR4bYbIVNp5qA6ALPIiWDevT5HtBq1c0tMwFjRn5cP5T5rArpQ3Uaf0lxNF/gTA59FQowKhKXkxB/nlAYVEgC8zkj8WriImo6IoW8+zM5dA/UEpIlkCjew7hpi5rPNlfDY42jQ3x2JXWpD4pHAVbciAte13gDqIlATU3+EVzUXNWWuHSJODJUr3tLWzerEbV+fFrsEnFkqKt4mpmIW/mi1cWjbhGp64iDQ1Rr0HfHFPWwUGodJhabJdn5mRy6B6KvYYyqn5umJigZzWZJXCIODXWVLps2W1HS27rpjWY6dn4mh+6BWi9E8xkWuq4ItoY6WinUJeLIUIs1qHXOm/6IrcmuDpeIg0O3vdhU9bDUp1PNWdaal/sRB4e6JOUWgpa8lLba5zJ4rPFOUHtLw17ZKUMuKSCXrUzOKsW3eIEzOfRVqL2vMdw4lS1t3Vqq8P6I94Ts9udzpuiIpjdMXq7enX9w6C86oj0ac01Xdu127ke8BVSz2LX2acbB/AjQKYlYI5W5oS9xJoe+DrV3w1NA5LSKTtZpN6i9EX6xTolVys9SvcCZHPoqJP7rhQ455NA/xm8m/StYsqNuGwAAAABJRU5ErkJggg==" alt="QR Übung 2.3"></div>
+  <span class="qr-label">Übung 2.3</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">2.4</td>
+      <td class="kann-text">… das <b>Matrizenprodukt mit dem Falkschen Schema</b> und mit dem <b>TR</b> berechnen.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">A</span> = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table></span>, <span class="var">B</span> = <span class="matrix"><table><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table></span></div><div class="beispiel-zeile small">Falksches Schema:</div><div class="falk"><table><tr><td class="ecke"></td><td class="ecke"></td><td class="dat">5</td><td class="dat">6</td></tr><tr class="trenn-h"><td class="ecke"></td><td class="ecke"></td><td class="dat">7</td><td class="dat">8</td></tr><tr><td>1</td><td class="trenn-v">2</td><td><b>19</b></td><td><b>22</b></td></tr><tr><td>3</td><td class="trenn-v">4</td><td><b>43</b></td><td><b>50</b></td></tr></table></div><div class="beispiel-zeile small">1·5 + 2·7 = 19; &nbsp; 3·6 + 4·8 = 50 …</div></td>
+      <td class="formel"><p><b>Falksches Schema:</b></p><ol><li>Zweite Matrix <b>oben rechts</b> notieren.</li><li>Erste Matrix <b>unten links</b> notieren.</li><li>Produkt-Eintrag = <b>Zeile · Spalte</b> (Skalarprodukt) → in den Schnittpunkt.</li></ol><p><b>CASIO:</b></p><div class="tr-box">Menü → <b>Matrix</b><br>MatA, MatB definieren<br><b>MatA × MatB</b> → EXE</div></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADi0lEQVR4nO2cTarjOhBGTz0JMrQhC8hS7J31mt4O7KVkAQ3WMCBTPSjJ0b2Dhk7ASXzLIwfrgISV+vlUZVH++Zr/+3cGHHLIoQ+FkpRrZBWRfhUZU0TGFGHuAVKkDop7T8+hfSFUl6CqqsqgGYYFgKA6ddmeAkEZVNUGT2++Joeeh8p/P50sqlDVjFmGscvoBJgtGV8yPYdeBq1ibmIWEehUIYm8zfQc2gGK334rgNAtCMSs8yVHhuX8ouk59CKouAlARihuYtCbyK9rROSSgU61+I+PWJNDj0OrZRFAUIsefl3vYUVQhms0TyLS7z89h3aF0Obaso4t16iWIbTDPNc4MrTll2DZJ51apomZjC5T7myI74iDQ00IoaoZ1eX+QDdRAlqT8eZrcuhJKJ3sxYv0IKOpUVWPaCLLdLIo4xPW5NDDUDEAZgWqmzBPUiTMoMV4uGb5I6DiKyYwAVunrujZ5e1vAxt5+83X5NAzUIR0ViBkSCFDillJPcxjoD44Z+aLAum86/Qc2h3aPETJMHSqQpTFmMUy1MGT24ijQxG6mwBrVFjjfQvIMOWocx+yDP+fs5i16JZdp+fQ7lAEgjJLULG7fgEImbn/DcPSi8LNjruEbt/pObQ71DiHElQ2d6E4EYsxu0zxKW++JoeegSJ0CiQQEJQUsoDAfMnIcC3WQeupR377NTn0DLQJkuX4whLPqdNakdtVPduUCdcjjg41KnbZDNsDk60BO9wYFvxc4wdA20FGlSYnMKWSr8WWjXDpO+LIUFWxNZezz7vX2DSKL4PdaxwcqgrVUt2E7YN7mrEVaReT4Tbi4FDjEuxnuy0oaanWXYKfaxweajoySpBAaIumJuBuMjyyPD7UdvDQRJGqVboKTVqK24jDQ+0WsBe/0FRFfIksq/HwHXFkqPZrpB6sg+eiCN1NlHRWgXVr6VhrL8+br8mhZ6DvtdgllFzq06lqljVL9Tji4FDz9tv6iC43hbh1q3iu8VOgLbJMbc9f+WRALczXiVVKlvoBa3LoUcj2QCmHYRWGq8BwPSmQo86Xm+g8IkDI4hUzh4e+fCFigXLYWSslKBkG5axjcBX76ND33nAsuUhWHxGtVXwwx3ET5j7sOj2HXgSV+KDL6JROWlq3LI4AnZKIdfpYGPoRa3LocWjrDbctsIpOpj0EtY7w0Sol6vdGPmFNDj0KiX+90CGHHPrL9QeTqgHhvr8udAAAAABJRU5ErkJggg==" alt="QR Übung 2.4"></div>
+  <span class="qr-label">Übung 2.4</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">2.5</td>
+      <td class="kann-text">… die <b>inverse Matrix</b> mit dem <b>TR bestimmen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">A</span> = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table></span></div><div class="beispiel-zeile"><span class="var">A</span><sup>−1</sup> = <span class="matrix"><table><tr><td>−2</td><td>1</td></tr><tr><td>1,5</td><td>−0,5</td></tr></table></span></div><div class="beispiel-zeile small">Probe: <span class="var">A</span> · <span class="var">A</span><sup>−1</sup> = <span class="matrix"><table><tr><td>1</td><td>0</td></tr><tr><td>0</td><td>1</td></tr></table></span> ✓</div></td>
+      <td class="formel"><p><b>CASIO:</b></p><div class="tr-box">Menü → <b>Matrix</b> → MatA definieren<br>Im Rechenmodus: <b>MatA<sup>−1</sup></b> (Inverstaste)<br>EXE</div><p style="margin-top:1.5mm;">Fehlermeldung „Math ERROR" → Matrix ist <b>nicht invertierbar</b>.</p><p class="small">Voraussetzung: <span class="var">A</span> muss <b>quadratisch</b> sein.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADdUlEQVR4nO2cTW7cMAxGH2sBWcpADtCjaG7QI/VMvYF9lNxAXgaQwS70YzmLAo0Bj+PQiwk81gNEWKHIj9SI8t/X/OP/GTDIIIO+KLRIuR6sIjKuAoA8FgfzCLA46iB39vQMOhdCNQ6qqqoETe3rQXXyKT8FBiWoah48Xdwmg45D5X9/ecnLQlUT2TM8fEInIPuSx1OmZ9DToFVgcTCLCHhVWEQuMz2DToDc7m5IQHKCjwi4pPPP5Ajx9UnTM+h0KK+IDymozr+AMK1CeHMIPgFegeXc6Rn0FGjNWQQA8lheVH6/1bAiB5VvZScRGc+fnkGnQmh3RagJR8k1wKvqxNAPs1zjzlDLLyHnl+3tA4OSNwz2Qy5uk0FHIIoUEQctSSbkdLP4gyxKQO8yLm6TQUeg6iN8KhtGqFpVfhAiQBYlilZlK+LWkKOpEAqDCsuIsryqhOldKBnpCkFBWV5PnZ5Bp0NVnwQIEXTyvY/YdpLiLcxH3B1q4UIrWjBoCRzYbofdkIvbZNARiJJzRmoikdPN3YNt8GQ+4u6QA68IgMLqCHF1CiBhSk7ncUgS/rwmyRGFj6dOz6DTobpr5JtBO0lqSzxV0+7pxW0y6AhU33ls4QKQy57hQ/TgE2VPubhNBh2BqoodKblGkSuhLos6btqcx8VtMugI1ATJ8rqLGuV3yyKXuzY3cnGbDDoC7fQIbf1SNNkaKIpmxOoa3wAqSSa+FTYBQmyKdW22VM3tdrYibg511fC+xTILl/WjG2y7xt2hTogq/mATsH2/VCguw3zEzaFuCbD1yWT3EOnzj24nubhNBh2B+sWQy9+1WeZDWFFLYOYjbg61/ojiFLa9ojbZ1bS02zoubpNBR6A+Zpi25rmaXOwiy1oKtRVxZyh350t4EwhxFMIEgn+X3DYDazvSsdazPBe3yaAjkMsiZT6ysQyp9lCNCCA6j1FL2XMZ67mOi9tk0BGoKlRQNUuf9nloDTUs1/g+UGvHXxzygPqRb0tsoROrFP3qC9hk0Geh3e8BxJpStMiyuIw81PojvgO0XxF922Xfagul1hFMxb475D7cy/Z3/plqf13eON6FeRxOnZ5BT4JqfSt1gpVONazQaRGB5aWoVl/DJoM+D7Wz4XkJrKJT1h4GzSfCH7lTYpXys1RfwCaDPguJ/XqhQQYZ9I/rL5y0IPJP9oqdAAAAAElFTkSuQmCC" alt="QR Übung 2.5"></div>
+  <span class="qr-label">Übung 2.5</span>
+</td>
+    </tr>
+  </tbody>
+</table>
+<div class="bereich-titel">3. Mehrstufige Produktionsprozesse</div>
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center th-ampel-qr"><div>🟢 🟡 🔴</div><div>Übung</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="nr">3.1</td>
+      <td class="kann-text">… zwischen <b>Verflechtungsdiagramm</b> und <b>Matrix</b> wechseln (RZ, ZE).</td>
+      <td class="beispiel"><svg class="diagramm-svg" width="180" height="155" viewBox="0 0 180 155" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead31" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+
+  <!-- ============ STUFE 1: R -> Z ============ -->
+  <!-- R1 -> Z1, Gewicht 2 -->
+  <line x1="18" y1="45" x2="80" y2="28" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="42" y="28" width="10" height="9" fill="#fff"/>
+  <text x="47" y="35" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">2</text>
+  <!-- R1 -> Z2, Gewicht 3 (hervorgehoben) -->
+  <line x1="18" y1="45" x2="80" y2="72" stroke="#C8102E" stroke-width="1.3" marker-end="url(#arrowhead31)"/>
+  <rect x="42" y="48" width="10" height="10" fill="#fff"/>
+  <text x="47" y="56" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#C8102E" text-anchor="middle">3</text>
+  <!-- R2 -> Z1, Gewicht 1 -->
+  <line x1="18" y1="108" x2="80" y2="28" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="58" y="54" width="10" height="9" fill="#fff"/>
+  <text x="63" y="61" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">1</text>
+  <!-- R2 -> Z3, Gewicht 4 -->
+  <line x1="18" y1="108" x2="80" y2="117" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="42" y="110" width="10" height="9" fill="#fff"/>
+  <text x="47" y="117" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">4</text>
+
+  <!-- ============ STUFE 2: Z -> E ============ -->
+  <!-- Z1 -> E1, Gewicht 1 -->
+  <line x1="100" y1="28" x2="158" y2="50" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="122" y="30" width="10" height="9" fill="#fff"/>
+  <text x="127" y="37" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">1</text>
+  <!-- Z1 -> E2, Gewicht 2 -->
+  <line x1="100" y1="28" x2="158" y2="105" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="125" y="55" width="10" height="9" fill="#fff"/>
+  <text x="130" y="62" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">2</text>
+  <!-- Z2 -> E2, Gewicht 1 -->
+  <line x1="100" y1="72" x2="158" y2="105" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="122" y="80" width="10" height="9" fill="#fff"/>
+  <text x="127" y="87" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">1</text>
+  <!-- Z3 -> E1, Gewicht 2 -->
+  <line x1="100" y1="117" x2="158" y2="50" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="122" y="86" width="10" height="9" fill="#fff"/>
+  <text x="127" y="93" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">2</text>
+  <!-- Z3 -> E2, Gewicht 1 -->
+  <line x1="100" y1="117" x2="158" y2="105" stroke="#1a1a1a" stroke-width="0.9" marker-end="url(#arrowhead31)"/>
+  <rect x="122" y="113" width="10" height="9" fill="#fff"/>
+  <text x="127" y="120" font-family="Georgia, serif" font-size="8" fill="#1a1a1a" text-anchor="middle">1</text>
+
+  <!-- Knoten R -->
+  <circle cx="10" cy="45" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="10" y="48" font-family="Georgia, serif" font-size="8" text-anchor="middle">R₁</text>
+  <circle cx="10" cy="108" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="10" y="111" font-family="Georgia, serif" font-size="8" text-anchor="middle">R₂</text>
+  <!-- Knoten Z -->
+  <circle cx="90" cy="28" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="90" y="31" font-family="Georgia, serif" font-size="8" text-anchor="middle">Z₁</text>
+  <circle cx="90" cy="72" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="90" y="75" font-family="Georgia, serif" font-size="8" text-anchor="middle">Z₂</text>
+  <circle cx="90" cy="117" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="90" y="120" font-family="Georgia, serif" font-size="8" text-anchor="middle">Z₃</text>
+  <!-- Knoten E -->
+  <circle cx="168" cy="50" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="168" y="53" font-family="Georgia, serif" font-size="8" text-anchor="middle">E₁</text>
+  <circle cx="168" cy="105" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1"/>
+  <text x="168" y="108" font-family="Georgia, serif" font-size="8" text-anchor="middle">E₂</text>
+
+  <!-- Stufenbeschriftung -->
+  <text x="49" y="145" font-family="Georgia, serif" font-size="7" fill="#666" text-anchor="middle" font-style="italic">Stufe 1: RZ</text>
+  <text x="129" y="145" font-family="Georgia, serif" font-size="7" fill="#666" text-anchor="middle" font-style="italic">Stufe 2: ZE</text>
+</svg><div class="beispiel-zeile small">Hervorgehoben: <b style="color:#C8102E;">R<sub>1</sub> → Z<sub>2</sub> mit Gewicht 3</b> → Eintrag <span class="var">rz</span><sub>1,2</sub> = 3</div><div class="beispiel-zeile">RZ = <span class="matrix"><table><tr><td>2</td><td>3</td><td>0</td></tr><tr><td>1</td><td>0</td><td>4</td></tr></table></span> &nbsp; ZE = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>0</td><td>1</td></tr><tr><td>2</td><td>1</td></tr></table></span></div><div class="beispiel-zeile small">RZ: Zeilen = Rohstoffe, Spalten = Zwischenprodukte<br>ZE: Zeilen = Zwischenprodukte, Spalten = Endprodukte</div></td>
+      <td class="formel"><p><b>Konvention:</b> Eintrag <span class="var">rz</span><sub><span class="var">i</span>,<span class="var">j</span></sub> = ME von R<sub><span class="var">i</span></sub> für 1 ME von Z<sub><span class="var">j</span></sub>.</p><ol><li>Pfeil R<sub><span class="var">i</span></sub> → Z<sub><span class="var">j</span></sub> mit Gewicht <span class="var">k</span> → Eintrag in Zeile <span class="var">i</span>, Spalte <span class="var">j</span>.</li><li>Kein Pfeil → Eintrag 0.</li><li><b>Format:</b> RZ ist (Anzahl R) × (Anzahl Z); ZE ist (Anzahl Z) × (Anzahl E).</li><li>So passt die Multiplikation <b>RE = RZ · ZE</b> dimensional zusammen.</li></ol></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADbElEQVR4nO2cUW7bMAyGP84C9qgAPUCOIt9sZ9oN5KP4AAPsxwIyuAdKitMBA9ZiburQD2kS60MkmKXIX5RE+edr+vbvDDjkkENfFFqlXiNbfwEZ1wDTBWANtEbh6O45dCyE6jKoqqqStACxAAyqORa7CwxKUlVrnB98TA59HKr/++t3Jc0BzbFgnmGMBc2A+ZLxU7rn0KdBm9jfNItAVIVV5H/8kkOPCoW7T0MBShCiIhCKTtcSSMvLJ3XPocMhs4hbCiopD2peIeVNSHNALLaICqzHds+hT4E2yyLqN2uANLewwoLKOcAkIiKX47vn0KEQurt61tFzDYiqmhn2zTzXODPU80uo2SfVSoBBb8loa+IWcXKo+YgFVBcgLVi6Wf2BiRKwdxkPPiaHPgI1HxFL/2YwrcpupAXARImhTScPPiaHPgJVz2DvVM02qjFogWSxRem+xC3i5BD2uDPUCaPr2fXp94bmLdxHnB0K1ABywcSGaQRlvcA0DmCq1fpSmK4KrC+Hds+hw6FdPEmyWUO1Rpb9xq1xdh9xdihALIEqYIPCZjqmpFyCTpehSPr5UsSaxOXQ7jl0OLRTqOrSVtwrVDUt1S5KePZ5dminUFVpcgHNUdXSjBx7hhGL3XCLODUULN1kvSDEX6IwFAGB6VqQNNt6h6j5iDWUhx+TQx+BWgBp+mRLPLNNHXCbRKoy4XrE2aE7PaK/gy5bA6Zo9nTELeLUUNMsY1/YBFMquS+23AmXbhFnht5W3u6yjqTt5U1jt4gzQzW1TG2dc19y3fxGWyZv37lFnBniNhvsCvPNDhbu1joWX/t8BqiL1YOVSu0e/H1Y0TIR9xEnh7jNELuPvYqmmkCrmcB9xOmhexP4oyqiuQzAjMEt4jkgGde675PpMijEV6m12PG17+DZfE/XE0Bva7GbNNnu5r7wVde8PI44ObSrqrvtBK66lPa1z2XwXOOZoL5Lo2/ZgXpagIwMKiOgmU3quvgXGJND74VqdUytmNnErCHN3xUoQafrq+h0QbBFUa+YeU5ouhaqjzC/QVvpmv1EkZNDd2eGLLDfuRFLL83Wmox6HPEkUH3ct406UVWzxRGgeRVLRmsY+iXG5ND7ob43fA3Ij1lEs50tMqjtCB/Nb2xSj6X6AmNy6L2Q+OmFDjnk0F+u368BF1Y9VQVTAAAAAElFTkSuQmCC" alt="QR Übung 3.1"></div>
+  <span class="qr-label">Übung 3.1</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.2</td>
+      <td class="kann-text">… die <b>RE-Matrix</b> aus RZ und ZE als Produkt <b>berechnen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">RZ = <span class="matrix"><table><tr><td>2</td><td>3</td><td>0</td></tr><tr><td>1</td><td>0</td><td>4</td></tr></table></span> (2×3), &nbsp; ZE = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>0</td><td>1</td></tr><tr><td>2</td><td>1</td></tr></table></span> (3×2)</div><div class="beispiel-zeile"><b>RE = RZ · ZE</b> = <span class="matrix"><table><tr><td>2</td><td>7</td></tr><tr><td>9</td><td>6</td></tr></table></span> (2×2)</div><div class="beispiel-zeile small"><span class="var">re</span><sub>1,1</sub> = 2·1 + 3·0 + 0·2 = 2</div><div class="beispiel-zeile small"><span class="var">re</span><sub>1,2</sub> = 2·2 + 3·1 + 0·1 = 7</div></td>
+      <td class="formel"><p><b>Formel:</b></p><div class="formel-box">RE = RZ · ZE</div><ol><li><b>Formate prüfen</b>: Spaltenzahl von RZ = Zeilenzahl von ZE.</li><li>Produkt mit <b>Falk</b> oder <b>TR</b> berechnen.</li><li>Eintrag <span class="var">re</span><sub><span class="var">i</span>,<span class="var">j</span></sub> = ME von R<sub><span class="var">i</span></sub> für 1 ME von E<sub><span class="var">j</span></sub>.</li></ol></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADb0lEQVR4nO2cUY6jMAyGP28izSOVeoAeBW62miPNDeAovQF5rBTkfXACdEZaaVqJttQ8Ac0nJcJ17N8GUX59DH9+z4BDDjn0olCScnRMAkmEQSLSpQjDASBF6qC49fQc2hZCdQyqqqq0moEmQzsG1b7J9isQlFZVbXD/5Gty6H6o/PfTh9KOoJ+njHmGrsloD5gv6R4yPYceBk0CKUJ7FoFG1TaRZ5meQxtA8eoqZEARGkUgZh1OOdKOxwdNz6EHQaqa7Vo6JrFtotWLyN9zROSUgUa17B8vsSaHbvcR09W+kI4q7TlmO4OQpf2KmcFGhU2n59DmELo6RigJByXXqJ4hrId5rrFnaM4vMWPQvinPHQhqyaid2RC3iJ1DFCliDCsfoX39oYoSsHYZT74mh+6BikJVHnd55mYWOgaTJ8BEiaJVuUXsHioqRH3mk2ifPlS65iLAlfPQcfvpObQpZIlnySrB4ojFRyw/FG/hPmLvUKQEkCOQDkASlHSAoQtgqlU6ZoaTAum46fQc2hyqkaVmSyQWIarsFePV4N59xBtAVrkIqj2TlEgBsCLX5yFYJsIqGX3+NTl0M1TiCBMlmlyTTMI68VSdRQnPPvcO1Wc+sjKLkoJaWjp3RTRVv3KL2DMUoSl6pACigApJYDhlpD1bOUPUfESK+enX5NA9UA0gTZ/U0jHTN1o7cpuqZxdZ0yPLnUNrPaL9rkzkem6ddnhd4w2gGjbW+pYJl3NysTRblgjULWLv0Opxmx4xF0Drper3wW4Re4ZqQWtlB7OAPdfF1z0T7iN2DtVS93KjyXOFHIseloI5XtfYPcQiUpba53XTVA8syoRHlvuHvr/Bs+wVta4RarS5bB1PviaH7oFmpXJJMyh2sNKu7Si24Raxa6i8r9F+CVjvTKMIzUXUurL7pVN7PnvyNTl0DxQtlARrfshCOmYlHYqoPRxGa9GHdEC3np5Dm0OryLLGEaXjshZF5wTVc423gWpkaa/+UpJR6ewyaL03SYktXmBNDt0KXX0PYISVQqXVZVS1wvsj3hQKKnLKFB+RPurLOyPQnv2LIjuH4s9bU6T2R0QFkNaM4iIMB3/vc+fQT4VqJVxC/bLMPM4rXe8ATfaFqRpZTqK9aQ9BGUREOuuUmKR8luoF1uTQrZD41wsdcsih/xz/AD4NB+mQ+xZDAAAAAElFTkSuQmCC" alt="QR Übung 3.2"></div>
+  <span class="qr-label">Übung 3.2</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.3</td>
+      <td class="kann-text">… den <b>Rohstoffbedarf</b> für einen Auftrag <b>berechnen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Auftrag <span class="var">e</span> = <span class="matrix"><table><tr><td>10</td></tr><tr><td>20</td></tr></table></span> ME Endprodukte</div><div class="beispiel-zeile">RE = <span class="matrix"><table><tr><td>2</td><td>7</td></tr><tr><td>9</td><td>6</td></tr></table></span> (aus 3.2)</div><div class="beispiel-zeile"><span class="var">r</span> = RE · <span class="var">e</span> = <span class="matrix"><table><tr><td>2·10 + 7·20</td></tr><tr><td>9·10 + 6·20</td></tr></table></span> = <span class="matrix"><table><tr><td>150</td></tr><tr><td>210</td></tr></table></span> ME</div><div class="beispiel-zeile small">Antwort: 150 ME R<sub>1</sub>, 210 ME R<sub>2</sub>.</div></td>
+      <td class="formel"><p><b>Formel:</b></p><div class="formel-box"><span class="var">r</span> = RE · <span class="var">e</span></div><ol><li>Endproduktbedarf als <b>Spaltenvektor</b> <span class="var">e</span>.</li><li>Mit <b>RE multiplizieren</b> (Falk oder TR).</li><li>Komponenten als ME der einzelnen Rohstoffe <b>interpretieren</b>.</li></ol></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADXUlEQVR4nO2cUYrjMAyGP20C85jCHKBHSW+wR1p6M/covUHyOJDw74Ns1zMsC9NC20mVhyFp/EFMNLL0S46Jbx+nX99nIKCAAvqh0Gz5OLBavtyBHeYeTjuAuacM6u/9eAHdF0KaOkmSGLWQ/0ydlIbF7wKdGCX54PTkcwrodij/789vgrlHx/2Ce4bDsKAEuPM4POTxAnoYtJovE+PZDAYJZrOnebyA7gD1X64Fa28MwqBfdNovPeP0/qDHC+jukFvEpxS0E6ffwJhWYzz3GMMCDALm+z5eQA+BVs8igE52mHvsz7mGFXRiPPdwspyE/Ig5BXQthJqjZh2Qcw0YJCW6dljkGluGan4JjMUYmjNfMGiHhEVsGkLSks/SsJA9A8V5ZFECWpfx5HMK6Bao+IihiFPZRxRxapwAXJToynLy5HMK6BbIHQDjRGMC+ayql9JS4o3QLLcONauGX6ZBjY/IciWQvUX4iBeA5reSTUwAs5nSpcjlNzrpuFcZ8vxzCuhqKPuIcaoZhqeb7XLSDE7hI14AciEKlFhNmlYvZHiR67jr5PbSJKPPP6eArobIYeME+XUXAaJJPFWTkMg+Nw/VxaGT0qCcV3h4efmttkuksIitQ32pYK3GeDbE/C4Dg9N+wcZzXkPkPmLul6efU0C3QMVHuD6pElGUs9wkQQ4mQo/YPpTjiASuWV4EiIuenRXNiahrvADUhI3FNtrk4tJs2QiXYRFbhri86dxbq1zQcnkiV0Hr4Fg1tg7VOKIkEm4bTepRmrSzywgfsXGoFr3bhohiFpQSWLESoq6xeaiIU8BFe4DaNJWgUSsistw+VPsjSuJZW+vatLT0TBA+YvNQ7YUoLx5ouiK4NNS5MYRFbB0q3fnzDsZpZzBMGMOHuXo5prXu4KlnTz6ngG6BvvZiF2my3K0hZ6l5RRyxcaiJLFsp2xOOWvucusg1XgmquzTmds+f7+U50MkO1O4JRX/ExiG3AYPOixiWC6BvApZep/2H6bTDgG4xhumujxfQg6HVdNxLXgh3H1E6rLJgdY4vimwc+vTNkIlPjZXDPwoeEUe8BlTqW3WjziApeRwBSrOZ92xHL/ZLQHVvuJvAakquPXTyHeEH75Qo3xv5CXMK6FrI4uuFAQUU0H+Ov41PIQ1zaYchAAAAAElFTkSuQmCC" alt="QR Übung 3.3"></div>
+  <span class="qr-label">Übung 3.3</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.4</td>
+      <td class="kann-text">… den <b>Zwischenproduktbedarf</b> für einen Auftrag <b>berechnen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Auftrag <span class="var">e</span> = <span class="matrix"><table><tr><td>10</td></tr><tr><td>20</td></tr></table></span></div><div class="beispiel-zeile">ZE = <span class="matrix"><table><tr><td>1</td><td>2</td></tr><tr><td>0</td><td>1</td></tr><tr><td>2</td><td>1</td></tr></table></span> (aus 3.2)</div><div class="beispiel-zeile"><span class="var">z</span> = ZE · <span class="var">e</span> = <span class="matrix"><table><tr><td>50</td></tr><tr><td>20</td></tr><tr><td>40</td></tr></table></span> ME</div><div class="beispiel-zeile small">Antwort: 50 ME Z<sub>1</sub>, 20 ME Z<sub>2</sub>, 40 ME Z<sub>3</sub>.</div></td>
+      <td class="formel"><p><b>Formel:</b></p><div class="formel-box"><span class="var">z</span> = ZE · <span class="var">e</span></div><ol><li>Endproduktvektor <span class="var">e</span> mit <b>ZE multiplizieren</b>.</li><li>Komponenten als ME der einzelnen <b>Zwischenprodukte</b> interpretieren.</li></ol><p class="small">Aus <span class="var">z</span> kann mit RZ der Rohstoffbedarf berechnet werden: <span class="var">r</span> = RZ · <span class="var">z</span>.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADOUlEQVR4nO2cUY6jMAyGPy9IfUylOUCPQm+22iPtDcJRegN4HCnI+5A4pPOw0sxItJOahwpIPikI17F/J4jy6WP+9XkGHHLIoR8KrVKOK5swiwgAcl1HmM8A64h1Go8enkPHQqgug6qqKpMm8g9BVWNIuRUYlElVc+f45M/k0Peh8t9fTzmq0Ahkz3ANqV6KyPUhw3PoYdAmzDLCdBOBoAprmUSeYXgOHQCNd1dDArZRCIrAmHS+pJFpeXvQ8Bw6HMoWYSnoJkzRmqa4CdNtRAg5tgDWY4fn0EOgLWcRwKA5mJhue1gxlMtZRETOxw/PoUMhtDlq1gFDzjVK1sHQdvNco2eo5pfkxHN/+2SXERLlLHdxi+gcwt4+FKdw12CiRG0NbhGdQ1WhSjAtQFGjTJzK90JxHuTp5MmfyaHvQMUBlJ97Y8hWUuylCTXcInqGyK871ssYtDGLvWH3IG4RvUPrSXN8oAvAKqJxL3IxFM/w51K7PP8zOfRliBJC5EqXqsUMZSYxz2Cdo/uI3iH2sqed6cdklGmpQaXnGr1DTWRZSltVktoTT9UqSrhF9A6Z2ECrTGTbmBZzCjnGDAn3Ef1DNlcsdhnDB7NoGzyO6B+yANJqFvneB7PAggnXI/qHWj2iqBDW0IjawRRNr2t0DzVhY2sbTXKRGqHba5/9Q1Wdpk4dpaDVahR7Z581eoeayLLkFXv5wi7L+mzXI14CqqVubdZCNPnHtOxG47XPV4CagtadZmmLpiKwKxMeWfYP1cp3LWk0UwdmDLZmAvcR3UPNnq5Gs6yrIu4iy8EVqheAbL/GerY7YUEI76Ksbyqw1S0dm+3lefJncug70P1abCyUXKw1hhpWLLge8QJQ8/ZL+TsvsE1FzGyW23mu8TJQXY5vO4GB8rUAuTKoXAGNbFL0qx/wTA59FcpBgpQtnyDT7aQy/T0pkEadL++i8xkBhiSE5dDhOfRgyGLH+ZIoPqL6jSxY3fyLIp1Dd98MWcCEy3K2q1ZNRczjiP4hq28lNNal2THHEaBxFYH1pL4W+zWgujd8HZHfyyYa8/wxaN4Rfs1+Y5OyYv8HPJNDX4XEv17okEMO/ef4BzBTOt4f3vySAAAAAElFTkSuQmCC" alt="QR Übung 3.4"></div>
+  <span class="qr-label">Übung 3.4</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.5</td>
+      <td class="kann-text">… die <b>fehlende Matrix RZ oder ZE</b> mithilfe der <b>Inversen</b> aus RE und der bekannten Matrix bestimmen.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><b>Gegeben:</b> RE und RZ &nbsp; <b>Gesucht:</b> ZE</div><div class="beispiel-zeile">RE = RZ · ZE &nbsp;|&nbsp; ·RZ<sup>−1</sup> von links</div><div class="beispiel-zeile"><b>ZE = RZ<sup>−1</sup> · RE</b></div><div class="beispiel-zeile small">Analog: gegeben RE und ZE → RZ = RE · ZE<sup>−1</sup></div></td>
+      <td class="formel"><p>Aus <b>RE = RZ · ZE</b> nach der gesuchten Matrix auflösen:</p><ol><li>RZ gesucht → <b>RZ = RE · ZE<sup>−1</sup></b> (von rechts mit ZE<sup>−1</sup>).</li><li>ZE gesucht → <b>ZE = RZ<sup>−1</sup> · RE</b> (von links mit RZ<sup>−1</sup>).</li><li>Inverse mit dem <b>TR</b> bestimmen → Produkt berechnen.</li></ol><p class="small">Voraussetzung: Die zu invertierende Matrix ist quadratisch und invertierbar.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADW0lEQVR4nO2cUWrjMBCG/1kZ8qhAD5CjyDfYI5UeqTewj9IDLFiPAZl/H6SR5S4sNIbEccYPpnb0gYSnM/+Mxhbix8f46+cMYJBBBj0pFKUcPWaRPnYAMIvIGSj3AOig7t7TM+j+kCNJEognYrxcRXo4cgDAIZ4IxA4IJMnp/tMz6AFQ+d8HgPDVgR9nIDuP3qfV5UOmZ9Adoe7bNREBgZ87lsszEL7Jz52vyaAt0Moi/FUITwjgKIBLGH+njohv6THTM+hBEMnVIw8TgMAEef/qIL1PADyztniSNRl0OzTnLAKIJ5ZcYznBFWU5iuT84ynWZNCtUAf4qhIiAPirAAA4XhIwXlLWFq2U2PmaDNoCgZw0+wyTI+BJBJLI7sFrOAmsoWPnazJoC5QlBAfPahbIT7/UHrKESOAAxzzOLOLIUAfEN0qY5pJ1jBdCyo8uSfhssxEBurT7NRm0FZoFiB04+AQgivBDTiwZhlYvEXgVq1keHyrKcrwQEqYZCMPcIUxv4Hie6jBHgf9z/+kZdHcIRT9MrpwGAKuTo0qIVGSo6YgjQ1jpSVJVJIqyDNNqcLaNna/JoC1QzTVKcpEvyYSSjGqGoVmH5RoHh9QOtBRR8ssmTCw17jpk52syaAtUg4NKiGICJZKsDIRWj3gBqIYJjQvVDtRK1Bg4Ob238zUZtAWqpUlS1YP6iBomsqLIP5hFHB1SZQmsateAFqwALM4jt9aZRRwZ0qiR6xF6r00uNMPIUcMs4gWgWHYupM/bnnWzU4VDadc+z8IhWi/2waGmfSqHicC6m+FXkrMMMR9xcEgtoiYXTaVS98D1UqvdZhFHhhoJkU8DdIdjkZzVZZiOOD6kCaVnm1+yvq2TTQCObTjZ+ZoM2gKhqTw1jqJGiHLUrMMs4mUgfb2z96S8T3Puo5I+d2ovrdkPmp5B94LA5qilySH/toQT17oM8xEHh5Z3w/06ODSvigPSAyiOYv9rMuhmaNWdn2sPyw5HrVDBfMTLQNoaUbOJwBomaivNkIdaf8TrQY4YZQkTLn9TQt6zqVyF/LKocXDoHx/RHLWKHZYU1LLP14Cax91sccYTpQfAj/yecKd75U+xJoNu9xH6Z61Zon6JqG3b9wnWQ3V8SOzrhQYZZNB/jr9gbB14LVDyQAAAAABJRU5ErkJggg==" alt="QR Übung 3.5"></div>
+  <span class="qr-label">Übung 3.5</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.6</td>
+      <td class="kann-text">… <b>fehlende Werte in einer Matrix</b> aus bekannten Produkten <b>bestimmen</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">RZ = <span class="matrix"><table><tr><td>2</td><td>1</td></tr><tr><td><span class="var">a</span></td><td>3</td></tr></table></span>, &nbsp; ZE = <span class="matrix"><table><tr><td>1</td><td>0</td></tr><tr><td>2</td><td>1</td></tr></table></span></div><div class="beispiel-zeile">RE = <span class="matrix"><table><tr><td>4</td><td>1</td></tr><tr><td><span class="var">b</span></td><td>3</td></tr></table></span> &nbsp;<span class="small">(eine Position bekannt: <span class="var">b</span> = 8)</span></div><div class="beispiel-zeile small">Eintrag (2,1) von RE = RZ · ZE:</div><div class="beispiel-zeile"><span class="var">a</span>·1 + 3·2 = <span class="var">b</span></div><div class="beispiel-zeile">Mit <span class="var">b</span> = 8: &nbsp; <span class="var">a</span> + 6 = 8 → <b><span class="var">a</span> = 2</b></div></td>
+      <td class="formel"><ol><li>Betroffene <b>Zeile/Spalte</b> des Produkts ansehen.</li><li><b>Skalarprodukt</b> Zeile · Spalte mit der Unbekannten aufstellen.</li><li>Gleichung lösen → Unbekannte einsetzen.</li></ol><p class="small">Bei mehreren Unbekannten: Mehrere Gleichungen aufstellen → LGS lösen.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADX0lEQVR4nO2cS46rOhBATz1bytBIvYBeCuzs6u4MlpIdwLAlo3oDuwydwZW6IyWEFAOUYB/JpVTK9TOi/Pia/vs5Aw455NCLQovUa2AVkW4Vpg5kWCJMHcASsUnx0ctz6LEQqnNQVVWl1wykDL2q6phyGQWClmc6B9Xx4DI5dD9U//vLReln0L8dFMswpIyOQLElw1OW59DToFVgidBfRSCpwiJymOU59AAo3nxXyFFIikDMOn3mSD9/PGl5Dj0JUtUMEEosWraJXr9E/lwjIp8ZSKp1/3gJmRz6PbSWKAIAGZaLyp+ruRXFqbxGmEREpHv88hx6KITurhZ1QCixhlmGsJ/mscaZoRZfYjGnfaJsImm/ndQpB5fJoXug4kKozthNa7hZ7UGy0Z3JOLhMDt0DRVg+FFKOUm4ElV7XCMtHlv4aEVKOsFxUWGI+vEwO3QOZAaAaBXsWagqzL75FNn/Dc5Znh1rgCSVd2fLZ9ddvE/sZKC7nwWVy6B7I3AWC7q1F+RTaQFAdk9uId4DKr193CNUSXGxqYZbBJo9uI94I0pFV6C0YLUWuv11Qe9aC0deRyaGfX/u8VKrV8GoKWuC5y3F79Hl2yDTCbqYWWizD3ntImfLVNeLMkAUXM8WZ0DGptV4mGwBMGdyPODvUPEvdNVLdqkUpdzVb4hpxZmiXtrYshA2UtDVQO+1mvK7xBpCpQGqFTfbBxdZsuUtcukacGdoVuaqNKFGHllZbq4Juk33XODlkNQyLJqoebGGGtiZt7JlrxJkhbvpkSj5iF3/MWzjSdpKDy+TQPdBtPmLTDXMrYDMZ7lmeH7rNWW57hdU1gnmb29ZxcJkcugdqvRDarMC+K8LyEQCtFOoacWbIzmssHYDA1M0qpC9Rlg+VflzbkY7VzvIcXCaH7oG+92JjruRso2NqbsWM5yPeANr9+tYfoZaX2rXkBo813glqnuUSoW0OMiwRGQgqA7V7ovoWLyCTQ7+FipMgEDKwisKK9NeLAjnq9PklOnUIELKQ5ocuz6GnQyJyUabPTLUR5agfVum6+htFTg59e2fIzLfGyi17WbYVz0e8A3T7jpmt0rWd99vcS690vQfUzoaXbUKk9OBC0HIifCidEvUFVS8hk0O/hcTfXuiQQw794/ofoh5T8NlUSOEAAAAASUVORK5CYII=" alt="QR Übung 3.6"></div>
+  <span class="qr-label">Übung 3.6</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">3.7</td>
+      <td class="kann-text">… <b>überprüfen, ob der Lagerbestand</b> für einen Auftrag <b>ausreicht</b>.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Bedarf <span class="var">r</span> = <span class="matrix"><table><tr><td>150</td></tr><tr><td>210</td></tr></table></span> &nbsp;<span class="small">(aus 3.3)</span></div><div class="beispiel-zeile">Lager <span class="var">l</span> = <span class="matrix"><table><tr><td>200</td></tr><tr><td>180</td></tr></table></span></div><div class="beispiel-zeile" style="margin-top:1mm;">R<sub>1</sub>: 200 ≥ 150 ✓</div><div class="beispiel-zeile">R<sub>2</sub>: 180 &lt; 210 ✗ &nbsp;<b>(30 ME fehlen)</b></div><div class="beispiel-zeile small">Antwort: Lager reicht <b>nicht</b>, R<sub>2</sub> muss nachbestellt werden.</div></td>
+      <td class="formel"><ol><li><b>Bedarfsvektor</b> <span class="var">r</span> mit RE · <span class="var">e</span> berechnen.</li><li><b>Komponentenweise</b> mit Lagerbestand vergleichen: <span class="var">l</span><sub><span class="var">i</span></sub> ≥ <span class="var">r</span><sub><span class="var">i</span></sub>?</li><li><b>Antwortsatz</b> mit Fehlmenge bzw. Überschuss formulieren.</li></ol><p class="small">Fehlmenge: <span class="var">r</span><sub><span class="var">i</span></sub> − <span class="var">l</span><sub><span class="var">i</span></sub>.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADUElEQVR4nO2cUWrkMAyGP20C++jAHmCOktys9GbJUeYAheSx4KB9kO14+rDQdklnPPJD6dT+wGZUWfotW5RPt+XX5xlwyCGHHhTaJLWJXUSGXUSkR6ath2UA2HryoP7s6Tl0LoTq2qmqqjJqJP9Q1TlE6wU6tb/p2qnOd74mh74Ppf/97bfC1qOvA5hnmEJEZ8B8yfQj03Pox6BdbJsYryIQVGETuZvpOXQC1N986iIAQlAE+qjLJfaM658fmp5DPwSpagTYbV+wbWLUd5GXa4/IJQJBNe0fD7Emh74O7ZZFAJ3FEfJyLWEFnTJee1hERGQ4f3oOnQqhVVtJuQZ0lmtkz9DVwzzXaBkq+SXZGEI0K8FcRkgGkoe4RTQOJR8xV04h3nSYKAG1y7jzNTn0HSj5iEOcIiStKnWsYH5jJmlVbhFNQ6ToYSV955UxaITRFM2Y4w3XLFuHLPFM6eaa9orDLFK6mXtxH9E8lL/4kHINnSEHDnQ5zaiGuEU0DpVwIZ1l5Zih3k6qwbP7iKeBdtGZXQ4TsEOu1yHbS5WMPsqaHPpCs3MNhdgL4Q1dhjeALrIMbzCugyi823GXEM6dnkOnQ1WSmSIFjfabpRlV9BBSh+8aTUP9IUkJYe91mToVEFguERmvyTtoPvWId78mh74D5QAyn1mkyDJorsgNWc82ZcJzjdahGz1Ck2JtHXN2HuZGxhU/13gCqJhAliZn6uTiKLashEu3iJahSp2+KbrVJE+YRnEM9l2jdagIUcUfHAJ2yLFFXTPhPqJxqJhA+UOpj7DAYS1nHauffT4DlIOEcmmD4zTDCifgUCY8smwfyjVUITmFwzaqtLQck+M+onmosoikQoS6KiLrEcDhPNwiWobKrkGlOHwsm6mbW0TjUFaxgwIbwDagbAMCiC7DqmJXe7YBPXt6Dp0O1WnGUYtd56E3JRTuI54CKmnG1ptmKRMg09YjU/6oM7uk2OIB1uTQV6Gb9wCqiKKI2sfdcEoEeudrcuj/Qbtd9dPXSyT5CLvqR447r/6iSOPQrY+AOrk41EvVnIx6HNE69PGNmSxKFLkya1WVtukW0TpU7obbNiGpBhc6tRvhU0hvCaRnqR5gTQ59FRJ/vdAhhxz6R/sLKzY7Q2ZzSgsAAAAASUVORK5CYII=" alt="QR Übung 3.7"></div>
+  <span class="qr-label">Übung 3.7</span>
+</td>
+    </tr>
+  </tbody>
+</table>
+<div class="bereich-titel">4. Stochastische Matrizen</div>
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center th-ampel-qr"><div>🟢 🟡 🔴</div><div>Übung</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="nr">4.1</td>
+      <td class="kann-text">… die <b>Eigenschaften einer stochastischen Matrix prüfen</b> (quadratisch, Einträge in [0; 1], Spaltensumme 1).</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">M</span> = <span class="matrix"><table><tr><td>0,7</td><td>0,2</td></tr><tr><td>0,3</td><td>0,8</td></tr></table></span></div><div class="beispiel-zeile">• quadratisch (2×2) ✓</div><div class="beispiel-zeile">• alle Einträge in [0; 1] ✓</div><div class="beispiel-zeile">• Spalte 1: 0,7 + 0,3 = 1 ✓</div><div class="beispiel-zeile">• Spalte 2: 0,2 + 0,8 = 1 ✓</div><div class="beispiel-zeile">→ <b>stochastische Matrix</b></div></td>
+      <td class="formel"><p>Drei Bedingungen <b>einzeln prüfen</b>:</p><ol><li>Matrix ist <b>quadratisch</b>.</li><li>Alle Einträge liegen in <b>[0; 1]</b>.</li><li>Jede <b>Spaltensumme = 1</b>.</li></ol><p class="small">Wenn <b>eine</b> Bedingung verletzt ist, dann ist die Matrix <b>nicht stochastisch</b>.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADZElEQVR4nO2cTW7rOgyFD68MdGgDWUCWomztLenuwF5KdyANCyg4b0BSdjp4QJsHJ3HoQWHH/hAJYflzKFmIHx/Ln58zQEABBfSiUBU7Lrj6WR0glzoAywQAdYA/NOw9vID2hxJJ8nv44D/nL0H+HCAyAcgkybL/8AJ6AGT/+/VDzYLz2KCe4TI2cAagvuTykOEF9DDoKnZSRYCRtLP//5sCelZo+HZNABCMhABD43JuA3I5PWh4Ae0OqUWsOYTk2U/zfLU8AmMDMBJA3Xd4AT0EsgoDQCJQByB/rmlFol4uIqI55ivMKaDfQuDmKNCSAkCipZcjydnLET3mJ59TQPdAIEuyoJHZwHkkV7OABgysj4RFHBwCSfvNzUcUaLlp/mBsIEuvSMewiIND5iOymgWgNWdm8xsFAFSUSB5OnnxOAd0DmQPQPy5cbqwkl0SSzfONEhZxcEijhqqSGjBufITJlX4X4SMODw2wtDE1ExuqgKgTsFwS/MapYTkTQD3tOryAdoduIkRPJWdYJHHP4A/P4SOODm1UbALXAblc9VLy3AYuU2qS/56aqLcYy67DC2h3yEtL1x40j+gKlaecXZSI6vPoUK81EjmPtLpC08v1s+IGModFHB1yIapfmo8ATJko2xuRRxwf2kgRqkesJageHkRMmQg94uhQTxIAVyH8hsrWALS5kQuir/EG0E1fgxYXkEu6TS9vhMuwiCNDXZ2GNcK1w9EboPlmSW5EjeNDm4bWKmBvy4zVSuCfhUUcGertiy42rHZQYL0Ou4ze5ztAG7Ha9WxXqNaytLuMyCyPD/W00Tue3UesuYVlm2voePI5BXQPtPEMq5S9rorwWAFAjSEs4uiQd7rqBOQyCfIMCsYvIepJz/zZvr/nyecU0D3QoP0t3bJRUxPUUyPqBAEgXKZCa3vWyfd1PPmcAroH2oiUm7XYGJstrrLaNEWt8U5Q3xteB8jFg4O9MgC+NHvGVUzgfIE5BfRbSPMIiwsAiDqAtp2rDVzOX8LlAgGQmsSKmbeD5IJEkXODv1bkwzfvFPj2vxebU0A/OnxPV+K3NZWeTLguxdAj3giyn7ubgOrZax5RRYD6wXjHzHtAfW+4v26Ks6aXiboj/KIrJa5ir6V6gTkF9FtI4u2FAQUU0H8c/wLiYwGGD+cWQwAAAABJRU5ErkJggg==" alt="QR Übung 4.1"></div>
+  <span class="qr-label">Übung 4.1</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">4.2</td>
+      <td class="kann-text">… zwischen <b>Sachtext, Übergangsgraph und Übergangsmatrix</b> wechseln.</td>
+      <td class="beispiel"><div class="beispiel-zeile small">Text: „70 % bleiben bei A, 30 % wechseln zu B; 20 % wechseln von B zu A, 80 % bleiben bei B."</div><svg class="diagramm-svg" width="240" height="130" viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead42" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+  <!-- Schlinge A (links oben) -->
+  <path d="M 50 50 C 30 20, 70 20, 65 45" stroke="#1a1a1a" stroke-width="1" fill="none" marker-end="url(#arrowhead42)"/>
+  <text x="50" y="18" font-family="Georgia, serif" font-size="10" text-anchor="middle">0,7</text>
+  <!-- Schlinge B (rechts oben) -->
+  <path d="M 190 50 C 210 20, 170 20, 175 45" stroke="#1a1a1a" stroke-width="1" fill="none" marker-end="url(#arrowhead42)"/>
+  <text x="190" y="18" font-family="Georgia, serif" font-size="10" text-anchor="middle">0,8</text>
+  <!-- A -> B (oben) -->
+  <path d="M 75 55 Q 120 35, 165 55" stroke="#1a1a1a" stroke-width="1" fill="none" marker-end="url(#arrowhead42)"/>
+  <text x="120" y="38" font-family="Georgia, serif" font-size="10" text-anchor="middle">0,3</text>
+  <!-- B -> A (unten) -->
+  <path d="M 165 75 Q 120 95, 75 75" stroke="#1a1a1a" stroke-width="1" fill="none" marker-end="url(#arrowhead42)"/>
+  <text x="120" y="105" font-family="Georgia, serif" font-size="10" text-anchor="middle">0,2</text>
+  <!-- Knoten A und B -->
+  <circle cx="60" cy="65" r="15" fill="#fff" stroke="#1a1a1a" stroke-width="1.2"/>
+  <text x="60" y="70" font-family="Georgia, serif" font-size="13" text-anchor="middle" font-weight="bold">A</text>
+  <circle cx="180" cy="65" r="15" fill="#fff" stroke="#1a1a1a" stroke-width="1.2"/>
+  <text x="180" y="70" font-family="Georgia, serif" font-size="13" text-anchor="middle" font-weight="bold">B</text>
+</svg><div class="beispiel-zeile small">Matrix (Spalte „von", Zeile „nach"):</div><div class="beispiel-zeile"><span class="var">M</span> = <span class="matrix"><table><tr><td>0,7</td><td>0,2</td></tr><tr><td>0,3</td><td>0,8</td></tr></table></span></div></td>
+      <td class="formel"><ol><li><b>Zustände</b> festlegen (z. B. A, B). Zustand <span class="var">i</span> = Spalte/Zeile <span class="var">i</span>.</li><li>Übergangswahrscheinlichkeiten <b>„von Spalte nach Zeile"</b> eintragen.</li><li>Im Graphen: Pfeile = Übergänge; <b>Schlingen</b> = Bleiben im Zustand.</li><li><b>Spaltensumme</b> immer = 1 (alle Wahrscheinlichkeiten zusammen).</li></ol></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADSklEQVR4nO2cX4rbMBCHv6kN+6jAHmCP4tys9Ei9gXOU3MB+XLD59WEkWWlLoRvwZp3xkx3pAwlP5r9s4r+vy7f/ZyCggAL6otBs+TqzGpfTalxOYOe5h8sJYO4pk/q9lxfQvhDS1EmSxKCl/txJY1p8FOjEIMknjw++p4Duh/J/f34RpAVJC64ZzmlBI+C65Pwpywvo06DVYO6B2QySlO8eZHkB7QD1vz0L1t5IwqBfdHlbeobp9ZOWF9AnQdlMAHaGbCYGvZt9v/aYvS1AkrL9+BJ7Cujj0OpRBNAJ5hfZ92t1K+jEcO3hYmZmp/2XF9CuEGoujzoWqLFG0QxdOy1ijSNDNb6EJvocpKweSFlAtoGQiEND7kJoBKQJF4v8KNWkBLQq48H3FNA9EK2tqPpgUElODRM+oJGcqwqJODy0mp3nvr7z1TTOL7Jzendvs1EemvZfXkC7Qo3VKI9qdMQ2kLVF6IhngIo10IQHmRq3IpcPdNKPNyl0xPGhnJwaJkogkW4dzelm8hg64uhQD3QyAAHYMOGPNoxLr8upW2z4+boYdAukadflBbQ7VNyFJOXSVmozVB541qxVRJ/Hh5oOCHcq/UoSQxGVIjQL/hgScWSoJKKAm7QDFLEo88aazw6JODJU7YKaRqpsRIBsSeiyyogeqsNDTSG8zUFR09aA+xZNOPLgewroHqiKQKlujgBD9S1qs6VnsqL2eXioGIypVjM8KSFvtS1V0Do5rMbRoZqhKg0RLgdbmKGtSbv8FhJxZKg6lfWdU4sbE+49lMeofT4DdONHbO/8T7disyQhEYeGbnKWbO0SparlwlB6JggdcXiokYi2v+6m47JMLcojJOLIkJ/XsOHq53QM0oSR3k3Mr7JhXOsJnnr34HsK6B7o917skposo2PJWTa5zdARR4aaJGX2FFJpklDTbNlFrPFMUC17+pGdfLDLznPvdx6RjqyWfYsvsKeAPgrdfA9ggqag5Q2Y29nw6I94Ssjf/uVtIeuIojeyvFzjiyIHh/6iI+pQWmpr9m1a88H3FND9kOoJntwxkySNmx8xm8H8oujFfg6ong13EVhNo+ceOvmJ8LN3SuQPVH2JPQX0Ucji64UBBRTQP65fbbcsDuSPMdIAAAAASUVORK5CYII=" alt="QR Übung 4.2"></div>
+  <span class="qr-label">Übung 4.2</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">4.3</td>
+      <td class="kann-text">… eine <b>zukünftige Verteilung berechnen</b> (<span class="var">v</span><sub><span class="var">n</span></sub> = <span class="var">M</span><sup><span class="var">n</span></sup> · <span class="var">v</span><sub>0</sub>).</td>
+      <td class="beispiel"><div class="beispiel-zeile">Startverteilung <span class="var">v</span><sub>0</sub> = <span class="matrix"><table><tr><td>0,6</td></tr><tr><td>0,4</td></tr></table></span></div><div class="beispiel-zeile"><span class="var">M</span> = <span class="matrix"><table><tr><td>0,7</td><td>0,2</td></tr><tr><td>0,3</td><td>0,8</td></tr></table></span></div><div class="beispiel-zeile"><span class="var">v</span><sub>1</sub> = <span class="var">M</span> · <span class="var">v</span><sub>0</sub> = <span class="matrix"><table><tr><td>0,5</td></tr><tr><td>0,5</td></tr></table></span></div><div class="beispiel-zeile"><span class="var">v</span><sub>3</sub> = <span class="var">M</span><sup>3</sup> · <span class="var">v</span><sub>0</sub> mit TR</div></td>
+      <td class="formel"><p><b>Formel:</b></p><div class="formel-box"><span class="var">v</span><sub><span class="var">n</span></sub> = <span class="var">M</span><sup><span class="var">n</span></sup> · <span class="var">v</span><sub>0</sub></div><ol><li><b>Startverteilung</b> <span class="var">v</span><sub>0</sub> als Spaltenvektor.</li><li><span class="var">M</span><sup><span class="var">n</span></sup> mit TR berechnen (oder <span class="var">M</span> <span class="var">n</span>-mal anwenden).</li><li>Komponenten als <b>Anteile</b> in den Zuständen deuten.</li></ol></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADZUlEQVR4nO2cUWrkMAyGP20M++jAHKBHcW6wR9oz9QbJUfYABeexkKB9sJy4fVhYBtKpR3kwqccftakrS7+lEeW/n+XH/zPgkEMOfVNoFXumNcAyAqwBkXEXlnEXEQnUQeHq6Tl0LYRqHlRVVUmqSsqDWl9pbAhJ1frmB1+TQ/dD9r8P6BzfBdil2ohBWV42ii2ZvmR6Dn0VtIrYqRFVa/MujzI9h66AwueOlPf6Nu9BYVCBsN39mxz6HlDZEZ9CUEkzsMigkv6EzT6NCqzXTs+hL4H2EkUAg8q0/lRYA6RsYywIERGR8frpOXQphDZPBp0ZFOIGxM0ikTm2ozzW6B1aA1WAANsMDErKIPKyQfoj1Yysrkd0DoUaTQwo6604kMoq6CKgyy8Q67ttUvbLg6/JoXsgTJwqGtRW1aja6HyYDBj81HgCCFXdME8hD6rz0ffxg6JoEn1HdA5VzzKD6dRlHxwNJmWbYIWr2J1DNJthjqoWa3AYjzKqveHwHdE9NGi5tPidQX7nXXSOqkWFOOJQlhFkcs+ydygAuwCDhRnLCEIEhS1IyqhUPXuTEo48+Jocugc6To2tiJSNj3k0xUYk3XDPsn+o7oh8RBhNXGHuJeZHVPXSd0TPUKNTV0Mx1CCzNGYZSpNcj+gdOixDG4cWUWKmpk8dNxx+avQPtXrEeTicuXSmVFZD4Taie6jJsyxq1NEUUXs+dSlXsZ8CKjddCiBJd3uDXdSEirBBzFCi1JgvnZ5Dl0NHcHHGFeZbnLK13Xmdbw++JofugRp3wZwEBm2Di3z+WONQ3xE9QzRq1EwrStSA43AhMrhn2T8UIG5Iet2FpHuQ9HpTYBdSHuuo+CZK3IJePT2HLodaFUKPFJmiVZUkiSMr4jxYHnxNDt0DUaUIqIpDmx9Ra/uAM5HKd0TPULA6DABWAdYRgYCkjLKMb+XaE9Ybfmo8BXTWhtP6k8Be+mQCZPqi6Tl0PVRrw4nvtdYX0HkN7Q3HzO7fFvA0kP2la9KUTEApCweQqZSKA56d3z30oRI4KrKIlYEKMSNWrQEQ3wLpNXgO1TNBu+gMpbpLZ0u3M3fSMqzcRnQOfa4Nl6QgJeogoMsECoqw3lT8pqt7qNUjUnPDsdXrLky1OnP3XY/oGhL/9kKHHHLoH89fh/Tt4IRkuKYAAAAASUVORK5CYII=" alt="QR Übung 4.3"></div>
+  <span class="qr-label">Übung 4.3</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">4.4</td>
+      <td class="kann-text">… eine <b>vergangene Verteilung</b> mit der <b>Inversen</b> berechnen.</td>
+      <td class="beispiel"><div class="beispiel-zeile">Aktuell: <span class="var">v</span><sub>1</sub> = <span class="matrix"><table><tr><td>0,5</td></tr><tr><td>0,5</td></tr></table></span></div><div class="beispiel-zeile"><span class="var">v</span><sub>0</sub> = <span class="var">M</span><sup>−1</sup> · <span class="var">v</span><sub>1</sub> = <span class="matrix"><table><tr><td>0,6</td></tr><tr><td>0,4</td></tr></table></span></div><div class="beispiel-zeile small">Plausibilität: beide Komponenten in [0;1], Summe = 1 ✓</div></td>
+      <td class="formel"><p><b>Formel:</b></p><div class="formel-box"><span class="var">v</span><sub><span class="var">n</span>−1</sub> = <span class="var">M</span><sup>−1</sup> · <span class="var">v</span><sub><span class="var">n</span></sub></div><ol><li><span class="var">M</span><sup>−1</sup> mit dem <b>TR</b> bestimmen.</li><li>Mit der aktuellen Verteilung <b>multiplizieren</b>.</li><li><b>Plausibilität prüfen</b>: alle Komponenten ≥ 0? Summe = 1?</li></ol><p class="small">Negative Komponenten → kein gültiger vergangener Zustand.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADWElEQVR4nO2cS46jMBBAX42RsgSpD5CjkKv1zeAofQNYtgSqWbj8SY80UgeJEFJepAHzJJdSXa6fI8qvx/jn9ww45JBDLwrNYuPGKsAqMDfIbW5g7CDe2mj2Xp5D+0KoTkFVVZVeF+gnoFdVHdolzgJB4zOdgupwcJkc2g7Z//58Ucbrgg6AGYq23IrI7SnLc+hp0Cr0Xw0wi0CralcHWZ5DO0DNj3sFRWgVgWbR8bo09NPHk5bn0O5Q1IgUgoZF+mE1LekHMxlCuwCtAvO+y3PoKdAaowh7Ml80bR2X5FR+NTCKiEi3//Ic2hVCqzERwwwgxFgDWlUdCPVrHmucGcrxJcTok3ap1CLexqv4imvEySFU1dIOZhSqiZKUgNpkHFwmh7ZAtTL0E8SYs09akp4t6EBI28nBZXJoCxQNQLoyFbCrmMIMambEc5ZvAdmuMVS3tY0oE2Yt3Ea8AZSCzGgtRhHRoRS54kRQ/bymcOQFZHLoYSgZhSnVsoYYbqbtxCxDenlwG/EGUKpc6MAqRQVikeuzC6YvVTB6fJkcehiqgkwLKXJKqgSeqjkp4dHn2aEcYZi7QKph2LOhzRFG0ZeDy+TQFsj8iDiqFhlIapHeq4zHwWVyaAuU9wVzKsvWYfNtymdnM+IacWooOwnEukaVmaiS2u19u93BZXJoC5Rylq1qylXVwUVptqwSl64RZ4b+7bxV1VTcSB8/XnaNODNE6Yowe5CrGTHMyKpiJsNtxMmhqoJlyYaiBxNY4SunNb2ucXooF7TMAFRffPQZoDIZ7lmeH6KYh1IIT3aDpAyEu63j4DI5tAXKvRCabQRVV8SdZ5ltycFlcmgLlLrz5w5AIB7VaL9FmT9UYM1HOtbUrn1wmRzaAjXUhzG6+KHMHQKIjt2kAmGxiZ2X59DuUNVVl3qx6zi01ME81ngjKGWomJsqiy23uUFuEJ/pwCqW8n4BmRx6FIpOgu0LhEX6aW3ovy4KLI2O12/R8YbEWdpp1+U5tDt09wsR010VtGq1BcrW4bvGqaGfZ8Ol/B2vS6MA0keP8lsYu7Dr8hx6EmT+QemYaVV1KH7ELALzRb0X+z2gfDZ8bhDpVok9uBA0ngi/xU6JVaxj/wVkcuhRSPzXCx1yyKH/jL+HJxojYuJqCgAAAABJRU5ErkJggg==" alt="QR Übung 4.4"></div>
+  <span class="qr-label">Übung 4.4</span>
+</td>
+    </tr>
+    <tr>
+      <td class="nr">4.5</td>
+      <td class="kann-text">… eine <b>langfristige Verteilung</b> durch <b>wiederholte Matrixmultiplikation</b> näherungsweise bestimmen.</td>
+      <td class="beispiel"><div class="beispiel-zeile"><span class="var">v</span><sub>1</sub> ≈ (0,500; 0,500)</div><div class="beispiel-zeile"><span class="var">v</span><sub>2</sub> ≈ (0,450; 0,550)</div><div class="beispiel-zeile"><span class="var">v</span><sub>5</sub> ≈ (0,406; 0,594)</div><div class="beispiel-zeile"><span class="var">v</span><sub>10</sub> ≈ (0,400; 0,600)</div><div class="beispiel-zeile"><span class="var">v</span><sub>11</sub> ≈ (0,400; 0,600)</div><div class="beispiel-zeile">→ stationär: <b>(0,4; 0,6)</b></div></td>
+      <td class="formel"><ol><li>Startverteilung <span class="var">v</span><sub>0</sub> wählen.</li><li><b>Wiederholt</b> mit <span class="var">M</span> multiplizieren: <span class="var">v</span><sub>1</sub>, <span class="var">v</span><sub>2</sub>, <span class="var">v</span><sub>3</sub>, …</li><li>Beobachten, ab welchem <span class="var">n</span> sich die Komponenten <b>nicht mehr</b> ändern (z. B. auf 3 Nachkommastellen).</li><li>Grenzverteilung als langfristige Verteilung angeben.</li></ol><p class="small">Hinweis: <b>nicht</b> über ein LGS, sondern durch iteratives Multiplizieren.</p></td>
+      <td class="ampel-qr-zelle">
+  <div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div>
+  <div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADgElEQVR4nO2cUYrjOhBFT40E+bShFzBLkXfwlvSYndlLyQIG7M8GmTsfktwOAwM9GZy0U/4wlqNDJFKUqq5KMfHpa/r2eQYccsihLwotVq9hifXt1INZvxpTv5qZRVqnePTwHDoeCpIkQZepvzkgXS8iXSPSDCRJ5ekrzMmh+6C9HejdSFez5iOCmL5nii8ZHjI8hx4FLWb1qZPa7d3+DP3VNzn0tFD8/VWo6Uca1ygIMoj57m9y6GtAxSJaChoysMbSnCzI0jXm+mknYDl2eA49BFpLFgGADctFJetIc+1TmpOZmfXHD8+hQyG0u+a2YNDlcpPmII3dvpfGJ5+TQ/dA9TffjEEjoQaVSRnotpxz6+wWcWYISbmsENUVzEG1SX1X+83VVNwiTg1FIMimPmQDQ2XBIGRL81sJNEsTQotAn3xODt0DFR9R44O2QrR3+cZvSO4jXgBqkeVM06mLHWw3QosjyvrhccTJoRZHbD5ibApVtY3SKzTn4ZHlC0BLBJaI/T9Tbho7VVFiy0PLfujQ5aOH59CxUIROGKwmWCNTjwlAkKOlGVnTs7OxvOWnn5ND90C7VYNU8ssMqWkULefM7OQJXzXODHEjP9VAs+UVNbykxhFNvXSLODO0U56qF2ATosqteobWxS3i5FDTHuamWY5sciUf9pJds3wVaK9HFLHhJtOk1tw1R+E+4hWgUm8bpJHVgFpLZ0P3bhpL7eVFGpfY5Innn5NDfw1FauIJlrRGa2UzphJRLDFDNwOsVp+efE4O3QO15GLmRrbelgkIJS0tYmZyzfLsEHvFoeSXt8nFlomw5aFuEWeG2mGMOew2uZpTqAU0u+0ujyxPD8VWUbsadD+xdL2oNNPct17dTxNdjl4f8SqQWb/5g+7d6oZWV0vybSCIyS6y4SHDc+jwVaNmld1eu67rx41agccRp4d+q8VOW0F2rZnIu+LcWmv15HNy6E7o42w4oJHVWtnMajYQylphw4OG59CxUCmrBcA+AgcAsfRo+g/EAirBJ8HrI14BqmfDl4gN1MSzHAsHsIG1HefyGqqzQ7sNrV1VhLSdDYd23u9DqHjyOTn076DVpGvcktGyTOzMoiqaX2pODn3uuj0bDpZGYSxWPtQ0gEAYy5vMd7peAtrOhi8Xlc3x1E7w2AAw9avpx/eMxsX/h+rkkPm/FzrkkEN/uH4Bz37b2+lyHW8AAAAASUVORK5CYII=" alt="QR Übung 4.5"></div>
+  <span class="qr-label">Übung 4.5</span>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

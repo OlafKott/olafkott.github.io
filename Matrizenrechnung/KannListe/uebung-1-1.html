@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.1: Funktionsgleichung über LGS aufstellen</title>
+<style>
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+    background: #fff;
+  }
+  h1 {
+    color: #C8102E;
+    font-size: 18pt;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+  }
+  h2 {
+    color: #C8102E;
+    font-size: 13pt;
+    margin: 18px 0 8px 0;
+  }
+  .beschreibung {
+    font-style: italic;
+    color: #555;
+    margin: 0 0 18px 0;
+  }
+  .aufgabe-box {
+    background: #fdf2f3;
+    border-left: 4px solid #C8102E;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box {
+    background: #fff8e1;
+    border-left: 4px solid #c79100;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box[hidden] { display: none; }
+  .formel-box {
+    display: inline-block;
+    background: #fff8e1;
+    border: 1px solid #c79100;
+    color: #6d4c00;
+    padding: 4px 12px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  .tr-box {
+    display: inline-block;
+    background: #e8f5e9;
+    border: 1px solid #2e7d32;
+    color: #1b5e20;
+    padding: 4px 10px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    white-space: pre-line;
+  }
+  button {
+    background: #C8102E;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 11pt;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 4px 4px 4px 0;
+  }
+  button:hover { background: #a00d24; }
+  button.sekundaer {
+    background: #fff;
+    color: #C8102E;
+    border: 1.5px solid #C8102E;
+  }
+  button.sekundaer:hover { background: #fdf2f3; }
+  .matrix {
+    display: inline-grid;
+    vertical-align: middle;
+    padding: 2px 6px;
+    border-left: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    margin: 0 2px;
+    column-gap: 10px;
+    row-gap: 2px;
+  }
+  .matrix .cell {
+    text-align: center;
+    padding: 0;
+  }
+  .matrix-wrap {
+    text-align: center;
+    margin: 8px 0;
+  }
+  .var { font-style: italic; }
+  .small { font-size: 9.5pt; color: #555; }
+  ol, ul { padding-left: 22px; }
+  ol li, ul li { margin: 3px 0; }
+  .nav {
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+    font-size: 10pt;
+    color: #666;
+  }
+  .nav a {
+    color: #C8102E;
+    text-decoration: none;
+    margin-right: 12px;
+  }
+  .nav a:hover { text-decoration: underline; }
+  .schritt {
+    margin: 6px 0;
+  }
+  .schritt-label {
+    font-weight: bold;
+    color: #C8102E;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    display: block;
+    margin-bottom: 2px;
+  }
+  p { margin: 6px 0; }
+</style>
+</head>
+<body>
+<h1>Übung 1.1: Funktionsgleichung über LGS aufstellen</h1>
+<p class="beschreibung">Stelle aus drei vorgegebenen Punkten das lineare Gleichungssystem auf, mit dem die Koeffizienten einer quadratischen Funktion bestimmt werden können.</p>
+
+<h2>Aufgabe</h2>
+<div class="aufgabe-box" id="aufgabe"></div>
+
+<div style="margin: 12px 0;">
+  <button onclick="neueAufgabe()">🎲 Neue Aufgabe</button>
+  <button class="sekundaer" onclick="toggleLoesung()" id="loesung-btn">Lösung anzeigen</button>
+</div>
+
+<h2 id="loesung-h2" hidden>Lösung</h2>
+<div class="loesung-box" id="loesung" hidden></div>
+
+<div class="nav">
+  <a href="index.html">← Übersicht aller Übungen</a>
+</div>
+
+<script>
+// ===== Hilfsfunktionen =====
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randIntExcl(min, max, exclude) {
+  let v;
+  do { v = randInt(min, max); } while (exclude.includes(v));
+  return v;
+}
+function matHTML(rows) {
+  // Tabellenfrei: nutzt CSS-Grid in einem <span>, sodass es überall (auch in <p>) eingebettet werden kann.
+  if (rows.length === 0) return '';
+  const cols = rows[0].length;
+  let html = '<span class="matrix" style="grid-template-columns: repeat(' + cols + ', auto);">';
+  for (const r of rows) {
+    for (const c of r) {
+      html += '<span class="cell">' + c + '</span>';
+    }
+  }
+  return html + '</span>';
+}
+function matBlock(rows) {
+  // Block-Matrix (eigene Zeile, zentriert) — für alleinstehende Matrizen
+  return '<div class="matrix-wrap">' + matHTML(rows) + '</div>';
+}
+function fmtNum(n) {
+  // Deutsche Notation: Komma statt Punkt, Minuszeichen
+  if (n === 0) return '0';
+  const s = (Math.round(n * 1000) / 1000).toString();
+  return s.replace('-', '−').replace('.', ',');
+}
+
+// ===== Aufgabenlogik (wird unten überschrieben) =====
+
+function generiere() {
+  let a, b, c;
+  do {
+    a = randInt(-3, 3);
+    b = randInt(-4, 4);
+    c = randInt(-4, 5);
+  } while (a === 0);
+
+  const xs = [];
+  while (xs.length < 3) {
+    const v = randInt(-2, 4);
+    if (!xs.includes(v)) xs.push(v);
+  }
+  const pts = xs.map(x => [x, a*x*x + b*x + c]);
+
+  let html = '<p>Bestimmen Sie die quadratische Funktion <span class="var">f</span>(<span class="var">x</span>) = <span class="var">ax</span>² + <span class="var">bx</span> + <span class="var">c</span>, die durch die folgenden drei Punkte verläuft:</p>';
+  html += '<p style="text-align:center; font-size: 12pt;">';
+  pts.forEach((p, i) => {
+    html += '<span class="var">P</span><sub>'+(i+1)+'</sub>('+fmtNum(p[0])+' | '+fmtNum(p[1])+')';
+    if (i < 2) html += ', &nbsp; ';
+  });
+  html += '</p>';
+  html += '<p class="small">Stellen Sie das zugehörige LGS auf. (Das Lösen üben Sie in Übung 1.2.)</p>';
+  document.getElementById('aufgabe').innerHTML = html;
+
+  let lsg = '<div class="schritt"><span class="schritt-label">Schritt 1: Ansatz</span>';
+  lsg += '<span class="var">f</span>(<span class="var">x</span>) = <span class="var">a</span><span class="var">x</span>² + <span class="var">b</span><span class="var">x</span> + <span class="var">c</span></div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Schritt 2: Punkte einsetzen</span>';
+  pts.forEach((p, i) => {
+    const x = p[0], y = p[1], x2 = x*x;
+    let s = '<span class="var">P</span><sub>'+(i+1)+'</sub>: &nbsp;';
+    s += fmtNum(x2) + '<span class="var">a</span>';
+    s += (x >= 0 ? ' + ' + fmtNum(x) : ' − ' + fmtNum(-x));
+    s += '<span class="var">b</span> + <span class="var">c</span> = ' + fmtNum(y);
+    lsg += '<div>' + s + '</div>';
+  });
+  lsg += '</div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Schritt 3: LGS in Matrixform</span>';
+  const rows = pts.map(p => [fmtNum(p[0]*p[0]), fmtNum(p[0]), '1', '|', fmtNum(p[1])]);
+  lsg += matBlock(rows);
+  lsg += '</div>';
+
+  let fterm = '';
+  if (a === 1) fterm += '<span class="var">x</span>²';
+  else if (a === -1) fterm += '−<span class="var">x</span>²';
+  else fterm += fmtNum(a) + '<span class="var">x</span>²';
+  if (b !== 0) {
+    fterm += (b > 0 ? ' + ' : ' − ');
+    if (Math.abs(b) !== 1) fterm += Math.abs(b);
+    fterm += '<span class="var">x</span>';
+  }
+  if (c !== 0) {
+    fterm += (c > 0 ? ' + ' : ' − ') + Math.abs(c);
+  }
+
+  lsg += '<div class="schritt"><span class="schritt-label">Geprüfte Lösung</span>';
+  lsg += 'Das LGS hat die Lösung <span class="var">a</span> = '+fmtNum(a)+', <span class="var">b</span> = '+fmtNum(b)+', <span class="var">c</span> = '+fmtNum(c)+'.<br>';
+  lsg += '→ <span class="formel-box"><span class="var">f</span>(<span class="var">x</span>) = '+fterm+'</span></div>';
+
+  document.getElementById('loesung').innerHTML = lsg;
+}
+
+
+function toggleLoesung() {
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  if (l.hasAttribute('hidden')) {
+    l.removeAttribute('hidden');
+    h.removeAttribute('hidden');
+    btn.textContent = 'Lösung ausblenden';
+  } else {
+    l.setAttribute('hidden', '');
+    h.setAttribute('hidden', '');
+    btn.textContent = 'Lösung anzeigen';
+  }
+}
+
+// Bei jeder neuen Aufgabe Lösung ausblenden
+function neueAufgabe() {
+  generiere();
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  l.setAttribute('hidden', '');
+  h.setAttribute('hidden', '');
+  btn.textContent = 'Lösung anzeigen';
+}
+
+// Initialer Aufruf
+generiere();
+</script>
+</body>
+</html>

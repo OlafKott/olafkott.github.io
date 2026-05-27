@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.4: Lösungsvektor mit Parameter bestimmen</title>
+<style>
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+    background: #fff;
+  }
+  h1 {
+    color: #C8102E;
+    font-size: 18pt;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+  }
+  h2 {
+    color: #C8102E;
+    font-size: 13pt;
+    margin: 18px 0 8px 0;
+  }
+  .beschreibung {
+    font-style: italic;
+    color: #555;
+    margin: 0 0 18px 0;
+  }
+  .aufgabe-box {
+    background: #fdf2f3;
+    border-left: 4px solid #C8102E;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box {
+    background: #fff8e1;
+    border-left: 4px solid #c79100;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box[hidden] { display: none; }
+  .formel-box {
+    display: inline-block;
+    background: #fff8e1;
+    border: 1px solid #c79100;
+    color: #6d4c00;
+    padding: 4px 12px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  .tr-box {
+    display: inline-block;
+    background: #e8f5e9;
+    border: 1px solid #2e7d32;
+    color: #1b5e20;
+    padding: 4px 10px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    white-space: pre-line;
+  }
+  button {
+    background: #C8102E;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 11pt;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 4px 4px 4px 0;
+  }
+  button:hover { background: #a00d24; }
+  button.sekundaer {
+    background: #fff;
+    color: #C8102E;
+    border: 1.5px solid #C8102E;
+  }
+  button.sekundaer:hover { background: #fdf2f3; }
+  .matrix {
+    display: inline-grid;
+    vertical-align: middle;
+    padding: 2px 6px;
+    border-left: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    margin: 0 2px;
+    column-gap: 10px;
+    row-gap: 2px;
+  }
+  .matrix .cell {
+    text-align: center;
+    padding: 0;
+  }
+  .matrix-wrap {
+    text-align: center;
+    margin: 8px 0;
+  }
+  .var { font-style: italic; }
+  .small { font-size: 9.5pt; color: #555; }
+  ol, ul { padding-left: 22px; }
+  ol li, ul li { margin: 3px 0; }
+  .nav {
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+    font-size: 10pt;
+    color: #666;
+  }
+  .nav a {
+    color: #C8102E;
+    text-decoration: none;
+    margin-right: 12px;
+  }
+  .nav a:hover { text-decoration: underline; }
+  .schritt {
+    margin: 6px 0;
+  }
+  .schritt-label {
+    font-weight: bold;
+    color: #C8102E;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    display: block;
+    margin-bottom: 2px;
+  }
+  p { margin: 6px 0; }
+</style>
+</head>
+<body>
+<h1>Übung 1.4: Lösungsvektor mit Parameter bestimmen</h1>
+<p class="beschreibung">Bei unendlich vielen Lösungen: setze die freie Variable als Parameter und gib den Lösungsvektor in Stütz- und Richtungsvektor-Form an.</p>
+
+<h2>Aufgabe</h2>
+<div class="aufgabe-box" id="aufgabe"></div>
+
+<div style="margin: 12px 0;">
+  <button onclick="neueAufgabe()">🎲 Neue Aufgabe</button>
+  <button class="sekundaer" onclick="toggleLoesung()" id="loesung-btn">Lösung anzeigen</button>
+</div>
+
+<h2 id="loesung-h2" hidden>Lösung</h2>
+<div class="loesung-box" id="loesung" hidden></div>
+
+<div class="nav">
+  <a href="index.html">← Übersicht aller Übungen</a>
+</div>
+
+<script>
+// ===== Hilfsfunktionen =====
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randIntExcl(min, max, exclude) {
+  let v;
+  do { v = randInt(min, max); } while (exclude.includes(v));
+  return v;
+}
+function matHTML(rows) {
+  // Tabellenfrei: nutzt CSS-Grid in einem <span>, sodass es überall (auch in <p>) eingebettet werden kann.
+  if (rows.length === 0) return '';
+  const cols = rows[0].length;
+  let html = '<span class="matrix" style="grid-template-columns: repeat(' + cols + ', auto);">';
+  for (const r of rows) {
+    for (const c of r) {
+      html += '<span class="cell">' + c + '</span>';
+    }
+  }
+  return html + '</span>';
+}
+function matBlock(rows) {
+  // Block-Matrix (eigene Zeile, zentriert) — für alleinstehende Matrizen
+  return '<div class="matrix-wrap">' + matHTML(rows) + '</div>';
+}
+function fmtNum(n) {
+  // Deutsche Notation: Komma statt Punkt, Minuszeichen
+  if (n === 0) return '0';
+  const s = (Math.round(n * 1000) / 1000).toString();
+  return s.replace('-', '−').replace('.', ',');
+}
+
+// ===== Aufgabenlogik (wird unten überschrieben) =====
+
+function generiere() {
+  // Wir bauen eine 3-Variablen-Matrix in Stufenform mit einer freien Variable (z).
+  // Zeile 1: a·x + b·y + c·z = d
+  // Zeile 2:        e·y + f·z = g
+  // Zeile 3:        0    0    0  =  0
+  // Lösung: z = t, y = (g − f·t)/e, x = (d − b·y − c·t)/a
+  // Wir wählen a=1, e=1 für ganzzahlige Lösungen.
+  const b = randInt(-3, 3);
+  const c = randInt(-3, 3);
+  const d = randInt(-5, 5);
+  const f = randInt(-3, 3);
+  const g = randInt(-5, 5);
+
+  const rows = [
+    ['1', fmtNum(b), fmtNum(c), '|', fmtNum(d)],
+    ['0', '1',        fmtNum(f), '|', fmtNum(g)],
+    ['0', '0',        '0',       '|', '0']
+  ];
+
+  let html = '<p>Bestimmen Sie alle Lösungen des folgenden LGS in Stufenform:</p>';
+  html += matBlock(rows);
+  html += '<p>Geben Sie die Lösung als Lösungsvektor mit Parameter <span class="var">t</span> an.</p>';
+  document.getElementById('aufgabe').innerHTML = html;
+
+  // Lösung: z = t
+  // y = g - f*t
+  // x = d - b*(g - f*t) - c*t = d - b*g - (c - b*f)*t
+  const stueY = g;
+  const richY = -f;
+  const stueX = d - b*g;
+  const richX = -c + b*f;
+
+  let lsg = '<div class="schritt"><span class="schritt-label">Schritt 1: Freie Variable wählen</span>';
+  lsg += 'Setze <span class="var">z</span> = <span class="var">t</span>.</div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Schritt 2: y bestimmen (aus Zeile 2)</span>';
+  // Zeile 2: y + f*z = g  →  y = g - f*t
+  let z2 = '<span class="var">y</span>';
+  if (f !== 0) {
+    z2 += (f > 0 ? ' + ' : ' − ');
+    if (Math.abs(f) !== 1) z2 += Math.abs(f);
+    z2 += '<span class="var">t</span>';
+  }
+  z2 += ' = ' + fmtNum(g) + ' &nbsp; → &nbsp; <span class="var">y</span> = ' + fmtNum(stueY);
+  if (richY !== 0) {
+    z2 += (richY > 0 ? ' + ' : ' − ');
+    if (Math.abs(richY) !== 1) z2 += Math.abs(richY);
+    z2 += '<span class="var">t</span>';
+  }
+  lsg += z2 + '</div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Schritt 3: x bestimmen (aus Zeile 1)</span>';
+  lsg += '<span class="var">x</span> = '+fmtNum(stueX);
+  if (richX !== 0) lsg += (richX > 0 ? ' + ' : ' − ') + (Math.abs(richX)===1?'':Math.abs(richX)) + '<span class="var">t</span>';
+  lsg += '</div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Lösungsvektor</span>';
+  const vekVar = matHTML([['<span class="var">x</span>'],['<span class="var">y</span>'],['<span class="var">z</span>']]);
+  const vekStue = matHTML([[fmtNum(stueX)],[fmtNum(stueY)],['0']]);
+  const vekRich = matHTML([[fmtNum(richX)],[fmtNum(richY)],['1']]);
+  lsg += '<span class="formel-box">' + vekVar + ' = ' + vekStue + ' + <span class="var">t</span> · ' + vekRich + '</span></div>';
+
+  document.getElementById('loesung').innerHTML = lsg;
+}
+
+
+function toggleLoesung() {
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  if (l.hasAttribute('hidden')) {
+    l.removeAttribute('hidden');
+    h.removeAttribute('hidden');
+    btn.textContent = 'Lösung ausblenden';
+  } else {
+    l.setAttribute('hidden', '');
+    h.setAttribute('hidden', '');
+    btn.textContent = 'Lösung anzeigen';
+  }
+}
+
+// Bei jeder neuen Aufgabe Lösung ausblenden
+function neueAufgabe() {
+  generiere();
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  l.setAttribute('hidden', '');
+  h.setAttribute('hidden', '');
+  btn.textContent = 'Lösung anzeigen';
+}
+
+// Initialer Aufruf
+generiere();
+</script>
+</body>
+</html>

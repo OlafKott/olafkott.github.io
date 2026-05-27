@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 4.2: Sachtext zu Übergangsmatrix</title>
+<style>
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+    background: #fff;
+  }
+  h1 {
+    color: #C8102E;
+    font-size: 18pt;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 6px;
+    margin: 0 0 12px 0;
+  }
+  h2 {
+    color: #C8102E;
+    font-size: 13pt;
+    margin: 18px 0 8px 0;
+  }
+  .beschreibung {
+    font-style: italic;
+    color: #555;
+    margin: 0 0 18px 0;
+  }
+  .aufgabe-box {
+    background: #fdf2f3;
+    border-left: 4px solid #C8102E;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box {
+    background: #fff8e1;
+    border-left: 4px solid #c79100;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 2px;
+  }
+  .loesung-box[hidden] { display: none; }
+  .formel-box {
+    display: inline-block;
+    background: #fff8e1;
+    border: 1px solid #c79100;
+    color: #6d4c00;
+    padding: 4px 12px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  .tr-box {
+    display: inline-block;
+    background: #e8f5e9;
+    border: 1px solid #2e7d32;
+    color: #1b5e20;
+    padding: 4px 10px;
+    margin: 4px 0;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    white-space: pre-line;
+  }
+  button {
+    background: #C8102E;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 11pt;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 4px 4px 4px 0;
+  }
+  button:hover { background: #a00d24; }
+  button.sekundaer {
+    background: #fff;
+    color: #C8102E;
+    border: 1.5px solid #C8102E;
+  }
+  button.sekundaer:hover { background: #fdf2f3; }
+  .matrix {
+    display: inline-grid;
+    vertical-align: middle;
+    padding: 2px 6px;
+    border-left: 1.5px solid #1a1a1a;
+    border-right: 1.5px solid #1a1a1a;
+    margin: 0 2px;
+    column-gap: 10px;
+    row-gap: 2px;
+  }
+  .matrix .cell {
+    text-align: center;
+    padding: 0;
+  }
+  .matrix-wrap {
+    text-align: center;
+    margin: 8px 0;
+  }
+  .var { font-style: italic; }
+  .small { font-size: 9.5pt; color: #555; }
+  ol, ul { padding-left: 22px; }
+  ol li, ul li { margin: 3px 0; }
+  .nav {
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid #ddd;
+    font-size: 10pt;
+    color: #666;
+  }
+  .nav a {
+    color: #C8102E;
+    text-decoration: none;
+    margin-right: 12px;
+  }
+  .nav a:hover { text-decoration: underline; }
+  .schritt {
+    margin: 6px 0;
+  }
+  .schritt-label {
+    font-weight: bold;
+    color: #C8102E;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    display: block;
+    margin-bottom: 2px;
+  }
+  p { margin: 6px 0; }
+</style>
+</head>
+<body>
+<h1>Übung 4.2: Sachtext zu Übergangsmatrix</h1>
+<p class="beschreibung">Übersetze den Sachtext in eine Übergangsmatrix (Spalte = von, Zeile = nach).</p>
+
+<h2>Aufgabe</h2>
+<div class="aufgabe-box" id="aufgabe"></div>
+
+<div style="margin: 12px 0;">
+  <button onclick="neueAufgabe()">🎲 Neue Aufgabe</button>
+  <button class="sekundaer" onclick="toggleLoesung()" id="loesung-btn">Lösung anzeigen</button>
+</div>
+
+<h2 id="loesung-h2" hidden>Lösung</h2>
+<div class="loesung-box" id="loesung" hidden></div>
+
+<div class="nav">
+  <a href="index.html">← Übersicht aller Übungen</a>
+</div>
+
+<script>
+// ===== Hilfsfunktionen =====
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randIntExcl(min, max, exclude) {
+  let v;
+  do { v = randInt(min, max); } while (exclude.includes(v));
+  return v;
+}
+function matHTML(rows) {
+  // Tabellenfrei: nutzt CSS-Grid in einem <span>, sodass es überall (auch in <p>) eingebettet werden kann.
+  if (rows.length === 0) return '';
+  const cols = rows[0].length;
+  let html = '<span class="matrix" style="grid-template-columns: repeat(' + cols + ', auto);">';
+  for (const r of rows) {
+    for (const c of r) {
+      html += '<span class="cell">' + c + '</span>';
+    }
+  }
+  return html + '</span>';
+}
+function matBlock(rows) {
+  // Block-Matrix (eigene Zeile, zentriert) — für alleinstehende Matrizen
+  return '<div class="matrix-wrap">' + matHTML(rows) + '</div>';
+}
+function fmtNum(n) {
+  // Deutsche Notation: Komma statt Punkt, Minuszeichen
+  if (n === 0) return '0';
+  const s = (Math.round(n * 1000) / 1000).toString();
+  return s.replace('-', '−').replace('.', ',');
+}
+
+// ===== Aufgabenlogik (wird unten überschrieben) =====
+
+function generiere() {
+  // 2 Zustände A, B mit Übergangswahrscheinlichkeiten in 10er-Schritten
+  const p_AA = randInt(2, 9) / 10;  // bleibe bei A
+  const p_AB = Math.round((1 - p_AA) * 10) / 10; // wechsle von A nach B
+  const p_BB = randInt(2, 9) / 10;  // bleibe bei B
+  const p_BA = Math.round((1 - p_BB) * 10) / 10; // wechsle von B nach A
+  function pc(x) { return (x*100).toFixed(0); }
+  function pf(x) { return x.toFixed(1).replace('.', ','); }
+
+  let html = '<p>Übersetzen Sie den folgenden Sachverhalt in eine Übergangsmatrix M (Konvention „Spalte = von, Zeile = nach").</p>';
+  html += '<p class="aufgabe-inner-text" style="font-style: italic;">';
+  html += '„'+pc(p_AA)+' % der Personen, die zum aktuellen Zeitpunkt bei Anbieter <b>A</b> sind, bleiben dort, '+pc(p_AB)+' % wechseln zu Anbieter <b>B</b>. ';
+  html += pc(p_BA)+' % der Personen bei <b>B</b> wechseln zu <b>A</b>, '+pc(p_BB)+' % bleiben bei <b>B</b>."';
+  html += '</p>';
+  document.getElementById('aufgabe').innerHTML = html;
+
+  const M = [[p_AA, p_BA], [p_AB, p_BB]];
+
+  let lsg = '<div class="schritt"><span class="schritt-label">Schritt 1: Werte zuordnen</span>';
+  lsg += '<ul>';
+  lsg += '<li>von A nach A: '+pf(p_AA)+' → M<sub>1,1</sub></li>';
+  lsg += '<li>von A nach B: '+pf(p_AB)+' → M<sub>2,1</sub></li>';
+  lsg += '<li>von B nach A: '+pf(p_BA)+' → M<sub>1,2</sub></li>';
+  lsg += '<li>von B nach B: '+pf(p_BB)+' → M<sub>2,2</sub></li>';
+  lsg += '</ul></div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Schritt 2: Übergangsmatrix</span>';
+  lsg += '<span class="formel-box">M = ' + matHTML(M.map(r=>r.map(c=>pf(c)))) + '</span></div>';
+
+  lsg += '<div class="schritt"><span class="schritt-label">Probe (Spaltensummen)</span>';
+  lsg += 'Spalte 1 („von A"): '+pf(p_AA)+' + '+pf(p_AB)+' = '+pf(p_AA+p_AB)+' ✓<br>';
+  lsg += 'Spalte 2 („von B"): '+pf(p_BA)+' + '+pf(p_BB)+' = '+pf(p_BA+p_BB)+' ✓</div>';
+
+  document.getElementById('loesung').innerHTML = lsg;
+}
+
+
+function toggleLoesung() {
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  if (l.hasAttribute('hidden')) {
+    l.removeAttribute('hidden');
+    h.removeAttribute('hidden');
+    btn.textContent = 'Lösung ausblenden';
+  } else {
+    l.setAttribute('hidden', '');
+    h.setAttribute('hidden', '');
+    btn.textContent = 'Lösung anzeigen';
+  }
+}
+
+// Bei jeder neuen Aufgabe Lösung ausblenden
+function neueAufgabe() {
+  generiere();
+  const l = document.getElementById('loesung');
+  const h = document.getElementById('loesung-h2');
+  const btn = document.getElementById('loesung-btn');
+  l.setAttribute('hidden', '');
+  h.setAttribute('hidden', '');
+  btn.textContent = 'Lösung anzeigen';
+}
+
+// Initialer Aufruf
+generiere();
+</script>
+</body>
+</html>
