@@ -1,0 +1,292 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 1.7 · EINFÜHRUNG IN DIE DIFFERENTIALRECHNUNG</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Tangentengleichung aufstellen</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Bestimme die Gleichung der Tangente in Form t(x) = mx + b.</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <!-- Aufgabe -->
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 15px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabe</div>
+      <div style="font-size: 16px; margin-bottom: 6px;">Bestimme die Tangentengleichung an den Graphen von</div>
+      <div id="funktion-text" style="font-size: 18px; font-family: 'Cambria Math', Georgia, serif; font-weight: 600; text-align: center; padding: 8px; background: #fff; border-radius: 4px;"></div>
+      <div style="font-size: 16px; margin-top: 8px;">an der Stelle <span id="stelle-text" style="font-family: 'Cambria Math', Georgia, serif; font-weight: 600;"></span>.</div>
+    </div>
+
+    <div style="background: #eef2f7; border-left: 4px solid #1565c0; padding: 10px 16px; border-radius: 4px; margin-bottom: 20px; font-size: 13px; color: #1565c0;">
+      <b>Hilfsmittel:</b> Diese Aufgabe kannst du sowohl <b>oHiMi</b> (ohne Hilfsmittel) als auch mit dem <b>CAS</b> lösen.
+    </div>
+
+    <!-- Zwischenschritte (Hilfestellung) -->
+    <div style="background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px; font-size: 14px;">Berechne zunächst die beiden Zwischenwerte:</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">
+            f(<span id="x0-1"></span>) = (y-Wert)
+          </label>
+          <input type="text" id="eingabe-y" placeholder="Funktionswert"
+                 style="width: 100%; padding: 9px 12px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">
+            f′(<span id="x0-2"></span>) = (Steigung m)
+          </label>
+          <input type="text" id="eingabe-m" placeholder="Steigung"
+                 style="width: 100%; padding: 9px 12px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Endergebnis: Tangentengleichung -->
+    <div style="margin-bottom: 20px;">
+      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #2c3e50; font-size: 16px;">
+        Tangentengleichung:
+      </label>
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-family: 'Cambria Math', Georgia, serif; font-size: 17px;">
+        <span style="font-weight: 600;">t(x) =</span>
+        <input type="text" id="eingabe-tm" placeholder="m"
+               style="width: 90px; padding: 9px 10px; font-size: 16px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; text-align: center;">
+        <span>x &nbsp;+&nbsp;</span>
+        <input type="text" id="eingabe-tb" placeholder="b"
+               style="width: 90px; padding: 9px 10px; font-size: 16px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; text-align: center;">
+      </div>
+      <div style="font-size: 12px; color: #666; margin-top: 6px;">Bei negativem b einfach das Minuszeichen vor die Zahl schreiben (z. B. −3).</div>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback" style="display: none; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 500;"></div>
+
+    <!-- Rechenweg -->
+    <div id="rechenweg" style="display: none; background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px;">Rechenweg</div>
+      <div id="rechenweg-inhalt" style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="pruefen()"
+              style="padding: 12px 24px; background: #2e7d32; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ✓ Prüfen
+      </button>
+      <button onclick="neueAufgabe()"
+              style="padding: 12px 24px; background: #C8102E; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ↻ Neue Aufgabe
+      </button>
+      <button onclick="rechenwegAnzeigen()"
+              style="padding: 12px 24px; background: #fff; color: #1565c0; border: 2px solid #1565c0; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        💡 Rechenweg anzeigen
+      </button>
+    </div>
+
+    <div style="margin-top: 20px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Formel:</b> t(x) = f′(x<sub>0</sub>) · (x − x<sub>0</sub>) + f(x<sub>0</sub>) &nbsp;·&nbsp; Nach Ausmultiplizieren ergibt sich t(x) = mx + b.
+    </div>
+  </div>
+</div>
+
+<script>
+let aktuelleAufgabe = {};
+
+function generiereAufgabe() {
+  // f(x) = ax² + bx + c oder f(x) = (1/3)x³ + bx² + cx + d
+  const typen = ['quadratisch', 'kubisch_einfach'];
+  const typ = typen[Math.floor(Math.random() * typen.length)];
+
+  let koeffs, funkText;
+  let x0;
+
+  if (typ === 'quadratisch') {
+    // a, b, c so wählen, dass an x0 nette Werte rauskommen
+    const a_options = [0.5, 1, -0.5, -1];
+    const a = a_options[Math.floor(Math.random()*a_options.length)];
+    const b = [-4, -3, -2, -1, 0, 1, 2, 3, 4][Math.floor(Math.random()*9)];
+    const c = [-3, -2, -1, 0, 1, 2, 3][Math.floor(Math.random()*7)];
+    koeffs = [a, b, c];
+    x0 = [-2, -1, 1, 2, 3][Math.floor(Math.random()*5)];
+    funkText = formuleString(koeffs);
+  } else {
+    // Einfache Kubische: f(x) = (1/3)x³ + bx + c
+    const a = 1/3;
+    const b = [-3, -1, 1, 3][Math.floor(Math.random()*4)];
+    const c = [-2, -1, 0, 1, 2][Math.floor(Math.random()*5)];
+    koeffs = [a, 0, b, c];
+    x0 = [-2, -1, 1, 2][Math.floor(Math.random()*4)];
+    funkText = formuleString(koeffs);
+  }
+
+  // f(x0) und f'(x0) berechnen
+  const fx0 = auswerten(koeffs, x0);
+  const ableit = ableite(koeffs);
+  const m = auswerten(ableit, x0);
+  // b der Tangentengleichung: t(x) = m·x + (fx0 - m·x0)
+  const tb = fx0 - m * x0;
+
+  aktuelleAufgabe = { koeffs, x0, fx0, m, tb, funkText };
+
+  document.getElementById('funktion-text').innerHTML = 'f(x) = ' + funkText;
+  document.getElementById('stelle-text').innerHTML = `x<sub>0</sub> = ${x0}`;
+  document.getElementById('x0-1').innerHTML = x0;
+  document.getElementById('x0-2').innerHTML = x0;
+}
+
+function formuleString(koeffs) {
+  const grad = koeffs.length - 1;
+  let parts = [];
+  for (let i = 0; i < koeffs.length; i++) {
+    const k = koeffs[i];
+    const exp = grad - i;
+    if (Math.abs(k) < 1e-10) continue;
+    const abs = Math.abs(k);
+    const isFirst = parts.length === 0;
+    let str = '';
+    if (isFirst) {
+      if (k < 0) str += '−';
+    } else {
+      str += k < 0 ? ' − ' : ' + ';
+    }
+    if (exp === 0) {
+      str += formatiereZahl(abs);
+    } else {
+      // Spezialfall 1/3 für kubisch
+      if (Math.abs(abs - 1/3) < 0.001) str += '⅓';
+      else if (Math.abs(abs - 1) > 1e-10) str += formatiereZahl(abs);
+      str += 'x';
+      if (exp === 2) str += '²';
+      else if (exp === 3) str += '³';
+      else if (exp > 3) str += '^' + exp;
+    }
+    parts.push(str);
+  }
+  return parts.length ? parts.join('') : '0';
+}
+
+function formatiereZahl(z) {
+  if (Math.abs(z - Math.round(z)) < 0.001) return Math.round(z).toString();
+  return z.toString().replace('.', ',');
+}
+
+function ableite(koeffs) {
+  const grad = koeffs.length - 1;
+  const result = new Array(grad).fill(0);
+  for (let i = 0; i < grad; i++) {
+    result[i] = koeffs[i] * (grad - i);
+  }
+  return result;
+}
+
+function auswerten(koeffs, x) {
+  const grad = koeffs.length - 1;
+  let sum = 0;
+  for (let i = 0; i < koeffs.length; i++) {
+    sum += koeffs[i] * Math.pow(x, grad - i);
+  }
+  return sum;
+}
+
+function parseZahl(s) {
+  if (!s) return NaN;
+  s = s.toString().trim().replace(',', '.').replace(/[−–]/g, '-').replace(/\s/g, '');
+  // ⅓ bzw. ein Drittel
+  if (s.includes('/')) {
+    const parts = s.split('/');
+    return parseFloat(parts[0]) / parseFloat(parts[1]);
+  }
+  return parseFloat(s);
+}
+
+function pruefen() {
+  const { x0, fx0, m, tb } = aktuelleAufgabe;
+  const y = parseZahl(document.getElementById('eingabe-y').value);
+  const mEin = parseZahl(document.getElementById('eingabe-m').value);
+  const tmEin = parseZahl(document.getElementById('eingabe-tm').value);
+  const tbEin = parseZahl(document.getElementById('eingabe-tb').value);
+
+  const ergebnisse = [
+    { id: 'eingabe-y', richtig: !isNaN(y) && Math.abs(y - fx0) < 0.01 },
+    { id: 'eingabe-m', richtig: !isNaN(mEin) && Math.abs(mEin - m) < 0.01 },
+    { id: 'eingabe-tm', richtig: !isNaN(tmEin) && Math.abs(tmEin - m) < 0.01 },
+    { id: 'eingabe-tb', richtig: !isNaN(tbEin) && Math.abs(tbEin - tb) < 0.01 }
+  ];
+
+  ergebnisse.forEach(e => {
+    const el = document.getElementById(e.id);
+    if (el.value.trim() === '') {
+      el.style.borderColor = '#d0d0d0';
+      el.style.background = '#fff';
+    } else if (e.richtig) {
+      el.style.borderColor = '#2e7d32';
+      el.style.background = '#e8f5e9';
+    } else {
+      el.style.borderColor = '#c62828';
+      el.style.background = '#fdecea';
+    }
+  });
+
+  const anzahlRichtig = ergebnisse.filter(e => e.richtig).length;
+  const feedback = document.getElementById('feedback');
+  feedback.style.display = 'block';
+
+  if (anzahlRichtig === 4) {
+    feedback.style.background = '#e8f5e9';
+    feedback.style.color = '#1b5e20';
+    feedback.style.border = '1px solid #66bb6a';
+    feedback.innerHTML = '✓ Perfekt! Die Tangentengleichung ist richtig.';
+  } else if (anzahlRichtig >= 2) {
+    feedback.style.background = '#fff8e1';
+    feedback.style.color = '#5d4e00';
+    feedback.style.border = '1px solid #f9a825';
+    feedback.innerHTML = `⚠ ${anzahlRichtig} von 4 Eingaben richtig. Korrigiere die rot markierten Felder.`;
+  } else {
+    feedback.style.background = '#fdecea';
+    feedback.style.color = '#a72824';
+    feedback.style.border = '1px solid #ef5350';
+    feedback.innerHTML = '✗ Noch nicht richtig. Schau dir den Rechenweg an.';
+  }
+}
+
+function rechenwegAnzeigen() {
+  const r = document.getElementById('rechenweg');
+  const i = document.getElementById('rechenweg-inhalt');
+  const { koeffs, x0, fx0, m, tb, funkText } = aktuelleAufgabe;
+  const ableit = ableite(koeffs);
+  const ableitStr = formuleString(ableit);
+
+  const vorzeichen = tb >= 0 ? '+' : '−';
+  const tbAbs = Math.abs(tb);
+
+  i.innerHTML = `
+    <div style="margin-bottom: 6px;"><b>1. Funktionswert berechnen:</b></div>
+    <div style="margin-left: 16px;">f(x) = ${funkText}</div>
+    <div style="margin-left: 16px;">f(${x0}) = ${formatiereZahl(fx0)}</div>
+
+    <div style="margin: 10px 0 6px 0;"><b>2. Ableitung berechnen:</b></div>
+    <div style="margin-left: 16px;">f′(x) = ${ableitStr}</div>
+    <div style="margin-left: 16px;">f′(${x0}) = ${formatiereZahl(m)}  &nbsp;→ Steigung m = ${formatiereZahl(m)}</div>
+
+    <div style="margin: 10px 0 6px 0;"><b>3. In die Tangentenformel einsetzen:</b></div>
+    <div style="margin-left: 16px;">t(x) = m · (x − x<sub>0</sub>) + f(x<sub>0</sub>)</div>
+    <div style="margin-left: 16px;">t(x) = ${formatiereZahl(m)} · (x − (${x0})) + ${formatiereZahl(fx0)}</div>
+    <div style="margin-left: 16px;">t(x) = ${formatiereZahl(m)}x ${m*x0 >= 0 ? '−' : '+'} ${formatiereZahl(Math.abs(m*x0))} + ${formatiereZahl(fx0)}</div>
+    <div style="margin-left: 16px; margin-top: 6px; font-weight: 600; color: #2e7d32;">t(x) = ${formatiereZahl(m)}x ${vorzeichen} ${formatiereZahl(tbAbs)}</div>
+  `;
+  r.style.display = 'block';
+}
+
+function neueAufgabe() {
+  ['eingabe-y', 'eingabe-m', 'eingabe-tm', 'eingabe-tb'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.style.borderColor = '#d0d0d0';
+    el.style.background = '#fff';
+  });
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('rechenweg').style.display = 'none';
+  generiereAufgabe();
+}
+
+generiereAufgabe();
+</script>

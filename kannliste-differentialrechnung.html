@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Kann-Liste: Differentialrechnung – HAW 11</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 10mm 10mm 10mm 10mm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 10pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  /* ---------- KOPFBEREICH ---------- */
+  .kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 6mm;
+    margin-bottom: 6mm;
+  }
+  .kopf-links { flex: 1; }
+  .kopf-titel {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #C8102E;
+    margin: 0 0 2mm 0;
+    letter-spacing: 0.3pt;
+  }
+  .kopf-untertitel {
+    font-size: 11pt;
+    color: #444;
+    margin: 0 0 4mm 0;
+    font-style: italic;
+  }
+  .kopf-felder {
+    display: flex;
+    gap: 8mm;
+    font-size: 9.5pt;
+  }
+  .kopf-feld { border-bottom: 1px solid #999; min-width: 50mm; padding: 0 0 1mm 0; }
+  .kopf-feld-label { font-weight: bold; color: #555; }
+  .kopf-rechts {
+    text-align: right;
+    margin-left: 8mm;
+  }
+  .kopf-logo {
+    height: 22mm;
+    margin-bottom: 3mm;
+  }
+  .kopf-fach {
+    font-size: 9pt;
+    color: #666;
+  }
+
+  /* ---------- ANLEITUNG ---------- */
+  .anleitung {
+    background: #fdf2f3;
+    border-left: 4px solid #C8102E;
+    padding: 3mm 4mm;
+    font-size: 9pt;
+    margin-bottom: 5mm;
+    line-height: 1.45;
+  }
+  .anleitung-titel {
+    font-weight: bold;
+    color: #C8102E;
+    margin-bottom: 1mm;
+  }
+  .ampel-legende {
+    display: inline-flex;
+    gap: 4mm;
+    margin-left: 3mm;
+  }
+  .ampel-eintrag { display: inline-flex; align-items: center; gap: 1mm; }
+  .ampel-kreis {
+    display: inline-block;
+    width: 3mm; height: 3mm;
+    border-radius: 50%;
+    border: 1px solid #555;
+  }
+
+  /* ---------- BEREICHS-HEADER ---------- */
+  .bereich-titel {
+    background: #C8102E;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12pt;
+    padding: 2mm 4mm;
+    margin: 6mm 0 0 0;
+    page-break-after: avoid;
+    letter-spacing: 0.3pt;
+  }
+  .bereich-titel:first-of-type { margin-top: 0; }
+
+  /* ---------- TABELLE ---------- */
+  table.kannliste {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 0;
+  }
+  table.kannliste th {
+    background: #f5e6e8;
+    color: #C8102E;
+    font-weight: bold;
+    text-align: left;
+    padding: 2mm 2mm;
+    border: 1px solid #C8102E;
+    font-size: 9pt;
+    vertical-align: middle;
+  }
+  table.kannliste td {
+    border: 1px solid #c4a8ad;
+    padding: 2.5mm 2mm;
+    vertical-align: top;
+    font-size: 9pt;
+    line-height: 1.4;
+    page-break-inside: avoid;
+  }
+
+  /* Spaltenbreiten (A4 quer = 277 mm nutzbar) */
+  col.col-nr        { width: 10mm; }
+  col.col-kann      { width: 60mm; }
+  col.col-beispiel  { width: 70mm; }
+  col.col-formel    { width: 78mm; }
+  col.col-ampel     { width: 22mm; }
+  col.col-qr        { width: 22mm; }
+
+  /* Zell-Inhalte */
+  .nr {
+    font-weight: bold;
+    color: #C8102E;
+    text-align: center;
+    font-size: 9.5pt;
+  }
+  .kann-text { }
+  .kann-text b, .kann-text strong { font-weight: bold; }
+
+  .beispiel {
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-size: 9pt;
+  }
+  .beispiel-zeile { margin: 0.3mm 0; }
+
+  .formel {
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-size: 9pt;
+  }
+  .formel ol {
+    margin: 0;
+    padding-left: 4mm;
+  }
+  .formel ol li {
+    margin: 0.5mm 0;
+  }
+  .formel p { margin: 0.5mm 0; }
+
+  /* Ampel-Bereich */
+  .ampel-zelle {
+    text-align: center;
+    vertical-align: middle;
+  }
+  .ampel-set {
+    display: flex;
+    justify-content: center;
+    gap: 1.5mm;
+    margin-top: 1mm;
+  }
+  .ampel-feld {
+    width: 5mm; height: 5mm;
+    border-radius: 50%;
+    border: 1.2px solid #333;
+    background: #fff;
+  }
+  .ampel-feld.gruen  { background: radial-gradient(circle, #fff 30%, #fff 70%); border-color: #2e7d32; }
+  .ampel-feld.gelb   { background: radial-gradient(circle, #fff 30%, #fff 70%); border-color: #c79100; }
+  .ampel-feld.rot    { background: radial-gradient(circle, #fff 30%, #fff 70%); border-color: #c62828; }
+
+  /* QR-Codes */
+  .qr-zelle {
+    text-align: center;
+    vertical-align: middle;
+  }
+  .qr-box {
+    display: inline-block;
+    width: 16mm; height: 16mm;
+    background: #fff;
+    position: relative;
+    margin: 1mm auto 0.5mm auto;
+    padding: 0;
+  }
+  .qr-box img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .qr-label {
+    font-size: 7.5pt;
+    color: #666;
+    display: block;
+    margin-top: 0.5mm;
+  }
+
+  /* Mathematik-Schriftbild */
+  .var { font-style: italic; }
+  .frac {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 8.5pt;
+    line-height: 1.1;
+  }
+  .frac > .z { display: block; border-bottom: 1px solid #1a1a1a; padding: 0 1mm; }
+  .frac > .n { display: block; padding: 0 1mm; }
+
+  /* Hervorhebungen */
+  b, strong { font-weight: bold; }
+  em { font-style: italic; }
+
+  /* Notizen-Box (am Ende) */
+  .notizen {
+    border: 1px solid #c4a8ad;
+    padding: 3mm;
+    margin-top: 6mm;
+    page-break-inside: avoid;
+  }
+  .notizen-titel {
+    font-weight: bold;
+    color: #C8102E;
+    margin-bottom: 2mm;
+    font-size: 10pt;
+  }
+  .notizen-linien {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 6mm,
+      #ccc 6mm,
+      #ccc 6.1mm
+    );
+    min-height: 30mm;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 4mm;
+    padding-top: 2mm;
+    border-top: 1px solid #C8102E;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* Druck-Verhalten */
+  @media print {
+    .bereich-titel { page-break-after: avoid; }
+    table.kannliste tr { page-break-inside: avoid; }
+  }
+
+  /* Hilfklassen */
+  .center { text-align: center; }
+  .small { font-size: 8.5pt; color: #555; }
+</style>
+</head>
+<body>
+
+<!-- ============== KOPFBEREICH ============== -->
+<div class="kopf">
+  <div class="kopf-links">
+    <h1 class="kopf-titel">Kann-Liste: Differentialrechnung</h1>
+    <p class="kopf-untertitel">Selbsteinschätzung – Was kann ich schon? Was muss ich noch üben?</p>
+    <div class="kopf-felder">
+      <div class="kopf-feld"><span class="kopf-feld-label">Name:</span></div>
+      <div class="kopf-feld"><span class="kopf-feld-label">Klasse:</span></div>
+      <div class="kopf-feld"><span class="kopf-feld-label">Datum:</span></div>
+    </div>
+  </div>
+  <div class="kopf-rechts">
+    <img src="data:image/png;base64,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" alt="RWB Berufskolleg – Berufliches Gymnasium" class="kopf-logo">
+    <div class="kopf-fach" style="display: none;">Mathematik · Berufliches Gymnasium</div>
+  </div>
+</div>
+
+<!-- ============== ANLEITUNG ============== -->
+<div class="anleitung" style="display: flex; gap: 6mm; align-items: stretch;">
+  <div style="flex: 1;">
+    <div class="anleitung-titel">So nutzt du diese Liste</div>
+    <p style="margin: 0 0 1.5mm 0;">Lies dir jede Kompetenz („Ich kann …") in Ruhe durch und schätze ehrlich ein, wie sicher du dich fühlst. Markiere in der Ampel-Spalte:</p>
+    <p style="margin: 0 0 1.5mm 0;">
+      <span class="ampel-legende" style="margin-left: 0;">
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#2e7d32;"></span><b style="color:#2e7d32;">grün</b> = sicher</span>
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#c79100;"></span><b style="color:#c79100;">gelb</b> = unsicher</span>
+        <span class="ampel-eintrag"><span class="ampel-kreis" style="border-color:#c62828;"></span><b style="color:#c62828;">rot</b> = noch nicht</span>
+      </span>
+    </p>
+    <p style="margin: 0;">Bei <b>gelb</b> und <b>rot</b>: Übungsaufgaben über den QR-Code in der letzten Spalte aufrufen und gezielt nacharbeiten.</p>
+  </div>
+  <div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-left: 4mm; border-left: 1px solid #e8c5c8;">
+    <div style="font-weight: bold; color: #C8102E; font-size: 9pt; margin-bottom: 1.5mm; text-align: center;">Übersicht &amp;<br>Schnellzugriff</div>
+    <div style="width: 22mm; height: 22mm; background: #fff;"><img src="data:image/png;base64,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" alt="QR-Code Übersicht aller Übungen" style="width: 100%; height: 100%; display: block;"></div>
+    <div style="font-size: 7.5pt; color: #666; margin-top: 1mm; text-align: center;">Alle Übungen</div>
+  </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- ============== BEREICH 1 ============== -->
+<!-- ====================================================== -->
+<div class="bereich-titel">1. Einführung in die Differentialrechnung</div>
+
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel">
+    <col class="col-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center">🟢 🟡 🔴</th>
+      <th class="center">Übung</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 1.1 -->
+    <tr>
+      <td class="nr">1.1</td>
+      <td class="kann-text">… die <b>mittlere Änderungsrate</b> einer Funktion in einem Intervall <b>berechnen</b> und <b>geometrisch</b> als Sekantensteigung <b>deuten</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>² &nbsp; auf [1; 3]</div>
+        <div class="beispiel-zeile"><span class="var">m</span><sub>s</sub> = <span class="frac"><span class="z"><span class="var">f</span>(3) − <span class="var">f</span>(1)</span><span class="n">3 − 1</span></span> = <span class="frac"><span class="z">9 − 1</span><span class="n">2</span></span> = 4</div>
+        <div class="beispiel-zeile small">Die Sekante durch (1|1) und (3|9) hat Steigung 4.</div>
+      </td>
+      <td class="formel">
+        <p>Mittlere Änderungsrate im Intervall [<span class="var">a</span>; <span class="var">b</span>]:</p>
+        <p><span class="var">m</span><sub>s</sub> = <span class="frac"><span class="z"><span class="var">f</span>(<span class="var">b</span>) − <span class="var">f</span>(<span class="var">a</span>)</span><span class="n"><span class="var">b</span> − <span class="var">a</span></span></span></p>
+        <p class="small">Entspricht der Steigung der Sekante durch (<span class="var">a</span>|<span class="var">f</span>(<span class="var">a</span>)) und (<span class="var">b</span>|<span class="var">f</span>(<span class="var">b</span>)).</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.1"></div><span class="qr-label">Übung 1.1</span></td>
+    </tr>
+
+    <!-- 1.2 -->
+    <tr>
+      <td class="nr">1.2</td>
+      <td class="kann-text">… die <b>lokale Änderungsrate</b> <b>geometrisch</b> als Tangentensteigung <b>deuten</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>², an Stelle <span class="var">x</span><sub>0</sub> = 2</div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(2) = 4</div>
+        <div class="beispiel-zeile small">Die Tangente an den Graphen im Punkt (2|4) hat Steigung 4.</div>
+      </td>
+      <td class="formel">
+        <p>Die lokale Änderungsrate an der Stelle <span class="var">x</span><sub>0</sub> ist gleich der <b>Steigung der Tangente</b> im Punkt (<span class="var">x</span><sub>0</sub> | <span class="var">f</span>(<span class="var">x</span><sub>0</sub>)).</p>
+        <p><span class="var">m</span><sub>t</sub> = <span class="var">f</span>′(<span class="var">x</span><sub>0</sub>)</p>
+        <p class="small">Aus Sekanten wird durch Annäherung der zweiten Stelle die Tangente.</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.2"></div><span class="qr-label">Übung 1.2</span></td>
+    </tr>
+
+    <!-- 1.3 -->
+    <tr>
+      <td class="nr">1.3</td>
+      <td class="kann-text">… im Punkt eines Graphen eine <b>Tangente nach Augenmaß</b> zeichnen und ihre Steigung mit einem <b>Steigungsdreieck bestimmen</b>.</td>
+      <td class="beispiel">
+        <svg viewBox="0 0 220 135" xmlns="http://www.w3.org/2000/svg" style="width:62mm; height:auto; display:block; margin: 0 auto 1mm auto;">
+          <!-- Hilfsgitter -->
+          <g stroke="#eee" stroke-width="0.3">
+            <line x1="30" y1="20" x2="200" y2="20"/>
+            <line x1="30" y1="43.8" x2="200" y2="43.8"/>
+            <line x1="30" y1="91.2" x2="200" y2="91.2"/>
+            <line x1="30" y1="115" x2="200" y2="115"/>
+            <line x1="54.3" y1="20" x2="54.3" y2="115"/>
+            <line x1="102.9" y1="20" x2="102.9" y2="115"/>
+            <line x1="127.1" y1="20" x2="127.1" y2="115"/>
+            <line x1="151.4" y1="20" x2="151.4" y2="115"/>
+            <line x1="175.7" y1="20" x2="175.7" y2="115"/>
+          </g>
+          <!-- Achsen (Ursprung bei x=0 => sx=78.6, y=0 => sy=91.2) -->
+          <line x1="20" y1="91.2" x2="210" y2="91.2" stroke="#333" stroke-width="0.7"/>
+          <line x1="78.6" y1="10" x2="78.6" y2="125" stroke="#333" stroke-width="0.7"/>
+          <polygon points="210,91.2 205,88.7 205,93.7" fill="#333"/>
+          <polygon points="78.6,10 76.1,15 81.1,15" fill="#333"/>
+          <text x="205" y="100" font-size="7" font-style="italic">x</text>
+          <text x="71" y="14" font-size="7" font-style="italic">y</text>
+          <!-- Beschriftungen -->
+          <g font-size="6" fill="#555">
+            <text x="51" y="100">-1</text>
+            <text x="101" y="100">1</text>
+            <text x="125" y="100">2</text>
+            <text x="149" y="100">3</text>
+            <text x="173" y="100">4</text>
+            <text x="68" y="69.5">1</text>
+            <text x="68" y="45.8">2</text>
+          </g>
+          <!-- Funktionsgraph f -->
+          <path d="M 34.9,55.9 L 37.3,51.1 L 39.7,46.8 L 42.1,43.0 L 44.6,39.8 L 47.0,37.1 L 49.4,34.9 L 51.9,33.2 L 54.3,31.9 L 56.7,31.0 L 59.1,30.6 L 61.6,30.5 L 64.0,30.8 L 66.4,31.4 L 68.9,32.4 L 71.3,33.6 L 73.7,35.2 L 76.1,37.0 L 78.6,39.0 L 81.0,41.2 L 83.4,43.7 L 85.9,46.3 L 88.3,49.0 L 90.7,51.9 L 93.1,54.9 L 95.6,58.0 L 98.0,61.1 L 100.4,64.3 L 102.9,67.5 L 105.3,70.7 L 107.7,73.9 L 110.1,77.0 L 112.6,80.1 L 115.0,83.1 L 117.4,86.0 L 119.9,88.7 L 122.3,91.3 L 124.7,93.8 L 127.1,96.0 L 129.6,98.0 L 132.0,99.8 L 134.4,101.4 L 136.9,102.6 L 139.3,103.6 L 141.7,104.2 L 144.1,104.5 L 146.6,104.4 L 149.0,104.0 L 151.4,103.1 L 153.9,101.8 L 156.3,100.1 L 158.7,97.9 L 161.1,95.2 L 163.6,92.0 L 166.0,88.2 L 168.4,83.9 L 170.9,79.1 L 173.3,73.6 L 175.7,67.5 L 178.1,60.8 L 180.6,53.4 L 183.0,45.3 L 185.4,36.5 L 187.9,27.0"
+                fill="none" stroke="#1565c0" stroke-width="1.5"/>
+          <text x="42" y="55" font-size="7" font-style="italic" fill="#1565c0">f</text>
+          <!-- Tangente (Steigung 0,45 durch P(3|-0,5)) -->
+          <line x1="115.0" y1="119.2" x2="187.9" y2="87.1" stroke="#2e7d32" stroke-width="1.3"/>
+          <text x="186" y="83" font-size="7" font-style="italic" fill="#2e7d32">t</text>
+          <!-- Punkt P bei (3 | -0,5) -->
+          <circle cx="151.4" cy="103.1" r="2" fill="#C8102E"/>
+          <text x="146" y="115" font-size="7" font-style="italic" fill="#C8102E">P</text>
+          <!-- Steigungsdreieck am Punkt: 1 nach rechts, dann hoch um Δy -->
+          <g stroke="#c79100" stroke-width="1" fill="none">
+            <line x1="151.4" y1="103.1" x2="175.7" y2="103.1"/>
+            <line x1="175.7" y1="103.1" x2="175.7" y2="92.4"/>
+          </g>
+          <text x="158" y="111" font-size="6" fill="#c79100">Δx = 1</text>
+          <text x="178" y="100" font-size="6" fill="#c79100">Δy</text>
+        </svg>
+        <div class="beispiel-zeile" style="text-align:center;"><span class="var">m</span> = <span class="frac"><span class="z">Δ<span class="var">y</span></span><span class="n">Δ<span class="var">x</span></span></span> ≈ <span class="frac"><span class="z">0,45</span><span class="n">1</span></span> ≈ <b>0,45</b></div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li>Tangente durch den Punkt einzeichnen (Lineal anlegen).</li>
+          <li>Steigungsdreieck mit Δ<span class="var">x</span> = 1 wählen.</li>
+          <li>Δ<span class="var">y</span> ablesen.</li>
+          <li>Steigung: <span class="var">m</span> = <span class="frac"><span class="z">Δ<span class="var">y</span></span><span class="n">Δ<span class="var">x</span></span></span></li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.3"></div><span class="qr-label">Übung 1.3</span></td>
+    </tr>
+
+    <!-- 1.4 -->
+    <tr>
+      <td class="nr">1.4</td>
+      <td class="kann-text">… die ersten drei Ableitungen einer ganzrationalen Funktion mithilfe von <b>Potenz-, Faktor- und Summenregel berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = 0,25<span class="var">x</span>⁴ + 0,5<span class="var">x</span>³ + 4<span class="var">x</span>² + 6<span class="var">x</span> + 2</div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(<span class="var">x</span>) = <span class="var">x</span>³ + 1,5<span class="var">x</span>² + 8<span class="var">x</span> + 6</div>
+        <div class="beispiel-zeile"><span class="var">f</span>″(<span class="var">x</span>) = 3<span class="var">x</span>² + 3<span class="var">x</span> + 8</div>
+        <div class="beispiel-zeile"><span class="var">f</span>‴(<span class="var">x</span>) = 6<span class="var">x</span> + 3</div>
+      </td>
+      <td class="formel">
+        <p><b>Potenzregel:</b> Wenn <span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span><sup><span class="var">n</span></sup>, dann <span class="var">f</span>′(<span class="var">x</span>) = <span class="var">n</span> · <span class="var">x</span><sup><span class="var">n</span>−1</sup></p>
+        <p><b>Faktorregel:</b> Konstante Faktoren bleiben erhalten.</p>
+        <p><b>Summenregel:</b> Jeder Summand wird einzeln abgeleitet.</p>
+        <p class="small">Konstante Summanden fallen weg.</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAIAAAC5ZBI0AAAJKklEQVR4nO3dy40cuBVAUbehdCYGx+BIHYNjmIDKCRiEZiiKj7fP2Qqqf19w8Uh+fT6ffwC875+3XwDAryFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERP3b+8x//+veveh1D/Pnf/yz+def93nrkc9aveef9nvus1nY+yd6nccvOt2B1BkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRHx9Pp+//Z93pplvuTW9vWPmHPyaz+r3+G5/g2tWZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQMTWXQE7XpzefvG8/1tz4bc+q3PP++L8/dqLf4NrVmdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0DEtV0BLzp3z8DadztZf+f/nntH5/T2G9xidQZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTYFfAX7Mz9n9szsHZuOv/F+fsXv0F+ntUZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQcW1XwHc7Af3WefC39hvsPO/OZ3Xrd/Xi/Qa9v0GrMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIOLgroDe6em3zpI/t6Pg3Nn55553bebui1vz972/wTWrMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIGJrV0DvrPEd5/YM3JrdX5s5B7/24mtee/E1n2N1BkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRGztCrh1dv65Rz73vOfOvz9n5on+t351M53b5zDzr3vN6gyIkDMgQs6ACDkDIuQMiJAzIELOgAg5AyLkDIjY2hVwzszT8Xe8uEfi3Ez5TLc+q7VbOyjOvaNzj2x1BkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRBzcFXDrdPxbdwWce+RztxDcOpV/5s6NmW7d2LDj1vdrdQZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkQc3BVwa2r83Cz7uUdeO/fI57x4hv1Mbnv4eVZnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxNfn87nyxLcm7Ndmnn9/awfFOTMn+1+cg1+buTNnbed5rc6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoCIrbsCzJT/Kuc+yXO7L27d53DLizc27LyqF+9zsDoDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMiht4VsOPc9PbMmwRu+W57Qm6df3/Orfs6zn0aVmdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0DEwbsCZk5CzzzxfeZJ82szd1/sPPLO/711Kv/OI+/Y+TTOvV+rMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIGJrV8DazLnwW3PStx75xZ0b55w7HX/mPRIv7ijYYXUGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEbO0KuHXu/swT39denAtf6+03ePEdzfxduSsAYIucARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxNfn8/nb//nWRPKLp7bvmLm/4pyZJ/rPdOseiZm/SaszIELOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgYmtXwI5bE8m35uBnvt9bc/B2I/y8F2f3b+29sToDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMifpx76FuTwS9O2PdOqT/3jmZOya99t+/31p4BqzMgQs6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBia1fAzMngtZ1XNfM8+B3nPo0dL95gMPPbn/mqzrE6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIq7dFeB5f4+d2e5b+zpm3kKw49YM/blvf8e5R7Y6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIr4+n8/t1/B/zLyFYObp6Tuz7DNPfH/x279l5ju69buyOgMi5AyIkDMgQs6ACDkDIuQMiJAzIELOgAg5AyKG7gpYmzmfvXZrevvcDL3Z/Z/n2/89rM6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoCIa7sCbk1vvzjrvOPWO3pxOv/clHzPuU9j5zdpdQZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkT8OPfQMyfsd+aVZ57afs7MV7U2c5/DizcnzJz7X7M6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIrbuCjh3tvqLM/RrM2fKZ06NnzNzz8AtM/9SdlidARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEVt3Bbw4Yz1zN8K5CfuZ0+q3dhTM/PZvfUcz95PssDoDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMitu4K+G565/2v9c6SnznLfuvui5l7JHZYnQERcgZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFbdwXMPId+x8zbD27tGZg5rb7ju+1zuPV+b+2+sDoDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMitnYFrM2cwL61k6E3Qz/zpPlb32/vd3Xuec99VlZnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxMFdAWsvngd/bhJ655Fvze6vnft+b+0ouPUdzdzncO6Xs8PqDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiLi2K+BFO7POM6eoZ5q5o+DFKfkXd33ssDoDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMi7Ar4ZV6cC5/5vDMnzs+Z+ctZu/W7WrM6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIq7tCpg5Vbx27jWfm6HfOeH+3KvaeeSZ59/PnN2feevCOVZnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxMFdATPnpHe8OGF/a9J951W9uGNk7dwuiB239gys7bxfqzMgQs6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyDi6/P53H4NAL+A1RkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQIScARH/A5Rwmhks7uWTAAAAAElFTkSuQmCC" alt="QR-Code Übung 1.4"></div><span class="qr-label">Übung 1.4</span></td>
+    </tr>
+
+    <!-- 1.5 -->
+    <tr>
+      <td class="nr">1.5</td>
+      <td class="kann-text">… die <b>Steigung</b> des Graphen einer Funktion <b>an einer Stelle</b> mithilfe der Ableitung <b>berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>³ − 2<span class="var">x</span></div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(<span class="var">x</span>) = 3<span class="var">x</span>² − 2</div>
+        <div class="beispiel-zeile">Steigung bei <span class="var">x</span><sub>0</sub> = 2:</div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(2) = 3 · 4 − 2 = <b>10</b></div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li>Ableitung <span class="var">f</span>′(<span class="var">x</span>) bilden.</li>
+          <li>Stelle <span class="var">x</span><sub>0</sub> in <span class="var">f</span>′(<span class="var">x</span>) einsetzen.</li>
+          <li>Wert <span class="var">f</span>′(<span class="var">x</span><sub>0</sub>) ist die Steigung der Tangente in (<span class="var">x</span><sub>0</sub> | <span class="var">f</span>(<span class="var">x</span><sub>0</sub>)).</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.5"></div><span class="qr-label">Übung 1.5</span></td>
+    </tr>
+
+    <!-- 1.6 -->
+    <tr>
+      <td class="nr">1.6</td>
+      <td class="kann-text">… die <b>Stelle bestimmen</b>, an der der Graph einer Funktion eine <b>vorgegebene Steigung</b> hat.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>² − 4<span class="var">x</span>, gesucht: <span class="var">m</span> = 2</div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(<span class="var">x</span>) = 2<span class="var">x</span> − 4</div>
+        <div class="beispiel-zeile">2<span class="var">x</span> − 4 = 2</div>
+        <div class="beispiel-zeile">2<span class="var">x</span> = 6 → <span class="var">x</span> = <b>3</b></div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li>Ableitung <span class="var">f</span>′(<span class="var">x</span>) bilden.</li>
+          <li>Gleichung <span class="var">f</span>′(<span class="var">x</span>) = <span class="var">m</span> aufstellen.</li>
+          <li>Nach <span class="var">x</span> auflösen.</li>
+        </ol>
+        <p class="small">Mehrere Lösungen möglich, je nach Grad der Ableitung.</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.6"></div><span class="qr-label">Übung 1.6</span></td>
+    </tr>
+
+    <!-- 1.7 -->
+    <tr>
+      <td class="nr">1.7</td>
+      <td class="kann-text">… die <b>Gleichung der Tangente</b> an den Graphen einer Funktion an einer beliebigen Stelle <b>aufstellen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>², Stelle <span class="var">x</span><sub>0</sub> = 2</div>
+        <div class="beispiel-zeile"><span class="var">f</span>(2) = 4, <span class="var">f</span>′(<span class="var">x</span>) = 2<span class="var">x</span>, <span class="var">f</span>′(2) = 4</div>
+        <div class="beispiel-zeile"><span class="var">t</span>(<span class="var">x</span>) = 4(<span class="var">x</span> − 2) + 4</div>
+        <div class="beispiel-zeile"><b><span class="var">t</span>(<span class="var">x</span>) = 4<span class="var">x</span> − 4</b></div>
+      </td>
+      <td class="formel">
+        <p>Tangentengleichung an der Stelle <span class="var">x</span><sub>0</sub>:</p>
+        <p><span class="var">t</span>(<span class="var">x</span>) = <span class="var">f</span>′(<span class="var">x</span><sub>0</sub>) · (<span class="var">x</span> − <span class="var">x</span><sub>0</sub>) + <span class="var">f</span>(<span class="var">x</span><sub>0</sub>)</p>
+        <ol>
+          <li><span class="var">f</span>(<span class="var">x</span><sub>0</sub>) berechnen (<i>y</i>-Wert).</li>
+          <li><span class="var">f</span>′(<span class="var">x</span><sub>0</sub>) berechnen (Steigung).</li>
+          <li>In Formel einsetzen und ausmultiplizieren.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.7"></div><span class="qr-label">Übung 1.7</span></td>
+    </tr>
+
+    <!-- 1.8 -->
+    <tr>
+      <td class="nr">1.8</td>
+      <td class="kann-text">… einem Funktionsgraphen den zugehörigen Graphen der <b>Ableitungsfunktion</b> mithilfe der <b>NEW-Regel</b> (Nullstellen – Extrempunkte – Wendepunkte) <b>skizzieren</b>.</td>
+      <td class="beispiel">
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" style="width:62mm; height:auto; display:block; margin: 0 auto;">
+          <!-- ============ Oberes KS: f ============ -->
+          <!-- Achsen (x-Achse bei sy=92.14, y-Achse bei sx=30) -->
+          <line x1="20" y1="92.1" x2="210" y2="92.1" stroke="#333" stroke-width="0.7"/>
+          <line x1="30" y1="10" x2="30" y2="110" stroke="#333" stroke-width="0.7"/>
+          <polygon points="210,92.1 205,89.6 205,94.6" fill="#333"/>
+          <polygon points="30,10 27,15 33,15" fill="#333"/>
+          <text x="205" y="100" font-size="7" font-style="italic">x</text>
+          <text x="22" y="14" font-size="7" font-style="italic">y</text>
+          <text x="35" y="20" font-size="8" font-style="italic" fill="#1565c0" font-weight="bold">f</text>
+          <!-- x-Tick-Beschriftung -->
+          <g font-size="6" fill="#555">
+            <text x="70" y="100">2</text>
+            <text x="112" y="100">4</text>
+            <text x="155" y="100">6</text>
+          </g>
+          <!-- Funktionsgraph f -->
+          <path d="M 30.0,92.1 L 32.1,84.7 L 34.2,77.7 L 36.4,71.3 L 38.5,65.3 L 40.6,59.7 L 42.8,54.7 L 44.9,50.0 L 47.0,45.8 L 49.1,42.0 L 51.2,38.6 L 53.4,35.5 L 55.5,32.9 L 57.6,30.6 L 59.8,28.7 L 61.9,27.1 L 64.0,25.8 L 66.1,24.8 L 68.2,24.1 L 70.4,23.7 L 72.5,23.6 L 74.6,23.7 L 76.8,24.1 L 78.9,24.7 L 81.0,25.5 L 83.1,26.5 L 85.2,27.7 L 87.4,29.1 L 89.5,30.7 L 91.6,32.4 L 93.8,34.3 L 95.9,36.3 L 98.0,38.4 L 100.1,40.6 L 102.3,42.9 L 104.4,45.3 L 106.5,47.7 L 108.6,50.2 L 110.8,52.7 L 112.9,55.3 L 115.0,57.9 L 117.1,60.4 L 119.2,63.0 L 121.4,65.5 L 123.5,68.0 L 125.6,70.4 L 127.8,72.8 L 129.9,75.1 L 132.0,77.3 L 134.1,79.4 L 136.2,81.4 L 138.4,83.3 L 140.5,85.0 L 142.6,86.6 L 144.8,88.0 L 146.9,89.2 L 149.0,90.2 L 151.1,91.0 L 153.2,91.6 L 155.4,92.0 L 157.5,92.1 L 159.6,92.0 L 161.8,91.6 L 163.9,90.9 L 166.0,89.9 L 168.1,88.7 L 170.2,87.1 L 172.4,85.1 L 174.5,82.8 L 176.6,80.2 L 178.8,77.1 L 180.9,73.7 L 183.0,69.9 L 185.1,65.7 L 187.2,61.1 L 189.4,56.0 L 191.5,50.5 L 193.6,44.5 L 195.8,38.0 L 197.9,31.0 L 200.0,23.6"
+                fill="none" stroke="#1565c0" stroke-width="1.6"/>
+          <!-- Markante Punkte auf f -->
+          <circle cx="72.5" cy="23.6" r="2" fill="#C8102E"/>
+          <text x="60" y="22" font-size="6" fill="#C8102E" font-weight="bold">HP</text>
+          <circle cx="115.0" cy="57.9" r="2" fill="#c79100"/>
+          <text x="118" y="55" font-size="6" fill="#c79100" font-weight="bold">WP</text>
+          <circle cx="157.5" cy="92.1" r="2" fill="#C8102E"/>
+          <text x="160" y="89" font-size="6" fill="#C8102E" font-weight="bold">TP</text>
+
+          <!-- ============ Verbindungslinien (gestrichelt) ============ -->
+          <g stroke="#999" stroke-width="0.6" stroke-dasharray="2,1.5">
+            <line x1="72.5" y1="23.6" x2="72.5" y2="186"/>
+            <line x1="115.0" y1="57.9" x2="115.0" y2="202"/>
+            <line x1="157.5" y1="92.1" x2="157.5" y2="186"/>
+          </g>
+
+          <!-- ============ Unteres KS: f' ============ -->
+          <!-- Achsen (x-Achse bei sy=186, y-Achse bei sx=30) -->
+          <line x1="20" y1="186" x2="210" y2="186" stroke="#333" stroke-width="0.7"/>
+          <line x1="30" y1="125" x2="30" y2="215" stroke="#333" stroke-width="0.7"/>
+          <polygon points="210,186 205,183.5 205,188.5" fill="#333"/>
+          <polygon points="30,125 27,130 33,130" fill="#333"/>
+          <text x="205" y="194" font-size="7" font-style="italic">x</text>
+          <text x="22" y="129" font-size="7" font-style="italic">y</text>
+          <text x="35" y="135" font-size="8" font-style="italic" fill="#2e7d32" font-weight="bold">f ′</text>
+          <!-- x-Tick-Beschriftung -->
+          <g font-size="6" fill="#555">
+            <text x="70" y="194">2</text>
+            <text x="112" y="194">4</text>
+            <text x="155" y="194">6</text>
+          </g>
+          <!-- Funktionsgraph f' (echte Parabel) -->
+          <path d="M 30.0,138.0 L 32.1,141.2 L 34.2,144.2 L 36.4,147.2 L 38.5,150.2 L 40.6,153.0 L 42.8,155.8 L 44.9,158.4 L 47.0,161.0 L 49.1,163.6 L 51.2,166.0 L 53.4,168.4 L 55.5,170.6 L 57.6,172.8 L 59.8,175.0 L 61.9,177.0 L 64.0,179.0 L 66.1,180.8 L 68.2,182.6 L 70.4,184.4 L 72.5,186.0 L 74.6,187.6 L 76.8,189.0 L 78.9,190.4 L 81.0,191.8 L 83.1,193.0 L 85.2,194.2 L 87.4,195.2 L 89.5,196.2 L 91.6,197.2 L 93.8,198.0 L 95.9,198.8 L 98.0,199.4 L 100.1,200.0 L 102.3,200.6 L 104.4,201.0 L 106.5,201.4 L 108.6,201.6 L 110.8,201.8 L 112.9,202.0 L 115.0,202.0 L 117.1,202.0 L 119.2,201.8 L 121.4,201.6 L 123.5,201.4 L 125.6,201.0 L 127.8,200.6 L 129.9,200.0 L 132.0,199.4 L 134.1,198.8 L 136.2,198.0 L 138.4,197.2 L 140.5,196.2 L 142.6,195.2 L 144.8,194.2 L 146.9,193.0 L 149.0,191.8 L 151.1,190.4 L 153.2,189.0 L 155.4,187.6 L 157.5,186.0 L 159.6,184.4 L 161.8,182.6 L 163.9,180.8 L 166.0,179.0 L 168.1,177.0 L 170.2,175.0 L 172.4,172.8 L 174.5,170.6 L 176.6,168.4 L 178.8,166.0 L 180.9,163.6 L 183.0,161.0 L 185.1,158.4 L 187.2,155.8 L 189.4,153.0 L 191.5,150.2 L 193.6,147.2 L 195.8,144.2 L 197.9,141.2 L 200.0,138.0"
+                fill="none" stroke="#2e7d32" stroke-width="1.6"/>
+          <!-- Markante Punkte auf f' -->
+          <circle cx="72.5" cy="186" r="2" fill="#C8102E"/>
+          <text x="62" y="183" font-size="6" fill="#C8102E" font-weight="bold">N</text>
+          <circle cx="115.0" cy="202" r="2" fill="#c79100"/>
+          <text x="118" y="208" font-size="6" fill="#c79100" font-weight="bold">TP</text>
+          <circle cx="157.5" cy="186" r="2" fill="#C8102E"/>
+          <text x="160" y="183" font-size="6" fill="#C8102E" font-weight="bold">N</text>
+        </svg>
+        <div class="beispiel-zeile small" style="text-align:center; margin-top:1mm;">HP/TP von <span class="var">f</span> → <b>N</b>ullstellen von <span class="var">f</span> ′ &nbsp;·&nbsp; <b>W</b>P von <span class="var">f</span> → <b>E</b>xtremum von <span class="var">f</span> ′</div>
+      </td>
+      <td class="formel">
+        <p><b>NEW-Regel:</b></p>
+        <ol>
+          <li><b>N</b>ullstellen von <span class="var">f</span>′ = Extrempunkte von <span class="var">f</span></li>
+          <li><b>E</b>xtrempunkte von <span class="var">f</span>′ = Wendepunkte von <span class="var">f</span></li>
+          <li><b>W</b>endepunkte von <span class="var">f</span>′ kommen aus Krümmungs­änderungen höherer Ordnung.</li>
+        </ol>
+        <p class="small">Zusatz: Steigt <span class="var">f</span> → <span class="var">f</span>′ > 0; fällt <span class="var">f</span> → <span class="var">f</span>′ < 0.</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 1.8"></div><span class="qr-label">Übung 1.8</span></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- ====================================================== -->
+<!-- ============== BEREICH 2 ============== -->
+<!-- ====================================================== -->
+<div class="bereich-titel">2. Extrem- und Wendepunkte</div>
+
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel">
+    <col class="col-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center">🟢 🟡 🔴</th>
+      <th class="center">Übung</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 2.1 -->
+    <tr>
+      <td class="nr">2.1</td>
+      <td class="kann-text">… die <b>notwendige und hinreichende Bedingung</b> für <b>Extrempunkte</b> nennen und <b>erläutern</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><b>Notwendig:</b> An einer Extremstelle muss die Tangente waagerecht sein.</div>
+        <div class="beispiel-zeile"><b>Hinreichend:</b> Die Krümmung entscheidet, ob Hoch- oder Tiefpunkt.</div>
+      </td>
+      <td class="formel">
+        <p><b>Notwendige Bedingung:</b> <span class="var">f</span>′(<span class="var">x</span><sub>E</sub>) = 0</p>
+        <p><b>Hinreichende Bedingung (2. Ableitung):</b></p>
+        <ol>
+          <li><span class="var">f</span>″(<span class="var">x</span><sub>E</sub>) < 0 → lokales <b>Maximum</b> (Hochpunkt)</li>
+          <li><span class="var">f</span>″(<span class="var">x</span><sub>E</sub>) > 0 → lokales <b>Minimum</b> (Tiefpunkt)</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.1"></div><span class="qr-label">Übung 2.1</span></td>
+    </tr>
+
+    <!-- 2.2 -->
+    <tr>
+      <td class="nr">2.2</td>
+      <td class="kann-text">… die <b>Extrempunkte</b> (Hoch- und Tiefpunkte) einer ganzrationalen Funktion mithilfe der <b>notwendigen und hinreichenden Bedingung</b> (2. Ableitung) <b>berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="frac"><span class="z">1</span><span class="n">3</span></span><span class="var">x</span>³ − 3<span class="var">x</span></div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(<span class="var">x</span>) = <span class="var">x</span>² − 3 = 0 → <span class="var">x</span><sub>1</sub> ≈ 1,73; <span class="var">x</span><sub>2</sub> ≈ −1,73</div>
+        <div class="beispiel-zeile"><span class="var">f</span>″(<span class="var">x</span>) = 2<span class="var">x</span></div>
+        <div class="beispiel-zeile"><span class="var">f</span>″(1,73) ≈ 3,46 > 0 → TP</div>
+        <div class="beispiel-zeile"><span class="var">f</span>″(−1,73) ≈ −3,46 < 0 → HP</div>
+        <div class="beispiel-zeile"><b>HP</b>(−1,73 | 3,46), <b>TP</b>(1,73 | −3,46)</div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li><b>Notwendige Bedingung:</b> <span class="var">f</span>′(<span class="var">x</span>) = 0 → Lösungen <span class="var">x</span><sub>E</sub>.</li>
+          <li><b>Hinreichende Bedingung:</b> Werte in <span class="var">f</span>″(<span class="var">x</span>) einsetzen.</li>
+          <li><b><span class="var">y</span>-Werte berechnen:</b> <span class="var">f</span>(<span class="var">x</span><sub>E</sub>).</li>
+          <li>Hoch-/Tiefpunkt als Koordinaten angeben.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.2"></div><span class="qr-label">Übung 2.2</span></td>
+    </tr>
+
+    <!-- 2.3 -->
+    <tr>
+      <td class="nr">2.3</td>
+      <td class="kann-text">… die <b>notwendige und hinreichende Bedingung</b> für <b>Wendepunkte</b> nennen und <b>erläutern</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><b>Notwendig:</b> An einer Wendestelle ändert sich die Krümmung – die zweite Ableitung wird null.</div>
+        <div class="beispiel-zeile"><b>Hinreichend:</b> Die 3. Ableitung ist ungleich null (Krümmungswechsel ist nachgewiesen).</div>
+      </td>
+      <td class="formel">
+        <p><b>Notwendige Bedingung:</b> <span class="var">f</span>″(<span class="var">x</span><sub>W</sub>) = 0</p>
+        <p><b>Hinreichende Bedingung (3. Ableitung):</b></p>
+        <ol>
+          <li><span class="var">f</span>‴(<span class="var">x</span><sub>W</sub>) > 0 → <b>R-L-Wendepunkt</b> (von rechts- nach linksgekrümmt)</li>
+          <li><span class="var">f</span>‴(<span class="var">x</span><sub>W</sub>) < 0 → <b>L-R-Wendepunkt</b></li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.3"></div><span class="qr-label">Übung 2.3</span></td>
+    </tr>
+
+    <!-- 2.4 -->
+    <tr>
+      <td class="nr">2.4</td>
+      <td class="kann-text">… die <b>Wendepunkte</b> einer ganzrationalen Funktion mithilfe der <b>notwendigen und hinreichenden Bedingung</b> (3. Ableitung) <b>berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">f</span>(<span class="var">x</span>) = <span class="frac"><span class="z">1</span><span class="n">3</span></span><span class="var">x</span>³ − 3<span class="var">x</span></div>
+        <div class="beispiel-zeile"><span class="var">f</span>″(<span class="var">x</span>) = 2<span class="var">x</span> = 0 → <span class="var">x</span><sub>W</sub> = 0</div>
+        <div class="beispiel-zeile"><span class="var">f</span>‴(<span class="var">x</span>) = 2 ≠ 0 → R-L-Wendepunkt</div>
+        <div class="beispiel-zeile"><span class="var">f</span>(0) = 0</div>
+        <div class="beispiel-zeile"><b>W</b>(0 | 0)</div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li><b>Notwendige Bedingung:</b> <span class="var">f</span>″(<span class="var">x</span>) = 0 → Lösungen <span class="var">x</span><sub>W</sub>.</li>
+          <li><b>Hinreichende Bedingung:</b> Werte in <span class="var">f</span>‴(<span class="var">x</span>) einsetzen, prüfen ob ≠ 0.</li>
+          <li><b><span class="var">y</span>-Werte berechnen:</b> <span class="var">f</span>(<span class="var">x</span><sub>W</sub>).</li>
+          <li>Wendepunkt als Koordinaten angeben.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.4"></div><span class="qr-label">Übung 2.4</span></td>
+    </tr>
+
+    <!-- 2.5 -->
+    <tr>
+      <td class="nr">2.5</td>
+      <td class="kann-text">… <b>prüfen</b>, ob ein Wendepunkt ein <b>Sattelpunkt</b> ist.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">Aus 2.4: <b>W</b>(0 | 0)</div>
+        <div class="beispiel-zeile"><span class="var">f</span>′(0) = 0² − 3 = −3 ≠ 0</div>
+        <div class="beispiel-zeile">→ <b>kein Sattelpunkt</b></div>
+        <div class="beispiel-zeile small">Bei <span class="var">g</span>(<span class="var">x</span>) = <span class="var">x</span>³: <span class="var">g</span>′(0) = 0 → <b>Sattelpunkt</b> in (0|0)</div>
+      </td>
+      <td class="formel">
+        <p>Ein Sattelpunkt ist ein <b>Wendepunkt mit waagerechter Tangente</b>.</p>
+        <p><b>Zusätzliche Bedingung:</b> <span class="var">f</span>′(<span class="var">x</span><sub>W</sub>) = 0</p>
+        <ol>
+          <li>Wendepunkt mit 2.4 berechnen.</li>
+          <li><span class="var">f</span>′(<span class="var">x</span><sub>W</sub>) prüfen.</li>
+          <li>= 0 → Sattelpunkt; ≠ 0 → kein Sattelpunkt.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.5"></div><span class="qr-label">Übung 2.5</span></td>
+    </tr>
+
+    <!-- 2.6 -->
+    <tr>
+      <td class="nr">2.6</td>
+      <td class="kann-text">… Extrem- und Wendepunkte aus einem <b>Sachkontext heraus interpretieren</b> (z. B. maximaler Gewinn, stärkste Änderung).</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">G</span>(<span class="var">x</span>) = Gewinn in € bei <span class="var">x</span> Stück</div>
+        <div class="beispiel-zeile">HP bei <span class="var">x</span> = 50 → max. Gewinn bei 50 Stück</div>
+        <div class="beispiel-zeile"><span class="var">K</span>(<span class="var">x</span>) hat WP bei <span class="var">x</span> = 30</div>
+        <div class="beispiel-zeile">→ bei 30 Stück: stärkste / schwächste Kostenzunahme</div>
+      </td>
+      <td class="formel">
+        <p><b>Extrempunkte:</b> beschreiben „größte/kleinste" Werte im Sachkontext (max. Gewinn, min. Kosten, max. Geschwindigkeit).</p>
+        <p><b>Wendepunkte:</b> beschreiben Stellen mit <b>stärkster oder schwächster Änderung</b> (z. B. Übergang von beschleunigtem zu gedämpftem Wachstum).</p>
+        <p class="small">Stets mit <b>Einheit</b> und im <b>Sachbezug</b> antworten.</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 2.6"></div><span class="qr-label">Übung 2.6</span></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- ====================================================== -->
+<!-- ============== BEREICH 3 ============== -->
+<!-- ====================================================== -->
+<div class="bereich-titel">3. Bestimmung ganzrationaler Funktionen (Gauß-Verfahren)</div>
+
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel">
+    <col class="col-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center">🟢 🟡 🔴</th>
+      <th class="center">Übung</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 3.1 -->
+    <tr>
+      <td class="nr">3.1</td>
+      <td class="kann-text">… aus <b>vier gegebenen Punkten</b> ein <b>lineares Gleichungssystem (LGS)</b> zur Bestimmung einer ganzrationalen Funktion 3. Grades <b>aufstellen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">Geg.: <span class="var">A</span>(0|1), <span class="var">B</span>(1|0), <span class="var">C</span>(−1|2), <span class="var">D</span>(2|5)</div>
+        <div class="beispiel-zeile">Ansatz: <span class="var">f</span>(<span class="var">x</span>) = <span class="var">a</span><span class="var">x</span>³ + <span class="var">b</span><span class="var">x</span>² + <span class="var">c</span><span class="var">x</span> + <span class="var">d</span></div>
+        <div class="beispiel-zeile" style="margin-top:1mm;">Einsetzen jedes Punkts:</div>
+        <div class="beispiel-zeile">I: &nbsp;&nbsp;<span class="var">d</span> = 1</div>
+        <div class="beispiel-zeile">II:&nbsp; <span class="var">a</span> + <span class="var">b</span> + <span class="var">c</span> + <span class="var">d</span> = 0</div>
+        <div class="beispiel-zeile">III: −<span class="var">a</span> + <span class="var">b</span> − <span class="var">c</span> + <span class="var">d</span> = 2</div>
+        <div class="beispiel-zeile">IV:&nbsp; 8<span class="var">a</span> + 4<span class="var">b</span> + 2<span class="var">c</span> + <span class="var">d</span> = 5</div>
+      </td>
+      <td class="formel">
+        <p><b>Allgemeiner Ansatz für Grad 3:</b></p>
+        <p><span class="var">f</span>(<span class="var">x</span>) = <span class="var">a</span><span class="var">x</span>³ + <span class="var">b</span><span class="var">x</span>² + <span class="var">c</span><span class="var">x</span> + <span class="var">d</span></p>
+        <ol>
+          <li>Jeden Punkt <span class="var">P</span>(<span class="var">x</span><sub><span class="var">i</span></sub>|<span class="var">y</span><sub><span class="var">i</span></sub>) in <span class="var">f</span>(<span class="var">x</span>) einsetzen → 4 Gleichungen.</li>
+          <li>Gleichungssystem mit 4 Unbekannten (<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>, <span class="var">d</span>) aufschreiben.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 3.1"></div><span class="qr-label">Übung 3.1</span></td>
+    </tr>
+
+    <!-- 3.2 -->
+    <tr>
+      <td class="nr">3.2</td>
+      <td class="kann-text">… ein lineares Gleichungssystem mit dem <b>Gauß-Verfahren</b> (per Hand oder mit CAS/GTR) <b>lösen</b>, indem ich es in die <b>Stufenform überführe</b> und die Koeffizienten durch <b>Rückwärtseinsetzen bestimme</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><b>Variante 1: Per Hand (Gauß)</b></div>
+        <div class="beispiel-zeile">Stufenform aus dem LGS in 3.1:</div>
+        <div class="beispiel-zeile">I′: &nbsp;<span class="var">a</span> + <span class="var">b</span> + <span class="var">c</span> + <span class="var">d</span> = 0</div>
+        <div class="beispiel-zeile">II′: &nbsp;2<span class="var">b</span> + 2<span class="var">d</span> = 2</div>
+        <div class="beispiel-zeile">III′: −6<span class="var">c</span> − 3<span class="var">d</span> = 9</div>
+        <div class="beispiel-zeile">IV′: &nbsp;<span class="var">d</span> = 1</div>
+        <div class="beispiel-zeile" style="margin-top:1mm;"><b>Rückwärtseinsetzen:</b></div>
+        <div class="beispiel-zeile"><span class="var">d</span> = 1</div>
+        <div class="beispiel-zeile">−6<span class="var">c</span> − 3 = 9 → <span class="var">c</span> = −2</div>
+        <div class="beispiel-zeile">2<span class="var">b</span> + 2 = 2 → <span class="var">b</span> = 0</div>
+        <div class="beispiel-zeile"><span class="var">a</span> + 0 − 2 + 1 = 0 → <span class="var">a</span> = 1</div>
+        <div class="beispiel-zeile" style="margin-top:1mm;">→ <b><span class="var">f</span>(<span class="var">x</span>) = <span class="var">x</span>³ − 2<span class="var">x</span> + 1</b></div>
+
+        <div class="beispiel-zeile" style="margin-top:2mm;"><b>Variante 2: Mit CAS (ClassPad)</b></div>
+        <div style="border: 1.5px solid #2e7d32; background: #f0f8f1; padding: 2mm 2mm; border-radius: 1mm; margin: 1mm 0;">
+          <table style="border-collapse: collapse; font-family: 'Cambria Math', 'Latin Modern Math', Georgia, serif; font-size: 8.5pt; margin: 0 auto;">
+            <tr>
+              <td style="vertical-align: middle; padding: 0 0.3mm; font-style: italic;">linSolve</td>
+              <td style="vertical-align: middle; font-size: 22pt; font-weight: 100; padding: 0; line-height: 0.85;">(</td>
+              <td style="vertical-align: middle; font-size: 22pt; font-weight: 100; padding: 0; line-height: 0.85;">{</td>
+              <td style="vertical-align: middle; padding: 0 0.5mm; line-height: 1.3;">
+                <div><span class="var">a</span>+<span class="var">b</span>+<span class="var">c</span>+<span class="var">d</span>=0,</div>
+                <div>−<span class="var">a</span>+<span class="var">b</span>−<span class="var">c</span>+<span class="var">d</span>=2,</div>
+                <div>8<span class="var">a</span>+4<span class="var">b</span>+2<span class="var">c</span>+<span class="var">d</span>=5,</div>
+                <div><span class="var">d</span>=1</div>
+              </td>
+              <td style="vertical-align: middle; font-size: 22pt; font-weight: 100; padding: 0; line-height: 0.85;">}</td>
+              <td style="vertical-align: middle; padding: 0 0.5mm;">,</td>
+              <td style="vertical-align: middle; padding: 0 0.3mm; font-style: italic; white-space: nowrap;">{<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>, <span class="var">d</span>}</td>
+              <td style="vertical-align: middle; font-size: 22pt; font-weight: 100; padding: 0; line-height: 0.85;">)</td>
+            </tr>
+          </table>
+        </div>
+        <div class="beispiel-zeile">Ergebnis: {<span class="var">a</span> = 1, <span class="var">b</span> = 0, <span class="var">c</span> = −2, <span class="var">d</span> = 1}</div>
+      </td>
+      <td class="formel">
+        <p><b>Per Hand (Gauß-Verfahren):</b></p>
+        <ol>
+          <li>LGS in <b>Matrixform</b> übertragen.</li>
+          <li>Mit Zeilenumformungen <b>Stufenform</b> erzeugen (unter der Diagonale Nullen).</li>
+          <li>Letzte Gleichung lösen.</li>
+          <li><b>Rückwärtseinsetzen</b>: Werte schrittweise nach oben einsetzen.</li>
+          <li>Funktionsgleichung mit den Koeffizienten angeben.</li>
+        </ol>
+        <p style="margin-top:1.5mm;"><b>Mit CAS (ClassPad):</b></p>
+        <ol>
+          <li>Menü <i>Main</i> → Tastatur <i>Math3</i> → <code>linSolve</code> wählen.</li>
+          <li>In die geschweiften Klammern alle Gleichungen <b>kommagetrennt</b> eintragen.</li>
+          <li>Hinter Komma die <b>gesuchten Variablen</b> als Liste angeben.</li>
+          <li>Mit EXE bestätigen.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 3.2"></div><span class="qr-label">Übung 3.2</span></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- ====================================================== -->
+<!-- ============== BEREICH 4 ============== -->
+<!-- ====================================================== -->
+<div class="bereich-titel">4. Wirtschaftliche Anwendung: Monopol</div>
+
+<table class="kannliste">
+  <colgroup>
+    <col class="col-nr">
+    <col class="col-kann">
+    <col class="col-beispiel">
+    <col class="col-formel">
+    <col class="col-ampel">
+    <col class="col-qr">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Nr.</th>
+      <th>Ich kann …</th>
+      <th>Beispiel</th>
+      <th>Formel / Rechenweg</th>
+      <th class="center">🟢 🟡 🔴</th>
+      <th class="center">Übung</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 4.1 -->
+    <tr>
+      <td class="nr">4.1</td>
+      <td class="kann-text">… die <b>Erlösfunktion</b> <span class="var">E</span>(<span class="var">x</span>) aus der Preis-Absatz-Funktion und der Menge <b>aufstellen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">PAF: <span class="var">p</span>(<span class="var">x</span>) = −0,5<span class="var">x</span> + 20</div>
+        <div class="beispiel-zeile"><span class="var">E</span>(<span class="var">x</span>) = <span class="var">p</span>(<span class="var">x</span>) · <span class="var">x</span></div>
+        <div class="beispiel-zeile"><b><span class="var">E</span>(<span class="var">x</span>) = −0,5<span class="var">x</span>² + 20<span class="var">x</span></b></div>
+      </td>
+      <td class="formel">
+        <p><b>Erlös = Preis · Menge:</b></p>
+        <p><span class="var">E</span>(<span class="var">x</span>) = <span class="var">p</span>(<span class="var">x</span>) · <span class="var">x</span></p>
+        <ol>
+          <li>PAF <span class="var">p</span>(<span class="var">x</span>) mit <span class="var">x</span> multiplizieren.</li>
+          <li>Ausmultiplizieren und sortieren.</li>
+        </ol>
+        <p class="small">Einheit: <span class="var">E</span>(<span class="var">x</span>) in GE (Geldeinheiten).</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.1"></div><span class="qr-label">Übung 4.1</span></td>
+    </tr>
+
+    <!-- 4.2 -->
+    <tr>
+      <td class="nr">4.2</td>
+      <td class="kann-text">… aus zwei gegebenen ökonomischen Funktionen die <b>dritte ökonomische Funktion</b> (Gewinn-, Erlös- oder Kostenfunktion) <b>aufstellen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">Geg.: <span class="var">E</span>(<span class="var">x</span>) = −0,5<span class="var">x</span>² + 20<span class="var">x</span></div>
+        <div class="beispiel-zeile"><span class="var">K</span>(<span class="var">x</span>) = 0,1<span class="var">x</span>² + 4<span class="var">x</span> + 30</div>
+        <div class="beispiel-zeile"><span class="var">G</span>(<span class="var">x</span>) = <span class="var">E</span>(<span class="var">x</span>) − <span class="var">K</span>(<span class="var">x</span>)</div>
+        <div class="beispiel-zeile"><b><span class="var">G</span>(<span class="var">x</span>) = −0,6<span class="var">x</span>² + 16<span class="var">x</span> − 30</b></div>
+      </td>
+      <td class="formel">
+        <p><b>Zusammenhänge:</b></p>
+        <p><span class="var">G</span>(<span class="var">x</span>) = <span class="var">E</span>(<span class="var">x</span>) − <span class="var">K</span>(<span class="var">x</span>)</p>
+        <p><span class="var">E</span>(<span class="var">x</span>) = <span class="var">G</span>(<span class="var">x</span>) + <span class="var">K</span>(<span class="var">x</span>)</p>
+        <p><span class="var">K</span>(<span class="var">x</span>) = <span class="var">E</span>(<span class="var">x</span>) − <span class="var">G</span>(<span class="var">x</span>)</p>
+        <ol>
+          <li>Passende Formel je nach Gegebenem auswählen.</li>
+          <li>Funktionen einsetzen und zusammenfassen.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.2"></div><span class="qr-label">Übung 4.2</span></td>
+    </tr>
+
+    <!-- 4.3 -->
+    <tr>
+      <td class="nr">4.3</td>
+      <td class="kann-text">… <b>überprüfen</b>, ob eine vorgegebene Kostenfunktion eine <b>ertragsgesetzliche Kostenfunktion</b> ist.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">K</span>(<span class="var">x</span>) = <span class="var">x</span>³ − 6<span class="var">x</span>² + 15<span class="var">x</span> + 20</div>
+        <div class="beispiel-zeile">Grad 3 mit <span class="var">a</span> = 1 > 0: ✓ (III → I)</div>
+        <div class="beispiel-zeile"><span class="var">K</span>(0) = 20 > 0 (Fixkosten): ✓</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(<span class="var">x</span>) = 3<span class="var">x</span>² − 12<span class="var">x</span> + 15 > 0 für alle <span class="var">x</span> ≥ 0: ✓</div>
+        <div class="beispiel-zeile">→ <b>ertragsgesetzlich</b></div>
+      </td>
+      <td class="formel">
+        <p><b>Bedingungen einer ertragsgesetzlichen Kostenfunktion:</b></p>
+        <ol>
+          <li>Grad 3: <span class="var">K</span>(<span class="var">x</span>) = <span class="var">a</span><span class="var">x</span>³ + <span class="var">b</span><span class="var">x</span>² + <span class="var">c</span><span class="var">x</span> + <span class="var">d</span> mit <b><span class="var">a</span> > 0</b> (Leitkoeffizient positiv → Verlauf vom <b>III.</b> in den <b>I. Quadranten</b>)</li>
+          <li><b>Fixkosten</b> <span class="var">K</span>(0) = <span class="var">d</span> > 0</li>
+          <li><b>Streng monoton steigend</b>: <span class="var">K</span>′(<span class="var">x</span>) > 0 für alle <span class="var">x</span> ≥ 0</li>
+          <li><b>Wendepunkt</b> mit <span class="var">K</span>″ = 0, danach progressiv</li>
+          <li>Vorzeichen: <span class="var">a</span> > 0, <span class="var">b</span> < 0, <span class="var">c</span> > 0, <span class="var">d</span> > 0</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.3"></div><span class="qr-label">Übung 4.3</span></td>
+    </tr>
+
+    <!-- 4.4 -->
+    <tr>
+      <td class="nr">4.4</td>
+      <td class="kann-text">… die <b>Grenzkosten</b> <span class="var">K</span>′(<span class="var">x</span>), den <b>Grenzerlös</b> <span class="var">E</span>′(<span class="var">x</span>) und den <b>Grenzgewinn</b> <span class="var">G</span>′(<span class="var">x</span>) als ökonomische Ableitung <b>berechnen</b>, miteinander <b>vergleichen</b> und inhaltlich <b>interpretieren</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">K</span>(<span class="var">x</span>) = 0,1<span class="var">x</span>² + 4<span class="var">x</span> + 30</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(<span class="var">x</span>) = 0,2<span class="var">x</span> + 4</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(10) = 6 → 10. Stück verursacht ca. 6 GE Mehrkosten</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(20) = 8 → höherer Kostenzuwachs als bei <span class="var">x</span> = 10</div>
+      </td>
+      <td class="formel">
+        <p><b>Grenzkosten:</b> <span class="var">K</span>′(<span class="var">x</span>) = Kostenzuwachs für die nächste Mengeneinheit.</p>
+        <p><b>Grenzerlös:</b> <span class="var">E</span>′(<span class="var">x</span>) = Erlöszuwachs.</p>
+        <p><b>Grenzgewinn:</b> <span class="var">G</span>′(<span class="var">x</span>) = <span class="var">E</span>′(<span class="var">x</span>) − <span class="var">K</span>′(<span class="var">x</span>).</p>
+        <ol>
+          <li>Funktion ableiten.</li>
+          <li>Werte einsetzen, Ergebnisse vergleichen.</li>
+          <li>Inhaltlich mit Einheit (GE/ME) interpretieren.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.4"></div><span class="qr-label">Übung 4.4</span></td>
+    </tr>
+
+    <!-- 4.5 -->
+    <tr>
+      <td class="nr">4.5</td>
+      <td class="kann-text">… das <b>Grenzkostenminimum</b> (geringster Kostenanstieg) mithilfe der <b>notwendigen und hinreichenden Bedingung berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">K</span>(<span class="var">x</span>) = <span class="var">x</span>³ − 6<span class="var">x</span>² + 15<span class="var">x</span> + 20</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(<span class="var">x</span>) = 3<span class="var">x</span>² − 12<span class="var">x</span> + 15</div>
+        <div class="beispiel-zeile"><span class="var">K</span>″(<span class="var">x</span>) = 6<span class="var">x</span> − 12 = 0 → <span class="var">x</span> = 2</div>
+        <div class="beispiel-zeile"><span class="var">K</span>‴(<span class="var">x</span>) = 6 > 0 → Minimum von <span class="var">K</span>′</div>
+        <div class="beispiel-zeile"><span class="var">K</span>′(2) = 3 → <b>Grenzkostenminimum 3 GE/ME</b> bei <span class="var">x</span> = 2</div>
+      </td>
+      <td class="formel">
+        <p><b>Das Grenzkostenminimum</b> ist das Minimum der Funktion <span class="var">K</span>′(<span class="var">x</span>) – also der <b>Wendepunkt</b> der Kostenfunktion.</p>
+        <ol>
+          <li>Notwendige Bedingung: <span class="var">K</span>″(<span class="var">x</span>) = 0.</li>
+          <li>Hinreichende Bedingung: <span class="var">K</span>‴(<span class="var">x</span>) > 0.</li>
+          <li><span class="var">K</span>′(<span class="var">x</span>) an der Stelle berechnen.</li>
+          <li>Ergebnis inhaltlich interpretieren.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAIAAAC5ZBI0AAAJJElEQVR4nO3dy3FkuRFAUVEx7sgG2SBLZYNskEGlLVcITaMxCVyes2d9WTewyHzv6/P5/A3gfX+ffgEAv4ecARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERcgZE/LHzx//4579+1+u4xH//8+9f/ttzn8b6Va2fd+cdTdn5JM+93zs/Z7/B75zOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6AiK2tgLU759F3pqin5sLvnPye+jSmdiRe3M3o/QbXnM6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoCIg1sBa1NX1n/Rnde/n5qSv3OvY+fT2HnkHb3foNMZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQMbYV0HPn1eLPTX7vvN+pefT1807dk6G3xzLF6QyIkDMgQs6ACDkDIuQMiJAzIELOgAg5AyLkDIiwFfAnTE26n3Pn1fF33HlV/rU790le5HQGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEjG0F/LRZ53NX1l//7bnZ/Z3nXZv6rNbOPfLUb6H3G3Q6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIg5uBbx47fy1c9Pq50y95hevfz+1jTC1ydDjdAZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkRsbQXcOds95cW5/3NevHb+jhc/5x6nMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIOLr8/n88h/fOY++9uL1/td6r3nHne937dw3eOd9Bs59+05nQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxNa9Anacm3U+N/d/bsZ6arJ/6nmnJt17XtwJOcfpDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiNi6V8Da1Bz81Nz/jt7cf292/84J+zu3XHbsvCqnMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIOLJewXsPPKdOwPnHnnqHU19C+f2SXobIzvPe+dGgdMZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQMbYVsDY1rX7OnVeav3NnYMrUHPzONsKdd5mY2qBwOgMi5AyIkDMgQs6ACDkDIuQMiJAzIELOgAg5AyK2tgLOXZd9x52T7i8+752z+2svzrLfuTMwdceGHU5nQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxMF7BUzNZ/ee99xs9znnthHO7aK8OAf/4v/GOU5nQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAxNfn8/nlP+7dK2Bq4nzH1BXu137a+1178T4SL+6TOJ0BEXIGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERY/cK2PHi3P/UtfOnro4/NXF+56s69+3vPG/v23c6AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIg5uBUyZui77i9ewPze9/dNm2ad2UdamXvPUb9DpDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiDi4FXDnBPbUvPKd16E/584p+TX7JN+9+Dk7nQERcgZEyBkQIWdAhJwBEXIGRMgZECFnQIScAREHtwJenCq+07kJ+x07n/O5nZAdLz7yuW//xV+Z0xkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRBxcCtgbepq8VPP++K18885N3E+NSW/dud/7Iv7JGtOZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQMTWVsCdU/J3Pu+Lj2yT4budT2NnC2Lqszp3P4dzOyFOZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQMTYvQJ2TF3j/JypKeo7r0N/5wz9uTn4O/+fz73fc5zOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6AiCe3AnZMTW9PXfH9zmu6m4P/ax55ytQ7cjoDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoAIOQMitrYCpibOp65D/+KU/NR89p2fxjnn3u/UNsKOc7+UNaczIELOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMg4uvz+fzyH985vT11Vf4dd852r724E7I2NSW/due+wZ2/MqczIELOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgYuteAWt3Xi1+atb53Hz21JT8zmc1tTNg7v///9sdU5+G0xkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRBx8F4B5yaS77w6/tqd187vTcn33HlHjrWpb9DpDIiQMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiDh4r4C1O+8ksHbnFf3Xpj7nOzc3pq6dz3fn7ufgdAZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkRs3SvgpzFx/t2ddzC4834Oa+ce+ac9r9MZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQsXWvgJ826f7i1PidU/I7r+rO3YzehP2LnM6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoCIra2AtTsnkqc2Ge6cR5/aGVh7cd9g55F3vPgrO/eanc6ACDkDIuQMiJAzIELOgAg5AyLkDIiQMyBCzoCIg1sBaz9tTnpqpvzObYQpd0723/m8a3e+KqczIELOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgYmwroOfFOfipnYG1c5/k1CbD1DbC1Dtav+Zz34LTGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZEGEr4Lc5N719bgJ7bWd6+6fN359z57bJnZzOgAg5AyLkDIiQMyBCzoAIOQMi5AyIkDMgQs6AiLGtgN6s853Xgz832b829chr53YVzu1mrN35Xzd1hwqnMyBCzoAIOQMi5AyIkDMgQs6ACDkDIuQMiJAzIOLgVsCdV17fMXXt/J2J852p8akr+k/N0O98knfeo2BqJ2SK0xkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRDx9fl8pl8DwG/gdAZEyBkQIWdAhJwBEXIGRMgZECFnQIScARFyBkTIGRAhZ0CEnAERcgZEyBkQIWdAhJwBEXIGRMgZECFnQMT/ADVPlzF0CK/OAAAAAElFTkSuQmCC" alt="QR-Code Übung 4.5"></div><span class="qr-label">Übung 4.5</span></td>
+    </tr>
+
+    <!-- 4.6 -->
+    <tr>
+      <td class="nr">4.6</td>
+      <td class="kann-text">… das <b>Gewinnmaximum</b> mithilfe der <b>notwendigen und hinreichenden Bedingung berechnen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile"><span class="var">G</span>(<span class="var">x</span>) = −0,6<span class="var">x</span>² + 16<span class="var">x</span> − 30</div>
+        <div class="beispiel-zeile"><span class="var">G</span>′(<span class="var">x</span>) = −1,2<span class="var">x</span> + 16 = 0 → <span class="var">x</span><sub>max</sub> ≈ 13,33</div>
+        <div class="beispiel-zeile"><span class="var">G</span>″(<span class="var">x</span>) = −1,2 < 0 → Maximum</div>
+        <div class="beispiel-zeile"><span class="var">G</span>(13,33) ≈ 76,67</div>
+        <div class="beispiel-zeile">→ <b>max. Gewinn ca. 76,67 GE</b> bei ≈ 13,33 ME</div>
+      </td>
+      <td class="formel">
+        <ol>
+          <li>Notwendige Bedingung: <span class="var">G</span>′(<span class="var">x</span>) = 0.</li>
+          <li>Hinreichende Bedingung: <span class="var">G</span>″(<span class="var">x</span>) < 0 → Maximum.</li>
+          <li><span class="var">y</span>-Wert berechnen: <span class="var">G</span>(<span class="var">x</span><sub>max</sub>).</li>
+          <li>Im Sachzusammenhang interpretieren.</li>
+        </ol>
+        <p class="small">Alternativ: <span class="var">G</span>′(<span class="var">x</span>) = 0 ⇔ <span class="var">E</span>′(<span class="var">x</span>) = <span class="var">K</span>′(<span class="var">x</span>).</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.6"></div><span class="qr-label">Übung 4.6</span></td>
+    </tr>
+
+    <!-- 4.7 -->
+    <tr>
+      <td class="nr">4.7</td>
+      <td class="kann-text">… den <b>Cournot-Punkt</b> (gewinnmaximale Menge und zugehöriger Preis) <b>bestimmen</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">Aus 4.6: <span class="var">x</span><sub>C</sub> ≈ 13,33</div>
+        <div class="beispiel-zeile"><span class="var">p</span>(13,33) = −0,5 · 13,33 + 20 ≈ 13,33</div>
+        <div class="beispiel-zeile"><b>Cournot-Punkt C(13,33 | 13,33)</b></div>
+        <div class="beispiel-zeile small">Menge: 13,33 ME · Preis: 13,33 GE/ME</div>
+      </td>
+      <td class="formel">
+        <p><b>Der Cournot-Punkt</b> liegt auf der <b>Preis-Absatz-Funktion</b> und gibt die gewinnmaximale Menge und den dazugehörigen Preis an.</p>
+        <ol>
+          <li>Gewinnmaximale Menge <span class="var">x</span><sub>C</sub> aus 4.6.</li>
+          <li><span class="var">p</span>(<span class="var">x</span><sub>C</sub>) in der PAF berechnen.</li>
+          <li>C(<span class="var">x</span><sub>C</sub> | <span class="var">p</span>(<span class="var">x</span><sub>C</sub>)) angeben.</li>
+        </ol>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.7"></div><span class="qr-label">Übung 4.7</span></td>
+    </tr>
+
+    <!-- 4.8 -->
+    <tr>
+      <td class="nr">4.8</td>
+      <td class="kann-text">… die ökonomischen Ergebnisse im <b>Sachzusammenhang interpretieren</b>.</td>
+      <td class="beispiel">
+        <div class="beispiel-zeile">Cournot-Punkt C(13,33 | 13,33):</div>
+        <div class="beispiel-zeile">„Bei einer Produktion von ca. 13 ME zum Preis von 13,33 GE/ME erzielt das Unternehmen den maximalen Gewinn von ca. 76,67 GE."</div>
+      </td>
+      <td class="formel">
+        <p><b>Antwortsatz immer mit:</b></p>
+        <ol>
+          <li>Bezeichnung der Größe (Menge, Preis, Gewinn, Kosten …).</li>
+          <li>Konkreter Zahlenwert.</li>
+          <li>Einheit (GE, ME, GE/ME, …).</li>
+          <li>Sachbezug (Unternehmen, Produkt, Zeitpunkt).</li>
+        </ol>
+        <p class="small">Ergebnisse stets <b>plausibilisieren</b> (sinnvoll? sinnlos?).</p>
+      </td>
+      <td class="ampel-zelle"><div class="ampel-set"><span class="ampel-feld gruen"></span><span class="ampel-feld gelb"></span><span class="ampel-feld rot"></span></div></td>
+      <td class="qr-zelle"><div class="qr-box"><img src="data:image/png;base64,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" alt="QR-Code Übung 4.8"></div><span class="qr-label">Übung 4.8</span></td>
+    </tr>
+
+  </tbody>
+</table>
+
+</body>
+</html>
