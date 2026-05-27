@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lösungen – Gaußverfahren</title>
+
+<style>
+/* === Code-Schutz Overlay === */
+#code-lock {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#code-lock.unlocked { display: none; }
+#code-lock-box {
+  background: white;
+  border-radius: 10px;
+  padding: 32px 36px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  border-top: 4px solid #c8102e;
+}
+#code-lock-icon {
+  font-size: 42pt;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: #c8102e;
+}
+#code-lock-title {
+  font-size: 16pt;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px;
+}
+#code-lock-subtitle {
+  font-size: 10.5pt;
+  color: #666;
+  margin: 0 0 18px;
+}
+#code-lock-input {
+  font-size: 22pt;
+  letter-spacing: 8px;
+  text-align: center;
+  width: 180px;
+  padding: 10px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Consolas', 'Menlo', monospace;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.15s;
+}
+#code-lock-input:focus { border-color: #c8102e; }
+#code-lock-input.wrong { border-color: #d32f2f; background: #ffebee; }
+#code-lock-button {
+  display: block;
+  margin: 14px auto 0;
+  background: #c8102e;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-size: 11pt;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#code-lock-button:hover { background: #a00d24; }
+#code-lock-error {
+  color: #d32f2f;
+  font-size: 10pt;
+  margin-top: 10px;
+  min-height: 14px;
+  font-weight: 600;
+}
+#code-lock-hint {
+  margin-top: 16px;
+  font-size: 9pt;
+  color: #888;
+  font-style: italic;
+}
+</style>
+</head>
+<body style="background: #e8eaed; margin: 0; padding: 20px 0; font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;">
+
+<!-- ============================================================ -->
+<!-- CODE-SCHUTZ — Den Code findest du WEITER UNTEN im Script-Tag -->
+<!-- ============================================================ -->
+<div id="code-lock">
+  <div id="code-lock-box">
+    <div id="code-lock-icon">🔒</div>
+    <h1 id="code-lock-title">Lösung geschützt</h1>
+    <p id="code-lock-subtitle">Bitte den 4-stelligen Code eingeben:</p>
+    <input id="code-lock-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" autofocus />
+    <button id="code-lock-button" onclick="checkCode()">Lösung anzeigen</button>
+    <div id="code-lock-error"></div>
+    <div id="code-lock-hint">Frag deine Lehrkraft nach dem Code.</div>
+  </div>
+</div>
+
+<div style="background: white; box-shadow: 0 4px 16px rgba(0,0,0,0.12); border-radius: 6px; margin: 0 auto; max-width: 880px; padding: 24px;">
+<div style="max-width: 880px; margin: 0 auto; padding: 18px; font-family: 'Calibri', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.45; color: #1a1a1a;">
+
+  <!-- Titel -->
+  <div style="border-bottom: 2.5px solid #c8102e; padding-bottom: 8px; margin-bottom: 18px;">
+    <div style="font-size: 16pt; font-weight: 700; color: #1a1a1a; margin: 0;">Lösungen – Gaußverfahren</div>
+    <div style="font-size: 10.5pt; color: #c8102e; font-weight: 600; margin-top: 2px;">
+      Funktionsgleichung 3. Grades durch 4 Punkte: P<sub>1</sub>(0&nbsp;|&nbsp;2), P<sub>2</sub>(1&nbsp;|&nbsp;0), P<sub>3</sub>(2&nbsp;|&nbsp;0), P<sub>4</sub>(3&nbsp;|&nbsp;8)
+    </div>
+  </div>
+
+  <!-- ============ AUFGABE 1: Funktionsgleichung mit CAS ============ -->
+  <div style="margin-bottom: 22px;">
+    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+      <span style="background: #c8102e; color: white; font-weight: 700; padding: 2px 10px; border-radius: 3px; font-size: 11pt;">Aufgabe 1</span>
+      <span style="font-style: italic; color: #555; font-size: 10.5pt;">Funktionsgleichung mit dem CAS bestimmen</span>
+    </div>
+
+    <p style="margin: 8px 0 4px 0;"><b>Ansatz:</b> &nbsp;<span style="font-family: 'Cambria Math', serif; font-size: 12pt;">f(x) = a · x³ + b · x² + c · x + d</span></p>
+
+    <p style="margin: 8px 0 4px 0;">Einsetzen der vier Punkte liefert das LGS:</p>
+    <table style="border-collapse: collapse; font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 12pt; margin-left: 10px;">
+      <tr><td style="font-size: 42pt; font-weight: 200; color: #1a1a1a; line-height: 0.85; padding-right: 10px; vertical-align: middle;" rowspan="4">{</td>
+          <td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(I)</td>
+          <td style="padding: 2px 0;">d = 2</td></tr>
+      <tr><td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(II)</td>
+          <td style="padding: 2px 0;">a + b + c + d = 0</td></tr>
+      <tr><td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(III)</td>
+          <td style="padding: 2px 0;">8a + 4b + 2c + d = 0</td></tr>
+      <tr><td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(IV)</td>
+          <td style="padding: 2px 0;">27a + 9b + 3c + d = 8</td></tr>
+    </table>
+
+    <!-- a) -->
+    <div style="margin-top: 14px;">
+      <span style="font-weight: 700; color: #c8102e;">a)</span>
+      <div style="margin: 6px 0 0 20px;">
+        <p style="margin: 4px 0;">Lösen mit dem CAS, z. B. mit dem <code style="background: #f5f5f5; padding: 1px 5px; border-radius: 2px; font-size: 10.5pt;">solve</code>-Befehl:</p>
+        <div style="background: #f5f5f5; border-left: 3px solid #888; padding: 8px 12px; font-family: 'Cambria Math', 'Consolas', monospace; font-size: 10.5pt; margin: 6px 0;">
+          solve({d = 2, a + b + c + d = 0, 8a + 4b + 2c + d = 0, 27a + 9b + 3c + d = 8}, {a, b, c, d})
+        </div>
+        <p style="margin: 8px 0 4px 0;"><b>Ergebnis des CAS:</b></p>
+        <div style="display: inline-block; background: #fff5f5; border: 1.5px solid #c8102e; border-radius: 3px; padding: 8px 16px; font-family: 'Cambria Math', serif; font-size: 13pt; margin: 4px 0;">
+          <b style="color: #c8102e;">Koeffizienten:</b> &nbsp;&nbsp; a = 1 &nbsp;,&nbsp; b = &minus;2 &nbsp;,&nbsp; c = &minus;1 &nbsp;,&nbsp; d = 2
+        </div>
+      </div>
+    </div>
+
+    <!-- b) Funktionsgleichung -->
+    <div style="margin-top: 14px;">
+      <span style="font-weight: 700; color: #c8102e;">b)</span>
+      <div style="margin: 6px 0 0 20px;">
+        <p style="margin: 4px 0;">Einsetzen der Koeffizienten in den Ansatz liefert die <b>Funktionsgleichung</b>:</p>
+        <div style="display: inline-block; background: #e8f5e9; border: 1.5px solid #2e7d32; border-radius: 3px; padding: 10px 18px; font-family: 'Cambria Math', serif; font-size: 14pt; margin: 6px 0;">
+          <b style="color: #2e7d32;">f(x) =</b>&nbsp;&nbsp; x³ &minus; 2x² &minus; x + 2
+        </div>
+      </div>
+    </div>
+
+    <!-- c) Probe -->
+    <div style="margin-top: 14px;">
+      <span style="font-weight: 700; color: #c8102e;">c)</span>
+      <div style="margin: 6px 0 0 20px;">
+        <p style="margin: 4px 0;"><b>Probe</b> &mdash; alle vier Punkte in f(x) einsetzen:</p>
+
+        <table style="border-collapse: collapse; margin: 8px 0; font-family: 'Cambria Math', serif; font-size: 11pt;">
+          <tr>
+            <td style="color: #555; font-style: italic; font-family: 'Calibri', sans-serif; padding: 4px 14px 4px 0;">f(0) =</td>
+            <td style="padding: 4px 14px;">0 &minus; 0 &minus; 0 + 2 = 2</td>
+            <td style="color: #2e7d32; font-weight: 700; padding-left: 8px;">✓ &nbsp;P<sub>1</sub>(0 | 2)</td>
+          </tr>
+          <tr>
+            <td style="color: #555; font-style: italic; font-family: 'Calibri', sans-serif; padding: 4px 14px 4px 0;">f(1) =</td>
+            <td style="padding: 4px 14px;">1 &minus; 2 &minus; 1 + 2 = 0</td>
+            <td style="color: #2e7d32; font-weight: 700; padding-left: 8px;">✓ &nbsp;P<sub>2</sub>(1 | 0)</td>
+          </tr>
+          <tr>
+            <td style="color: #555; font-style: italic; font-family: 'Calibri', sans-serif; padding: 4px 14px 4px 0;">f(2) =</td>
+            <td style="padding: 4px 14px;">8 &minus; 8 &minus; 2 + 2 = 0</td>
+            <td style="color: #2e7d32; font-weight: 700; padding-left: 8px;">✓ &nbsp;P<sub>3</sub>(2 | 0)</td>
+          </tr>
+          <tr>
+            <td style="color: #555; font-style: italic; font-family: 'Calibri', sans-serif; padding: 4px 14px 4px 0;">f(3) =</td>
+            <td style="padding: 4px 14px;">27 &minus; 18 &minus; 3 + 2 = 8</td>
+            <td style="color: #2e7d32; font-weight: 700; padding-left: 8px;">✓ &nbsp;P<sub>4</sub>(3 | 8)</td>
+          </tr>
+        </table>
+
+        <p style="margin: 8px 0; padding: 6px 10px; background: #e8f5e9; border-left: 3px solid #2e7d32; border-radius: 0 3px 3px 0;">
+          Alle vier Punkte werden von f(x) getroffen &mdash; die Funktionsgleichung stimmt.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ AUFGABE 2: Gauß händisch ============ -->
+  <div style="margin-bottom: 22px;">
+    <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+      <span style="background: #c8102e; color: white; font-weight: 700; padding: 2px 10px; border-radius: 3px; font-size: 11pt;">Aufgabe 2</span>
+      <span style="font-style: italic; color: #555; font-size: 10.5pt;">Dasselbe LGS händisch mit dem Gaußverfahren lösen</span>
+    </div>
+
+    <!-- Vereinfachung -->
+    <p style="margin: 10px 0 6px 0;"><b>Vorüberlegung:</b> Wie im Arbeitsblatt gezeigt, ergibt sich aus (I) direkt 
+    <b>d = 2</b>. Nach Einsetzen und Vereinfachen erhält man das folgende 3×3-LGS:</p>
+
+    <table style="border-collapse: collapse; font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 12pt; margin-left: 10px;">
+      <tr><td style="font-size: 36pt; font-weight: 200; color: #1a1a1a; line-height: 0.85; padding-right: 10px; vertical-align: middle;" rowspan="3">{</td>
+          <td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(II*)</td>
+          <td style="padding: 2px 0;">a + b + c = &minus;2</td></tr>
+      <tr><td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(III*)</td>
+          <td style="padding: 2px 0;">4a + 2b + c = &minus;1</td></tr>
+      <tr><td style="color: #555; font-style: italic; font-size: 10pt; padding-right: 14px; font-family: 'Calibri', sans-serif;">(IV*)</td>
+          <td style="padding: 2px 0;">9a + 3b + c = 2</td></tr>
+    </table>
+
+    <!-- a) Gauß-Verfahren -->
+    <div style="margin-top: 14px;">
+      <span style="font-weight: 700; color: #c8102e;">a)</span>
+      <div style="margin: 6px 0 0 20px;">
+
+        <!-- Anfangstableau -->
+        <p style="margin: 8px 0 4px 0;"><b style="color: #c8102e;">1.</b> &nbsp;<b>Anfangstableau:</b></p>
+        <div style="display: inline-flex; align-items: center; font-family: 'Cambria Math', serif; font-size: 12pt; margin: 4px 0;">
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">(</span>
+          <table style="border-collapse: collapse; margin: 0 2px;">
+            <tr>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">&minus;2</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">4</td>
+              <td style="padding: 4px 11px; text-align: center;">2</td>
+              <td style="padding: 4px 11px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">&minus;1</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">9</td>
+              <td style="padding: 4px 11px; text-align: center;">3</td>
+              <td style="padding: 4px 11px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">2</td>
+            </tr>
+          </table>
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">)</span>
+        </div>
+
+        <!-- Schritt 1 -->
+        <p style="margin: 12px 0 4px 0;"><b style="color: #c8102e;">2.</b> &nbsp;<b>Schritt 1:</b> Nullen in der ersten Spalte erzeugen.</p>
+        <div style="background: #fff8e1; border-left: 3px solid #ffb300; padding: 8px 12px; margin: 4px 0; font-family: 'Cambria Math', serif; font-size: 11pt;">
+          <div style="margin: 2px 0;"><span style="color: #e65100; font-weight: 700;">(II*)<sub>neu</sub></span> = (II*) + (&minus;4) · (I) &nbsp; → &nbsp; (0 &nbsp;|&nbsp; &minus;2 &nbsp;|&nbsp; &minus;3 &nbsp;|&nbsp; 7)</div>
+          <div style="margin: 2px 0;"><span style="color: #e65100; font-weight: 700;">(III*)<sub>neu</sub></span> = (III*) + (&minus;9) · (I) &nbsp; → &nbsp; (0 &nbsp;|&nbsp; &minus;6 &nbsp;|&nbsp; &minus;8 &nbsp;|&nbsp; 20)</div>
+        </div>
+
+        <div style="display: inline-flex; align-items: center; font-family: 'Cambria Math', serif; font-size: 12pt; margin: 4px 0;">
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">(</span>
+          <table style="border-collapse: collapse; margin: 0 2px;">
+            <tr>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">&minus;2</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">0</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;2</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;3</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">7</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">0</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;6</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;8</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">20</td>
+            </tr>
+          </table>
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">)</span>
+        </div>
+
+        <!-- Schritt 2 -->
+        <p style="margin: 12px 0 4px 0;"><b style="color: #c8102e;">3.</b> &nbsp;<b>Schritt 2:</b> Null in der zweiten Spalte erzeugen.</p>
+        <div style="background: #fff8e1; border-left: 3px solid #ffb300; padding: 8px 12px; margin: 4px 0; font-family: 'Cambria Math', serif; font-size: 11pt;">
+          <div style="margin: 2px 0;"><span style="color: #e65100; font-weight: 700;">(III*)<sub>neu</sub></span> = (III*) + (&minus;3) · (II*) &nbsp; → &nbsp; (0 &nbsp;|&nbsp; 0 &nbsp;|&nbsp; 1 &nbsp;|&nbsp; &minus;1)</div>
+        </div>
+
+        <div style="display: inline-flex; align-items: center; font-family: 'Cambria Math', serif; font-size: 12pt; margin: 4px 0;">
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">(</span>
+          <table style="border-collapse: collapse; margin: 0 2px;">
+            <tr>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; min-width: 28px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">&minus;2</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">0</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;2</td>
+              <td style="padding: 4px 11px; text-align: center;">&minus;3</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">7</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 11px; text-align: center;">0</td>
+              <td style="padding: 4px 11px; text-align: center;">0</td>
+              <td style="padding: 4px 11px; text-align: center;">1</td>
+              <td style="padding: 4px 11px; text-align: center; border-left: 1px solid #888; padding-left: 13px;">&minus;1</td>
+            </tr>
+          </table>
+          <span style="font-size: 38pt; font-weight: 200; color: #1a1a1a; line-height: 1;">)</span>
+          <span style="margin-left: 12px; color: #2e7d32; font-weight: 700; font-family: 'Calibri', sans-serif; font-size: 11pt;">Dreiecksgestalt ✓</span>
+        </div>
+
+        <!-- Rückwärtseinsetzen -->
+        <p style="margin: 14px 0 4px 0;"><b style="color: #c8102e;">4.</b> &nbsp;<b>Rückwärtseinsetzen:</b></p>
+        <table style="border-collapse: collapse; font-family: 'Cambria Math', serif; font-size: 11.5pt;">
+          <tr>
+            <td style="padding: 4px 14px 4px 0; color: #555; font-style: italic; font-family: 'Calibri', sans-serif;">aus&nbsp;(III*<sub>neu</sub>):</td>
+            <td style="padding: 4px 14px;">c = &minus;1</td>
+            <td style="padding: 4px 14px; color: #ff8800;">⟹</td>
+            <td style="padding: 4px 14px;"><b>c = &minus;1</b></td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 14px 4px 0; color: #555; font-style: italic; font-family: 'Calibri', sans-serif;">aus&nbsp;(II*<sub>neu</sub>):</td>
+            <td style="padding: 4px 14px;">&minus;2b &minus; 3 · (&minus;1) = 7 &nbsp;→&nbsp; &minus;2b = 4</td>
+            <td style="padding: 4px 14px; color: #ff8800;">⟹</td>
+            <td style="padding: 4px 14px;"><b>b = &minus;2</b></td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 14px 4px 0; color: #555; font-style: italic; font-family: 'Calibri', sans-serif;">aus&nbsp;(I):</td>
+            <td style="padding: 4px 14px;">a + (&minus;2) + (&minus;1) = &minus;2 &nbsp;→&nbsp; a = 1</td>
+            <td style="padding: 4px 14px; color: #ff8800;">⟹</td>
+            <td style="padding: 4px 14px;"><b>a = 1</b></td>
+          </tr>
+          <tr>
+            <td style="padding: 4px 14px 4px 0; color: #555; font-style: italic; font-family: 'Calibri', sans-serif;">aus&nbsp;Vorüberlegung:</td>
+            <td style="padding: 4px 14px;">d = 2</td>
+            <td style="padding: 4px 14px; color: #ff8800;">⟹</td>
+            <td style="padding: 4px 14px;"><b>d = 2</b></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- b) Funktionsgleichung & Vergleich -->
+    <div style="margin-top: 14px;">
+      <span style="font-weight: 700; color: #c8102e;">b)</span>
+      <div style="margin: 6px 0 0 20px;">
+        <p style="margin: 4px 0;">Einsetzen der Koeffizienten ergibt:</p>
+        <div style="display: inline-block; background: #e8f5e9; border: 1.5px solid #2e7d32; border-radius: 3px; padding: 10px 18px; font-family: 'Cambria Math', serif; font-size: 14pt; margin: 6px 0;">
+          <b style="color: #2e7d32;">f(x) =</b>&nbsp;&nbsp; x³ &minus; 2x² &minus; x + 2
+        </div>
+
+        <p style="margin: 10px 0; padding: 6px 10px; background: #fff3e0; border-left: 3px solid #ff8800; border-radius: 0 3px 3px 0;">
+          <b style="color: #e65100;">Vergleich mit Aufgabe 1:</b> Die Funktionsgleichung 
+          <span style="font-family: 'Cambria Math', serif;">f(x) = x³ &minus; 2x² &minus; x + 2</span> 
+          stimmt mit dem CAS-Ergebnis aus Aufgabe&nbsp;1 überein. Beide Lösungswege führen zum gleichen Ergebnis &mdash; 
+          das händische Gaußverfahren bestätigt die CAS-Lösung.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- ZUGANGSCODE FÜR DIE LÖSUNG                            -->
+<!--                                                       -->
+<!-- So änderst du den Code:                               -->
+<!-- 1) Den Wert von ZUGANGSCODE unten ändern              -->
+<!-- 2) Datei speichern und bei Neocities neu hochladen    -->
+<!--                                                       -->
+<!-- Aktuell: KEIN CODE GESETZT - Lösung ist frei sichtbar -->
+<!-- Um die Sperre zu aktivieren, einen 4-stelligen        -->
+<!-- Code zwischen die Anführungszeichen schreiben:        -->
+<!--    const ZUGANGSCODE = "1234";                        -->
+<!-- ===================================================== -->
+<script>
+  const ZUGANGSCODE = "1234";  // <-- HIER den 4-stelligen Code eintragen
+
+  (function() {
+    const lock = document.getElementById('code-lock');
+    // Wenn KEIN Code gesetzt ist, Sperre direkt ausblenden
+    if (!ZUGANGSCODE || ZUGANGSCODE.length === 0) {
+      lock.classList.add('unlocked');
+      return;
+    }
+    // Eingabe auf Ziffern beschränken
+    const input = document.getElementById('code-lock-input');
+    input.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      document.getElementById('code-lock-error').textContent = '';
+      input.classList.remove('wrong');
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkCode();
+    });
+  })();
+
+  function checkCode() {
+    const input = document.getElementById('code-lock-input');
+    const code = input.value;
+    if (code === ZUGANGSCODE) {
+      document.getElementById('code-lock').classList.add('unlocked');
+    } else {
+      input.classList.add('wrong');
+      document.getElementById('code-lock-error').textContent = 'Falscher Code. Bitte erneut versuchen.';
+      input.value = '';
+      input.focus();
+    }
+  }
+</script>
+
+</body>
+</html>
