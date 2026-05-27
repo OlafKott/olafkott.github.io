@@ -1,0 +1,481 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Lineares Gleichungssystem (3×3)</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Übung: Gauß-Verfahren &amp; CAS</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
+      <button id="lgs-new-btn" style="background: #c41e3a; color: white; border: none; padding: 12px 24px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(196,30,58,0.3); transition: all 0.2s;">
+        🎲 Neues LGS erzeugen
+      </button>
+      <button id="lgs-check-btn" style="background: #2c3e50; color: white; border: none; padding: 12px 24px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(44,62,80,0.3); transition: all 0.2s;">
+        ✓ Lösung prüfen
+      </button>
+      <button id="lgs-solution-btn" style="background: #ffffff; color: #2c3e50; border: 2px solid #2c3e50; padding: 10px 22px; font-size: 15px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+        💡 Lösung &amp; Rechenweg
+      </button>
+    </div>
+
+    <div style="background: #fafafa; border-left: 4px solid #c41e3a; padding: 20px 25px; border-radius: 4px; margin-bottom: 20px;">
+      <div style="font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; font-weight: 600;">Aufgabe</div>
+      <p style="margin: 0 0 15px 0; font-size: 15px;">Bestimme die Lösung des folgenden linearen Gleichungssystems:</p>
+      <div id="lgs-display" style="font-family: 'Cambria Math', Georgia, serif; font-size: 18px; line-height: 2.2; padding: 10px 0; white-space: pre;"></div>
+    </div>
+
+    <div style="background: #f5f7fa; border-radius: 6px; padding: 20px; margin-bottom: 20px;">
+      <div style="font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; font-weight: 600;">Deine Lösung</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="font-size: 18px; font-family: 'Cambria Math', Georgia, serif; font-style: italic; min-width: 30px;">x =</label>
+          <input id="lgs-x" type="text" inputmode="decimal" style="width: 100%; padding: 10px 12px; font-size: 16px; border: 2px solid #d0d7de; border-radius: 6px; font-family: inherit; box-sizing: border-box;" placeholder="z. B. 2 oder -3/4">
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="font-size: 18px; font-family: 'Cambria Math', Georgia, serif; font-style: italic; min-width: 30px;">y =</label>
+          <input id="lgs-y" type="text" inputmode="decimal" style="width: 100%; padding: 10px 12px; font-size: 16px; border: 2px solid #d0d7de; border-radius: 6px; font-family: inherit; box-sizing: border-box;" placeholder="z. B. 1.5">
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="font-size: 18px; font-family: 'Cambria Math', Georgia, serif; font-style: italic; min-width: 30px;">z =</label>
+          <input id="lgs-z" type="text" inputmode="decimal" style="width: 100%; padding: 10px 12px; font-size: 16px; border: 2px solid #d0d7de; border-radius: 6px; font-family: inherit; box-sizing: border-box;" placeholder="z. B. -1">
+        </div>
+      </div>
+      <p style="font-size: 12px; color: #888; margin: 12px 0 0 0;">Tipp: Brüche eingeben mit <code style="background: #e8eaed; padding: 2px 6px; border-radius: 3px;">3/4</code>, Dezimalzahlen mit Punkt oder Komma.</p>
+    </div>
+
+    <div id="lgs-feedback" style="display: none; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; font-size: 15px; font-weight: 500;"></div>
+
+    <div id="lgs-solution" style="display: none; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 25px; margin-top: 20px;">
+      <div style="font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; font-weight: 600;">Lösung</div>
+      <div id="lgs-result" style="font-size: 18px; padding: 15px 20px; background: #f0f7f4; border-left: 4px solid #2d8a4e; border-radius: 4px; margin-bottom: 25px; font-family: 'Cambria Math', Georgia, serif;"></div>
+
+      <div style="font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 15px; font-weight: 600;">Rechenweg (Gauß-Verfahren)</div>
+      <div id="lgs-steps" style="font-size: 15px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // --- Rational number arithmetic (Brüche) ---
+  function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b) { [a, b] = [b, a % b]; }
+    return a || 1;
+  }
+
+  function R(n, d) {
+    d = d === undefined ? 1 : d;
+    if (d === 0) throw new Error('div by zero');
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcd(Math.round(n), Math.round(d));
+    return { n: Math.round(n) / g, d: Math.round(d) / g };
+  }
+  function Radd(a, b) { return R(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function Rsub(a, b) { return R(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function Rmul(a, b) { return R(a.n * b.n, a.d * b.d); }
+  function Rdiv(a, b) { return R(a.n * b.d, a.d * b.n); }
+  function Rneg(a) { return R(-a.n, a.d); }
+  function Reqz(a) { return a.n === 0; }
+  function Req(a, b) { return a.n * b.d === b.n * a.d; }
+  function Rstr(a) {
+    if (a.d === 1) return String(a.n);
+    return a.n + '/' + a.d;
+  }
+  function RstrSigned(a) {
+    if (a.n >= 0) return '+' + Rstr(a);
+    return '−' + Rstr({ n: -a.n, d: a.d });
+  }
+  function Rnum(a) { return a.n / a.d; }
+
+  // Parse user input: "3/4", "-2", "1.5", "1,5"
+  function parseInput(s) {
+    if (!s) return null;
+    s = String(s).trim().replace(',', '.').replace(/\s+/g, '');
+    if (!s) return null;
+    if (s.indexOf('/') >= 0) {
+      var parts = s.split('/');
+      if (parts.length !== 2) return null;
+      var num = parseFloat(parts[0]);
+      var den = parseFloat(parts[1]);
+      if (isNaN(num) || isNaN(den) || den === 0) return null;
+      // For decimals in fractions, multiply through
+      while (num % 1 !== 0 || den % 1 !== 0) { num *= 10; den *= 10; }
+      return R(num, den);
+    }
+    var v = parseFloat(s);
+    if (isNaN(v)) return null;
+    if (v % 1 === 0) return R(v, 1);
+    // Decimal -> fraction (up to reasonable precision)
+    var decimals = (s.split('.')[1] || '').length;
+    var p = Math.pow(10, decimals);
+    return R(Math.round(v * p), p);
+  }
+
+  // --- Generate solvable LGS with "nice" integer solution and coefficients ---
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  function randNonzero(min, max) {
+    var v;
+    do { v = randInt(min, max); } while (v === 0);
+    return v;
+  }
+
+  function generateLGS() {
+    // Pick a "nice" integer solution
+    var sol = [randInt(-4, 4), randInt(-4, 4), randInt(-4, 4)];
+    // Avoid trivial all-zero solution
+    if (sol[0] === 0 && sol[1] === 0 && sol[2] === 0) sol[0] = 1;
+
+    // Generate coefficient matrix with non-zero determinant
+    // Strategy: pick small integer coefficients, then check det != 0
+    var A, attempts = 0;
+    while (attempts < 100) {
+      A = [
+        [randNonzero(-3, 3), randInt(-3, 3), randInt(-3, 3)],
+        [randInt(-3, 3), randNonzero(-3, 3), randInt(-3, 3)],
+        [randInt(-3, 3), randInt(-3, 3), randNonzero(-3, 3)]
+      ];
+      // Determinant
+      var det = A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1])
+              - A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0])
+              + A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);
+      if (det !== 0) {
+        // Ensure no row is a trivial scalar multiple of another (already implied by det != 0)
+        // Also avoid too many zero coefficients (>= 2 zeros in a row makes it too easy)
+        var ok = true;
+        for (var i = 0; i < 3; i++) {
+          var zeros = 0;
+          for (var j = 0; j < 3; j++) if (A[i][j] === 0) zeros++;
+          if (zeros >= 2) { ok = false; break; }
+        }
+        if (ok) break;
+      }
+      attempts++;
+    }
+
+    // Compute b = A * sol
+    var b = [
+      A[0][0]*sol[0] + A[0][1]*sol[1] + A[0][2]*sol[2],
+      A[1][0]*sol[0] + A[1][1]*sol[1] + A[1][2]*sol[2],
+      A[2][0]*sol[0] + A[2][1]*sol[1] + A[2][2]*sol[2]
+    ];
+
+    return { A: A, b: b, sol: sol };
+  }
+
+  // --- Format equation row nicely ---
+  function formatEquation(a, b, c, rhs) {
+    var vars = ['x', 'y', 'z'];
+    var coefs = [a, b, c];
+    var parts = [];
+    var first = true;
+    for (var i = 0; i < 3; i++) {
+      var v = coefs[i];
+      if (v === 0) continue;
+      var sign, absV;
+      if (v > 0) {
+        sign = first ? '' : ' + ';
+        absV = v;
+      } else {
+        sign = first ? '−' : ' − ';
+        absV = -v;
+      }
+      var coefStr = (absV === 1) ? '' : String(absV);
+      parts.push(sign + coefStr + vars[i]);
+      first = false;
+    }
+    if (parts.length === 0) parts.push('0');
+    return parts.join('') + ' = ' + rhs;
+  }
+
+  // --- Display LGS ---
+  function displayLGS(lgs) {
+    var lines = [];
+    for (var i = 0; i < 3; i++) {
+      // Pad to align – simple approach using fixed-width-ish chars
+      lines.push('(' + (i + 1) + ')  ' + formatEquation(lgs.A[i][0], lgs.A[i][1], lgs.A[i][2], lgs.b[i]));
+    }
+    document.getElementById('lgs-display').textContent = lines.join('\n');
+  }
+
+  // --- Render matrix in HTML with big brackets ---
+  function renderMatrix(M, label) {
+    // M is 3x4 array of rational numbers
+    var html = '';
+    if (label) {
+      html += '<div style="font-size: 13px; color: #555; margin-bottom: 6px; font-style: italic;">' + label + '</div>';
+    }
+    html += '<div style="display: inline-block; position: relative; padding: 8px 14px; margin: 4px 0;">';
+    // Left bracket
+    html += '<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 8px; border-left: 2px solid #2c3e50; border-top: 2px solid #2c3e50; border-bottom: 2px solid #2c3e50;"></span>';
+    // Right bracket
+    html += '<span style="position: absolute; right: 0; top: 0; bottom: 0; width: 8px; border-right: 2px solid #2c3e50; border-top: 2px solid #2c3e50; border-bottom: 2px solid #2c3e50;"></span>';
+    html += '<table style="border-collapse: collapse; font-family: \'Cambria Math\', Georgia, serif; font-size: 17px;">';
+    for (var i = 0; i < M.length; i++) {
+      html += '<tr>';
+      for (var j = 0; j < 3; j++) {
+        html += '<td style="padding: 4px 12px; text-align: right; min-width: 30px;">' + Rstr(M[i][j]) + '</td>';
+      }
+      // Separator before RHS
+      html += '<td style="padding: 4px 6px 4px 12px; border-left: 1px dashed #888; text-align: right; min-width: 30px;">' + Rstr(M[i][3]) + '</td>';
+      html += '</tr>';
+    }
+    html += '</table>';
+    html += '</div>';
+    return html;
+  }
+
+  // --- Gauß-Elimination with step tracking ---
+  function gaussElimination(A, b) {
+    // Build augmented matrix with rationals
+    var M = [];
+    for (var i = 0; i < 3; i++) {
+      M.push([R(A[i][0],1), R(A[i][1],1), R(A[i][2],1), R(b[i],1)]);
+    }
+
+    var steps = [];
+    steps.push({
+      title: 'Erweiterte Koeffizientenmatrix',
+      desc: 'Wir schreiben das LGS in Matrixschreibweise. Der senkrechte Strich trennt Koeffizienten von der rechten Seite.',
+      matrix: copyMatrix(M)
+    });
+
+    // --- Forward elimination ---
+    // Step: Make pivot in column 0 (use row 0)
+    // Ensure M[0][0] != 0, swap if needed
+    if (Reqz(M[0][0])) {
+      var swapRow = -1;
+      for (var k = 1; k < 3; k++) {
+        if (!Reqz(M[k][0])) { swapRow = k; break; }
+      }
+      if (swapRow > 0) {
+        var tmp = M[0]; M[0] = M[swapRow]; M[swapRow] = tmp;
+        steps.push({
+          title: 'Zeilen tauschen',
+          desc: 'Wir tauschen Zeile (1) mit Zeile (' + (swapRow + 1) + '), damit in der ersten Spalte oben kein Nullelement steht.',
+          matrix: copyMatrix(M)
+        });
+      }
+    }
+
+    // Eliminate column 0 below pivot
+    for (var i = 1; i < 3; i++) {
+      if (!Reqz(M[i][0])) {
+        var factor = Rdiv(M[i][0], M[0][0]);
+        // New row i = row i - factor * row 0
+        var opDesc = 'Z' + (i + 1) + ' → Z' + (i + 1);
+        if (Rnum(factor) > 0) {
+          opDesc += ' − (' + Rstr(factor) + ') · Z1';
+        } else {
+          opDesc += ' + (' + Rstr(Rneg(factor)) + ') · Z1';
+        }
+        for (var j = 0; j < 4; j++) {
+          M[i][j] = Rsub(M[i][j], Rmul(factor, M[0][j]));
+        }
+        steps.push({
+          title: 'Spalte 1 unter dem Pivot eliminieren',
+          desc: opDesc + '  — Damit wird in Zeile ' + (i + 1) + ' der x-Koeffizient zu 0.',
+          matrix: copyMatrix(M)
+        });
+      }
+    }
+
+    // Make pivot in column 1 (use row 1)
+    if (Reqz(M[1][1])) {
+      // Swap with row 2 if possible
+      if (!Reqz(M[2][1])) {
+        var tmp2 = M[1]; M[1] = M[2]; M[2] = tmp2;
+        steps.push({
+          title: 'Zeilen tauschen',
+          desc: 'Wir tauschen Zeile (2) mit Zeile (3), damit in der zweiten Spalte ein Pivotelement entsteht.',
+          matrix: copyMatrix(M)
+        });
+      }
+    }
+
+    // Eliminate column 1 below pivot
+    if (!Reqz(M[2][1])) {
+      var factor2 = Rdiv(M[2][1], M[1][1]);
+      var opDesc2 = 'Z3 → Z3';
+      if (Rnum(factor2) > 0) {
+        opDesc2 += ' − (' + Rstr(factor2) + ') · Z2';
+      } else {
+        opDesc2 += ' + (' + Rstr(Rneg(factor2)) + ') · Z2';
+      }
+      for (var j = 0; j < 4; j++) {
+        M[2][j] = Rsub(M[2][j], Rmul(factor2, M[1][j]));
+      }
+      steps.push({
+        title: 'Spalte 2 unter dem Pivot eliminieren',
+        desc: opDesc2 + '  — Damit entsteht die obere Dreiecksform.',
+        matrix: copyMatrix(M)
+      });
+    }
+
+    steps[steps.length - 1].title = 'Obere Dreiecksform erreicht';
+    steps[steps.length - 1].desc = 'Die Matrix hat nun Dreiecksgestalt. Jetzt können wir die Lösung durch Rückwärtseinsetzen bestimmen.';
+
+    // --- Back-substitution ---
+    // z = M[2][3] / M[2][2]
+    var z = Rdiv(M[2][3], M[2][2]);
+    // y = (M[1][3] - M[1][2]*z) / M[1][1]
+    var y = Rdiv(Rsub(M[1][3], Rmul(M[1][2], z)), M[1][1]);
+    // x = (M[0][3] - M[0][1]*y - M[0][2]*z) / M[0][0]
+    var x = Rdiv(Rsub(Rsub(M[0][3], Rmul(M[0][1], y)), Rmul(M[0][2], z)), M[0][0]);
+
+    var backSubHtml = '<div style="background: #fafafa; padding: 15px 18px; border-radius: 6px; border-left: 3px solid #c41e3a; font-family: \'Cambria Math\', Georgia, serif; font-size: 16px; line-height: 1.9;">';
+    backSubHtml += '<div style="font-family: -apple-system, sans-serif; font-size: 13px; color: #666; margin-bottom: 8px; font-style: italic;">Aus Zeile 3:</div>';
+    backSubHtml += Rstr(M[2][2]) + 'z = ' + Rstr(M[2][3]) + '  ⟹  <b>z = ' + Rstr(z) + '</b><br>';
+    backSubHtml += '<div style="font-family: -apple-system, sans-serif; font-size: 13px; color: #666; margin: 10px 0 8px 0; font-style: italic;">Aus Zeile 2 (z einsetzen):</div>';
+    backSubHtml += Rstr(M[1][1]) + 'y ' + RstrSigned(M[1][2]) + '·(' + Rstr(z) + ') = ' + Rstr(M[1][3]) + '  ⟹  <b>y = ' + Rstr(y) + '</b><br>';
+    backSubHtml += '<div style="font-family: -apple-system, sans-serif; font-size: 13px; color: #666; margin: 10px 0 8px 0; font-style: italic;">Aus Zeile 1 (y und z einsetzen):</div>';
+    backSubHtml += Rstr(M[0][0]) + 'x ' + RstrSigned(M[0][1]) + '·(' + Rstr(y) + ') ' + RstrSigned(M[0][2]) + '·(' + Rstr(z) + ') = ' + Rstr(M[0][3]) + '  ⟹  <b>x = ' + Rstr(x) + '</b>';
+    backSubHtml += '</div>';
+
+    return { steps: steps, x: x, y: y, z: z, backSub: backSubHtml };
+  }
+
+  function copyMatrix(M) {
+    var c = [];
+    for (var i = 0; i < M.length; i++) {
+      var row = [];
+      for (var j = 0; j < M[i].length; j++) {
+        row.push({ n: M[i][j].n, d: M[i][j].d });
+      }
+      c.push(row);
+    }
+    return c;
+  }
+
+  // --- Render full solution & steps ---
+  function renderSolution(result) {
+    var html = '';
+    for (var i = 0; i < result.steps.length; i++) {
+      var s = result.steps[i];
+      html += '<div style="margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #eee;">';
+      html += '<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">';
+      html += '<span style="background: #c41e3a; color: white; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 10px;">Schritt ' + (i + 1) + '</span>';
+      html += '<span style="font-weight: 600; color: #2c3e50;">' + s.title + '</span>';
+      html += '</div>';
+      html += '<div style="font-size: 14px; color: #555; margin-bottom: 10px;">' + s.desc + '</div>';
+      html += renderMatrix(s.matrix);
+      html += '</div>';
+    }
+
+    // Back substitution
+    html += '<div style="margin-bottom: 18px;">';
+    html += '<div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;">';
+    html += '<span style="background: #2d8a4e; color: white; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 10px;">Rückwärtseinsetzen</span>';
+    html += '<span style="font-weight: 600; color: #2c3e50;">Lösung berechnen</span>';
+    html += '</div>';
+    html += result.backSub;
+    html += '</div>';
+
+    document.getElementById('lgs-steps').innerHTML = html;
+
+    // Final result box
+    var resHtml = '<b>L</b> = { ( ' + Rstr(result.x) + ' ; ' + Rstr(result.y) + ' ; ' + Rstr(result.z) + ' ) }';
+    document.getElementById('lgs-result').innerHTML = resHtml;
+  }
+
+  // --- State ---
+  var currentLGS = null;
+  var currentSolution = null;
+
+  function newProblem() {
+    currentLGS = generateLGS();
+    currentSolution = gaussElimination(currentLGS.A, currentLGS.b);
+    displayLGS(currentLGS);
+    // Reset UI
+    document.getElementById('lgs-x').value = '';
+    document.getElementById('lgs-y').value = '';
+    document.getElementById('lgs-z').value = '';
+    document.getElementById('lgs-feedback').style.display = 'none';
+    document.getElementById('lgs-solution').style.display = 'none';
+    // Reset input border colors
+    ['lgs-x', 'lgs-y', 'lgs-z'].forEach(function(id) {
+      document.getElementById(id).style.borderColor = '#d0d7de';
+    });
+  }
+
+  function checkSolution() {
+    if (!currentLGS) return;
+    var xIn = parseInput(document.getElementById('lgs-x').value);
+    var yIn = parseInput(document.getElementById('lgs-y').value);
+    var zIn = parseInput(document.getElementById('lgs-z').value);
+
+    var fb = document.getElementById('lgs-feedback');
+    fb.style.display = 'block';
+
+    if (!xIn || !yIn || !zIn) {
+      fb.style.background = '#fff4e5';
+      fb.style.color = '#8a5a00';
+      fb.style.border = '1px solid #ffd28a';
+      fb.innerHTML = '⚠️ Bitte alle drei Werte eingeben (Ganzzahlen, Brüche wie 3/4 oder Dezimalzahlen).';
+      return;
+    }
+
+    var correctX = Req(xIn, currentSolution.x);
+    var correctY = Req(yIn, currentSolution.y);
+    var correctZ = Req(zIn, currentSolution.z);
+
+    // Mark each input
+    document.getElementById('lgs-x').style.borderColor = correctX ? '#2d8a4e' : '#c41e3a';
+    document.getElementById('lgs-y').style.borderColor = correctY ? '#2d8a4e' : '#c41e3a';
+    document.getElementById('lgs-z').style.borderColor = correctZ ? '#2d8a4e' : '#c41e3a';
+
+    if (correctX && correctY && correctZ) {
+      fb.style.background = '#e8f5ec';
+      fb.style.color = '#1d6e3a';
+      fb.style.border = '1px solid #a8d9b8';
+      fb.innerHTML = '✅ <b>Richtig!</b> Deine Lösung erfüllt alle drei Gleichungen.';
+    } else {
+      fb.style.background = '#fdecea';
+      fb.style.color = '#a02020';
+      fb.style.border = '1px solid #f5b5b0';
+      var wrong = [];
+      if (!correctX) wrong.push('x');
+      if (!correctY) wrong.push('y');
+      if (!correctZ) wrong.push('z');
+      fb.innerHTML = '❌ Noch nicht ganz richtig. Falsch: <b>' + wrong.join(', ') + '</b>. Versuche es noch einmal oder schau dir den Rechenweg an.';
+    }
+  }
+
+  function showSolution() {
+    if (!currentSolution) return;
+    renderSolution(currentSolution);
+    var box = document.getElementById('lgs-solution');
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // --- Wire up buttons ---
+  document.getElementById('lgs-new-btn').addEventListener('click', newProblem);
+  document.getElementById('lgs-check-btn').addEventListener('click', checkSolution);
+  document.getElementById('lgs-solution-btn').addEventListener('click', showSolution);
+
+  // Allow Enter key to check
+  ['lgs-x', 'lgs-y', 'lgs-z'].forEach(function(id) {
+    document.getElementById(id).addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkSolution();
+    });
+  });
+
+  // Hover effects via JS (Moodle-safe, no CSS rules)
+  function addHover(btn, normalBg, hoverBg) {
+    btn.addEventListener('mouseenter', function() { btn.style.background = hoverBg; });
+    btn.addEventListener('mouseleave', function() { btn.style.background = normalBg; });
+  }
+  addHover(document.getElementById('lgs-new-btn'), '#c41e3a', '#a01830');
+  addHover(document.getElementById('lgs-check-btn'), '#2c3e50', '#1c2a3a');
+
+  // --- Initial generation ---
+  newProblem();
+})();
+</script>
