@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaußverfahren – Unterrichtsmaterialien</title>
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+  background: #e8eaed;
+  color: #1a1a1a;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ===== Header ===== */
+.site-header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: white;
+  padding: 32px 24px 28px;
+  border-bottom: 4px solid #c8102e;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::before {
+  content: "Σ";
+  position: absolute;
+  font-size: 240pt;
+  font-weight: 700;
+  color: rgba(200, 16, 46, 0.08);
+  top: -100px;
+  right: -30px;
+  line-height: 1;
+  font-family: 'Cambria Math', serif;
+  pointer-events: none;
+}
+.site-header-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.site-header h1 {
+  font-size: 28pt;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+.site-header .subtitle {
+  font-size: 13pt;
+  color: #ffb3b3;
+  margin-top: 4px;
+  font-style: italic;
+  font-weight: 600;
+}
+.site-header .breadcrumb {
+  font-size: 10.5pt;
+  color: #aaa;
+  margin-top: 14px;
+  letter-spacing: 0.3px;
+}
+.site-header .breadcrumb span { color: #c8102e; font-weight: 700; }
+
+/* ===== Inhalt ===== */
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+.intro {
+  background: white;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-left: 4px solid #c8102e;
+}
+.intro p { margin: 6px 0; font-size: 11.5pt; }
+.intro strong { color: #c8102e; }
+
+/* Abschnittsüberschriften */
+.section-title {
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 28px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #c8102e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title .num {
+  background: #c8102e;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13pt;
+  font-weight: 700;
+}
+
+/* ===== Material-Karten ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid #e5e5e5;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+}
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22pt;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.card-icon.presentation { background: #fff5f5; color: #c8102e; }
+.card-icon.worksheet { background: #fff3e0; color: #e65100; }
+.card-icon.generator { background: #f3e5f5; color: #7b1fa2; }
+.card-icon.exercise { background: #e3f2fd; color: #1565c0; }
+.card-icon.solution { background: #e8f5e9; color: #2e7d32; }
+
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 13pt;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.card .desc {
+  font-size: 10.5pt;
+  color: #555;
+  margin-bottom: 14px;
+  flex: 1;
+}
+.card .links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 5px;
+  font-size: 10pt;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn-primary {
+  background: #c8102e;
+  color: white;
+}
+.btn-primary:hover { background: #a00d24; }
+.btn-secondary {
+  background: #f5f5f5;
+  color: #1a1a1a;
+  border: 1px solid #ddd;
+}
+.btn-secondary:hover { background: #ebebeb; }
+.btn-solution {
+  background: #2e7d32;
+  color: white;
+}
+.btn-solution:hover { background: #256628; }
+
+.badge {
+  display: inline-block;
+  background: #f5f5f5;
+  color: #666;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 9.5pt;
+  border-top: 1px solid #ddd;
+  background: white;
+}
+footer strong { color: #c8102e; }
+
+@media (max-width: 600px) {
+  .site-header h1 { font-size: 22pt; }
+  main { padding: 20px 14px 40px; }
+  .card .links { flex-direction: column; align-items: stretch; }
+  .btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <h1>Gaußverfahren</h1>
+    <div class="subtitle">Lineare Gleichungssysteme lösen — händisch &amp; mit dem CAS</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Einleitung -->
+  <div class="intro">
+    <p>Auf dieser Seite findest du alle <strong>Unterrichtsmaterialien zum Gaußverfahren</strong> — von der Präsentation der Doppelstunde über das Arbeitsblatt bis zum Übungsblatt mit den dazugehörigen Lösungen.</p>
+    <p><strong>Roter Faden:</strong> Wir bestimmen die Gleichung einer ganzrationalen Funktion 3. Grades durch vier vorgegebene Punkte — sowohl mit dem CAS als auch händisch mit dem Gaußverfahren.</p>
+  </div>
+
+  <!-- ============ Präsentation ============ -->
+  <h2 class="section-title"><span class="num">1</span> Präsentation der Doppelstunde</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon presentation">📊</div>
+      <h3>Gaußverfahren – Doppelstunde</h3>
+      <p class="desc">Folienpräsentation mit Einstiegsproblem, gemeinsamem Aufstellen des LGS, Arbeitsauftrag und Sicherung. <span class="badge">7 FOLIEN</span></p>
+      <div class="links">
+        <a href="Gaussverfahren_Doppelstunde.pdf" class="btn btn-primary" target="_blank">📄 PDF öffnen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Arbeitsblatt ============ -->
+  <h2 class="section-title"><span class="num">2</span> Arbeitsblatt zur Doppelstunde</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon worksheet">📝</div>
+      <h3>Arbeitsblatt Gaußverfahren</h3>
+      <p class="desc">Funktionsgleichung 3. Grades durch 4 Punkte. Aufgabe 1: mit dem CAS lösen. Aufgabe 2: dasselbe LGS händisch mit dem Gaußverfahren.</p>
+      <div class="links">
+        <a href="AB_Gauss.pdf" class="btn btn-primary" target="_blank">📄 PDF</a>
+        <a href="AB_Gauss.html" class="btn btn-secondary" target="_blank">🌐 HTML</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon solution">✓</div>
+      <h3>Lösung zum Arbeitsblatt</h3>
+      <p class="desc">Vollständiger Lösungsweg für beide Aufgaben: CAS-Lösung mit Probe, händisches Gaußverfahren mit allen Zwischenschritten und Rückwärtseinsetzen.</p>
+      <div class="links">
+        <a href="Loesung_AB_Moodle.html" class="btn btn-solution" target="_blank">🌐 Lösung ansehen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Interaktive Übung ============ -->
+  <h2 class="section-title"><span class="num">3</span> Interaktive Übung</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon generator">⚙️</div>
+      <h3>LGS-Generator</h3>
+      <p class="desc">Interaktives Widget: Erzeugt zufällige Punkt-Tupel und ermöglicht das selbstständige Aufstellen des dazugehörigen linearen Gleichungssystems mit sofortiger Rückmeldung. <span class="badge">WIDGET</span></p>
+      <div class="links">
+        <a href="Lgs-generator.html" class="btn btn-primary" target="_blank">🌐 Widget starten</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Übungsblatt ============ -->
+  <h2 class="section-title"><span class="num">4</span> Übungsblatt zur Vertiefung</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon exercise">📐</div>
+      <h3>Übungsblatt Gaußverfahren</h3>
+      <p class="desc">Fünf Aufgaben: LGS lösen, Parabel durch 3 Punkte, Zuordnung Punktmenge → LGS, Funktion 3. Grades, Anwendung Kostenfunktion. <span class="badge">5 AUFGABEN</span></p>
+      <div class="links">
+        <a href="Uebungsblatt_Gauss.pdf" class="btn btn-primary" target="_blank">📄 PDF</a>
+        <a href="Uebungsblatt_Gauss.html" class="btn btn-secondary" target="_blank">🌐 HTML</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon solution">✓</div>
+      <h3>Lösung zum Übungsblatt</h3>
+      <p class="desc">Ausführliche Lösungen zu allen fünf Aufgaben mit Rechenweg, Probe und Interpretation (z.&nbsp;B. wirtschaftliche Bedeutung der Fixkosten).</p>
+      <div class="links">
+        <a href="Loesung_Uebungsblatt_Moodle.html" class="btn btn-solution" target="_blank">🌐 Lösung ansehen</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p><strong>rwb.</strong> Berufskolleg &nbsp;·&nbsp; Mathematik 11 &nbsp;·&nbsp; Berufliches Gymnasium</p>
+</footer>
+
+</body>
+</html>
