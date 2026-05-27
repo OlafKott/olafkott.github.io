@@ -1,0 +1,102 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 4.4 · MONOPOL</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Grenzkosten, Grenzerlös und Grenzgewinn</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Bilde die Ableitungen und berechne die Grenzfunktionen.</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 15px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabenstellung</div>
+      <div style="font-size: 15px;">
+        Gegeben sind die Kostenfunktion <span style="font-family: 'Cambria Math', Georgia, serif;">K(x) = x³ − 6x² + 15x + 20</span> und die Preis-Absatz-Funktion <span style="font-family: 'Cambria Math', Georgia, serif;">p(x) = −x + 20</span>. Bearbeite die Aufgaben:
+      </div>
+    </div>
+
+    <div style="background: #eef2f7; border-left: 4px solid #1565c0; padding: 10px 16px; border-radius: 4px; margin-bottom: 25px; font-size: 13px; color: #1565c0;">
+      <b>Hilfsmittel:</b> Diese Aufgabe kannst du sowohl <b>oHiMi</b> als auch mit dem <b>CAS</b> lösen.
+    </div>
+
+    <div style="display: grid; gap: 15px; margin-bottom: 25px;">
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px;">a)</div>
+        <div style="font-size: 15px;">Bestimme die Erlösfunktion E(x) und die Gewinnfunktion G(x).</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px;">b)</div>
+        <div style="font-size: 15px;">Bilde die <b>Grenzkostenfunktion</b> K′(x), die <b>Grenzerlösfunktion</b> E′(x) und die <b>Grenzgewinnfunktion</b> G′(x).</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px;">c)</div>
+        <div style="font-size: 15px;">Berechne K′(2), E′(2) und G′(2). Interpretiere die Werte im Sachzusammenhang.</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px;">d)</div>
+        <div style="font-size: 15px;">Berechne K′(4), E′(4) und G′(4). Was bedeutet das negative Vorzeichen bei G′(4) wirtschaftlich?</div>
+      </div>
+    </div>
+
+    <button onclick="toggleLoesung()" id="loesungs-btn" style="width: 100%; padding: 14px 24px; background: #2e7d32; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 20px;">▼ Lösung anzeigen</button>
+
+    <div id="loesung" style="display: none;">
+      <div style="background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px;"><div style="font-weight: 600; color: #1b5e20;">Lösungen</div></div>
+
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">a) Erlös- und Gewinnfunktion</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          E(x) = p(x) · x = (−x + 20) · x = <b>−x² + 20x</b><br>
+          G(x) = E(x) − K(x) = −x² + 20x − (x³ − 6x² + 15x + 20)<br>
+          G(x) = <b>−x³ + 5x² + 5x − 20</b>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">b) Grenzfunktionen</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          K′(x) = <b>3x² − 12x + 15</b><br>
+          E′(x) = <b>−2x + 20</b><br>
+          G′(x) = <b>−3x² + 10x + 5</b>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">c) Werte bei x = 2 ME</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          K′(2) = 3·4 − 12·2 + 15 = <b>3</b><br>
+          E′(2) = −4 + 20 = <b>16</b><br>
+          G′(2) = −12 + 20 + 5 = <b>13</b>
+        </div>
+        <div style="font-family: -apple-system, sans-serif; font-size: 14px; color: #2c3e50; margin-top: 8px; padding: 10px; background: #fff; border-radius: 4px;">
+          <b>Interpretation:</b> Bei einer Produktion von 2 ME steigen die Kosten um ca. 3 GE pro zusätzlicher ME, der Erlös wächst um ca. 16 GE und der Gewinn um ca. 13 GE. Es lohnt sich also, die Produktion auszuweiten.
+        </div>
+      </div>
+
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">d) Werte bei x = 4 ME</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          K′(4) = 48 − 48 + 15 = <b>15</b><br>
+          E′(4) = −8 + 20 = <b>12</b><br>
+          G′(4) = −48 + 40 + 5 = <b>−3</b>
+        </div>
+        <div style="font-family: -apple-system, sans-serif; font-size: 14px; color: #2c3e50; margin-top: 8px; padding: 10px; background: #fff; border-radius: 4px;">
+          <b>Interpretation:</b> Bei x = 4 ME sind die Grenzkosten (15) höher als der Grenzerlös (12). Eine weitere Produktion senkt also den Gewinn um etwa 3 GE pro zusätzlicher ME. Das negative Vorzeichen bei G′(4) bedeutet: <b>Das Gewinnmaximum liegt vor dieser Stelle</b>. Eine Produktionsausweitung über x = 4 hinaus ist wirtschaftlich nicht sinnvoll.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Merke:</b> Solange G′(x) &gt; 0 ist (Grenzerlös &gt; Grenzkosten), lohnt sich die Produktion einer weiteren Einheit. Bei G′(x) = 0 ist das <b>Gewinnmaximum</b> erreicht.
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLoesung() {
+  const l = document.getElementById('loesung');
+  const b = document.getElementById('loesungs-btn');
+  if (l.style.display === 'none') { l.style.display = 'block'; b.innerHTML = '▲ Lösung ausblenden'; b.style.background = '#5d4e00'; }
+  else { l.style.display = 'none'; b.innerHTML = '▼ Lösung anzeigen'; b.style.background = '#2e7d32'; }
+}
+</script>
