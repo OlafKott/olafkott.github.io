@@ -1,0 +1,345 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 1.9 · EINFÜHRUNG IN DIE DIFFERENTIALRECHNUNG</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Ableitung im Weg-Zeit-Kontext</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Berechne Geschwindigkeit und Beschleunigung aus einer Weg-Zeit-Funktion.</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <!-- Aufgabe -->
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabe</div>
+      <div style="font-size: 16px; margin-bottom: 6px;">
+        Ein Körper bewegt sich entlang einer Geraden. Seine Position (in m) zur Zeit <i>t</i> (in s) wird beschrieben durch:
+      </div>
+      <div id="funktion-text" style="font-size: 18px; font-family: 'Cambria Math', Georgia, serif; font-weight: 600; text-align: center; padding: 8px; background: #fff; border-radius: 4px;"></div>
+      <div style="font-size: 16px; margin-top: 8px;">
+        Berechne die <b>Geschwindigkeit</b> und die <b>Beschleunigung</b> zum Zeitpunkt <span id="zeit-text" style="font-family: 'Cambria Math', Georgia, serif; font-weight: 600;"></span>.
+      </div>
+    </div>
+
+    <!-- Zwischenschritte -->
+    <div style="background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px; font-size: 14px;">Schritt 1: Ableitungen bilden und Werte berechnen</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">
+            v(<span class="t0-anz"></span>) = s′(<span class="t0-anz"></span>) = <span style="font-family: -apple-system, sans-serif; font-size: 13px; color: #666;">(in m/s)</span>
+          </label>
+          <input type="text" id="eingabe-v" placeholder="z. B. 6"
+                 style="width: 100%; padding: 9px 12px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">
+            a(<span class="t0-anz"></span>) = s″(<span class="t0-anz"></span>) = <span style="font-family: -apple-system, sans-serif; font-size: 13px; color: #666;">(in m/s²)</span>
+          </label>
+          <input type="text" id="eingabe-a" placeholder="z. B. 12"
+                 style="width: 100%; padding: 9px 12px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Schritt 2: Interpretation -->
+    <div style="background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px; font-size: 14px;">Schritt 2: Was bedeutet das?</div>
+      <div id="deut-optionen" style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback" style="display: none; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 500;"></div>
+
+    <!-- Rechenweg -->
+    <div id="rechenweg" style="display: none; background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px;">Rechenweg</div>
+      <div id="rechenweg-inhalt" style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="pruefen()" id="btn-pruefen"
+              style="padding: 12px 24px; background: #2e7d32; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ✓ Prüfen
+      </button>
+      <button onclick="neueAufgabe()"
+              style="padding: 12px 24px; background: #C8102E; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ↻ Neue Aufgabe
+      </button>
+      <button onclick="rechenwegAnzeigen()"
+              style="padding: 12px 24px; background: #fff; color: #1565c0; border: 2px solid #1565c0; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        💡 Rechenweg anzeigen
+      </button>
+    </div>
+
+    <div style="margin-top: 20px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Zusammenhang:</b> Weg → Geschwindigkeit → Beschleunigung:<br>
+      v(t) = s′(t) &nbsp;·&nbsp; a(t) = v′(t) = s″(t)<br>
+      Einheiten: s in m, v in m/s, a in m/s².
+    </div>
+  </div>
+</div>
+
+<script>
+let aktuelleAufgabe = {};
+let gewaehlteDeutung = null;
+
+const aufgaben = [
+  {
+    s_text: 's(t) = t³ − 3t² + 4',
+    v_text: 'v(t) = s′(t) = 3t² − 6t',
+    a_text: 'a(t) = s″(t) = 6t − 6',
+    s: (t) => t*t*t - 3*t*t + 4,
+    v: (t) => 3*t*t - 6*t,
+    a: (t) => 6*t - 6,
+    t0: 2,
+    deutungen: [
+      'Der Körper steht kurz still (v = 0), wird aber positiv beschleunigt (a > 0) – er setzt sich in Bewegung.',
+      'Der Körper bewegt sich mit maximaler Geschwindigkeit vorwärts.',
+      'Der Körper wird abgebremst und kehrt seine Richtung um.',
+      'Der Körper bewegt sich gleichförmig ohne Beschleunigung.'
+    ],
+    richtigeDeutung: 0
+  },
+  {
+    s_text: 's(t) = −t³ + 6t² − 9t + 2',
+    v_text: 'v(t) = s′(t) = −3t² + 12t − 9',
+    a_text: 'a(t) = s″(t) = −6t + 12',
+    s: (t) => -t*t*t + 6*t*t - 9*t + 2,
+    v: (t) => -3*t*t + 12*t - 9,
+    a: (t) => -6*t + 12,
+    t0: 1,
+    deutungen: [
+      'Der Körper bewegt sich gleichförmig rückwärts.',
+      'Der Körper steht kurz still (v = 0) und wird positiv beschleunigt (a > 0) – er beginnt sich vorwärts zu bewegen.',
+      'Der Körper bewegt sich rückwärts und wird immer schneller.',
+      'Der Körper bewegt sich vorwärts und wird abgebremst.'
+    ],
+    richtigeDeutung: 1
+  },
+  {
+    s_text: 's(t) = 0,5t³ − 3t² + 4,5t + 1',
+    v_text: 'v(t) = s′(t) = 1,5t² − 6t + 4,5',
+    a_text: 'a(t) = s″(t) = 3t − 6',
+    s: (t) => 0.5*t*t*t - 3*t*t + 4.5*t + 1,
+    v: (t) => 1.5*t*t - 6*t + 4.5,
+    a: (t) => 3*t - 6,
+    t0: 3,
+    deutungen: [
+      'Der Körper bewegt sich vorwärts und beschleunigt.',
+      'Der Körper steht still und wird nicht beschleunigt.',
+      'Der Körper steht kurz still (v = 0) und wird positiv beschleunigt (a > 0) – er setzt sich wieder in Bewegung.',
+      'Der Körper bewegt sich rückwärts und bremst ab.'
+    ],
+    richtigeDeutung: 2
+  },
+  {
+    s_text: 's(t) = t³ − 6t² + 9t',
+    v_text: 'v(t) = s′(t) = 3t² − 12t + 9',
+    a_text: 'a(t) = s″(t) = 6t − 12',
+    s: (t) => t*t*t - 6*t*t + 9*t,
+    v: (t) => 3*t*t - 12*t + 9,
+    a: (t) => 6*t - 12,
+    t0: 1,
+    deutungen: [
+      'Der Körper bewegt sich vorwärts und wird abgebremst (v > 0, a < 0).',
+      'Der Körper steht still und wird positiv beschleunigt.',
+      'Der Körper bewegt sich rückwärts mit konstanter Geschwindigkeit.',
+      'Der Körper hat die maximale Geschwindigkeit erreicht.'
+    ],
+    richtigeDeutung: 0
+  },
+  {
+    s_text: 's(t) = 2t³ − 9t² + 12t + 1',
+    v_text: 'v(t) = s′(t) = 6t² − 18t + 12',
+    a_text: 'a(t) = s″(t) = 12t − 18',
+    s: (t) => 2*t*t*t - 9*t*t + 12*t + 1,
+    v: (t) => 6*t*t - 18*t + 12,
+    a: (t) => 12*t - 18,
+    t0: 2,
+    deutungen: [
+      'Der Körper bewegt sich vorwärts mit zunehmender Geschwindigkeit.',
+      'Der Körper bewegt sich rückwärts und wird abgebremst.',
+      'Der Körper steht kurz still (v = 0) und wird positiv beschleunigt (a > 0) – er setzt sich wieder in Bewegung.',
+      'Der Körper bewegt sich gleichförmig.'
+    ],
+    richtigeDeutung: 2
+  },
+  {
+    s_text: 's(t) = −0,5t³ + 3t² + 1',
+    v_text: 'v(t) = s′(t) = −1,5t² + 6t',
+    a_text: 'a(t) = s″(t) = −3t + 6',
+    s: (t) => -0.5*t*t*t + 3*t*t + 1,
+    v: (t) => -1.5*t*t + 6*t,
+    a: (t) => -3*t + 6,
+    t0: 4,
+    deutungen: [
+      'Der Körper steht kurz still und wird negativ beschleunigt.',
+      'Der Körper bewegt sich vorwärts und beschleunigt weiter.',
+      'Der Körper steht kurz still (v = 0) und wird negativ beschleunigt (a < 0) – er beginnt sich rückwärts zu bewegen.',
+      'Der Körper bewegt sich rückwärts mit maximaler Geschwindigkeit.'
+    ],
+    richtigeDeutung: 2
+  }
+];
+
+function generiereAufgabe() {
+  const auf = aufgaben[Math.floor(Math.random() * aufgaben.length)];
+  aktuelleAufgabe = auf;
+
+  document.getElementById('funktion-text').textContent = auf.s_text;
+  document.getElementById('zeit-text').innerHTML = `t = ${auf.t0} s`;
+  document.querySelectorAll('.t0-anz').forEach(el => el.textContent = auf.t0);
+
+  // Deutungsoptionen aufbauen
+  const cont = document.getElementById('deut-optionen');
+  cont.innerHTML = '';
+  gewaehlteDeutung = null;
+
+  auf.deutungen.forEach((d, i) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = d;
+    btn.dataset.idx = i;
+    btn.style.cssText = 'padding: 12px 16px; background: #fff; color: #2c3e50; border: 2px solid #d0d0d0; border-radius: 6px; font-size: 14px; cursor: pointer; transition: all 0.15s; text-align: left; line-height: 1.4;';
+    btn.onmouseover = () => { if (!btn.dataset.disabled) btn.style.borderColor = '#1565c0'; };
+    btn.onmouseout = () => { if (!btn.dataset.disabled && gewaehlteDeutung !== i) btn.style.borderColor = '#d0d0d0'; };
+    btn.onclick = () => {
+      if (btn.dataset.disabled) return;
+      gewaehlteDeutung = i;
+      document.querySelectorAll('#deut-optionen button').forEach(b => {
+        b.style.borderColor = '#d0d0d0';
+        b.style.background = '#fff';
+      });
+      btn.style.borderColor = '#1565c0';
+      btn.style.background = '#e3f2fd';
+    };
+    cont.appendChild(btn);
+  });
+}
+
+function parseZahl(s) {
+  if (!s) return NaN;
+  s = s.toString().trim().replace(',', '.').replace(/[−–]/g, '-');
+  return parseFloat(s);
+}
+
+function formatiereZahl(z) {
+  if (Math.abs(z - Math.round(z)) < 0.001) return Math.round(z).toString();
+  return z.toFixed(2).replace('.', ',');
+}
+
+function pruefen() {
+  const { t0, v, a, richtigeDeutung } = aktuelleAufgabe;
+  const vErwartet = v(t0);
+  const aErwartet = a(t0);
+
+  const vEin = parseZahl(document.getElementById('eingabe-v').value);
+  const aEin = parseZahl(document.getElementById('eingabe-a').value);
+
+  const vRichtig = !isNaN(vEin) && Math.abs(vEin - vErwartet) < 0.1;
+  const aRichtig = !isNaN(aEin) && Math.abs(aEin - aErwartet) < 0.1;
+  const deutRichtig = gewaehlteDeutung === richtigeDeutung;
+
+  // Eingabefelder markieren
+  const elV = document.getElementById('eingabe-v');
+  const elA = document.getElementById('eingabe-a');
+  if (elV.value.trim()) {
+    elV.style.borderColor = vRichtig ? '#2e7d32' : '#c62828';
+    elV.style.background = vRichtig ? '#e8f5e9' : '#fdecea';
+  }
+  if (elA.value.trim()) {
+    elA.style.borderColor = aRichtig ? '#2e7d32' : '#c62828';
+    elA.style.background = aRichtig ? '#e8f5e9' : '#fdecea';
+  }
+
+  // Deutungs-Buttons markieren
+  document.querySelectorAll('#deut-optionen button').forEach(b => {
+    const i = parseInt(b.dataset.idx);
+    if (i === richtigeDeutung) {
+      b.style.borderColor = '#2e7d32';
+      b.style.background = '#e8f5e9';
+      b.style.color = '#1b5e20';
+    } else if (i === gewaehlteDeutung) {
+      b.style.borderColor = '#c62828';
+      b.style.background = '#fdecea';
+      b.style.color = '#a72824';
+    } else {
+      b.style.opacity = '0.5';
+    }
+    b.dataset.disabled = '1';
+  });
+
+  const richtigAnz = (vRichtig ? 1 : 0) + (aRichtig ? 1 : 0) + (deutRichtig ? 1 : 0);
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+
+  if (richtigAnz === 3) {
+    fb.style.background = '#e8f5e9'; fb.style.color = '#1b5e20'; fb.style.border = '1px solid #66bb6a';
+    fb.innerHTML = '✓ Perfekt! Geschwindigkeit, Beschleunigung und Deutung sind korrekt.';
+  } else if (richtigAnz >= 2) {
+    fb.style.background = '#fff8e1'; fb.style.color = '#5d4e00'; fb.style.border = '1px solid #f9a825';
+    fb.innerHTML = `⚠ ${richtigAnz} von 3 Antworten richtig. Schau dir den Rechenweg an.`;
+  } else {
+    fb.style.background = '#fdecea'; fb.style.color = '#a72824'; fb.style.border = '1px solid #ef5350';
+    fb.innerHTML = `✗ ${richtigAnz} von 3 richtig. Lies den Rechenweg und versuche es erneut.`;
+  }
+}
+
+function rechenwegAnzeigen() {
+  const { s_text, v_text, a_text, t0, v, a, s, deutungen, richtigeDeutung } = aktuelleAufgabe;
+  const r = document.getElementById('rechenweg');
+  const i = document.getElementById('rechenweg-inhalt');
+
+  const vWert = v(t0);
+  const aWert = a(t0);
+  const sWert = s(t0);
+
+  let deutung = '';
+  if (vWert === 0 && aWert > 0) {
+    deutung = 'Der Körper steht kurz still (v = 0), wird aber positiv beschleunigt → er setzt sich (wieder) in Bewegung.';
+  } else if (vWert === 0 && aWert < 0) {
+    deutung = 'Der Körper steht kurz still (v = 0) und wird negativ beschleunigt → er beginnt sich rückwärts zu bewegen.';
+  } else if (vWert === 0 && aWert === 0) {
+    deutung = 'Der Körper steht still und wird nicht beschleunigt.';
+  } else if (vWert > 0 && aWert > 0) {
+    deutung = 'Der Körper bewegt sich vorwärts und wird weiter beschleunigt.';
+  } else if (vWert > 0 && aWert < 0) {
+    deutung = 'Der Körper bewegt sich vorwärts, wird aber abgebremst (a < 0).';
+  } else if (vWert < 0 && aWert > 0) {
+    deutung = 'Der Körper bewegt sich rückwärts, wird aber abgebremst (a > 0).';
+  } else if (vWert < 0 && aWert < 0) {
+    deutung = 'Der Körper bewegt sich rückwärts und wird weiter negativ beschleunigt.';
+  }
+
+  i.innerHTML = `
+    <div style="margin-bottom: 6px;"><b>1. Ableitungen bilden:</b></div>
+    <div style="margin-left: 16px;">${v_text}</div>
+    <div style="margin-left: 16px; margin-bottom: 10px;">${a_text}</div>
+
+    <div style="margin-bottom: 6px;"><b>2. Werte zum Zeitpunkt t = ${t0} s berechnen:</b></div>
+    <div style="margin-left: 16px;">s(${t0}) = ${formatiereZahl(sWert)} m &nbsp;(Position)</div>
+    <div style="margin-left: 16px;">v(${t0}) = s′(${t0}) = <b>${formatiereZahl(vWert)} m/s</b> &nbsp;(Geschwindigkeit)</div>
+    <div style="margin-left: 16px; margin-bottom: 10px;">a(${t0}) = s″(${t0}) = <b>${formatiereZahl(aWert)} m/s²</b> &nbsp;(Beschleunigung)</div>
+
+    <div style="margin-bottom: 6px; font-family: -apple-system, sans-serif;"><b>3. Deutung:</b></div>
+    <div style="margin-left: 16px; font-family: -apple-system, sans-serif; font-size: 14px; padding: 10px; background: #fff; border-radius: 4px; border-left: 3px solid #2e7d32;">
+      ${deutung}
+    </div>
+  `;
+  r.style.display = 'block';
+}
+
+function neueAufgabe() {
+  ['eingabe-v', 'eingabe-a'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.style.borderColor = '#d0d0d0';
+    el.style.background = '#fff';
+  });
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('rechenweg').style.display = 'none';
+  generiereAufgabe();
+}
+
+generiereAufgabe();
+</script>

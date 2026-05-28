@@ -1,0 +1,148 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 2.2 · EXTREM- UND WENDEPUNKTE</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Extrempunkte berechnen</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Berechne alle Extrempunkte (Hoch- und Tiefpunkte) der Funktionen.</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 15px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabenstellung</div>
+      <div style="font-size: 15px;">
+        Bestimme jeweils alle Extrempunkte der Funktion. Gib die Art (Hoch- oder Tiefpunkt) an und prüfe die hinreichende Bedingung mit der 2. Ableitung.
+      </div>
+    </div>
+
+    <div style="background: #eef2f7; border-left: 4px solid #1565c0; padding: 10px 16px; border-radius: 4px; margin-bottom: 25px; font-size: 13px; color: #1565c0;">
+      <b>Hilfsmittel:</b> Diese Aufgabe kannst du sowohl <b>oHiMi</b> (ohne Hilfsmittel) als auch mit dem <b>CAS</b> lösen.
+    </div>
+
+    <div style="display: grid; gap: 15px; margin-bottom: 25px; font-family: 'Cambria Math', Georgia, serif; font-size: 16px;">
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px; font-family: -apple-system, sans-serif;">a)</div>
+        <div>f(x) = x³ − 3x² + 4</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px; font-family: -apple-system, sans-serif;">b)</div>
+        <div>f(x) = −x³ + 3x² + 9x − 1</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px; font-family: -apple-system, sans-serif;">c)</div>
+        <div>f(x) = ⅓x³ − 2x² + 3x</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px; font-family: -apple-system, sans-serif;">d)</div>
+        <div>f(x) = 0,25x⁴ − 2x² + 3</div>
+      </div>
+      <div style="border: 1px solid #d0d0d0; border-radius: 6px; padding: 16px;">
+        <div style="font-weight: 600; color: #2c3e50; margin-bottom: 6px; font-family: -apple-system, sans-serif;">e) — Anwendung</div>
+        <div style="font-family: -apple-system, sans-serif; font-size: 15px; line-height: 1.6;">
+          Die Gewinnfunktion eines Unternehmens lautet <span style="font-family: 'Cambria Math', Georgia, serif;">G(x) = −0,1x³ + 3x² − 15x + 5</span> (x = Stückzahl in 1000, G in 1000 €). Berechne, bei welcher Stückzahl der Gewinn <b>maximal</b> ist und wie hoch dieser Gewinn ausfällt.
+        </div>
+      </div>
+    </div>
+
+    <button onclick="toggleLoesung()" id="loesungs-btn"
+            style="width: 100%; padding: 14px 24px; background: #2e7d32; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 20px;">
+      ▼ Lösung anzeigen
+    </button>
+
+    <div id="loesung" style="display: none;">
+      <div style="background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px;">
+        <div style="font-weight: 600; color: #1b5e20;">Lösungen</div>
+      </div>
+
+      <!-- a -->
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">a) f(x) = x³ − 3x² + 4</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          f′(x) = 3x² − 6x = 3x(x − 2)<br>
+          f″(x) = 6x − 6<br><br>
+          <b>Notwendige Bedingung:</b> f′(x) = 0<br>
+          3x(x − 2) = 0 → x<sub>1</sub> = 0; x<sub>2</sub> = 2<br><br>
+          <b>Hinreichende Bedingung:</b><br>
+          f″(0) = −6 &lt; 0 → Hochpunkt; f(0) = 4 → <b>HP(0 | 4)</b><br>
+          f″(2) = 6 &gt; 0 → Tiefpunkt; f(2) = 8 − 12 + 4 = 0 → <b>TP(2 | 0)</b>
+        </div>
+      </div>
+
+      <!-- b -->
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">b) f(x) = −x³ + 3x² + 9x − 1</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          f′(x) = −3x² + 6x + 9 = −3(x² − 2x − 3)<br>
+          f″(x) = −6x + 6<br><br>
+          <b>Notwendige Bedingung:</b> f′(x) = 0<br>
+          x² − 2x − 3 = 0 → x<sub>1</sub> = −1; x<sub>2</sub> = 3<br><br>
+          <b>Hinreichende Bedingung:</b><br>
+          f″(−1) = 12 &gt; 0 → Tiefpunkt; f(−1) = 1 + 3 − 9 − 1 = −6 → <b>TP(−1 | −6)</b><br>
+          f″(3) = −12 &lt; 0 → Hochpunkt; f(3) = −27 + 27 + 27 − 1 = 26 → <b>HP(3 | 26)</b>
+        </div>
+      </div>
+
+      <!-- c -->
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">c) f(x) = ⅓x³ − 2x² + 3x</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          f′(x) = x² − 4x + 3<br>
+          f″(x) = 2x − 4<br><br>
+          <b>Notwendige Bedingung:</b> f′(x) = 0<br>
+          x² − 4x + 3 = 0 → x<sub>1</sub> = 1; x<sub>2</sub> = 3<br><br>
+          <b>Hinreichende Bedingung:</b><br>
+          f″(1) = −2 &lt; 0 → Hochpunkt; f(1) = ⅓ − 2 + 3 = 4/3 ≈ 1,33 → <b>HP(1 | 4/3)</b><br>
+          f″(3) = 2 &gt; 0 → Tiefpunkt; f(3) = 9 − 18 + 9 = 0 → <b>TP(3 | 0)</b>
+        </div>
+      </div>
+
+      <!-- d -->
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">d) f(x) = 0,25x⁴ − 2x² + 3</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          f′(x) = x³ − 4x = x(x² − 4) = x(x − 2)(x + 2)<br>
+          f″(x) = 3x² − 4<br><br>
+          <b>Notwendige Bedingung:</b> f′(x) = 0<br>
+          x<sub>1</sub> = −2; x<sub>2</sub> = 0; x<sub>3</sub> = 2<br><br>
+          <b>Hinreichende Bedingung:</b><br>
+          f″(−2) = 8 &gt; 0 → Tiefpunkt; f(−2) = 4 − 8 + 3 = −1 → <b>TP(−2 | −1)</b><br>
+          f″(0) = −4 &lt; 0 → Hochpunkt; f(0) = 3 → <b>HP(0 | 3)</b><br>
+          f″(2) = 8 &gt; 0 → Tiefpunkt; f(2) = 4 − 8 + 3 = −1 → <b>TP(2 | −1)</b>
+        </div>
+      </div>
+
+      <!-- e -->
+      <div style="border: 1px solid #66bb6a; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #f1f8e9;">
+        <div style="font-weight: 600; color: #1b5e20; margin-bottom: 8px;">e) Gewinnfunktion G(x) = −0,1x³ + 3x² − 15x + 5</div>
+        <div style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;">
+          G′(x) = −0,3x² + 6x − 15<br>
+          G″(x) = −0,6x + 6<br><br>
+          <b>Notwendige Bedingung:</b> G′(x) = 0<br>
+          −0,3x² + 6x − 15 = 0 &nbsp;|&nbsp; · (−1/0,3) &nbsp;→&nbsp; x² − 20x + 50 = 0<br>
+          x<sub>1,2</sub> = 10 ± √(100 − 50) = 10 ± √50 ≈ 10 ± 7,07<br>
+          x<sub>1</sub> ≈ 2,93; &nbsp; x<sub>2</sub> ≈ 17,07<br><br>
+          <b>Hinreichende Bedingung:</b><br>
+          G″(2,93) = 4,24 &gt; 0 → Tiefpunkt (uninteressant)<br>
+          G″(17,07) = −4,24 &lt; 0 → Hochpunkt → <b>Gewinnmaximum</b><br>
+          G(17,07) ≈ −0,1 · 4978 + 3 · 291,4 − 15 · 17,07 + 5 ≈ <b>121,2</b>
+        </div>
+        <div style="font-family: -apple-system, sans-serif; font-size: 14px; color: #2c3e50; margin-top: 10px; padding: 10px; background: #fff; border-radius: 4px;">
+          <b>Interpretation:</b> Bei einer Stückzahl von ca. 17 070 Stück erzielt das Unternehmen den maximalen Gewinn von ca. 121 200 €.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Vorgehen:</b> 1. f′(x) und f″(x) bilden &nbsp;·&nbsp; 2. f′(x) = 0 setzen → mögliche Extremstellen &nbsp;·&nbsp; 3. Vorzeichen von f″ prüfen (HP/TP) &nbsp;·&nbsp; 4. y-Wert mit f(x<sub>E</sub>) berechnen.
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLoesung() {
+  const l = document.getElementById('loesung');
+  const b = document.getElementById('loesungs-btn');
+  if (l.style.display === 'none') { l.style.display = 'block'; b.innerHTML = '▲ Lösung ausblenden'; b.style.background = '#5d4e00'; }
+  else { l.style.display = 'none'; b.innerHTML = '▼ Lösung anzeigen'; b.style.background = '#2e7d32'; }
+}
+</script>

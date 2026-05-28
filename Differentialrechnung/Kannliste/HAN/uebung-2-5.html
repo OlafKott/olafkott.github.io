@@ -1,0 +1,241 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 2.5 · EXTREM- UND WENDEPUNKTE</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Sattelpunkt prüfen</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">Liegt an der gegebenen Stelle ein Sattelpunkt, Hochpunkt, Tiefpunkt oder normaler Wendepunkt vor?</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabe</div>
+      <div style="font-size: 16px;">
+        Gegeben ist die Funktion <span id="funktion-text" style="font-family: 'Cambria Math', Georgia, serif; font-weight: 600;"></span>
+        und die Stelle <span id="stelle-text" style="font-family: 'Cambria Math', Georgia, serif; font-weight: 600;"></span>.
+        Bestimme die <b>Art des besonderen Punktes</b>, der dort vorliegt.
+      </div>
+    </div>
+
+    <!-- Zwischenwerte: Schüler trägt 3 Ableitungswerte ein -->
+    <div style="background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px; font-size: 14px;">Schritt 1: Berechne die drei Ableitungswerte an der Stelle x<sub>0</sub>.</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">f′(<span class="x0-anz"></span>) =</label>
+          <input type="text" id="eingabe-f1" placeholder="z. B. 0" style="width: 100%; padding: 9px 10px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">f″(<span class="x0-anz"></span>) =</label>
+          <input type="text" id="eingabe-f2" placeholder="z. B. 0" style="width: 100%; padding: 9px 10px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 500; margin-bottom: 6px; font-family: 'Cambria Math', Georgia, serif;">f‴(<span class="x0-anz"></span>) =</label>
+          <input type="text" id="eingabe-f3" placeholder="z. B. 6" style="width: 100%; padding: 9px 10px; font-size: 15px; border: 2px solid #d0d0d0; border-radius: 4px; font-family: 'Cambria Math', Georgia, serif; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Schritt 2: Art bestimmen -->
+    <div style="background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px; font-size: 14px;">Schritt 2: Welche Art von Punkt liegt vor?</div>
+      <div id="art-optionen" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;"></div>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback" style="display: none; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 500;"></div>
+
+    <!-- Rechenweg -->
+    <div id="rechenweg" style="display: none; background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 12px;">Rechenweg</div>
+      <div id="rechenweg-inhalt" style="font-family: 'Cambria Math', Georgia, serif; font-size: 15px; line-height: 1.8;"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="pruefen()" id="btn-pruefen"
+              style="padding: 12px 24px; background: #2e7d32; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ✓ Prüfen
+      </button>
+      <button onclick="neueAufgabe()"
+              style="padding: 12px 24px; background: #C8102E; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ↻ Neue Aufgabe
+      </button>
+      <button onclick="rechenwegAnzeigen()"
+              style="padding: 12px 24px; background: #fff; color: #1565c0; border: 2px solid #1565c0; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        💡 Rechenweg anzeigen
+      </button>
+    </div>
+
+    <div style="margin-top: 20px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Entscheidungsbaum:</b><br>
+      • f′ = 0 und f″ &lt; 0 → <b>Hochpunkt</b><br>
+      • f′ = 0 und f″ &gt; 0 → <b>Tiefpunkt</b><br>
+      • f′ = 0 und f″ = 0 und f‴ ≠ 0 → <b>Sattelpunkt</b><br>
+      • f′ ≠ 0 und f″ = 0 und f‴ ≠ 0 → normaler <b>Wendepunkt</b>
+    </div>
+  </div>
+</div>
+
+<script>
+let aktuelleAufgabe = {};
+let gewaehlteArt = null;
+
+const aufgaben = [
+  // Sattelpunkt
+  { name: 'sattel', f_text: 'f(x) = ⅓x³', x0: 0,
+    f1: 0, f2: 0, f3: 2, art: 'Sattelpunkt' },
+  { name: 'sattel2', f_text: 'f(x) = x³ − 3x² + 3x − 1', x0: 1,
+    f1: 0, f2: 0, f3: 6, art: 'Sattelpunkt' },
+  { name: 'sattel3', f_text: 'f(x) = x³ + 3x² + 3x', x0: -1,
+    f1: 0, f2: 0, f3: 6, art: 'Sattelpunkt' },
+  // Hochpunkt
+  { name: 'hp1', f_text: 'f(x) = −x² + 4x − 1', x0: 2,
+    f1: 0, f2: -2, f3: 0, art: 'Hochpunkt' },
+  { name: 'hp2', f_text: 'f(x) = x³ − 3x² + 4', x0: 0,
+    f1: 0, f2: -6, f3: 6, art: 'Hochpunkt' },
+  // Tiefpunkt
+  { name: 'tp1', f_text: 'f(x) = x² − 4x + 5', x0: 2,
+    f1: 0, f2: 2, f3: 0, art: 'Tiefpunkt' },
+  { name: 'tp2', f_text: 'f(x) = x³ − 3x² + 4', x0: 2,
+    f1: 0, f2: 6, f3: 6, art: 'Tiefpunkt' },
+  // Wendepunkt (kein Sattelpunkt)
+  { name: 'wp1', f_text: 'f(x) = x³ − 3x² + 4', x0: 1,
+    f1: -3, f2: 0, f3: 6, art: 'Wendepunkt' },
+  { name: 'wp2', f_text: 'f(x) = ⅓x³ − 2x² + 3x + 1', x0: 2,
+    f1: -1, f2: 0, f3: 2, art: 'Wendepunkt' }
+];
+
+const moeglicheArten = ['Hochpunkt', 'Tiefpunkt', 'Sattelpunkt', 'Wendepunkt'];
+
+function generiereAufgabe() {
+  const auf = aufgaben[Math.floor(Math.random() * aufgaben.length)];
+  aktuelleAufgabe = auf;
+  document.getElementById('funktion-text').textContent = auf.f_text;
+  document.getElementById('stelle-text').innerHTML = `x<sub>0</sub> = ${auf.x0}`;
+  document.querySelectorAll('.x0-anz').forEach(el => el.textContent = auf.x0);
+
+  // Auswahloptionen aufbauen
+  const cont = document.getElementById('art-optionen');
+  cont.innerHTML = '';
+  moeglicheArten.forEach(art => {
+    const btn = document.createElement('button');
+    btn.textContent = art;
+    btn.dataset.art = art;
+    btn.style.cssText = 'padding: 12px 16px; background: #fff; color: #2c3e50; border: 2px solid #d0d0d0; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s;';
+    btn.onmouseover = () => { if (!btn.dataset.disabled) btn.style.borderColor = '#1565c0'; };
+    btn.onmouseout = () => { if (!btn.dataset.disabled && gewaehlteArt !== art) btn.style.borderColor = '#d0d0d0'; };
+    btn.onclick = () => {
+      if (btn.dataset.disabled) return;
+      gewaehlteArt = art;
+      document.querySelectorAll('#art-optionen button').forEach(b => {
+        b.style.borderColor = '#d0d0d0';
+        b.style.background = '#fff';
+      });
+      btn.style.borderColor = '#1565c0';
+      btn.style.background = '#e3f2fd';
+    };
+    cont.appendChild(btn);
+  });
+
+  gewaehlteArt = null;
+}
+
+function parseZahl(s) {
+  if (!s) return NaN;
+  s = s.toString().trim().replace(',', '.').replace(/[−–]/g, '-');
+  return parseFloat(s);
+}
+
+function pruefen() {
+  const { x0, f1, f2, f3, art } = aktuelleAufgabe;
+  const e1 = parseZahl(document.getElementById('eingabe-f1').value);
+  const e2 = parseZahl(document.getElementById('eingabe-f2').value);
+  const e3 = parseZahl(document.getElementById('eingabe-f3').value);
+
+  const erg = [
+    { id: 'eingabe-f1', richtig: !isNaN(e1) && Math.abs(e1 - f1) < 0.01 },
+    { id: 'eingabe-f2', richtig: !isNaN(e2) && Math.abs(e2 - f2) < 0.01 },
+    { id: 'eingabe-f3', richtig: !isNaN(e3) && Math.abs(e3 - f3) < 0.01 }
+  ];
+
+  erg.forEach(e => {
+    const el = document.getElementById(e.id);
+    if (el.value.trim() === '') {
+      el.style.borderColor = '#d0d0d0'; el.style.background = '#fff';
+    } else if (e.richtig) {
+      el.style.borderColor = '#2e7d32'; el.style.background = '#e8f5e9';
+    } else {
+      el.style.borderColor = '#c62828'; el.style.background = '#fdecea';
+    }
+  });
+
+  const artRichtig = gewaehlteArt === art;
+  // Art-Button visuell markieren
+  document.querySelectorAll('#art-optionen button').forEach(b => {
+    if (b.dataset.art === art) {
+      b.style.borderColor = '#2e7d32';
+      b.style.background = '#e8f5e9';
+      b.style.color = '#1b5e20';
+    } else if (b.dataset.art === gewaehlteArt) {
+      b.style.borderColor = '#c62828';
+      b.style.background = '#fdecea';
+      b.style.color = '#a72824';
+    } else {
+      b.style.opacity = '0.5';
+    }
+    b.dataset.disabled = '1';
+  });
+
+  const richtigAnz = erg.filter(e => e.richtig).length + (artRichtig ? 1 : 0);
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+  if (richtigAnz === 4) {
+    fb.style.background = '#e8f5e9'; fb.style.color = '#1b5e20'; fb.style.border = '1px solid #66bb6a';
+    fb.innerHTML = `✓ Perfekt! Alle Ableitungswerte stimmen und die Art "${art}" wurde richtig erkannt.`;
+  } else if (artRichtig) {
+    fb.style.background = '#fff8e1'; fb.style.color = '#5d4e00'; fb.style.border = '1px solid #f9a825';
+    fb.innerHTML = `⚠ Die Art "${art}" ist richtig, aber bei den Ableitungswerten gab es Fehler. Schau dir den Rechenweg an.`;
+  } else if (gewaehlteArt) {
+    fb.style.background = '#fdecea'; fb.style.color = '#a72824'; fb.style.border = '1px solid #ef5350';
+    fb.innerHTML = `✗ Die richtige Art ist "${art}", nicht "${gewaehlteArt}". Schau dir den Entscheidungsbaum unten an.`;
+  } else {
+    fb.style.background = '#fdecea'; fb.style.color = '#a72824'; fb.style.border = '1px solid #ef5350';
+    fb.innerHTML = `✗ Bitte wähle auch eine Art aus. Die richtige Antwort ist "${art}".`;
+  }
+}
+
+function rechenwegAnzeigen() {
+  const { f_text, x0, f1, f2, f3, art } = aktuelleAufgabe;
+  const r = document.getElementById('rechenweg');
+  const i = document.getElementById('rechenweg-inhalt');
+  let begruendung = '';
+  if (art === 'Hochpunkt') begruendung = `f′(${x0}) = 0 und f″(${x0}) = ${f2} &lt; 0 → <b>Hochpunkt</b>`;
+  else if (art === 'Tiefpunkt') begruendung = `f′(${x0}) = 0 und f″(${x0}) = ${f2} &gt; 0 → <b>Tiefpunkt</b>`;
+  else if (art === 'Sattelpunkt') begruendung = `f′(${x0}) = 0 <b>und</b> f″(${x0}) = 0 und f‴(${x0}) = ${f3} ≠ 0 → <b>Sattelpunkt</b> (Wendepunkt mit waagerechter Tangente)`;
+  else if (art === 'Wendepunkt') begruendung = `f′(${x0}) = ${f1} ≠ 0 und f″(${x0}) = 0 und f‴(${x0}) = ${f3} ≠ 0 → <b>Wendepunkt</b> (mit Steigung ≠ 0)`;
+
+  i.innerHTML = `
+    <div><b>Ableitungswerte:</b></div>
+    <div style="margin-left: 16px;">f′(${x0}) = ${f1}</div>
+    <div style="margin-left: 16px;">f″(${x0}) = ${f2}</div>
+    <div style="margin-left: 16px;">f‴(${x0}) = ${f3}</div>
+    <div style="margin-top: 10px; font-family: -apple-system, sans-serif;"><b>Begründung:</b><br>${begruendung}</div>
+  `;
+  r.style.display = 'block';
+}
+
+function neueAufgabe() {
+  ['eingabe-f1', 'eingabe-f2', 'eingabe-f3'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.style.borderColor = '#d0d0d0';
+    el.style.background = '#fff';
+  });
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('rechenweg').style.display = 'none';
+  generiereAufgabe();
+}
+
+generiereAufgabe();
+</script>

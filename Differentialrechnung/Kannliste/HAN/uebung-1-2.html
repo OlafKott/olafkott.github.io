@@ -1,0 +1,271 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; color: #2c3e50; line-height: 1.5;">
+
+  <div style="background: linear-gradient(135deg, #C8102E 0%, #8b0000 100%); color: white; padding: 20px 25px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="font-size: 13px; opacity: 0.9; letter-spacing: 0.5pt; margin-bottom: 4px;">ÜBUNG 1.2 · EINFÜHRUNG IN DIE DIFFERENTIALRECHNUNG</div>
+    <h2 style="margin: 0 0 5px 0; font-size: 24px; font-weight: 600;">Tangentensteigung deuten</h2>
+    <p style="margin: 0; font-size: 14px; opacity: 0.95;">An welcher Stelle hat der Graph die angegebene Steigung?</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e0e0e0; border-top: none; padding: 25px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+    <!-- Aufgabe -->
+    <div style="background: #fdf2f3; border-left: 4px solid #C8102E; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #C8102E; margin-bottom: 8px;">Aufgabe</div>
+      <div id="aufgabe-text" style="font-size: 16px;"></div>
+    </div>
+
+    <!-- Graph -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <svg id="graph" viewBox="0 0 480 280" style="width: 100%; max-width: 480px; height: auto; background: #fafafa; border: 1px solid #e0e0e0; border-radius: 6px;"></svg>
+    </div>
+
+    <!-- Antwort-Optionen -->
+    <div id="optionen" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px;"></div>
+
+    <!-- Feedback -->
+    <div id="feedback" style="display: none; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; font-weight: 500;"></div>
+
+    <!-- Erklärung -->
+    <div id="erklaerung" style="display: none; background: #f7f9fc; border: 1px solid #d6e2ed; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+      <div style="font-weight: 600; color: #1565c0; margin-bottom: 8px;">Erklärung</div>
+      <div id="erklaerung-text" style="font-size: 15px; line-height: 1.6;"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="neueAufgabe()"
+              style="padding: 12px 24px; background: #C8102E; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer;">
+        ↻ Neue Aufgabe
+      </button>
+    </div>
+
+    <div style="margin-top: 20px; padding: 12px 16px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 4px; font-size: 13px; color: #5d4e00;">
+      <b>Tipp:</b> Die Tangentensteigung an einer Stelle ist die Steigung der Tangente, die du dort an den Graphen legen würdest. Wo verläuft der Graph waagerecht? Wo steigt er stark an? Wo fällt er?
+    </div>
+  </div>
+</div>
+
+<script>
+let aktuelleAufgabe = {};
+
+// Funktionen mit charakteristischen Steigungen
+const aufgabenTypen = [
+  {
+    name: 'parabel_oben',
+    f: (x) => 0.3 * x * x - 1.2 * x + 1,
+    fStrich: (x) => 0.6 * x - 1.2,
+    text: 'f(x) = 0,3x² − 1,2x + 1',
+    nullstelleAbleitung: 2,
+    xBereich: [-1, 5]
+  },
+  {
+    name: 'parabel_unten',
+    f: (x) => -0.25 * x * x + 1 * x + 1,
+    fStrich: (x) => -0.5 * x + 1,
+    text: 'f(x) = −0,25x² + x + 1',
+    nullstelleAbleitung: 2,
+    xBereich: [-1, 5]
+  },
+  {
+    name: 'kubisch',
+    f: (x) => 0.1 * x * x * x - 0.9 * x + 1,
+    fStrich: (x) => 0.3 * x * x - 0.9,
+    text: 'f(x) = 0,1x³ − 0,9x + 1',
+    xBereich: [-3, 3]
+  }
+];
+
+function generiereAufgabe() {
+  const typ = aufgabenTypen[Math.floor(Math.random() * aufgabenTypen.length)];
+
+  // Wähle eine Frage-Art
+  const fragenArten = ['waagerecht', 'positivWelche', 'negativWelche'];
+  const frage = fragenArten[Math.floor(Math.random() * fragenArten.length)];
+
+  // Mögliche x-Stellen für Antwort-Optionen
+  const xBereich = typ.xBereich;
+  const optionen = [];
+  for (let x = xBereich[0]; x <= xBereich[1]; x += 0.5) {
+    optionen.push(Number(x.toFixed(1)));
+  }
+
+  // Vier Optionen: eine richtige, drei falsche
+  let richtigeOption, ausgewaehlt;
+  let fragetext;
+
+  if (frage === 'waagerecht') {
+    // Suche Stelle wo f'(x) ≈ 0
+    let beste_x = optionen[0];
+    let min_abs = Math.abs(typ.fStrich(beste_x));
+    for (const x of optionen) {
+      if (Math.abs(typ.fStrich(x)) < min_abs) {
+        min_abs = Math.abs(typ.fStrich(x));
+        beste_x = x;
+      }
+    }
+    richtigeOption = beste_x;
+    fragetext = `An welcher Stelle verläuft die Tangente an ${typ.text} <b>waagerecht</b> (Steigung 0)?`;
+  } else if (frage === 'positivWelche') {
+    // Suche Stelle mit größter positiver Steigung
+    let beste_x = optionen[0];
+    let max = typ.fStrich(beste_x);
+    for (const x of optionen) {
+      const s = typ.fStrich(x);
+      if (s > max) { max = s; beste_x = x; }
+    }
+    richtigeOption = beste_x;
+    fragetext = `An welcher Stelle ist die Tangentensteigung von ${typ.text} <b>am größten</b>?`;
+  } else {
+    // Größte negative Steigung
+    let beste_x = optionen[0];
+    let min = typ.fStrich(beste_x);
+    for (const x of optionen) {
+      const s = typ.fStrich(x);
+      if (s < min) { min = s; beste_x = x; }
+    }
+    richtigeOption = beste_x;
+    fragetext = `An welcher Stelle ist die Tangentensteigung von ${typ.text} <b>am kleinsten</b> (am negativsten)?`;
+  }
+
+  // 4 Optionen: richtige + 3 zufällige andere
+  const falscheOptionen = optionen.filter(x => Math.abs(x - richtigeOption) > 0.6);
+  const shuffled = falscheOptionen.sort(() => Math.random() - 0.5).slice(0, 3);
+  ausgewaehlt = [richtigeOption, ...shuffled].sort((a, b) => a - b);
+
+  aktuelleAufgabe = { typ, frage, richtigeOption, optionen: ausgewaehlt, fragetext };
+
+  document.getElementById('aufgabe-text').innerHTML = fragetext;
+
+  zeichneGraph(typ, richtigeOption);
+  zeigeOptionen(ausgewaehlt);
+}
+
+function zeichneGraph(typ, markierteStelle) {
+  const svg = document.getElementById('graph');
+  const [xmin, xmax] = typ.xBereich;
+  const ymin = -2, ymax = 4;
+
+  function toSvgX(x) { return 40 + (x - xmin) / (xmax - xmin) * 420; }
+  function toSvgY(y) { return 250 - (y - ymin) / (ymax - ymin) * 220; }
+
+  let svgContent = '';
+
+  // Gitter
+  for (let x = xmin; x <= xmax; x++) {
+    svgContent += `<line x1="${toSvgX(x)}" y1="20" x2="${toSvgX(x)}" y2="260" stroke="#eee" stroke-width="0.5"/>`;
+  }
+  for (let y = ymin; y <= ymax; y++) {
+    svgContent += `<line x1="40" y1="${toSvgY(y)}" x2="460" y2="${toSvgY(y)}" stroke="#eee" stroke-width="0.5"/>`;
+  }
+
+  // Achsen
+  svgContent += `<line x1="40" y1="${toSvgY(0)}" x2="460" y2="${toSvgY(0)}" stroke="#333" stroke-width="1.2"/>`;
+  svgContent += `<line x1="${toSvgX(0)}" y1="20" x2="${toSvgX(0)}" y2="260" stroke="#333" stroke-width="1.2"/>`;
+  svgContent += `<polygon points="460,${toSvgY(0)} 453,${toSvgY(0)-4} 453,${toSvgY(0)+4}" fill="#333"/>`;
+  svgContent += `<polygon points="${toSvgX(0)},20 ${toSvgX(0)-4},27 ${toSvgX(0)+4},27" fill="#333"/>`;
+
+  // x-Achsenbeschriftung
+  for (let x = xmin; x <= xmax; x++) {
+    if (x !== 0) {
+      svgContent += `<text x="${toSvgX(x)}" y="${toSvgY(0)+14}" font-size="11" fill="#666" text-anchor="middle">${x}</text>`;
+    }
+  }
+  for (let y = ymin; y <= ymax; y++) {
+    if (y !== 0) {
+      svgContent += `<text x="${toSvgX(0)-8}" y="${toSvgY(y)+4}" font-size="11" fill="#666" text-anchor="end">${y}</text>`;
+    }
+  }
+
+  // Funktionsgraph
+  let path = '';
+  for (let xi = xmin; xi <= xmax; xi += 0.05) {
+    const yi = typ.f(xi);
+    if (yi < ymin - 0.5 || yi > ymax + 0.5) continue;
+    path += (path === '' ? 'M ' : ' L ') + toSvgX(xi).toFixed(1) + ',' + toSvgY(yi).toFixed(1);
+  }
+  svgContent += `<path d="${path}" fill="none" stroke="#1565c0" stroke-width="2"/>`;
+
+  // Markierungen für alle Optionen mit vertikalen Strichen
+  for (const xi of aktuelleAufgabe ? aktuelleAufgabe.optionen || [] : []) {
+    const sx = toSvgX(xi);
+    svgContent += `<line x1="${sx}" y1="${toSvgY(0)-3}" x2="${sx}" y2="${toSvgY(0)+3}" stroke="#C8102E" stroke-width="1.5"/>`;
+    svgContent += `<text x="${sx}" y="${toSvgY(0)+18}" font-size="11" fill="#C8102E" text-anchor="middle" font-weight="bold">${xi}</text>`;
+  }
+
+  svg.innerHTML = svgContent;
+}
+
+function zeigeOptionen(optionen) {
+  const container = document.getElementById('optionen');
+  container.innerHTML = '';
+  for (const opt of optionen) {
+    const btn = document.createElement('button');
+    btn.innerHTML = `x = ${opt.toString().replace('.', ',')}`;
+    btn.style.cssText = 'padding: 14px 16px; background: #fff; color: #2c3e50; border: 2px solid #d0d0d0; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: \'Cambria Math\', Georgia, serif; transition: all 0.15s;';
+    btn.onmouseover = () => { if (!btn.dataset.disabled) btn.style.borderColor = '#1565c0'; };
+    btn.onmouseout = () => { if (!btn.dataset.disabled) btn.style.borderColor = '#d0d0d0'; };
+    btn.onclick = () => pruefeAntwort(opt, btn);
+    container.appendChild(btn);
+  }
+}
+
+function pruefeAntwort(gewaehlt, btn) {
+  const richtig = Math.abs(gewaehlt - aktuelleAufgabe.richtigeOption) < 0.01;
+  const feedback = document.getElementById('feedback');
+  const erkl = document.getElementById('erklaerung');
+  const erklText = document.getElementById('erklaerung-text');
+
+  // Alle Buttons sperren und Lösung markieren
+  const alleBtns = document.getElementById('optionen').querySelectorAll('button');
+  alleBtns.forEach(b => {
+    b.dataset.disabled = '1';
+    b.style.cursor = 'default';
+    b.disabled = true;
+    const wert = parseFloat(b.innerHTML.replace('x = ', '').replace(',', '.'));
+    if (Math.abs(wert - aktuelleAufgabe.richtigeOption) < 0.01) {
+      b.style.background = '#e8f5e9';
+      b.style.borderColor = '#2e7d32';
+      b.style.color = '#1b5e20';
+    } else {
+      b.style.background = '#f5f5f5';
+      b.style.color = '#999';
+      b.style.borderColor = '#e0e0e0';
+    }
+  });
+
+  feedback.style.display = 'block';
+  if (richtig) {
+    feedback.style.background = '#e8f5e9';
+    feedback.style.color = '#1b5e20';
+    feedback.style.border = '1px solid #66bb6a';
+    feedback.innerHTML = `✓ Richtig! Bei x = ${gewaehlt.toString().replace('.', ',')} ist die Antwort korrekt.`;
+  } else {
+    feedback.style.background = '#fdecea';
+    feedback.style.color = '#a72824';
+    feedback.style.border = '1px solid #ef5350';
+    feedback.innerHTML = `✗ Leider falsch. Die richtige Antwort ist x = ${aktuelleAufgabe.richtigeOption.toString().replace('.', ',')}.`;
+  }
+
+  // Erklärung anzeigen
+  let erklaerungstext = '';
+  const { typ, frage, richtigeOption } = aktuelleAufgabe;
+  const m = typ.fStrich(richtigeOption);
+  if (frage === 'waagerecht') {
+    erklaerungstext = `An der Stelle x = ${richtigeOption.toString().replace('.', ',')} hat der Graph einen Extrempunkt (Hoch- oder Tiefpunkt). Dort ist die Tangente waagerecht, die Steigung ist also 0.`;
+  } else if (frage === 'positivWelche') {
+    erklaerungstext = `An der Stelle x = ${richtigeOption.toString().replace('.', ',')} steigt der Graph am stärksten an. Die Tangente dort hat die größte positive Steigung (m ≈ ${m.toFixed(2).replace('.', ',')}).`;
+  } else {
+    erklaerungstext = `An der Stelle x = ${richtigeOption.toString().replace('.', ',')} fällt der Graph am stärksten ab. Die Tangente dort hat die kleinste (negativste) Steigung (m ≈ ${m.toFixed(2).replace('.', ',')}).`;
+  }
+  erklText.innerHTML = erklaerungstext;
+  erkl.style.display = 'block';
+}
+
+function neueAufgabe() {
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('erklaerung').style.display = 'none';
+  generiereAufgabe();
+}
+
+generiereAufgabe();
+</script>
