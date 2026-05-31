@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 2.2 — Vierfeldertafel ↔ Baumdiagramm</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ergebnis-zeile label { font-weight: bold; min-width: 80px; }
+  .ergebnis-zeile input { padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 140px; background: #fff; }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>2.2 — Vierfeldertafel ↔ Baumdiagramm</h1>
+    <span class="nr">Kompetenz 2.2</span>
+  </div>
+  <div class="uebung-body">
+    
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+    <div class="info-box" id="info-box"></div>
+    <div class="frage-block">
+      <div class="frage-text">a) Ergänze die fehlenden Werte im <b>Baumdiagramm</b>:</div>
+      <div id="baum-bereich"></div>
+    </div>
+    <div class="frage-block">
+      <div class="frage-text">b) Bestimme <span style="font-style:italic">P</span>(<i>B</i>) (Pfadregel 2):</div>
+      <div class="ergebnis-zeile">
+        <label>P(B) =</label>
+        <input type="text" id="ein-pb" placeholder="z. B. 0,2">
+      </div>
+    </div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+    
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) {
+  if (!s && s !== 0) return NaN;
+  return parseFloat(String(s).replace(",","."));
+}
+
+
+const aufgaben = [
+  { icon: "📱", text: "100 Smartphones: <b>30 %</b> haben Display-Fehler (A), <b>20 %</b> Akku-Fehler (B), <b>12 %</b> haben beides.",
+    pA: 0.3, pAB: 0.12, pB_givenA: 0.4, pB_givenNotA: 0.114, A: "Display", B: "Akku" },
+  { icon: "🚗", text: "Werkstatt: 40 % der Autos haben Bremsen-Fehler (A), 25 % Reifen-Fehler (B), 10 % beides.",
+    pA: 0.4, pAB: 0.10, pB_givenA: 0.25, pB_givenNotA: 0.25, A: "Bremse", B: "Reifen" },
+  { icon: "🏫", text: "Schule: 60 % lernen Französisch (A), 50 % Spanisch (B), 30 % beides.",
+    pA: 0.6, pAB: 0.30, pB_givenA: 0.5, pB_givenNotA: 0.5, A: "Französisch", B: "Spanisch" },
+];
+let aktuelleAufgabe = null;
+
+function baumSVG(a) {
+  const W=460, H=240;
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">`;
+  s += `<circle cx="20" cy="${H/2}" r="3" fill="#1a1a1a"/>`;
+  const n1x=130, n1ay=60, n1by=H-60;
+  s += `<line x1="20" y1="${H/2}" x2="${n1x-14}" y2="${n1ay}" stroke="#1a1a1a"/>`;
+  s += `<line x1="20" y1="${H/2}" x2="${n1x-14}" y2="${n1by}" stroke="#1a1a1a"/>`;
+  s += `<text x="60" y="${n1ay+30}" font-size="13" text-anchor="middle">${a.pA.toFixed(2).replace(".",",")}</text>`;
+  s += `<text x="60" y="${n1by-22}" font-size="13" text-anchor="middle">${(1-a.pA).toFixed(2).replace(".",",")}</text>`;
+  s += `<circle cx="${n1x}" cy="${n1ay}" r="14" fill="#fff" stroke="#1a1a1a"/>`;
+  s += `<text x="${n1x}" y="${n1ay+5}" font-size="14" text-anchor="middle" font-style="italic">A</text>`;
+  s += `<circle cx="${n1x}" cy="${n1by}" r="14" fill="#fff" stroke="#1a1a1a"/>`;
+  s += `<text x="${n1x}" y="${n1by+5}" font-size="14" text-anchor="middle" font-style="italic">A̅</text>`;
+  // 2. Stufe Knoten
+  const n2x=320, ys=[20,100,H-100,H-20];
+  ys.forEach((y,i) => {
+    s += `<line x1="${n1x+14}" y1="${i<2?n1ay:n1by}" x2="${n2x-14}" y2="${y}" stroke="#1a1a1a"/>`;
+    s += `<circle cx="${n2x}" cy="${y}" r="14" fill="#fff" stroke="#1a1a1a"/>`;
+    s += `<text x="${n2x}" y="${y+5}" font-size="13" text-anchor="middle" font-style="italic">${i%2===0?"B":"B̅"}</text>`;
+  });
+  // Felder für 2. Stufe Wahrscheinlichkeiten (Eingabe)
+  // Soll-Werte:
+  const p2 = [a.pB_givenA, 1-a.pB_givenA, a.pB_givenNotA, 1-a.pB_givenNotA];
+  const xMid = (n1x+n2x)/2;
+  // Stelle die 4 Inputs nahe der Mitte der jeweiligen Linie
+  return s + `</svg>`;
+}
+
+function neueAufgabe() {
+  let n;
+  do { n = aufgaben[Math.floor(Math.random()*aufgaben.length)]; }
+  while (n === aktuelleAufgabe && aufgaben.length > 1);
+  aktuelleAufgabe = n;
+  document.getElementById("aufgabe-text").innerHTML = '<span class="kontext-icon">'+n.icon+'</span>'+n.text;
+  document.getElementById("info-box").innerHTML = `<b>A</b> = ${n.A} defekt &nbsp; <b>B</b> = ${n.B} defekt`;
+  // Baum mit Eingabefeldern für die 4 bedingten Wkt
+  const baumWrap = document.getElementById("baum-bereich");
+  baumWrap.innerHTML = `
+    ${baumSVG(n)}
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; max-width:500px; margin:10px auto;">
+      <div>P<sub>A</sub>(B) = <input type="text" id="ein-pba" style="width:80px;"></div>
+      <div>P<sub>A</sub>(B̅) = <input type="text" id="ein-pba_bar" style="width:80px;"></div>
+      <div>P<sub>A̅</sub>(B) = <input type="text" id="ein-pnab" style="width:80px;"></div>
+      <div>P<sub>A̅</sub>(B̅) = <input type="text" id="ein-pnab_bar" style="width:80px;"></div>
+    </div>
+  `;
+  document.getElementById("ein-pb").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function pruefen() {
+  if (!aktuelleAufgabe) return;
+  const a = aktuelleAufgabe;
+  const fb = document.getElementById("feedback");
+  const vals = {
+    pba: parseKomma(document.getElementById("ein-pba").value),
+    pba_bar: parseKomma(document.getElementById("ein-pba_bar").value),
+    pnab: parseKomma(document.getElementById("ein-pnab").value),
+    pnab_bar: parseKomma(document.getElementById("ein-pnab_bar").value),
+    pb: parseKomma(document.getElementById("ein-pb").value),
+  };
+  const sollwerte = {
+    pba: a.pB_givenA,
+    pba_bar: 1-a.pB_givenA,
+    pnab: a.pB_givenNotA,
+    pnab_bar: 1-a.pB_givenNotA,
+    pb: a.pA*a.pB_givenA + (1-a.pA)*a.pB_givenNotA,
+  };
+  let allOk = true;
+  for (const k in vals) {
+    if (isNaN(vals[k]) || Math.abs(vals[k] - sollwerte[k]) > 0.01) { allOk = false; break; }
+  }
+  if (allOk) {
+    fb.className = "feedback richtig"; fb.innerHTML = "✓ Alles richtig!"; fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "Noch nicht ganz. Achte auf die Pfadregel: bedingte Wkt + Pfade addieren für P(B).";
+    fb.style.display = "block";
+  }
+}
+function zeigeLoesung() {
+  if (!aktuelleAufgabe) return;
+  const a = aktuelleAufgabe;
+  const lw = document.getElementById("loesungsweg");
+  const pb = a.pA*a.pB_givenA + (1-a.pA)*a.pB_givenNotA;
+  lw.innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p><b>Bedingte Wahrscheinlichkeiten (2. Stufe):</b></p>
+    <ul>
+      <li>P<sub>A</sub>(B) = P(A∩B)/P(A) = ${a.pAB.toFixed(2).replace(".",",")} / ${a.pA.toFixed(2).replace(".",",")} = <b>${a.pB_givenA.toFixed(3).replace(".",",")}</b></li>
+      <li>P<sub>A̅</sub>(B) = P(A̅∩B)/P(A̅) = ${(((1-a.pA))-(1-a.pA-a.pB_givenNotA*(1-a.pA))).toFixed(3).replace(".",",")} / ${(1-a.pA).toFixed(2).replace(".",",")} = <b>${a.pB_givenNotA.toFixed(3).replace(".",",")}</b></li>
+      <li>Die Komplemente (P<sub>A</sub>(B̅), P<sub>A̅</sub>(B̅)) ergeben sich aus 1 − ...</li>
+    </ul>
+    <p><b>Totale Wahrscheinlichkeit P(B):</b></p>
+    <p>P(B) = P(A)·P<sub>A</sub>(B) + P(A̅)·P<sub>A̅</sub>(B) = <b>${pb.toFixed(3).replace(".",",")}</b></p>
+  `;
+  lw.style.display = "block";
+}
+neueAufgabe();
+    
+</script>
+
+</body>
+</html>

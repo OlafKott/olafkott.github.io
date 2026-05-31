@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.3 — Laplace-Wahrscheinlichkeiten</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px 16px;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh;
+  }
+  .uebung-box {
+    max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .uebung-kopf {
+    background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; letter-spacing: 0.3px; }
+  .uebung-kopf .nr {
+    background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px;
+  }
+  .uebung-body { padding: 22px; }
+  .aufgabe {
+    background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px;
+  }
+  .aufgabe h2 {
+    margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;
+  }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .eingabe-bereich { margin: 16px 0; }
+  .frage-block {
+    margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec;
+  }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .formel-zeile {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    font-size: 17px; margin: 8px 0;
+  }
+  .formel-zeile input[type="number"], .formel-zeile input[type="text"] {
+    padding: 6px 8px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px;
+    width: 70px; text-align: center; background: #fff;
+  }
+  .formel-zeile input:focus {
+    outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15);
+  }
+  .bruch-display {
+    display: inline-flex; flex-direction: column; align-items: center;
+    vertical-align: middle; margin: 0 4px;
+  }
+  .bruch-display .z, .bruch-display .n {
+    padding: 0 6px; min-width: 30px; text-align: center;
+  }
+  .bruch-display .z { border-bottom: 1.5px solid #1a1a1a; padding-bottom: 2px; }
+  .bruch-display .n { padding-top: 2px; }
+  .ergebnis-zeile {
+    background: #fff; border: 1px solid #ececec; border-radius: 4px;
+    padding: 10px 14px; margin-top: 8px; display: flex;
+    align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .ergebnis-zeile label { font-weight: bold; }
+  .ergebnis-zeile input {
+    padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 130px; background: #fff;
+  }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn {
+    padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold;
+  }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback {
+    margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease;
+  }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .loesungsweg {
+    display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    border-radius: 0 4px 4px 0; animation: feedback-in 0.3s ease;
+  }
+  .loesungsweg h3 {
+    margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .konfetti {
+    position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999;
+  }
+  @keyframes konfettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; }
+  }
+  .uebung-fuss {
+    text-align: center; padding: 10px; font-size: 12px; color: #888;
+    border-top: 1px solid #ececec;
+  }
+  @media (max-width: 600px) {
+    .uebung-kopf h1 { font-size: 16px; }
+    .uebung-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>1.3 — Laplace-Wahrscheinlichkeiten berechnen</h1>
+    <span class="nr">Kompetenz 1.3</span>
+  </div>
+
+  <div class="uebung-body">
+
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <div class="eingabe-bereich">
+      <div class="frage-block">
+        <div class="frage-text">a) Wie viele <b>günstige</b> und wie viele <b>mögliche</b> Ergebnisse gibt es?</div>
+        <div class="formel-zeile">
+          <span>P(E) =</span>
+          <span class="bruch-display">
+            <span class="z"><input type="number" id="guenstige" min="0" placeholder="?"></span>
+            <span class="n"><input type="number" id="moeglich" min="1" placeholder="?"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="frage-block">
+        <div class="frage-text">b) Berechnen Sie die <b>Wahrscheinlichkeit</b> als Dezimalzahl:</div>
+        <div class="ergebnis-zeile">
+          <label>P(E) ≈</label>
+          <input type="text" id="dezimal" placeholder="z. B. 0,5 oder 0,25">
+          <span style="font-size:13px; color:#666;">(zwei bis drei Nachkommastellen reichen)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+// =============== AUFGABEN-POOL ===============
+// Verschiedene Laplace-Szenarien: Würfel, Münze, Karten, Glücksrad, Urne
+const aufgabenPool = [
+  // --- Würfel ---
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird einmal geworfen. Mit welcher Wahrscheinlichkeit fällt eine <b>gerade Zahl</b>?",
+    guenstige: 3, moeglich: 6, erklaerung: "Gerade Zahlen: 2, 4, 6 → 3 günstige. Mögliche Ergebnisse: 1–6 → 6 insgesamt." },
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird einmal geworfen. Mit welcher Wahrscheinlichkeit fällt eine <b>Zahl größer als 4</b>?",
+    guenstige: 2, moeglich: 6, erklaerung: "Größer als 4: 5 und 6 → 2 günstige. Insgesamt 6 mögliche." },
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird einmal geworfen. Mit welcher Wahrscheinlichkeit fällt eine <b>Primzahl</b>?",
+    guenstige: 3, moeglich: 6, erklaerung: "Primzahlen unter 7: 2, 3, 5 → 3 günstige. Insgesamt 6 mögliche." },
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird einmal geworfen. Mit welcher Wahrscheinlichkeit fällt eine <b>Sechs</b>?",
+    guenstige: 1, moeglich: 6, erklaerung: "Eine günstige Zahl (die 6), 6 mögliche insgesamt." },
+  // --- Münze ---
+  { icon: "🪙", text: "Eine <b>Münze</b> wird <b>zweimal</b> geworfen. Mit welcher Wahrscheinlichkeit fällt <b>genau einmal Kopf</b>?",
+    guenstige: 2, moeglich: 4, erklaerung: "Ergebnismenge: KK, KZ, ZK, ZZ → 4 mögliche. Genau einmal K: KZ und ZK → 2 günstige." },
+  { icon: "🪙", text: "Eine <b>Münze</b> wird <b>zweimal</b> geworfen. Mit welcher Wahrscheinlichkeit fällt <b>zweimal Zahl</b>?",
+    guenstige: 1, moeglich: 4, erklaerung: "Nur ZZ erfüllt die Bedingung → 1 günstig. Insgesamt 4 mögliche." },
+  { icon: "🪙", text: "Eine <b>Münze</b> wird <b>dreimal</b> geworfen. Mit welcher Wahrscheinlichkeit fällt <b>mindestens einmal Kopf</b>?",
+    guenstige: 7, moeglich: 8, erklaerung: "8 mögliche Ergebnisse. Nur ZZZ hat keinen Kopf → 7 günstige (Komplement: 8−1=7)." },
+  // --- Karten ---
+  { icon: "🃏", text: "Aus einem <b>Skatspiel</b> (32 Karten, 4 Farben mit je 8 Karten) wird eine Karte gezogen. Wie wahrscheinlich ist es, eine <b>Herzkarte</b> zu ziehen?",
+    guenstige: 8, moeglich: 32, erklaerung: "8 Herzkarten (eine pro Farbe). Insgesamt 32 Karten." },
+  { icon: "🃏", text: "Aus einem <b>Skatspiel</b> (32 Karten) wird eine Karte gezogen. Wie wahrscheinlich ist eine <b>Bube</b>?",
+    guenstige: 4, moeglich: 32, erklaerung: "Es gibt 4 Buben (einen pro Farbe), 32 Karten insgesamt." },
+  { icon: "🃏", text: "Aus einem <b>Skatspiel</b> wird eine Karte gezogen. Wie wahrscheinlich ist eine <b>schwarze Karte</b> (Kreuz oder Pik)?",
+    guenstige: 16, moeglich: 32, erklaerung: "Kreuz (8) + Pik (8) = 16 schwarze Karten." },
+  // --- Urne ---
+  { icon: "⚪", text: "In einer Urne liegen <b>5 rote</b> und <b>3 blaue</b> Kugeln. Eine Kugel wird zufällig gezogen. Wie wahrscheinlich ist es, eine <b>blaue Kugel</b> zu ziehen?",
+    guenstige: 3, moeglich: 8, erklaerung: "3 blaue von insgesamt 5+3 = 8 Kugeln." },
+  { icon: "⚪", text: "In einer Urne liegen <b>4 weiße</b>, <b>6 schwarze</b> und <b>2 grüne</b> Kugeln. Wie wahrscheinlich ist es, eine <b>schwarze Kugel</b> zu ziehen?",
+    guenstige: 6, moeglich: 12, erklaerung: "6 schwarze, 12 insgesamt." },
+  // --- Glücksrad ---
+  { icon: "🎯", text: "Ein <b>Glücksrad</b> hat 8 gleich große Sektoren, davon sind <b>3 rot</b>, <b>3 blau</b> und <b>2 grün</b>. Wie wahrscheinlich ist <b>rot</b>?",
+    guenstige: 3, moeglich: 8, erklaerung: "3 rote Sektoren von 8 gleich großen." },
+  { icon: "🎯", text: "Ein <b>Glücksrad</b> ist in 10 gleich große Sektoren mit den Zahlen 1–10 eingeteilt. Wie wahrscheinlich ist eine <b>Zahl ≤ 3</b>?",
+    guenstige: 3, moeglich: 10, erklaerung: "Sektoren mit 1, 2, 3 → 3 günstige von 10." },
+  // --- Lotterie/Stichprobe ---
+  { icon: "🎟️", text: "In einer Lostrommel sind <b>20 Lose</b>, davon sind <b>4 Gewinne</b>. Wie wahrscheinlich ist es, mit einem Los zu <b>gewinnen</b>?",
+    guenstige: 4, moeglich: 20, erklaerung: "4 Gewinne von 20 Losen." },
+];
+
+let aktuelleAufgabe = null;
+
+function neueAufgabe() {
+  let neu;
+  do {
+    neu = aufgabenPool[Math.floor(Math.random() * aufgabenPool.length)];
+  } while (neu === aktuelleAufgabe && aufgabenPool.length > 1);
+  aktuelleAufgabe = neu;
+
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + neu.icon + '</span>' + neu.text;
+  document.getElementById("guenstige").value = "";
+  document.getElementById("moeglich").value = "";
+  document.getElementById("dezimal").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function parseKomma(s) {
+  if (!s) return NaN;
+  return parseFloat(String(s).replace(",","."));
+}
+
+function pruefen() {
+  if (!aktuelleAufgabe) return;
+  const fb = document.getElementById("feedback");
+  const g = parseInt(document.getElementById("guenstige").value);
+  const m = parseInt(document.getElementById("moeglich").value);
+  const dStr = document.getElementById("dezimal").value;
+  const d = parseKomma(dStr);
+  
+  if (isNaN(g) || isNaN(m) || dStr.trim() === "") {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte alle Felder ausfüllen.";
+    fb.style.display = "block";
+    return;
+  }
+  
+  // a) prüfen: Bruch kann auch gekürzt sein! Wir akzeptieren beide Darstellungen.
+  const sollG = aktuelleAufgabe.guenstige;
+  const sollM = aktuelleAufgabe.moeglich;
+  // Akzeptiere gekürzten Bruch via Kreuzmultiplikation: g/m == sollG/sollM ↔ g*sollM == m*sollG
+  const bruchRichtig = (g * sollM === m * sollG) && m > 0 && g >= 0;
+  
+  // b) prüfen: Dezimalwert
+  const sollDezimal = sollG / sollM;
+  const dezRichtig = Math.abs(d - sollDezimal) < 0.005;
+  
+  if (bruchRichtig && dezRichtig) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Alles richtig! Sehr gut.";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    let msg = [];
+    msg.push("a) " + (bruchRichtig ? "✓ Bruch passt" : "✗ Bruch nicht korrekt"));
+    msg.push("b) " + (dezRichtig ? "✓ Dezimalzahl passt" : "✗ Dezimalzahl falsch"));
+    fb.className = "feedback falsch";
+    fb.innerHTML = msg.join(" &nbsp; ") + "<br><small>Schau dir den Lösungsweg an.</small>";
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!aktuelleAufgabe) return;
+  const lw = document.getElementById("loesungsweg");
+  const g = aktuelleAufgabe.guenstige;
+  const m = aktuelleAufgabe.moeglich;
+  const dez = (g/m).toFixed(3).replace(".",",");
+  lw.innerHTML =
+    '<h3>Lösungsweg</h3>' +
+    '<p><b>Schritt 1:</b> Günstige und mögliche Ergebnisse zählen.</p>' +
+    '<p>' + aktuelleAufgabe.erklaerung + '</p>' +
+    '<p><b>Schritt 2:</b> Laplace-Formel anwenden:</p>' +
+    '<p style="font-size:18px; text-align:center; margin:10px 0;">' +
+      'P(E) = <span class="bruch-display"><span class="z">Anzahl günstige</span><span class="n">Anzahl mögliche</span></span>' +
+      ' = <span class="bruch-display"><span class="z">' + g + '</span><span class="n">' + m + '</span></span> ≈ <b>' + dez + '</b>' +
+    '</p>';
+  lw.style.display = "block";
+}
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.7 — Gesetz der großen Zahlen</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 880px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  
+  .teil {
+    background: #fafafa; border: 1px solid #ececec; border-radius: 6px;
+    padding: 14px; margin: 14px 0;
+  }
+  .teil-kopf {
+    background: #C8102E; color: #fff; padding: 4px 10px;
+    border-radius: 3px; font-weight: bold; font-size: 13px;
+    display: inline-block; margin-bottom: 10px;
+  }
+  .teil-titel { font-weight: bold; font-size: 15px; margin-bottom: 6px; }
+  .teil-untertitel { font-size: 14px; color: #555; margin-bottom: 10px; }
+  
+  /* Sim-Buttons */
+  .sim-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 12px 0; }
+  .btn-sim {
+    padding: 8px 16px; border: 1.5px solid #C8102E; background: #fff; color: #C8102E;
+    border-radius: 4px; cursor: pointer; font-family: Georgia, serif;
+    font-size: 14px; transition: all 0.15s; font-weight: bold;
+  }
+  .btn-sim:hover { background: #fdecea; }
+  .btn-sim.primary { background: #C8102E; color: #fff; }
+  .btn-sim.primary:hover { background: #a00d25; }
+  .btn-sim.reset { border-color: #888; color: #555; }
+  .btn-sim.reset:hover { background: #f3f3f3; }
+  
+  /* Tabelle für Simulation */
+  .sim-tab-wrap { display: flex; justify-content: center; margin: 12px 0; overflow-x: auto; }
+  .sim-tab { border-collapse: collapse; font-size: 14px; min-width: 460px; }
+  .sim-tab th, .sim-tab td { border: 1.5px solid #1a1a1a; padding: 7px 14px; text-align: center; }
+  .sim-tab th { background: #f5e6e8; color: #C8102E; font-weight: bold; }
+  .sim-tab td.neu-eintrag { background: #fff8e1; animation: blink 0.6s ease; }
+  @keyframes blink {
+    0% { background: #fff3b0; }
+    100% { background: #fff8e1; }
+  }
+  .sim-tab td.leer { color: #999; font-style: italic; }
+  
+  /* Chart */
+  .chart-container { margin: 10px 0; text-align: center; }
+  #chart-svg { max-width: 100%; height: auto; }
+  
+  /* Schätzfeld */
+  .schaetz-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .schaetz-zeile label { font-weight: bold; }
+  .schaetz-zeile input {
+    padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 110px; background: #fff;
+  }
+  .schaetz-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  
+  /* MC */
+  .mc-item {
+    display: flex; gap: 10px; padding: 8px; align-items: flex-start;
+    border-radius: 4px; margin: 6px 0; background: #fff; border: 1px solid #ececec;
+  }
+  .mc-item .text { flex: 1; font-size: 14px; }
+  .mc-buttons { display: flex; gap: 6px; flex-shrink: 0; }
+  .mc-buttons button {
+    padding: 5px 12px; border: 1.5px solid #c0c0c0; background: #fff;
+    border-radius: 4px; cursor: pointer; font-family: Georgia, serif;
+    font-size: 13px; transition: all 0.15s;
+  }
+  .mc-buttons button:hover { border-color: #C8102E; }
+  .mc-buttons button.gewaehlt-r { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+  .mc-buttons button.gewaehlt-f { background: #C8102E; color: #fff; border-color: #C8102E; }
+  
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>1.7 — Gesetz der großen Zahlen</h1>
+    <span class="nr">Kompetenz 1.7</span>
+  </div>
+
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <!-- TEIL 1: Simulation MIT Tabelle -->
+    <div class="teil">
+      <div class="teil-kopf">Teil 1 · Simulation & Tabelle</div>
+      <div class="teil-titel">Führe das Experiment durch und beobachte, wie sich h<sub>n</sub>(E) entwickelt:</div>
+      <div class="teil-untertitel">Bei jedem Klick wird sowohl die Grafik aktualisiert als auch der Tabelleneintrag für das aktuelle n eingetragen.</div>
+      
+      <div class="sim-tab-wrap">
+        <table class="sim-tab">
+          <thead>
+            <tr><th>n</th><th>10</th><th>100</th><th>1000</th><th>10 000</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Treffer</th>
+              <td id="tab-tr-10" class="leer">—</td>
+              <td id="tab-tr-100" class="leer">—</td>
+              <td id="tab-tr-1000" class="leer">—</td>
+              <td id="tab-tr-10000" class="leer">—</td>
+            </tr>
+            <tr><th>h<sub>n</sub>(E)</th>
+              <td id="tab-hn-10" class="leer">—</td>
+              <td id="tab-hn-100" class="leer">—</td>
+              <td id="tab-hn-1000" class="leer">—</td>
+              <td id="tab-hn-10000" class="leer">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="chart-container">
+        <div id="chart-svg-wrap"></div>
+      </div>
+      
+      <div class="sim-buttons">
+        <button class="btn-sim primary" onclick="simSchritt(10)">+ 10 Versuche</button>
+        <button class="btn-sim" onclick="simSchritt(100)">+ 100 Versuche</button>
+        <button class="btn-sim" onclick="simSchritt(1000)">+ 1000 Versuche</button>
+        <button class="btn-sim" onclick="simSchritt(10000)">+ 10 000 Versuche</button>
+        <button class="btn-sim reset" onclick="zuruecksetzen()">Zurücksetzen</button>
+      </div>
+    </div>
+
+    <!-- TEIL 2: Schätzen -->
+    <div class="teil">
+      <div class="teil-kopf">Teil 2 · Schätzen</div>
+      <div class="teil-titel">Was vermutest du: Wie groß ist die theoretische Wahrscheinlichkeit P(E)?</div>
+      <div class="teil-untertitel">Nutze die Werte aus Teil 1 (besonders die h<sub>n</sub>-Werte bei großen n).</div>
+      <div class="schaetz-zeile">
+        <label>geschätzte P(E) =</label>
+        <input type="text" id="ein-pschaetz" placeholder="z. B. 0,5">
+      </div>
+    </div>
+
+    <!-- TEIL 3: Quiz -->
+    <div class="teil">
+      <div class="teil-kopf">Teil 3 · Verständnis-Quiz</div>
+      <div class="teil-titel">Sind die folgenden Aussagen über das Gesetz der großen Zahlen <b>richtig</b> oder <b>falsch</b>?</div>
+      <div id="mc-bereich"></div>
+    </div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) { if (!s && s !== 0) return NaN; return parseFloat(String(s).replace(",",".")); }
+
+// ===== Aufgaben =====
+const aufgaben = [
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird wiederholt geworfen. Beobachtet wird das Ereignis <b>E = „eine Sechs“</b>.",
+    p: 1/6 },
+  { icon: "🪙", text: "Eine <b>Münze</b> wird wiederholt geworfen. Beobachtet wird das Ereignis <b>E = „Kopf“</b>.",
+    p: 1/2 },
+  { icon: "🎯", text: "Ein Glücksrad mit Sektoren <b>rot (60°)</b>, <b>blau (120°)</b>, <b>grün (180°)</b> wird gedreht. Beobachtet wird <b>E = „rot“</b>.",
+    p: 60/360 },
+  { icon: "🎲", text: "Ein <b>Würfel</b> wird wiederholt geworfen. Beobachtet wird <b>E = „gerade Augenzahl“</b>.",
+    p: 0.5 },
+  { icon: "🎯", text: "Ein Glücksrad mit 5 gleichen Sektoren (1 rot, 4 weiß) wird gedreht. Beobachtet wird <b>E = „rot“</b>.",
+    p: 0.2 },
+];
+
+// ===== MC-Aussagen =====
+const aussagenPool = [
+  { text: "Bei großem n nähert sich die relative Häufigkeit h<sub>n</sub>(E) der Wahrscheinlichkeit P(E) an.",
+    soll: "richtig",
+    erklaerung: "Genau das ist das Gesetz der großen Zahlen." },
+  { text: "Bei großen n ist h<sub>n</sub>(E) <b>exakt gleich</b> P(E).",
+    soll: "falsch",
+    erklaerung: "Falsch. h<sub>n</sub>(E) nähert sich nur an — es gibt immer kleine Schwankungen." },
+  { text: "Bei kleinem n (z. B. n = 10) kann h<sub>n</sub>(E) stark von P(E) abweichen.",
+    soll: "richtig",
+    erklaerung: "Richtig. Bei wenigen Versuchen sind große Schwankungen normal." },
+  { text: "Wenn beim Münzwurf 5-mal hintereinander Kopf fällt, muss im 6. Wurf zwingend Zahl kommen, damit das Gesetz erfüllt ist.",
+    soll: "falsch",
+    erklaerung: "Falsch — das ist der „Spielerirrtum“. Jeder Wurf ist unabhängig, die Münze hat „kein Gedächtnis“." },
+  { text: "Das Gesetz der großen Zahlen gibt eine sichere Vorhersage für ein einzelnes Experiment.",
+    soll: "falsch",
+    erklaerung: "Falsch. Es gilt nur als Tendenz bei vielen Wiederholungen, nicht für einzelne Versuche." },
+  { text: "Mit dem Gesetz der großen Zahlen kann man unbekannte Wahrscheinlichkeiten näherungsweise schätzen, wenn man oft genug experimentiert.",
+    soll: "richtig",
+    erklaerung: "Richtig. Das ist der praktische Nutzen — man schätzt P aus h<sub>n</sub> bei großem n." },
+];
+
+let aktuelleAufgabe = null;
+let versuche = 0, treffer = 0;
+let verlauf = [];
+let aktuelleAussagen = [];
+let mcAntworten = {};
+
+// Welche Tabellen-Spalten sind bereits gefüllt
+const TAB_N = [10, 100, 1000, 10000];
+
+function neueAufgabe() {
+  let neu;
+  do { neu = aufgaben[Math.floor(Math.random() * aufgaben.length)]; }
+  while (neu === aktuelleAufgabe && aufgaben.length > 1);
+  aktuelleAufgabe = neu;
+  
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + neu.icon + '</span>' + neu.text;
+  
+  document.getElementById("ein-pschaetz").value = "";
+  zuruecksetzen();
+  
+  // Quiz: 3 Aussagen
+  const kopie = [...aussagenPool];
+  aktuelleAussagen = [];
+  for (let i = 0; i < 3 && kopie.length > 0; i++) {
+    const idx = Math.floor(Math.random() * kopie.length);
+    aktuelleAussagen.push(kopie.splice(idx, 1)[0]);
+  }
+  mcAntworten = {};
+  rendereMC();
+  
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function rendereMC() {
+  const wrap = document.getElementById("mc-bereich");
+  wrap.innerHTML = aktuelleAussagen.map((a, i) =>
+    `<div class="mc-item">
+      <div class="text">${a.text}</div>
+      <div class="mc-buttons">
+        <button data-i="${i}" data-v="richtig" onclick="mcWahl(${i},'richtig')">richtig</button>
+        <button data-i="${i}" data-v="falsch" onclick="mcWahl(${i},'falsch')">falsch</button>
+      </div>
+    </div>`
+  ).join("");
+}
+
+function mcWahl(i, v) {
+  mcAntworten[i] = v;
+  document.querySelectorAll(`.mc-buttons button[data-i="${i}"]`).forEach(b => {
+    b.classList.remove("gewaehlt-r", "gewaehlt-f");
+  });
+  const btn = document.querySelector(`.mc-buttons button[data-i="${i}"][data-v="${v}"]`);
+  btn.classList.add(v === "richtig" ? "gewaehlt-r" : "gewaehlt-f");
+}
+
+function zuruecksetzen() {
+  versuche = 0; treffer = 0; verlauf = [];
+  // Tabelle leeren
+  TAB_N.forEach(n => {
+    const trTd = document.getElementById(`tab-tr-${n}`);
+    const hnTd = document.getElementById(`tab-hn-${n}`);
+    trTd.textContent = "—"; trTd.className = "leer";
+    hnTd.textContent = "—"; hnTd.className = "leer";
+  });
+  renderChart();
+}
+
+function simSchritt(zielN) {
+  if (!aktuelleAufgabe) return;
+  // Setzt n auf zielN (kumulativ aufstockend, NICHT additiv im Sinne von +)
+  // → bedeutet: wenn wir bei 0 sind und 100 wählen, simulieren wir bis n=100
+  // wenn wir bei 100 sind und 1000 wählen, simulieren wir 900 weitere
+  // wenn wir bei 1000 sind und 100 wählen, simulieren wir trotzdem 100 weitere (zur 1100)
+  // → Hmm, ich denke neu: einfach +zielN, das ist intuitiver
+  const startN = versuche;
+  const endeN = versuche + zielN;
+  for (let i = startN + 1; i <= endeN; i++) {
+    versuche++;
+    if (Math.random() < aktuelleAufgabe.p) treffer++;
+    if (versuche <= 50 || versuche % Math.max(1, Math.floor(versuche/100)) === 0) {
+      verlauf.push({n: versuche, hn: treffer/versuche});
+    }
+    // Tabelle aktualisieren, wenn ein Milestone überschritten wird
+    TAB_N.forEach(milestone => {
+      if (versuche === milestone) {
+        const trTd = document.getElementById(`tab-tr-${milestone}`);
+        const hnTd = document.getElementById(`tab-hn-${milestone}`);
+        trTd.textContent = treffer;
+        hnTd.textContent = (treffer/versuche).toFixed(3).replace(".",",");
+        trTd.className = "neu-eintrag";
+        hnTd.className = "neu-eintrag";
+        // CSS-Animation Klasse nach kurzer Zeit entfernen, damit sie beim nächsten Treffen wieder läuft
+        setTimeout(() => {
+          trTd.classList.remove("neu-eintrag");
+          hnTd.classList.remove("neu-eintrag");
+        }, 800);
+      }
+    });
+  }
+  // Letzten Verlaufspunkt sicher anhängen
+  if (verlauf.length === 0 || verlauf[verlauf.length-1].n !== versuche) {
+    verlauf.push({n: versuche, hn: treffer/versuche});
+  }
+  renderChart();
+}
+
+function renderChart() {
+  if (!aktuelleAufgabe) return;
+  const W=620, H=220;
+  const margin = {l:55, r:50, t:15, b:35};
+  const plotW = W-margin.l-margin.r, plotH = H-margin.t-margin.b;
+  const p = aktuelleAufgabe.p;
+  const yMin = 0, yMax = 1;
+  let svg = `<svg id="chart-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">`;
+  // Theorie-Linie (gestrichelt, ohne P-Wert-Beschriftung)
+  const pY = margin.t + plotH - (p-yMin)/(yMax-yMin) * plotH;
+  svg += `<line x1="${margin.l}" y1="${pY}" x2="${margin.l+plotW}" y2="${pY}" stroke="#2a6fa1" stroke-width="2" stroke-dasharray="5,4" opacity="0.4"/>`;
+  if (document.getElementById("theorie-aufgedeckt") && document.getElementById("theorie-aufgedeckt").value === "1") {
+    svg += `<text x="${margin.l+plotW+4}" y="${pY+4}" font-size="11" fill="#2a6fa1" font-weight="bold">P = ${p.toFixed(3).replace(".",",")}</text>`;
+  } else {
+    svg += `<text x="${margin.l+plotW+4}" y="${pY+4}" font-size="11" fill="#2a6fa1" font-weight="bold">P = ?</text>`;
+  }
+  // Achsen
+  svg += `<line x1="${margin.l}" y1="${margin.t+plotH}" x2="${margin.l+plotW}" y2="${margin.t+plotH}" stroke="#1a1a1a"/>`;
+  svg += `<line x1="${margin.l}" y1="${margin.t}" x2="${margin.l}" y2="${margin.t+plotH}" stroke="#1a1a1a"/>`;
+  // y-Achse Ticks
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    const y = margin.t + plotH - (v-yMin)/(yMax-yMin) * plotH;
+    svg += `<line x1="${margin.l-3}" y1="${y}" x2="${margin.l}" y2="${y}" stroke="#1a1a1a" stroke-width="0.8"/>`;
+    svg += `<text x="${margin.l-6}" y="${y+3}" font-size="10" text-anchor="end">${v.toString().replace(".",",")}</text>`;
+  });
+  svg += `<text x="14" y="${margin.t+plotH/2}" font-size="11" text-anchor="middle" transform="rotate(-90 14 ${margin.t+plotH/2})">h_n(E)</text>`;
+  // x-Achse - logarithmisch wäre schöner, aber linear ist intuitiver bei kleinen n
+  const nMax = Math.max(20, versuche);
+  [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    const x = margin.l + f*plotW;
+    const lbl = Math.round(f*nMax);
+    svg += `<line x1="${x}" y1="${margin.t+plotH}" x2="${x}" y2="${margin.t+plotH+3}" stroke="#1a1a1a" stroke-width="0.8"/>`;
+    svg += `<text x="${x}" y="${margin.t+plotH+13}" font-size="10" text-anchor="middle">${lbl}</text>`;
+  });
+  svg += `<text x="${margin.l+plotW/2}" y="${H-5}" font-size="11" text-anchor="middle">Anzahl Versuche n</text>`;
+  // Verlaufslinie
+  if (verlauf.length > 1) {
+    let path = "";
+    verlauf.forEach((pt, i) => {
+      const x = margin.l + (pt.n/nMax)*plotW;
+      const y = margin.t + plotH - (pt.hn-yMin)/(yMax-yMin)*plotH;
+      path += (i===0?"M":"L") + x.toFixed(1) + "," + y.toFixed(1);
+    });
+    svg += `<path d="${path}" stroke="#C8102E" stroke-width="1.5" fill="none"/>`;
+  } else if (verlauf.length === 1) {
+    const pt = verlauf[0];
+    const x = margin.l + (pt.n/nMax)*plotW;
+    const y = margin.t + plotH - (pt.hn-yMin)/(yMax-yMin)*plotH;
+    svg += `<circle cx="${x}" cy="${y}" r="3" fill="#C8102E"/>`;
+  }
+  svg += '</svg>';
+  // Hidden flag for "theorie aufgedeckt"
+  if (!document.getElementById("theorie-aufgedeckt")) {
+    svg += '<input type="hidden" id="theorie-aufgedeckt" value="0">';
+  }
+  document.getElementById("chart-svg-wrap").innerHTML = svg;
+  // hidden-Flag wieder anhängen
+  const wrap = document.getElementById("chart-svg-wrap");
+  if (!wrap.querySelector("#theorie-aufgedeckt")) {
+    const inp = document.createElement("input");
+    inp.type = "hidden"; inp.id = "theorie-aufgedeckt"; inp.value = "0";
+    wrap.appendChild(inp);
+  }
+}
+
+function pruefen() {
+  if (!aktuelleAufgabe) return;
+  const fb = document.getElementById("feedback");
+  
+  // Schätzung
+  const eSchaetz = parseKomma(document.getElementById("ein-pschaetz").value);
+  const sollP = aktuelleAufgabe.p;
+  const rSchaetz = !isNaN(eSchaetz) && Math.abs(eSchaetz - sollP) < 0.05;
+  
+  // MC
+  let rMC_count = 0;
+  let mcGesamt = aktuelleAussagen.length;
+  let mcAlleBeantw = true;
+  for (let i = 0; i < mcGesamt; i++) {
+    if (mcAntworten[i] === undefined) { mcAlleBeantw = false; }
+    else if (mcAntworten[i] === aktuelleAussagen[i].soll) rMC_count++;
+  }
+  
+  if (isNaN(eSchaetz) || !mcAlleBeantw) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte alle Eingaben/Fragen bearbeiten (Teil 2 Schätzung, Teil 3 alle Aussagen).";
+    fb.style.display = "block";
+    return;
+  }
+  
+  const allOk = rSchaetz && rMC_count === mcGesamt;
+  // P-Wert aufdecken
+  const flag = document.getElementById("theorie-aufgedeckt");
+  if (flag) flag.value = "1";
+  renderChart();
+  
+  if (allOk) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = `✓ Alles richtig! P(E) = ${sollP.toFixed(3).replace(".",",")} — du hast das Gesetz der großen Zahlen verstanden.`;
+    fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML =
+      `Teil 2 (Schätzung): ${rSchaetz?"✓":"✗"} (theoretischer Wert: ${sollP.toFixed(3).replace(".",",")}) &nbsp; Teil 3 (Quiz): ${rMC_count}/${mcGesamt} richtig<br><small>Schau dir den Lösungsweg an.</small>`;
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!aktuelleAufgabe) return;
+  const flag = document.getElementById("theorie-aufgedeckt");
+  if (flag) flag.value = "1";
+  renderChart();
+  
+  const lw = document.getElementById("loesungsweg");
+  let html = '<h3>Lösungsweg</h3>';
+  html += `<p><b>Teil 2 — Schätzung:</b> P(E) = ${aktuelleAufgabe.p.toFixed(3).replace(".",",")} (theoretisch).</p>`;
+  html += '<p style="font-size:13px; color:#555;">Tipp: Bei großem n liefert h<sub>n</sub>(E) eine sehr gute Schätzung für P(E). Die h<sub>n</sub>-Werte bei n = 1000 und n = 10 000 sind am aussagekräftigsten.</p>';
+  html += '<p><b>Teil 3 — Aussagen:</b></p><ul>';
+  aktuelleAussagen.forEach((a, i) => {
+    const userAntw = mcAntworten[i];
+    const istRichtig = userAntw === a.soll;
+    const symbol = istRichtig ? "✓" : (userAntw ? "✗" : "—");
+    const farbe = istRichtig ? "#2e7d32" : "#C8102E";
+    html += `<li><b style="color:${farbe};">${symbol}</b> Richtig: <b>${a.soll}</b> — ${a.erklaerung}</li>`;
+  });
+  html += '</ul>';
+  html += '<p style="font-size:13px; color:#666;"><b>Merke:</b> Das Gesetz der großen Zahlen erlaubt es, aus vielen Versuchen eine unbekannte Wahrscheinlichkeit zu schätzen. Bei kleinen n schwankt h<sub>n</sub>, bei großen n stabilisiert es sich.</p>';
+  lw.innerHTML = html;
+  lw.style.display = "block";
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

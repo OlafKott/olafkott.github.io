@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 3.3 — Varianz & Standardabweichung</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ergebnis-zeile label { font-weight: bold; min-width: 80px; }
+  .ergebnis-zeile input { padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 140px; background: #fff; }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>3.3 — Varianz & Standardabweichung</h1>
+    <span class="nr">Kompetenz 3.3</span>
+  </div>
+  <div class="uebung-body">
+    
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+    <div id="tab-bereich" style="display:flex; justify-content:center; margin:14px 0;"></div>
+    <div class="info-box" id="info-box"></div>
+    <div class="frage-block">
+      <div class="frage-text">a) Berechne die <b>Varianz</b> V(X):</div>
+      <div class="ergebnis-zeile">
+        <label>V(X) =</label>
+        <input type="text" id="ein-vx" placeholder="z. B. 2069">
+      </div>
+    </div>
+    <div class="frage-block">
+      <div class="frage-text">b) Berechne die <b>Standardabweichung</b> σ(X):</div>
+      <div class="ergebnis-zeile">
+        <label>σ(X) ≈</label>
+        <input type="text" id="ein-sx" placeholder="z. B. 45,5">
+        <span class="hinweis" id="einheit-hinweis"></span>
+      </div>
+    </div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+    
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) {
+  if (!s && s !== 0) return NaN;
+  return parseFloat(String(s).replace(",","."));
+}
+
+
+const aufgaben = [
+  { icon: "💼", text: "<b>X</b> = Reparaturkosten je Gerät.",
+    werte: [0, 50, 200], wkt: [0.80, 0.15, 0.05], einheit: "€" },
+  { icon: "📊", text: "<b>X</b> = Gewinn pro Verkauf.",
+    werte: [-10, 5, 20], wkt: [0.2, 0.5, 0.3], einheit: "€" },
+  { icon: "🎲", text: "<b>X</b> = Augensumme bei 2 Würfen eines normalen Würfels (vereinfacht).",
+    werte: [2, 7, 12], wkt: [1/36, 6/36, 1/36] /* falsch, nur Beispiel */, einheit: "" },
+];
+let akt = null;
+function tabHTML(a) {
+  let h = '<table style="border-collapse:collapse;"><tr>';
+  h += `<th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">x ${a.einheit?'('+a.einheit+')':''}</th>`;
+  a.werte.forEach(v => { h += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px;">${v}</td>`; });
+  h += '</tr><tr><th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">P(X=x)</th>';
+  a.wkt.forEach(p => { h += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px;">${p.toFixed(3).replace(".",",")}</td>`; });
+  h += '</tr></table>';
+  return h;
+}
+function neueAufgabe() {
+  let n; do { n=aufgaben[Math.floor(Math.random()*aufgaben.length)]; } while(n===akt && aufgaben.length>1); akt=n;
+  document.getElementById("aufgabe-text").innerHTML = '<span class="kontext-icon">'+n.icon+'</span>'+n.text;
+  document.getElementById("tab-bereich").innerHTML = tabHTML(n);
+  const ex = n.werte.reduce((s,v,i) => s + v*n.wkt[i], 0);
+  document.getElementById("info-box").innerHTML = `Erwartungswert: E(X) = ${ex.toFixed(2).replace(".",",")} ${n.einheit}`;
+  document.getElementById("einheit-hinweis").textContent = n.einheit;
+  document.getElementById("ein-vx").value = "";
+  document.getElementById("ein-sx").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  const ex = akt.werte.reduce((s,v,i) => s + v*akt.wkt[i], 0);
+  const vx = akt.werte.reduce((s,v,i) => s + Math.pow(v-ex,2)*akt.wkt[i], 0);
+  const sx = Math.sqrt(vx);
+  const e1 = parseKomma(document.getElementById("ein-vx").value);
+  const e2 = parseKomma(document.getElementById("ein-sx").value);
+  if (isNaN(e1)||isNaN(e2)) { fb.className="feedback teilweise"; fb.textContent="⚠ Beide Felder ausfüllen."; fb.style.display="block"; return; }
+  const tol1 = Math.max(1, vx*0.02);
+  const tol2 = Math.max(0.1, sx*0.02);
+  const r1 = Math.abs(e1-vx) < tol1;
+  const r2 = Math.abs(e2-sx) < tol2;
+  if (r1 && r2) { fb.className="feedback richtig"; fb.innerHTML="✓ Beides richtig!"; fb.style.display="block"; starteKonfetti(); }
+  else { fb.className="feedback falsch"; fb.innerHTML=`${r1?"✓":"✗"} V(X) &nbsp; ${r2?"✓":"✗"} σ(X)`; fb.style.display="block"; }
+}
+function zeigeLoesung() {
+  if (!akt) return;
+  const ex = akt.werte.reduce((s,v,i) => s + v*akt.wkt[i], 0);
+  const vx = akt.werte.reduce((s,v,i) => s + Math.pow(v-ex,2)*akt.wkt[i], 0);
+  const sx = Math.sqrt(vx);
+  let teile = akt.werte.map((v,i) => `(${v}−${ex.toFixed(2).replace(".",",")})²·${akt.wkt[i].toFixed(3).replace(".",",")}`).join(" + ");
+  document.getElementById("loesungsweg").innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p>V(X) = ${teile} = <b>${vx.toFixed(2).replace(".",",")}</b></p>
+    <p>σ(X) = √V(X) = √${vx.toFixed(2).replace(".",",")} ≈ <b>${sx.toFixed(2).replace(".",",")} ${akt.einheit}</b></p>
+    <p style="font-size:13px; color:#666;">σ ist die <b>mittlere Abweichung</b> vom Erwartungswert.</p>
+  `;
+  document.getElementById("loesungsweg").style.display = "block";
+}
+neueAufgabe();
+
+</script>
+
+</body>
+</html>

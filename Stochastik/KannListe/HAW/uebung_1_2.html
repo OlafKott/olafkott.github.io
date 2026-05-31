@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.2 — Laplace-Experiment erkennen</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ja-nein-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ja-nein-buttons button { padding: 8px 22px; border: 1.5px solid #c0c0c0;
+    background: #fff; border-radius: 4px; cursor: pointer;
+    font-family: Georgia, serif; font-size: 15px; transition: all 0.15s; font-weight: bold; }
+  .ja-nein-buttons button:hover { border-color: #C8102E; }
+  .ja-nein-buttons button.gewaehlt { background: #C8102E; color: #fff; border-color: #C8102E; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>1.2 — Laplace-Experiment erkennen</h1>
+    <span class="nr">Kompetenz 1.2</span>
+  </div>
+
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <div class="frage-block">
+      <div class="frage-text">Ist dies ein <b>Laplace-Experiment</b>?</div>
+      <div class="ja-nein-buttons" id="ist-laplace">
+        <button data-val="ja">Ja, Laplace</button>
+        <button data-val="nein">Nein, kein Laplace</button>
+      </div>
+    </div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+
+const aufgaben = [
+  // BEISPIELE (Laplace) — nur einstufig
+  { icon: "🎲", text: "Ein <b>fairer Würfel</b> wird einmal geworfen. Beobachtet wird die Augenzahl.",
+    istLaplace: "ja", erklaerung: "Alle 6 Augenzahlen sind gleich wahrscheinlich (jeweils 1/6). Laplace-Experiment." },
+  { icon: "🪙", text: "Eine <b>faire Münze</b> wird einmal geworfen. Beobachtet wird Kopf oder Zahl.",
+    istLaplace: "ja", erklaerung: "Kopf und Zahl sind je mit Wahrscheinlichkeit 1/2 möglich — Laplace." },
+  { icon: "🎯", text: "Ein <b>Glücksrad</b> hat 8 <b>gleich große</b> Sektoren. Der angezeigte Sektor wird notiert.",
+    istLaplace: "ja", erklaerung: "Alle 8 Sektoren gleich groß → jeweils Wahrscheinlichkeit 1/8 → Laplace." },
+  { icon: "🃏", text: "Aus einem <b>gut gemischten Skatspiel</b> (32 Karten) wird eine Karte gezogen.",
+    istLaplace: "ja", erklaerung: "Jede der 32 Karten wird mit Wahrscheinlichkeit 1/32 gezogen — Laplace." },
+  { icon: "⚪", text: "In einer Urne sind <b>10 nummerierte Kugeln</b>. Eine Kugel wird zufällig gezogen, die Nummer wird notiert.",
+    istLaplace: "ja", erklaerung: "Jede Kugel hat dieselbe Ziehungswahrscheinlichkeit (1/10). Laplace." },
+  { icon: "🎲", text: "Ein <b>fairer Würfel</b> wird einmal geworfen. Notiert wird, ob die Augenzahl <b>gerade</b> ist.",
+    istLaplace: "ja", erklaerung: "Bei einem fairen Würfel sind 3 Augenzahlen gerade und 3 ungerade → P(gerade) = P(ungerade) = 1/2 → Laplace." },
+  { icon: "🎯", text: "Ein Glücksrad ist in 10 <b>gleich große</b> Sektoren mit den Zahlen 1 bis 10 eingeteilt.",
+    istLaplace: "ja", erklaerung: "Alle 10 Sektoren gleich groß → jede Zahl mit Wahrscheinlichkeit 1/10 → Laplace." },
+
+  // GEGENBEISPIELE (kein Laplace) — alle einstufig
+  { icon: "🎯", text: "Ein Glücksrad hat 3 Sektoren: <b>rot (180°)</b>, <b>blau (120°)</b>, <b>grün (60°)</b>.",
+    istLaplace: "nein", erklaerung: "Die Sektoren sind unterschiedlich groß: P(rot) = 1/2, P(blau) = 1/3, P(grün) = 1/6. Nicht gleich wahrscheinlich." },
+  { icon: "📌", text: "Ein <b>Reißnagel</b> wird auf den Tisch fallen gelassen. Beobachtet wird, ob er auf dem <b>Kopf</b> oder auf der <b>Seite</b> landet.",
+    istLaplace: "nein", erklaerung: "Ein Reißnagel ist nicht symmetrisch — Kopf und Seite sind nicht gleich wahrscheinlich." },
+  { icon: "🌧️", text: "Beobachtet wird, ob es morgen in Essen <b>regnet</b> oder <b>nicht regnet</b>.",
+    istLaplace: "nein", erklaerung: "Regen und kein Regen sind nicht gleich wahrscheinlich (wetterabhängig). Kein Laplace." },
+  { icon: "⚪", text: "In einer Urne sind <b>3 rote und 7 blaue Kugeln</b>. Es wird gezogen und die <b>Farbe</b> notiert.",
+    istLaplace: "nein", erklaerung: "P(rot) = 3/10, P(blau) = 7/10 — die beiden Farben sind nicht gleich wahrscheinlich." },
+  { icon: "🎲", text: "Ein <b>gezinkter Würfel</b>, bei dem die Sechs häufiger fällt als die anderen Zahlen, wird einmal geworfen.",
+    istLaplace: "nein", erklaerung: "Bei einem gezinkten Würfel sind die Augenzahlen nicht gleich wahrscheinlich. Kein Laplace." },
+  { icon: "🎯", text: "Ein Glücksrad hat 4 Sektoren: <b>rot (180°)</b>, <b>blau (90°)</b>, <b>grün (45°)</b>, <b>gelb (45°)</b>.",
+    istLaplace: "nein", erklaerung: "Die Sektoren haben unterschiedliche Größen → unterschiedliche Wahrscheinlichkeiten → kein Laplace." },
+];
+
+let aktuelleAufgabe = null;
+let auswahl = null;
+
+function neueAufgabe() {
+  let neu;
+  do { neu = aufgaben[Math.floor(Math.random() * aufgaben.length)]; }
+  while (neu === aktuelleAufgabe && aufgaben.length > 1);
+  aktuelleAufgabe = neu;
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + neu.icon + '</span>' + neu.text;
+  auswahl = null;
+  document.querySelectorAll("#ist-laplace button").forEach(b => b.classList.remove("gewaehlt"));
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+document.querySelectorAll("#ist-laplace button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#ist-laplace button").forEach(x => x.classList.remove("gewaehlt"));
+    b.classList.add("gewaehlt");
+    auswahl = b.dataset.val;
+  });
+});
+
+function pruefen() {
+  if (!aktuelleAufgabe) return;
+  const fb = document.getElementById("feedback");
+  if (auswahl === null) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte eine Antwort auswählen.";
+    fb.style.display = "block";
+    return;
+  }
+  if (auswahl === aktuelleAufgabe.istLaplace) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Richtig!";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "✗ Leider nicht. Schau dir den Lösungsweg an.";
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!aktuelleAufgabe) return;
+  const lw = document.getElementById("loesungsweg");
+  const antwort = aktuelleAufgabe.istLaplace === "ja"
+    ? "<b style='color:#2e7d32'>Ja, Laplace-Experiment</b>"
+    : "<b style='color:#C8102E'>Nein, kein Laplace-Experiment</b>";
+  lw.innerHTML =
+    '<h3>Lösungsweg</h3>' +
+    '<p>' + antwort + '</p>' +
+    '<p><b>Begründung:</b> ' + aktuelleAufgabe.erklaerung + '</p>' +
+    '<p style="font-size:13px; color:#666; margin-top:10px;"><b>Merke:</b> Ein Laplace-Experiment liegt vor, wenn <b>alle Ergebnisse gleich wahrscheinlich</b> sind.</p>';
+  lw.style.display = "block";
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

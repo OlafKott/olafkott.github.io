@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 2.1 — Vierfeldertafel</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .tafel-wrap { display: flex; justify-content: center; margin: 20px 0; }
+  table.vfft {
+    border-collapse: collapse; font-size: 16px;
+  }
+  table.vfft th, table.vfft td {
+    border: 1.5px solid #1a1a1a; padding: 6px 14px; text-align: center;
+    min-width: 70px; min-height: 36px;
+  }
+  table.vfft th { background: #f5e6e8; color: #C8102E; font-weight: bold; }
+  table.vfft td.fest { background: #fff8e1; font-weight: bold; }
+  table.vfft td.summe { background: #f3f3f3; font-weight: bold; }
+  table.vfft td input {
+    width: 64px; padding: 4px 6px;
+    font-family: Georgia, serif; font-size: 14px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px;
+    text-align: center; background: #fff;
+  }
+  table.vfft td input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; text-align: center; margin-top: 6px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } table.vfft { font-size: 14px; } }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>2.1 — Vierfeldertafel ausfüllen</h1>
+    <span class="nr">Kompetenz 2.1</span>
+  </div>
+
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <div class="tafel-wrap" id="tafel-wrap"></div>
+    <div class="hinweis">Füllen Sie die <b>leeren Felder</b> aus. Hinweis: Spalten- und Zeilensummen helfen.</div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+// Aufgaben: jeweils Kontext + zwei Ereignisse A, B + alle 4 Innenfelder als P-Werte (Summe = 1)
+// Wir geben 2-3 Werte vor und der Schüler füllt den Rest auf.
+const aufgaben = [
+  { icon: "📱", kontext: "100 Smartphones werden geprüft. Bei 30 % treten Display-Fehler auf (Ereignis <b>A</b>), bei 20 % Akku-Fehler (<b>B</b>). Bei 12 % treten <b>beide</b> Fehler auf.",
+    A_label: "A", Abar_label: "A̅", B_label: "B", Bbar_label: "B̅",
+    A_meaning: "Display defekt", B_meaning: "Akku defekt",
+    pAB: 0.12, pA_notB: 0.18, pnotA_B: 0.08, pnotA_notB: 0.62,
+    // Vorgegeben: Ränder (Marginalien) — Schüler muss die Innenfelder berechnen
+    geg_zellen: ["pA","pB","pAB"], // P(A), P(B), P(A∩B) sind vorgegeben (Rest berechnen)
+    erklaerung: "P(A) = 0,30, P(B) = 0,20, P(A∩B) = 0,12. Daraus: P(A∩B̅) = 0,30 − 0,12 = 0,18; P(A̅∩B) = 0,20 − 0,12 = 0,08; P(A̅∩B̅) = 1 − 0,38 = 0,62." },
+  { icon: "🏫", kontext: "An einer Schule lernen <b>60 %</b> der Schüler:innen Französisch (<b>A</b>) und <b>50 %</b> Spanisch (<b>B</b>). <b>30 %</b> lernen beide Sprachen.",
+    A_label: "A", Abar_label: "A̅", B_label: "B", Bbar_label: "B̅",
+    A_meaning: "Französisch", B_meaning: "Spanisch",
+    pAB: 0.30, pA_notB: 0.30, pnotA_B: 0.20, pnotA_notB: 0.20,
+    geg_zellen: ["pA","pB","pAB"],
+    erklaerung: "P(A) = 0,60, P(B) = 0,50, P(A∩B) = 0,30. P(A∩B̅) = 0,60 − 0,30 = 0,30; P(A̅∩B) = 0,50 − 0,30 = 0,20; P(A̅∩B̅) = 1 − 0,80 = 0,20." },
+  { icon: "🚗", kontext: "In einer Werkstatt werden Autos überprüft. <b>40 %</b> haben einen Bremsenfehler (<b>A</b>), <b>25 %</b> einen Reifenfehler (<b>B</b>). <b>10 %</b> haben <b>beide</b> Fehler.",
+    A_label: "A", Abar_label: "A̅", B_label: "B", Bbar_label: "B̅",
+    A_meaning: "Bremse defekt", B_meaning: "Reifen defekt",
+    pAB: 0.10, pA_notB: 0.30, pnotA_B: 0.15, pnotA_notB: 0.45,
+    geg_zellen: ["pA","pB","pAB"],
+    erklaerung: "P(A) = 0,40, P(B) = 0,25, P(A∩B) = 0,10. P(A∩B̅) = 0,30; P(A̅∩B) = 0,15; P(A̅∩B̅) = 0,45." },
+  { icon: "💊", kontext: "Eine Studie an Patient:innen: <b>20 %</b> haben Bluthochdruck (<b>A</b>), <b>15 %</b> Diabetes (<b>B</b>). Innenfeld: <b>5 %</b> haben beides.",
+    A_label: "A", Abar_label: "A̅", B_label: "B", Bbar_label: "B̅",
+    A_meaning: "Bluthochdruck", B_meaning: "Diabetes",
+    pAB: 0.05, pA_notB: 0.15, pnotA_B: 0.10, pnotA_notB: 0.70,
+    geg_zellen: ["pA","pB","pAB"],
+    erklaerung: "P(A) = 0,20, P(B) = 0,15, P(A∩B) = 0,05. P(A∩B̅) = 0,15; P(A̅∩B) = 0,10; P(A̅∩B̅) = 0,70." },
+];
+
+let aktuelleAufgabe = null;
+
+function fmt(v) { return v.toFixed(2).replace(".",","); }
+function parseKomma(s) {
+  if (!s && s !== 0) return NaN;
+  return parseFloat(String(s).replace(",","."));
+}
+
+function tafelHTML(aufg) {
+  const A = aufg.A_label, Abar = aufg.Abar_label, B = aufg.B_label, Bbar = aufg.Bbar_label;
+  const pA = aufg.pAB + aufg.pA_notB;
+  const pB = aufg.pAB + aufg.pnotA_B;
+  const pAbar = 1 - pA;
+  const pBbar = 1 - pB;
+  
+  // Berechne, was vorgegeben (fest) ist und was Input bekommt
+  // Wir geben standardmäßig P(A), P(B), P(A∩B) vor → 3 Felder Input
+  // (Innenfeld A∩B vorgegeben), Rand-Summen P(A) und P(B) vorgegeben
+  const cells = {
+    AB:     {val: aufg.pAB,       fest: aufg.geg_zellen.includes('pAB')},
+    AnB:    {val: aufg.pA_notB,   fest: false},
+    nAB:    {val: aufg.pnotA_B,   fest: false},
+    nAnB:   {val: aufg.pnotA_notB, fest: false},
+    pA:     {val: pA,             fest: aufg.geg_zellen.includes('pA')},
+    pAbar:  {val: pAbar,          fest: false},
+    pB:     {val: pB,             fest: aufg.geg_zellen.includes('pB')},
+    pBbar:  {val: pBbar,          fest: false},
+  };
+  
+  function cellTd(key) {
+    const c = cells[key];
+    if (c.fest) {
+      return `<td class="fest">${fmt(c.val)}</td>`;
+    } else {
+      return `<td><input type="text" id="ein-${key}" placeholder="?"></td>`;
+    }
+  }
+  
+  return `
+  <table class="vfft">
+    <thead>
+      <tr><th></th><th>${B}</th><th>${Bbar}</th><th class="summe">Σ</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>${A}</th>
+        ${cellTd('AB')}
+        ${cellTd('AnB')}
+        ${cellTd('pA')}
+      </tr>
+      <tr>
+        <th>${Abar}</th>
+        ${cellTd('nAB')}
+        ${cellTd('nAnB')}
+        ${cellTd('pAbar')}
+      </tr>
+      <tr>
+        <th class="summe">Σ</th>
+        ${cellTd('pB')}
+        ${cellTd('pBbar')}
+        <td class="summe">1</td>
+      </tr>
+    </tbody>
+  </table>
+  `;
+}
+
+function neueAufgabe() {
+  let neu;
+  do {
+    neu = aufgaben[Math.floor(Math.random() * aufgaben.length)];
+  } while (neu === aktuelleAufgabe && aufgaben.length > 1);
+  aktuelleAufgabe = neu;
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + neu.icon + '</span>' + neu.kontext + 
+    ` <br><span style="font-size:13px; color:#666;"><b>${neu.A_label}</b> = ${neu.A_meaning}, <b>${neu.B_label}</b> = ${neu.B_meaning}</span>`;
+  document.getElementById("tafel-wrap").innerHTML = tafelHTML(neu);
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function pruefen() {
+  if (!aktuelleAufgabe) return;
+  const fb = document.getElementById("feedback");
+  const sollwerte = {
+    AB: aktuelleAufgabe.pAB,
+    AnB: aktuelleAufgabe.pA_notB,
+    nAB: aktuelleAufgabe.pnotA_B,
+    nAnB: aktuelleAufgabe.pnotA_notB,
+    pA: aktuelleAufgabe.pAB + aktuelleAufgabe.pA_notB,
+    pAbar: 1 - (aktuelleAufgabe.pAB + aktuelleAufgabe.pA_notB),
+    pB: aktuelleAufgabe.pAB + aktuelleAufgabe.pnotA_B,
+    pBbar: 1 - (aktuelleAufgabe.pAB + aktuelleAufgabe.pnotA_B),
+  };
+  let allRight = true;
+  let errors = [];
+  for (const key of Object.keys(sollwerte)) {
+    const inp = document.getElementById(`ein-${key}`);
+    if (!inp) continue; // war fest
+    const v = parseKomma(inp.value);
+    if (isNaN(v)) { allRight = false; errors.push(key); inp.style.borderColor = "#C8102E"; continue; }
+    if (Math.abs(v - sollwerte[key]) > 0.005) { allRight = false; errors.push(key); inp.style.borderColor = "#C8102E"; }
+    else inp.style.borderColor = "#2e7d32";
+  }
+  if (allRight) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Alle Felder richtig ausgefüllt!";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "Noch nicht ganz: " + errors.length + " Feld(er) falsch oder leer. Schau dir den Lösungsweg an.";
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!aktuelleAufgabe) return;
+  const a = aktuelleAufgabe;
+  const lw = document.getElementById("loesungsweg");
+  const pA = a.pAB + a.pA_notB;
+  const pB = a.pAB + a.pnotA_B;
+  lw.innerHTML =
+    '<h3>Lösungsweg</h3>' +
+    '<p>Aus den vorgegebenen Werten ergeben sich:</p>' +
+    `<ul>` +
+      `<li>P(${a.A_label} ∩ ${a.Bbar_label}) = P(${a.A_label}) − P(${a.A_label} ∩ ${a.B_label}) = ${fmt(pA)} − ${fmt(a.pAB)} = <b>${fmt(a.pA_notB)}</b></li>` +
+      `<li>P(${a.Abar_label} ∩ ${a.B_label}) = P(${a.B_label}) − P(${a.A_label} ∩ ${a.B_label}) = ${fmt(pB)} − ${fmt(a.pAB)} = <b>${fmt(a.pnotA_B)}</b></li>` +
+      `<li>P(${a.Abar_label} ∩ ${a.Bbar_label}) = 1 − Summe der drei anderen = <b>${fmt(a.pnotA_notB)}</b></li>` +
+      `<li>P(${a.Abar_label}) = 1 − P(${a.A_label}) = <b>${fmt(1-pA)}</b>; P(${a.Bbar_label}) = 1 − P(${a.B_label}) = <b>${fmt(1-pB)}</b></li>` +
+    `</ul>` +
+    '<p>' + a.erklaerung + '</p>';
+  lw.style.display = "block";
+}
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

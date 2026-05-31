@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.1 — Zufallsexperimente (Quiz)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .quiz-frage { margin: 14px 0; padding: 14px 16px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .quiz-frage-nr { display: inline-block; background: #C8102E; color: #fff;
+    padding: 2px 10px; border-radius: 3px; font-weight: bold;
+    font-size: 13px; margin-right: 8px; }
+  .quiz-frage-text { font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+  .quiz-optionen { display: flex; flex-direction: column; gap: 6px; }
+  .quiz-opt { padding: 8px 14px; border: 1.5px solid #c0c0c0; background: #fff;
+    border-radius: 4px; cursor: pointer; font-family: Georgia, serif;
+    font-size: 14px; text-align: left; transition: all 0.15s; }
+  .quiz-opt:hover { border-color: #C8102E; background: #fdecea; }
+  .quiz-opt.gewaehlt { background: #C8102E; color: #fff; border-color: #C8102E; }
+  .quiz-opt.richtig-gezeigt { background: #eaf5ea; color: #2e7d32; border-color: #2e7d32; font-weight: bold; }
+  .quiz-opt.falsch-gezeigt { background: #fdecea; color: #C8102E; border-color: #C8102E; opacity: 0.7; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .erklaerung-zeile { margin: 8px 0; padding: 8px 10px; background: #fff;
+    border-radius: 4px; font-size: 14px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>1.1 — Zufallsexperimente (Quiz)</h1>
+    <span class="nr">Kompetenz 1.1</span>
+  </div>
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div>Beantworte die folgenden Fragen rund um <b>Zufallsexperimente</b>.</div>
+    </div>
+    <div id="quiz-bereich"></div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+
+const fragenPool = [
+  // EIGENSCHAFTEN
+  { typ: "eigenschaft",
+    frage: "Welche Eigenschaft muss ein Zufallsexperiment immer erfüllen?",
+    optionen: [
+      "Das Ergebnis muss vorher unbekannt sein.",
+      "Das Ergebnis muss eine Zahl sein.",
+      "Es muss mindestens 6 mögliche Ergebnisse haben.",
+      "Es muss in einem Labor stattfinden."
+    ],
+    richtig: 0,
+    erklaerung: "Wichtigste Eigenschaft: das Ergebnis ist vor der Durchführung nicht sicher vorhersagbar." },
+  { typ: "eigenschaft",
+    frage: "Was gehört zu einem Zufallsexperiment?",
+    optionen: [
+      "Eine genaue Vorhersage des Ergebnisses.",
+      "Beliebig viele Wiederholungen unter gleichen Bedingungen sind möglich.",
+      "Ein einziger fester Ablauf, der sich nicht wiederholen lässt.",
+      "Ergebnisse, die immer gleich sind."
+    ],
+    richtig: 1,
+    erklaerung: "Ein Zufallsexperiment ist unter gleichen Bedingungen beliebig oft wiederholbar." },
+  { typ: "eigenschaft",
+    frage: "Wie nennt man die Menge aller möglichen Ergebnisse eines Zufallsexperiments?",
+    optionen: [
+      "Ereignisraum E",
+      "Wahrscheinlichkeit P",
+      "Ergebnismenge Ω",
+      "Zufallsmenge Z"
+    ],
+    richtig: 2,
+    erklaerung: "Die Menge aller möglichen Ergebnisse heißt Ergebnismenge und wird mit Ω (Omega) bezeichnet." },
+  { typ: "eigenschaft",
+    frage: "Was ist ein einzelner möglicher Ausgang eines Zufallsexperiments?",
+    optionen: [
+      "Ein Ergebnis (Element von Ω)",
+      "Ein Experiment",
+      "Eine Wahrscheinlichkeit",
+      "Eine Verteilung"
+    ],
+    richtig: 0,
+    erklaerung: "Ein einzelner möglicher Ausgang heißt Ergebnis und ist ein Element der Ergebnismenge Ω." },
+  { typ: "eigenschaft",
+    frage: "Welche Aussage über die Ergebnismenge Ω ist korrekt?",
+    optionen: [
+      "Ω enthält genau ein Element.",
+      "Ω enthält alle möglichen Ergebnisse des Experiments.",
+      "Ω ist immer leer.",
+      "Ω enthält nur die wahrscheinlichsten Ergebnisse."
+    ],
+    richtig: 1,
+    erklaerung: "Ω enthält alle möglichen Ergebnisse — keine fehlen, keine doppelt." },
+
+  // IST ES EIN ZUFALLSEXPERIMENT — JA-Beispiele
+  { typ: "istZufall",
+    frage: "Ist das Werfen eines Würfels ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 0,
+    erklaerung: "Ja — das Ergebnis ist nicht vorhersagbar (eine der Augenzahlen 1–6)." },
+  { typ: "istZufall",
+    frage: "Ist das Werfen einer Münze ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 0,
+    erklaerung: "Ja — das Ergebnis (Kopf oder Zahl) ist nicht vorher bekannt." },
+  { typ: "istZufall",
+    frage: "Ist das Drehen eines Glücksrads ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 0,
+    erklaerung: "Ja — welcher Sektor erscheint, ist zufällig." },
+  { typ: "istZufall",
+    frage: "Ist das Ziehen einer Karte aus einem gut gemischten Kartenspiel ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 0,
+    erklaerung: "Ja — welche Karte gezogen wird, ist nicht vorhersagbar." },
+
+  // IST ES EIN ZUFALLSEXPERIMENT — NEIN-Beispiele (offensichtlich)
+  { typ: "istZufall",
+    frage: "Ist das Berechnen von 5 + 7 ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 1,
+    erklaerung: "Nein — das Ergebnis 12 steht eindeutig fest." },
+  { typ: "istZufall",
+    frage: "Ist das Ablesen der Uhrzeit von einer Uhr ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 1,
+    erklaerung: "Nein — die Uhrzeit ist eindeutig festgelegt, nicht zufällig." },
+  { typ: "istZufall",
+    frage: "Ist das Einschalten einer nachweislich intakten Glühbirne ein Zufallsexperiment?",
+    optionen: ["Ja", "Nein"], richtig: 1,
+    erklaerung: "Nein — eine intakte Glühbirne leuchtet sicher, das Ergebnis steht fest." },
+
+  // ERGEBNISMENGE
+  { typ: "ergebnismenge",
+    frage: "Welches ist die Ergebnismenge beim Werfen eines normalen Würfels?",
+    optionen: [
+      "Ω = {1, 2, 3, 4, 5, 6}",
+      "Ω = {1, 2, 3, 4, 5}",
+      "Ω = {0, 1, 2, 3, 4, 5}",
+      "Ω = {Augenzahl}"
+    ],
+    richtig: 0,
+    erklaerung: "Ein Würfel zeigt eine der Zahlen 1 bis 6." },
+  { typ: "ergebnismenge",
+    frage: "Welches ist die Ergebnismenge beim einmaligen Werfen einer Münze?",
+    optionen: [
+      "Ω = {Kopf, Zahl}",
+      "Ω = {1, 2}",
+      "Ω = {Kopf}",
+      "Ω = {0, 1, 2}"
+    ],
+    richtig: 0,
+    erklaerung: "Eine Münze hat genau zwei Seiten: Kopf und Zahl." },
+  { typ: "ergebnismenge",
+    frage: "Ein Glücksrad ist in 4 gleich große Sektoren mit den Farben rot, blau, grün und gelb eingeteilt. Wie lautet Ω?",
+    optionen: [
+      "Ω = {rot, blau, grün, gelb}",
+      "Ω = {1, 2, 3, 4}",
+      "Ω = {Farbe}",
+      "Ω = {rot, blau}"
+    ],
+    richtig: 0,
+    erklaerung: "Ω enthält alle vier möglichen Farben." },
+];
+
+let aktuellesQuiz = [];
+let antworten = {};
+
+function zufallsAuswahl(arr, n) {
+  const kopie = [...arr];
+  const result = [];
+  for (let i = 0; i < n && kopie.length > 0; i++) {
+    const idx = Math.floor(Math.random() * kopie.length);
+    result.push(kopie.splice(idx, 1)[0]);
+  }
+  return result;
+}
+
+function neueAufgabe() {
+  const eigenschaft = fragenPool.filter(f => f.typ === "eigenschaft");
+  const istZufall = fragenPool.filter(f => f.typ === "istZufall");
+  const ergebnis = fragenPool.filter(f => f.typ === "ergebnismenge");
+  aktuellesQuiz = [
+    ...zufallsAuswahl(eigenschaft, 2),
+    ...zufallsAuswahl(istZufall, 2),
+    ...zufallsAuswahl(ergebnis, 1),
+  ];
+  antworten = {};
+  rendereQuiz();
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function rendereQuiz() {
+  const wrap = document.getElementById("quiz-bereich");
+  wrap.innerHTML = aktuellesQuiz.map((f, i) => {
+    const opts = f.optionen.map((o, j) =>
+      `<button class="quiz-opt" data-q="${i}" data-o="${j}" onclick="wahl(${i},${j})">${o}</button>`
+    ).join("");
+    return `<div class="quiz-frage">
+      <div class="quiz-frage-text"><span class="quiz-frage-nr">${i+1}</span>${f.frage}</div>
+      <div class="quiz-optionen">${opts}</div>
+    </div>`;
+  }).join("");
+}
+
+function wahl(qIdx, oIdx) {
+  antworten[qIdx] = oIdx;
+  document.querySelectorAll(`.quiz-opt[data-q="${qIdx}"]`).forEach(b => b.classList.remove("gewaehlt"));
+  document.querySelector(`.quiz-opt[data-q="${qIdx}"][data-o="${oIdx}"]`).classList.add("gewaehlt");
+}
+
+function pruefen() {
+  const fb = document.getElementById("feedback");
+  if (Object.keys(antworten).length < aktuellesQuiz.length) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte alle " + aktuellesQuiz.length + " Fragen beantworten.";
+    fb.style.display = "block";
+    return;
+  }
+  let richtigeAnzahl = 0;
+  aktuellesQuiz.forEach((f, i) => { if (antworten[i] === f.richtig) richtigeAnzahl++; });
+  if (richtigeAnzahl === aktuellesQuiz.length) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Alle " + aktuellesQuiz.length + " Antworten richtig!";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "Du hast " + richtigeAnzahl + " von " + aktuellesQuiz.length + " richtig. Schau dir den Lösungsweg an.";
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  const lw = document.getElementById("loesungsweg");
+  let html = '<h3>Lösungsweg</h3>';
+  aktuellesQuiz.forEach((f, i) => {
+    const gewaehlt = antworten[i];
+    const istRichtig = gewaehlt === f.richtig;
+    const icon = istRichtig ? "✓" : (gewaehlt !== undefined ? "✗" : "—");
+    const farbe = istRichtig ? "#2e7d32" : "#C8102E";
+    html += `<div class="erklaerung-zeile">
+      <b style="color:${farbe};">${icon} Frage ${i+1}:</b> Richtige Antwort: <b>${f.optionen[f.richtig]}</b><br>
+      <span style="font-size:13px; color:#555;">${f.erklaerung}</span>
+    </div>`;
+  });
+  lw.innerHTML = html;
+  lw.style.display = "block";
+  aktuellesQuiz.forEach((f, i) => {
+    document.querySelectorAll(`.quiz-opt[data-q="${i}"]`).forEach(b => {
+      b.classList.remove("gewaehlt", "richtig-gezeigt", "falsch-gezeigt");
+      const o = parseInt(b.dataset.o);
+      if (o === f.richtig) b.classList.add("richtig-gezeigt");
+      else if (o === antworten[i]) b.classList.add("falsch-gezeigt");
+    });
+  });
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

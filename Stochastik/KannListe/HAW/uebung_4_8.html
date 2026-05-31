@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 4.8 — Sigma-Regeln anwenden</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ergebnis-zeile label { font-weight: bold; min-width: 80px; }
+  .ergebnis-zeile input { padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 140px; background: #fff; }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>4.8 — Sigma-Regeln anwenden</h1>
+    <span class="nr">Kompetenz 4.8</span>
+  </div>
+  <div class="uebung-body">
+    
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+    <div class="info-box" id="info-box"></div>
+    <div class="frage-block">
+      <div class="frage-text">a) Bestimme das <b id="sigma-typ"></b>-Intervall um μ. Untere Grenze <b>abrunden</b>, obere <b>aufrunden</b>.</div>
+      <div class="ergebnis-zeile">
+        <label>untere =</label>
+        <input type="text" id="ein-u" placeholder="z. B. 1" style="width:90px;">
+        <label style="margin-left:14px;">obere =</label>
+        <input type="text" id="ein-o" placeholder="z. B. 4" style="width:90px;">
+      </div>
+    </div>
+    <div class="frage-block">
+      <div class="frage-text">b) Berechne die <b>tatsächliche</b> Wahrscheinlichkeit P(u ≤ X ≤ o) mit dem CAS:</div>
+      <div class="ergebnis-zeile">
+        <label>P =</label>
+        <input type="text" id="ein-p" placeholder="z. B. 0,89">
+      </div>
+      <div class="hinweis">CAS: <code>binomCdf(n; p; u; o)</code></div>
+    </div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+    
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) { if (!s && s !== 0) return NaN; return parseFloat(String(s).replace(",",".")); }
+function binomPdf(n, p, k) {
+  // Binomialkoeffizient
+  let bk = 1;
+  for (let i = 0; i < k; i++) bk = bk * (n - i) / (i + 1);
+  return bk * Math.pow(p, k) * Math.pow(1-p, n-k);
+}
+function binomCdf(n, p, von, bis) {
+  let s = 0;
+  for (let k = von; k <= bis; k++) s += binomPdf(n, p, k);
+  return s;
+}
+function fakt(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+function binomKoeff(n, k) {
+  if (k < 0 || k > n) return 0;
+  let r = 1;
+  for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1);
+  return Math.round(r);
+}
+
+
+const aufgaben = [
+  { icon: "🏭", n: 50, p: 0.05, sigmaTyp: 1, kontext: "50 Bauteile, 5 % defekt" },
+  { icon: "🪙", n: 100, p: 0.5, sigmaTyp: 1, kontext: "100 Münzwürfe" },
+  { icon: "🪙", n: 100, p: 0.5, sigmaTyp: 2, kontext: "100 Münzwürfe" },
+  { icon: "🎲", n: 60, p: 1/6, sigmaTyp: 1, kontext: "60 Würfelwürfe, Sechs" },
+  { icon: "📊", n: 200, p: 0.1, sigmaTyp: 2, kontext: "200 Kunden, 10 % Reklamationsquote" },
+  { icon: "🎯", n: 80, p: 0.4, sigmaTyp: 1, kontext: "80 Dartwürfe, 40 % Trefferwahrscheinlichkeit" },
+];
+let akt = null;
+function neueAufgabe() {
+  let n; do { n=aufgaben[Math.floor(Math.random()*aufgaben.length)]; } while(n===akt && aufgaben.length>1); akt=n;
+  const mu = n.n*n.p;
+  const sigma = Math.sqrt(n.n*n.p*(1-n.p));
+  document.getElementById("aufgabe-text").innerHTML = '<span class="kontext-icon">'+n.icon+'</span>'+n.kontext;
+  document.getElementById("info-box").innerHTML = `<b>n</b> = ${n.n} &nbsp; <b>p</b> = ${n.p.toFixed(3).replace(".",",")} &nbsp; μ = ${mu.toFixed(2).replace(".",",")} &nbsp; σ ≈ ${sigma.toFixed(2).replace(".",",")}`;
+  document.getElementById("sigma-typ").textContent = `${n.sigmaTyp}σ`;
+  document.getElementById("ein-u").value = "";
+  document.getElementById("ein-o").value = "";
+  document.getElementById("ein-p").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+function grenzen(a) {
+  const mu = a.n*a.p;
+  const sigma = Math.sqrt(a.n*a.p*(1-a.p));
+  const u = Math.max(0, Math.floor(mu - a.sigmaTyp*sigma));
+  const o = Math.min(a.n, Math.ceil(mu + a.sigmaTyp*sigma));
+  return {u, o};
+}
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  const {u, o} = grenzen(akt);
+  const sollP = binomCdf(akt.n, akt.p, u, o);
+  const eu = parseInt(document.getElementById("ein-u").value);
+  const eo = parseInt(document.getElementById("ein-o").value);
+  const ep = parseKomma(document.getElementById("ein-p").value);
+  if (isNaN(eu)||isNaN(eo)||isNaN(ep)) { fb.className="feedback teilweise"; fb.textContent="⚠ Alle Felder."; fb.style.display="block"; return; }
+  const r1 = eu === u, r2 = eo === o;
+  const r3 = Math.abs(ep-sollP) < 0.01;
+  if (r1 && r2 && r3) { fb.className="feedback richtig"; fb.innerHTML="✓ Alles richtig!"; fb.style.display="block"; starteKonfetti(); }
+  else { fb.className="feedback falsch"; fb.innerHTML=`${r1?"✓":"✗"} u &nbsp; ${r2?"✓":"✗"} o &nbsp; ${r3?"✓":"✗"} P`; fb.style.display="block"; }
+}
+function zeigeLoesung() {
+  if (!akt) return;
+  const mu = akt.n*akt.p;
+  const sigma = Math.sqrt(akt.n*akt.p*(1-akt.p));
+  const {u, o} = grenzen(akt);
+  const sollP = binomCdf(akt.n, akt.p, u, o);
+  document.getElementById("loesungsweg").innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p>μ = ${mu.toFixed(2).replace(".",",")}, σ ≈ ${sigma.toFixed(2).replace(".",",")}</p>
+    <p>Reelles Intervall: [${(mu-akt.sigmaTyp*sigma).toFixed(2).replace(".",",")}; ${(mu+akt.sigmaTyp*sigma).toFixed(2).replace(".",",")}]</p>
+    <p>Ganzzahlig (untere abrunden, obere aufrunden): <b>[${u}; ${o}]</b></p>
+    <p>Tatsächliche Wkt: P(${u} ≤ X ≤ ${o}) = binomCdf(${akt.n}; ${akt.p.toFixed(3).replace(".",",")}; ${u}; ${o}) ≈ <b>${sollP.toFixed(3).replace(".",",")}</b></p>
+    <p style="font-size:13px; color:#666;">Faustregel: 1σ ≈ 68 %, 2σ ≈ 95,5 %, 3σ ≈ 99,7 %.</p>
+  `;
+  document.getElementById("loesungsweg").style.display = "block";
+}
+neueAufgabe();
+
+</script>
+
+</body>
+</html>

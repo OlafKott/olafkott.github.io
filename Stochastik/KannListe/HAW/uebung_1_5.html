@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 1.5 — Rechnen mit Wahrscheinlichkeiten</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .schritt-kopf {
+    display: inline-block; background: #C8102E; color: #fff;
+    padding: 2px 10px; border-radius: 3px; font-weight: bold;
+    font-size: 13px; margin-right: 8px;
+  }
+  .opt-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt-buttons button {
+    padding: 8px 16px; border: 1.5px solid #c0c0c0; background: #fff;
+    border-radius: 4px; cursor: pointer; font-family: Georgia, serif;
+    font-size: 14px; transition: all 0.15s;
+  }
+  .opt-buttons button:hover { border-color: #C8102E; background: #fdecea; }
+  .opt-buttons button.gewaehlt { background: #C8102E; color: #fff; border-color: #C8102E; }
+  .opt-buttons button.richtig-gezeigt { background: #eaf5ea; color: #2e7d32; border-color: #2e7d32; font-weight: bold; }
+  .opt-buttons button.falsch-gezeigt { background: #fdecea; color: #C8102E; border-color: #C8102E; opacity: 0.7; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .ergebnis-zeile label { font-weight: bold; }
+  .ergebnis-zeile input {
+    padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 130px; background: #fff;
+  }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>1.5 — Rechnen mit Wahrscheinlichkeiten</h1>
+    <span class="nr">Kompetenz 1.5</span>
+  </div>
+
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <div class="info-box" id="info-box"></div>
+
+    <div class="frage-block">
+      <div class="frage-text"><span class="schritt-kopf">1</span>Welche <b>Mengenoperation</b> ist gesucht?</div>
+      <div class="opt-buttons" id="opt-menge"></div>
+    </div>
+
+    <div class="frage-block">
+      <div class="frage-text"><span class="schritt-kopf">2</span>Berechne die Wahrscheinlichkeit:</div>
+      <div class="ergebnis-zeile">
+        <label>P =</label>
+        <input type="text" id="ein-p" placeholder="z. B. 0,5">
+      </div>
+    </div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) { if (!s && s !== 0) return NaN; return parseFloat(String(s).replace(",",".")); }
+
+// Operationstypen:
+// "vereinigung"   → A ∪ B (A oder B)
+// "schnitt"       → A ∩ B (A und B)
+// "komplement_A"  → A̅   (nicht A)
+// "weder_noch"    → A̅ ∩ B̅ (weder A noch B), wird über 1 − P(A∪B) berechnet
+
+const opts = [
+  { val: "vereinigung", label: "A ∪ B (Vereinigung)" },
+  { val: "schnitt", label: "A ∩ B (Schnitt)" },
+  { val: "komplement_A", label: "A̅ (Komplement von A)" },
+  { val: "weder_noch", label: "A̅ ∩ B̅ (weder noch)" },
+];
+
+const aufgaben = [
+  // "Oder" → Vereinigung
+  { icon: "🎲", kontext: "Ein Würfel wird einmal geworfen.",
+    A_def: 'A = "Augenzahl ist gerade" → P(A) = 0,5',
+    B_def: 'B = "Augenzahl ≥ 5" → P(B) ≈ 0,333',
+    pA: 0.5, pB: 2/6, pAB: 1/6, // P(A∩B) = {6} → 1/6
+    frage: 'Wie wahrscheinlich ist es, dass die Augenzahl <b>gerade ODER mindestens 5</b> ist?',
+    soll_op: "vereinigung" },
+  
+  // "Oder" → Vereinigung (disjunkt)
+  { icon: "🃏", kontext: "Aus einem Skatspiel (32 Karten) wird eine Karte gezogen.",
+    A_def: 'A = "Karte ist ein Bube" → P(A) = 4/32 = 0,125',
+    B_def: 'B = "Karte ist eine Dame" → P(B) = 4/32 = 0,125',
+    pA: 4/32, pB: 4/32, pAB: 0,
+    frage: 'Wie wahrscheinlich ist es, einen <b>Buben ODER eine Dame</b> zu ziehen?',
+    soll_op: "vereinigung" },
+
+  // "Und" → Schnitt
+  { icon: "🎲", kontext: "Ein Würfel wird einmal geworfen.",
+    A_def: 'A = "Augenzahl ist gerade" → P(A) = 0,5',
+    B_def: 'B = "Augenzahl ≥ 5" → P(B) ≈ 0,333',
+    pA: 0.5, pB: 2/6, pAB: 1/6,
+    frage: 'Wie wahrscheinlich ist es, dass die Augenzahl <b>gerade UND mindestens 5</b> ist?',
+    soll_op: "schnitt" },
+  
+  { icon: "🃏", kontext: "Aus einem Skatspiel wird eine Karte gezogen.",
+    A_def: 'A = "Karte ist Herz" → P(A) = 0,25',
+    B_def: 'B = "Karte ist Bube" → P(B) = 0,125',
+    pA: 8/32, pB: 4/32, pAB: 1/32,
+    frage: 'Wie wahrscheinlich ist es, dass die Karte <b>Herz UND Bube</b> ist (also der Herz-Bube)?',
+    soll_op: "schnitt" },
+  
+  // "Nicht" → Komplement
+  { icon: "🎲", kontext: "Ein Würfel wird einmal geworfen.",
+    A_def: 'A = "Augenzahl ist 6" → P(A) ≈ 0,167',
+    B_def: '—',
+    pA: 1/6, pB: 0, pAB: 0,
+    frage: 'Wie wahrscheinlich ist <b>KEINE 6</b>?',
+    soll_op: "komplement_A" },
+  
+  { icon: "🃏", kontext: "Aus einem Skatspiel wird eine Karte gezogen.",
+    A_def: 'A = "Karte ist Herz" → P(A) = 0,25',
+    B_def: '—',
+    pA: 8/32, pB: 0, pAB: 0,
+    frage: 'Wie wahrscheinlich ist es, <b>KEINE Herzkarte</b> zu ziehen?',
+    soll_op: "komplement_A" },
+
+  // "Weder ... noch" → Komplement der Vereinigung
+  { icon: "🃏", kontext: "Aus einem Skatspiel wird eine Karte gezogen.",
+    A_def: 'A = "Bube" → P(A) = 0,125',
+    B_def: 'B = "Dame" → P(B) = 0,125',
+    pA: 4/32, pB: 4/32, pAB: 0,
+    frage: 'Wie wahrscheinlich ist es, <b>weder einen Buben noch eine Dame</b> zu ziehen?',
+    soll_op: "weder_noch" },
+
+  { icon: "🎯", kontext: "Glücksrad mit Farben rot, blau, grün, gelb.",
+    A_def: 'A = "rot" → P(A) = 0,4',
+    B_def: 'B = "blau" → P(B) = 0,3',
+    pA: 0.4, pB: 0.3, pAB: 0,
+    frage: 'Wie wahrscheinlich ist <b>weder rot noch blau</b>?',
+    soll_op: "weder_noch" },
+];
+
+let akt = null;
+let auswahl = null;
+
+function rendereOptionen() {
+  const wrap = document.getElementById("opt-menge");
+  wrap.innerHTML = opts.map(o =>
+    `<button data-val="${o.val}" onclick="wahl('${o.val}')">${o.label}</button>`
+  ).join("");
+}
+
+function wahl(val) {
+  auswahl = val;
+  document.querySelectorAll("#opt-menge button").forEach(b => b.classList.remove("gewaehlt"));
+  document.querySelector(`#opt-menge button[data-val="${val}"]`).classList.add("gewaehlt");
+}
+
+function neueAufgabe() {
+  let n;
+  do { n = aufgaben[Math.floor(Math.random() * aufgaben.length)]; }
+  while (n === akt && aufgaben.length > 1);
+  akt = n;
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + n.icon + '</span>' + n.kontext + '<br><br>' + n.frage;
+  document.getElementById("info-box").innerHTML = n.A_def + (n.B_def !== "—" ? '<br>' + n.B_def : '');
+  rendereOptionen();
+  auswahl = null;
+  document.getElementById("ein-p").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function berechneSoll(op) {
+  if (op === "vereinigung") return akt.pA + akt.pB - akt.pAB;
+  if (op === "schnitt") return akt.pAB;
+  if (op === "komplement_A") return 1 - akt.pA;
+  if (op === "weder_noch") return 1 - (akt.pA + akt.pB - akt.pAB);
+  return NaN;
+}
+
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  const e = parseKomma(document.getElementById("ein-p").value);
+  
+  if (auswahl === null) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Wähle zuerst die Mengenoperation aus.";
+    fb.style.display = "block";
+    return;
+  }
+  if (isNaN(e)) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte auch die Wahrscheinlichkeit eingeben.";
+    fb.style.display = "block";
+    return;
+  }
+  
+  const rOp = auswahl === akt.soll_op;
+  const sollWkt = berechneSoll(akt.soll_op);
+  const rWkt = Math.abs(e - sollWkt) < 0.01;
+  
+  if (rOp && rWkt) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Beides richtig!";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else if (!rOp) {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "✗ Die Mengenoperation stimmt noch nicht. Überlege: Welches Verknüpfungswort steht in der Aufgabe?";
+    fb.style.display = "block";
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = "✓ Mengenoperation richtig, aber die Wahrscheinlichkeit stimmt noch nicht. Schau dir den Lösungsweg an.";
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!akt) return;
+  const sollWkt = berechneSoll(akt.soll_op);
+  
+  // Mengenoperationen in Buttons markieren
+  document.querySelectorAll("#opt-menge button").forEach(b => {
+    b.classList.remove("gewaehlt", "richtig-gezeigt", "falsch-gezeigt");
+    if (b.dataset.val === akt.soll_op) b.classList.add("richtig-gezeigt");
+    else if (b.dataset.val === auswahl) b.classList.add("falsch-gezeigt");
+  });
+  
+  let rechnung = "";
+  let opName = "";
+  if (akt.soll_op === "vereinigung") {
+    opName = "Vereinigung (A ∪ B)";
+    if (akt.pAB === 0) {
+      rechnung = `Da A und B unvereinbar sind: P(A ∪ B) = P(A) + P(B) = ${akt.pA.toFixed(3).replace(".",",")} + ${akt.pB.toFixed(3).replace(".",",")} = <b>${sollWkt.toFixed(3).replace(".",",")}</b>`;
+    } else {
+      rechnung = `Allgemeiner Additionssatz: P(A ∪ B) = P(A) + P(B) − P(A ∩ B) = ${akt.pA.toFixed(3).replace(".",",")} + ${akt.pB.toFixed(3).replace(".",",")} − ${akt.pAB.toFixed(3).replace(".",",")} = <b>${sollWkt.toFixed(3).replace(".",",")}</b>`;
+    }
+  } else if (akt.soll_op === "schnitt") {
+    opName = "Schnitt (A ∩ B)";
+    rechnung = `P(A ∩ B) = <b>${sollWkt.toFixed(3).replace(".",",")}</b> (gegeben bzw. abgelesen)`;
+  } else if (akt.soll_op === "komplement_A") {
+    opName = "Komplement (A̅)";
+    rechnung = `P(A̅) = 1 − P(A) = 1 − ${akt.pA.toFixed(3).replace(".",",")} = <b>${sollWkt.toFixed(3).replace(".",",")}</b>`;
+  } else if (akt.soll_op === "weder_noch") {
+    opName = "Komplement der Vereinigung (A̅ ∩ B̅)";
+    const pUnion = akt.pA + akt.pB - akt.pAB;
+    rechnung = `Erst Vereinigung: P(A ∪ B) = ${pUnion.toFixed(3).replace(".",",")}<br>Dann Komplement: P(A̅ ∩ B̅) = 1 − P(A ∪ B) = 1 − ${pUnion.toFixed(3).replace(".",",")} = <b>${sollWkt.toFixed(3).replace(".",",")}</b>`;
+  }
+  
+  document.getElementById("loesungsweg").innerHTML =
+    '<h3>Lösungsweg</h3>' +
+    '<p><b>Schritt 1:</b> Gesuchte Mengenoperation: <b>' + opName + '</b></p>' +
+    '<p style="font-size:13px; color:#666;">Signalwörter: "oder" → Vereinigung, "und" → Schnitt, "nicht" / "kein" → Komplement, "weder ... noch" → Komplement der Vereinigung.</p>' +
+    '<p><b>Schritt 2:</b> ' + rechnung + '</p>';
+  document.getElementById("loesungsweg").style.display = "block";
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

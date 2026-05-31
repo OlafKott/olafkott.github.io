@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 4.6 — Umkehraufgaben (Querdenker)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block.disabled { opacity: 0.5; pointer-events: none; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .schritt-kopf {
+    display: inline-block; background: #C8102E; color: #fff;
+    padding: 2px 10px; border-radius: 3px; font-weight: bold;
+    font-size: 13px; margin-right: 8px;
+  }
+  .opt-buttons { display: flex; flex-direction: column; gap: 6px; }
+  .opt-buttons-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .opt-buttons button, .opt-buttons-grid button {
+    padding: 10px 16px; border: 1.5px solid #c0c0c0; background: #fff;
+    border-radius: 4px; cursor: pointer; font-family: Georgia, serif;
+    font-size: 15px; text-align: center; transition: all 0.15s;
+  }
+  .opt-buttons button { text-align: left; }
+  .opt-buttons button:hover, .opt-buttons-grid button:hover {
+    border-color: #C8102E; background: #fdecea;
+  }
+  /* Feedback-Zustände direkt am Button */
+  .opt-buttons button.user-richtig, .opt-buttons-grid button.user-richtig {
+    background: #eaf5ea; color: #2e7d32; border-color: #2e7d32; font-weight: bold;
+  }
+  .opt-buttons button.user-falsch, .opt-buttons-grid button.user-falsch {
+    background: #fdecea; color: #C8102E; border-color: #C8102E; opacity: 0.7;
+  }
+  .opt-buttons button.zeigt-richtig, .opt-buttons-grid button.zeigt-richtig {
+    background: #eaf5ea; color: #2e7d32; border-color: #2e7d32; font-weight: bold;
+  }
+  /* Hint-Box, die nach einer falschen Wahl erscheint */
+  .schritt-hint {
+    margin-top: 10px; padding: 8px 12px;
+    background: #fff8e1; border-left: 3px solid #d6a300;
+    border-radius: 0 4px 4px 0; font-size: 14px;
+    display: none;
+  }
+  .schritt-hint.aktiv { display: block; animation: feedback-in 0.3s ease; }
+  .schritt-hint.korrekt { background: #eaf5ea; border-left-color: #2e7d32; color: #2e7d32; }
+  
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .ergebnis-zeile label { font-weight: bold; }
+  .ergebnis-zeile input {
+    padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 110px; background: #fff;
+  }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) {
+    .uebung-kopf h1 { font-size: 16px; }
+    .uebung-body { padding: 16px; }
+    .opt-buttons-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>4.6 — Umkehraufgaben (Querdenker)</h1>
+    <span class="nr">Kompetenz 4.6</span>
+  </div>
+
+  <div class="uebung-body">
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+
+    <div class="info-box" id="info-box"></div>
+
+    <div class="frage-block" id="block-a">
+      <div class="frage-text"><span class="schritt-kopf">a</span>Was ist in dieser Aufgabe <b>gesucht</b>?</div>
+      <div class="opt-buttons-grid" id="opt-gesucht">
+        <button data-val="n">n</button>
+        <button data-val="p">p</button>
+        <button data-val="k">k</button>
+      </div>
+      <div class="schritt-hint" id="hint-a"></div>
+    </div>
+
+    <div class="frage-block disabled" id="block-b">
+      <div class="frage-text"><span class="schritt-kopf">b</span>Welche <b>Bedingung</b> beschreibt die Situation mathematisch?</div>
+      <div class="opt-buttons" id="opt-bed"></div>
+      <div class="schritt-hint" id="hint-b"></div>
+    </div>
+
+    <div class="frage-block disabled" id="block-c">
+      <div class="frage-text"><span class="schritt-kopf">c</span>Berechne das gesuchte Ergebnis:</div>
+      <div class="ergebnis-zeile">
+        <label id="ergebnis-label">? =</label>
+        <input type="text" id="ein-ergebnis" placeholder="?">
+        <span class="hinweis" id="ergebnis-hinweis"></span>
+      </div>
+    </div>
+
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+  </div>
+
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) { if (!s && s !== 0) return NaN; return parseFloat(String(s).replace(",",".")); }
+function binomPdf(n, p, k) {
+  let bk = 1;
+  for (let i = 0; i < k; i++) bk = bk * (n - i) / (i + 1);
+  return bk * Math.pow(p, k) * Math.pow(1-p, n-k);
+}
+function binomCdf(n, p, von, bis) {
+  let s = 0;
+  for (let k = von; k <= bis; k++) s += binomPdf(n, p, k);
+  return s;
+}
+
+// ===== Bedingungs-Typen =====
+// "le_ge": P(X ≤ k) ≥ s   ("höchstens k Treffer mit mindestens s")
+// "le_le": P(X ≤ k) ≤ s   ("höchstens k Treffer mit höchstens s")
+// "ge_ge": P(X ≥ k) ≥ s   ("mindestens k Treffer mit mindestens s")
+// "ge_le": P(X ≥ k) ≤ s   ("mindestens k Treffer mit höchstens s")
+
+const bedLabels = {
+  "le_ge": "P(X ≤ k) ≥ s",
+  "le_le": "P(X ≤ k) ≤ s",
+  "ge_ge": "P(X ≥ k) ≥ s",
+  "ge_le": "P(X ≥ k) ≤ s"
+};
+
+function konkretes_bedLabel(typ, k_text, s) {
+  // Ersetzt k durch konkrete Zahl und s durch konkrete Schwelle
+  const sStr = s.toFixed(2).replace(/0+$/,'').replace(/\.$/,'').replace(".",",");
+  const map = {
+    "le_ge": `P(X ≤ ${k_text}) ≥ ${sStr}`,
+    "le_le": `P(X ≤ ${k_text}) ≤ ${sStr}`,
+    "ge_ge": `P(X ≥ ${k_text}) ≥ ${sStr}`,
+    "ge_le": `P(X ≥ ${k_text}) ≤ ${sStr}`
+  };
+  return map[typ];
+}
+
+// ===== Aufgaben-Pool =====
+// Jede Aufgabe: kontext, info (was gegeben ist), gesucht (n|p|k), bedingung (typ + schwelle + ggf. k-Wert oder festes k)
+// Bei "k gesucht" steht im Bedingungs-Label "k", bei "n/p gesucht" steht ein konkreter Zahlenwert für k (z. B. 1 oder 10).
+const aufgaben = [
+  // GESUCHT: k
+  {
+    icon: "🏭", gesucht: "k",
+    kontext: "Eine Maschine produziert Bauteile, von denen <b>5 % defekt</b> sind. Es werden <b>50 Stück</b> stichprobenartig geprüft.",
+    info: "Gegeben: <b>Stichprobengröße</b> und <b>Defektquote</b>.",
+    n: 50, p: 0.05, k_im_label: "k",
+    bed_typ: "le_ge", schwelle: 0.95,
+    frage_kontext: "Wie viele Defekte dürfen <b>höchstens</b> auftreten, sodass diese Anzahl mit <b>mindestens 95 %</b> Wahrscheinlichkeit nicht überschritten wird?",
+    erklaerung_gesucht: "Gegeben sind n = 50 und p = 0,05. Gesucht ist die Anzahl <b>k</b> der Defekte, die höchstens auftreten dürfen.",
+    erklaerung_bed: "„höchstens k mit mindestens 95 % Wkt“ → die Wahrscheinlichkeit, dass X höchstens k ist, soll mindestens 0,95 betragen: P(X ≤ k) ≥ 0,95."
+  },
+  {
+    icon: "🪙", gesucht: "k",
+    kontext: "Eine <b>Münze</b> wird <b>20-mal</b> geworfen. Beobachtet wird die Anzahl K der „Köpfe“.",
+    info: "Gegeben: <b>Anzahl Würfe</b> und <b>Wahrscheinlichkeit pro Wurf</b>.",
+    n: 20, p: 0.5, k_im_label: "k",
+    bed_typ: "le_ge", schwelle: 0.9,
+    frage_kontext: "Wie viele Köpfe fallen mit <b>mindestens 90 %</b> Wahrscheinlichkeit <b>höchstens</b>?",
+    erklaerung_gesucht: "Gegeben sind n = 20 und p = 0,5. Gesucht ist die Trefferanzahl <b>k</b>.",
+    erklaerung_bed: "„Höchstens k Köpfe mit mindestens 90 % Wkt“ → P(X ≤ k) ≥ 0,9."
+  },
+  {
+    icon: "🎲", gesucht: "k",
+    kontext: "Ein <b>Würfel</b> wird <b>30-mal</b> geworfen. Beobachtet wird die Anzahl der Sechsen.",
+    info: "Gegeben: <b>Anzahl Würfe</b> und <b>Wahrscheinlichkeit pro Wurf</b>.",
+    n: 30, p: 1/6, k_im_label: "k",
+    bed_typ: "ge_ge", schwelle: 0.95,
+    frage_kontext: "Wie viele Sechsen fallen <b>mindestens</b> mit einer Wahrscheinlichkeit von <b>mindestens 95 %</b>?",
+    erklaerung_gesucht: "Gegeben sind n = 30 und p = 1/6. Gesucht ist die Trefferanzahl <b>k</b>.",
+    erklaerung_bed: "„Mindestens k Sechsen mit mindestens 95 % Wkt“ → P(X ≥ k) ≥ 0,95."
+  },
+  {
+    icon: "🎯", gesucht: "k",
+    kontext: "Bei <b>40 Dartwürfen</b> mit einer Trefferwahrscheinlichkeit von <b>30 %</b> pro Wurf wird die Trefferzahl gezählt.",
+    info: "Gegeben: <b>Anzahl Würfe</b> und <b>Trefferwahrscheinlichkeit pro Wurf</b>.",
+    n: 40, p: 0.3, k_im_label: "k",
+    bed_typ: "ge_le", schwelle: 0.1,
+    frage_kontext: "Ab welcher Trefferzahl gilt, dass <b>mindestens</b> diese Anzahl Treffer nur noch mit <b>höchstens 10 %</b> Wahrscheinlichkeit auftreten?",
+    erklaerung_gesucht: "Gegeben sind n = 40 und p = 0,3. Gesucht ist die Trefferanzahl <b>k</b>.",
+    erklaerung_bed: "„Mindestens k Treffer mit höchstens 10 % Wkt“ → P(X ≥ k) ≤ 0,1."
+  },
+  
+  // GESUCHT: n
+  {
+    icon: "🎯", gesucht: "n",
+    kontext: "Ein Dartspieler trifft pro Wurf mit einer Wahrscheinlichkeit von <b>40 %</b>. Er will mit <b>mindestens 99 %</b> Wahrscheinlichkeit <b>mindestens einen</b> Treffer erzielen.",
+    info: "Gegeben: <b>Trefferwahrscheinlichkeit pro Wurf</b> und <b>Mindesttrefferzahl</b>.",
+    p: 0.4, k_fix: 1,
+    bed_typ: "ge_ge", schwelle: 0.99,
+    frage_kontext: "Wie viele Würfe sind mindestens nötig?",
+    erklaerung_gesucht: "Gegeben sind p = 0,4 und die Bedingung „mindestens 1 Treffer mit mindestens 99 % Wkt“. Gesucht ist die Anzahl Versuche <b>n</b>.",
+    erklaerung_bed: "„Mindestens 1 Treffer mit mindestens 99 % Wkt“ → P(X ≥ 1) ≥ 0,99. Suche das kleinste n, das diese Bedingung erfüllt."
+  },
+  {
+    icon: "🃏", gesucht: "n",
+    kontext: "Aus einem Skatspiel wird mit Zurücklegen gezogen. P(Bube) = 1/8 = <b>0,125</b>. Mit <b>mindestens 90 %</b> Wahrscheinlichkeit soll <b>mindestens 1 Bube</b> dabei sein.",
+    info: "Gegeben: <b>Wahrscheinlichkeit pro Ziehung</b> und <b>Mindesttrefferzahl</b>.",
+    p: 0.125, k_fix: 1,
+    bed_typ: "ge_ge", schwelle: 0.9,
+    frage_kontext: "Wie viele Karten müssen mindestens gezogen werden?",
+    erklaerung_gesucht: "Gegeben sind p = 0,125 und die Bedingung „mindestens 1 Bube mit mindestens 90 % Wkt“. Gesucht ist die Anzahl Karten <b>n</b>.",
+    erklaerung_bed: "„Mindestens 1 Bube mit mindestens 90 % Wkt“ → P(X ≥ 1) ≥ 0,9."
+  },
+  {
+    icon: "🏭", gesucht: "n",
+    kontext: "Bei einer Qualitätskontrolle sind <b>2 %</b> der Teile defekt. Es soll mit <b>mindestens 80 %</b> Wahrscheinlichkeit <b>mindestens ein</b> defektes Teil gefunden werden.",
+    info: "Gegeben: <b>Defektquote</b> und <b>Mindestanzahl gefundener Defekte</b>.",
+    p: 0.02, k_fix: 1,
+    bed_typ: "ge_ge", schwelle: 0.8,
+    frage_kontext: "Wie viele Teile müssen mindestens geprüft werden?",
+    erklaerung_gesucht: "Gegeben sind p = 0,02 und die Bedingung „mindestens 1 defektes Teil mit mindestens 80 % Wkt“. Gesucht ist die Anzahl Versuche <b>n</b>.",
+    erklaerung_bed: "„Mindestens 1 Treffer mit mindestens 80 % Wkt“ → P(X ≥ 1) ≥ 0,8."
+  },
+  
+  // GESUCHT: p
+  {
+    icon: "🏭", gesucht: "p",
+    kontext: "Bei einer Stichprobe von <b>100</b> Bauteilen sollen mit <b>mindestens 95 % Wahrscheinlichkeit höchstens 10 defekte</b> Teile gefunden werden.",
+    info: "Gegeben: <b>Stichprobengröße</b> und <b>maximale Trefferzahl</b>.",
+    n: 100, k_fix: 10,
+    bed_typ: "le_ge", schwelle: 0.95,
+    frage_kontext: "Welche Defektquote darf die Produktion höchstens haben?",
+    erklaerung_gesucht: "Gegeben sind n = 100 und die Bedingung „höchstens 10 Defekte mit mindestens 95 % Wkt“. Gesucht ist die Defektquote <b>p</b>.",
+    erklaerung_bed: "„Höchstens 10 Defekte mit mindestens 95 % Wkt“ → P(X ≤ 10) ≥ 0,95."
+  },
+  {
+    icon: "🎲", gesucht: "p",
+    kontext: "Bei einem Würfelspiel werden <b>50</b> Würfe durchgeführt. Mit <b>mindestens 90 % Wahrscheinlichkeit</b> sollen <b>höchstens 15</b> Treffer auftreten.",
+    info: "Gegeben: <b>Anzahl Würfe</b> und <b>maximale Trefferzahl</b>.",
+    n: 50, k_fix: 15,
+    bed_typ: "le_ge", schwelle: 0.9,
+    frage_kontext: "Wie groß darf die Trefferwahrscheinlichkeit pro Wurf höchstens sein?",
+    erklaerung_gesucht: "Gegeben sind n = 50 und die Bedingung „höchstens 15 Treffer mit mindestens 90 % Wkt“. Gesucht ist die Trefferwahrscheinlichkeit <b>p</b>.",
+    erklaerung_bed: "„Höchstens 15 Treffer mit mindestens 90 % Wkt“ → P(X ≤ 15) ≥ 0,9."
+  }
+];
+
+// ===== State =====
+let akt = null;
+let auswahl_gesucht = null;
+let auswahl_bed = null;
+let aufgedeckt_a = false;
+let aufgedeckt_b = false;
+
+function aktivBlock(id, aktiv) {
+  const el = document.getElementById(id);
+  if (aktiv) el.classList.remove("disabled");
+  else el.classList.add("disabled");
+}
+
+function neueAufgabe() {
+  let n;
+  do { n = aufgaben[Math.floor(Math.random()*aufgaben.length)]; }
+  while (n === akt && aufgaben.length > 1);
+  akt = n;
+  
+  document.getElementById("aufgabe-text").innerHTML =
+    '<span class="kontext-icon">' + n.icon + '</span>' + n.kontext + '<br><br>' + n.frage_kontext;
+  document.getElementById("info-box").innerHTML = n.info;
+  
+  // a) Auswahl reset
+  auswahl_gesucht = null;
+  aufgedeckt_a = false;
+  document.querySelectorAll("#opt-gesucht button").forEach(b => {
+    b.classList.remove("user-richtig", "user-falsch", "zeigt-richtig");
+    b.disabled = false;
+  });
+  document.getElementById("hint-a").classList.remove("aktiv", "korrekt");
+  document.getElementById("hint-a").innerHTML = "";
+  
+  // b) Bedingungs-Optionen vorbereiten
+  rendereBedingungen();
+  aktivBlock("block-b", false);
+  aktivBlock("block-c", false);
+  document.getElementById("hint-b").classList.remove("aktiv", "korrekt");
+  document.getElementById("hint-b").innerHTML = "";
+  
+  // c) Reset
+  document.getElementById("ein-ergebnis").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+
+function rendereBedingungen() {
+  const wrap = document.getElementById("opt-bed");
+  // 4 Bedingungs-Optionen, abhängig vom Aufgabentyp
+  // Bei "k gesucht" erscheint im Label "k"
+  // Bei "n/p gesucht" erscheint die konkrete k-Zahl
+  const k_text = akt.gesucht === "k" ? "k" : akt.k_fix.toString();
+  const typen = ["le_ge", "le_le", "ge_ge", "ge_le"];
+  wrap.innerHTML = typen.map(t =>
+    `<button data-typ="${t}" onclick="wahlBed('${t}')">${konkretes_bedLabel(t, k_text, akt.schwelle)}</button>`
+  ).join("");
+  auswahl_bed = null;
+  aufgedeckt_b = false;
+  document.querySelectorAll("#opt-bed button").forEach(b => {
+    b.classList.remove("user-richtig", "user-falsch", "zeigt-richtig");
+    b.disabled = false;
+  });
+}
+
+// === a) Wahl: was ist gesucht? ===
+document.querySelectorAll("#opt-gesucht button").forEach(b => {
+  b.addEventListener("click", () => {
+    if (aufgedeckt_a) return;
+    auswahl_gesucht = b.dataset.val;
+    aufgedeckt_a = true;
+    
+    const richtig = auswahl_gesucht === akt.gesucht;
+    
+    // Buttons markieren
+    document.querySelectorAll("#opt-gesucht button").forEach(btn => {
+      if (btn.dataset.val === akt.gesucht) {
+        btn.classList.add(richtig ? "user-richtig" : "zeigt-richtig");
+      } else if (btn.dataset.val === auswahl_gesucht && !richtig) {
+        btn.classList.add("user-falsch");
+      }
+      btn.disabled = true;
+    });
+    
+    // Hint anzeigen
+    const hint = document.getElementById("hint-a");
+    hint.classList.add("aktiv");
+    if (richtig) {
+      hint.classList.add("korrekt");
+      hint.innerHTML = `✓ <b>Richtig!</b> ${akt.erklaerung_gesucht}`;
+    } else {
+      hint.innerHTML = `✗ Leider falsch. Gesucht ist <b>${akt.gesucht}</b>. ${akt.erklaerung_gesucht}`;
+    }
+    
+    // b) freischalten
+    aktivBlock("block-b", true);
+  });
+});
+
+// === b) Wahl: welche Bedingung? ===
+function wahlBed(typ) {
+  if (aufgedeckt_b) return;
+  auswahl_bed = typ;
+  aufgedeckt_b = true;
+  
+  const richtig = auswahl_bed === akt.bed_typ;
+  
+  // Buttons markieren
+  document.querySelectorAll("#opt-bed button").forEach(btn => {
+    if (btn.dataset.typ === akt.bed_typ) {
+      btn.classList.add(richtig ? "user-richtig" : "zeigt-richtig");
+    } else if (btn.dataset.typ === auswahl_bed && !richtig) {
+      btn.classList.add("user-falsch");
+    }
+    btn.disabled = true;
+  });
+  
+  // Hint
+  const hint = document.getElementById("hint-b");
+  hint.classList.add("aktiv");
+  if (richtig) {
+    hint.classList.add("korrekt");
+    hint.innerHTML = `✓ <b>Richtig!</b> ${akt.erklaerung_bed}`;
+  } else {
+    const k_text = akt.gesucht === "k" ? "k" : akt.k_fix.toString();
+    hint.innerHTML = `✗ Leider falsch. Die richtige Bedingung ist <b>${konkretes_bedLabel(akt.bed_typ, k_text, akt.schwelle)}</b>. ${akt.erklaerung_bed}`;
+  }
+  
+  // c) freischalten + Label/Hinweis anpassen
+  aktivBlock("block-c", true);
+  if (akt.gesucht === "k") {
+    document.getElementById("ergebnis-label").textContent = "k =";
+    document.getElementById("ergebnis-hinweis").textContent = "(ganzzahliger Wert)";
+  } else if (akt.gesucht === "n") {
+    document.getElementById("ergebnis-label").textContent = "n =";
+    document.getElementById("ergebnis-hinweis").textContent = "(ganzzahliger Wert)";
+  } else if (akt.gesucht === "p") {
+    document.getElementById("ergebnis-label").textContent = "p ≤";
+    document.getElementById("ergebnis-hinweis").textContent = "(zwei bis drei Nachkommastellen)";
+  }
+}
+
+// === Sollwert-Berechnung ===
+function berechneSoll(a) {
+  if (a.gesucht === "k") {
+    if (a.bed_typ === "le_ge") {
+      // Kleinstes k mit P(X ≤ k) ≥ s
+      for (let k = 0; k <= a.n; k++) {
+        if (binomCdf(a.n, a.p, 0, k) >= a.schwelle) return k;
+      }
+      return a.n;
+    } else if (a.bed_typ === "le_le") {
+      // Größtes k mit P(X ≤ k) ≤ s
+      for (let k = a.n; k >= 0; k--) {
+        if (binomCdf(a.n, a.p, 0, k) <= a.schwelle) return k;
+      }
+      return 0;
+    } else if (a.bed_typ === "ge_ge") {
+      // Größtes k mit P(X ≥ k) ≥ s
+      for (let k = a.n; k >= 0; k--) {
+        if (binomCdf(a.n, a.p, k, a.n) >= a.schwelle) return k;
+      }
+      return 0;
+    } else if (a.bed_typ === "ge_le") {
+      // Kleinstes k mit P(X ≥ k) ≤ s
+      for (let k = 0; k <= a.n; k++) {
+        if (binomCdf(a.n, a.p, k, a.n) <= a.schwelle) return k;
+      }
+      return a.n;
+    }
+  } else if (a.gesucht === "n") {
+    // Bei n suchen wir das kleinste n, für das die Bedingung gilt
+    // Wir betrachten hier den Standardfall ge_ge: P(X ≥ k_fix) ≥ s
+    // Für andere Typen: analog
+    for (let n = 1; n <= 5000; n++) {
+      let val;
+      if (a.bed_typ === "le_ge") val = binomCdf(n, a.p, 0, a.k_fix);
+      else if (a.bed_typ === "le_le") val = binomCdf(n, a.p, 0, a.k_fix);
+      else if (a.bed_typ === "ge_ge") val = binomCdf(n, a.p, a.k_fix, n);
+      else if (a.bed_typ === "ge_le") val = binomCdf(n, a.p, a.k_fix, n);
+      
+      let erfuellt;
+      if (a.bed_typ === "le_ge") erfuellt = val >= a.schwelle;
+      else if (a.bed_typ === "le_le") erfuellt = val <= a.schwelle;
+      else if (a.bed_typ === "ge_ge") erfuellt = val >= a.schwelle;
+      else if (a.bed_typ === "ge_le") erfuellt = val <= a.schwelle;
+      
+      if (erfuellt) return n;
+    }
+    return 5000;
+  } else if (a.gesucht === "p") {
+    // Bisektion: größtes p mit Bedingung erfüllt
+    // Bei le_ge: P(X ≤ k_fix) ≥ s — sinkt mit steigendem p → größtes p suchen
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 60; i++) {
+      const mid = (lo+hi)/2;
+      let val;
+      if (a.bed_typ === "le_ge") val = binomCdf(a.n, mid, 0, a.k_fix);
+      else if (a.bed_typ === "le_le") val = binomCdf(a.n, mid, 0, a.k_fix);
+      else if (a.bed_typ === "ge_ge") val = binomCdf(a.n, mid, a.k_fix, a.n);
+      else if (a.bed_typ === "ge_le") val = binomCdf(a.n, mid, a.k_fix, a.n);
+      
+      let erfuellt;
+      if (a.bed_typ === "le_ge") erfuellt = val >= a.schwelle;
+      else if (a.bed_typ === "le_le") erfuellt = val <= a.schwelle;
+      else if (a.bed_typ === "ge_ge") erfuellt = val >= a.schwelle;
+      else if (a.bed_typ === "ge_le") erfuellt = val <= a.schwelle;
+      
+      if (erfuellt) lo = mid;
+      else hi = mid;
+    }
+    return lo;
+  }
+  return NaN;
+}
+
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  
+  if (!aufgedeckt_a || !aufgedeckt_b) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte zuerst a) und b) bearbeiten.";
+    fb.style.display = "block";
+    return;
+  }
+  
+  const e = parseKomma(document.getElementById("ein-ergebnis").value);
+  if (isNaN(e)) {
+    fb.className = "feedback teilweise";
+    fb.textContent = "⚠ Bitte das Ergebnis (c) eingeben.";
+    fb.style.display = "block";
+    return;
+  }
+  
+  const soll = berechneSoll(akt);
+  let rErg;
+  if (akt.gesucht === "p") rErg = Math.abs(e - soll) < 0.015;
+  else rErg = parseInt(e) === parseInt(soll);
+  
+  // a) und b) — der Schüler hat das Feedback schon bekommen, aber wir bilden die Gesamtbewertung
+  const rA = auswahl_gesucht === akt.gesucht;
+  const rB = auswahl_bed === akt.bed_typ;
+  
+  if (rA && rB && rErg) {
+    fb.className = "feedback richtig";
+    fb.innerHTML = "✓ Alle drei Teilaufgaben richtig!";
+    fb.style.display = "block";
+    starteKonfetti();
+  } else if (rErg) {
+    // Ergebnis stimmt, aber a) oder b) waren falsch
+    fb.className = "feedback teilweise";
+    fb.innerHTML = `Ergebnis ist richtig! ${rA?"":"a) ✗ &nbsp;"} ${rB?"":"b) ✗ &nbsp;"} Auch wenn du die Auswahl korrigieren musstest, hast du die Berechnung gemeistert.`;
+    fb.style.display = "block";
+  } else {
+    fb.className = "feedback falsch";
+    fb.innerHTML = `${rA?"✓":"✗"} a) &nbsp; ${rB?"✓":"✗"} b) &nbsp; ✗ c) Ergebnis stimmt nicht. Schau dir den Lösungsweg an.`;
+    fb.style.display = "block";
+  }
+}
+
+function zeigeLoesung() {
+  if (!akt) return;
+  
+  // a) und b) aufdecken, falls noch nicht
+  if (!aufgedeckt_a) {
+    document.querySelectorAll("#opt-gesucht button").forEach(btn => {
+      if (btn.dataset.val === akt.gesucht) btn.classList.add("zeigt-richtig");
+      btn.disabled = true;
+    });
+    document.getElementById("hint-a").classList.add("aktiv");
+    document.getElementById("hint-a").innerHTML = `Richtig ist: <b>${akt.gesucht}</b>. ${akt.erklaerung_gesucht}`;
+    aufgedeckt_a = true;
+    aktivBlock("block-b", true);
+  }
+  if (!aufgedeckt_b) {
+    document.querySelectorAll("#opt-bed button").forEach(btn => {
+      if (btn.dataset.typ === akt.bed_typ) btn.classList.add("zeigt-richtig");
+      btn.disabled = true;
+    });
+    const k_text = akt.gesucht === "k" ? "k" : akt.k_fix.toString();
+    document.getElementById("hint-b").classList.add("aktiv");
+    document.getElementById("hint-b").innerHTML = `Richtig ist: <b>${konkretes_bedLabel(akt.bed_typ, k_text, akt.schwelle)}</b>. ${akt.erklaerung_bed}`;
+    aufgedeckt_b = true;
+    aktivBlock("block-c", true);
+  }
+  
+  const soll = berechneSoll(akt);
+  let rechnung;
+  
+  if (akt.gesucht === "k") {
+    const ks = [];
+    for (let k = Math.max(0, soll-2); k <= Math.min(akt.n, soll+2); k++) {
+      let val, label;
+      if (akt.bed_typ === "le_ge" || akt.bed_typ === "le_le") {
+        val = binomCdf(akt.n, akt.p, 0, k); label = "P(X≤k)";
+      } else {
+        val = binomCdf(akt.n, akt.p, k, akt.n); label = "P(X≥k)";
+      }
+      ks.push({ k, val, label });
+    }
+    let tab = '<table style="border-collapse:collapse; margin:6px 0;"><tr><th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">k</th>';
+    ks.forEach(r => { tab += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px; ${r.k === soll ? 'background:#eaf5ea; font-weight:bold;' : ''}">${r.k}</td>`; });
+    tab += `</tr><tr><th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">${ks[0].label}</th>`;
+    ks.forEach(r => { tab += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px; ${r.k === soll ? 'background:#eaf5ea; font-weight:bold;' : ''}">${r.val.toFixed(3).replace(".",",")}</td>`; });
+    tab += '</tr></table>';
+    rechnung = tab + `<p>Gesuchtes <b>k = ${soll}</b></p>`;
+  } else if (akt.gesucht === "n") {
+    const ns = [];
+    for (let n = Math.max(1, soll-2); n <= soll+2; n++) {
+      let val;
+      if (akt.bed_typ === "le_ge" || akt.bed_typ === "le_le") val = binomCdf(n, akt.p, 0, akt.k_fix);
+      else val = binomCdf(n, akt.p, akt.k_fix, n);
+      ns.push({ n, val });
+    }
+    let tab = '<table style="border-collapse:collapse; margin:6px 0;"><tr><th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">n</th>';
+    ns.forEach(r => { tab += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px; ${r.n === soll ? 'background:#eaf5ea; font-weight:bold;' : ''}">${r.n}</td>`; });
+    const label = (akt.bed_typ === "le_ge" || akt.bed_typ === "le_le") ? `P(X≤${akt.k_fix})` : `P(X≥${akt.k_fix})`;
+    tab += `</tr><tr><th style="border:1.5px solid #1a1a1a; background:#f5e6e8; color:#C8102E; padding:6px 12px;">${label}</th>`;
+    ns.forEach(r => { tab += `<td style="border:1.5px solid #1a1a1a; padding:6px 12px; ${r.n === soll ? 'background:#eaf5ea; font-weight:bold;' : ''}">${r.val.toFixed(3).replace(".",",")}</td>`; });
+    tab += '</tr></table>';
+    rechnung = tab + `<p>Gesuchtes <b>n = ${soll}</b></p>`;
+  } else if (akt.gesucht === "p") {
+    let label = (akt.bed_typ === "le_ge" || akt.bed_typ === "le_le") ? `P(X ≤ ${akt.k_fix})` : `P(X ≥ ${akt.k_fix})`;
+    let probe;
+    if (akt.bed_typ === "le_ge" || akt.bed_typ === "le_le") probe = binomCdf(akt.n, soll, 0, akt.k_fix);
+    else probe = binomCdf(akt.n, soll, akt.k_fix, akt.n);
+    rechnung = `<p>Mit numerischer Suche (Bisektion oder CAS): größtes p, sodass ${konkretes_bedLabel(akt.bed_typ, akt.k_fix, akt.schwelle)} gilt.</p>` +
+      `<p>Ergebnis: <b>p ≤ ${soll.toFixed(3).replace(".",",")}</b></p>` +
+      `<p style="font-size:13px; color:#666;">Probe: ${label} mit n = ${akt.n}, p = ${soll.toFixed(3).replace(".",",")} ergibt ${probe.toFixed(3).replace(".",",")} (≈ Schwelle).</p>`;
+  }
+  
+  document.getElementById("loesungsweg").innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p><b>a) Gesucht:</b> <b>${akt.gesucht}</b> — ${akt.erklaerung_gesucht}</p>
+    <p><b>b) Bedingung:</b> <b>${konkretes_bedLabel(akt.bed_typ, akt.gesucht === "k" ? "k" : akt.k_fix, akt.schwelle)}</b> — ${akt.erklaerung_bed}</p>
+    <p><b>c) Berechnung:</b></p>
+    ${rechnung}
+  `;
+  document.getElementById("loesungsweg").style.display = "block";
+}
+
+neueAufgabe();
+</script>
+
+</body>
+</html>

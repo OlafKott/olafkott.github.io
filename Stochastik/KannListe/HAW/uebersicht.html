@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übungen Stochastik · Übersicht</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 30px 16px;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header {
+    background: #C8102E; color: #fff; padding: 24px 28px;
+    border-radius: 6px; margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .header h1 { margin: 0 0 6px 0; font-size: 26px; }
+  .header .subtitle { font-size: 16px; opacity: 0.95; font-style: italic; }
+  .bereich {
+    background: #fff; border: 1px solid #d4d4d4; border-radius: 6px;
+    margin-bottom: 24px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .bereich-titel {
+    background: #f5e6e8; color: #C8102E;
+    padding: 14px 22px; font-weight: bold; font-size: 18px;
+    border-bottom: 2px solid #C8102E;
+  }
+  .uebungen-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px; padding: 18px;
+  }
+  .uebung-karte {
+    background: #fafafa; border: 1px solid #ececec; border-radius: 4px;
+    padding: 14px 16px; text-decoration: none; color: inherit;
+    transition: all 0.15s; display: flex; flex-direction: column; gap: 6px;
+  }
+  .uebung-karte:hover {
+    background: #fff8e1; border-color: #C8102E;
+    transform: translateY(-2px); box-shadow: 0 4px 10px rgba(200,16,46,0.1);
+  }
+  .uebung-karte .nr {
+    display: inline-block; background: #C8102E; color: #fff;
+    padding: 2px 8px; border-radius: 3px; font-weight: bold;
+    font-size: 13px; align-self: flex-start;
+  }
+  .uebung-karte .titel { font-weight: bold; font-size: 15px; margin-top: 2px; }
+  .uebung-karte .beschr { font-size: 13px; color: #555; }
+  .footer {
+    text-align: center; padding: 20px 0; font-size: 13px; color: #888;
+    border-top: 1px solid #ececec; margin-top: 30px;
+  }
+  @media (max-width: 600px) {
+    .header h1 { font-size: 20px; }
+    .uebungen-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Übungen zur Stochastik</h1>
+    <div class="subtitle">25 interaktive Aufgaben · Jahrgang 12 HAW · RWB Berufskolleg Essen</div>
+  </div>
+
+  <div class="bereich">
+    <div class="bereich-titel">1. Grundbegriffe der Wahrscheinlichkeitstheorie</div>
+    <div class="uebungen-grid">
+      <a href="uebung_1_1.html" class="uebung-karte"><span class="nr">1.1</span>
+        <div class="titel">Zufallsexperimente erkennen</div>
+        <div class="beschr">Ein-/mehrstufig, Ergebnismenge bestimmen</div></a>
+      <a href="uebung_1_2.html" class="uebung-karte"><span class="nr">1.2</span>
+        <div class="titel">Laplace erkennen</div>
+        <div class="beschr">Beispiel / Gegenbeispiel</div></a>
+      <a href="uebung_1_3.html" class="uebung-karte"><span class="nr">1.3</span>
+        <div class="titel">Laplace-Wahrscheinlichkeiten</div>
+        <div class="beschr">günstige / mögliche Ergebnisse</div></a>
+      <a href="uebung_1_4.html" class="uebung-karte"><span class="nr">1.4</span>
+        <div class="titel">Mengenlehre</div>
+        <div class="beschr">A∪B, A∩B, Komplement</div></a>
+      <a href="uebung_1_5.html" class="uebung-karte"><span class="nr">1.5</span>
+        <div class="titel">Rechnen mit Wahrscheinlichkeiten</div>
+        <div class="beschr">Komplement, Additionssatz</div></a>
+      <a href="uebung_1_6.html" class="uebung-karte"><span class="nr">1.6</span>
+        <div class="titel">Baumdiagramm & Pfadregeln</div>
+        <div class="beschr">Multiplizieren & Addieren</div></a>
+      <a href="uebung_1_7.html" class="uebung-karte"><span class="nr">1.7</span>
+        <div class="titel">Gesetz der großen Zahlen</div>
+        <div class="beschr">Interaktive Simulation</div></a>
+    </div>
+  </div>
+
+  <div class="bereich">
+    <div class="bereich-titel">2. Bedingte Wahrscheinlichkeit</div>
+    <div class="uebungen-grid">
+      <a href="uebung_2_1.html" class="uebung-karte"><span class="nr">2.1</span>
+        <div class="titel">Vierfeldertafel ausfüllen</div>
+        <div class="beschr">Innenfelder und Randsummen</div></a>
+      <a href="uebung_2_2.html" class="uebung-karte"><span class="nr">2.2</span>
+        <div class="titel">Tafel ↔ Baumdiagramm</div>
+        <div class="beschr">Bedingte Wkt aus Tafel ablesen</div></a>
+      <a href="uebung_2_3.html" class="uebung-karte"><span class="nr">2.3</span>
+        <div class="titel">Bedingte Wahrscheinlichkeiten</div>
+        <div class="beschr">P_A(B) und P_B(A) berechnen</div></a>
+      <a href="uebung_2_4.html" class="uebung-karte"><span class="nr">2.4</span>
+        <div class="titel">Inverses Baumdiagramm</div>
+        <div class="beschr">Reihenfolge der Stufen vertauschen</div></a>
+      <a href="uebung_2_5.html" class="uebung-karte"><span class="nr">2.5</span>
+        <div class="titel">Totale Wkt & Bayes</div>
+        <div class="beschr">Bedingung "umdrehen"</div></a>
+      <a href="uebung_2_6.html" class="uebung-karte"><span class="nr">2.6</span>
+        <div class="titel">Stochastische Unabhängigkeit</div>
+        <div class="beschr">Rechnerisch prüfen</div></a>
+      <a href="uebung_2_7.html" class="uebung-karte"><span class="nr">2.7</span>
+        <div class="titel">Unabhängigkeit visuell</div>
+        <div class="beschr">An Vierfeldertafel erkennen</div></a>
+    </div>
+  </div>
+
+  <div class="bereich">
+    <div class="bereich-titel">3. Zufallsvariablen</div>
+    <div class="uebungen-grid">
+      <a href="uebung_3_1.html" class="uebung-karte"><span class="nr">3.1</span>
+        <div class="titel">Zufallsvariable & Verteilung</div>
+        <div class="beschr">Lücken ergänzen, Modus bestimmen</div></a>
+      <a href="uebung_3_2.html" class="uebung-karte"><span class="nr">3.2</span>
+        <div class="titel">Erwartungswert</div>
+        <div class="beschr">E(X), faire Spiele</div></a>
+      <a href="uebung_3_3.html" class="uebung-karte"><span class="nr">3.3</span>
+        <div class="titel">Varianz & Standardabweichung</div>
+        <div class="beschr">V(X), σ(X)</div></a>
+    </div>
+  </div>
+
+  <div class="bereich">
+    <div class="bereich-titel">4. Binomialverteilung</div>
+    <div class="uebungen-grid">
+      <a href="uebung_4_1.html" class="uebung-karte"><span class="nr">4.1</span>
+        <div class="titel">Bernoulli-Experimente</div>
+        <div class="beschr">Bernoulli-Kette erkennen</div></a>
+      <a href="uebung_4_2.html" class="uebung-karte"><span class="nr">4.2</span>
+        <div class="titel">Binomialkoeffizient</div>
+        <div class="beschr">(n über k) berechnen</div></a>
+      <a href="uebung_4_3.html" class="uebung-karte"><span class="nr">4.3</span>
+        <div class="titel">Bernoulli-Formel</div>
+        <div class="beschr">Genau k Treffer (binomPdf)</div></a>
+      <a href="uebung_4_4.html" class="uebung-karte"><span class="nr">4.4</span>
+        <div class="titel">Höchstens / mindestens / Intervall</div>
+        <div class="beschr">Summierte Wkt (binomCdf)</div></a>
+      <a href="uebung_4_5.html" class="uebung-karte"><span class="nr">4.5</span>
+        <div class="titel">E(X) und σ(X)</div>
+        <div class="beschr">Binomialverteilung</div></a>
+      <a href="uebung_4_6.html" class="uebung-karte"><span class="nr">4.6</span>
+        <div class="titel">Umkehraufgaben</div>
+        <div class="beschr">Gesuchtes k via Wertetabelle</div></a>
+      <a href="uebung_4_7.html" class="uebung-karte"><span class="nr">4.7</span>
+        <div class="titel">B-/F-Histogramm</div>
+        <div class="beschr">n und p ablesen</div></a>
+      <a href="uebung_4_8.html" class="uebung-karte"><span class="nr">4.8</span>
+        <div class="titel">Sigma-Regeln</div>
+        <div class="beschr">σ-Intervalle, tatsächliche Wkt</div></a>
+    </div>
+  </div>
+
+  <div class="footer">
+    RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW
+  </div>
+</div>
+
+</body>
+</html>

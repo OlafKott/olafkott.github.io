@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 2.5 — Totale Wahrscheinlichkeit & Bayes</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ergebnis-zeile label { font-weight: bold; min-width: 80px; }
+  .ergebnis-zeile input { padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 140px; background: #fff; }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>2.5 — Totale Wahrscheinlichkeit & Bayes</h1>
+    <span class="nr">Kompetenz 2.5</span>
+  </div>
+  <div class="uebung-body">
+    
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+    <div class="info-box" id="info-box"></div>
+    <div class="frage-block">
+      <div class="frage-text" id="f1-text">Berechne die <b>totale Wahrscheinlichkeit</b>:</div>
+      <div class="ergebnis-zeile">
+        <label id="f1-label">P(B) =</label>
+        <input type="text" id="ein-1" placeholder="z. B. 0,2">
+      </div>
+      <div class="hinweis">P(B) = P(A)·P<sub>A</sub>(B) + P(A̅)·P<sub>A̅</sub>(B)</div>
+    </div>
+    <div class="frage-block">
+      <div class="frage-text" id="f2-text">Berechne mit dem <b>Satz von Bayes</b>:</div>
+      <div class="ergebnis-zeile">
+        <label id="f2-label">P<sub>B</sub>(A) =</label>
+        <input type="text" id="ein-2" placeholder="z. B. 0,6">
+      </div>
+      <div class="hinweis">P<sub>B</sub>(A) = P(A)·P<sub>A</sub>(B) / P(B)</div>
+    </div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+    
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) {
+  if (!s && s !== 0) return NaN;
+  return parseFloat(String(s).replace(",","."));
+}
+
+
+const aufgaben = [
+  { icon: "🩺", text: "Ein Test erkennt eine Krankheit. <b>5 %</b> der Personen haben die Krankheit (A). Bei Kranken zeigt der Test mit <b>95 %</b> positiv (B), bei Gesunden fälschlich mit <b>10 %</b> positiv.",
+    pA: 0.05, pB_A: 0.95, pB_nA: 0.10, A: "krank", B: "Test positiv" },
+  { icon: "🏭", text: "Eine Fabrik bezieht <b>60 %</b> Bauteile von Lieferant A, Rest von B. Bei A sind <b>2 %</b> defekt (D), bei B <b>5 %</b>.",
+    pA: 0.6, pB_A: 0.02, pB_nA: 0.05, A: "Lieferant A", B: "Defekt" },
+  { icon: "📧", text: "<b>30 %</b> aller E-Mails sind Spam (A). Spam-E-Mails enthalten zu <b>80 %</b> das Wort \"Rabatt\" (B), normale Mails nur zu <b>5 %</b>.",
+    pA: 0.3, pB_A: 0.8, pB_nA: 0.05, A: "Spam", B: "enthält \"Rabatt\"" },
+];
+let akt = null;
+function neueAufgabe() {
+  let n; do { n=aufgaben[Math.floor(Math.random()*aufgaben.length)]; } while(n===akt && aufgaben.length>1); akt=n;
+  document.getElementById("aufgabe-text").innerHTML = '<span class="kontext-icon">'+n.icon+'</span>'+n.text;
+  document.getElementById("info-box").innerHTML = `<b>A</b> = ${n.A} &nbsp; <b>B</b> = ${n.B}<br>P(A) = ${n.pA.toFixed(2).replace(".",",")} &nbsp; P<sub>A</sub>(B) = ${n.pB_A.toFixed(2).replace(".",",")} &nbsp; P<sub>A̅</sub>(B) = ${n.pB_nA.toFixed(2).replace(".",",")}`;
+  document.getElementById("ein-1").value = "";
+  document.getElementById("ein-2").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  const e1 = parseKomma(document.getElementById("ein-1").value);
+  const e2 = parseKomma(document.getElementById("ein-2").value);
+  const s1 = akt.pA*akt.pB_A + (1-akt.pA)*akt.pB_nA;
+  const s2 = akt.pA*akt.pB_A / s1;
+  if (isNaN(e1)||isNaN(e2)) { fb.className="feedback teilweise"; fb.textContent="⚠ Beide ausfüllen."; fb.style.display="block"; return; }
+  const r1 = Math.abs(e1-s1)<0.01, r2 = Math.abs(e2-s2)<0.01;
+  if (r1 && r2) { fb.className="feedback richtig"; fb.innerHTML="✓ Beide richtig!"; fb.style.display="block"; starteKonfetti(); }
+  else { fb.className="feedback falsch"; fb.innerHTML=`${r1?"✓":"✗"} 1) &nbsp; ${r2?"✓":"✗"} 2)`; fb.style.display="block"; }
+}
+function zeigeLoesung() {
+  if (!akt) return;
+  const s1 = akt.pA*akt.pB_A + (1-akt.pA)*akt.pB_nA;
+  const s2 = akt.pA*akt.pB_A / s1;
+  document.getElementById("loesungsweg").innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p><b>Totale Wkt:</b> P(B) = P(A)·P<sub>A</sub>(B) + P(A̅)·P<sub>A̅</sub>(B)<br>
+    = ${akt.pA.toFixed(2).replace(".",",")}·${akt.pB_A.toFixed(2).replace(".",",")} + ${(1-akt.pA).toFixed(2).replace(".",",")}·${akt.pB_nA.toFixed(2).replace(".",",")} = <b>${s1.toFixed(4).replace(".",",")}</b></p>
+    <p><b>Bayes:</b> P<sub>B</sub>(A) = P(A)·P<sub>A</sub>(B) / P(B) = ${(akt.pA*akt.pB_A).toFixed(4).replace(".",",")} / ${s1.toFixed(4).replace(".",",")} = <b>${s2.toFixed(4).replace(".",",")}</b></p>
+  `;
+  document.getElementById("loesungsweg").style.display = "block";
+}
+neueAufgabe();
+
+</script>
+
+</body>
+</html>

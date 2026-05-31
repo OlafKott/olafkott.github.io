@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung 4.3 — Bernoulli-Formel anwenden</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 20px 16px; font-family: Georgia, "Times New Roman", serif;
+    background: #f9f8f6; color: #1a1a1a; line-height: 1.5; min-height: 100vh; }
+  .uebung-box { max-width: 820px; margin: 0 auto; background: #fff;
+    border: 1px solid #d4d4d4; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .uebung-kopf { background: #C8102E; color: #fff; padding: 14px 22px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .uebung-kopf h1 { margin: 0; font-size: 18px; font-weight: bold; }
+  .uebung-kopf .nr { background: #fff; color: #C8102E; padding: 3px 10px;
+    border-radius: 4px; font-weight: bold; font-size: 14px; }
+  .uebung-body { padding: 22px; }
+  .aufgabe { background: #fff8e1; border-left: 4px solid #d6a300;
+    padding: 14px 18px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .aufgabe h2 { margin: 0 0 8px 0; font-size: 14px; color: #8a6800;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold; }
+  .aufgabe-text { font-size: 16px; }
+  .aufgabe-text b { color: #C8102E; }
+  .kontext-icon { font-size: 32px; margin-right: 10px; vertical-align: middle; }
+  .info-box { background: #f0f7fa; border-left: 4px solid #2a6fa1;
+    padding: 10px 14px; border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 14px; }
+  .frage-block { margin: 14px 0; padding: 12px 14px; background: #fafafa;
+    border-radius: 4px; border: 1px solid #ececec; }
+  .frage-block .frage-text { margin-bottom: 10px; font-weight: bold; }
+  .ergebnis-zeile { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ergebnis-zeile label { font-weight: bold; min-width: 80px; }
+  .ergebnis-zeile input { padding: 7px 10px; font-family: Georgia, serif; font-size: 15px;
+    border: 1.5px solid #c0c0c0; border-radius: 4px; width: 140px; background: #fff; }
+  .ergebnis-zeile input:focus { outline: none; border-color: #C8102E;
+    box-shadow: 0 0 0 2px rgba(200,16,46,0.15); }
+  .hinweis { font-size: 13px; color: #666; margin-top: 4px; }
+  .button-leiste { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .btn { padding: 10px 20px; border: none; border-radius: 4px;
+    font-family: Georgia, serif; font-size: 15px; cursor: pointer;
+    transition: all 0.15s; font-weight: bold; }
+  .btn-pruefen { background: #C8102E; color: #fff; }
+  .btn-pruefen:hover { background: #a00d25; }
+  .btn-loesung { background: #fff; color: #C8102E; border: 1.5px solid #C8102E; }
+  .btn-loesung:hover { background: #fdecea; }
+  .btn-neu { background: #f3f3f3; color: #1a1a1a; border: 1.5px solid #c0c0c0; }
+  .btn-neu:hover { background: #e6e6e6; }
+  .feedback { margin-top: 16px; padding: 12px 16px; border-radius: 4px;
+    font-weight: bold; display: none; animation: feedback-in 0.3s ease; }
+  .feedback.richtig { background: #eaf5ea; color: #2e7d32; border: 1.5px solid #2e7d32; }
+  .feedback.falsch { background: #fdecea; color: #C8102E; border: 1.5px solid #C8102E; }
+  .feedback.teilweise { background: #fff8e1; color: #8a6800; border: 1.5px solid #d6a300; }
+  @keyframes feedback-in { from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); } }
+  .loesungsweg { display: none; margin-top: 16px; padding: 14px 18px;
+    background: #f0f7fa; border-left: 4px solid #2a6fa1; border-radius: 0 4px 4px 0;
+    animation: feedback-in 0.3s ease; }
+  .loesungsweg h3 { margin: 0 0 8px 0; font-size: 14px; color: #2a6fa1;
+    text-transform: uppercase; letter-spacing: 0.5px; }
+  .konfetti { position: fixed; top: -10px; width: 8px; height: 8px;
+    pointer-events: none; z-index: 9999; }
+  @keyframes konfettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.6; } }
+  .uebung-fuss { text-align: center; padding: 10px; font-size: 12px;
+    color: #888; border-top: 1px solid #ececec; }
+  @media (max-width: 600px) { .uebung-kopf h1 { font-size: 16px; } .uebung-body { padding: 16px; } }
+
+
+</style>
+</head>
+<body>
+
+<div class="uebung-box">
+  <div class="uebung-kopf">
+    <h1>4.3 — Bernoulli-Formel anwenden</h1>
+    <span class="nr">Kompetenz 4.3</span>
+  </div>
+  <div class="uebung-body">
+    
+    <div class="aufgabe">
+      <h2>Aufgabe</h2>
+      <div class="aufgabe-text" id="aufgabe-text"></div>
+    </div>
+    <div class="info-box" id="info-box"></div>
+    <div class="frage-block">
+      <div class="frage-text" id="frage-text"></div>
+      <div class="ergebnis-zeile">
+        <label>P =</label>
+        <input type="text" id="ein-p" placeholder="z. B. 0,220">
+      </div>
+      <div class="hinweis">Tipp: CAS-Befehl <code>binomPdf(n; p; k)</code></div>
+    </div>
+    <div class="button-leiste">
+      <button class="btn btn-pruefen" onclick="pruefen()">Prüfen</button>
+      <button class="btn btn-loesung" onclick="zeigeLoesung()">Lösungsweg anzeigen</button>
+      <button class="btn btn-neu" onclick="neueAufgabe()">Neue Aufgabe</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="loesungsweg" id="loesungsweg"></div>
+    
+  </div>
+  <div class="uebung-fuss">RWB Berufskolleg Essen · Mathematik · Stochastik · Jahrgang 12 HAW</div>
+</div>
+
+<script>
+
+function starteKonfetti() {
+  const farben = ["#C8102E", "#2e7d32", "#d6a300", "#2a6fa1", "#8e44ad"];
+  for (let i = 0; i < 50; i++) {
+    const k = document.createElement("div");
+    k.className = "konfetti";
+    k.style.left = Math.random() * 100 + "vw";
+    k.style.background = farben[Math.floor(Math.random() * farben.length)];
+    k.style.animation = "konfettiFall " + (1.5 + Math.random()*1.5) + "s ease-in forwards";
+    k.style.animationDelay = (Math.random() * 0.3) + "s";
+    if (Math.random() > 0.5) { k.style.borderRadius = "50%"; }
+    document.body.appendChild(k);
+    setTimeout(() => k.remove(), 3500);
+  }
+}
+function parseKomma(s) { if (!s && s !== 0) return NaN; return parseFloat(String(s).replace(",",".")); }
+function binomPdf(n, p, k) {
+  // Binomialkoeffizient
+  let bk = 1;
+  for (let i = 0; i < k; i++) bk = bk * (n - i) / (i + 1);
+  return bk * Math.pow(p, k) * Math.pow(1-p, n-k);
+}
+function binomCdf(n, p, von, bis) {
+  let s = 0;
+  for (let k = von; k <= bis; k++) s += binomPdf(n, p, k);
+  return s;
+}
+function fakt(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+function binomKoeff(n, k) {
+  if (k < 0 || k > n) return 0;
+  let r = 1;
+  for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1);
+  return Math.round(r);
+}
+
+
+const aufgaben = [
+  { icon: "🏭", n: 50, p: 0.05, k: 3, kontext: "50 Bauteile geprüft, jedes 5 % defekt", was: "genau 3 defekte Teile" },
+  { icon: "🪙", n: 10, p: 0.5, k: 4, kontext: "10-mal Münze geworfen", was: "genau 4-mal Kopf" },
+  { icon: "🎲", n: 20, p: 1/6, k: 5, kontext: "20-mal Würfel geworfen", was: "genau 5-mal eine Sechs" },
+  { icon: "🎯", n: 8, p: 0.4, k: 3, kontext: "8 Dartwürfe mit 40 % Trefferwahrscheinlichkeit", was: "genau 3 Treffer" },
+  { icon: "🃏", n: 12, p: 0.25, k: 4, kontext: "12-mal Karte ziehen mit Zurücklegen, P(Herz) = 1/4", was: "genau 4-mal Herz" },
+];
+let akt = null;
+function neueAufgabe() {
+  let n; do { n=aufgaben[Math.floor(Math.random()*aufgaben.length)]; } while(n===akt && aufgaben.length>1); akt=n;
+  document.getElementById("aufgabe-text").innerHTML = '<span class="kontext-icon">'+n.icon+'</span>'+n.kontext;
+  document.getElementById("info-box").innerHTML = `<b>n</b> = ${n.n} &nbsp; <b>p</b> = ${n.p.toFixed(3).replace(".",",")} &nbsp; <b>k</b> = ${n.k}`;
+  document.getElementById("frage-text").innerHTML = `Wahrscheinlichkeit für <b>${n.was}</b>:`;
+  document.getElementById("ein-p").value = "";
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("loesungsweg").style.display = "none";
+}
+function pruefen() {
+  if (!akt) return;
+  const fb = document.getElementById("feedback");
+  const e = parseKomma(document.getElementById("ein-p").value);
+  const soll = binomPdf(akt.n, akt.p, akt.k);
+  if (isNaN(e)) { fb.className="feedback teilweise"; fb.textContent="⚠ Bitte Zahl eingeben."; fb.style.display="block"; return; }
+  if (Math.abs(e - soll) < 0.005) { fb.className="feedback richtig"; fb.innerHTML=`✓ Richtig! P ≈ ${soll.toFixed(3).replace(".",",")}`; fb.style.display="block"; starteKonfetti(); }
+  else { fb.className="feedback falsch"; fb.innerHTML="✗ Leider nicht. Schau den Lösungsweg an."; fb.style.display="block"; }
+}
+function zeigeLoesung() {
+  if (!akt) return;
+  const bk = binomKoeff(akt.n, akt.k);
+  const p_term = Math.pow(akt.p, akt.k);
+  const q_term = Math.pow(1-akt.p, akt.n-akt.k);
+  const soll = bk * p_term * q_term;
+  document.getElementById("loesungsweg").innerHTML = `
+    <h3>Lösungsweg</h3>
+    <p>P(X = ${akt.k}) = (${akt.n} über ${akt.k}) · ${akt.p.toFixed(3).replace(".",",")}<sup>${akt.k}</sup> · ${(1-akt.p).toFixed(3).replace(".",",")}<sup>${akt.n-akt.k}</sup></p>
+    <p>= ${bk} · ${p_term.toExponential(3).replace(".",",")} · ${q_term.toExponential(3).replace(".",",")}</p>
+    <p>≈ <b>${soll.toFixed(4).replace(".",",")}</b></p>
+    <p style="font-size:13px; color:#666;"><b>CAS:</b> <code>binomPdf(${akt.n}; ${akt.p.toFixed(3).replace(".",",")}; ${akt.k})</code></p>
+  `;
+  document.getElementById("loesungsweg").style.display = "block";
+}
+neueAufgabe();
+
+</script>
+
+</body>
+</html>
