@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiederholung · Aufgabe 5 · Musterlösung</title>
+<style>
+:root{--acc:#C1143C;--acc-dark:#8E0E2C}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ background:#eef0f3;color:#1d1d1d;line-height:1.5;font-size:16px;-webkit-text-size-adjust:100%}
+.wrap{max-width:780px;margin:0 auto;padding:0 14px 48px}
+.head{background:linear-gradient(135deg,var(--acc),var(--acc-dark));color:#fff;border-radius:0 0 14px 14px;
+ padding:22px 20px 18px;margin-bottom:18px;box-shadow:0 4px 16px rgba(0,0,0,.18);display:flex;align-items:center;gap:14px}
+.head .hbadge{flex:0 0 auto;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.16);
+ display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
+.head .htxt{flex:1;min-width:0}
+.head .ey{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;font-weight:700}
+.head h1{margin:6px 0 2px;font-size:21px;line-height:1.2}
+.head .sub{font-size:14px;opacity:.9}
+.sol{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:16px 18px;margin:0 0 14px}
+.sol .nr{display:inline-flex;min-width:30px;height:30px;padding:0 9px;align-items:center;justify-content:center;
+ background:var(--acc);color:#fff;font-weight:700;border-radius:8px;font-size:15px;margin-right:8px}
+.sol h2{display:flex;align-items:center;font-size:16px;margin:0 0 10px;color:var(--acc-dark)}
+.sol h2 .tt{font-weight:600;color:#444;font-size:15px}
+.teil{margin:9px 0;padding-left:4px}
+.teil>.l{display:inline-block;font-weight:700;color:var(--acc-dark);margin-right:6px}
+.math{font-family:"Cambria Math",Georgia,serif}
+.erg{background:#f4f6f9;border-left:4px solid var(--acc);border-radius:6px;padding:7px 11px;margin:6px 0;font-family:"Cambria Math",Georgia,serif}
+.erg b{color:var(--acc-dark)}
+.note{color:#555;font-size:14px}
+.tag{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:2px 9px;margin-left:6px;vertical-align:middle}
+.ja{background:#e3f3e6;color:#1B7A34}
+.nein{background:#fbe3e3;color:#B0241F}
+table{border-collapse:collapse;margin:8px 0;font-size:15px}
+th,td{border:1px solid #bbb;padding:4px 12px;text-align:center}
+th{background:#fbe9ed}
+.frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .12em;line-height:1.05}
+.frac>.z{padding:0 .3em;border-bottom:1.4px solid currentColor}
+.frac>.n{padding:0 .3em}
+.ol{text-decoration:overline}
+.foot{text-align:center;color:#9a9a9a;font-size:12px;margin-top:22px}
+@media(max-width:480px){.head h1{font-size:19px}body{font-size:15px}}
+</style></head>
+<body style="--acc:#C1143C;--acc-dark:#8E0E2C"><div class="head"><div class="hbadge">✓</div><div class="htxt"><div class="ey">Wiederholung · Aufgabe 5 · Selbstkontrolle</div>
+<h1>Musterlösung</h1><div class="sub">Stationen 1–4 · vernetzt gedacht</div></div></div>
+<div class="wrap"><div class="sol"><h2><span class="nr">5</span><span class="tt">Umfrage in der Klasse (Venn-Diagramm)</span></h2>
+<div class="teil"><span class="l">a)</span>Beides: 7. Nur Sport: 18 − 7 = 11. Nur Musik: 12 − 7 = 5. Weder noch: 30 − (11 + 7 + 5) = 7.<svg viewBox="0 0 260 130" xmlns="http://www.w3.org/2000/svg" style="width:260px;max-width:100%;height:auto;display:block;margin:6px auto"><rect x="2" y="2" width="256" height="110" fill="#fff" stroke="#888" stroke-width="1.2"/><circle cx="100" cy="57" r="44" fill="#C1143C" fill-opacity=".13" stroke="#444" stroke-width="1.3"/><circle cx="160" cy="57" r="44" fill="#1d6fb8" fill-opacity=".13" stroke="#444" stroke-width="1.3"/><text x="72" y="62" text-anchor="middle" font-size="17" font-weight="700">11</text><text x="130" y="62" text-anchor="middle" font-size="17" font-weight="700">7</text><text x="188" y="62" text-anchor="middle" font-size="17" font-weight="700">5</text><text x="232" y="103" text-anchor="middle" font-size="15" font-weight="700">7</text><text x="88" y="21" text-anchor="middle" font-size="12" font-style="italic">S</text><text x="172" y="21" text-anchor="middle" font-size="12" font-style="italic">M</text><text x="248" y="14" text-anchor="end" font-size="10" fill="#666">Ω</text><text x="130" y="127" text-anchor="middle" font-size="10.5" fill="#555">nur Sport 11 · beides 7 · nur Musik 5 · weder noch 7</text></svg></div><div class="teil"><span class="l">b)</span>Additionssatz:<div class="erg">P(S ∪ M) = <span class="frac"><span class="z">18</span><span class="n">30</span></span> + <span class="frac"><span class="z">12</span><span class="n">30</span></span> − <span class="frac"><span class="z">7</span><span class="n">30</span></span> = <span class="frac"><span class="z">23</span><span class="n">30</span></span> ≈ 0,767</div></div><div class="teil"><span class="l">c)</span>Gegenereignis zu „Sport oder Musik“:<div class="erg">P(„weder noch“) = 1 − <span class="frac"><span class="z">23</span><span class="n">30</span></span> = <span class="frac"><span class="z">7</span><span class="n">30</span></span> ≈ 0,233</div></div><div class="teil"><span class="l">d)</span>S ∩ M = „treibt Sport <b>und</b> spielt ein Instrument“ (beides).<div class="erg">P(S ∩ M) = <span class="frac"><span class="z">7</span><span class="n">30</span></span> ≈ 0,233</div></div></div>
+<div class="foot">RWB Essen · Grundbegriffe der Wahrscheinlichkeitstheorie</div></div></body></html>
