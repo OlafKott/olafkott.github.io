@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zahlen am Zahlenstrahl ablesen</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:18px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+h2{font-size:17px;margin:0 0 8px;color:#C8102E}
+h2.b{color:#1D70B8}
+p{margin:8px 0}
+.regel{background:#FBEEF0;border-left:4px solid #C8102E;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp b,.regel b{color:#1D70B8}
+.regel b{color:#C8102E}
+.schritt{margin:7px 0 7px 2px;padding-left:24px;position:relative}
+.schritt::before{content:attr(data-n);position:absolute;left:0;top:2px;background:#1D70B8;
+  color:#fff;width:18px;height:18px;border-radius:50%;font-size:11px;font-weight:700;
+  text-align:center;line-height:18px}
+.mrk{background:#fff3cd;padding:0 3px;border-radius:3px}
+.br{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;
+  margin:0 3px;line-height:1.15}
+.br>span:first-child{padding:0 4px}
+.br>span:last-child{padding:0 4px;border-top:2px solid currentColor}
+.rechnung{font-size:19px;margin:10px 0}
+.frage{font-size:21px;margin:4px 0 14px;min-height:34px}
+.felder{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 16px;font-size:20px}
+input[type=text],input[type=number]{font-size:20px;padding:10px 12px;width:96px;border:2px solid #c9cfd6;
+  border-radius:8px;font-family:inherit;text-align:center;background:#fff}
+input:focus{outline:none;border-color:#1D70B8}
+.brf{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.brf .bal{width:96px;height:2px;background:#1d1d1f}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.45;cursor:default}
+.rueck{margin:12px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.zaehler{font-size:14px;color:#6b7280;margin-top:14px}
+.wahl{display:flex;gap:10px;flex-wrap:wrap}
+.wahl button{min-width:74px;font-size:22px;background:#fff;border:2px solid #c9cfd6}
+.wahl button.sel{border-color:#1D70B8;background:#EAF3FB}
+a.link{display:inline-block;margin-top:6px;color:#1D70B8;font-weight:600;text-decoration:none}
+a.link:hover{text-decoration:underline}
+.fuss{text-align:center;font-size:14px;color:#6b7280;margin-top:26px}
+svg{max-width:100%;height:auto}
+table.t{border-collapse:collapse;margin:6px 0;font-size:18px}
+table.t td,table.t th{border:1px solid #c9cfd6;padding:8px 12px;text-align:center}
+table.t th{background:#f3ece0}
+</style><style>
+.lg{background:#E6F4EA;border-left:4px solid #1E7B3C;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0}
+.erg{color:#1E7B3C;font-weight:700}
+.ta{margin:9px 0;font-size:18px}
+.ta .weg{display:block;color:#6b7280;font-size:15px;margin-top:2px}
+h2.g{color:#1E7B3C}
+.gl{font-size:19px;margin:6px 0;font-family:Cambria,Georgia,serif}
+.gl .op{background:#fff3cd;padding:1px 5px;border-radius:3px;font-size:16px}
+.per{border-top:2px solid currentColor}
+svg.kos{max-width:340px;background:#fff;border:1px solid #dfe4ea;border-radius:8px}
+</style><style>header{background:#1E7B3C}.karte h2.g{color:#1E7B3C}a.link{color:#1E7B3C}</style></head><body>
+<header><div class="wrap"><div class="knr">Aufgabe 7 &middot; Musterlösung</div><h1>Zahlen am Zahlenstrahl ablesen</h1></div></header>
+<div class="wrap">
+<div class="karte"><h2 class="g">a) Ein kleiner Strich = 0,5</h2><svg viewBox="0 0 560 74" width="100%" style="max-width:560px"><line x1="16" y1="42" x2="540" y2="42" stroke="#1d1d1f" stroke-width="2"/><polygon points="548,42 536,37 536,47" fill="#1d1d1f"/><line x1="34.0" y1="31" x2="34.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="34.0" y="68" font-size="13" text-anchor="middle">&minus;2</text><line x1="82.6" y1="36" x2="82.6" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="131.2" y1="31" x2="131.2" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="131.2" y="68" font-size="13" text-anchor="middle">&minus;1</text><line x1="179.8" y1="36" x2="179.8" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="228.4" y1="31" x2="228.4" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="228.4" y="68" font-size="13" text-anchor="middle">0</text><line x1="277.0" y1="36" x2="277.0" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="325.6" y1="31" x2="325.6" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="325.6" y="68" font-size="13" text-anchor="middle">1</text><line x1="374.2" y1="36" x2="374.2" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="422.8" y1="31" x2="422.8" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="422.8" y="68" font-size="13" text-anchor="middle">2</text><line x1="471.4" y1="36" x2="471.4" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="520.0" y1="31" x2="520.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="520.0" y="68" font-size="13" text-anchor="middle">3</text><line x1="82.6" y1="22" x2="82.6" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="82.6" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">A</text><line x1="277.0" y1="22" x2="277.0" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="277.0" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">B</text><line x1="471.4" y1="22" x2="471.4" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="471.4" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">C</text></svg><div class="ta"><b></b> A = <span class="erg">&minus;1,5</span> &nbsp;&nbsp; B = <span class="erg">0,5</span> &nbsp;&nbsp; C = <span class="erg">2,5</span></div></div><div class="karte"><h2 class="g">b) Ein kleiner Strich = 0,1</h2><svg viewBox="0 0 560 74" width="100%" style="max-width:560px"><line x1="16" y1="42" x2="540" y2="42" stroke="#1d1d1f" stroke-width="2"/><polygon points="548,42 536,37 536,47" fill="#1d1d1f"/><line x1="34.0" y1="31" x2="34.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="34.0" y="68" font-size="13" text-anchor="middle">2</text><line x1="82.6" y1="36" x2="82.6" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="131.2" y1="36" x2="131.2" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="179.8" y1="36" x2="179.8" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="228.4" y1="36" x2="228.4" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="277.0" y1="31" x2="277.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="277.0" y="68" font-size="13" text-anchor="middle">2,5</text><line x1="325.6" y1="36" x2="325.6" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="374.2" y1="36" x2="374.2" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="422.8" y1="36" x2="422.8" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="471.4" y1="36" x2="471.4" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="520.0" y1="31" x2="520.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="520.0" y="68" font-size="13" text-anchor="middle">3</text><line x1="179.8" y1="22" x2="179.8" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="179.8" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">D</text><line x1="422.8" y1="22" x2="422.8" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="422.8" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">E</text></svg><div class="ta"><b></b> D = <span class="erg">2,3</span> &nbsp;&nbsp; E = <span class="erg">2,8</span><span class="weg">von 2 bis 3 sind es 10 Abschnitte: 1 : 10 = 0,1</span></div></div><div class="karte"><h2 class="g">c) Ein kleiner Strich = 0,1</h2><svg viewBox="0 0 560 74" width="100%" style="max-width:560px"><line x1="16" y1="42" x2="540" y2="42" stroke="#1d1d1f" stroke-width="2"/><polygon points="548,42 536,37 536,47" fill="#1d1d1f"/><line x1="34.0" y1="31" x2="34.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="34.0" y="68" font-size="13" text-anchor="middle">&minus;1</text><line x1="58.3" y1="36" x2="58.3" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="82.6" y1="36" x2="82.6" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="106.9" y1="36" x2="106.9" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="131.2" y1="36" x2="131.2" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="155.5" y1="31" x2="155.5" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="155.5" y="68" font-size="13" text-anchor="middle">&minus;0,5</text><line x1="179.8" y1="36" x2="179.8" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="204.1" y1="36" x2="204.1" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="228.4" y1="36" x2="228.4" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="252.7" y1="36" x2="252.7" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="277.0" y1="31" x2="277.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="277.0" y="68" font-size="13" text-anchor="middle">0</text><line x1="301.3" y1="36" x2="301.3" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="325.6" y1="36" x2="325.6" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="349.9" y1="36" x2="349.9" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="374.2" y1="36" x2="374.2" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="398.5" y1="31" x2="398.5" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="398.5" y="68" font-size="13" text-anchor="middle">0,5</text><line x1="422.8" y1="36" x2="422.8" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="447.1" y1="36" x2="447.1" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="471.4" y1="36" x2="471.4" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="495.7" y1="36" x2="495.7" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="520.0" y1="31" x2="520.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="520.0" y="68" font-size="13" text-anchor="middle">1</text><line x1="106.9" y1="22" x2="106.9" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="106.9" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">F</text><line x1="228.4" y1="22" x2="228.4" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="228.4" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">G</text><line x1="422.8" y1="22" x2="422.8" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="422.8" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">H</text></svg><div class="ta"><b></b> F = <span class="erg">&minus;0,7</span> &nbsp;&nbsp; G = <span class="erg">&minus;0,2</span> &nbsp;&nbsp; H = <span class="erg">0,6</span><span class="weg">links von der 0 wird es kleiner</span></div></div><div class="karte"><h2 class="g">d) Ein kleiner Strich = 0,25</h2><svg viewBox="0 0 560 74" width="100%" style="max-width:560px"><line x1="16" y1="42" x2="540" y2="42" stroke="#1d1d1f" stroke-width="2"/><polygon points="548,42 536,37 536,47" fill="#1d1d1f"/><line x1="34.0" y1="31" x2="34.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="34.0" y="68" font-size="13" text-anchor="middle">&minus;1</text><line x1="74.5" y1="36" x2="74.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="115.0" y1="36" x2="115.0" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="155.5" y1="36" x2="155.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="196.0" y1="31" x2="196.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="196.0" y="68" font-size="13" text-anchor="middle">0</text><line x1="236.5" y1="36" x2="236.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="277.0" y1="36" x2="277.0" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="317.5" y1="36" x2="317.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="358.0" y1="31" x2="358.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="358.0" y="68" font-size="13" text-anchor="middle">1</text><line x1="398.5" y1="36" x2="398.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="439.0" y1="36" x2="439.0" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="479.5" y1="36" x2="479.5" y2="48" stroke="#1d1d1f" stroke-width="1"/><line x1="520.0" y1="31" x2="520.0" y2="53" stroke="#1d1d1f" stroke-width="2"/><text x="520.0" y="68" font-size="13" text-anchor="middle">2</text><line x1="74.5" y1="22" x2="74.5" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="74.5" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">&minus;0,75</text><line x1="317.5" y1="22" x2="317.5" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="317.5" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">0,75</text><line x1="398.5" y1="22" x2="398.5" y2="56" stroke="#1E7B3C" stroke-width="2.5"/><text x="398.5" y="17" font-size="13" font-weight="bold" fill="#1E7B3C" text-anchor="middle">1,25</text></svg><div class="ta"><b></b> Zwischen zwei ganzen Zahlen liegen <b>4</b> Abschnitte: 1 : 4 = <span class="erg">0,25</span> pro Strich.<span class="weg">&minus;0,75 = 3 Striche links von 0 &nbsp;&middot;&nbsp; <span class="br"><span>3</span><span>4</span></span> = 0,75 = 3 Striche rechts von 0 &nbsp;&middot;&nbsp; 1,25 = 1 Strich rechts von 1</span></div></div><div class="karte"><p style="margin:0">Noch unsicher? <a class="link" href="tipp-07.html">Zum Tipp &rarr;</a><a class="link" style="margin-left:20px" href="ueben-07.html">Interaktiv weiterüben &rarr;</a></p></div><div class="karte" style="text-align:center"><a class="link" href="loesungen.html">&larr; Alle Musterlösungen</a></div>
+<div class="fuss">Fit für die Vorklasse &middot; RWB Essen</div>
+</div>
+
+</body></html>
