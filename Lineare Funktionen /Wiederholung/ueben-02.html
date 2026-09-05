@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Addieren und Subtrahieren</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:18px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+h2{font-size:17px;margin:0 0 8px;color:#C8102E}
+h2.b{color:#1D70B8}
+p{margin:8px 0}
+.regel{background:#FBEEF0;border-left:4px solid #C8102E;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp b,.regel b{color:#1D70B8}
+.regel b{color:#C8102E}
+.schritt{margin:7px 0 7px 2px;padding-left:24px;position:relative}
+.schritt::before{content:attr(data-n);position:absolute;left:0;top:2px;background:#1D70B8;
+  color:#fff;width:18px;height:18px;border-radius:50%;font-size:11px;font-weight:700;
+  text-align:center;line-height:18px}
+.mrk{background:#fff3cd;padding:0 3px;border-radius:3px}
+.br{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;
+  margin:0 3px;line-height:1.15}
+.br>span:first-child{padding:0 4px}
+.br>span:last-child{padding:0 4px;border-top:2px solid currentColor}
+.rechnung{font-size:19px;margin:10px 0}
+.frage{font-size:21px;margin:4px 0 14px;min-height:34px}
+.felder{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 16px;font-size:20px}
+input[type=text],input[type=number]{font-size:20px;padding:10px 12px;width:96px;border:2px solid #c9cfd6;
+  border-radius:8px;font-family:inherit;text-align:center;background:#fff}
+input:focus{outline:none;border-color:#1D70B8}
+.brf{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.brf .bal{width:96px;height:2px;background:#1d1d1f}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.45;cursor:default}
+.rueck{margin:12px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.zaehler{font-size:14px;color:#6b7280;margin-top:14px}
+.wahl{display:flex;gap:10px;flex-wrap:wrap}
+.wahl button{min-width:74px;font-size:22px;background:#fff;border:2px solid #c9cfd6}
+.wahl button.sel{border-color:#1D70B8;background:#EAF3FB}
+a.link{display:inline-block;margin-top:6px;color:#1D70B8;font-weight:600;text-decoration:none}
+a.link:hover{text-decoration:underline}
+.fuss{text-align:center;font-size:14px;color:#6b7280;margin-top:26px}
+svg{max-width:100%;height:auto}
+table.t{border-collapse:collapse;margin:6px 0;font-size:18px}
+table.t td,table.t th{border:1px solid #c9cfd6;padding:8px 12px;text-align:center}
+table.t th{background:#f3ece0}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Aufgabe 2 &middot; Üben</div><h1>Addieren und Subtrahieren</h1></div></header>
+<div class="wrap">
+<div class="karte">
+<h2 class="b">Übungsaufgabe</h2>
+<p style="color:#6b7280;font-size:15px;margin-top:0">Gib das Ergebnis als vollständig gekürzten Bruch an.</p>
+<div class="frage" id="frage"></div>
+<div class="felder" id="felder"></div>
+<button class="bp" id="bp" onclick="pruefen()">Prüfen</button>
+<button class="bn" onclick="neueAufgabe()">Nächste Aufgabe</button>
+<div class="rueck" id="rueck"></div>
+<div class="zaehler" id="zaehler">Richtig: 0 von 0</div>
+</div>
+<div class="karte">
+<p style="margin:0">Du kommst nicht weiter?
+<a class="link" href="tipp-02.html">Zum Tipp für Aufgabe 2 &rarr;</a></p>
+</div><div class="karte" style="text-align:center"><a class="link" href="index.html">&larr; Übersicht aller Aufgaben</a></div>
+<div class="fuss">Fit für die Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+function zuf(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function wahl(a){return a[zuf(0,a.length-1)];}
+function ggt(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a||1;}
+function kuerze(z,n){var g=ggt(z,n);z/=g;n/=g;if(n<0){z=-z;n=-n;}return [z,n];}
+function br(z,n){return '<span class="br"><span>'+z+'</span><span>'+n+'</span></span>';}
+function zs(x){return String(x).replace('.',',');}
+function feldZ(id,ph){return '<input type="text" inputmode="decimal" id="'+id+'" placeholder="'+(ph||'')+'">';}
+function feldBr(idz,idn){return '<span class="brf">'+feldZ(idz)+'<span class="bal"></span>'+feldZ(idn)+'</span>';}
+function lies(id){var e=document.getElementById(id);if(!e)return null;
+  var v=e.value.trim().replace(',','.');if(v==='')return null;var x=Number(v);return isNaN(x)?null:x;}
+function gleich(a,b){return a!==null&&Math.abs(a-b)<1e-9;}
+
+var A=null,richtig=0,gesamt=0;
+function neueAufgabe(){
+  A=erzeuge();
+  document.getElementById('frage').innerHTML=A.frage;
+  document.getElementById('felder').innerHTML=A.felder;
+  var r=document.getElementById('rueck');r.className='rueck';r.innerHTML='';
+  document.getElementById('bp').disabled=false;
+  if(A.nachBau)A.nachBau();
+  var f=document.querySelector('#felder input');if(f)f.focus();
+}
+function pruefen(){
+  if(document.getElementById('bp').disabled)return;
+  var ok=A.pruefe();
+  if(ok===null){
+    var r0=document.getElementById('rueck');r0.className='rueck no';
+    r0.innerHTML='<b>Da fehlt noch etwas.</b> Trage bitte eine Zahl ein.';return;}
+  gesamt++;if(ok)richtig++;
+  var r=document.getElementById('rueck');
+  r.className='rueck '+(ok?'ok':'no');
+  r.innerHTML=(ok?'<b>Richtig!</b> ':'<b>Noch nicht. </b>')+A.loesung();
+  document.getElementById('bp').disabled=true;
+  document.getElementById('zaehler').textContent='Richtig: '+richtig+' von '+gesamt;
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();
+    if(document.getElementById('bp').disabled)neueAufgabe();else pruefen();}});
+
+function rd(x,k){var p=Math.pow(10,k);return Math.round(x*p)/p;}
+function mz(x){return String(x).replace('.',',').replace('-','−');}
+function fmtI(t,dez){var neg=t<0;t=Math.abs(t);var s=String(t);
+  if(dez===0)return (neg?'−':'')+s;
+  while(s.length<=dez)s='0'+s;
+  return (neg?'−':'')+s.slice(0,s.length-dez)+','+s.slice(s.length-dez);}
+function liesT(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function brStatus(idz,idn,z,n){
+  var a=lies(idz),b=lies(idn);
+  if(a===null||b===null)return 'leer';
+  if(b===0||Math.abs(a/b-z/n)>1e-9)return 'falsch';
+  if(ggt(a,b)!==1||b<0)return 'unkuerz';
+  return 'ok';}
+function dezTeil(z,n){
+  var vor=Math.floor(z/n),r=z%n,nach='',pos={},per='';
+  while(r!==0){
+    if(pos[r]!==undefined){per=nach.slice(pos[r]);nach=nach.slice(0,pos[r]);break;}
+    pos[r]=nach.length;r*=10;nach+=String(Math.floor(r/n));r=r%n;
+    if(nach.length>24)break;}
+  return {vor:vor,nach:nach,per:per};}
+function zeigeDez(z,n){var d=dezTeil(z,n);
+  var s=mz(d.vor)+',' ;
+  if(d.nach==='' && d.per==='')return mz(d.vor);
+  s=mz(d.vor)+','+d.nach;
+  if(d.per!=='')s+='<span style="border-top:2px solid currentColor">'+d.per+'</span>';
+  return s;}
+function zsSvg(a,b,gross,klein,marke,name){
+  var W=560,H=70,L=34,R=W-40;
+  var n=Math.round((b-a)/klein);
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:560px">';
+  s+='<line x1="'+(L-18)+'" y1="40" x2="'+(R+20)+'" y2="40" stroke="#1d1d1f" stroke-width="2"/>';
+  s+='<polygon points="'+(R+28)+',40 '+(R+16)+',35 '+(R+16)+',45" fill="#1d1d1f"/>';
+  for(var i=0;i<=n;i++){
+    var x=L+(R-L)*i/n, v=rd(a+i*klein,6);
+    var q=v/gross, gr=Math.abs(q-Math.round(q))<1e-9;
+    s+='<line x1="'+x+'" y1="'+(gr?29:34)+'" x2="'+x+'" y2="'+(gr?51:46)+'" stroke="#1d1d1f" stroke-width="'+(gr?2:1)+'"/>';
+    if(gr)s+='<text x="'+x+'" y="65" font-size="13" text-anchor="middle" fill="#1d1d1f">'+mz(rd(v,6))+'</text>';}
+  var xm=L+(R-L)*(marke-a)/(b-a);
+  s+='<line x1="'+xm+'" y1="20" x2="'+xm+'" y2="54" stroke="#C8102E" stroke-width="2.5"/>';
+  s+='<text x="'+xm+'" y="15" font-size="14" font-weight="bold" fill="#C8102E" text-anchor="middle">'+name+'</text>';
+  return s+'</svg>';}
+function kosySvg(m,st,punkte,klickbar){
+  var off=st*m+26, W=st*2*m+52, H=W;
+  function px(x){return off+x*st;} function py(y){return off-y*st;}
+  var s='<svg id="kos" viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:360px;background:#fff;border:1px solid #dfe4ea;border-radius:8px">';
+  for(var i=-m;i<=m;i++){
+    s+='<line x1="'+px(i)+'" y1="'+py(-m)+'" x2="'+px(i)+'" y2="'+py(m)+'" stroke="#e6ebf1" stroke-width="1"/>';
+    s+='<line x1="'+px(-m)+'" y1="'+py(i)+'" x2="'+px(m)+'" y2="'+py(i)+'" stroke="#e6ebf1" stroke-width="1"/>';}
+  s+='<line x1="'+px(-m)+'" y1="'+py(0)+'" x2="'+(px(m)+14)+'" y2="'+py(0)+'" stroke="#1d1d1f" stroke-width="1.6"/>';
+  s+='<line x1="'+px(0)+'" y1="'+(py(-m))+'" x2="'+px(0)+'" y2="'+(py(m)-14)+'" stroke="#1d1d1f" stroke-width="1.6"/>';
+  s+='<polygon points="'+(px(m)+20)+','+py(0)+' '+(px(m)+10)+','+(py(0)-4)+' '+(px(m)+10)+','+(py(0)+4)+'" fill="#1d1d1f"/>';
+  s+='<polygon points="'+px(0)+','+(py(m)-20)+' '+(px(0)-4)+','+(py(m)-10)+' '+(px(0)+4)+','+(py(m)-10)+'" fill="#1d1d1f"/>';
+  s+='<text x="'+(px(m)+8)+'" y="'+(py(0)+18)+'" font-size="12" font-style="italic">x</text>';
+  s+='<text x="'+(px(0)+8)+'" y="'+(py(m)-12)+'" font-size="12" font-style="italic">y</text>';
+  for(var i=-m;i<=m;i++){ if(i===0)continue;
+    s+='<text x="'+px(i)+'" y="'+(py(0)+14)+'" font-size="10" text-anchor="middle" fill="#6b7280">'+mz(i)+'</text>';
+    s+='<text x="'+(px(0)-7)+'" y="'+(py(i)+4)+'" font-size="10" text-anchor="end" fill="#6b7280">'+mz(i)+'</text>';}
+  for(var k=0;k<punkte.length;k++){var p=punkte[k];
+    s+='<circle cx="'+px(p[1])+'" cy="'+py(p[2])+'" r="4.5" fill="#C8102E"/>';
+    s+='<text x="'+(px(p[1])+7)+'" y="'+(py(p[2])-7)+'" font-size="13" font-weight="bold" fill="#C8102E">'+p[0]+'</text>';}
+  if(klickbar){
+    s+='<circle id="mk" cx="-99" cy="-99" r="5.5" fill="none" stroke="#1D70B8" stroke-width="2.5"/>';
+    for(var x=-m;x<=m;x++)for(var y=-m;y<=m;y++)
+      s+='<rect x="'+(px(x)-st/2)+'" y="'+(py(y)-st/2)+'" width="'+st+'" height="'+st+'" fill="transparent" style="cursor:pointer" onclick="setP('+x+','+y+','+px(x)+','+py(y)+')"/>';}
+  return s+'</svg>';}
+
+function erzeuge(){
+  var hinw='',NN=[2,3,4,5,6,8,10,12];
+  var n1=wahl(NN),n2=wahl(NN),z1=zuf(1,n1-1),z2=zuf(1,n2-1);
+  var plus=zuf(0,1)===0, ganz=(zuf(1,10)>8);
+  var t1,t2,Z,N,frageTxt;
+  if(ganz){
+    var g=zuf(1,3);
+    frageTxt=g+' &minus; '+br(z2,n2);
+    Z=g*n2-z2;N=n2;
+  }else{
+    if(!plus && z1/n1 < z2/n2){var th=n1;n1=n2;n2=th;th=z1;z1=z2;z2=th;}
+    frageTxt=br(z1,n1)+(plus?' + ':' &minus; ')+br(z2,n2);
+    N=n1*n2/ggt(n1,n2); Z=plus? z1*(N/n1)+z2*(N/n2) : z1*(N/n1)-z2*(N/n2);
+  }
+  var k=kuerze(Z,N),ze=k[0],ne=k[1];
+  return {frage:'Berechne und kürze:<br>'+frageTxt+' = ?',
+    antw:[ze,ne],
+    felder:feldBr('a','b'),
+    pruefe:function(){var s=brStatus('a','b',ze,ne);if(s==='leer')return null;
+      hinw=(s==='unkuerz')?' <b>Der Wert stimmt – kürze noch vollständig.</b>':'';return s==='ok';},
+    loesung:function(){
+      var t='Gemeinsamer Nenner: <b>'+N+'</b> &nbsp;→&nbsp; '+br(Z,N);
+      if(ne!==N||ze!==Z)t+=' = '+br(ze,ne);
+      if(ne===1)t+=' = <b>'+ze+'</b>';
+      return t+hinw;}};
+}neueAufgabe();</script>
+</body></html>

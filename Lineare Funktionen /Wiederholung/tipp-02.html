@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brüche addieren und subtrahieren</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:18px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+h2{font-size:17px;margin:0 0 8px;color:#C8102E}
+h2.b{color:#1D70B8}
+p{margin:8px 0}
+.regel{background:#FBEEF0;border-left:4px solid #C8102E;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:12px 0}
+.bsp b,.regel b{color:#1D70B8}
+.regel b{color:#C8102E}
+.schritt{margin:7px 0 7px 2px;padding-left:24px;position:relative}
+.schritt::before{content:attr(data-n);position:absolute;left:0;top:2px;background:#1D70B8;
+  color:#fff;width:18px;height:18px;border-radius:50%;font-size:11px;font-weight:700;
+  text-align:center;line-height:18px}
+.mrk{background:#fff3cd;padding:0 3px;border-radius:3px}
+.br{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;
+  margin:0 3px;line-height:1.15}
+.br>span:first-child{padding:0 4px}
+.br>span:last-child{padding:0 4px;border-top:2px solid currentColor}
+.rechnung{font-size:19px;margin:10px 0}
+.frage{font-size:21px;margin:4px 0 14px;min-height:34px}
+.felder{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 16px;font-size:20px}
+input[type=text],input[type=number]{font-size:20px;padding:10px 12px;width:96px;border:2px solid #c9cfd6;
+  border-radius:8px;font-family:inherit;text-align:center;background:#fff}
+input:focus{outline:none;border-color:#1D70B8}
+.brf{display:inline-flex;flex-direction:column;align-items:center;gap:4px}
+.brf .bal{width:96px;height:2px;background:#1d1d1f}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.45;cursor:default}
+.rueck{margin:12px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.zaehler{font-size:14px;color:#6b7280;margin-top:14px}
+.wahl{display:flex;gap:10px;flex-wrap:wrap}
+.wahl button{min-width:74px;font-size:22px;background:#fff;border:2px solid #c9cfd6}
+.wahl button.sel{border-color:#1D70B8;background:#EAF3FB}
+a.link{display:inline-block;margin-top:6px;color:#1D70B8;font-weight:600;text-decoration:none}
+a.link:hover{text-decoration:underline}
+.fuss{text-align:center;font-size:14px;color:#6b7280;margin-top:26px}
+svg{max-width:100%;height:auto}
+table.t{border-collapse:collapse;margin:6px 0;font-size:18px}
+table.t td,table.t th{border:1px solid #c9cfd6;padding:8px 12px;text-align:center}
+table.t th{background:#f3ece0}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Aufgabe 2 &middot; Tipp</div><h1>Brüche addieren und subtrahieren</h1></div></header>
+<div class="wrap">
+<div class="karte"><h2>Brüche addieren und subtrahieren</h2><div class="regel">Addieren und Subtrahieren geht nur, wenn die Brüche <b>denselben Nenner</b> haben. Suche also zuerst einen gemeinsamen Nenner, dann rechnest du <b>nur mit den Zählern</b> weiter. Der Nenner bleibt stehen.</div><h2 class="b" style="margin-top:16px">Beispiel: <span class="br"><span>1</span><span>6</span></span> + <span class="br"><span>3</span><span>4</span></span></h2><div class="bsp"><div class="schritt" data-n="1">Gemeinsamen Nenner suchen: In welche Zahl passen <b>6 und 4</b> beide hinein? 6, 12, 18 … und 4, 8, <b>12</b> → der gemeinsame Nenner ist <b>12</b>.</div><div class="schritt" data-n="2">Beide Brüche erweitern: &nbsp; <span class="br"><span>1</span><span>6</span></span> = <span class="br"><span>2</span><span>12</span></span> &nbsp; (·2) &nbsp;&nbsp; <span class="br"><span>3</span><span>4</span></span> = <span class="br"><span>9</span><span>12</span></span> &nbsp; (·3)</div><div class="schritt" data-n="3">Jetzt nur die Zähler addieren: &nbsp; <span class="br"><span>2</span><span>12</span></span> + <span class="br"><span>9</span><span>12</span></span> = <span class="br"><span>11</span><span>12</span></span></div><div class="schritt" data-n="4">Zum Schluss prüfen, ob man kürzen kann. Hier geht es nicht.</div></div><h2 class="b" style="margin-top:16px">Und wenn eine ganze Zahl dabei ist?</h2><div class="bsp">Schreibe die ganze Zahl als Bruch: &nbsp; 2 = <span class="br"><span>2</span><span>1</span></span><br>Dann wie oben erweitern: &nbsp; 2 &minus; <span class="br"><span>3</span><span>4</span></span> = <span class="br"><span>8</span><span>4</span></span> &minus; <span class="br"><span>3</span><span>4</span></span> = <span class="br"><span>5</span><span>4</span></span></div><p style="color:#6b7280;font-size:15px">Merke: Nenner niemals addieren! <span class="br"><span>1</span><span>2</span></span> + <span class="br"><span>1</span><span>3</span></span> ist <b>nicht</b> <span class="br"><span>2</span><span>5</span></span>.</p></div><div class="karte">
+<p style="margin:0">Alles verstanden?
+<a class="link" href="ueben-02.html">Jetzt interaktiv weiterüben &rarr;</a></p>
+</div><div class="karte" style="text-align:center"><a class="link" href="index.html">&larr; Übersicht aller Aufgaben</a></div>
+<div class="fuss">Fit für die Vorklasse &middot; RWB Essen</div>
+</div>
+
+</body></html>
