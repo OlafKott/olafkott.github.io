@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Formulierungshilfe</title><style>
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+     background:#eef1f4; color:#1d1d1f; line-height:1.7; font-size:17px;}
+.wrap{max-width:720px; margin:0 auto; padding:14px 14px 40px;}
+header{background:#C8102E; color:#fff; border-radius:14px; padding:16px 18px; margin-bottom:14px;}
+header h1{margin:0 0 4px; font-size:22px; line-height:1.3;}
+header p{margin:0; font-size:15px; opacity:.92;}
+section{background:#fff; border-radius:14px; padding:14px 16px 16px; margin-bottom:14px;
+        box-shadow:0 1px 4px rgba(20,40,60,.08);}
+h2{margin:0 0 4px; font-size:18px; color:#C8102E;}
+.hint{margin:0 0 12px; font-size:14.5px; color:#666;}
+.text{font-size:17.5px; line-height:2.6;}
+.slot{display:inline-block; min-width:112px; min-height:38px; padding:2px 10px;
+      border:2px dashed #a9b5c1; border-radius:9px; background:#F7F9FB;
+      text-align:center; vertical-align:middle; margin:0 3px; cursor:pointer;
+      transition:background .12s, border-color .12s;}
+.slot.voll{border-style:solid; border-color:#C8102E; background:#FDEEF1; font-weight:600;}
+.slot.ziel{border-color:#C8102E; background:#FBE3E9;}
+.bank{display:flex; flex-wrap:wrap; gap:9px; margin-top:4px; min-height:46px;}
+.chip{display:inline-block; background:#FFF8E8; border:2px solid #e8ce8a; border-radius:22px;
+      padding:7px 16px; font-size:17px; cursor:grab; user-select:none;
+      transition:transform .1s, box-shadow .1s;}
+.chip:active{cursor:grabbing;}
+.chip.gewaehlt{background:#C8102E; border-color:#C8102E; color:#fff;
+               box-shadow:0 2px 8px rgba(200,16,46,.35);}
+.tipp{background:#FFF8E8; border-left:5px solid #F2B705; border-radius:8px; padding:10px 14px;
+      font-size:15.5px;}
+.tipp b{color:#8a5a00;}
+footer{text-align:center; font-size:13px; color:#8a8478; padding:6px 0 0;}
+@media (max-width:480px){
+  body{font-size:16px;} .wrap{padding:10px 10px 34px;}
+  .text{font-size:16.5px; line-height:2.5;} .slot{min-width:96px;}
+}
+</style></head><body><div class="wrap"><header><h1>Formulierungshilfe</h1><p>Aufgabe 7: Welche Anlage soll die Firma behalten?</p></header><section><h2>L&uuml;ckentext</h2><p class="hint">Ziehen Sie die W&ouml;rter in die L&uuml;cken. Auf dem Handy: erst auf ein Wort tippen, dann auf die L&uuml;cke. Ein Tipp auf eine gef&uuml;llte L&uuml;cke legt das Wort zur&uuml;ck.</p><div class="text"><p style="margin:0 0 10px">Bei Anlage 1 gibt es <span class="slot"></span> Ausrei&szlig;er.</p><p style="margin:0 0 10px">Darum nehme ich den <span class="slot"></span>. Er ist <span class="slot"></span> g.</p><p style="margin:0 0 10px">Bei Anlage 2 gibt es einen Ausrei&szlig;er: <span class="slot"></span> g.</p><p style="margin:0 0 10px">Darum nehme ich den <span class="slot"></span>. Er ist <span class="slot"></span> g.</p><p style="margin:0 0 10px">Anlage <span class="slot"></span> trifft die 500 g genau.</p><p style="margin:0 0 10px">Die Firma sollte <span class="slot"></span> behalten.</p></div><div class="bank" id="bank"></div><p class="hint" style="margin:10px 0 0">Achtung: Es sind mehr W&ouml;rter da, als Sie brauchen. Einige passen nicht. Zum Neustarten laden Sie die Seite neu.</p></section><section><div class="tipp"><b>Tipp:</b> Nennen Sie in Ihrer Begr&uuml;ndung immer eine <b>Zahl</b>. S&auml;tze ohne Zahl sind keine Begr&uuml;ndung.</div></section><footer>Lagema&szlig;e &middot; Zwei Abf&uuml;llanlagen &middot; RWB Essen</footer></div><script>
+(function(){
+  var W = ["a2VpbmVu", "TWl0dGVsd2VydA==", "NDk5", "NDQw", "TWVkaWFu", "NTAw", "Mg==", "QW5sYWdlIDI=", "ZWluZW4=", "U3Bhbm53ZWl0ZQ==", "QW5sYWdlIDE=", "MQ==", "NDk1", "NTAy"];
+  var bank = document.getElementById('bank');
+  var slots = Array.prototype.slice.call(document.querySelectorAll('.slot'));
+  var gewaehlt = null;
+
+  function dek(x){ return decodeURIComponent(escape(atob(x))); }
+
+  function chip(w){
+    var c = document.createElement('span');
+    c.className = 'chip';
+    c.textContent = w;
+    c.setAttribute('draggable','true');
+    c.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(gewaehlt === c){ c.classList.remove('gewaehlt'); gewaehlt = null; return; }
+      if(gewaehlt) gewaehlt.classList.remove('gewaehlt');
+      gewaehlt = c; c.classList.add('gewaehlt');
+    });
+    c.addEventListener('dragstart', function(e){
+      if(gewaehlt) gewaehlt.classList.remove('gewaehlt');
+      gewaehlt = c; c.classList.add('gewaehlt');
+      e.dataTransfer.setData('text/plain', w);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    c.addEventListener('dragend', function(){ c.classList.remove('gewaehlt'); });
+    return c;
+  }
+
+  function zurueck(slot){
+    if(!slot.classList.contains('voll')) return;
+    bank.appendChild(chip(slot.textContent));
+    slot.textContent = '';
+    slot.classList.remove('voll');
+  }
+
+  function setzen(slot){
+    if(!gewaehlt) return;
+    zurueck(slot);
+    slot.textContent = gewaehlt.textContent;
+    slot.classList.add('voll');
+    gewaehlt.parentNode.removeChild(gewaehlt);
+    gewaehlt = null;
+  }
+
+  slots.forEach(function(slot){
+    slot.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(gewaehlt){ setzen(slot); } else { zurueck(slot); }
+    });
+    slot.addEventListener('dragover', function(e){ e.preventDefault(); slot.classList.add('ziel'); });
+    slot.addEventListener('dragleave', function(){ slot.classList.remove('ziel'); });
+    slot.addEventListener('drop', function(e){
+      e.preventDefault(); slot.classList.remove('ziel'); setzen(slot);
+    });
+  });
+
+  bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+  bank.addEventListener('drop', function(e){
+    e.preventDefault();
+    if(gewaehlt && gewaehlt.parentNode !== bank){ bank.appendChild(gewaehlt); }
+  });
+  document.addEventListener('click', function(){
+    if(gewaehlt){ gewaehlt.classList.remove('gewaehlt'); gewaehlt = null; }
+  });
+
+  function mischen(a){
+    for(var i=a.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+
+  function start(){
+    bank.innerHTML = '';
+    slots.forEach(function(s){ s.textContent=''; s.className='slot'; });
+    mischen(W.map(dek)).forEach(function(w){ bank.appendChild(chip(w)); });
+    gewaehlt = null;
+  }
+
+  start();
+})();
+</script></body></html>
