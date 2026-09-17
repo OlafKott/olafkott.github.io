@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineare Funktionen &ndash; Steigung ablesen</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+.karte.aus{opacity:.45}
+h2{font-size:17px;margin:0 0 4px;color:#C8102E}
+h2 .s{display:inline-block;background:#C8102E;color:#fff;width:24px;height:24px;border-radius:50%;
+  font-size:14px;text-align:center;line-height:24px;margin-right:7px;vertical-align:2px}
+h2.fertig{color:#1E7B3C}
+h2.fertig .s{background:#1E7B3C}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.felder{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 12px}
+.feld{flex:1 1 130px}
+.feld label{display:block;font-size:15px;color:#4b5563;margin-bottom:3px}
+.feld input{font-size:19px;padding:10px 8px;width:100%;border:2px solid #c9cfd6;border-radius:8px;
+  font-family:inherit;text-align:center;background:#fff}
+.feld input:focus{outline:none;border-color:#1D70B8}
+.feld input.ok{border-color:#1E7B3C;background:#E6F4EA}
+.feld input.no{border-color:#C8102E;background:#FDECEC}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bl{background:#5B3E90;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.ksbox{text-align:center;margin:6px 0 10px}
+svg.ks{width:100%;max-width:420px;height:auto;touch-action:manipulation;
+  border:1px solid #dbe6f0;border-radius:8px;background:#fff;cursor:crosshair}
+.dreieck{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:8px 0;font-size:17px}
+.gleichung{background:#FAF7FF;border-left:4px solid #5B3E90;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 0;font-size:20px;color:#5B3E90;font-weight:700}
+.bruch{display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;
+  margin:0 3px;font-size:.82em}
+.bruch .o{display:block;border-bottom:2px solid currentColor;padding:0 4px 1px}
+.bruch .u{display:block;padding:1px 4px 0}
+.zaehler{font-size:14px;color:#6b7280;margin-top:12px}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Lineare Funktionen &middot; Stunde 3</div>
+<h1>Steigung und Gleichung ablesen</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <p class="hint" style="margin:0 0 8px">Der Graph ist gegeben. Lies b ab, w&auml;hle zwei Gitterpunkte
+  und bestimme m. Ganz ohne Gleichung.</p>
+  <div class="ksbox"><svg class="ks" id="ks" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</div>
+
+<div class="karte" id="k1">
+  <h2 id="h1t"><span class="s">1</span>y-Achsenabschnitt b ablesen</h2>
+  <p class="hint">Wo schneidet die Gerade die senkrechte Achse?</p>
+  <div class="felder"><div class="feld"><label>b</label><input type="text" id="ib"></div></div>
+  <button class="bp" id="bp1" onclick="pruefeB()">Pr&uuml;fen</button>
+  <div class="rueck" id="r1"></div>
+</div>
+
+<div class="karte aus" id="k2">
+  <h2 id="h2t"><span class="s">2</span>Zwei Gitterpunkte antippen</h2>
+  <p class="hint" id="h2hint">Erst b bestimmen.</p>
+  <div class="rueck" id="r2"></div>
+  <button class="bn" id="bz" onclick="punktZurueck()" disabled>Punkte l&ouml;schen</button>
+</div>
+
+<div class="karte aus" id="k3">
+  <h2 id="h3t"><span class="s">3</span>Steigung m berechnen</h2>
+  <p class="hint" id="h3hint">Erst zwei Gitterpunkte w&auml;hlen.</p>
+  <div class="felder">
+    <div class="feld"><label>&Delta;y (oben / unten)</label><input type="text" id="idy" disabled></div>
+    <div class="feld"><label>&Delta;x (nach rechts)</label><input type="text" id="idx" disabled></div>
+    <div class="feld"><label>m = <span class="bruch"><span class="o">&Delta;y</span><span class="u">&Delta;x</span></span></label><input type="text" id="im" disabled></div>
+  </div>
+  <button class="bp" id="bp3" onclick="pruefeM()" disabled>Pr&uuml;fen</button>
+  <button class="bn" onclick="neueAufgabe()">Neue Aufgabe</button>
+  <div class="rueck" id="r3"></div>
+  <div class="dreieck" id="dreieck" style="display:none"></div>
+  <div class="gleichung" id="gleichung" style="display:none"></div>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Aufgaben</div>
+</div>
+
+<div class="fuss">Lineare Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var N=6, PAD=26, S=(420-2*PAD)/(2*N);
+var mz=1, mn=1, b=0, schritt=1, gesetzt=[], fertig=0;
+
+function zuf(a,c){return Math.floor(Math.random()*(c-a+1))+a;}
+function zs(x){return String(x).replace('-','\u2212');}
+function px(x){return PAD+(x+N)*S;}
+function py(y){return 420-PAD-(y+N)*S;}
+function fy(x){return mz*x/mn + b;}
+function kuerze(z,n){var a=Math.abs(z),c=Math.abs(n);while(c){var t=c;c=a%c;a=t;}return a||1;}
+
+function neueAufgabe(){
+  var ok=false;
+  while(!ok){
+    mn=[1,1,2,3,4][zuf(0,4)];
+    mz=zuf(-4,4);
+    if(mz===0) continue;
+    var g=kuerze(mz,mn); mz=mz/g; mn=mn/g;
+    b=zuf(-4,4);
+    /* Gerade muss im Fenster genug Gitterpunkte haben */
+    var treffer=0;
+    for(var x=-N;x<=N;x++){ var y=fy(x); if(Number.isInteger(y)&&Math.abs(y)<=N) treffer++; }
+    ok = (treffer>=3 && Math.abs(fy(-N))<=N*3 && Math.abs(fy(N))<=N*3);
+  }
+  schritt=1; gesetzt=[];
+  var e=document.getElementById('ib'); e.value=''; e.className=''; e.disabled=false;
+  ['idy','idx','im'].forEach(function(id){var f=document.getElementById(id);f.value='';f.className='';f.disabled=true;});
+  setRueck('r1',''); setRueck('r2',''); setRueck('r3','');
+  document.getElementById('bp1').disabled=false;
+  document.getElementById('bz').disabled=true;
+  document.getElementById('bp3').disabled=true;
+  document.getElementById('k2').className='karte aus';
+  document.getElementById('k3').className='karte aus';
+  ['h1t','h2t','h3t'].forEach(function(id){document.getElementById(id).className='';});
+  document.getElementById('h2hint').innerHTML='Erst b bestimmen.';
+  document.getElementById('h3hint').innerHTML='Erst zwei Gitterpunkte wählen.';
+  document.getElementById('dreieck').style.display='none';
+  document.getElementById('gleichung').style.display='none';
+  zeichne();
+  document.getElementById('ib').focus();
+}
+
+function setRueck(id,txt,ok){
+  var r=document.getElementById(id);
+  r.className='rueck'+(txt?(ok?' ok':' no'):'');
+  r.innerHTML=txt;
+}
+function zahl(id){
+  var v=document.getElementById(id).value.trim().replace('\u2212','-').replace(',','.');
+  if(v.indexOf('/')>0){var t=v.split('/');return Number(t[0])/Number(t[1]);}
+  return v===''?NaN:Number(v);
+}
+
+/* ------------------------------------------------------------ Schritt 1 */
+function pruefeB(){
+  var e=document.getElementById('ib');
+  if(e.value.trim()===''){setRueck('r1','<b>Da fehlt noch etwas.</b> Trage b ein.',false);return;}
+  if(zahl('ib')!==b){
+    e.className='no';
+    setRueck('r1','<b>Noch nicht.</b> Suche den Punkt, an dem die Gerade die senkrechte y-Achse '+
+      'kreuzt, und lies dort den Wert ab. Liegt er unter der x-Achse, ist b negativ.',false);
+    return;
+  }
+  e.className='ok'; e.disabled=true;
+  document.getElementById('bp1').disabled=true;
+  document.getElementById('h1t').className='fertig';
+  setRueck('r1','<b>Richtig!</b> b = '+zs(b)+'.',true);
+  schritt=2;
+  document.getElementById('k2').className='karte';
+  document.getElementById('h2hint').innerHTML='Tippe zwei Punkte an, die <b>genau auf einer Kreuzung</b> '+
+    'des Gitters und auf der Geraden liegen.';
+  document.getElementById('ks').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ------------------------------------------------------------ Schritt 2 */
+function klick(ev){
+  if(schritt!==2) return;
+  var svg=document.getElementById('ks');
+  var r=svg.getBoundingClientRect();
+  var t=(ev.touches&&ev.touches[0])?ev.touches[0]:ev;
+  var sx=(t.clientX-r.left)/r.width*420, sy=(t.clientY-r.top)/r.height*420;
+  var gx=Math.round((sx-PAD)/S-N), gy=Math.round((420-PAD-sy)/S-N);
+  if(gx<-N||gx>N||gy<-N||gy>N) return;
+  if(gesetzt.length===1 && gesetzt[0][0]===gx && gesetzt[0][1]===gy){
+    setRueck('r2','<b>Das ist derselbe Punkt.</b> Wähle einen zweiten, der weiter rechts liegt.',false);
+    return;
+  }
+  if(Math.abs(fy(gx)-gy)>0.001){
+    setRueck('r2','<b>Dieser Punkt liegt nicht auf der Geraden.</b> Suche eine Stelle, an der die Gerade '+
+      'genau durch eine Gitterkreuzung läuft.',false);
+    zeichne([gx,gy]);
+    return;
+  }
+  gesetzt.push([gx,gy]);
+  gesetzt.sort(function(a,c){return a[0]-c[0];});
+  document.getElementById('bz').disabled=false;
+  if(gesetzt.length===1){
+    setRueck('r2','<b>Guter Punkt.</b> Jetzt noch einen zweiten.',true);
+  }else{
+    setRueck('r2','<b>Zwei Punkte sitzen.</b> Das rote Dreieck zeigt deinen Weg: '+
+      'erst nach rechts, dann nach oben oder unten. Zähle die Kästchen selbst ab.',true);
+    document.getElementById('h2t').className='fertig';
+    schritt=3;
+    document.getElementById('k3').className='karte';
+    document.getElementById('h3hint').innerHTML='Trage die Werte deines Dreiecks ein und rechne m aus. '+
+      'Als Bruch (z. B. 3/4) oder als Dezimalzahl.';
+    ['idy','idx','im'].forEach(function(id){document.getElementById(id).disabled=false;});
+    document.getElementById('bp3').disabled=false;
+    document.getElementById('k3').scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  zeichne();
+}
+
+function punktZurueck(){
+  gesetzt=[]; schritt=2;
+  document.getElementById('bz').disabled=true;
+  document.getElementById('bp3').disabled=true;
+  document.getElementById('dreieck').style.display='none';
+  document.getElementById('k3').className='karte aus';
+  document.getElementById('h2t').className='';
+  ['idy','idx','im'].forEach(function(id){var f=document.getElementById(id);f.value='';f.className='';f.disabled=true;});
+  setRueck('r2',''); setRueck('r3','');
+  zeichne();
+}
+
+/* ------------------------------------------------------------ Schritt 3 */
+function pruefeM(){
+  var dx=gesetzt[1][0]-gesetzt[0][0], dy=gesetzt[1][1]-gesetzt[0][1];
+  var edy=document.getElementById('idy'), edx=document.getElementById('idx'), em=document.getElementById('im');
+  if(edy.value.trim()===''||edx.value.trim()===''||em.value.trim()===''){
+    setRueck('r3','<b>Da fehlt noch etwas.</b> Fülle alle drei Felder aus.',false); return;
+  }
+  var okdy=(zahl('idy')===dy), okdx=(zahl('idx')===dx), okm=(Math.abs(zahl('im')-mz/mn)<0.001);
+  edy.className=okdy?'ok':'no'; edx.className=okdx?'ok':'no'; em.className=okm?'ok':'no';
+  if(!okdy||!okdx){
+    var t='<b>Zähle am roten Dreieck noch einmal nach.</b> Δx sind die Kästchen nach rechts, '+
+          'Δy die Kästchen nach oben oder unten.';
+    if(!okdy && dy<0) t+=' Achtung: Geht es nach unten, ist Δy negativ.';
+    setRueck('r3',t,false);
+    return;
+  }
+  if(!okm){
+    setRueck('r3','<b>Noch nicht.</b> Teile Δy durch Δx – y steht oben, x unten. '+
+      'Kontrolle: flache Gerade → kleine Zahl, steile Gerade → große Zahl.',false);
+    return;
+  }
+  var mb = (mn===1)? zs(mz)
+                   : ('<span class="bruch"><span class="o">'+zs(mz)+'</span><span class="u">'+mn+'</span></span>');
+  var bt = b>0? (' + '+b) : (b<0? (' \u2212 '+Math.abs(b)) : '');
+  document.getElementById('dreieck').style.display='block';
+  document.getElementById('dreieck').innerHTML='m = <span class="bruch"><span class="o">&Delta;y</span>'+
+    '<span class="u">&Delta;x</span></span> = <span class="bruch"><span class="o">'+zs(dy)+
+    '</span><span class="u">'+dx+'</span></span>'+(mn===1||Math.abs(dy)!==Math.abs(mz)?' = '+mb:'');
+  document.getElementById('gleichung').style.display='block';
+  document.getElementById('gleichung').innerHTML='y = '+
+    (mz===1&&mn===1?'x':(mz===-1&&mn===1?'\u2212x':mb+'x'))+bt;
+  setRueck('r3','<b>Richtig!</b> Mit b = '+zs(b)+' ergibt sich daraus die Funktionsgleichung.',true);
+  document.getElementById('h3t').className='fertig';
+  document.getElementById('bp3').disabled=true;
+  schritt=4;
+  fertig++;
+  document.getElementById('zaehler').textContent='Geschafft: '+fertig+' Aufgabe'+(fertig===1?'':'n');
+  zeichne();
+}
+
+/* ------------------------------------------------------------ Zeichnen */
+function zeichne(fehler){
+  var p=[], i, v;
+  for(i=-N;i<=N;i++){
+    p.push('<line x1="'+px(i)+'" y1="'+py(-N)+'" x2="'+px(i)+'" y2="'+py(N)+'" stroke="#dbe6f0"/>');
+    p.push('<line x1="'+px(-N)+'" y1="'+py(i)+'" x2="'+px(N)+'" y2="'+py(i)+'" stroke="#dbe6f0"/>');
+  }
+  p.push('<line x1="'+(px(-N)-6)+'" y1="'+py(0)+'" x2="414" y2="'+py(0)+'" stroke="#333" stroke-width="1.6"/>');
+  p.push('<polygon points="414,'+py(0)+' 405,'+(py(0)-4)+' 405,'+(py(0)+4)+'" fill="#333"/>');
+  p.push('<line x1="'+px(0)+'" y1="'+(py(-N)+6)+'" x2="'+px(0)+'" y2="6" stroke="#333" stroke-width="1.6"/>');
+  p.push('<polygon points="'+px(0)+',6 '+(px(0)-4)+',15 '+(px(0)+4)+',15" fill="#333"/>');
+  for(v=-N;v<=N;v++){
+    if(v===0) continue;
+    p.push('<line x1="'+px(v)+'" y1="'+(py(0)-3)+'" x2="'+px(v)+'" y2="'+(py(0)+3)+'" stroke="#333"/>');
+    p.push('<line x1="'+(px(0)-3)+'" y1="'+py(v)+'" x2="'+(px(0)+3)+'" y2="'+py(v)+'" stroke="#333"/>');
+    if(v%2===0){
+      p.push('<text x="'+px(v)+'" y="'+(py(0)+15)+'" font-size="11" fill="#555" text-anchor="middle">'+zs(v)+'</text>');
+      p.push('<text x="'+(px(0)-6)+'" y="'+(py(v)+4)+'" font-size="11" fill="#555" text-anchor="end">'+zs(v)+'</text>');
+    }
+  }
+  p.push('<text x="410" y="'+(py(0)-8)+'" font-size="13" fill="#333" text-anchor="end" font-style="italic">x</text>');
+  p.push('<text x="'+(px(0)+8)+'" y="16" font-size="13" fill="#333" text-anchor="start" font-style="italic">y</text>');
+  /* die gegebene Gerade */
+  var x1=-N, y1=fy(x1), x2=N, y2=fy(x2);
+  if(Math.abs(y1)>N){ y1=y1>0?N:-N; x1=(y1-b)*mn/mz; }
+  if(Math.abs(y2)>N){ y2=y2>0?N:-N; x2=(y2-b)*mn/mz; }
+  p.push('<line x1="'+px(x1)+'" y1="'+py(y1)+'" x2="'+px(x2)+'" y2="'+py(y2)+
+         '" stroke="#1D70B8" stroke-width="3" stroke-linecap="round"/>');
+  /* Steigungsdreieck der gewaehlten Punkte */
+  if(gesetzt.length===2){
+    var a=gesetzt[0], c=gesetzt[1];
+    p.push('<line x1="'+px(a[0])+'" y1="'+py(a[1])+'" x2="'+px(c[0])+'" y2="'+py(a[1])+
+           '" stroke="#C8102E" stroke-width="2" stroke-dasharray="5 4"/>');
+    p.push('<line x1="'+px(c[0])+'" y1="'+py(a[1])+'" x2="'+px(c[0])+'" y2="'+py(c[1])+
+           '" stroke="#C8102E" stroke-width="2" stroke-dasharray="5 4"/>');
+  }
+  for(i=0;i<gesetzt.length;i++){
+    p.push('<circle cx="'+px(gesetzt[i][0])+'" cy="'+py(gesetzt[i][1])+'" r="6" fill="#C8102E"/>');
+  }
+  if(schritt===1){
+    p.push('<circle cx="'+px(0)+'" cy="'+py(b)+'" r="9" fill="none" stroke="#F2B705" stroke-width="3"/>');
+  }
+  if(fehler){
+    var fx=px(fehler[0]), fy2=py(fehler[1]);
+    p.push('<circle cx="'+fx+'" cy="'+fy2+'" r="8" fill="none" stroke="#C8102E" stroke-width="2.5"/>');
+    p.push('<line x1="'+(fx-5)+'" y1="'+(fy2-5)+'" x2="'+(fx+5)+'" y2="'+(fy2+5)+'" stroke="#C8102E" stroke-width="2.5"/>');
+    p.push('<line x1="'+(fx+5)+'" y1="'+(fy2-5)+'" x2="'+(fx-5)+'" y2="'+(fy2+5)+'" stroke="#C8102E" stroke-width="2.5"/>');
+  }
+  document.getElementById('ks').innerHTML=p.join('');
+}
+
+document.getElementById('ks').addEventListener('click',klick);
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter') return;
+  e.preventDefault();
+  if(schritt===1) pruefeB(); else if(schritt===3) pruefeM();
+});
+neueAufgabe();
+</script>
+</body></html>
