@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineare Funktionen &ndash; m, b und Steigungsdreieck</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+.karte.aus{opacity:.45}
+h2{font-size:17px;margin:0 0 4px;color:#C8102E}
+h2 .s{display:inline-block;background:#C8102E;color:#fff;width:24px;height:24px;border-radius:50%;
+  font-size:14px;text-align:center;line-height:24px;margin-right:7px;vertical-align:2px}
+h2.fertig{color:#1E7B3C}
+h2.fertig .s{background:#1E7B3C}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.term{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 14px;font-size:22px}
+.term b{color:#1D70B8}
+.felder{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 12px}
+.feld{flex:1 1 130px}
+.feld label{display:block;font-size:15px;color:#4b5563;margin-bottom:3px}
+.feld input{font-size:19px;padding:10px 8px;width:100%;border:2px solid #c9cfd6;border-radius:8px;
+  font-family:inherit;text-align:center;background:#fff}
+.feld input:focus{outline:none;border-color:#1D70B8}
+.feld input.ok{border-color:#1E7B3C;background:#E6F4EA}
+.feld input.no{border-color:#C8102E;background:#FDECEC}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bl{background:#5B3E90;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.ksbox{text-align:center;margin:6px 0 10px}
+svg.ks{width:100%;max-width:420px;height:auto;touch-action:manipulation;
+  border:1px solid #dbe6f0;border-radius:8px;background:#fff;cursor:crosshair}
+.marke{display:inline-block;background:#fff3cd;border-radius:6px;padding:2px 9px;font-weight:700}
+.zaehler{font-size:14px;color:#6b7280;margin-top:12px}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Lineare Funktionen &middot; Stunde 2</div>
+<h1>m, b und das Steigungsdreieck</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <div class="term" id="term"></div>
+  <p class="hint" style="margin:0">Drei Schritte: m und b ablesen &rarr; Startpunkt setzen &rarr;
+  Steigungsdreieck abtragen. Ganz ohne Wertetabelle.</p>
+</div>
+
+<div class="karte" id="k1">
+  <h2 id="h1t"><span class="s">1</span>m und b ablesen</h2>
+  <p class="hint">Achte auf die unsichtbare Eins und auf das Vorzeichen.</p>
+  <div class="felder">
+    <div class="feld"><label>Steigung m</label><input type="text" id="im"></div>
+    <div class="feld"><label>y-Achsenabschnitt b</label><input type="text" id="ib"></div>
+  </div>
+  <button class="bp" id="bp1" onclick="pruefeMB()">Pr&uuml;fen</button>
+  <div class="rueck" id="r1"></div>
+</div>
+
+<div class="karte aus" id="k2">
+  <h2 id="h2t"><span class="s">2</span>Startpunkt und Steigungsdreieck</h2>
+  <p class="hint" id="h2hint">Erst m und b bestimmen.</p>
+  <div class="ksbox"><svg class="ks" id="ks" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  <button class="bn" id="bz" onclick="zurueck()" disabled>Letzten Punkt l&ouml;schen</button>
+  <div class="rueck" id="r2"></div>
+</div>
+
+<div class="karte aus" id="k3">
+  <h2 id="h3t"><span class="s">3</span>Gerade zeichnen</h2>
+  <p class="hint" id="h3hint">Erst beide Punkte setzen.</p>
+  <button class="bl" id="bp3" onclick="verbinden()" disabled>Gerade ziehen</button>
+  <button class="bn" onclick="neueAufgabe()">Neue Aufgabe</button>
+  <div class="rueck" id="r3"></div>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Aufgaben</div>
+</div>
+
+<div class="fuss">Lineare Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var N=6, PAD=26, S=(420-2*PAD)/(2*N);
+var m=1,b=0, schritt=1, idx=0, gesetzt=[], fertig=0;
+
+function zuf(a,c){return Math.floor(Math.random()*(c-a+1))+a;}
+function zs(x){return String(x).replace('-','\u2212');}
+function px(x){return PAD+(x+N)*S;}
+function py(y){return 420-PAD-(y+N)*S;}
+
+function neueAufgabe(){
+  do{ m=[-3,-2,-1,1,2,3][zuf(0,5)]; b=zuf(-4,4); }
+  while(Math.abs(m+b)>N || Math.abs(b)>N-1);
+  var t='f(x) = ';
+  t += (m===1?'x':(m===-1?'\u2212x':zs(m)+'x'));
+  if(b>0) t+=' + '+b; else if(b<0) t+=' \u2212 '+Math.abs(b);
+  document.getElementById('term').innerHTML='<b>'+t+'</b>';
+  schritt=1; idx=0; gesetzt=[];
+  ['im','ib'].forEach(function(id){var e=document.getElementById(id);e.value='';e.className='';e.disabled=false;});
+  setRueck('r1',''); setRueck('r2',''); setRueck('r3','');
+  document.getElementById('bp1').disabled=false;
+  document.getElementById('bz').disabled=true;
+  document.getElementById('bp3').disabled=true;
+  document.getElementById('k2').className='karte aus';
+  document.getElementById('k3').className='karte aus';
+  ['h1t','h2t','h3t'].forEach(function(id){document.getElementById(id).className='';});
+  document.getElementById('h2hint').innerHTML='Erst m und b bestimmen.';
+  document.getElementById('h3hint').innerHTML='Erst beide Punkte setzen.';
+  zeichne();
+  document.getElementById('im').focus();
+}
+
+function setRueck(id,txt,ok){
+  var r=document.getElementById(id);
+  r.className='rueck'+(txt?(ok?' ok':' no'):'');
+  r.innerHTML=txt;
+}
+function zahl(id){
+  return Number(document.getElementById(id).value.trim().replace('\u2212','-').replace(',','.'));
+}
+
+/* ------------------------------------------------------------ Schritt 1 */
+function pruefeMB(){
+  var em=document.getElementById('im'), eb=document.getElementById('ib');
+  if(em.value.trim()===''||eb.value.trim()===''){
+    setRueck('r1','<b>Da fehlt noch etwas.</b> F\u00fclle beide Felder aus.',false); return;
+  }
+  var okm=(zahl('im')===m), okb=(zahl('ib')===b);
+  em.className=okm?'ok':'no'; eb.className=okb?'ok':'no';
+  if(!okm||!okb){
+    var t='';
+    if(!okm && (m===1||m===-1)) t=' Steht vor dem x keine Zahl, ist m trotzdem 1 oder \u22121.';
+    else if(!okm) t=' m ist die Zahl direkt vor dem x, mit Vorzeichen.';
+    if(!okb) t+=' b ist die Zahl, die hinten steht \u2013 mit ihrem Vorzeichen.';
+    setRueck('r1','<b>Noch nicht ganz.</b>'+t,false);
+    return;
+  }
+  setRueck('r1','<b>Richtig!</b> Jetzt kannst du zeichnen.',true);
+  em.disabled=true; eb.disabled=true;
+  document.getElementById('bp1').disabled=true;
+  document.getElementById('h1t').className='fertig';
+  schritt=2;
+  document.getElementById('k2').className='karte';
+  hinweis2();
+  zeichne();
+  document.getElementById('k2').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function hinweis2(){
+  if(idx===0){
+    document.getElementById('h2hint').innerHTML='Tippe den <span class="marke">Startpunkt ( 0 | '+
+      zs(b)+' )</span> auf der y-Achse an.';
+  }else if(idx===1){
+    document.getElementById('h2hint').innerHTML='Jetzt <span class="marke">1 nach rechts</span> und '+
+      '<span class="marke">'+Math.abs(m)+' nach '+(m>0?'oben':'unten')+'</span> \u2013 tippe den zweiten Punkt an.';
+  }else{
+    document.getElementById('h2hint').innerHTML='Beide Punkte sitzen.';
+  }
+}
+
+/* ------------------------------------------------------------ Schritt 2 */
+function klick(ev){
+  if(schritt!==2) return;
+  var svg=document.getElementById('ks');
+  var r=svg.getBoundingClientRect();
+  var t=(ev.touches&&ev.touches[0])?ev.touches[0]:ev;
+  var sx=(t.clientX-r.left)/r.width*420, sy=(t.clientY-r.top)/r.height*420;
+  var gx=Math.round((sx-PAD)/S-N), gy=Math.round((420-PAD-sy)/S-N);
+  if(gx<-N||gx>N||gy<-N||gy>N) return;
+  var zx = (idx===0)?0:1, zy = (idx===0)?b:(m+b);
+  if(gx===zx && gy===zy){
+    gesetzt.push([gx,gy]); idx++;
+    document.getElementById('bz').disabled=false;
+    setRueck('r2', idx===1?'<b>Startpunkt sitzt.</b> Weiter mit dem Steigungsdreieck.':
+      '<b>Beide Punkte sind richtig.</b>', true);
+    hinweis2();
+    if(idx===2){
+      schritt=3;
+      document.getElementById('h2t').className='fertig';
+      document.getElementById('k3').className='karte';
+      document.getElementById('bp3').disabled=false;
+      document.getElementById('h3hint').innerHTML='Verbinde die beiden Punkte mit dem Lineal.';
+      document.getElementById('k3').scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    zeichne();
+  }else{
+    var tipp;
+    if(idx===0){
+      tipp = (gx!==0) ? ' Der Startpunkt liegt immer auf der y-Achse, also bei x = 0.'
+                      : ' Auf der y-Achse ja \u2013 aber b ist '+zs(b)+'.';
+    }else{
+      tipp = (gx!==1) ? ' Vom Startpunkt aus geht es genau 1 Schritt nach rechts.'
+                      : ' Von ( 0 | '+zs(b)+' ) aus '+Math.abs(m)+' nach '+(m>0?'oben':'unten')+'.';
+    }
+    setRueck('r2','<b>Noch nicht.</b>'+tipp,false);
+    zeichne([gx,gy]);
+  }
+}
+
+function zurueck(){
+  if(gesetzt.length===0) return;
+  gesetzt.pop(); idx=gesetzt.length;
+  if(idx<2){
+    schritt=2;
+    document.getElementById('bp3').disabled=true;
+    document.getElementById('h2t').className='';
+    document.getElementById('k3').className='karte aus';
+    setRueck('r3','');
+  }
+  if(idx===0) document.getElementById('bz').disabled=true;
+  setRueck('r2','');
+  hinweis2();
+  zeichne();
+}
+
+/* ------------------------------------------------------------ Schritt 3 */
+function verbinden(){
+  document.getElementById('bp3').disabled=true;
+  zeichne(null,true);
+  document.getElementById('h3t').className='fertig';
+  fertig++;
+  document.getElementById('zaehler').textContent='Geschafft: '+fertig+' Aufgabe'+(fertig===1?'':'n');
+  setRueck('r3','<b>Fertig!</b> Zwei Punkte gen\u00fcgen \u2013 du hast die Gerade ohne eine einzige '+
+    'Wertetabelle gezeichnet.', true);
+}
+
+/* ------------------------------------------------------------ Zeichnen */
+function zeichne(fehler, gerade){
+  var p=[], i, v;
+  for(i=-N;i<=N;i++){
+    p.push('<line x1="'+px(i)+'" y1="'+py(-N)+'" x2="'+px(i)+'" y2="'+py(N)+'" stroke="#dbe6f0"/>');
+    p.push('<line x1="'+px(-N)+'" y1="'+py(i)+'" x2="'+px(N)+'" y2="'+py(i)+'" stroke="#dbe6f0"/>');
+  }
+  p.push('<line x1="'+(px(-N)-6)+'" y1="'+py(0)+'" x2="414" y2="'+py(0)+'" stroke="#333" stroke-width="1.6"/>');
+  p.push('<polygon points="414,'+py(0)+' 405,'+(py(0)-4)+' 405,'+(py(0)+4)+'" fill="#333"/>');
+  p.push('<line x1="'+px(0)+'" y1="'+(py(-N)+6)+'" x2="'+px(0)+'" y2="6" stroke="#333" stroke-width="1.6"/>');
+  p.push('<polygon points="'+px(0)+',6 '+(px(0)-4)+',15 '+(px(0)+4)+',15" fill="#333"/>');
+  for(v=-N;v<=N;v++){
+    if(v===0) continue;
+    p.push('<line x1="'+px(v)+'" y1="'+(py(0)-3)+'" x2="'+px(v)+'" y2="'+(py(0)+3)+'" stroke="#333"/>');
+    p.push('<line x1="'+(px(0)-3)+'" y1="'+py(v)+'" x2="'+(px(0)+3)+'" y2="'+py(v)+'" stroke="#333"/>');
+    if(v%2===0){
+      p.push('<text x="'+px(v)+'" y="'+(py(0)+15)+'" font-size="11" fill="#555" text-anchor="middle">'+zs(v)+'</text>');
+      p.push('<text x="'+(px(0)-6)+'" y="'+(py(v)+4)+'" font-size="11" fill="#555" text-anchor="end">'+zs(v)+'</text>');
+    }
+  }
+  p.push('<text x="410" y="'+(py(0)-8)+'" font-size="13" fill="#333" text-anchor="end" font-style="italic">x</text>');
+  p.push('<text x="'+(px(0)+8)+'" y="16" font-size="13" fill="#333" text-anchor="start" font-style="italic">y</text>');
+  if(gerade){
+    var x1=-N, y1=m*x1+b, x2=N, y2=m*x2+b;
+    if(Math.abs(y1)>N){ y1=y1>0?N:-N; x1=(y1-b)/m; }
+    if(Math.abs(y2)>N){ y2=y2>0?N:-N; x2=(y2-b)/m; }
+    p.push('<line x1="'+px(x1)+'" y1="'+py(y1)+'" x2="'+px(x2)+'" y2="'+py(y2)+
+           '" stroke="#5B3E90" stroke-width="3" stroke-linecap="round"/>');
+  }
+  /* Steigungsdreieck erst zeigen, wenn beide Punkte eingetragen sind */
+  if(idx>=2){
+    p.push('<line x1="'+px(0)+'" y1="'+py(b)+'" x2="'+px(1)+'" y2="'+py(b)+
+           '" stroke="#C8102E" stroke-width="2" stroke-dasharray="5 4"/>');
+    p.push('<line x1="'+px(1)+'" y1="'+py(b)+'" x2="'+px(1)+'" y2="'+py(m+b)+
+           '" stroke="#C8102E" stroke-width="2" stroke-dasharray="5 4"/>');
+  }
+  if(schritt===2 && idx===0){
+    p.push('<line x1="'+px(0)+'" y1="'+py(-N)+'" x2="'+px(0)+'" y2="'+py(N)+
+           '" stroke="#F2B705" stroke-width="2.5" stroke-dasharray="6 5"/>');
+  }
+  for(i=0;i<gesetzt.length;i++){
+    p.push('<circle cx="'+px(gesetzt[i][0])+'" cy="'+py(gesetzt[i][1])+'" r="6" fill="#1D70B8"/>');
+  }
+  if(fehler){
+    var fx=px(fehler[0]), fy=py(fehler[1]);
+    p.push('<circle cx="'+fx+'" cy="'+fy+'" r="8" fill="none" stroke="#C8102E" stroke-width="2.5"/>');
+    p.push('<line x1="'+(fx-5)+'" y1="'+(fy-5)+'" x2="'+(fx+5)+'" y2="'+(fy+5)+'" stroke="#C8102E" stroke-width="2.5"/>');
+    p.push('<line x1="'+(fx+5)+'" y1="'+(fy-5)+'" x2="'+(fx-5)+'" y2="'+(fy+5)+'" stroke="#C8102E" stroke-width="2.5"/>');
+  }
+  document.getElementById('ks').innerHTML=p.join('');
+}
+
+document.getElementById('ks').addEventListener('click',klick);
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&schritt===1){e.preventDefault();pruefeMB();}
+});
+neueAufgabe();
+</script>
+</body></html>
