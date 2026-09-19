@@ -132,12 +132,26 @@ table.rt td.l{ text-align:left; }
               text-align:center; padding:0 2mm; line-height:6.2mm; font-size:13px;
               font-family:Calibri,Arial,sans-serif; }
 .aufg{ break-inside:avoid; page-break-inside:avoid; }
+.loeskasten{ border:1.6px solid var(--rwb); border-radius:8px; background:#fdf6f7;
+   padding:6px 11px 7px; margin:7px 0 0; break-inside:avoid; page-break-inside:avoid;
+   display:table; width:100%; }
+.loeskasten > div{ display:table-cell; vertical-align:middle; }
+.loeskasten > div:first-child{ width:19mm; }
+.loeskasten img{ width:17mm; height:17mm; display:block; }
+.loeskasten .vt{ font-size:12px; line-height:1.5; padding-left:5px; }
+.loeskasten .vt b{ color:var(--rwb); font-size:13px; }
+.codefeld{ display:inline-block; }
+.codefeld span{ display:inline-block; width:8mm; height:9mm; border:1.4px solid #8e877a;
+   border-radius:1.6mm; background:#fff; margin-right:2mm; vertical-align:-2.5mm; }
+
 .bild{ width:100%; height:auto; display:block; border:1px solid #e3dcd0; border-radius:5px; }
 .uebung{ border:1.6px solid #5B3E90; border-radius:8px; background:#FAF7FF;
          padding:6px 11px 7px; margin:8px 0 0; break-inside:avoid; page-break-inside:avoid; }
 .uebung .t{ color:#5B3E90; font-size:13.5px; font-weight:bold; display:block; margin-bottom:2px; }
 .uebung .sp{ display:table; width:100%; table-layout:fixed; }
-.uebung .sp > div{ display:table-cell; width:50%; vertical-align:middle; }
+.uebung .sp > div{ display:table-cell; width:33.33%; vertical-align:middle; }
+.codefeld{ display:block; margin-top:2px; }
+.codefeld span{ display:inline-block; width:6mm; height:7mm; border:1.3px solid #8e877a; border-radius:1.2mm; background:#fff; margin-right:1.4mm; vertical-align:-1.8mm; }
 .ubox{ display:table; width:100%; }
 .ubox > div{ display:table-cell; vertical-align:middle; }
 .ubox > div:first-child{ width:17mm; }
