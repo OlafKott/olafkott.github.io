@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineare Funktionen &ndash; Gleichung aus zwei Punkten</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+.karte.aus{opacity:.45}
+h2{font-size:17px;margin:0 0 4px;color:#C8102E}
+h2 .s{display:inline-block;background:#C8102E;color:#fff;width:24px;height:24px;border-radius:50%;
+  font-size:14px;text-align:center;line-height:24px;margin-right:7px;vertical-align:2px}
+h2.fertig{color:#1E7B3C}
+h2.fertig .s{background:#1E7B3C}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.punkte{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 14px;font-size:21px}
+.punkte b{color:#1D70B8}
+.felder{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 12px}
+.feld{flex:1 1 130px}
+.feld label{display:block;font-size:15px;color:#4b5563;margin-bottom:3px}
+.feld input{font-size:19px;padding:10px 8px;width:100%;border:2px solid #c9cfd6;border-radius:8px;
+  font-family:inherit;text-align:center;background:#fff}
+.feld input:focus{outline:none;border-color:#1D70B8}
+.feld input.ok{border-color:#1E7B3C;background:#E6F4EA}
+.feld input.no{border-color:#C8102E;background:#FDECEC}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.formel{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:8px 0;font-size:17px}
+.gleichung{background:#FAF7FF;border-left:4px solid #5B3E90;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 0;font-size:20px;color:#5B3E90;font-weight:700}
+.probe{background:#FFF8E8;border-left:4px solid #F2B705;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:10px 0 0;font-size:16px}
+.ksbox{text-align:center;margin:6px 0 0}
+svg.ks{width:100%;max-width:340px;height:auto;border:1px solid #dbe6f0;border-radius:8px;background:#fff}
+.bruch{display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 3px;
+  font-size:.82em}
+.bruch .o{display:block;border-bottom:2px solid currentColor;padding:0 4px 1px}
+.bruch .u{display:block;padding:1px 4px 0}
+.zaehler{font-size:14px;color:#6b7280;margin-top:12px}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Lineare Funktionen &middot; Stunde 4</div>
+<h1>Gleichung aus zwei Punkten</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <p class="hint" style="margin:0 0 8px">Gegeben sind zwei Punkte. Gesucht ist die Funktionsgleichung
+  y = m &middot; x + b.</p>
+  <div class="punkte" id="punkte"></div>
+</div>
+
+<div class="karte" id="k1">
+  <h2 id="h1t"><span class="s">1</span>Steigung m berechnen</h2>
+  <div class="formel">m = <span class="bruch"><span class="o">y&#8322; &minus; y&#8321;</span>
+    <span class="u">x&#8322; &minus; x&#8321;</span></span></div>
+  <p class="hint">Negative Zahlen beim Einsetzen in eine Klammer setzen.</p>
+  <div class="felder">
+    <div class="feld"><label>y&#8322; &minus; y&#8321; (oben)</label><input type="text" id="idy"></div>
+    <div class="feld"><label>x&#8322; &minus; x&#8321; (unten)</label><input type="text" id="idx"></div>
+    <div class="feld"><label>m</label><input type="text" id="im"></div>
+  </div>
+  <button class="bp" id="bp1" onclick="pruefeM()">Pr&uuml;fen</button>
+  <div class="rueck" id="r1"></div>
+</div>
+
+<div class="karte aus" id="k2">
+  <h2 id="h2t"><span class="s">2</span>y-Achsenabschnitt b berechnen</h2>
+  <p class="hint" id="h2hint">Erst m bestimmen.</p>
+  <div class="formel" id="einsetzen"></div>
+  <div class="felder"><div class="feld"><label>b</label><input type="text" id="ib" disabled></div></div>
+  <button class="bp" id="bp2" onclick="pruefeB()" disabled>Pr&uuml;fen</button>
+  <button class="bn" onclick="neueAufgabe()">Neue Aufgabe</button>
+  <div class="rueck" id="r2"></div>
+  <div class="gleichung" id="gleichung" style="display:none"></div>
+  <div class="probe" id="probe" style="display:none"></div>
+  <div class="ksbox"><svg class="ks" id="ks" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg"
+       style="display:none"></svg></div>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Aufgaben</div>
+</div>
+
+<div class="fuss">Lineare Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var N=6, PAD=22, S=(340-2*PAD)/(2*N);
+var A=[0,0], B=[0,0], mz=1, mn=1, b=0, schritt=1, fertig=0;
+
+function zuf(a,c){return Math.floor(Math.random()*(c-a+1))+a;}
+function zs(x){return String(x).replace('-','\u2212');}
+function px(x){return PAD+(x+N)*S;}
+function py(y){return 340-PAD-(y+N)*S;}
+function kuerze(z,n){var a=Math.abs(z),c=Math.abs(n);while(c){var t=c;c=a%c;a=t;}return a||1;}
+function pkt(p){return '('+zs(p[0])+' | '+zs(p[1])+')';}
+
+function neueAufgabe(){
+  var ok=false;
+  while(!ok){
+    var m0=[-3,-2,-1,1,2,3,0.5,-0.5][zuf(0,7)];
+    b=zuf(-4,4);
+    var x1=zuf(-4,4), x2=zuf(-4,4);
+    if(x1===x2) continue;
+    var y1=m0*x1+b, y2=m0*x2+b;
+    if(!Number.isInteger(y1)||!Number.isInteger(y2)) continue;
+    if(Math.abs(y1)>6||Math.abs(y2)>6) continue;
+    A=[x1,y1]; B=[x2,y2];
+    var dz=y2-y1, dn=x2-x1, g=kuerze(dz,dn);
+    mz=dz/g; mn=dn/g;
+    if(mn<0){mz=-mz;mn=-mn;}
+    ok=true;
+  }
+  schritt=1;
+  document.getElementById('punkte').innerHTML='<b>A '+pkt(A)+'</b> &nbsp;und&nbsp; <b>B '+pkt(B)+'</b>';
+  ['idy','idx','im'].forEach(function(id){var e=document.getElementById(id);e.value='';e.className='';e.disabled=false;});
+  var eb=document.getElementById('ib'); eb.value=''; eb.className=''; eb.disabled=true;
+  setRueck('r1',''); setRueck('r2','');
+  document.getElementById('bp1').disabled=false;
+  document.getElementById('bp2').disabled=true;
+  document.getElementById('k2').className='karte aus';
+  ['h1t','h2t'].forEach(function(id){document.getElementById(id).className='';});
+  document.getElementById('h2hint').innerHTML='Erst m bestimmen.';
+  document.getElementById('einsetzen').innerHTML='y = m &middot; x + b';
+  document.getElementById('gleichung').style.display='none';
+  document.getElementById('probe').style.display='none';
+  document.getElementById('ks').style.display='none';
+  document.getElementById('idy').focus();
+}
+
+function setRueck(id,txt,ok){
+  var r=document.getElementById(id);
+  r.className='rueck'+(txt?(ok?' ok':' no'):'');
+  r.innerHTML=txt;
+}
+function zahl(id){
+  var v=document.getElementById(id).value.trim().replace('\u2212','-').replace(',','.');
+  if(v.indexOf('/')>0){var t=v.split('/');return Number(t[0])/Number(t[1]);}
+  return v===''?NaN:Number(v);
+}
+
+/* ------------------------------------------------------------ Schritt 1 */
+function pruefeM(){
+  var dy=B[1]-A[1], dx=B[0]-A[0];
+  var edy=document.getElementById('idy'), edx=document.getElementById('idx'), em=document.getElementById('im');
+  if(edy.value.trim()===''||edx.value.trim()===''||em.value.trim()===''){
+    setRueck('r1','<b>Da fehlt noch etwas.</b> Fülle alle drei Felder aus.',false); return;
+  }
+  /* beide Reihenfolgen sind erlaubt, wenn oben und unten gleich gewaehlt */
+  var v1 = (zahl('idy')===dy && zahl('idx')===dx);
+  var v2 = (zahl('idy')===-dy && zahl('idx')===-dx);
+  var okm = Math.abs(zahl('im')-mz/mn)<0.001;
+  edy.className=(v1||v2)?'ok':'no'; edx.className=(v1||v2)?'ok':'no'; em.className=okm?'ok':'no';
+  if(!(v1||v2)){
+    setRueck('r1','<b>Schau noch einmal.</b> Oben die Differenz der y-Werte, unten die der x-Werte – '+
+      'und beide in derselben Reihenfolge der Punkte. Negative Zahlen in Klammern setzen.',false);
+    return;
+  }
+  if(!okm){
+    setRueck('r1','<b>Der Bruch stimmt, das Ergebnis noch nicht.</b> Teile den oberen Wert durch den '+
+      'unteren und kürze so weit wie möglich.',false);
+    return;
+  }
+  ['idy','idx','im'].forEach(function(id){document.getElementById(id).disabled=true;});
+  document.getElementById('bp1').disabled=true;
+  document.getElementById('h1t').className='fertig';
+  setRueck('r1','<b>Richtig!</b> m = '+mtext()+'.',true);
+  schritt=2;
+  document.getElementById('k2').className='karte';
+  document.getElementById('h2hint').innerHTML='Setze m und einen der beiden Punkte in y = m · x + b ein '+
+    'und löse nach b auf.';
+  document.getElementById('einsetzen').innerHTML=
+    zs(A[1])+' = '+mtext()+' &middot; '+zs(A[0])+' + b';
+  document.getElementById('ib').disabled=false;
+  document.getElementById('bp2').disabled=false;
+  document.getElementById('ib').focus();
+  document.getElementById('k2').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function mtext(){
+  if(mn===1) return zs(mz);
+  return '<span class="bruch"><span class="o">'+zs(mz)+'</span><span class="u">'+mn+'</span></span>';
+}
+
+/* ------------------------------------------------------------ Schritt 2 */
+function pruefeB(){
+  var eb=document.getElementById('ib');
+  if(eb.value.trim()===''){setRueck('r2','<b>Da fehlt noch etwas.</b> Trage b ein.',false);return;}
+  if(Math.abs(zahl('ib')-b)>0.001){
+    eb.className='no';
+    setRueck('r2','<b>Noch nicht.</b> Rechne zuerst m · x aus und bringe das Ergebnis mit der '+
+      'Gegenoperation auf die andere Seite.',false);
+    return;
+  }
+  eb.className='ok'; eb.disabled=true;
+  document.getElementById('bp2').disabled=true;
+  document.getElementById('h2t').className='fertig';
+  setRueck('r2','<b>Richtig!</b> Damit ist die Gleichung fertig.',true);
+  var bt = b>0? (' + '+b) : (b<0? (' \u2212 '+Math.abs(b)) : '');
+  var mt = (mz===1&&mn===1)?'x':((mz===-1&&mn===1)?'\u2212x':mtext()+'x');
+  document.getElementById('gleichung').style.display='block';
+  document.getElementById('gleichung').innerHTML='y = '+mt+bt;
+  document.getElementById('probe').style.display='block';
+  document.getElementById('probe').innerHTML='<b>Probe mit B '+pkt(B)+':</b> '+
+    'x = '+zs(B[0])+' eingesetzt ergibt y = '+zs(B[1])+'. Passt.';
+  zeichne();
+  fertig++;
+  document.getElementById('zaehler').textContent='Geschafft: '+fertig+' Aufgabe'+(fertig===1?'':'n');
+}
+
+/* ------------------------------------------------------------ Zeichnen */
+function zeichne(){
+  var p=[], i, v;
+  for(i=-N;i<=N;i++){
+    p.push('<line x1="'+px(i)+'" y1="'+py(-N)+'" x2="'+px(i)+'" y2="'+py(N)+'" stroke="#dbe6f0"/>');
+    p.push('<line x1="'+px(-N)+'" y1="'+py(i)+'" x2="'+px(N)+'" y2="'+py(i)+'" stroke="#dbe6f0"/>');
+  }
+  p.push('<line x1="'+(px(-N)-5)+'" y1="'+py(0)+'" x2="335" y2="'+py(0)+'" stroke="#333" stroke-width="1.5"/>');
+  p.push('<polygon points="335,'+py(0)+' 327,'+(py(0)-3.5)+' 327,'+(py(0)+3.5)+'" fill="#333"/>');
+  p.push('<line x1="'+px(0)+'" y1="'+(py(-N)+5)+'" x2="'+px(0)+'" y2="5" stroke="#333" stroke-width="1.5"/>');
+  p.push('<polygon points="'+px(0)+',5 '+(px(0)-3.5)+',13 '+(px(0)+3.5)+',13" fill="#333"/>');
+  for(v=-N;v<=N;v+=2){
+    if(v===0) continue;
+    p.push('<text x="'+px(v)+'" y="'+(py(0)+13)+'" font-size="10" fill="#555" text-anchor="middle">'+zs(v)+'</text>');
+    p.push('<text x="'+(px(0)-5)+'" y="'+(py(v)+3.5)+'" font-size="10" fill="#555" text-anchor="end">'+zs(v)+'</text>');
+  }
+  var m=mz/mn;
+  var x1=-N, y1=m*x1+b, x2=N, y2=m*x2+b;
+  if(Math.abs(y1)>N){ y1=y1>0?N:-N; x1=(y1-b)/m; }
+  if(Math.abs(y2)>N){ y2=y2>0?N:-N; x2=(y2-b)/m; }
+  p.push('<line x1="'+px(x1)+'" y1="'+py(y1)+'" x2="'+px(x2)+'" y2="'+py(y2)+
+         '" stroke="#5B3E90" stroke-width="2.6" stroke-linecap="round"/>');
+  [[A,'A'],[B,'B']].forEach(function(q){
+    p.push('<circle cx="'+px(q[0][0])+'" cy="'+py(q[0][1])+'" r="5" fill="#C8102E"/>');
+    p.push('<text x="'+(px(q[0][0])+7)+'" y="'+(py(q[0][1])-6)+'" font-size="12" fill="#C8102E" '+
+           'font-weight="bold">'+q[1]+'</text>');
+  });
+  var ks=document.getElementById('ks');
+  ks.innerHTML=p.join(''); ks.style.display='block';
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter') return;
+  e.preventDefault();
+  if(schritt===1) pruefeM(); else pruefeB();
+});
+neueAufgabe();
+</script>
+</body></html>
