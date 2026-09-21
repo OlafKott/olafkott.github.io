@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zuordnen &ndash; Funktion und Nullstelle</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:14px 16px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+h2{font-size:17px;margin:0 0 6px;color:#C8102E}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.vorrat{display:flex;flex-wrap:wrap;gap:9px;min-height:56px;padding:9px;border-radius:10px;
+  background:#f4f6f9;border:2px dashed #c9cfd6}
+.chip{background:#fff;border:2px solid #1D70B8;color:#1D70B8;border-radius:9px;padding:9px 14px;
+  font-size:17px;font-weight:600;cursor:pointer;user-select:none;line-height:1.3}
+.chip.aktiv{background:#1D70B8;color:#fff}
+.chip.gesetzt{cursor:pointer}
+.chip.ok{border-color:#1E7B3C;color:#1E7B3C;background:#E6F4EA}
+.chip.no{border-color:#C8102E;color:#C8102E;background:#FDECEC}
+.ziele{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.ziel{flex:1 1 44%;min-width:230px;background:#fff;border:1.5px solid #dbe6f0;border-radius:11px;
+  padding:10px;text-align:center}
+.ziel .nr{font-size:13px;color:#6b7280;text-align:left;margin-bottom:2px}
+.slot{margin-top:8px;min-height:48px;border-radius:9px;border:2px dashed #c9cfd6;background:#fafbfc;
+  display:flex;align-items:center;justify-content:center;padding:6px;cursor:pointer;font-size:15px;
+  color:#9aa1a9}
+.slot.offen{border-color:#1D70B8;background:#F4F9FE}
+svg{display:block;margin:0 auto;max-width:100%;height:auto}
+table.wt{border-collapse:collapse;margin:2px auto;font-family:Calibri,Arial,sans-serif}
+table.wt th,table.wt td{border:1.4px solid #8e877a;padding:5px 9px;text-align:center;font-size:16px}
+table.wt th{background:#f4efe6}
+table.wt th.lbl{background:#efeae1;font-weight:700}
+.bruch{display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 3px;
+  font-size:.85em}
+.bruch .o{display:block;border-bottom:2px solid currentColor;padding:0 4px 1px}
+.bruch .u{display:block;padding:1px 4px 0}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.zaehler{font-size:14px;color:#6b7280;margin-top:10px}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Lineare Funktionen &middot; Stunde 6</div>
+<h1>Zuordnen: Funktion und Nullstelle</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <h2>Wo schneidet welche Gerade die x-Achse?</h2>
+  <p class="hint">Tippe eine Karte an und danach das Feld, zu dem sie geh&ouml;rt.
+  Ein Tipp auf eine gesetzte Karte holt sie zur&uuml;ck.</p>
+  <div class="vorrat" id="vorrat"></div>
+</div>
+
+<div class="ziele" id="ziele"></div>
+
+<div class="karte">
+  <button class="bp" id="bpruefen" onclick="pruefen()">Pr&uuml;fen</button>
+  <button class="bn" onclick="neueRunde()">Neue Runde</button>
+  <div class="rueck" id="rueck"></div>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Runden</div>
+</div>
+
+<div class="fuss">Lineare Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var SETS = [[{"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 2x &minus; 8</b><br><b>&nbsp;</b></div>", "karte": "( 4 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = &minus;3x + 9</b><br><b>&nbsp;</b></div>", "karte": "( 3 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = x + 5</b><br><b>&nbsp;</b></div>", "karte": "( &minus;5 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 0,5x + 1</b><br><b>&nbsp;</b></div>", "karte": "( &minus;2 | 0 )"}], [{"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 3x &minus; 6</b><br><b>&nbsp;</b></div>", "karte": "( 2 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = &minus;2x &minus; 2</b><br><b>&nbsp;</b></div>", "karte": "( &minus;1 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 4x &minus; 20</b><br><b>&nbsp;</b></div>", "karte": "( 5 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = &minus;0,5x + 4</b><br><b>&nbsp;</b></div>", "karte": "( 8 | 0 )"}], [{"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 5x + 15</b><br><b>&nbsp;</b></div>", "karte": "( &minus;3 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = &minus;x + 6</b><br><b>&nbsp;</b></div>", "karte": "( 6 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = 2x &minus; 2</b><br><b>&nbsp;</b></div>", "karte": "( 1 | 0 )"}, {"ziel": "<div style=\"font-size:18px;font-family:Calibri,Arial,sans-serif;line-height:1.7;padding:12px 6px\"><b>f(x) = &minus;4x &minus; 16</b><br><b>&nbsp;</b></div>", "karte": "( &minus;4 | 0 )"}]];
+var TIPP = "Setze den Term gleich 0 und l&ouml;se nach x auf. Oder mach die Probe: Setze den x-Wert ein &ndash; kommt 0 heraus?";
+var paare = [], belegung = [], aktiv = null, fertig = 0, gesperrt = false;
+
+function misch(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+function neueRunde(){
+  var s = SETS[Math.floor(Math.random()*SETS.length)];
+  paare = s.map(function(p,i){ return {ziel:p.ziel, karte:p.karte, id:i}; });
+  belegung = paare.map(function(){ return null; });
+  aktiv = null; gesperrt = false;
+  document.getElementById('bpruefen').disabled = false;
+  setRueck('');
+  zeichne(misch(paare.map(function(p){ return p.id; })));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+var reihenfolge = [];
+function zeichne(neueReihenfolge){
+  if(neueReihenfolge) reihenfolge = neueReihenfolge;
+  var v = document.getElementById('vorrat'); v.innerHTML='';
+  reihenfolge.forEach(function(id){
+    if(belegung.indexOf(id) >= 0) return;
+    var el = document.createElement('div');
+    el.className = 'chip' + (aktiv===id?' aktiv':'');
+    el.innerHTML = paare[id].karte;
+    el.onclick = function(){ if(gesperrt) return; aktiv = (aktiv===id)?null:id; zeichne(); };
+    v.appendChild(el);
+  });
+  if(v.children.length===0){
+    v.innerHTML = '<div style="color:#9aa1a9;font-size:15px;padding:8px">Alle Karten sind verteilt.</div>';
+  }
+  var z = document.getElementById('ziele'); z.innerHTML='';
+  paare.forEach(function(p, i){
+    var d = document.createElement('div'); d.className='ziel';
+    var inner = '<div class="nr">Feld ' + (i+1) + '</div>' + p.ziel;
+    var belegt = belegung[i];
+    var slot = '<div class="slot' + (aktiv!==null&&belegt===null?' offen':'') + '" data-i="'+i+'">' +
+               (belegt===null ? 'hier ablegen'
+                              : '<span class="chip gesetzt" id="c'+i+'">'+paare[belegt].karte+'</span>') +
+               '</div>';
+    d.innerHTML = inner + slot;
+    z.appendChild(d);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.slot'), function(s){
+    s.onclick = function(){
+      if(gesperrt) return;
+      var i = +s.dataset.i;
+      if(belegung[i] !== null){ aktiv = belegung[i]; belegung[i] = null; zeichne(); return; }
+      if(aktiv === null) return;
+      belegung[i] = aktiv; aktiv = null; setRueck(''); zeichne();
+    };
+  });
+}
+
+function setRueck(txt, ok){
+  var r = document.getElementById('rueck');
+  r.className = 'rueck' + (txt ? (ok?' ok':' no') : '');
+  r.innerHTML = txt;
+}
+
+function pruefen(){
+  if(belegung.indexOf(null) >= 0){
+    setRueck('<b>Es fehlt noch etwas.</b> Jedes Feld braucht eine Karte.', false); return;
+  }
+  var richtig = 0;
+  belegung.forEach(function(id, i){
+    var c = document.getElementById('c'+i);
+    if(id === i){ c.className='chip gesetzt ok'; richtig++; }
+    else { c.className='chip gesetzt no'; }
+  });
+  if(richtig === paare.length){
+    gesperrt = true;
+    document.getElementById('bpruefen').disabled = true;
+    fertig++;
+    document.getElementById('zaehler').textContent='Geschafft: '+fertig+' Runde'+(fertig===1?'':'n');
+    setRueck('<b>Alles richtig!</b> Starte eine neue Runde f&uuml;r neue Aufgaben.', true);
+  }else{
+    setRueck('<b>'+richtig+' von '+paare.length+' stimmen.</b> Die rot markierten Karten passen noch nicht &ndash; '+
+      'tippe sie an, um sie zur&uuml;ckzuholen.<br>'+TIPP, false);
+  }
+}
+
+neueRunde();
+</script>
+</body></html>
