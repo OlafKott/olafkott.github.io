@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineare Funktionen &ndash; Schnittpunkte</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;
+  box-shadow:0 1px 3px rgba(0,0,0,.09)}
+.karte.aus{opacity:.45}
+h2{font-size:17px;margin:0 0 4px;color:#C8102E}
+h2 .s{display:inline-block;background:#C8102E;color:#fff;width:24px;height:24px;border-radius:50%;
+  font-size:14px;text-align:center;line-height:24px;margin-right:7px;vertical-align:2px}
+h2.fertig{color:#1E7B3C}
+h2.fertig .s{background:#1E7B3C}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.punkte{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 14px;font-size:21px}
+.punkte b{color:#1D70B8}
+.felder{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 12px}
+.feld{flex:1 1 130px}
+.feld label{display:block;font-size:15px;color:#4b5563;margin-bottom:3px}
+.feld input{font-size:19px;padding:10px 8px;width:100%;border:2px solid #c9cfd6;border-radius:8px;
+  font-family:inherit;text-align:center;background:#fff}
+.feld input:focus{outline:none;border-color:#1D70B8}
+.feld input.ok{border-color:#1E7B3C;background:#E6F4EA}
+.feld input.no{border-color:#C8102E;background:#FDECEC}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;
+  border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff}
+.bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.formel{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:8px 0;font-size:17px}
+.gleichung{background:#FAF7FF;border-left:4px solid #5B3E90;border-radius:0 8px 8px 0;
+  padding:12px 14px;margin:10px 0 0;font-size:20px;color:#5B3E90;font-weight:700}
+.probe{background:#FFF8E8;border-left:4px solid #F2B705;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:10px 0 0;font-size:16px}
+.ksbox{text-align:center;margin:6px 0 0}
+svg.ks{width:100%;max-width:340px;height:auto;border:1px solid #dbe6f0;border-radius:8px;background:#fff}
+.bruch{display:inline-block;vertical-align:middle;text-align:center;line-height:1.15;margin:0 3px;
+  font-size:.82em}
+.bruch .o{display:block;border-bottom:2px solid currentColor;padding:0 4px 1px}
+.bruch .u{display:block;padding:1px 4px 0}
+.zaehler{font-size:14px;color:#6b7280;margin-top:12px}
+button.gewaehlt{background:#1D70B8;color:#fff}
+.cm{color:#1D4ED8;font-weight:700}.cb{color:#C8102E;font-weight:700}.cx{color:#15803D;font-weight:700}.cy{color:#C2410C;font-weight:700}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Lineare Funktionen &middot; Stunde 7</div>
+<h1>Schnittpunkte</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <p class="hint" style="margin:0 0 8px" id="auftrag"></p>
+  <div class="punkte" id="angabe"></div>
+</div>
+
+<div class="karte" id="k1">
+  <h2 id="h1t"><span class="s">1</span><span id="titel"></span></h2>
+  <p class="hint" id="h1hint"></p>
+  <div id="felder" class="felder"></div>
+  <div id="wahl" style="display:none;margin:4px 0 10px">
+    <button class="bn" data-w="1" onclick="waehle(1)">genau ein Schnittpunkt</button>
+    <button class="bn" data-w="0" onclick="waehle(0)">kein Schnittpunkt (parallel)</button>
+    <button class="bn" data-w="2" onclick="waehle(2)">unendlich viele (gleiche Gerade)</button>
+  </div>
+  <button class="bp" id="bp1" onclick="pruefe()">Pr&uuml;fen</button>
+  <button class="bn" onclick="neueAufgabe()">Neue Aufgabe</button>
+  <div class="rueck" id="r1"></div>
+  <div class="gleichung" id="gleichung" style="display:none"></div>
+  <div class="ksbox"><svg class="ks" id="ks" viewBox="0 0 340 340" style="display:none"></svg></div>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Aufgaben</div>
+</div>
+
+<div class="fuss">Lineare Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var N=6, PAD=22, S=(340-2*PAD)/(2*N);
+var f={m:1,b:0}, g={m:1,b:0}, xs=0, ys=0, typ="b", art=1, wahl=null, fertig=0, gezaehlt=false;
+
+function zuf(a,c){return Math.floor(Math.random()*(c-a+1))+a;}
+function wahlaus(a){return a[zuf(0,a.length-1)];}
+function zs(x){ var t=String(Math.round(x*100)/100).replace('.',','); return t.replace('-','\u2212'); }
+function px(x){return PAD+(x+N)*S;}
+function py(y){return 340-PAD-(y+N)*S;}
+function span(k,t){return '<span class="'+k+'">'+t+'</span>';}
+function term(F, vertauscht){
+  var m=F.m, b=F.b;
+  var mt = (m===1)?'x':(m===-1?'\u2212x':zs(m)+'x');
+  if(vertauscht && b!==0){ return zs(b)+(m<0?' \u2212 '+(m===-1?'x':zs(-m)+'x'):' + '+(m===1?'x':zs(m)+'x')); }
+  var bt = b>0?' + '+zs(b):(b<0?' \u2212 '+zs(-b):'');
+  return mt+bt;
+}
+var vt=false;
+function neueAufgabe(){
+  typ = Math.random()<0.65 ? "b" : "a";
+  gezaehlt=false; wahl=null; vt=false;
+  var M=[-3,-2,-1,1,2,3,0.5,-0.5];
+  if(typ==="b"){
+    var ok=false;
+    while(!ok){
+      f.m=wahlaus(M); g.m=wahlaus(M); xs=zuf(-4,4); ys=zuf(-5,5);
+      f.b=ys-f.m*xs; g.b=ys-g.m*xs;
+      ok = f.m!==g.m && Number.isInteger(f.b) && Number.isInteger(g.b) && Math.abs(f.b)<=9 && Math.abs(g.b)<=9 && f.b!==g.b;
+    }
+    document.getElementById('auftrag').innerHTML='Berechne den Schnittpunkt der beiden Geraden.';
+    document.getElementById('angabe').innerHTML='<span style="color:#1D4ED8;font-weight:700">f(x) = '+term(f)+
+      '</span><br><span style="color:#16A34A;font-weight:700">g(x) = '+term(g)+'</span>';
+    document.getElementById('titel').textContent='Schnittpunkt berechnen';
+    document.getElementById('h1hint').innerHTML='1. Gleichsetzen und nach x aufl\u00f6sen. 2. x in f(x) einsetzen \u2013 so bekommst du y.';
+    document.getElementById('felder').innerHTML='<div class="feld"><label>x =</label><input type="text" id="ix"></div>'+
+      '<div class="feld"><label>y =</label><input type="text" id="iy"></div>';
+    document.getElementById('wahl').style.display='none';
+    document.getElementById('bp1').style.display='';
+  }else{
+    art = zuf(0,2);
+    f.m=wahlaus(M); f.b=zuf(-6,6);
+    if(art===0){ g.m=f.m; do{ g.b=zuf(-6,6);}while(g.b===f.b); }
+    else if(art===2){ g.m=f.m; g.b=f.b; vt = f.b!==0 && Math.random()<0.5; }
+    else { do{ g.m=wahlaus(M);}while(g.m===f.m); g.b = Math.random()<0.5 ? f.b : zuf(-6,6); }
+    document.getElementById('auftrag').innerHTML='Wie viele Schnittpunkte haben die Geraden? Du musst nicht rechnen \u2013 vergleiche m und b.';
+    document.getElementById('angabe').innerHTML='<span style="color:#1D4ED8;font-weight:700">f(x) = '+term(f)+
+      '</span><br><span style="color:#16A34A;font-weight:700">g(x) = '+term(g,vt)+'</span>';
+    document.getElementById('titel').textContent='Anzahl der Schnittpunkte';
+    document.getElementById('h1hint').innerHTML='Welche Zahl steht vor dem x (Steigung m)? Welche Zahl steht allein (y-Achsenabschnitt b)?';
+    document.getElementById('felder').innerHTML='';
+    document.getElementById('wahl').style.display='block';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#wahl button'),function(e){e.className='bn';e.disabled=false;});
+  document.getElementById('bp1').disabled=false;
+  document.getElementById('h1t').className='';
+  setRueck('r1','');
+  document.getElementById('gleichung').style.display='none';
+  document.getElementById('ks').style.display='none';
+  var ix=document.getElementById('ix'); if(ix) ix.focus();
+}
+function waehle(w){
+  wahl=w;
+  Array.prototype.forEach.call(document.querySelectorAll('#wahl button'),function(e){
+    e.className = (+e.dataset.w===w) ? 'bn gewaehlt' : 'bn'; });
+}
+function setRueck(id,txt,ok){
+  var r=document.getElementById(id);
+  r.className='rueck'+(txt?(ok?' ok':' no'):'');
+  r.innerHTML=txt;
+}
+function zahl(id){
+  var v=document.getElementById(id).value.trim().replace('\u2212','-').replace(',','.');
+  if(v.indexOf('/')>0){var t=v.split('/');return Number(t[0])/Number(t[1]);}
+  return v===''?NaN:Number(v);
+}
+function pruefe(){
+  if(typ==="b"){
+    var ex=document.getElementById('ix'), ey=document.getElementById('iy');
+    if(ex.value.trim()===''){ setRueck('r1','<b>Da fehlt noch etwas.</b> Trage zuerst x ein.',false); return; }
+    if(Math.abs(zahl('ix')-xs)>0.001){
+      ex.className='no'; ey.className='';
+      setRueck('r1','<b>x stimmt noch nicht.</b> Setze f(x) = g(x). Bringe alle x auf eine Seite und alle Zahlen auf die andere. '+
+        'Teile dann durch die Zahl vor dem x.',false);
+      return;
+    }
+    ex.className='ok';
+    if(ey.value.trim()===''){ setRueck('r1','<b>x ist richtig!</b> Aber Achtung, h\u00e4ufigster Fehler: Der y-Wert fehlt noch. '+
+      'Setze x = '+zs(xs)+' in f(x) ein.',false); return; }
+    if(Math.abs(zahl('iy')-ys)>0.001){
+      ey.className='no';
+      setRueck('r1','<b>y stimmt noch nicht.</b> Setze x = '+zs(xs)+' in f(x) ein: f('+zs(xs)+') = '+zs(f.m)+' \u00b7 '+
+        (xs<0?'('+zs(xs)+')':zs(xs))+(f.b>=0?' + '+zs(f.b):' \u2212 '+zs(-f.b))+'. Mach die Probe mit g(x).',false);
+      return;
+    }
+    ey.className='ok'; ex.disabled=true; ey.disabled=true;
+    setRueck('r1','<b>Richtig!</b> Probe: g('+zs(xs)+') = '+zs(ys)+' \u2713',true);
+    document.getElementById('gleichung').style.display='block';
+    document.getElementById('gleichung').innerHTML='S = ('+zs(xs)+' | '+zs(ys)+')';
+  }else{
+    if(wahl===null){ setRueck('r1','<b>W\u00e4hle eine Antwort.</b>',false); return; }
+    var mT = 'f: m = '+zs(f.m)+', b = '+zs(f.b)+' &nbsp;&middot;&nbsp; g: m = '+zs(g.m)+', b = '+zs(g.b)+'.';
+    if(wahl!==art){
+      setRueck('r1','<b>Noch nicht.</b> Vergleiche zuerst die Steigungen m. Nur wenn m gleich ist, kommt es auf b an.'+
+        (vt?' Achtung: Bei g ist die Reihenfolge vertauscht.':''),false);
+      return;
+    }
+    var erkl = art===1 ? 'Die Steigungen sind verschieden \u2013 die Geraden schneiden sich genau einmal.'
+             : (art===0 ? 'Gleiche Steigung, verschiedenes b \u2013 die Geraden sind parallel.'
+                        : 'Gleiche Steigung und gleiches b \u2013 es ist dieselbe Gerade.');
+    setRueck('r1','<b>Richtig!</b> '+mT+'<br>'+erkl,true);
+    Array.prototype.forEach.call(document.querySelectorAll('#wahl button'),function(e){e.disabled=true;});
+  }
+  document.getElementById('bp1').disabled=true;
+  document.getElementById('h1t').className='fertig';
+  zeichne();
+  if(!gezaehlt){ fertig++; gezaehlt=true; }
+  document.getElementById('zaehler').textContent='Geschafft: '+fertig+' Aufgabe'+(fertig===1?'':'n');
+}
+function linie(F,farbe,breite){
+  var x1=-N, y1=F.m*x1+F.b, x2=N, y2=F.m*x2+F.b;
+  if(Math.abs(y1)>N){ y1=y1>0?N:-N; x1=(y1-F.b)/F.m; }
+  if(Math.abs(y2)>N){ y2=y2>0?N:-N; x2=(y2-F.b)/F.m; }
+  if(x1>N||x1<-N||x2>N||x2<-N) return '';
+  return '<line x1="'+px(x1)+'" y1="'+py(y1)+'" x2="'+px(x2)+'" y2="'+py(y2)+
+         '" stroke="'+farbe+'" stroke-width="'+breite+'" stroke-linecap="round"/>';
+}
+function zeichne(){
+  var p=[], i, v;
+  for(i=-N;i<=N;i++){
+    p.push('<line x1="'+px(i)+'" y1="'+py(-N)+'" x2="'+px(i)+'" y2="'+py(N)+'" stroke="#dbe6f0"/>');
+    p.push('<line x1="'+px(-N)+'" y1="'+py(i)+'" x2="'+px(N)+'" y2="'+py(i)+'" stroke="#dbe6f0"/>');
+  }
+  p.push('<line x1="'+(px(-N)-5)+'" y1="'+py(0)+'" x2="335" y2="'+py(0)+'" stroke="#333" stroke-width="1.5"/>');
+  p.push('<polygon points="335,'+py(0)+' 327,'+(py(0)-3.5)+' 327,'+(py(0)+3.5)+'" fill="#333"/>');
+  p.push('<line x1="'+px(0)+'" y1="'+(py(-N)+5)+'" x2="'+px(0)+'" y2="5" stroke="#333" stroke-width="1.5"/>');
+  p.push('<polygon points="'+px(0)+',5 '+(px(0)-3.5)+',13 '+(px(0)+3.5)+',13" fill="#333"/>');
+  for(v=-N;v<=N;v+=2){
+    if(v===0) continue;
+    p.push('<text x="'+px(v)+'" y="'+(py(0)+13)+'" font-size="10" fill="#555" text-anchor="middle">'+zs(v)+'</text>');
+    p.push('<text x="'+(px(0)-5)+'" y="'+(py(v)+3.5)+'" font-size="10" fill="#555" text-anchor="end">'+zs(v)+'</text>');
+  }
+  var gleich = (typ==="a" && art===2);
+  p.push(linie(g,'#16A34A',gleich?6:2.6));
+  p.push(linie(f,'#1D4ED8',2.4));
+  if(typ==="b" && Math.abs(ys)<=N && Math.abs(xs)<=N){
+    p.push('<circle cx="'+px(xs)+'" cy="'+py(ys)+'" r="5.5" fill="#C8102E"/>');
+    p.push('<text x="'+(px(xs)+8)+'" y="'+(py(ys)-7)+'" font-size="12" font-weight="bold" fill="#C8102E">S</text>');
+  }
+  var ks=document.getElementById('ks');
+  ks.innerHTML=p.join(''); ks.style.display='block';
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){ e.preventDefault(); pruefe(); }
+});
+neueAufgabe();
+</script>
+</body></html>
