@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warum man die R&auml;nder pr&uuml;fen muss</title>
+<style>
+:root{ --rwb:#C8102E; --ink:#1d1d1f; --line:#d9d2c5; --blau:#1D70B8; --gruen:#2E7D32; }
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{ margin:0; font-family:Cambria,Georgia,'Times New Roman',serif; color:var(--ink);
+  background:#F6F1EA; display:flex; flex-direction:column; min-height:100vh; }
+header{ display:flex; justify-content:space-between; align-items:center; gap:16px;
+  padding:10px 22px; background:#fff; border-bottom:3px solid var(--rwb); flex:0 0 auto; }
+header .t{ font-family:Calibri,Arial,sans-serif; font-weight:bold; color:var(--rwb); font-size:19px; }
+header .u{ font-size:13px; color:#666; }
+header img{ height:42px; }
+main{ flex:1 1 auto; display:flex; align-items:center; justify-content:center; padding:18px 22px; overflow:auto; }
+.folie{ display:none; width:100%; max-width:1000px; animation:auf .22s ease-out; }
+.folie.an{ display:block; }
+@keyframes auf{ from{ opacity:0; transform:translateY(7px);} to{ opacity:1; transform:none;} }
+.marke{ display:inline-flex; align-items:center; gap:9px; margin-bottom:10px; }
+.marke .nr{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:17px; color:#fff;
+  background:var(--rwb); border-radius:50%; width:36px; height:36px; line-height:36px; text-align:center; }
+.marke .txt{ font-family:Calibri,Arial,sans-serif; font-size:16px; color:#8a8a8a;
+  letter-spacing:.05em; text-transform:uppercase; }
+h1{ font-family:Calibri,Arial,sans-serif; font-size:32px; color:var(--rwb); margin:0 0 14px; line-height:1.2; }
+h2{ font-family:Calibri,Arial,sans-serif; font-size:26px; color:var(--rwb); margin:0 0 14px; }
+p{ font-size:21px; line-height:1.55; margin:0 0 12px; }
+.klein{ font-size:17px; color:#666; }
+.math{ font-size:29px; line-height:1.5; margin:8px 0; }
+.steuer{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:6px 0 2px; }
+.steuer button{ font-family:Calibri,Arial,sans-serif; font-size:17px; font-weight:bold;
+  background:var(--rwb); color:#fff; border:0; border-radius:20px; padding:8px 20px;
+  cursor:pointer; min-width:148px; }
+.steuer button:hover{ background:#a50d26; }
+.steuer input[type=range]{ flex:1 1 200px; min-width:160px; accent-color:var(--rwb); }
+.anzeige{ font-size:20px; color:var(--blau); font-weight:bold; white-space:nowrap; }
+.math i{ font-style:italic; }
+.math b{ color:#123B6B; }
+.kasten{ background:#fff; border:1px solid var(--line); border-radius:9px; padding:16px 22px; margin:10px 0; }
+.kasten.auf{ background:#FBEEF0; border-left:5px solid var(--rwb); border-radius:0 9px 9px 0; }
+.kasten.gut{ background:#EAF4EA; border-left:5px solid var(--gruen); border-radius:0 9px 9px 0; }
+.kasten.frage{ background:#E9F2FB; border-left:5px solid var(--blau); border-radius:0 9px 9px 0; }
+.zwei{ display:flex; gap:26px; align-items:center; flex-wrap:wrap; }
+.zwei > *{ flex:1 1 320px; min-width:0; }
+svg{ max-width:100%; max-height:50vh; width:auto; height:auto; display:block; margin:0 auto; }
+.zwei svg{ max-height:38vh; }
+.warn{ font-family:Calibri,Arial,sans-serif; font-size:25px; font-weight:bold; color:var(--rwb); margin:6px 0 10px; }
+button.deck{ font-family:Calibri,Arial,sans-serif; font-size:17px; font-weight:bold; color:#fff;
+  background:var(--blau); border:0; border-radius:8px; padding:11px 22px; cursor:pointer; margin-top:6px; }
+button.deck:hover{ background:#155a92; }
+.frag{ opacity:0; visibility:hidden; transition:opacity .18s ease-out; }
+.frag.sichtbar{ opacity:1; visibility:visible; }
+.frag.weg{ display:none; }
+.titelbild{ max-width:420px; margin:0 auto 4px; }
+.titelbild img{ width:100%; height:auto; display:block; border-radius:10px; }
+footer{ flex:0 0 auto; display:flex; align-items:center; gap:14px; padding:11px 22px;
+  background:#fff; border-top:1px solid var(--line); }
+footer button{ font-family:Calibri,Arial,sans-serif; font-size:16px; font-weight:bold;
+  border-radius:8px; padding:10px 20px; cursor:pointer; border:1.6px solid var(--rwb); }
+footer button.vor{ background:var(--rwb); color:#fff; }
+footer button.zur{ background:#fff; color:var(--rwb); }
+footer button:disabled{ opacity:.35; cursor:default; }
+.punkte{ flex:1; display:flex; gap:6px; justify-content:center; flex-wrap:wrap; }
+.punkte span{ width:11px; height:11px; border-radius:50%; background:#ded6ca; cursor:pointer; }
+.punkte span.an{ background:var(--rwb); transform:scale(1.25); }
+.zaehler{ font-family:Calibri,Arial,sans-serif; font-size:14px; color:#8a8a8a; min-width:56px; text-align:right; }
+@media (max-width:820px){
+  h1{ font-size:25px; } h2{ font-size:21px; } p{ font-size:18px; } .math{ font-size:23px; }
+  header img{ height:34px; } .zwei{ gap:14px; }
+}
+</style></head><body>
+<header><div><div class="t">Warum man die R&auml;nder pr&uuml;fen muss</div>
+<div class="u">Extremwertaufgaben &middot; Vertiefung der Differentialrechnung &middot; Jg. 12</div></div>
+<img src="data:image/png;base64,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" alt="rwb. ahr."></header>
+<main><section class="folie"><h1>Warum man die R&auml;nder pr&uuml;fen muss</h1>
+<div class="zwei"><div>
+<div class="kasten auf"><p>Mit einem <b>50 m langen Zaun</b> soll an einer <b>20 m langen Mauer</b>
+ein rechteckiges Gehege gebaut werden.<br>
+Die Mauer soll <b>komplett</b> als Teil der Umz&auml;unung genutzt werden.</p>
+<p style="margin:0">Welche Ma&szlig;e hat das Gehege, wenn die Fl&auml;che <b>maximal</b> sein soll?</p></div>
+<p class="klein">Wir rechnen nach dem bekannten Schema &ndash; und erleben eine &Uuml;berraschung.</p>
+</div><div class="titelbild"><div style="border:1px dashed #d8b8bf;border-radius:10px;height:230px;display:flex;align-items:center;justify-content:center;color:#b09aa0;font-family:Calibri,Arial,sans-serif;font-size:14px">Bild folgt</div></div></div>
+</section><section class="folie"><div class="marke"><span class="nr">0</span><span class="txt">Schritt 0</span></div><h2>Skizze</h2><div class="zwei"><div><svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" font-family="Cambria,Georgia,serif">
+<rect x="120" y="74" width="247.0" height="148" fill="#EAF3E4" stroke="#1d1d1f" stroke-width="2.6"/>
+<line x1="120" y1="74" x2="310" y2="74" stroke="#C8102E" stroke-width="11"/>
+<line x1="120" y1="46" x2="310" y2="46" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="120" y1="41" x2="120" y2="51" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="310" y1="41" x2="310" y2="51" stroke="#C8102E" stroke-width="1.6"/>
+<text x="215.0" y="36" font-size="19" text-anchor="middle" fill="#C8102E" font-weight="bold">Mauer 20 m</text>
+<line x1="310" y1="46" x2="367.0" y2="46" stroke="#1D70B8" stroke-width="1.6"/>
+<line x1="367.0" y1="41" x2="367.0" y2="51" stroke="#1D70B8" stroke-width="1.6"/>
+<text x="344.5" y="36" font-size="16" text-anchor="middle" fill="#1D70B8">Zaun</text>
+<text x="243.5" y="254" font-size="21" text-anchor="middle" fill="#1d1d1f" font-style="italic">a</text>
+<text x="383.0" y="156.0" font-size="21" fill="#1d1d1f" font-style="italic">h</text>
+<text x="104" y="156.0" font-size="21" fill="#1d1d1f" font-style="italic" text-anchor="end">h</text></svg></div><div><div class="frag"><p><i>a</i> &ndash; Breite des Gehges (die Seite an der Mauer)<br><i>h</i> &ndash; Tiefe des Gehges</p></div><div class="frag"><p class="klein">Die Mauer liegt vollst&auml;ndig in der Seite <i>a</i>. Oben wird nur das St&uuml;ck <i>a</i> &minus; 20 gezaunt.</p></div></div></div></section><section class="folie"><div class="marke"><span class="nr">1</span><span class="txt">Schritt 1</span></div><h2>Gesuchte Gr&ouml;&szlig;e</h2><div class="frag"><div class="math"><i>A</i><sub>max</sub> = ?</div></div></section><section class="folie"><div class="marke"><span class="nr">2</span><span class="txt">Schritt 2</span></div><h2>Hauptbedingung</h2><p>Womit berechnet man die Fl&auml;che des Rechtecks?</p><div class="frag"><div class="math"><i>A</i> = <i>a</i> &middot; <i>h</i></div></div></section><section class="folie"><div class="marke"><span class="nr">3</span><span class="txt">Schritt 3</span></div><h2>Nebenbedingung</h2><p>Wof&uuml;r wird der Zaun gebraucht?</p><div class="frag"><div class="math">50 = <i>a</i> &nbsp;+&nbsp; 2<i>h</i> &nbsp;+&nbsp; (<i>a</i> &minus; 20)</div></div><div class="frag"><p class="klein">unten <i>a</i> &nbsp;&middot;&nbsp; zwei Seiten je <i>h</i> &nbsp;&middot;&nbsp; oben nur der Rest neben der Mauer</p></div></section><section class="folie"><div class="marke"><span class="nr">4</span><span class="txt">Schritt 4</span></div><h2>Nebenbedingung umformen</h2><div class="frag"><div class="math">50 = 2<i>a</i> + 2<i>h</i> &minus; 20 &nbsp;&nbsp;<span class="klein">| + 20</span></div></div><div class="frag"><div class="math">70 = 2<i>a</i> + 2<i>h</i> &nbsp;&nbsp;<span class="klein">| : 2</span></div></div><div class="frag"><div class="math">35 = <i>a</i> + <i>h</i> &nbsp;&nbsp;<span class="klein">| &minus; <i>a</i></span></div></div><div class="frag"><div class="math"><b><i>h</i> = 35 &minus; <i>a</i></b></div></div></section><section class="folie"><div class="marke"><span class="nr">5</span><span class="txt">Schritt 5</span></div><h2>In die Hauptbedingung einsetzen</h2><div class="math" style="color:#8a8a8a"><i>A</i> = <i>a</i> &middot; <i>h</i></div><div class="frag"><div class="math"><i>A</i> = <i>a</i> &middot; (35 &minus; <i>a</i>)</div></div></section><section class="folie"><div class="marke"><span class="nr">6</span><span class="txt">Schritt 6</span></div><h2>Vereinfachen und ableiten</h2><div class="frag"><div class="math"><i>A</i>(<i>a</i>) = 35<i>a</i> &minus; <i>a</i>&sup2;</div></div><div class="frag"><div class="math"><i>A</i>&prime;(<i>a</i>) = 35 &minus; 2<i>a</i></div></div></section><section class="folie"><div class="marke"><span class="nr">7</span><span class="txt">Schritt 7</span></div><h2>Ableitung gleich null setzen</h2><div class="frag"><div class="math">0 = 35 &minus; 2<i>a</i> &nbsp;&nbsp;<span class="klein">| + 2<i>a</i></span></div></div><div class="frag"><div class="math">2<i>a</i> = 35 &nbsp;&nbsp;<span class="klein">| : 2</span></div></div><div class="frag"><div class="math"><b><i>a</i> = 17,5</b></div></div><div class="frag"><div class="kasten frage"><p style="margin:0">Setzen wir gleich ein &ndash; oder f&auml;llt euch etwas auf?</p></div></div><div class="frag"><div class="kasten auf"><p style="margin:0">Die Mauer ist <b>20 m</b> lang. Das Gehege w&auml;re aber nur <b>17,5 m</b> breit.</p></div></div></section><section class="folie"><div class="marke"><span class="txt">Stopp</span></div><h2>Das kann nicht sein</h2><div class="zwei"><div><svg viewBox="0 0 560 290" xmlns="http://www.w3.org/2000/svg" font-family="Cambria,Georgia,serif">
+<rect x="130" y="78" width="165" height="150" fill="#FBEEF0" stroke="#1d1d1f" stroke-width="2.6"/>
+<line x1="130" y1="78" x2="295" y2="78" stroke="#C8102E" stroke-width="11"/>
+<line x1="295" y1="78" x2="320" y2="78" stroke="#C8102E" stroke-width="11"
+ stroke-dasharray="7 5" opacity="0.55"/>
+<line x1="130" y1="50" x2="320" y2="50" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="130" y1="45" x2="130" y2="55" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="320" y1="45" x2="320" y2="55" stroke="#C8102E" stroke-width="1.6"/>
+<text x="225.0" y="40" font-size="18" text-anchor="middle" fill="#C8102E" font-weight="bold">Mauer 20 m</text>
+<text x="212.5" y="258" font-size="20" text-anchor="middle" fill="#1d1d1f" font-style="italic">a = 17,5 m</text>
+<text x="334" y="84" font-size="17" fill="#C8102E" font-weight="bold">&#9888; Mauer ragt heraus</text>
+<text x="212.5" y="161.0" font-size="18" text-anchor="middle" fill="#b06a75">nicht m&#246;glich</text>
+</svg></div><div><div class="warn">&#9888; 17,5 m sind schmaler als die Mauer</div><div class="frag"><p>Die Mauer soll <b>komplett</b> genutzt werden.<br>Also muss das Gehege mindestens <b>20 m</b> breit sein.</p></div><div class="frag"><p class="klein">Die Rechnung war richtig. Aber das Ergebnis passt nicht zur Situation.</p></div></div></div></section><section class="folie"><div class="marke"><span class="txt">Der fehlende Schritt</span></div><h2>Welche Werte sind &uuml;berhaupt m&ouml;glich?</h2><div class="kasten frage"><p style="margin:0">&Uuml;berlegt: Wie klein und wie gro&szlig; darf <i>a</i> h&ouml;chstens sein?</p></div><div class="frag"><div class="math"><i>a</i> &#8805; 20 &nbsp;<span class="klein">die Mauer wird ganz genutzt</span></div></div><div class="frag"><div class="math"><i>h</i> &#8805; 0 &nbsp;&rArr;&nbsp; 35 &minus; <i>a</i> &#8805; 0 &nbsp;&rArr;&nbsp; <i>a</i> &#8804; 35</div></div><div class="frag"><div class="kasten gut"><div class="math" style="margin:0"><b>D = { 20 &#8804; <i>a</i> &#8804; 35 }</b></div></div></div><div class="frag"><p class="klein">Diesen <b>Definitionsbereich</b> h&auml;tten wir gleich am Anfang aufschreiben k&ouml;nnen.</p></div></section><section class="folie"><div class="marke"><span class="txt">Im Bild</span></div><h2>Der Scheitel liegt au&szlig;erhalb</h2><svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg" font-family="Cambria,Georgia,serif"><rect x="96.0" y="18" width="304.0" height="378" fill="#6B6B6B" opacity="0.14"/><rect x="628.0" y="18" width="76.0" height="378" fill="#6B6B6B" opacity="0.14"/><line x1="400.0" y1="18" x2="400.0" y2="396" stroke="#444" stroke-width="2.4"/><line x1="628.0" y1="18" x2="628.0" y2="396" stroke="#444" stroke-width="2.4"/><text x="514.0" y="40" font-size="19" text-anchor="middle" fill="#2E7D32" font-weight="bold">erlaubt: 20 &#8804; a &#8804; 35</text><line x1="56" y1="348" x2="704" y2="348" stroke="#333" stroke-width="2"/><line x1="96" y1="406" x2="96" y2="16" stroke="#333" stroke-width="2"/><text x="706" y="373" font-size="19" font-style="italic">a</text><text x="106" y="26" font-size="19" font-style="italic">A(a)</text><line x1="248.0" y1="343" x2="248.0" y2="353" stroke="#333" stroke-width="1.6"/><text x="248.0" y="373" font-size="16" text-anchor="middle" fill="#444">10</text><line x1="400.0" y1="343" x2="400.0" y2="353" stroke="#333" stroke-width="1.6"/><text x="400.0" y="373" font-size="16" text-anchor="middle" fill="#444">20</text><line x1="552.0" y1="343" x2="552.0" y2="353" stroke="#333" stroke-width="1.6"/><text x="552.0" y="373" font-size="16" text-anchor="middle" fill="#444">30</text><line x1="628.0" y1="343" x2="628.0" y2="353" stroke="#333" stroke-width="1.6"/><text x="628.0" y="373" font-size="16" text-anchor="middle" fill="#444">35</text><line x1="91" y1="256.0" x2="101" y2="256.0" stroke="#333" stroke-width="1.6"/><text x="85" y="262.0" font-size="16" text-anchor="end" fill="#444">100</text><line x1="91" y1="164.0" x2="101" y2="164.0" stroke="#333" stroke-width="1.6"/><text x="85" y="170.0" font-size="16" text-anchor="end" fill="#444">200</text><line x1="91" y1="72.0" x2="101" y2="72.0" stroke="#333" stroke-width="1.6"/><text x="85" y="78.0" font-size="16" text-anchor="end" fill="#444">300</text><polyline points="96.0,348.0 99.8,340.0 103.6,332.1 107.4,324.4 111.2,316.7 115.0,309.2 118.8,301.8 122.6,294.5 126.4,287.3 130.2,280.2 134.0,273.2 137.8,266.4 141.6,259.7 145.4,253.1 149.2,246.6 153.0,240.2 156.8,233.9 160.6,227.8 164.4,221.7 168.2,215.8 172.0,210.0 175.8,204.3 179.6,198.7 183.4,193.3 187.2,187.9 191.0,182.7 194.8,177.6 198.6,172.6 202.4,167.7 206.2,162.9 210.0,158.2 213.8,153.7 217.6,149.3 221.4,145.0 225.2,140.8 229.0,136.7 232.8,132.7 236.6,128.9 240.4,125.1 244.2,121.5 248.0,118.0 251.8,114.6 255.6,111.3 259.4,108.2 263.2,105.1 267.0,102.2 270.8,99.4 274.6,96.7 278.4,94.1 282.2,91.6 286.0,89.2 289.8,87.0 293.6,84.9 297.4,82.9 301.2,81.0 305.0,79.2 308.8,77.5 312.6,76.0 316.4,74.5 320.2,73.2 324.0,72.0 327.8,70.9 331.6,69.9 335.4,69.1 339.2,68.3 343.0,67.7 346.8,67.2 350.6,66.8 354.4,66.5 358.2,66.3 362.0,66.2 365.8,66.3 369.6,66.5 373.4,66.8 377.2,67.2 381.0,67.7 384.8,68.3 388.6,69.1 392.4,69.9 396.2,70.9 400.0,72.0 403.8,73.2 407.6,74.5 411.4,76.0 415.2,77.5 419.0,79.2 422.8,81.0 426.6,82.9 430.4,84.9 434.2,87.0 438.0,89.2 441.8,91.6 445.6,94.1 449.4,96.7 453.2,99.4 457.0,102.2 460.8,105.1 464.6,108.2 468.4,111.3 472.2,114.6 476.0,118.0 479.8,121.5 483.6,125.1 487.4,128.9 491.2,132.7 495.0,136.7 498.8,140.8 502.6,145.0 506.4,149.3 510.2,153.7 514.0,158.2 517.8,162.9 521.6,167.7 525.4,172.6 529.2,177.6 533.0,182.7 536.8,187.9 540.6,193.3 544.4,198.7 548.2,204.3 552.0,210.0 555.8,215.8 559.6,221.7 563.4,227.8 567.2,233.9 571.0,240.2 574.8,246.6 578.6,253.1 582.4,259.7 586.2,266.4 590.0,273.2 593.8,280.2 597.6,287.3 601.4,294.5 605.2,301.8 609.0,309.2 612.8,316.7 616.6,324.4 620.4,332.1 624.2,340.0 628.0,348.0 631.8,356.1 635.6,364.3 639.4,372.7 643.2,381.1 647.0,389.7 650.8,398.4 654.6,407.2 658.4,416.1 662.2,425.1 666.0,434.2 669.8,443.5 673.6,452.9 677.4,462.4 681.2,472.0 685.0,481.7 688.8,491.5 692.6,501.5 696.4,511.5 700.2,521.7 704.0,532.0" fill="none" stroke="#C8102E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="362.0" y1="66.2" x2="362.0" y2="348.0" stroke="#C8102E" stroke-width="1.8" stroke-dasharray="5 4"/><circle cx="362.0" cy="66.2" r="8" fill="#fff" stroke="#C8102E" stroke-width="3.4"/><text x="348.0" y="48.2" font-size="18" text-anchor="end" fill="#C8102E" font-weight="bold">a = 17,5</text><text x="348.0" y="69.2" font-size="16" text-anchor="end" fill="#C8102E">nicht erlaubt</text><circle cx="400.0" cy="72.0" r="9" fill="#2E7D32"/><text x="416.0" y="102.0" font-size="19" fill="#2E7D32" font-weight="bold">A(20) = 300</text><circle cx="628.0" cy="348.0" r="9" fill="#1D70B8"/><text x="614.0" y="330.0" font-size="19" fill="#1D70B8" font-weight="bold" text-anchor="end">A(35) = 0</text></svg><div class="frag"><p class="klein" style="margin-top:8px">Grau = verboten. Im erlaubten Bereich f&auml;llt die Kurve. Der h&ouml;chste erlaubte Punkt ist deshalb der <b>linke Rand</b>.</p></div></section><section class="folie"><div class="marke"><span class="txt">Zum Ausprobieren</span></div><h2>Wir schieben den Zaun</h2><div class="zwei"><div><svg id="svgGeh" viewBox="34 56 478 232" xmlns="http://www.w3.org/2000/svg"
+ font-family="Cambria,Georgia,serif">
+<rect id="gRect" x="70.0" y="85.0" width="220.0" height="165.0"
+      fill="#EAF3E4" stroke="#1d1d1f" stroke-width="2.6"/>
+<line id="gZaun" x1="290.0" y1="85.0" x2="290.0" y2="85.0"
+      stroke="#1D70B8" stroke-width="7" stroke-dasharray="7 5"/>
+<line id="gMauer" x1="70.0" y1="85.0" x2="290.0" y2="85.0"
+      stroke="#C8102E" stroke-width="11"/>
+<text id="gMauerT" x="180.0" y="71.0" font-size="17" text-anchor="middle"
+      fill="#C8102E" font-weight="bold">Mauer 20 m</text>
+<text id="gA" x="180.0" y="278.0" font-size="20" text-anchor="middle" font-style="italic">a</text>
+<text id="gH" x="304.0" y="167.5" font-size="20" font-style="italic">h</text>
+<text id="gFl" x="180.0" y="174.5" font-size="21" text-anchor="middle"
+      fill="#2E7D32" font-weight="bold">300 m&#178;</text>
+</svg></div><div><svg id="svgGra" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg"
+ font-family="Cambria,Georgia,serif">
+<rect x="70.0" y="14" width="220.0" height="236.0" fill="#6B6B6B" opacity="0.13"/>
+<rect x="455.0" y="14" width="55.0" height="236.0" fill="#6B6B6B" opacity="0.13"/>
+<line x1="36.0" y1="250.0" x2="506" y2="250.0" stroke="#333" stroke-width="2"/>
+<line x1="70.0" y1="272" x2="70.0" y2="14" stroke="#333" stroke-width="2"/>
+<text x="508" y="274.0" font-size="17" font-style="italic">a</text>
+<text x="78.0" y="26" font-size="17" font-style="italic">A(a)</text>
+<line x1="180.0" y1="245.0" x2="180.0" y2="255.0" stroke="#333" stroke-width="1.5"/><text x="180.0" y="274.0" font-size="15" text-anchor="middle" fill="#444">10</text><line x1="290.0" y1="245.0" x2="290.0" y2="255.0" stroke="#333" stroke-width="1.5"/><text x="290.0" y="274.0" font-size="15" text-anchor="middle" fill="#444">20</text><line x1="400.0" y1="245.0" x2="400.0" y2="255.0" stroke="#333" stroke-width="1.5"/><text x="400.0" y="274.0" font-size="15" text-anchor="middle" fill="#444">30</text><line x1="455.0" y1="245.0" x2="455.0" y2="255.0" stroke="#333" stroke-width="1.5"/><text x="455.0" y="274.0" font-size="15" text-anchor="middle" fill="#444">35</text><line x1="65.0" y1="188.0" x2="75.0" y2="188.0" stroke="#333" stroke-width="1.5"/><text x="60.0" y="194.0" font-size="15" text-anchor="end" fill="#444">100</text><line x1="65.0" y1="126.0" x2="75.0" y2="126.0" stroke="#333" stroke-width="1.5"/><text x="60.0" y="132.0" font-size="15" text-anchor="end" fill="#444">200</text><line x1="65.0" y1="64.0" x2="75.0" y2="64.0" stroke="#333" stroke-width="1.5"/><text x="60.0" y="70.0" font-size="15" text-anchor="end" fill="#444">300</text>
+<polyline points="70.0,250.0 72.8,244.6 75.5,239.3 78.2,234.1 81.0,228.9 83.8,223.8 86.5,218.8 89.2,213.9 92.0,209.1 94.8,204.3 97.5,199.6 100.2,195.0 103.0,190.5 105.8,186.0 108.5,181.6 111.2,177.3 114.0,173.1 116.8,169.0 119.5,164.9 122.2,160.9 125.0,157.0 127.8,153.2 130.5,149.4 133.2,145.7 136.0,142.1 138.8,138.6 141.5,135.1 144.2,131.8 147.0,128.5 149.8,125.3 152.5,122.1 155.2,119.1 158.0,116.1 160.8,113.2 163.5,110.3 166.2,107.6 169.0,104.9 171.8,102.3 174.5,99.8 177.2,97.4 180.0,95.0 182.8,92.7 185.5,90.5 188.2,88.4 191.0,86.3 193.8,84.3 196.5,82.4 199.2,80.6 202.0,78.9 204.8,77.2 207.5,75.6 210.2,74.1 213.0,72.7 215.8,71.3 218.5,70.0 221.2,68.8 224.0,67.7 226.8,66.7 229.5,65.7 232.2,64.8 235.0,64.0 237.8,63.3 240.5,62.6 243.2,62.0 246.0,61.5 248.8,61.1 251.5,60.7 254.2,60.5 257.0,60.3 259.8,60.2 262.5,60.1 265.2,60.2 268.0,60.3 270.8,60.5 273.5,60.7 276.2,61.1 279.0,61.5 281.8,62.0 284.5,62.6 287.2,63.3 290.0,64.0 292.8,64.8 295.5,65.7 298.2,66.7 301.0,67.7 303.8,68.8 306.5,70.0 309.2,71.3 312.0,72.7 314.8,74.1 317.5,75.6 320.2,77.2 323.0,78.9 325.8,80.6 328.5,82.4 331.2,84.3 334.0,86.3 336.8,88.4 339.5,90.5 342.2,92.7 345.0,95.0 347.8,97.4 350.5,99.8 353.2,102.3 356.0,104.9 358.8,107.6 361.5,110.3 364.2,113.2 367.0,116.1 369.8,119.1 372.5,122.1 375.2,125.3 378.0,128.5 380.8,131.8 383.5,135.1 386.2,138.6 389.0,142.1 391.8,145.7 394.5,149.4 397.2,153.2 400.0,157.0 402.8,160.9 405.5,164.9 408.2,169.0 411.0,173.1 413.8,177.3 416.5,181.6 419.2,186.0 422.0,190.5 424.8,195.0 427.5,199.6 430.2,204.3 433.0,209.1 435.8,213.9 438.5,218.8 441.2,223.8 444.0,228.9 446.8,234.1 449.5,239.3 452.2,244.6 455.0,250.0 457.8,255.5 460.5,261.0 463.2,266.6 466.0,272.3 468.8,278.1 471.5,283.9 474.2,289.9 477.0,295.9 479.8,302.0 482.5,308.1 485.2,314.4 488.0,320.7 490.8,327.1 493.5,333.5 496.2,340.1 499.0,346.7 501.8,353.4 504.5,360.2 507.2,367.1 510.0,374.0" fill="none" stroke="#9aa0a6" stroke-width="2" stroke-dasharray="5 4"/>
+<polyline points="290.0,64.0 292.8,64.8 295.5,65.7 298.2,66.7 301.0,67.7 303.8,68.8 306.5,70.0 309.2,71.3 312.0,72.7 314.8,74.1 317.5,75.6 320.2,77.2 323.0,78.9 325.8,80.6 328.5,82.4 331.2,84.3 334.0,86.3 336.8,88.4 339.5,90.5 342.2,92.7 345.0,95.0 347.8,97.4 350.5,99.8 353.2,102.3 356.0,104.9 358.8,107.6 361.5,110.3 364.2,113.2 367.0,116.1 369.8,119.1 372.5,122.1 375.2,125.3 378.0,128.5 380.8,131.8 383.5,135.1 386.2,138.6 389.0,142.1 391.8,145.7 394.5,149.4 397.2,153.2 400.0,157.0 402.8,160.9 405.5,164.9 408.2,169.0 411.0,173.1 413.8,177.3 416.5,181.6 419.2,186.0 422.0,190.5 424.8,195.0 427.5,199.6 430.2,204.3 433.0,209.1 435.8,213.9 438.5,218.8 441.2,223.8 444.0,228.9 446.8,234.1 449.5,239.3 452.2,244.6 455.0,250.0" fill="none" stroke="#1D70B8" stroke-width="3.4"/>
+<line id="grLot" x1="290.0" y1="64.0" x2="290.0" y2="250.0"
+      stroke="#C8102E" stroke-width="1.6" stroke-dasharray="4 4"/>
+<circle id="grPkt" cx="290.0" cy="64.0" r="7" fill="#C8102E"/>
+</svg></div></div><div class="steuer"><button id="filmPlay">&#9654;&nbsp; Abspielen</button><input id="filmSlider" type="range" min="20" max="35" step="0.1" value="20"><span class="anzeige" id="filmWert">a = 20,0 m &middot; h = 15,0 m &middot; A = 300 m&sup2;</span></div><div class="frag"><p class="klein" style="margin-top:4px">Je breiter das Gehege wird, desto flacher wird es &ndash; und die Fl&auml;che wird <b>kleiner</b>. Der beste erlaubte Wert steht ganz am Anfang, bei <i>a</i> = 20 m.</p></div></section><section class="folie"><div class="marke"><span class="nr">8</span><span class="txt">Neuer Schritt</span></div><h2>Die R&auml;nder einsetzen</h2><div class="frag"><div class="math"><i>A</i>(20) = 35 &middot; 20 &minus; 20&sup2; = 700 &minus; 400 = <b>300</b></div></div><div class="frag"><div class="math"><i>A</i>(35) = 35 &middot; 35 &minus; 35&sup2; = 1225 &minus; 1225 = <b>0</b></div></div><div class="frag"><div class="kasten gut"><p style="margin:0">Der gr&ouml;&szlig;te Wert steht am Rand <i>a</i> = 20: <b>300 m&sup2;</b></p></div></div></section><section class="folie"><div class="marke"><span class="nr">9</span><span class="txt">Schritt 9</span></div><h2>Ergebnis</h2><div class="zwei"><div><svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" font-family="Cambria,Georgia,serif">
+<rect x="120" y="74" width="190.0" height="148" fill="#EAF3E4" stroke="#1d1d1f" stroke-width="2.6"/>
+<line x1="120" y1="74" x2="310" y2="74" stroke="#C8102E" stroke-width="11"/>
+<line x1="120" y1="46" x2="310" y2="46" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="120" y1="41" x2="120" y2="51" stroke="#C8102E" stroke-width="1.6"/>
+<line x1="310" y1="41" x2="310" y2="51" stroke="#C8102E" stroke-width="1.6"/>
+<text x="215.0" y="36" font-size="19" text-anchor="middle" fill="#C8102E" font-weight="bold">Mauer 20 m</text>
+<line x1="310" y1="46" x2="310.0" y2="46" stroke="#1D70B8" stroke-width="1.6"/>
+<line x1="310.0" y1="41" x2="310.0" y2="51" stroke="#1D70B8" stroke-width="1.6"/>
+<text x="316.0" y="36" font-size="16" text-anchor="middle" fill="#1D70B8">Zaun</text>
+<text x="215.0" y="254" font-size="21" text-anchor="middle" fill="#1d1d1f" font-style="italic">a = 20 m</text>
+<text x="326.0" y="156.0" font-size="21" fill="#1d1d1f" font-style="italic">h = 15 m</text>
+<text x="104" y="156.0" font-size="21" fill="#1d1d1f" font-style="italic" text-anchor="end">h = 15 m</text></svg></div><div><div class="frag"><div class="math" style="margin-top:0"><i>h</i> = 35 &minus; 20 = <b>15 m</b></div></div><div class="frag"><div class="math"><i>A</i><sub>max</sub> = 20 m &middot; 15 m = <b>300 m&sup2;</b></div></div><div class="frag"><p class="klein">Probe: 20 m + 2 &middot; 15 m = 50 m Zaun &#10003; &nbsp; Oben wird gar nicht gezaunt.</p></div></div></div><div class="frag"><div class="kasten gut"><p style="margin:0"><b>Antwort:</b> Das Gehege ist 20 m breit und 15 m tief. Die gr&ouml;&szlig;te Fl&auml;che betr&auml;gt 300 m&sup2;.</p></div></div></section><section class="folie"><div class="marke"><span class="txt">Zum Mitnehmen</span></div>
+<h1>Das Schema bekommt einen Schritt mehr</h1>
+<div class="frag"><div class="kasten auf"><p style="margin:0 0 6px"><b>Nach Schritt 3</b> (Nebenbedingung):<br>Schreibe auf, <b>welche Werte &uuml;berhaupt m&ouml;glich sind</b> &ndash; den Definitionsbereich.</p></div></div>
+<div class="frag"><div class="kasten gut"><p style="margin:0 0 6px"><b>Nach Schritt 7</b> (Ableitung = 0):<br>Pr&uuml;fe, ob die L&ouml;sung <b>im Definitionsbereich liegt</b>.<br>Rechne zus&auml;tzlich die <b>Randwerte</b> aus und vergleiche sie mit deinem Ergebnis.</p></div></div>
+<div class="frag"><p class="klein">Merke: Die Ableitung findet nur Hoch- und Tiefpunkte <i>im Inneren</i>. Am Rand schaut sie nicht nach.</p></div>
+</section></main>
+<footer>
+<button class="zur" id="zurueck">&#8592;&nbsp; Zur&uuml;ck</button>
+<div class="punkte" id="punkte"></div>
+<span class="zaehler" id="zaehler"></span>
+<button class="vor" id="weiter">Weiter&nbsp; &#8594;</button>
+</footer>
+<script>
+const folien=[...document.querySelectorAll('.folie')];
+const punkte=document.getElementById('punkte');
+let i=0;
+folien.forEach((_,k)=>{ const s=document.createElement('span');
+  s.addEventListener('click',()=>zeige(k)); punkte.appendChild(s); });
+function frags(k){ return [...folien[k].querySelectorAll('.frag')]; }
+function zeige(k, alleAuf){
+  i=Math.max(0,Math.min(folien.length-1,k));
+  folien.forEach((f,n)=>f.classList.toggle('an',n===i));
+  frags(i).forEach(f=>f.classList.toggle('sichtbar', !!alleAuf));
+  [...punkte.children].forEach((p,n)=>p.classList.toggle('an',n===i));
+  stand();
+  window.scrollTo(0,0);
+}
+function stand(){
+  const f=frags(i), auf=f.filter(x=>x.classList.contains('sichtbar')).length;
+  const zus = f.length ? ' · ' + auf + '/' + f.length : '';
+  document.getElementById('zaehler').textContent=(i+1)+' / '+folien.length+zus;
+  document.getElementById('zurueck').disabled=(i===0 && auf===0);
+  document.getElementById('weiter').disabled=(i===folien.length-1 && auf===f.length);
+}
+function weiter(){
+  const offen=frags(i).find(f=>!f.classList.contains('sichtbar'));
+  if(offen){ offen.classList.add('sichtbar'); stand(); }
+  else if(i<folien.length-1) zeige(i+1);
+}
+function zurueck(){
+  const auf=frags(i).filter(f=>f.classList.contains('sichtbar'));
+  if(auf.length){ auf[auf.length-1].classList.remove('sichtbar'); stand(); }
+  else if(i>0) zeige(i-1, true);
+}
+
+(function(){
+  var s=11.0, x0=70.0, yB=250.0, ox=70.0, oy=250.0, sx=11.0, sy=0.62;
+  var R=document.getElementById('gRect');
+  if(!R) return;
+  var Z=document.getElementById('gZaun'), M=document.getElementById('gMauer'),
+      MT=document.getElementById('gMauerT'), TA=document.getElementById('gA'),
+      TH=document.getElementById('gH'), TF=document.getElementById('gFl'),
+      PK=document.getElementById('grPkt'), LO=document.getElementById('grLot'),
+      SL=document.getElementById('filmSlider'), AN=document.getElementById('filmWert'),
+      BT=document.getElementById('filmPlay');
+  function de(z,n){ return z.toFixed(n).replace('.',','); }
+  function setze(a){
+    var h=35-a, F=a*h, yT=yB-h*s, br=a*s;
+    R.setAttribute('x',x0); R.setAttribute('y',yT);
+    R.setAttribute('width',br); R.setAttribute('height',h*s);
+    M.setAttribute('y1',yT); M.setAttribute('y2',yT);
+    MT.setAttribute('y', yT-14);
+    Z.setAttribute('x1', x0+20*s); Z.setAttribute('x2', x0+br);
+    Z.setAttribute('y1', yT); Z.setAttribute('y2', yT);
+    TA.setAttribute('x', x0+br/2); TA.textContent='a = '+de(a,1)+' m';
+    TH.setAttribute('x', x0+br+12); TH.setAttribute('y', yT+h*s/2+6);
+    TH.textContent='h = '+de(h,1)+' m';
+    TF.setAttribute('x', x0+br/2); TF.setAttribute('y', yT+h*s/2+7);
+    TF.textContent=de(F,0)+' m\u00B2';
+    TF.style.opacity = (h*s<34 ? 0 : 1);
+    var px=ox+a*sx, py=oy-F*sy;
+    PK.setAttribute('cx',px); PK.setAttribute('cy',py);
+    LO.setAttribute('x1',px); LO.setAttribute('x2',px); LO.setAttribute('y1',py);
+    if(AN) AN.textContent='a = '+de(a,1)+' m  \u00B7  h = '+de(35-a,1)+' m  \u00B7  A = '+de(F,0)+' m\u00B2';
+    if(SL && +SL.value!==a) SL.value=a;
+  }
+  var t0=null, laeuft=false;
+  function schritt(t){
+    if(t0===null) t0=t;
+    var p=Math.min((t-t0)/6500, 1);
+    setze(20+15*p);
+    if(p<1 && laeuft) requestAnimationFrame(schritt);
+    else { laeuft=false; t0=null; BT.innerHTML='&#9654;&nbsp; Nochmal'; }
+  }
+  BT.addEventListener('click', function(){
+    if(laeuft){ laeuft=false; BT.innerHTML='&#9654;&nbsp; Weiter'; return; }
+    if(SL && +SL.value>=34.9) setze(20);
+    t0=null; laeuft=true; BT.innerHTML='&#10073;&#10073;&nbsp; Pause';
+    requestAnimationFrame(schritt);
+  });
+  if(SL) SL.addEventListener('input', function(){ laeuft=false;
+    BT.innerHTML='&#9654;&nbsp; Abspielen'; setze(+SL.value); });
+  setze(20);
+})();
+
+document.getElementById('weiter').addEventListener('click',weiter);
+document.getElementById('zurueck').addEventListener('click',zurueck);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); weiter(); }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); zurueck(); }
+  if(e.key==='ArrowDown'){ e.preventDefault(); zeige(i+1); }
+  if(e.key==='ArrowUp'){ e.preventDefault(); zeige(i-1, true); }
+  if(e.key==='Home') zeige(0);
+  if(e.key==='End') zeige(folien.length-1, true);
+});
+zeige(0);
+</script>
+</body></html>
