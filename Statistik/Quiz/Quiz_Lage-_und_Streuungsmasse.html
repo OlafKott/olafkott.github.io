@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Lagemaße</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --rwb:#c80046; --rwb-dark:#9e0037; --rwb-soft:#fbe8ef; --rwb-line:#f1c4d4;
+    --ink:#1e1e24; --muted:#6b6b76; --line:#e3e3e8; --paper:#ffffff; --bg:#f6f5f7; --box:#f1f2f4;
+    --ok:#1f7a3d; --ok-soft:#e7f5ec; --bad:#b3261e; --bad-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:20px;line-height:1.7}
+
+  .app{min-height:100%;display:flex;flex-direction:column}
+
+  /* Kopfzeile */
+  header.kopf{background:var(--paper);border-bottom:4px solid var(--rwb);
+    break-inside:avoid;page-break-inside:avoid;break-after:avoid;page-break-after:avoid}
+  .kopf-inner{max-width:1040px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:22px}
+  .kopf img{height:46px;width:auto;display:block;flex:none}
+  .kopf .titel{flex:1;min-width:0}
+  .kopf h1{margin:0;font-size:1.3rem;line-height:1.25;font-weight:700}
+  .kopf .unter{margin:0;color:var(--muted);font-size:.85rem}
+  .kopf .stand{font-weight:700;color:var(--rwb);white-space:nowrap;font-size:1rem}
+
+  /* Fortschritt */
+  .punkte-leiste{max-width:1040px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--rwb-line);background:#fff;
+    color:var(--muted);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
+  .dot.aktiv{border-color:var(--rwb);color:var(--rwb);box-shadow:0 0 0 4px var(--rwb-soft)}
+  .dot.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  .dot.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+  .dot.ende{border-style:dashed}
+
+  main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:18px 20px 12px}
+
+  /* Aufgabenkarten */
+  .card{display:none;background:var(--paper);border-radius:16px;border:1px solid var(--line);
+    border-top:6px solid var(--rwb);padding:26px 32px 24px;box-shadow:0 6px 24px rgba(30,30,36,.06);
+    break-inside:avoid;page-break-inside:avoid}
+  .card.sichtbar{display:block;animation:rein .25s ease}
+  @keyframes rein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card .label{color:var(--rwb);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;margin:0}
+  .card h2{margin:2px 0 14px;font-size:1.45rem;line-height:1.3}
+  .frage{margin:0 0 14px}
+  .sub{display:inline-block;background:var(--rwb-soft);color:var(--rwb-dark);border-radius:6px;
+    padding:2px 12px;font-size:.9rem;margin:0 0 14px}
+
+  .optionen{display:grid;gap:12px}
+  .optionen.zwei{grid-template-columns:1fr 1fr}
+  .opt{display:flex;align-items:center;gap:16px;border:2px solid var(--line);border-radius:12px;
+    padding:12px 18px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:var(--rwb-line);background:#fffafb}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .buchst{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:var(--box);font-weight:700;color:var(--muted)}
+  .opt.gewaehlt{border-color:var(--rwb);background:var(--rwb-soft)}
+  .opt.gewaehlt .buchst{background:var(--rwb);color:#fff}
+  .opt.richtig{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.richtig .buchst{background:var(--ok);color:#fff}
+  .opt.falsch{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.falsch .buchst{background:var(--bad);color:#fff}
+  .opt .katex{font-size:1.2em}
+
+  .datenreihe{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px}
+  .datenreihe span{display:inline-block;min-width:3.4em;text-align:center;padding:8px 10px;font-size:1.15rem;font-weight:600;
+    border:2px solid var(--rwb-line);border-radius:10px;background:#fffafb;font-variant-numeric:tabular-nums}
+  table.daten{border-collapse:collapse;margin:4px 0 18px;font-variant-numeric:tabular-nums;width:100%}
+  table.daten th,table.daten td{border:1px solid var(--line);padding:6px 10px}
+  table.daten th{background:var(--rwb-soft);color:var(--rwb-dark);text-align:left;white-space:nowrap}
+  table.daten td{text-align:right}
+  table.daten tr:first-child td{text-align:center;color:var(--muted)}
+
+  .eingabe{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:1.15rem}
+  .eingabe input{font:inherit;font-size:1.3rem;width:170px;padding:8px 14px;border:2px solid var(--line);
+    border-radius:10px;background:var(--box);font-variant-numeric:tabular-nums}
+  .eingabe input:focus{outline:none;border-color:var(--rwb);background:#fff}
+
+  .aktionen{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  button.knopf{font:inherit;font-size:1rem;font-weight:600;border:2px solid var(--rwb);background:var(--rwb);
+    color:#fff;border-radius:10px;padding:8px 22px;cursor:pointer}
+  button.knopf:hover{background:var(--rwb-dark);border-color:var(--rwb-dark)}
+  button.knopf.leise{background:#fff;color:var(--rwb)}
+  button.knopf.leise:hover{background:var(--rwb-soft)}
+  button.knopf:disabled{opacity:.35;cursor:default}
+
+  .feedback{display:none;margin-top:18px;border-radius:12px;padding:14px 18px}
+  .feedback.ok{display:block;background:var(--ok-soft);border-left:6px solid var(--ok)}
+  .feedback.bad{display:block;background:var(--bad-soft);border-left:6px solid var(--bad)}
+  .feedback strong{display:block;font-size:1.05rem}
+  .feedback .loesung{margin-top:6px}
+  .feedback details{margin-top:6px}
+  .feedback summary{cursor:pointer;color:var(--rwb-dark);font-weight:600}
+
+  /* Navigation */
+  nav.navi{max-width:1040px;width:100%;margin:0 auto;padding:6px 20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  nav.navi .tipp{color:var(--muted);font-size:.8rem;text-align:center}
+
+  /* Auswertung */
+  .ergebnis-zahl{font-size:3.4rem;font-weight:800;color:var(--rwb);line-height:1.1;margin:8px 0}
+  .ergebnis-liste{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+  .ergebnis-liste li{display:flex;gap:12px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .ergebnis-liste li:hover{background:#fffafb}
+  .marke{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem;flex:none;background:#b9b9c2}
+  .marke.ok{background:var(--ok)} .marke.bad{background:var(--bad)}
+
+  @media (max-width:700px){
+    body{font-size:17px}
+    .optionen.zwei{grid-template-columns:1fr}
+    .card{padding:20px 18px}
+    .kopf img{height:34px}
+    .kopf .stand{display:none}
+    .dot{width:36px;height:36px}
+    table.daten{font-size:.85rem}
+    table.daten th,table.daten td{padding:4px 5px}
+  }
+
+  /* Druck: alle Aufgaben untereinander */
+  @page{size:A4;margin:14mm 15mm}
+  @media print{
+    body{background:#fff;font-size:12pt;line-height:1.55}
+    header.kopf{border-bottom:2px solid var(--rwb);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .kopf-inner{padding:0 0 8px}
+    .kopf .stand,.punkte-leiste,nav.navi,.aktionen,.feedback,#ende{display:none!important}
+    main{padding:6px 0 0}
+    .card{display:block!important;animation:none;box-shadow:none;border:1px solid #bbb;border-top:4px solid var(--rwb);
+      padding:12px 16px;margin:0 0 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card h2{font-size:1.15rem;margin-bottom:8px}
+    .opt{padding:5px 12px;border-width:1px}
+    #f2 .optionen.zwei{grid-template-columns:1fr}
+    .opt.gewaehlt,.opt.richtig,.opt.falsch{background:#fff;border-color:#ccc}
+    .opt .buchst,.opt.gewaehlt .buchst,.opt.richtig .buchst,.opt.falsch .buchst{width:28px;height:28px;background:#fff;border:1.5px solid #555;color:#333}
+    .datenreihe span{padding:3px 8px;font-size:1rem}
+    .eingabe input{border:1px solid #999;background:#f1f2f4;color:transparent;height:34px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="kopf">
+  <div class="kopf-inner">
+    <img src="data:image/png;base64,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" alt="rwb">
+    <div class="titel">
+      <h1>Quiz: Lagemaße und Streuungsmaße</h1>
+      <p class="unter">Mittelwert · Median · Spannweite · Varianz · Standardabweichung</p>
+    </div>
+    <div class="stand" id="stand"></div>
+  </div>
+</header>
+
+<div class="punkte-leiste" id="dots"></div>
+
+<main>
+
+<!-- 1 Arithmetisches Mittel (2 richtige) -->
+<section class="card" data-typ="multi" data-richtig="a,c" id="f1">
+  <p class="label">Formel</p>
+  <h2>Arithmetisches Mittel</h2>
+  <p class="frage">Mit welcher Formel berechnet man das arithmetische Mittel \(\bar{x}\)?</p>
+  <p class="sub"><strong>Zwei</strong> Antworten sind richtig.</p>
+  <div class="optionen zwei">
+    <label class="opt" data-wert="a"><input type="checkbox"><span class="buchst">A</span>
+      <span>\(\bar{x}=\dfrac{x_1+x_2+\ldots+x_n}{n}\)</span></label>
+    <label class="opt" data-wert="b"><input type="checkbox"><span class="buchst">B</span>
+      <span>\(\bar{x}=\dfrac{x_{\max}+x_{\min}}{2}\)</span></label>
+    <label class="opt" data-wert="c"><input type="checkbox"><span class="buchst">C</span>
+      <span>\(\bar{x}=\dfrac{1}{n}\cdot\displaystyle\sum_{i=1}^{n}x_i\)</span></label>
+    <label class="opt" data-wert="d"><input type="checkbox"><span class="buchst">D</span>
+      <span>\(\bar{x}=\dfrac{n}{x_1+x_2+\ldots+x_n}\)</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 2 Standardabweichung -->
+<section class="card" data-typ="single" data-richtig="c" id="f2">
+  <p class="label">Formel</p>
+  <h2>Standardabweichung</h2>
+  <p class="frage">Mit welcher Formel berechnet man die Standardabweichung \(\sigma\)?</p>
+  <div class="optionen zwei">
+    <label class="opt" data-wert="a"><input type="radio" name="f2"><span class="buchst">A</span>
+      <span>\(\sigma=\dfrac{(x_1-\bar{x})^2+(x_2-\bar{x})^2+\ldots+(x_n-\bar{x})^2}{n}\)</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="f2"><span class="buchst">B</span>
+      <span>\(\sigma=\dfrac{|x_1-\bar{x}|+|x_2-\bar{x}|+\ldots+|x_n-\bar{x}|}{n}\)</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="f2"><span class="buchst">C</span>
+      <span>\(\sigma=\sqrt{\dfrac{(x_1-\bar{x})^2+(x_2-\bar{x})^2+\ldots+(x_n-\bar{x})^2}{n}}\)</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="f2"><span class="buchst">D</span>
+      <span>\(\sigma=x_{\max}-x_{\min}\)</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Spannweite Formel -->
+<section class="card" data-typ="single" data-richtig="a" id="fsp1">
+  <p class="label">Formel</p>
+  <h2>Spannweite</h2>
+  <p class="frage">Mit welcher Formel berechnet man die Spannweite \(R\)?</p>
+  <div class="optionen zwei">
+    <label class="opt" data-wert="a"><input type="radio" name="fsp1"><span class="buchst">A</span>
+      <span>\(R=x_{\max}-x_{\min}\)</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="fsp1"><span class="buchst">B</span>
+      <span>\(R=x_{\max}+x_{\min}\)</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="fsp1"><span class="buchst">C</span>
+      <span>\(R=\dfrac{x_{\max}+x_{\min}}{2}\)</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="fsp1"><span class="buchst">D</span>
+      <span>\(R=x_{\max}-\bar{x}\)</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('fsp1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('fsp1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 3 Gehälter: Median -->
+<section class="card" data-typ="single" data-richtig="b" id="f3">
+  <p class="label">Lagemaß wählen</p>
+  <h2>Das typische Gehalt</h2>
+  <p class="frage">Bei Mehr Nutrition arbeiten 7 Personen.<br>
+  Die Tabelle zeigt ihre Monatsgehälter (brutto).</p>
+  <table class="daten">
+    <tr><th>Person</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+    <tr><th>Gehalt in €</th><td>2 950</td><td>3 100</td><td>2 800</td>
+      <td>45 000</td><td>3 200</td><td>2 900</td><td>3 050</td></tr>
+  </table>
+  <p class="frage">Welcher Wert beschreibt das <strong>typische</strong> Gehalt am besten?</p>
+  <div class="optionen zwei">
+    <label class="opt" data-wert="a"><input type="radio" name="f3"><span class="buchst">A</span>
+      <span>das arithmetische Mittel</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="f3"><span class="buchst">B</span>
+      <span>der Median</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="f3"><span class="buchst">C</span>
+      <span>die Spannweite</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="f3"><span class="buchst">D</span>
+      <span>das größte Gehalt</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f3')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f3')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 4 Mittelwert berechnen -->
+<section class="card" data-typ="zahl" id="f4">
+  <p class="label">Rechnen</p>
+  <h2>Arithmetisches Mittel berechnen</h2>
+  <p class="frage">Mehr Nutrition hat an 8 Tagen Proteinriegel verkauft.<br>
+  Das sind die verkauften Kartons pro Tag:</p>
+  <div class="datenreihe"><span>12</span><span>15</span><span>11</span><span>18</span><span>14</span><span>20</span><span>13</span><span>17</span></div>
+  <p class="frage">Berechnen Sie das arithmetische Mittel \(\bar{x}\).</p>
+  <div class="eingabe">\(\bar{x}=\)<input type="text" inputmode="decimal" autocomplete="off"> Kartons</div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f4')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f4')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 5 Median -->
+<section class="card" data-typ="zahl" id="f5">
+  <p class="label">Rechnen</p>
+  <h2>Median angeben</h2>
+  <p class="frage">Es geht wieder um die verkauften Kartons pro Tag:</p>
+  <div class="datenreihe"><span>12</span><span>15</span><span>11</span><span>18</span><span>14</span><span>20</span><span>13</span><span>17</span></div>
+  <p class="frage">Geben Sie den Median \(x_{\text{med}}\) an.</p>
+  <div class="eingabe">\(x_{\text{med}}=\)<input type="text" inputmode="decimal" autocomplete="off"> Kartons</div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f5')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f5')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Spannweite berechnen -->
+<section class="card" data-typ="zahl" id="fsp2">
+  <p class="label">Rechnen</p>
+  <h2>Spannweite berechnen</h2>
+  <p class="frage">Es geht wieder um die verkauften Kartons pro Tag:</p>
+  <div class="datenreihe"><span>12</span><span>15</span><span>11</span><span>18</span><span>14</span><span>20</span><span>13</span><span>17</span></div>
+  <p class="frage">Berechnen Sie die Spannweite \(R\).</p>
+  <div class="eingabe">\(R=\)<input type="text" inputmode="decimal" autocomplete="off"> Kartons</div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('fsp2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('fsp2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 6 Standardabweichung -->
+<section class="card" data-typ="zahl" id="f6">
+  <p class="label">Rechnen</p>
+  <h2>Standardabweichung berechnen</h2>
+  <p class="frage">Es geht wieder um die verkauften Kartons pro Tag:</p>
+  <div class="datenreihe"><span>12</span><span>15</span><span>11</span><span>18</span><span>14</span><span>20</span><span>13</span><span>17</span></div>
+  <p class="frage">Der Durchschnitt ist \(\bar{x}=15\).<br>
+  Berechnen Sie die Standardabweichung \(\sigma\).<br>
+  Runden Sie auf zwei Nachkommastellen.</p>
+  <div class="eingabe">\(\sigma\approx\)<input type="text" inputmode="decimal" autocomplete="off"> Kartons</div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('f6')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('f6')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Varianz aus Standardabweichung -->
+<section class="card" data-typ="zahl" id="fvar">
+  <p class="label">Rechnen</p>
+  <h2>Varianz bestimmen</h2>
+  <p class="frage">Mehr Nutrition prüft eine Abfüllanlage für Proteinpulver.<br>
+  Die Standardabweichung der Füllmengen beträgt \(\sigma=2{,}5\) g.</p>
+  <p class="frage">Bestimmen Sie die Varianz \(\sigma^2\).</p>
+  <div class="eingabe">\(\sigma^2=\)<input type="text" inputmode="decimal" autocomplete="off"> g²</div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('fvar')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('fvar')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Auswertung -->
+<section class="card" id="ende">
+  <p class="label">Auswertung</p>
+  <h2>Geschafft!</h2>
+  <div class="ergebnis-zahl" id="ergebnis-zahl"></div>
+  <p id="ergebnis-text" style="margin:0">richtig beantwortet</p>
+  <ul class="ergebnis-liste" id="ergebnis-liste"></ul>
+  <div class="aktionen"><button class="knopf" onclick="allesZuruecksetzen()">Quiz neu starten</button></div>
+</section>
+
+</main>
+
+<nav class="navi">
+  <button class="knopf leise" id="zurueck" onclick="gehe(aktuell-1)">← Zurück</button>
+  <span class="tipp">Pfeiltasten ← → zum Blättern</span>
+  <button class="knopf" id="weiter" onclick="gehe(aktuell+1)">Weiter →</button>
+</nav>
+
+</div>
+
+<script>
+const ids = ["f1","f2","fsp1","f3","f4","f5","fsp2","f6","fvar"];
+const titel = {f1:"Formel arithmetisches Mittel",f2:"Formel Standardabweichung",f3:"Das typische Gehalt",
+  fsp1:"Formel Spannweite",fsp2:"Spannweite berechnen",f4:"Arithmetisches Mittel berechnen",f5:"Median angeben",f6:"Standardabweichung berechnen",fvar:"Varianz bestimmen"};
+const ergebnis = {};   // id -> true/false (nur wenn geprüft)
+let aktuell = 0;       // Index in ids, ids.length = Auswertung
+
+const texte = {
+  f1:{ok:"Richtig! A und C sind dieselbe Formel: Alle Werte addieren und durch die Anzahl n teilen.",
+    loesung:"Richtig sind A und C.<br>A: Alle Werte addieren, dann durch n teilen.<br>C: Das Summenzeichen \\(\\sum\\) bedeutet ebenfalls „alle Werte addieren“. Mal \\(\\tfrac{1}{n}\\) ist dasselbe wie durch n teilen.<br>B ist nur die Mitte zwischen kleinstem und größtem Wert. D ist der Kehrwert."},
+  f2:{ok:"Richtig! Abweichungen quadrieren, Durchschnitt bilden, Wurzel ziehen.",
+    loesung:"Richtig ist C.<br>A ist die Varianz – dort fehlt die Wurzel.<br>B ist die mittlere lineare Abweichung (Beträge statt Quadrate).<br>D ist die Spannweite."},
+  fsp1:{ok:"Richtig! Größter Wert minus kleinster Wert.",
+    loesung:"Richtig ist A: \\(R=x_{\\max}-x_{\\min}\\)<br>Die Spannweite ist der Abstand zwischen dem größten und dem kleinsten Wert.<br>C ist die Mitte zwischen beiden Werten."},
+  f3:{ok:"Richtig! Das Gehalt von 45 000 € ist ein starker Ausreißer. Der Median wird davon nicht beeinflusst.",
+    loesung:"Richtig ist B, der Median.<br>Ein Gehalt (45 000 €) ist ein starker Ausreißer.<br>Er zieht den Mittelwert auf 9 000 € hoch – das ist fast das Dreifache der anderen Gehälter. So viel verdient aber niemand von den anderen 6 Personen.<br>Regel: Ausreißer → Median."}
+};
+
+const zahlAufgaben = {
+  f4:{ziel:15, tol:0.001,
+    loesung:"\\(\\bar{x}=\\dfrac{12+15+11+18+14+20+13+17}{8}=\\dfrac{120}{8}=15\\)",
+    fehler:[
+      {wert:120, text:"120 ist die Summe. Sie müssen noch durch n = 8 teilen."},
+      {wert:17.14, tol:0.01, text:"Sie haben durch 7 geteilt. Es sind aber 8 Werte, also n = 8."}
+    ]},
+  f5:{ziel:14.5, tol:0.001,
+    loesung:"Zuerst sortieren: 11, 12, 13, <b>14</b>, <b>15</b>, 17, 18, 20<br>Es sind 8 Werte (gerade Anzahl). Der Median liegt zwischen dem 4. und 5. Wert:<br>\\(x_{\\text{med}}=\\dfrac{14+15}{2}=14{,}5\\)",
+    fehler:[
+      {wert:16, text:"Haben Sie die Werte sortiert? In der unsortierten Liste stehen 18 und 14 in der Mitte. Zuerst der Größe nach ordnen, dann die Mitte suchen."},
+      {wert:14, text:"Fast! Bei einer geraden Anzahl gibt es zwei mittlere Werte. Bilden Sie den Mittelwert aus beiden."},
+      {wert:15, text:"Fast! Bei einer geraden Anzahl gibt es zwei mittlere Werte. Bilden Sie den Mittelwert aus beiden."}
+    ]},
+  fsp2:{ziel:9, tol:0.001,
+    loesung:"Größter Wert: \\(x_{\\max}=20\\)<br>Kleinster Wert: \\(x_{\\min}=11\\)<br>\\(R=x_{\\max}-x_{\\min}=20-11=9\\)",
+    fehler:[
+      {wert:5, text:"Sie haben den letzten minus den ersten Wert gerechnet. Suchen Sie den größten und den kleinsten Wert."},
+      {wert:-9, text:"Andersherum: größter Wert minus kleinster Wert."},
+      {wert:31, text:"Sie haben addiert. Die Spannweite ist eine Differenz: größter minus kleinster Wert."}
+    ]},
+  fvar:{ziel:6.25, tol:0.001,
+    loesung:"Die Standardabweichung ist die Wurzel aus der Varianz.<br>Also ist die Varianz das Quadrat der Standardabweichung:<br>\\(\\sigma^2=2{,}5^2=2{,}5\\cdot 2{,}5=6{,}25\\) g²",
+    fehler:[
+      {wert:5, text:"Sie haben 2,5 · 2 gerechnet. Quadrieren heißt: 2,5 · 2,5."},
+      {wert:1.58, tol:0.01, text:"Sie haben die Wurzel gezogen. Andersherum: Die Varianz ist das Quadrat der Standardabweichung."},
+      {wert:1.25, text:"Sie haben durch 2 geteilt. Die Varianz ist das Quadrat der Standardabweichung."},
+      {wert:2.5, text:"Das ist die Standardabweichung selbst. Sie müssen sie noch quadrieren."}
+    ]},
+  f6:{ziel:2.92, tol:0.011,
+    loesung:"Abweichungen vom Mittelwert 15: −3, 0, −4, 3, −1, 5, −2, 2<br>Quadrate: 9, 0, 16, 9, 1, 25, 4, 4 → Summe 68<br>\\(\\sigma=\\sqrt{\\dfrac{9+0+16+9+1+25+4+4}{8}}=\\sqrt{\\dfrac{68}{8}}=\\sqrt{8{,}5}\\approx 2{,}92\\)",
+    fehler:[
+      {wert:8.5, text:"8,5 ist die Varianz. Sie müssen noch die Wurzel ziehen."},
+      {wert:68, text:"68 ist die Summe der Quadrate. Teilen Sie durch n = 8 und ziehen Sie dann die Wurzel."},
+      {wert:2.5, text:"2,5 ist die mittlere lineare Abweichung (Beträge). Für σ müssen Sie die Abweichungen quadrieren."},
+      {wert:0, text:"Die Abweichungen heben sich auf, wenn man sie nur addiert. Deshalb werden sie quadriert."},
+      {wert:3.12, tol:0.01, text:"Sie haben durch 7 (n − 1) geteilt. Wir teilen durch n = 8."}
+    ]}
+};
+
+function leseZahl(s){
+  s = s.replace(/\s/g,"").replace(/€|kartons?/gi,"").replace(",",".");
+  if(s==="" || isNaN(Number(s))) return null;
+  return Number(s);
+}
+
+function rendere(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}],throwOnError:false});
+  }
+}
+
+function zeige(card, ok, t, text){
+  const fb = card.querySelector(".feedback");
+  fb.className = "feedback " + (ok ? "ok" : "bad");
+  fb.innerHTML = "<strong>"+t+"</strong>"+(text ? "<div class='loesung'>"+text+"</div>" : "");
+  rendere(fb);
+}
+
+function pruefe(id){
+  const card = document.getElementById(id);
+  const typ = card.dataset.typ;
+
+  if(typ==="multi" || typ==="single"){
+    const richtig = card.dataset.richtig.split(",");
+    const opts = [...card.querySelectorAll(".opt")];
+    const gewaehlt = opts.filter(o=>o.querySelector("input").checked).map(o=>o.dataset.wert);
+    if(gewaehlt.length===0){ zeige(card,false,"Bitte wählen Sie eine Antwort aus.",""); return; }
+    if(typ==="multi" && gewaehlt.length!==2){
+      zeige(card,false,"Bitte wählen Sie genau zwei Antworten aus.","Ausgewählt: "+gewaehlt.length); return;
+    }
+    const ok = gewaehlt.every(g=>richtig.includes(g)) && gewaehlt.length===richtig.length;
+    opts.forEach(o=>{
+      o.classList.remove("richtig","falsch","gewaehlt");
+      if(richtig.includes(o.dataset.wert)) o.classList.add("richtig");
+      else if(o.querySelector("input").checked) o.classList.add("falsch");
+    });
+    ergebnis[id] = ok;
+    zeige(card, ok, ok ? texte[id].ok : "Leider falsch.", ok ? "" : texte[id].loesung);
+  } else {
+    const a = zahlAufgaben[id];
+    const z = leseZahl(card.querySelector("input").value);
+    if(z===null){ zeige(card,false,"Bitte geben Sie eine Zahl ein.",""); return; }
+    const ok = Math.abs(z-a.ziel) <= a.tol;
+    ergebnis[id] = ok;
+    if(ok){
+      zeige(card,true,"Richtig!",a.loesung);
+    } else {
+      const f = a.fehler.find(f=>Math.abs(z-f.wert) <= (f.tol ?? 0.001));
+      zeige(card,false,"Leider falsch.",(f ? f.text : "")+
+        "<details><summary>Lösungsweg anzeigen</summary>"+a.loesung+"</details>");
+    }
+  }
+  zeichneDots();
+}
+
+function zuruecksetzen(id){
+  const card = document.getElementById(id);
+  card.querySelectorAll("input").forEach(i=>{ if(i.type==="text") i.value=""; else i.checked=false; });
+  card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch","gewaehlt"));
+  const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+  delete ergebnis[id];
+  zeichneDots();
+}
+
+function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); gehe(0); }
+
+/* Auswahl markieren */
+document.addEventListener("change",e=>{
+  const opt = e.target.closest(".opt"); if(!opt) return;
+  const card = opt.closest(".card");
+  if(card.querySelector(".opt.richtig,.opt.falsch")){ // nach dem Prüfen neu wählen -> Markierung zurücksetzen
+    card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch"));
+    const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+    delete ergebnis[card.id]; zeichneDots();
+  }
+  card.querySelectorAll(".opt").forEach(o=>o.classList.toggle("gewaehlt",o.querySelector("input").checked));
+});
+
+/* Navigation */
+function gehe(i){
+  if(i<0 || i>ids.length) return;
+  aktuell = i;
+  document.querySelectorAll("main .card").forEach(c=>c.classList.remove("sichtbar"));
+  const ziel = i<ids.length ? document.getElementById(ids[i]) : document.getElementById("ende");
+  ziel.classList.add("sichtbar");
+  if(i===ids.length) zeichneAuswertung();
+  document.getElementById("stand").textContent = i<ids.length ? "Frage "+(i+1)+" von "+ids.length : "Auswertung";
+  document.getElementById("zurueck").disabled = i===0;
+  const w = document.getElementById("weiter");
+  w.disabled = i===ids.length;
+  w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
+  zeichneDots();
+  window.scrollTo({top:0});
+}
+
+function zeichneDots(){
+  const box = document.getElementById("dots");
+  box.innerHTML = "";
+  ids.forEach((id,i)=>{
+    const b = document.createElement("button");
+    b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
+    b.textContent = i+1; b.title = titel[id];
+    b.onclick = ()=>gehe(i);
+    box.appendChild(b);
+  });
+  const e = document.createElement("button");
+  e.className = "dot ende" + (aktuell===ids.length?" aktiv":"");
+  e.textContent = "✓"; e.title = "Auswertung"; e.onclick = ()=>gehe(ids.length);
+  box.appendChild(e);
+}
+
+function zeichneAuswertung(){
+  const n = ids.filter(id=>ergebnis[id]===true).length;
+  document.getElementById("ergebnis-zahl").textContent = n+" / "+ids.length;
+  document.getElementById("ergebnis-text").textContent =
+    n===ids.length ? "Alles richtig – super!" : n>=ids.length-2 ? "richtig beantwortet – gut gemacht!" : "richtig beantwortet – schauen wir uns die anderen noch einmal an.";
+  const ul = document.getElementById("ergebnis-liste"); ul.innerHTML="";
+  ids.forEach((id,i)=>{
+    const li = document.createElement("li");
+    const st = id in ergebnis ? (ergebnis[id]?"ok":"bad") : "";
+    li.innerHTML = "<span class='marke "+st+"'>"+(st==="ok"?"✓":st==="bad"?"✗":"–")+"</span><span>Frage "+(i+1)+": "+titel[id]+"</span>";
+    li.onclick = ()=>gehe(i);
+    ul.appendChild(li);
+  });
+}
+
+document.addEventListener("keydown",e=>{
+  const inInput = e.target.tagName==="INPUT" && e.target.type==="text";
+  if(inInput){ if(e.key==="Enter") pruefe(e.target.closest(".card").id); return; }
+  const vor = e.key==="ArrowRight" || e.key==="PageDown", zur = e.key==="ArrowLeft" || e.key==="PageUp";
+  if(!vor && !zur) return;
+  e.preventDefault(); // verhindert, dass Pfeiltasten Radio-Antworten umschalten
+  if(document.activeElement) document.activeElement.blur();
+  gehe(aktuell + (vor ? 1 : -1));
+});
+
+document.addEventListener("DOMContentLoaded",()=>{
+  ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Frage "+(i+1)+" · "+l.textContent; });
+  rendere(document.body); gehe(0);
+});
+</script>
+</body>
+</html>
