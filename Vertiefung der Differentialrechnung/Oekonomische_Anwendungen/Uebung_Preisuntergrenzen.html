@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Übung Preisuntergrenzen</title>
+<style>
+:root{ --rwb:#C8102E; --ink:#1d1d1f; --ok:#2E7D32; --bad:#B00020; --blue:#1D70B8; --mut:#6B6B6B; --line:#d9d2c5; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:#f1f1f1; line-height:1.6; }
+.wrap{ max-width:860px; margin:0 auto; padding:14px; }
+.hdr{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-bottom:3px solid var(--rwb); padding-bottom:8px; margin-bottom:12px; }
+.hdr h1{ font-size:22px; margin:0 0 3px; color:var(--rwb); line-height:1.25; }
+.hdr .sub{ font-size:13.5px; color:#444; }
+.hdr img{ height:54px; width:auto; }
+.info{ background:#E9F2FB; border:1px solid var(--blue); border-radius:6px; padding:9px 14px; margin:0 0 12px; font-size:15px; }
+.card{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin:0 0 12px; }
+.top{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+.top h2{ margin:0; font-size:19px; color:var(--rwb); flex:1; }
+.score{ font-family:Calibri,Arial,sans-serif; font-size:14px; color:var(--mut); }
+.ctx{ background:#FBEEF0; border-left:4px solid var(--rwb); border-radius:4px; padding:10px 14px; margin:6px 0 12px; }
+.fxl{ font-family:Cambria,Georgia,serif; font-size:20px; margin:6px 0 4px 20px; }
+.m{ font-family:Cambria,Georgia,serif; white-space:nowrap; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; margin:8px 0; }
+@media (max-width:600px){ .grid{ grid-template-columns:1fr; } }
+.fld{ font-family:Cambria,Georgia,serif; font-size:17px; display:flex; align-items:center; gap:8px; }
+.fld label{ min-width:150px; }
+input.num{ width:100px; font-family:Cambria,Georgia,serif; font-size:17px; padding:4px 8px; border:1.5px solid #aaa; border-radius:6px; text-align:center; }
+input.num.ok{ border-color:var(--ok); background:#EAF5EA; } input.num.bad{ border-color:var(--bad); background:#FDECEA; }
+.btns{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin:10px 0 4px; }
+button{ font-family:Calibri,Arial,sans-serif; font-size:15px; font-weight:bold; padding:8px 16px; border-radius:6px; cursor:pointer; border:1.5px solid var(--rwb); }
+button.pr{ background:var(--rwb); color:#fff; } button.sec{ background:#fff; color:var(--rwb); }
+button.bl{ background:#fff; color:var(--blue); border-color:var(--blue); }
+.fb{ font-family:Calibri,Arial,sans-serif; font-size:15.5px; font-weight:bold; min-height:1.2em; }
+.fb.ok{ color:var(--ok); } .fb.bad{ color:var(--bad); }
+.tips{ display:none; margin-top:8px; }
+.tips.show{ display:block; }
+.tip{ display:none; background:#FFF8E8; border-left:4px solid #F2B705; border-radius:4px; padding:7px 12px; margin:6px 0; font-size:15.5px; }
+.tip.show{ display:block; }
+.sol{ display:none; margin-top:10px; border:1px solid var(--line); border-radius:8px; padding:10px 14px; background:#fcfbf9; }
+.sol.show{ display:block; }
+.sh{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:16px; color:var(--rwb); margin:12px 0 4px; }
+.eq{ display:grid; grid-template-columns:max-content max-content max-content 1fr; column-gap:10px; row-gap:6px; margin:4px 0 6px 14px; font-family:Cambria,Georgia,serif; font-size:18px; align-items:center; }
+.eq .er{ display:contents; }
+.eq .l{ text-align:right; white-space:nowrap; } .eq .e{ text-align:center; } .eq .r{ white-space:nowrap; }
+.eq .op{ color:var(--blue); font-size:16px; padding-left:18px; white-space:nowrap; }
+.eq .et{ grid-column:1 / -1; font-family:Calibri,Arial,sans-serif; font-size:15px; color:#444; }
+.fr{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; line-height:1.15; }
+.fr .nu{ border-bottom:1.5px solid currentColor; padding:0 4px 1px; } .fr .de{ padding:1px 4px 0; }
+.code{ font-family:Consolas,'Courier New',monospace; font-size:16px; background:#fff; border:1px solid #c9d8e8; border-radius:5px; padding:4px 10px; display:inline-block; }
+.res{ margin:12px 0 2px; padding:8px 12px; border:2px solid var(--ok); background:#EAF5EA; border-radius:8px; font-family:Calibri,Arial,sans-serif; font-weight:bold; color:#1B5E20; font-size:16px; }
+.opt{ display:flex; align-items:flex-start; gap:10px; padding:7px 11px; border:1.5px solid var(--line); border-radius:6px; margin:6px 0; cursor:pointer; background:#fdfcfa; font-size:16px; }
+.opt::before{ content:""; flex:0 0 14px; height:14px; border:2px solid #999; border-radius:50%; margin-top:5px; }
+.opt.sel{ border-color:var(--rwb); background:#FBEEF0; } .opt.sel::before{ border-color:var(--rwb); background:var(--rwb); }
+.opt.right{ border-color:var(--ok); background:#EAF5EA; } .opt.wrong{ border-color:var(--bad); background:#FDECEA; }
+h3{ font-size:17px; margin:16px 0 4px; border-left:4px solid var(--rwb); padding-left:9px; }
+.foot{ font-size:11.5px; color:#888; text-align:center; margin-top:6px; font-family:Calibri,Arial,sans-serif; }
+</style></head><body>
+<div class="wrap">
+<div class="hdr"><div><h1>Übung: Betriebsminimum und Betriebsoptimum</h1><div class="sub">Vertiefung der Differentialrechnung · Ökonomische Anwendungen · Preisuntergrenzen berechnen</div></div><img src="data:image/png;base64,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" alt="rwb. ahr."></div>
+<div class="info">Hier bekommst du immer neue Aufgaben.<br>Du darfst das CAS benutzen.<br>Runde nicht – alle Ergebnisse sind ganze Zahlen.</div>
+
+<div class="card">
+ <div class="top"><h2 id="titel">Aufgabe 1</h2><span class="score" id="score"></span><button class="sec" id="neu">Neue Aufgabe</button></div>
+ <div class="ctx">Ein Unternehmen im Polypol hat diese Kostenfunktion:<div class="fxl" id="kf"></div></div>
+ <h3>Berechne das Betriebsminimum und das Betriebsoptimum.</h3>
+ <div class="grid">
+  <div class="fld"><label>Betriebsminimum: <span class="m">x<sub>BM</sub> =</span></label><input class="num" id="i1"> ME</div>
+  <div class="fld"><label>kurzfristige Preisuntergrenze: <span class="m">KPU =</span></label><input class="num" id="i2"> GE/ME</div>
+  <div class="fld"><label>Betriebsoptimum: <span class="m">x<sub>BO</sub> =</span></label><input class="num" id="i3"> ME</div>
+  <div class="fld"><label>langfristige Preisuntergrenze: <span class="m">LPU =</span></label><input class="num" id="i4"> GE/ME</div>
+ </div>
+ <div class="btns"><button class="pr" id="pruef">Prüfen</button><button class="bl" id="tipp">Tipp</button><button class="sec" id="loes">Lösung zeigen</button></div>
+ <div class="fb" id="fb"></div>
+ <div class="tips" id="tips"></div>
+ <div class="sol" id="sol"></div>
+
+ <h3>Was soll das Unternehmen tun?</h3>
+ <p id="pfrage"></p>
+ <div id="mc"></div>
+ <div class="btns"><button class="pr" id="pruef2">Prüfen</button></div>
+ <div class="fb" id="fb2"></div>
+</div>
+<div class="foot">Vertiefung der Differentialrechnung · Ökonomische Anwendungen · Berufliches Gymnasium Jg. 12 (HAW)</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const fmt=v=>{ const r=Math.round(v*100)/100; return String(r).replace('.',',').replace('-','−'); };
+const fr=(n,d)=>`<span class="fr"><span class="nu">${n}</span><span class="de">${d}</span></span>`;
+const X='<i>x</i>';
+function poly(terms){ // [[c,p]]
+  let s=''; terms.forEach(([c,p],i)=>{ if(Math.abs(c)<1e-12) return;
+    const neg=c<0, a=Math.abs(c); let cs=(a===1&&p>0)?'':fmt(a);
+    const xs=p===0?'':(p===1?X:X+(p===2?'²':'³'));
+    s+= s===''?(neg?'−':'')+cs+xs : (neg?' − ':' + ')+cs+xs; });
+  return s||'0'; }
+const eq=rows=>'<div class="eq">'+rows.map(r=>r[0]==='T'?`<div class="et">${r[1]}</div>`:`<div class="er"><span class="l">${r[0]}</span><span class="e">${r[3]||'='}</span><span class="r">${r[1]}</span><span class="op">${r[2]||''}</span></div>`).join('')+'</div>';
+const ev=(a,b,c,x)=>`${a===1?'':fmt(a)+' · '}${x}² ${b<0?'−':'+'} ${fmt(Math.abs(b))} · ${x} + ${c}`;
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+let A, nr=0, solved=0, tipN=0;
+function gen(){
+  for(let t=0;t<500;t++){
+    const a=[1,1,0.5][rnd(0,2)], xb=rnd(3,8), dx=rnd(1,2), xo=xb+dx;
+    if(a===0.5 && (xb%2||xo%2)) continue;
+    const kpu=rnd(8,30); if(kpu<=a*xb*xb/3) continue;
+    const b=-2*a*xb, c=kpu+a*xb*xb, d=2*a*xo*xo*dx, lpu=3*a*xo*xo-4*a*xb*xo+c;
+    if(d>400||lpu>90) continue;
+    const pz=rnd(0,2), p=pz===0?rnd(Math.max(2,kpu-6),kpu-1):pz===1?rnd(kpu+1,lpu-1):rnd(lpu+1,lpu+12);
+    if(pz===1&&lpu-kpu<2) continue;
+    return {a,b,c,d,xb,xo,kpu,lpu,p,pz};
+  }
+}
+function render(){
+  A=gen(); nr++; tipN=0;
+  const {a,b,c,d,xb,xo,kpu,lpu,p}=A;
+  $('#titel').textContent='Aufgabe '+nr; $('#score').textContent=solved?`gelöst: ${solved}`:'';
+  $('#kf').innerHTML='<i>K</i>('+X+') = '+poly([[a,3],[b,2],[c,1],[d,0]]);
+  ['#i1','#i2','#i3','#i4'].forEach(s=>{ $(s).value=''; $(s).className='num'; });
+  $('#fb').textContent=''; $('#fb').className='fb'; $('#fb2').textContent=''; $('#fb2').className='fb';
+  $('#sol').classList.remove('show'); $('#loes').textContent='Lösung zeigen';
+  const kvT=poly([[a,2],[b,1],[c,0]]), kT=kvT+' + '+fr(d,X);
+  const tips=[
+    `Variable Stückkosten: Lass die Fixkosten weg und teile durch ${X}:<br><span class="m"><i>k</i><sub>v</sub>(${X}) = ${fr('<i>K</i><sub>v</sub>('+X+')',X)}</span>`,
+    `Betriebsminimum: Notwendige Bedingung <span class="m"><i>k</i><sub>v</sub>′(${X}) = 0</span>. Die KPU ist <span class="m"><i>k</i><sub>v</sub>(x<sub>BM</sub>)</span>.`,
+    `Stückkosten: Teile alle Kosten durch ${X}:<br><span class="m"><i>k</i>(${X}) = ${fr('<i>K</i>('+X+')',X)} = ${kT}</span>`,
+    `Betriebsoptimum: Notwendige Bedingung <span class="m"><i>k</i>′(${X}) = 0</span>. Löse mit dem CAS. Die LPU ist <span class="m"><i>k</i>(x<sub>BO</sub>)</span>.`];
+  $('#tips').innerHTML=tips.map(t=>`<div class="tip">${t}</div>`).join(''); $('#tips').classList.remove('show'); $('#tipp').textContent='Tipp';
+  const k2=2*a+2*d/(xo**3);
+  $('#sol').innerHTML=
+   `<div class="sh">1. Variable Stückkosten</div>`+eq([['<i>k</i><sub>v</sub>('+X+')',fr(poly([[a,3],[b,2],[c,1]]),X)],['',kvT]])+
+   `<div class="sh">2. Ableitungen</div>`+eq([['<i>k</i><sub>v</sub>′('+X+')',poly([[2*a,1],[b,0]])],['<i>k</i><sub>v</sub>″('+X+')',fmt(2*a)]])+
+   `<div class="sh">3. Notwendige Bedingung: <span class="m"><i>k</i><sub>v</sub>′(${X}) = 0</span></div>`+
+     eq([[poly([[2*a,1],[b,0]]),'0','| + '+fmt(-b)],[poly([[2*a,1]]),fmt(-b),2*a!==1?'| : '+fmt(2*a):''],[X,String(xb)]])+
+   `<div class="sh">4. Hinreichende Bedingung</div>`+eq([['<i>k</i><sub>v</sub>″('+xb+')',fmt(2*a)+' &gt; 0'],['T','⇒ Tiefpunkt']])+
+   `<div class="sh">5. KPU berechnen</div>`+eq([['<i>k</i><sub>v</sub>('+xb+')',ev(a,b,c,xb)],['',String(kpu)]])+
+   `<div class="res">BM (${xb} | ${kpu}) &nbsp;·&nbsp; KPU = ${kpu} GE/ME</div>`+
+   `<div class="sh">6. Stückkosten und Ableitungen</div>`+eq([['<i>k</i>('+X+')',kT],['<i>k</i>′('+X+')',poly([[2*a,1],[b,0]])+' − '+fr(d,X+'²')],['<i>k</i>″('+X+')',fmt(2*a)+' + '+fr(2*d,X+'³')]])+
+   `<div class="sh">7. Notwendige Bedingung: <span class="m"><i>k</i>′(${X}) = 0</span></div>`+eq([[poly([[2*a,1],[b,0]])+' − '+fr(d,X+'²'),'0']])+
+     `<div style="margin:4px 0 6px 14px">Mit dem CAS: <span class="code">solve(${(2*a===1?'':fmt(2*a).replace(',','.'))}x${b<0?'−':'+'}${Math.abs(b)}−${d}/x^2=0, x)</span> &nbsp;⇒&nbsp; <span class="m">x = ${xo}</span></div>`+
+   `<div class="sh">8. Hinreichende Bedingung</div>`+eq([['<i>k</i>″('+xo+')',fmt(2*a)+' + '+fr(2*d,xo**3)],['',fmt(k2)+' &gt; 0','',Number.isInteger(k2*100)?'=':'≈'],['T','⇒ Tiefpunkt']])+
+   `<div class="sh">9. LPU berechnen</div>`+eq([['<i>k</i>('+xo+')',ev(a,b,c,xo)+' + '+fr(d,xo)],['',String(lpu)]])+
+   `<div class="res">BO (${xo} | ${lpu}) &nbsp;·&nbsp; LPU = ${lpu} GE/ME</div>`;
+  $('#pfrage').innerHTML=`Der Marktpreis beträgt <b>${p} GE/ME</b>.`;
+  const opts=['Die Produktion sofort stoppen.','Kurzfristig weiter produzieren. Es gibt Verlust, aber er ist kleiner als die Fixkosten.','Produzieren. Das Unternehmen macht Gewinn.'];
+  $('#mc').innerHTML=opts.map((o,i)=>`<div class="opt" data-i="${i}">${o}</div>`).join('');
+  document.querySelectorAll('#mc .opt').forEach(o=>o.onclick=()=>{ document.querySelectorAll('#mc .opt').forEach(x=>x.classList.remove('sel','right','wrong')); o.classList.add('sel'); });
+}
+function num(s){ const v=parseFloat($(s).value.replace(',','.').replace('−','-')); return v; }
+$('#pruef').onclick=()=>{
+  const want=[A.xb,A.kpu,A.xo,A.lpu]; let ok=0, empty=0;
+  ['#i1','#i2','#i3','#i4'].forEach((s,i)=>{ const el=$(s); el.className='num'; if(el.value.trim()===''){empty++;return;} if(Math.abs(num(s)-want[i])<1e-6){el.classList.add('ok');ok++;} else el.classList.add('bad'); });
+  const fb=$('#fb');
+  if(ok===4){ fb.className='fb ok'; fb.textContent='Super – alles richtig!'; if(!A.done){A.done=true; solved++; $('#score').textContent=`gelöst: ${solved}`;} }
+  else { fb.className='fb bad'; fb.textContent=`${ok} von 4 richtig.`+(empty?' Es fehlen noch Ergebnisse.':' Nimm einen Tipp oder prüfe deine Rechnung.'); }
+};
+$('#tipp').onclick=()=>{ $('#tips').classList.add('show'); const t=document.querySelectorAll('#tips .tip'); if(tipN<t.length){ t[tipN].classList.add('show'); tipN++; } $('#tipp').textContent=tipN<t.length?'Noch ein Tipp':'Keine weiteren Tipps'; };
+$('#loes').onclick=()=>{ const s=$('#sol'); s.classList.toggle('show'); $('#loes').textContent=s.classList.contains('show')?'Lösung ausblenden':'Lösung zeigen'; };
+$('#pruef2').onclick=()=>{ const s=document.querySelector('#mc .opt.sel'), fb=$('#fb2');
+  if(!s){ fb.className='fb bad'; fb.textContent='Wähle eine Antwort.'; return; }
+  const i=+s.dataset.i; if(i===A.pz){ s.classList.add('right'); fb.className='fb ok';
+    fb.innerHTML=['Richtig! Der Preis liegt unter der KPU ('+A.kpu+' GE/ME).','Richtig! Der Preis liegt zwischen KPU ('+A.kpu+') und LPU ('+A.lpu+').','Richtig! Der Preis liegt über der LPU ('+A.lpu+' GE/ME).'][i]; }
+  else { s.classList.add('wrong'); fb.className='fb bad'; fb.textContent='Leider falsch. Vergleiche den Preis mit KPU und LPU.'; } };
+$('#neu').onclick=render;
+render();
+</script>
+</body></html>

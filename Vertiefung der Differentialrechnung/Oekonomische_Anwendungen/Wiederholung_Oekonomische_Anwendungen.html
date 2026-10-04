@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiederholung Ökonomische Anwendungen</title>
+<style>
+:root{ --rwb:#C8102E; --ink:#1d1d1f; --ok:#2E7D32; --bad:#B00020; --blue:#1D70B8; --mut:#6B6B6B; --line:#d9d2c5; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:#f1f1f1; line-height:1.6; }
+.wrap{ max-width:1020px; margin:0 auto; padding:14px; }
+.hdr{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; border-bottom:3px solid var(--rwb); padding-bottom:8px; margin-bottom:12px; }
+.hdr h1{ font-size:22px; margin:0 0 3px; color:var(--rwb); line-height:1.25; }
+.hdr .sub{ font-size:13.5px; color:#444; }
+.hdr img{ height:56px; width:auto; }
+.nav{ display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; font-family:Calibri,Arial,sans-serif; }
+.nav button{ border:1.5px solid var(--rwb); background:#fff; color:var(--rwb); border-radius:18px; padding:5px 12px; font-size:13.5px; font-weight:bold; cursor:pointer; }
+.nav button.now{ background:var(--rwb); color:#fff; }
+.nav button.done::after{ content:" ✓"; }
+.st{ display:none; background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px 20px; margin:0 0 14px; }
+.st.active{ display:block; }
+.st-head{ display:flex; align-items:center; gap:10px; margin:0 0 6px; }
+.st-head .no{ background:var(--rwb); color:#fff; font-family:Calibri,Arial,sans-serif; font-weight:bold; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; flex:0 0 32px; font-size:16px; }
+.st-head h2{ margin:0; font-size:20px; color:var(--rwb); line-height:1.3; }
+h3{ font-size:16.5px; margin:18px 0 6px; border-left:4px solid var(--rwb); padding-left:9px; color:var(--ink); }
+p{ margin:6px 0 10px; }
+.m{ font-family:Cambria,Georgia,serif; white-space:nowrap; }
+.ctx{ background:#FBEEF0; border-left:4px solid var(--rwb); border-radius:4px; padding:10px 14px; margin:8px 0 12px; }
+.merke{ background:#E9F2FB; border:1px solid var(--blue); border-radius:6px; padding:10px 14px; margin:12px 0; }
+.merke b.t{ color:var(--blue); display:block; margin-bottom:2px; font-family:Calibri,Arial,sans-serif; font-size:15px; }
+.auftrag{ font-family:Calibri,Arial,sans-serif; font-size:15.5px; background:#F6F1EA; border-radius:6px; padding:8px 12px; margin:8px 0; }
+.auftrag b{ color:var(--rwb); }
+.two{ display:grid; grid-template-columns:1.45fr 1fr; gap:16px; align-items:start; }
+.half{ display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+@media (max-width:780px){ .two,.half{ grid-template-columns:1fr; } }
+svg.plot{ width:100%; height:auto; display:block; background:#fff; border:1px solid #ead7da; border-radius:6px; font-family:Georgia,serif; touch-action:pan-y; }
+/* Drag & Drop */
+.bank{ display:flex; flex-wrap:wrap; gap:7px; min-height:48px; padding:8px; border:2px dashed #cfc6b8; border-radius:8px; background:#fcfbf9; margin:8px 0; }
+.bank::before{ content:"Begriffe:"; font-family:Calibri,Arial,sans-serif; font-size:13px; color:var(--mut); align-self:center; margin-right:4px; }
+.chip{ font-family:Calibri,Arial,sans-serif; font-size:14.5px; background:#fff; border:1.8px solid var(--blue); color:#0f3f6b; border-radius:16px; padding:4px 12px; cursor:grab; user-select:none; -webkit-user-select:none; touch-action:none; line-height:1.35; }
+.chip.sel{ background:#1D70B8; color:#fff; }
+.chip.dragging{ position:fixed; z-index:999; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,.25); cursor:grabbing; }
+.zones{ display:flex; flex-direction:column; gap:7px; }
+.zone{ display:flex; align-items:center; gap:8px; border:1.8px solid #d6cdbf; border-radius:8px; padding:5px 8px; min-height:42px; background:#fff; cursor:pointer; }
+.zone .zn{ font-family:Calibri,Arial,sans-serif; font-weight:bold; color:#fff; background:var(--rwb); border-radius:50%; min-width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:14px; padding:0 4px; }
+.zone .zn.lt{ border-radius:6px; background:#555; }
+.zone .zq{ font-size:14px; color:#444; }
+.zone .slot{ flex:1; min-height:30px; border-bottom:1.5px dashed #bbb; display:flex; align-items:center; }
+.zone.hover{ border-color:var(--blue); background:#EEF5FC; }
+.zone.ok{ border-color:var(--ok); background:#EAF5EA; }
+.zone.bad{ border-color:var(--bad); background:#FDECEA; }
+.zgroup{ font-family:Calibri,Arial,sans-serif; font-size:13.5px; font-weight:bold; color:var(--mut); margin:8px 0 2px; text-transform:uppercase; letter-spacing:.04em; }
+/* Buttons & feedback */
+.btns{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin:10px 0 4px; }
+button.pr,button.sec{ font-family:Calibri,Arial,sans-serif; font-size:15px; font-weight:bold; padding:7px 16px; border-radius:6px; cursor:pointer; border:1.5px solid var(--rwb); }
+button.pr{ background:var(--rwb); color:#fff; } button.sec{ background:#fff; color:var(--rwb); }
+.fb{ font-family:Calibri,Arial,sans-serif; font-size:15px; font-weight:bold; min-height:1em; }
+.fb.ok{ color:var(--ok); } .fb.bad{ color:var(--bad); }
+.sol{ display:none; margin-top:8px; padding:9px 13px; border-left:4px solid #F2B705; background:#FFF8E8; border-radius:4px; }
+.sol.show{ display:block; }
+.sol b{ color:#8a5a00; }
+/* MC */
+.q{ font-size:15.5px; margin:12px 0 6px; font-weight:bold; }
+.opt{ display:flex; align-items:flex-start; gap:10px; padding:7px 11px; border:1.5px solid var(--line); border-radius:6px; margin:6px 0; cursor:pointer; background:#fdfcfa; }
+.opt:hover{ border-color:#999; }
+.opt::before{ content:""; flex:0 0 14px; height:14px; border:2px solid #999; border-radius:50%; margin-top:5px; }
+.opt.sel{ border-color:var(--rwb); background:#FBEEF0; } .opt.sel::before{ border-color:var(--rwb); background:var(--rwb); }
+.opt.right{ border-color:var(--ok); background:#EAF5EA; } .opt.wrong{ border-color:var(--bad); background:#FDECEA; }
+/* Inputs */
+.task{ border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin:10px 0; background:#fff; }
+.task .tl{ font-weight:bold; }
+input.num{ width:90px; font-family:Cambria,Georgia,serif; font-size:16px; padding:3px 6px; border:1.5px solid #aaa; border-radius:5px; text-align:center; }
+input.num.ok{ border-color:var(--ok); background:#EAF5EA; } input.num.bad{ border-color:var(--bad); background:#FDECEA; }
+.row{ margin:6px 0; }
+/* Slider */
+.sliderbox{ background:#F6F1EA; border-radius:8px; padding:10px 14px; margin:10px 0; font-family:Calibri,Arial,sans-serif; }
+.sliderbox label{ font-weight:bold; font-size:15.5px; }
+.sliderbox input[type=range]{ width:100%; accent-color:var(--rwb); height:28px; }
+.read{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin:8px 0; font-family:Calibri,Arial,sans-serif; }
+.read div{ background:#fff; border:1px solid var(--line); border-radius:6px; padding:5px 9px; font-size:13.5px; color:#555; }
+.read div b{ display:block; font-size:18px; color:var(--ink); font-family:Cambria,Georgia,serif; }
+.status{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:15.5px; padding:7px 12px; border-radius:6px; margin:6px 0; }
+.status.g{ background:#EAF5EA; color:var(--ok); border:1px solid var(--ok); }
+.status.y{ background:#FFF4D6; color:#7a5600; border:1px solid #E0A800; }
+.status.r{ background:#FDECEA; color:var(--bad); border:1px solid var(--bad); }
+.chk{ font-family:Calibri,Arial,sans-serif; font-size:14.5px; margin-right:14px; cursor:pointer; display:inline-block; white-space:nowrap; }
+/* Linien / Karo */
+textarea.lin{ width:100%; min-height:120px; border:1px solid #c9c9c9; border-radius:4px; font-family:Calibri,Arial,sans-serif; font-size:16px; line-height:30px; padding:0 8px; resize:vertical;
+  background-color:#fff; background-image:repeating-linear-gradient(transparent 0 29px,#c9c9c9 29px 30px); background-attachment:local; }
+.karo{ border:1px solid #c4ccd6; border-radius:3px; background-color:#fff; background-image:linear-gradient(#dbe6f0 1px,transparent 1px),linear-gradient(90deg,#dbe6f0 1px,transparent 1px); background-size:5mm 5mm; margin:8px 0; }
+.ideas{ display:none; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px; margin:10px 0; }
+.ideas.show{ display:grid; }
+.idea{ border:1px solid var(--line); border-radius:8px; padding:8px 12px; background:#fcfbf9; font-size:14.5px; }
+.idea h4{ margin:0 0 4px; font-family:Calibri,Arial,sans-serif; font-size:15px; color:var(--rwb); }
+.idea ul{ margin:0; padding-left:18px; } .idea li{ margin:2px 0; }
+.idea.key{ border:2px solid var(--rwb); background:#FBEEF0; }
+table.ov{ border-collapse:collapse; width:100%; font-size:14.5px; margin:8px 0; }
+table.ov th,table.ov td{ border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+table.ov th{ background:#F6F1EA; font-family:Calibri,Arial,sans-serif; }
+.col-a{ border-top:5px solid var(--ok); } .col-b{ border-top:5px solid var(--blue); }
+.tag{ display:inline-block; font-family:Calibri,Arial,sans-serif; font-size:12.5px; font-weight:bold; padding:2px 10px; border-radius:10px; color:#fff; }
+.tag.a{ background:var(--ok); } .tag.b{ background:var(--blue); }
+.navb{ display:flex; justify-content:space-between; margin-top:16px; border-top:1px solid var(--line); padding-top:10px; }
+.foot{ font-size:11.5px; color:#888; text-align:center; margin-top:6px; font-family:Calibri,Arial,sans-serif; }
+@media print{
+  body{ background:#fff; }
+  .nav,.btns,.navb,.sliderbox input{ display:none !important; }
+  .st{ display:block !important; border:none; padding:0; break-before:page; page-break-before:always; }
+  .st:first-of-type{ break-before:auto; page-break-before:auto; }
+  .st-head{ break-after:avoid; page-break-after:avoid; }
+  svg.plot,.task,.zone,.merke{ break-inside:avoid; page-break-inside:avoid; }
+}
+@page{ size:A4; margin:14mm; }
+
+/* Präsentation: Schritte */
+.tabs{ margin:8px 0 14px; }
+.tabbar{ display:flex; gap:6px; flex-wrap:wrap; border-bottom:2px solid var(--rwb); }
+.tab{ font-family:Calibri,Arial,sans-serif; font-size:15.5px; font-weight:bold; padding:8px 16px; border:1.5px solid var(--rwb); border-bottom:none; border-radius:7px 7px 0 0; background:#fff; color:var(--rwb); cursor:pointer; }
+.tab.on{ background:var(--rwb); color:#fff; }
+.tabpane{ display:none; border:1px solid var(--line); border-top:none; border-radius:0 0 8px 8px; padding:12px 18px 16px; background:#fff; }
+.tabpane.on{ display:block; }
+.sbtns{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin:0 0 12px; position:sticky; top:0; background:#fff; padding:6px 0; z-index:5; }
+.sbtns button{ font-family:Calibri,Arial,sans-serif; font-size:15px; font-weight:bold; padding:7px 16px; border-radius:6px; cursor:pointer; border:1.5px solid var(--rwb); }
+.sbtns .scount{ font-family:Calibri,Arial,sans-serif; font-size:14px; color:var(--mut); margin-left:auto; }
+.stp:not(.on){ visibility:hidden; }
+.stp.on{ animation:fadein .35s ease; }
+@keyframes fadein{ from{opacity:0} to{opacity:1} }
+.sh{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:16.5px; color:var(--rwb); margin:14px 0 4px; }
+.sh .m{ color:var(--ink); }
+.eq{ display:grid; grid-template-columns:max-content max-content max-content 1fr; column-gap:10px; row-gap:4px; margin:4px 0 6px 18px; font-family:Cambria,Georgia,serif; font-size:19px; align-items:baseline; }
+.eq .er{ display:contents; }
+.eq .l{ text-align:right; white-space:nowrap; }
+.eq .e{ text-align:center; }
+.eq .r{ white-space:nowrap; }
+.eq .op{ color:var(--blue); font-size:17px; padding-left:22px; white-space:nowrap; }
+.eq .et{ grid-column:1 / -1; font-family:Calibri,Arial,sans-serif; font-size:16px; color:#444; padding-left:4px; }
+.res{ margin:16px 0 4px; padding:10px 14px; border:2px solid var(--ok); background:#EAF5EA; border-radius:8px; font-family:Calibri,Arial,sans-serif; font-size:17px; font-weight:bold; color:#1B5E20; }
+.res .m{ font-size:18px; }
+@media print{ .stp{ visibility:visible !important; } .tabpane{ display:block !important; } .sbtns,.tabbar{ display:none !important; } }
+
+.fr{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; line-height:1.15; font-family:Cambria,Georgia,serif; }
+.fr .nu{ border-bottom:1.6px solid currentColor; padding:0 4px 1px; }
+.fr .de{ padding:1px 4px 0; }
+.cx{ position:relative; }
+.cx::after{ content:""; position:absolute; left:-3px; right:-3px; top:50%; border-top:2.4px solid var(--rwb); transform:rotate(-35deg); }
+.eq{ align-items:center !important; row-gap:8px !important; }
+.say{ font-size:18px; line-height:1.55; margin:0 0 12px; padding:6px 0 6px 14px; border-left:4px solid #e6d9c6; }
+.cmp{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:6px 0 8px 18px; }
+@media (max-width:780px){ .cmp{ grid-template-columns:1fr; } }
+.cmpc{ border:1px solid var(--line); border-radius:8px; padding:8px 12px; background:#fcfbf9; }
+.cmpc.cas{ background:#EEF5FC; border-color:#9cc0e4; }
+.cmph{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:15px; color:#555; margin-bottom:6px; }
+.cmpc .eq{ margin-left:0; }
+.code{ font-family:Consolas,'Courier New',monospace; font-size:17px; background:#fff; border:1px solid #c9d8e8; border-radius:5px; padding:5px 10px; display:inline-block; margin:2px 0; }
+.cres{ font-family:Cambria,Georgia,serif; font-size:19px; margin:2px 0 8px 6px; }
+.cnote{ font-family:Calibri,Arial,sans-serif; font-size:14.5px; color:#555; margin-top:4px; }
+.sliderbox label[for]{ display:block; margin-top:4px; }
+
+.fr{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; line-height:1.15; font-family:Cambria,Georgia,serif; }
+.fr .nu{ border-bottom:1.6px solid currentColor; padding:0 4px 1px; }
+.fr .de{ padding:1px 4px 0; }
+.cx{ position:relative; }
+.cx::after{ content:""; position:absolute; left:-3px; right:-3px; top:50%; border-top:2.4px solid var(--rwb); transform:rotate(-35deg); }
+.eq{ align-items:center !important; row-gap:8px !important; }
+.say{ font-size:18px; line-height:1.55; margin:0 0 12px; padding:6px 0 6px 14px; border-left:4px solid #e6d9c6; }
+.cmp{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:6px 0 8px 18px; }
+@media (max-width:780px){ .cmp{ grid-template-columns:1fr; } }
+.cmpc{ border:1px solid var(--line); border-radius:8px; padding:8px 12px; background:#fcfbf9; }
+.cmpc.cas{ background:#EEF5FC; border-color:#9cc0e4; }
+.cmph{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:15px; color:#555; margin-bottom:6px; }
+.cmpc .eq{ margin-left:0; }
+.code{ font-family:Consolas,'Courier New',monospace; font-size:17px; background:#fff; border:1px solid #c9d8e8; border-radius:5px; padding:5px 10px; display:inline-block; margin:2px 0; }
+.cres{ font-family:Cambria,Georgia,serif; font-size:19px; margin:2px 0 8px 6px; }
+.cnote{ font-family:Calibri,Arial,sans-serif; font-size:14.5px; color:#555; margin-top:4px; }
+.sliderbox label[for]{ display:block; margin-top:4px; }
+.kbox{ grid-column:1 / -1; display:grid; grid-template-columns:subgrid; row-gap:6px; align-items:center; border:1.6px dashed #8fb3d9; background:#F4F8FC; border-radius:8px; padding:6px 0 8px; margin:2px 0; }
+.kbox .kh{ grid-column:1 / -1; font-family:Calibri,Arial,sans-serif; font-size:14px; color:#1D70B8; padding:0 10px; }
+.casbox{ margin:8px 0 6px 18px; padding:8px 14px; border:1px solid #9cc0e4; background:#EEF5FC; border-radius:8px; display:inline-block; min-width:360px; }
+
+.vt-wrap{ overflow-x:auto; margin:6px 0 4px; }
+table.vt{ border-collapse:collapse; width:100%; table-layout:fixed; min-width:760px; font-family:Cambria,Georgia,serif; font-size:15px; text-align:center; }
+table.vt th,table.vt td{ border:1px solid var(--line); padding:5px 4px; white-space:nowrap; }
+table.vt th{ background:#F6F1EA; font-family:Cambria,Georgia,serif; font-weight:normal; min-width:58px; }
+table.vt tr:first-child td{ background:#FBF8F3; font-weight:bold; }
+table.vt td.hi{ background:#FFF1D6 !important; font-weight:bold; outline:2px solid #E07B00; outline-offset:-2px; }
+.vt-note{ font-family:Calibri,Arial,sans-serif; font-size:14.5px; color:#444; margin:4px 0 14px; }
+
+.choice{ margin:6px 0 8px 18px; }
+.cbtns{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+.cb{ font-family:Calibri,Arial,sans-serif; font-size:15.5px; font-weight:bold; padding:7px 16px; border-radius:6px; cursor:pointer; border:1.5px solid var(--blue); background:#fff; color:var(--blue); }
+.cb.on{ background:var(--blue); color:#fff; }
+.cpane{ display:none; border:1px solid var(--line); border-radius:8px; padding:8px 12px; background:#fcfbf9; }
+.cpane.cas{ background:#EEF5FC; border-color:#9cc0e4; display:none; }
+.cpane.show{ display:block; }
+.cpane .eq{ margin-left:0; }
+.sq{ display:inline-flex; align-items:stretch; white-space:nowrap; vertical-align:middle; margin:0 2px 0 3px; }
+.sq .sym{ display:block; width:12px; flex:0 0 12px; }
+.sq .sym svg{ display:block; width:100%; height:100%; overflow:visible; }
+.sq .rad{ display:inline-flex; align-items:center; border-top:1.6px solid currentColor; padding:3px 4px 1px 3px; }
+.res .res-pt{ font-size:21px; font-weight:bold; }
+
+.sh2{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:15.5px; color:#555; margin:10px 0 2px 18px; }
+.hh{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:15.5px; color:var(--rwb); margin:12px 0 4px; }
+.hp{ font-family:Cambria,Georgia,serif; font-size:17px; margin:4px 0 6px; }
+table.horner{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:19px; margin:4px 0 6px; }
+table.horner th{ font-family:Calibri,Arial,sans-serif; font-size:15px; font-weight:bold; color:#555; padding:4px 12px 4px 0; text-align:left; }
+table.horner td{ min-width:62px; text-align:center; padding:5px 8px; }
+table.horner td.add{ color:var(--blue); }
+table.horner tr.sum td{ border-top:2px solid var(--ink); font-weight:bold; }
+table.horner td.zero{ background:#EAF5EA; color:var(--ok); border-radius:4px; }
+.hres{ font-family:Cambria,Georgia,serif; font-size:20px; font-weight:bold; margin:10px 0 2px; }
+</style></head><body>
+<div class="wrap">
+<div class="hdr"><div><h1>Wiederholung: Ökonomische Anwendungen</h1><div class="sub">Vertiefung der Differentialrechnung · HAW · Kosten, Erlös, Gewinn und Preisuntergrenzen</div></div><img src="data:image/png;base64,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" alt="rwb. ahr."></div>
+
+<div class="nav" id="nav"></div>
+
+<!-- ================= STATION 1 ================= -->
+<section class="st" id="s1" data-title="Kosten &amp; Grenzkosten">
+<div class="st-head"><div class="no">1</div><h2>Kostenfunktion und Grenzkostenfunktion</h2></div>
+<p>Du siehst zwei Graphen. Ein Graph gehört zur <b>Kostenfunktion</b> <span class="m">K</span>. Der andere Graph gehört zur <b>Grenzkostenfunktion</b> <span class="m">K′</span>.</p>
+<div class="auftrag"><b>Auftrag:</b> Ziehe die Begriffe in die richtigen Felder. Oder: Tippe zuerst auf einen Begriff. Tippe dann auf ein Feld.</div>
+<div class="dnd">
+ <div class="two">
+  <div><div id="p1"></div></div>
+  <div>
+   <div class="zgroup">Welcher Graph ist welche Funktion?</div>
+   <div class="zones">
+    <div class="zone" data-ans="Kostenfunktion K"><span class="zn lt">A</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Grenzkostenfunktion K′"><span class="zn lt">B</span><span class="slot"></span></div>
+   </div>
+   <div class="zgroup">Markante Punkte und Bereiche</div>
+   <div class="zones">
+    <div class="zone" data-ans="Fixkosten"><span class="zn">1</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Kostenkehre (Wendepunkt)"><span class="zn">2</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Grenzkostenminimum"><span class="zn">3</span><span class="slot"></span></div>
+    <div class="zone" data-ans="degressiver Kostenanstieg"><span class="zn">4</span><span class="slot"></span></div>
+    <div class="zone" data-ans="progressiver Kostenanstieg"><span class="zn">5</span><span class="slot"></span></div>
+   </div>
+  </div>
+ </div>
+ <div class="bank">
+  <span class="chip">Kostenfunktion K</span><span class="chip">Grenzkostenfunktion K′</span><span class="chip">Fixkosten</span><span class="chip">Kostenkehre (Wendepunkt)</span><span class="chip">Grenzkostenminimum</span><span class="chip">degressiver Kostenanstieg</span><span class="chip">progressiver Kostenanstieg</span>
+ </div>
+ <div class="btns"><button class="pr" data-act="check">Prüfen</button><button class="sec" data-act="solve">Lösung zeigen</button><button class="sec" data-act="reset">Zurücksetzen</button></div>
+ <div class="fb"></div>
+</div>
+
+</section>
+
+<!-- ================= STATION 2 ================= -->
+<section class="st" id="s2" data-title="Monopol">
+<div class="st-head"><div class="no">2</div><h2>Kosten, Erlös und Gewinn im Angebotsmonopol</h2></div>
+<div class="ctx">Ein <b>Monopolist</b> ist der <b>einzige Anbieter</b> auf dem Markt. Er bestimmt den Preis selbst. Aber: Ist der Preis hoch, kaufen weniger Kunden. Das zeigt die <b>Preis-Absatz-Funktion</b> <span class="m">p<sub>N</sub></span>.</div>
+<h3>Teil 1: Graphen und Punkte zuordnen</h3>
+<div class="auftrag"><b>Auftrag:</b> Ordne den Graphen A bis D die Funktionen zu. Ordne dann den Punkten 1 bis 7 die Fachbegriffe zu.</div>
+<div class="dnd">
+ <div class="two">
+  <div><div id="p2"></div></div>
+  <div>
+   <div class="zgroup">Funktionen</div>
+   <div class="zones">
+    <div class="zone" data-ans="Kostenfunktion K"><span class="zn lt">A</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Erlösfunktion E"><span class="zn lt">B</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinnfunktion G"><span class="zn lt">C</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Preis-Absatz-Funktion pN"><span class="zn lt">D</span><span class="slot"></span></div>
+   </div>
+   <div class="zgroup">Punkte</div>
+   <div class="zones">
+    <div class="zone" data-ans="Break-even-Punkt"><span class="zn">1</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinnschwelle"><span class="zn">2</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinngrenze"><span class="zn">3</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinnmaximum"><span class="zn">4</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Cournot'scher Punkt"><span class="zn">5</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Höchstpreis"><span class="zn">6</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Sättigungsmenge"><span class="zn">7</span><span class="slot"></span></div>
+   </div>
+  </div>
+ </div>
+ <div class="bank">
+  <span class="chip">Kostenfunktion K</span><span class="chip">Erlösfunktion E</span><span class="chip">Gewinnfunktion G</span><span class="chip">Preis-Absatz-Funktion pN</span><span class="chip">Break-even-Punkt</span><span class="chip">Gewinnschwelle</span><span class="chip">Gewinngrenze</span><span class="chip">Gewinnmaximum</span><span class="chip">Cournot'scher Punkt</span><span class="chip">Höchstpreis</span><span class="chip">Sättigungsmenge</span>
+ </div>
+ <div class="btns"><button class="pr" data-act="check">Prüfen</button><button class="sec" data-act="solve">Lösung zeigen</button><button class="sec" data-act="reset">Zurücksetzen</button></div>
+ <div class="fb"></div>
+</div>
+
+<h3>Teil 2: Welchen Preis kann der Monopolist verlangen?</h3>
+<div class="sliderbox">
+ <label for="sl2">Preis: <span id="sl2v" class="m"></span> GE/ME</label>
+ <input type="range" id="sl2" min="0" max="130" step="1" value="100">
+ <label class="chk"><input type="checkbox" id="cb2"> Preisspanne anzeigen</label>
+</div>
+<div id="p2b"></div>
+<div class="read"><div>Absatzmenge<b id="r2x"></b></div><div>Erlös<b id="r2e"></b></div><div>Kosten<b id="r2k"></b></div><div>Gewinn<b id="r2g"></b></div></div>
+<div class="status" id="st2"></div>
+</section>
+
+<!-- ================= STATION 3 ================= -->
+<section class="st" id="s3" data-title="Polypol">
+<div class="st-head"><div class="no">3</div><h2>Kosten, Erlös und Gewinn im Polypol</h2></div>
+<div class="ctx">Im <b>Polypol</b> gibt es <b>sehr viele Anbieter</b> und sehr viele Käufer. Ein einzelner Anbieter hat keine Macht über den Markt.</div>
+<h3>Teil 1: Graphen und Punkte zuordnen</h3>
+<div class="auftrag"><b>Auftrag:</b> Die Achsen haben diesmal keine Zahlen. Ordne trotzdem die Funktionen und die Punkte zu.</div>
+<div class="dnd">
+ <div class="two">
+  <div><div id="p3"></div></div>
+  <div>
+   <div class="zgroup">Funktionen</div>
+   <div class="zones">
+    <div class="zone" data-ans="Gewinnfunktion G"><span class="zn lt">A</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Erlösfunktion E"><span class="zn lt">B</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Kostenfunktion K"><span class="zn lt">C</span><span class="slot"></span></div>
+   </div>
+   <div class="zgroup">Punkte</div>
+   <div class="zones">
+    <div class="zone" data-ans="Fixkosten"><span class="zn">1</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Break-even-Punkt"><span class="zn">2</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinnschwelle"><span class="zn">3</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinngrenze"><span class="zn">4</span><span class="slot"></span></div>
+    <div class="zone" data-ans="Gewinnmaximum"><span class="zn">5</span><span class="slot"></span></div>
+   </div>
+  </div>
+ </div>
+ <div class="bank">
+  <span class="chip">Kostenfunktion K</span><span class="chip">Erlösfunktion E</span><span class="chip">Gewinnfunktion G</span><span class="chip">Fixkosten</span><span class="chip">Break-even-Punkt</span><span class="chip">Gewinnschwelle</span><span class="chip">Gewinngrenze</span><span class="chip">Gewinnmaximum</span><span class="chip">Cournot'scher Punkt</span><span class="chip">Sättigungsmenge</span>
+ </div>
+ <div class="btns"><button class="pr" data-act="check">Prüfen</button><button class="sec" data-act="solve">Lösung zeigen</button><button class="sec" data-act="reset">Zurücksetzen</button></div>
+ <div class="fb"></div>
+</div>
+
+<h3>Teil 2: Wie entsteht der Preis im Polypol?</h3>
+<div class="task">
+ <div class="q">Wie entsteht der Preis im Polypol?</div>
+ <div class="mc">
+  <div class="opt">Der Anbieter berechnet den Cournot'schen Punkt. So legt er den Preis fest.</div>
+  <div class="opt" data-ok="1">Der Preis entsteht auf dem Markt. Angebot und Nachfrage bestimmen den Preis (Marktgleichgewicht).</div>
+  <div class="opt">Der Staat legt für jedes Produkt einen festen Preis fest.</div>
+  <div class="opt">Der Anbieter nimmt seine Stückkosten. Dazu rechnet er einen festen Gewinn.</div>
+ </div>
+ <div class="btns"><button class="pr" onclick="chk(this)">Prüfen</button><button class="sec" onclick="rev(this)">Erklärung zeigen</button></div>
+ <div class="fb"></div>
+ <div class="sol"><div class="half"><div>
+ <b>Erklärung:</b> Viele Anbieter verkaufen das gleiche Produkt.<br>Die <b>Angebotskurve</b> und die <b>Nachfragekurve</b> schneiden sich. Dort entsteht der Preis. Das nennt man <b>Marktgleichgewicht</b>.<br>Ein Anbieter will mehr Geld? Dann kaufen die Kunden bei der Konkurrenz.<br>Der Anbieter muss also den <b>Marktpreis</b> annehmen.</div>
+ <div id="pmarkt"></div></div></div>
+</div>
+</section>
+
+<!-- ================= STATION 4 ================= -->
+<section class="st" id="s4" data-title="Konkurrenz">
+<div class="st-head"><div class="no">4</div><h2>Die Konkurrenz wird zu groß – was nun?</h2></div>
+<div class="ctx">Das Unternehmen aus Station 3 hat Probleme. Es gibt immer mehr Konkurrenten. Das Angebot steigt. Deshalb <b>sinkt der Marktpreis</b>.</div>
+<h3>Was kann das Unternehmen tun, wenn die Konkurrenz zu groß wird?</h3>
+<div class="btns"><button class="pr" onclick="const e=document.getElementById('ideas');e.classList.toggle('show');this.textContent=e.classList.contains('show')?'Ideen ausblenden':'Mögliche Ideen'">Mögliche Ideen</button></div>
+<div class="ideas" id="ideas">
+ <div class="idea"><h4>Kosten senken</h4><ul><li>billiger produzieren (z.&nbsp;B. mit Maschinen statt Handarbeit)</li><li>billigere Lieferanten oder Rohstoffe</li><li>weniger Personal, Kurzarbeit</li><li>an einen billigeren Ort umziehen</li></ul></div>
+ <div class="idea"><h4>Produkt verbessern</h4><ul><li>Qualität verbessern</li><li>neue Produkte entwickeln</li><li>Service oder Garantie anbieten</li><li>einen guten Ruf aufbauen</li></ul></div>
+ <div class="idea"><h4>Markt und Absatz</h4><ul><li>mehr Werbung machen</li><li>in anderen Ländern verkaufen (Export)</li><li>ein besonderes Produkt für wenige Kunden anbieten (Nische)</li><li>mehr online verkaufen</li></ul></div>
+ <div class="idea"><h4>Zusammenarbeit</h4><ul><li>mit anderen Firmen zusammenarbeiten</li><li>mit einer anderen Firma zusammengehen oder sie kaufen</li><li>Preise mit anderen absprechen (Kartell) → <b>verboten!</b></li></ul></div>
+ <div class="idea"><h4>Produktion anpassen</h4><ul><li>mehr oder weniger produzieren</li><li>die Produktion für eine Zeit stoppen</li><li>die Produktion ganz aufgeben</li></ul></div>
+ <div class="idea key"><h4>Preis anpassen</h4><ul><li>Preis erhöhen? → geht im Polypol <b>nicht</b>. Die Kunden kaufen dann bei der Konkurrenz.</li><li>Preis senken → so wie der Marktpreis</li></ul><p style="margin:6px 0 0"><b>Die Mathe-Frage:</b> Wie weit darf der Preis sinken? Wann lohnt sich die Produktion noch?</p></div>
+</div>
+
+<h3>Wie weit darf der Marktpreis sinken?</h3>
+<p>Die Kostenfunktion ist <span class="m">K(x) = x³ − 12x² + 60x + 98</span>.
+Der Erlös ist <span class="m">E(x) = p · x</span>.
+Dabei ist <span class="m">p</span> der Marktpreis.
+Die grüne Fläche zeigt die Gewinnzone.</p>
+<div class="two">
+ <div><div id="p4"></div></div>
+ <div>
+  <div class="sliderbox"><label for="sl4">Marktpreis: <span id="sl4v" class="m"></span> GE/ME</label><input type="range" id="sl4" min="15" max="80" step="1" value="60">
+  <label class="chk"><input type="checkbox" id="cb4"> <span class="m">K<sub>v</sub></span> einblenden (ohne Fixkosten)</label></div>
+  <div class="status" id="st4"></div>
+ </div>
+</div>
+<div class="stepper" id="sp4">
+<div class="sbtns"><button class="sec" data-s="back">◀ zurück</button><button class="pr" data-s="next">nächster Schritt ▶</button><button class="sec" data-s="all">alles zeigen</button><button class="sec" data-s="reset">neu starten</button><span class="scount"></span></div>
+<div class="sbody">
+<div class="say stp" data-p="50">Wir senken den Preis.<br>Die Erlösgerade wird flacher.<br>Die Gewinnzone wird kleiner.</div><div class="say stp" data-p="39">Bei <span class="m">p = 39</span> berührt die Erlösgerade die Kostenkurve <span class="m">K</span> nur noch in <b>einem</b> Punkt.</div><div class="say stp" data-bo="1">Dieser Berührpunkt ist das <b>Betriebsoptimum BO (7 | 273)</b>.<br>Hier sind Erlös und Kosten gleich groß.</div>
+<div class="say stp">Was sagt das Betriebsoptimum?<br>Bei <b>7 ME</b> sind die <b>Stückkosten am kleinsten</b>.<br>7 ME kosten zusammen <b>273 GE</b>.<br>Wie viel kostet dann 1 ME?<br>Wir teilen die Kosten durch die Menge:<div class="eq"><div class="er"><span class="l">273 GE : 7</span><span class="e">=</span><span class="r"> 39 GE</span><span class="op"></span></div></div>1 ME kostet also insgesamt <b>39 GE</b>.<br>Bei einem Preis von 39 GE/ME sind die <b>variablen Kosten</b> und die <b>Fixkosten</b> bezahlt.<br>Es gibt keinen Gewinn und keinen Verlust.</div>
+<div class="say stp">Der Preis von <span class="m">39</span> GE/ME heißt <b>langfristige Preisuntergrenze</b>.<br>Kurz: <b>LPU</b>.</div><div class="merke stp"><b class="t">Zum Nachdenken</b>Kann es sinnvoll sein, auch einen Preis unter <b>39 GE/ME</b> zu nehmen und <b>Verluste in Kauf zu nehmen</b>?<br><b>Wie hoch darf dieser Verlust höchstens sein?</b></div><div class="say stp" data-kv="1" data-p="39">Jetzt lassen wir die Fixkosten weg.<br>Die gestrichelte Kurve zeigt nur die <b>variablen Kosten</b> <span class="m">K<sub>v</sub>(x) = x³ − 12x² + 60x</span>.</div><div class="say stp" data-p="24">Wir senken den Preis weiter.<br>Bei <span class="m">p = 24</span> berührt die Erlösgerade die Kurve <span class="m">K<sub>v</sub></span> nur noch in <b>einem</b> Punkt.</div><div class="say stp" data-bm="1">Dieser Berührpunkt ist das <b>Betriebsminimum BM (6 | 144)</b>.<br>Hier sind Erlös und variable Kosten gleich groß.</div>
+<div class="say stp">Was sagt das Betriebsminimum?<br>Bei <b>6 ME</b> sind die <b>variablen Stückkosten am kleinsten</b>.<br>6 ME haben zusammen <b>144 GE</b> variable Kosten.<br>Wie viel variable Kosten hat dann 1 ME?<br>Wir teilen die variablen Kosten durch die Menge:<div class="eq"><div class="er"><span class="l">144 GE : 6</span><span class="e">=</span><span class="r"> 24 GE</span><span class="op"></span></div></div>1 ME kostet also <b>24 GE</b> variable Kosten.<br>Bei einem Preis von 24 GE/ME sind <b>nur die variablen Kosten</b> bezahlt.<br>Die <b>Fixkosten</b> sind <b>nicht</b> bezahlt.</div>
+<div class="say stp">Der Preis von <span class="m">24</span> GE/ME heißt <b>kurzfristige Preisuntergrenze</b>.<br>Kurz: <b>KPU</b>.</div><div class="res stp">BO und BM haben wir jetzt im Graphen gefunden.<br>Als nächstes schauen wir uns an, wie man diese Punkte <b>berechnet</b>.</div>
+</div></div>
+</section>
+
+<!-- ================= STATION 5 ================= -->
+<section class="st" id="s5" data-title="Betriebsminimum">
+<div class="st-head"><div class="no">5</div><h2>Betriebsminimum und kurzfristige Preisuntergrenze (KPU)</h2></div>
+<div class="ctx"><b>Kurzfristig</b> gilt: Die Fixkosten muss das Unternehmen sowieso bezahlen.
+Darum produziert es weiter, wenn der Preis die <b>variablen Kosten pro Stück</b> bezahlt.
+Dann bezahlt jedes verkaufte Stück noch einen Teil der Fixkosten.</div>
+<p>Kostenfunktion: <span class="m">K(x) = x³ − 12x² + 60x + 98</span> &nbsp;&nbsp; Variable Stückkosten: <span class="m">k<sub>v</sub>(x) = </span><span class="fr"><span class="nu">K<sub>v</sub>(x)</span><span class="de">x</span></span></p>
+<h3>Wertetabelle</h3>
+<div class="vt-wrap"><table class="vt"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td class=hi>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr><tr><th>K<sub>v</sub>(x)</th><td>0</td><td>49</td><td>80</td><td>99</td><td>112</td><td>125</td><td class=hi>144</td><td>175</td><td>224</td><td>297</td><td>400</td><td>539</td><td>720</td></tr><tr><th>k<sub>v</sub>(x)</th><td>–*</td><td>49</td><td>40</td><td>33</td><td>28</td><td>25</td><td class=hi>24</td><td>25</td><td>28</td><td>33</td><td>40</td><td>49</td><td>60</td></tr></table></div><p class="vt-note">K<sub>v</sub>(x): Kosten ohne Fixkosten. &nbsp; k<sub>v</sub>(x) = K<sub>v</sub>(x) : x &nbsp;(variable Kosten für 1 ME)<br>* Für x = 0 kann man nicht rechnen. Durch 0 kann man nicht teilen. Darum ist k<sub>v</sub>(0) <b>nicht definiert</b>.<br>Bei <b>x = 6</b> sind die variablen Stückkosten am kleinsten.</p>
+<div class="two">
+ <div><div id="p5"></div></div>
+ <div>
+  <div class="sliderbox">
+   <label for="sl5">Preis: <span id="sl5v" class="m"></span> GE/ME</label><input type="range" id="sl5" min="5" max="60" step="1" value="40">
+   <label for="sx5">Menge: <span id="sx5v" class="m"></span> ME</label><input type="range" id="sx5" min="1" max="12" step="0.5" value="4">
+   <label class="chk"><input type="checkbox" id="cb5"> Grenzkosten <span class="m">K′</span> einblenden</label>
+   <label class="chk"><input type="checkbox" id="cb5t"> Tiefpunkt zeigen</label>
+  </div>
+  <div class="read"><div>variable Stückkosten<b id="r5k"></b></div><div>Rest pro Stück: p − k<sub>v</sub><b id="r5d"></b></div><div>Rest für alle Stück<b id="r5db"></b></div><div>Gewinn / Verlust<b id="r5g"></b></div></div>
+  <div class="status" id="st5"></div>
+ </div>
+</div>
+<h3>Wie berechnet man das Betriebsminimum?</h3>
+<p>In Station 4 haben wir das Betriebsminimum im Graphen gefunden.
+Jetzt berechnen wir es.
+Es gibt zwei Wege.</p>
+<div class="tabs" id="tb5"><div class="tabbar"><button class="tab on" data-t="0">Weg 1: Tiefpunkt von k<sub>v</sub></button><button class="tab" data-t="1">Weg 2: Schnittpunkt von k<sub>v</sub> und K′</button></div><div class="tabpane on"><div class="stepper" id="sp5a">
+<div class="sbtns"><button class="sec" data-s="back">◀ zurück</button><button class="pr" data-s="next">nächster Schritt ▶</button><button class="sec" data-s="all">alles zeigen</button><button class="sec" data-s="reset">neu starten</button><span class="scount"></span></div>
+<div class="sbody">
+<div class="sh stp">1. Variable Kosten: Wir lassen die Fixkosten weg.</div>
+<div class="eq">
+<div class="er stp"><span class="l">K<sub>v</sub>(x)</span><span class="e">=</span><span class="r">x³ − 12x² + 60x</span><span class="op"></span></div>
+</div><div class="sh stp">2. Variable Stückkosten: Wir teilen durch x.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>(x)</span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">K<sub>v</sub>(x)</span><span class="de">x</span></span></span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x³ − 12x² + 60x</span><span class="de">x</span></span></span><span class="op stp">| jeden Summanden einzeln teilen</span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x³</span><span class="de">x</span></span> − <span class="fr"><span class="nu">12x²</span><span class="de">x</span></span> + <span class="fr"><span class="nu">60x</span><span class="de">x</span></span></span><span class="op stp">| kürzen</span></div>
+<div class="kbox stp"><div class="kh">Zur Verdeutlichung – diesen Zwischenschritt kann man überspringen:</div><div class="er"><span class="l"><span class="fr"><span class="nu">x³</span><span class="de">x</span></span></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x · x · <span class="cx">x</span></span><span class="de"><span class="cx">x</span></span></span> &nbsp;= &nbsp;x²</span><span class="op"></span></div></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">x² − 12x + 60</span><span class="op"></span></div>
+</div><div class="sh stp">3. Ableitungen bilden.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>′(x)</span><span class="e">=</span><span class="r">2x − 12</span><span class="op"></span></div>
+<div class="er stp"><span class="l">k<sub>v</sub>″(x)</span><span class="e">=</span><span class="r">2</span><span class="op"></span></div>
+</div><div class="sh stp">4. Notwendige Bedingung: <span class="m">k<sub>v</sub>′(x) = 0</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">2x − 12</span><span class="e">=</span><span class="r">0</span><span class="op stp">| + 12</span></div>
+<div class="er stp"><span class="l">2x</span><span class="e">=</span><span class="r">12</span><span class="op stp">| : 2</span></div>
+<div class="er stp"><span class="l">x</span><span class="e">=</span><span class="r">6</span><span class="op"></span></div>
+</div><div class="sh stp">5. Hinreichende Bedingung: <span class="m">k<sub>v</sub>″(x) &gt; 0</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>″(6)</span><span class="e">=</span><span class="r">2 &gt; 0</span><span class="op"></span></div>
+<div class="et stp">⇒ Tiefpunkt bei x = 6</div>
+</div><div class="sh stp">6. Den Tiefpunkt in k<sub>v</sub> einsetzen.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>(6)</span><span class="e">=</span><span class="r">6² − 12 · 6 + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">36 − 72 + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">24</span><span class="op"></span></div>
+</div><div class="res stp">Ergebnis: <span class="m res-pt">BM (6 | 24)</span><br>Betriebsminimum: <span class="m">x<sub>BM</sub> = 6</span> ME &nbsp;·&nbsp; Kurzfristige Preisuntergrenze: <span class="m">KPU = 24</span> GE/ME</div>
+</div></div></div><div class="tabpane"><div class="stepper" id="sp5b">
+<div class="sbtns"><button class="sec" data-s="back">◀ zurück</button><button class="pr" data-s="next">nächster Schritt ▶</button><button class="sec" data-s="all">alles zeigen</button><button class="sec" data-s="reset">neu starten</button><span class="scount"></span></div>
+<div class="sbody">
+<div class="sh stp">1. Variable Stückkosten und Grenzkosten aufschreiben.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>(x)</span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x³ − 12x² + 60x</span><span class="de">x</span></span> &nbsp;= &nbsp;x² − 12x + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l">K′(x)</span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op"></span></div>
+</div><div class="sh stp">2. Die Kurve K′ schneidet k<sub>v</sub> im Tiefpunkt. Wir setzen gleich: <span class="m">k<sub>v</sub>(x) = K′(x)</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">x² − 12x + 60</span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op"></span></div>
+</div><div class="sh stp">3. Die Gleichung lösen. Wähle einen Weg:</div>
+<div class="choice stp"><div class="cbtns"><button class="cb" data-c="0">mit der pq-Formel</button><button class="cb" data-c="1">mit dem CAS</button></div>
+<div class="cpane"><div class="eq"><div class="er"><span class="l">x² − 12x + 60</span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op">| − x² + 12x − 60</span></div><div class="er"><span class="l">0</span><span class="e">=</span><span class="r">2x² − 12x</span><span class="op">| : 2</span></div><div class="er"><span class="l">0</span><span class="e">=</span><span class="r">x² − 6x</span><span class="op"></span></div><div class="et">pq-Formel mit p = −6 und q = 0:</div><div class="er"><span class="l">x<sub>1,2</sub></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">p</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad">(<span class="fr"><span class="nu">p</span><span class="de">2</span></span>)² − q</span></span></span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">−6</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad">(<span class="fr"><span class="nu">−6</span><span class="de">2</span></span>)² − 0</span></span></span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">3 ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad">9</span></span></span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">3 ± 3</span><span class="op"></span></div><div class="er"><span class="l">x<sub>1</sub></span><span class="e">=</span><span class="r">3 − 3 = 0</span><span class="op"></span></div><div class="er"><span class="l">x<sub>2</sub></span><span class="e">=</span><span class="r">3 + 3 = 6</span><span class="op"></span></div></div></div><div class="cpane cas"><div class="code">solve(x^2−12x+60=3x^2−24x+60, x)</div><div class="cres">⇒ x = 0 &nbsp;oder&nbsp; x = 6</div></div></div>
+<div class="eq"><div class="et stp">Beide Wege ergeben x = 0 oder x = 6.<br>Die Menge 0 ergibt keinen Sinn. ⇒ x = 6</div></div>
+<div class="sh stp">4. Einsetzen in k<sub>v</sub> (oder in K′).</div>
+<div class="eq">
+<div class="er stp"><span class="l">k<sub>v</sub>(6)</span><span class="e">=</span><span class="r">36 − 72 + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">24</span><span class="op"></span></div>
+<div class="er stp"><span class="l">K′(6)</span><span class="e">=</span><span class="r">108 − 144 + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">24 ✓</span><span class="op"></span></div>
+</div><div class="res stp">Ergebnis: <span class="m res-pt">BM (6 | 24)</span><br>Betriebsminimum: <span class="m">x<sub>BM</sub> = 6</span> ME &nbsp;·&nbsp; Kurzfristige Preisuntergrenze: <span class="m">KPU = 24</span> GE/ME</div>
+</div></div></div></div>
+</section>
+
+<!-- ================= STATION 6 ================= -->
+<section class="st" id="s6" data-title="Betriebsoptimum">
+<div class="st-head"><div class="no">6</div><h2>Betriebsoptimum und langfristige Preisuntergrenze (LPU)</h2></div>
+<div class="ctx"><b>Langfristig</b> muss das Unternehmen <b>alle</b> Kosten bezahlen können.
+Auch die Fixkosten.
+Darum muss der Preis mindestens so hoch sein wie die <b>Stückkosten</b>.
+Das sind alle Kosten für 1 ME.</div>
+<p>Kostenfunktion: <span class="m">K(x) = x³ − 12x² + 60x + 98</span> &nbsp;&nbsp; Stückkosten: <span class="m">k(x) = </span><span class="fr"><span class="nu">K(x)</span><span class="de">x</span></span></p>
+<h3>Wertetabelle</h3>
+<div class="vt-wrap"><table class="vt"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td class=hi>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr><tr><th>K(x)</th><td>98</td><td>147</td><td>178</td><td>197</td><td>210</td><td>223</td><td>242</td><td class=hi>273</td><td>322</td><td>395</td><td>498</td><td>637</td><td>818</td></tr><tr><th>k(x)</th><td>–*</td><td>147</td><td>89</td><td>65,67</td><td>52,5</td><td>44,6</td><td>40,33</td><td class=hi>39</td><td>40,25</td><td>43,89</td><td>49,8</td><td>57,91</td><td>68,17</td></tr></table></div><p class="vt-note">k(x) = K(x) : x &nbsp;(alle Kosten für 1 ME)<br>* Für x = 0 kann man nicht rechnen. Durch 0 kann man nicht teilen. Darum ist k(0) <b>nicht definiert</b>.<br>Bei <b>x = 7</b> sind die Stückkosten am kleinsten.<br>Werte gerundet auf 2 Stellen nach dem Komma.</p>
+<div class="two">
+ <div><div id="p6"></div></div>
+ <div>
+  <div class="sliderbox">
+   <label for="sl6">Preis: <span id="sl6v" class="m"></span> GE/ME</label><input type="range" id="sl6" min="5" max="70" step="1" value="50">
+   <label for="sx6">Menge: <span id="sx6v" class="m"></span> ME</label><input type="range" id="sx6" min="1" max="12" step="0.5" value="5">
+   <label class="chk"><input type="checkbox" id="cb6a" checked> <span class="m">k<sub>v</sub></span> einblenden</label>
+   <label class="chk"><input type="checkbox" id="cb6b"> Grenzkosten <span class="m">K′</span> einblenden</label>
+   <label class="chk"><input type="checkbox" id="cb6t"> Tiefpunkt zeigen</label>
+  </div>
+  <div class="read"><div>Stückkosten<b id="r6k"></b></div><div>Rest pro Stück: p − k<b id="r6d"></b></div><div>Gewinn / Verlust<b id="r6g"></b></div></div>
+  <div class="status" id="st6"></div>
+ </div>
+</div>
+<h3>Wie berechnet man das Betriebsoptimum?</h3>
+<p>In Station 4 haben wir das Betriebsoptimum im Graphen gefunden.
+Jetzt berechnen wir es.
+Es gibt zwei Wege.</p>
+<div class="tabs" id="tb6"><div class="tabbar"><button class="tab on" data-t="0">Weg 1: Tiefpunkt von k</button><button class="tab" data-t="1">Weg 2: Schnittpunkt von k und K′</button></div><div class="tabpane on"><div class="stepper" id="sp6a">
+<div class="sbtns"><button class="sec" data-s="back">◀ zurück</button><button class="pr" data-s="next">nächster Schritt ▶</button><button class="sec" data-s="all">alles zeigen</button><button class="sec" data-s="reset">neu starten</button><span class="scount"></span></div>
+<div class="sbody">
+<div class="sh stp">1. Stückkosten: Wir teilen alle Kosten durch x.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k(x)</span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">K(x)</span><span class="de">x</span></span></span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x³ − 12x² + 60x + 98</span><span class="de">x</span></span></span><span class="op stp">| jeden Summanden einzeln teilen</span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x³</span><span class="de">x</span></span> − <span class="fr"><span class="nu">12x²</span><span class="de">x</span></span> + <span class="fr"><span class="nu">60x</span><span class="de">x</span></span> + <span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="op stp">| kürzen</span></div>
+<div class="kbox stp"><div class="kh">Zur Verdeutlichung – diesen Zwischenschritt kann man überspringen:</div><div class="er"><span class="l"><span class="fr"><span class="nu">x³</span><span class="de">x</span></span></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">x · x · <span class="cx">x</span></span><span class="de"><span class="cx">x</span></span></span> &nbsp;= &nbsp;x²</span><span class="op"></span></div></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">x² − 12x + 60 + <span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="op"></span></div>
+</div><div class="sh stp">2. Den Bruch als Potenz schreiben.</div>
+<div class="eq">
+<div class="er stp"><span class="l"><span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="e">=</span><span class="r">98 · x<sup>−1</sup></span><span class="op"></span></div>
+<div class="er stp"><span class="l">k(x)</span><span class="e">=</span><span class="r">x² − 12x + 60 + 98 · x<sup>−1</sup></span><span class="op"></span></div>
+</div><div class="sh stp">3. Ableitungen bilden (Potenzregel).</div>
+<div class="eq">
+<div class="er stp"><span class="l">k′(x)</span><span class="e">=</span><span class="r">2x − 12 − 98 · x<sup>−2</sup></span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">2x − 12 − <span class="fr"><span class="nu">98</span><span class="de">x²</span></span></span><span class="op"></span></div>
+<div class="er stp"><span class="l">k″(x)</span><span class="e">=</span><span class="r">2 + 196 · x<sup>−3</sup></span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">2 + <span class="fr"><span class="nu">196</span><span class="de">x³</span></span></span><span class="op"></span></div>
+</div><div class="sh stp">4. Notwendige Bedingung: <span class="m">k′(x) = 0</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">2x − 12 − <span class="fr"><span class="nu">98</span><span class="de">x²</span></span></span><span class="e">=</span><span class="r">0</span><span class="op"></span></div>
+</div><div class="sh2 stp">Die Gleichung lösen. Wähle einen Weg:</div>
+<div class="choice stp"><div class="cbtns"><button class="cb" data-c="0">mit dem Horner-Schema</button><button class="cb" data-c="1">mit dem CAS</button></div>
+<div class="cpane"><div class="eq"><div class="er"><span class="l">2x − 12 − <span class="fr"><span class="nu">98</span><span class="de">x²</span></span></span><span class="e">=</span><span class="r">0</span><span class="op">| · x²</span></div><div class="er"><span class="l">2x³ − 12x² − 98</span><span class="e">=</span><span class="r">0</span><span class="op">| : 2</span></div><div class="er"><span class="l">x³ − 6x² − 49</span><span class="e">=</span><span class="r">0</span><span class="op"></span></div></div><div class="hh">1. Eine Nullstelle raten.</div><p class="hp">Wir probieren Teiler von 49, also 1, 7, 49 … :</p><div class="eq"><div class="er"><span class="l">7³ − 6 · 7² − 49</span><span class="e">=</span><span class="r">343 − 294 − 49</span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">0 ✓</span><span class="op"></span></div><div class="et">⇒ x = 7 ist eine Nullstelle.</div></div><div class="hh">2. Horner-Schema mit x = 7</div><table class="horner"><tr><th></th><td>1</td><td>−6</td><td>0</td><td>−49</td></tr>
+<tr><th>x = 7</th><td></td><td class="add">+7</td><td class="add">+7</td><td class="add">+49</td></tr>
+<tr class="sum"><th></th><td>1</td><td>1</td><td>7</td><td class="zero">0</td></tr></table>
+<p class="hp">Rest 0 ✓ &nbsp;⇒&nbsp; x³ − 6x² − 49 = (x − 7) · (x² + x + 7)</p><div class="hh">3. Die restliche quadratische Gleichung prüfen.</div><div class="eq"><div class="er"><span class="l">x² + x + 7</span><span class="e">=</span><span class="r">0</span><span class="op"></span></div><div class="et">pq-Formel mit p = 1 und q = 7:</div><div class="er"><span class="l">x<sub>1,2</sub></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">1</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad">(<span class="fr"><span class="nu">1</span><span class="de">2</span></span>)² − 7</span></span></span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">1</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad"><span class="fr"><span class="nu">1</span><span class="de">4</span></span> − 7</span></span></span><span class="op"></span></div><div class="et">Unter der Wurzel steht eine negative Zahl. ⇒ keine weitere Lösung.</div></div><div class="hres">⇒ x = 7</div></div><div class="cpane cas"><div class="code">solve(2x−12−98/x^2=0, x)</div><div class="cres">⇒ x = 7</div></div></div>
+<div class="sh stp">5. Hinreichende Bedingung: <span class="m">k″(x) &gt; 0</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">k″(7)</span><span class="e">=</span><span class="r">2 + <span class="fr"><span class="nu">196</span><span class="de">343</span></span></span><span class="op"></span></div><div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">2 + <span class="fr"><span class="nu">4</span><span class="de">7</span></span></span><span class="op"></span></div><div class="er stp"><span class="l"></span><span class="e">≈</span><span class="r">2,57 &gt; 0</span><span class="op"></span></div>
+<div class="et stp">⇒ Tiefpunkt bei x = 7</div>
+</div><div class="sh stp">6. Den Tiefpunkt in k einsetzen.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k(7)</span><span class="e">=</span><span class="r">7² − 12 · 7 + 60 + <span class="fr"><span class="nu">98</span><span class="de">7</span></span></span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">49 − 84 + 60 + 14</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">39</span><span class="op"></span></div>
+</div><div class="res stp">Ergebnis: <span class="m res-pt">BO (7 | 39)</span><br>Betriebsoptimum: <span class="m">x<sub>BO</sub> = 7</span> ME &nbsp;·&nbsp; Langfristige Preisuntergrenze: <span class="m">LPU = 39</span> GE/ME</div>
+</div></div></div><div class="tabpane"><div class="stepper" id="sp6b">
+<div class="sbtns"><button class="sec" data-s="back">◀ zurück</button><button class="pr" data-s="next">nächster Schritt ▶</button><button class="sec" data-s="all">alles zeigen</button><button class="sec" data-s="reset">neu starten</button><span class="scount"></span></div>
+<div class="sbody">
+<div class="sh stp">1. Stückkosten und Grenzkosten aufschreiben.</div>
+<div class="eq">
+<div class="er stp"><span class="l">k(x)</span><span class="e">=</span><span class="r">x² − 12x + 60 + <span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="op"></span></div>
+<div class="er stp"><span class="l">K′(x)</span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op"></span></div>
+</div><div class="sh stp">2. Die Kurve K′ schneidet k im Tiefpunkt. Wir setzen gleich: <span class="m">k(x) = K′(x)</span></div>
+<div class="eq">
+<div class="er stp"><span class="l">x² − 12x + 60 + <span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op"></span></div>
+</div><div class="sh stp">3. Die Gleichung lösen. Wähle einen Weg:</div>
+<div class="choice stp"><div class="cbtns"><button class="cb" data-c="0">mit dem Horner-Schema</button><button class="cb" data-c="1">mit dem CAS</button></div>
+<div class="cpane"><div class="eq"><div class="er"><span class="l">x² − 12x + 60 + <span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="e">=</span><span class="r">3x² − 24x + 60</span><span class="op">| − x² + 12x − 60</span></div><div class="er"><span class="l"><span class="fr"><span class="nu">98</span><span class="de">x</span></span></span><span class="e">=</span><span class="r">2x² − 12x</span><span class="op">| · x</span></div><div class="er"><span class="l">98</span><span class="e">=</span><span class="r">2x³ − 12x²</span><span class="op">| − 98</span></div><div class="er"><span class="l">0</span><span class="e">=</span><span class="r">2x³ − 12x² − 98</span><span class="op">| : 2</span></div><div class="er"><span class="l">0</span><span class="e">=</span><span class="r">x³ − 6x² − 49</span><span class="op"></span></div></div><div class="hh">1. Eine Nullstelle raten.</div><p class="hp">Wir probieren Teiler von 49, also 1, 7, 49 … :</p><div class="eq"><div class="er"><span class="l">7³ − 6 · 7² − 49</span><span class="e">=</span><span class="r">343 − 294 − 49</span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">0 ✓</span><span class="op"></span></div><div class="et">⇒ x = 7 ist eine Nullstelle.</div></div><div class="hh">2. Horner-Schema mit x = 7</div><table class="horner"><tr><th></th><td>1</td><td>−6</td><td>0</td><td>−49</td></tr>
+<tr><th>x = 7</th><td></td><td class="add">+7</td><td class="add">+7</td><td class="add">+49</td></tr>
+<tr class="sum"><th></th><td>1</td><td>1</td><td>7</td><td class="zero">0</td></tr></table>
+<p class="hp">Rest 0 ✓ &nbsp;⇒&nbsp; x³ − 6x² − 49 = (x − 7) · (x² + x + 7)</p><div class="hh">3. Die restliche quadratische Gleichung prüfen.</div><div class="eq"><div class="er"><span class="l">x² + x + 7</span><span class="e">=</span><span class="r">0</span><span class="op"></span></div><div class="et">pq-Formel mit p = 1 und q = 7:</div><div class="er"><span class="l">x<sub>1,2</sub></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">1</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad">(<span class="fr"><span class="nu">1</span><span class="de">2</span></span>)² − 7</span></span></span><span class="op"></span></div><div class="er"><span class="l"></span><span class="e">=</span><span class="r">−<span class="fr"><span class="nu">1</span><span class="de">2</span></span> ± <span class="sq"><span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span><span class="rad"><span class="fr"><span class="nu">1</span><span class="de">4</span></span> − 7</span></span></span><span class="op"></span></div><div class="et">Unter der Wurzel steht eine negative Zahl. ⇒ keine weitere Lösung.</div></div><div class="hres">⇒ x = 7</div></div><div class="cpane cas"><div class="code">solve(x^2−12x+60+98/x=3x^2−24x+60, x)</div><div class="cres">⇒ x = 7</div></div></div>
+<div class="sh stp">4. Einsetzen in k (oder in K′).</div>
+<div class="eq">
+<div class="er stp"><span class="l">k(7)</span><span class="e">=</span><span class="r">49 − 84 + 60 + 14</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">39</span><span class="op"></span></div>
+<div class="er stp"><span class="l">K′(7)</span><span class="e">=</span><span class="r">147 − 168 + 60</span><span class="op"></span></div>
+<div class="er stp"><span class="l"></span><span class="e">=</span><span class="r">39 ✓</span><span class="op"></span></div>
+</div><div class="res stp">Ergebnis: <span class="m res-pt">BO (7 | 39)</span><br>Betriebsoptimum: <span class="m">x<sub>BO</sub> = 7</span> ME &nbsp;·&nbsp; Langfristige Preisuntergrenze: <span class="m">LPU = 39</span> GE/ME</div>
+</div></div></div></div>
+</section>
+
+<!-- ================= STATION 7 ================= -->
+<section class="st" id="s7" data-title="Übersicht Preise">
+<div class="st-head"><div class="no">7</div><h2>Übersicht: Welcher Preis ist für den Polypolisten noch möglich?</h2></div>
+<p>Unser Unternehmen hat die Kostenfunktion <span class="m">K(x) = x³ − 12x² + 60x + 98</span>.<br>Es gilt: <span class="m">KPU = 24</span> GE/ME und <span class="m">LPU = 39</span> GE/ME.<br>
+Das Unternehmen wählt immer die beste Menge: mit dem größten Gewinn oder dem kleinsten Verlust.</p>
+<p>Das Rechteck zeigt den Gewinn: (Preis − Stückkosten) · Menge.<br>Grün bedeutet Gewinn. Rot bedeutet Verlust.</p>
+<div class="two">
+ <div><div id="p7"></div><div id="ruler"></div></div>
+ <div>
+  <div class="sliderbox"><label for="sl7">Marktpreis: <span id="sl7v" class="m"></span> GE/ME</label><input type="range" id="sl7" min="5" max="75" step="0.5" value="45"></div>
+  <div class="read"><div>beste Menge<b id="r7x"></b></div><div>Stückkosten<b id="r7k"></b></div><div>Gewinn / Verlust<b id="r7g"></b></div><div>Verlust ohne Produktion<b>−98 GE</b></div></div>
+  <div class="status" id="st7"></div>
+ </div>
+</div>
+<table class="ov">
+ <tr><th>Marktpreis</th><th>Was wird bezahlt?</th><th>Entscheidung</th></tr>
+ <tr><td><span class="m">p &lt; KPU</span></td><td>nicht einmal die variablen Kosten</td><td>Produktion <b>sofort stoppen</b>. Sonst ist der Verlust größer als die Fixkosten.</td></tr>
+ <tr><td><span class="m">KPU ≤ p &lt; LPU</span></td><td>die variablen Kosten und ein Teil der Fixkosten</td><td><b>kurzfristig weiter produzieren</b>. Es gibt Verlust. Aber der Verlust ist kleiner als die Fixkosten.</td></tr>
+ <tr><td><span class="m">p = LPU</span></td><td>genau alle Kosten</td><td>kein Gewinn und kein Verlust</td></tr>
+ <tr><td><span class="m">p &gt; LPU</span></td><td>alle Kosten und mehr</td><td><b>Gewinnzone</b>. Das Unternehmen kann lange produzieren.</td></tr>
+</table>
+<div class="merke"><b class="t">Merke</b>
+<span class="m">KPU &lt; LPU &lt; Marktpreis</span> &nbsp;⇒&nbsp; Gewinnzone.<br>
+Liegt der Preis zwischen KPU und LPU? Dann produziert der Polypolist <b>nur kurze Zeit</b> weiter.<br>Bleibt der Preis lange unter der LPU? Dann muss er seine Kosten senken oder aufhören.</div>
+</section>
+
+<div class="navb"><button class="sec" id="prev">◀ zurück</button><button class="pr" id="next">weiter ▶</button></div>
+<div class="foot">Vertiefung der Differentialrechnung · Ökonomische Anwendungen · Berufliches Gymnasium Jg. 12 (HAW)</div>
+</div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(v,d=2)=>{const r=Math.round(v*10**d)/10**d; return (Object.is(r,-0)?0:r).toLocaleString('de-DE',{maximumFractionDigits:d});};
+const C={K:'#1d1d1f',E:'#1D70B8',G:'#C8102E',P:'#7B3FA0',d:'#2E7D32',o:'#E07B00',k:'#C8102E'};
+
+/* ---------- Plot ---------- */
+let pid=0;
+function Plot(hostId,o){
+  const host=document.getElementById(hostId);
+  const W=o.W||600,H=o.H||390,L=o.L??50,R=o.R??28,T=o.T??20,B=o.B??30;
+  const {xmin,xmax,ymin,ymax}=o, id='pl'+(++pid);
+  const sx=x=>L+(x-xmin)/(xmax-xmin)*(W-L-R), sy=y=>T+(ymax-y)/(ymax-ymin)*(H-T-B);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="plot"><defs><clipPath id="${id}c"><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}"/></clipPath><marker id="${id}a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z" fill="#333"/></marker></defs><g stroke="#ece4e0" stroke-width="1">`;
+  for(let x=Math.ceil(xmin/o.xg)*o.xg;x<=xmax+1e-9;x+=o.xg) s+=`<line x1="${sx(x)}" y1="${T}" x2="${sx(x)}" y2="${H-B}"/>`;
+  for(let y=Math.ceil(ymin/o.yg)*o.yg;y<=ymax+1e-9;y+=o.yg) s+=`<line x1="${L}" y1="${sy(y)}" x2="${W-R}" y2="${sy(y)}"/>`;
+  s+='</g>';
+  const y0=sy(Math.min(ymax,Math.max(ymin,0))), x0=sx(Math.max(xmin,0));
+  s+=`<g id="${id}u"></g>`;
+  s+=`<line x1="${L}" y1="${y0}" x2="${W-R+16}" y2="${y0}" stroke="#333" stroke-width="1.5" marker-end="url(#${id}a)"/>`;
+  s+=`<line x1="${x0}" y1="${H-B}" x2="${x0}" y2="${T-12}" stroke="#333" stroke-width="1.5" marker-end="url(#${id}a)"/>`;
+  if(o.labels!==false){
+    s+='<g font-size="12" fill="#333">';
+    for(let x=Math.ceil(xmin/o.xt)*o.xt;x<=xmax+1e-9;x+=o.xt){ if(Math.abs(x)<1e-9) continue; s+=`<line x1="${sx(x)}" y1="${y0-3}" x2="${sx(x)}" y2="${y0+3}" stroke="#333"/><text x="${sx(x)}" y="${y0+15}" text-anchor="middle">${fmt(x)}</text>`; }
+    for(let y=Math.ceil(ymin/o.yt)*o.yt;y<=ymax+1e-9;y+=o.yt){ if(Math.abs(y)<1e-9) continue; s+=`<line x1="${x0-3}" y1="${sy(y)}" x2="${x0+3}" y2="${sy(y)}" stroke="#333"/><text x="${x0-6}" y="${sy(y)+4}" text-anchor="end">${fmt(y)}</text>`; }
+    s+=`<text x="${x0-6}" y="${y0+15}" text-anchor="end">0</text>`;
+    if(o.xlab) s+=`<text x="${W-R+14}" y="${y0-8}" text-anchor="end" font-style="italic">${o.xlab}</text>`;
+    if(o.ylab) s+=`<text x="${x0+8}" y="${T-2}" font-style="italic">${o.ylab}</text>`;
+    s+='</g>';
+  }
+  s+=`<g clip-path="url(#${id}c)"><g id="${id}f"></g><g id="${id}d"></g></g><g id="${id}m"></g><g id="${id}t"></g></svg>`;
+  host.innerHTML=s;
+  const P={sx,sy,o,W,H,L,R,T,B,
+    fg:host.querySelector('#'+id+'f'), dg:host.querySelector('#'+id+'d'), mg:host.querySelector('#'+id+'m'), tg:host.querySelector('#'+id+'t'), ug:host.querySelector('#'+id+'u')};
+  P.path=(f,a,b,n=300)=>{ const lo=ymin-(ymax-ymin), hi=ymax+(ymax-ymin); let d='';
+    for(let i=0;i<=n;i++){ const x=a+(b-a)*i/n; let y=f(x); if(!isFinite(y)) continue; y=Math.max(lo,Math.min(hi,y)); d+=(d?'L':'M')+sx(x).toFixed(1)+','+sy(y).toFixed(1); } return d; };
+  P.fn=(f,a,b,col,w=2.6,dash='',g='fg')=>{ const e=`<path d="${P.path(f,a,b)}" fill="none" stroke="${col}" stroke-width="${w}" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linejoin="round" stroke-linecap="round"/>`; P[g].insertAdjacentHTML('beforeend',e); return e; };
+  P.lab=(x,y,t,col,dx=0,dy=0,g='tg')=>P[g].insertAdjacentHTML('beforeend',`<text x="${sx(x)+dx}" y="${sy(y)+dy}" font-size="17" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${col}" paint-order="stroke" stroke="#fff" stroke-width="4">${t}</text>`);
+  P.box=(x,y,t,col,dx=0,dy=0)=>{ const X=sx(x)+dx,Y=sy(y)+dy; P.tg.insertAdjacentHTML('beforeend',`<rect x="${X-12}" y="${Y-12}" width="24" height="24" rx="5" fill="#fff" stroke="${col}" stroke-width="2.2"/><text x="${X}" y="${Y+6}" text-anchor="middle" font-size="16" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${col}">${t}</text>`); };
+  P.badge=(x,y,n,dx,dy)=>{ const X=sx(x),Y=sy(y); P.mg.insertAdjacentHTML('beforeend',`<line x1="${X}" y1="${Y}" x2="${X+dx}" y2="${Y+dy}" stroke="#C8102E" stroke-width="1.4"/><circle cx="${X}" cy="${Y}" r="4.5" fill="#C8102E"/><circle cx="${X+dx}" cy="${Y+dy}" r="11.5" fill="#C8102E" stroke="#fff" stroke-width="1.5"/><text x="${X+dx}" y="${Y+dy+5}" text-anchor="middle" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="#fff">${n}</text>`); };
+  return P;
+}
+function bisect(f,a,b){ let fa=f(a); for(let i=0;i<60;i++){ const m=(a+b)/2, fm=f(m); if((fm>0)===(fa>0)){a=m;fa=fm;} else b=m; } return (a+b)/2; }
+function roots(f,a,b,n=400){ const r=[]; let px=a,pf=f(a); for(let i=1;i<=n;i++){ const x=a+(b-a)*i/n, fx=f(x); if(pf===0) r.push(px); else if((pf<0)!==(fx<0)) r.push(bisect(f,px,x)); px=x;pf=fx; } return r; }
+
+/* ---------- Funktionen ---------- */
+const K1=x=>x**3-9*x**2+30*x+20, dK1=x=>3*x*x-18*x+30;
+const K2=x=>x**3-15*x**2+82*x+108, p2=x=>-10*x+130, E2=x=>p2(x)*x, G2=x=>E2(x)-K2(x);
+const K3=x=>x**3-12*x**2+60*x+98, dK3=x=>3*x*x-24*x+60, kv3=x=>x*x-12*x+60, k3=x=>kv3(x)+98/x;
+
+/* ---------- Station 1 ---------- */
+(function(){
+  const P=Plot('p1',{xmin:0,xmax:7.3,ymin:0,ymax:145,xg:1,yg:10,xt:1,yt:20,xlab:'x in ME',ylab:'GE; GE/ME'});
+  P.fn(dK1,0,7.3,C.o); P.fn(K1,0,7.3,C.E);
+  P.fg.insertAdjacentHTML('beforeend',`<line x1="${P.sx(3)}" y1="${P.sy(56)}" x2="${P.sx(3)}" y2="${P.sy(3)}" stroke="#888" stroke-dasharray="5 4"/>`);
+  P.box(6.6,K1(6.6),'A',C.E,-22,0); P.box(6.9,dK1(6.9),'B',C.o,-24,6);
+  P.badge(0,20,1,26,16); P.badge(3,56,2,-14,-30); P.badge(3,3,3,26,-12); P.badge(1.3,K1(1.3),4,-6,-30); P.badge(5.6,K1(5.6),5,-28,-10);
+})();
+
+/* ---------- Station 2 ---------- */
+(function(){
+  const opt={xmin:0,xmax:14,ymin:-150,ymax:460,xg:0.5,yg:25,xt:1,yt:100,xlab:'x in ME',ylab:'GE; GE/ME',H:520,L:56};
+  const P=Plot('p2',opt);
+  P.fn(K2,0,14,C.K); P.fn(E2,0,13,C.E); P.fn(G2,0,14,C.G); P.fn(p2,0,13,C.P);
+  P.box(10.15,K2(10.15),'A',C.K,-24,0); P.box(10.6,E2(10.6),'B',C.E,18,-4); P.box(9.8,G2(9.8),'C',C.G,22,0); P.box(10.5,p2(10.5),'D',C.P,0,-20);
+  P.badge(2,220,1,-24,-20); P.badge(2,0,2,-20,20); P.badge(9,0,3,20,20); P.badge(6,144,4,0,-26); P.badge(6,70,5,-22,22); P.badge(0,130,6,-32,-6); P.badge(13,0,7,12,-24);
+  // Teil 2
+  const Q=Plot('p2b',Object.assign({},opt,{W:900,H:560,L:62,yg:20}));
+  const Z=Q;
+  Q.ug.insertAdjacentHTML('beforeend',`<rect x="${Q.sx(2)}" y="${Q.T}" width="${Q.sx(9)-Q.sx(2)}" height="${Q.H-Q.T-Q.B}" fill="#2E7D32" opacity=".07"/>`);
+  Q.fn(K2,0,14,'#999',1.8,'6 4'); Q.fn(E2,0,13,'#9cbfe0',1.8,'6 4'); Q.fn(G2,0,14,C.G,3); Q.fn(p2,0,13,C.P,3);
+  Q.lab(9.7,G2(9.7),'G',C.G,10,0); Q.lab(10.1,K2(10.1),'K',"#888",8,8); Q.lab(11.2,E2(11.2),'E',"#6b9cc9",8,0); Q.lab(11.8,p2(11.8),'p<tspan font-size="12" dy="4">N</tspan>',C.P,4,-10);
+  // Gewinnmaximum und Cournot'scher Punkt
+  { const xs=Q.sx(6), yG=Q.sy(144), yC=Q.sy(70), ya0=Q.sy(0), F='font-family="Calibri,Arial,sans-serif" font-weight="bold" font-size="15" paint-order="stroke" stroke="#fff" stroke-width="4"';
+    Q.ug.insertAdjacentHTML('beforeend',`<line x1="${xs}" y1="${yG}" x2="${xs}" y2="${ya0}" stroke="#777" stroke-width="1.4" stroke-dasharray="5 4"/><line x1="${Q.sx(0)}" y1="${yC}" x2="${xs}" y2="${yC}" stroke="${C.P}" stroke-width="1.4" stroke-dasharray="5 4" opacity=".7"/>`);
+    Q.mg.insertAdjacentHTML('beforeend',`<rect x="${xs-7}" y="${yG-7}" width="14" height="14" fill="${C.G}" stroke="#fff" stroke-width="2" transform="rotate(45 ${xs} ${yG})"/><text x="${xs}" y="${yG-16}" text-anchor="middle" ${F} fill="${C.G}">Gewinnmaximum (6 | 144)</text>
+      <rect x="${xs-7}" y="${yC-7}" width="14" height="14" fill="${C.P}" stroke="#fff" stroke-width="2" transform="rotate(45 ${xs} ${yC})"/><text x="${xs+14}" y="${yC-12}" ${F} fill="${C.P}">Cournot'scher Punkt C (6 | 70)</text>
+      <text x="${xs}" y="${ya0+34}" text-anchor="middle" font-family="Calibri,Arial,sans-serif" font-size="13" font-weight="bold" fill="#555">x<tspan font-size="10" dy="3">max</tspan></text>`); }
+  const x0=Q.sx(0), y1=Q.sy(110), y2=Q.sy(40), ya=Q.sy(0);
+  Q.tg.insertAdjacentHTML('beforeend',`<g id="band2" style="display:none">
+   <rect x="${Q.L}" y="${y1}" width="${Q.sx(14)-Q.L}" height="${y2-y1}" fill="#2E7D32" opacity=".12"/>
+   <line x1="${x0}" y1="${y1}" x2="${Q.sx(2)}" y2="${y1}" stroke="#2E7D32" stroke-width="1.8" stroke-dasharray="5 3"/>
+   <line x1="${Q.sx(2)}" y1="${y1}" x2="${Q.sx(2)}" y2="${ya}" stroke="#2E7D32" stroke-width="1.8" stroke-dasharray="5 3"/>
+   <line x1="${x0}" y1="${y2}" x2="${Q.sx(9)}" y2="${y2}" stroke="#2E7D32" stroke-width="1.8" stroke-dasharray="5 3"/>
+   <line x1="${Q.sx(9)}" y1="${y2}" x2="${Q.sx(9)}" y2="${ya}" stroke="#2E7D32" stroke-width="1.8" stroke-dasharray="5 3"/>
+   <circle cx="${Q.sx(2)}" cy="${y1}" r="5" fill="#2E7D32"/><circle cx="${Q.sx(9)}" cy="${y2}" r="5" fill="#2E7D32"/>
+   <rect x="2" y="${y1-12}" width="${x0-4}" height="${y2-y1+24}" fill="#fff"/>
+   <line x1="${x0}" y1="${y1}" x2="${x0}" y2="${y2}" stroke="#2E7D32" stroke-width="11" stroke-linecap="round" opacity=".85"/>
+   <text x="${x0-10}" y="${y1+5}" text-anchor="end" font-size="15" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="#2E7D32">110</text>
+   <text x="${x0-10}" y="${y2+5}" text-anchor="end" font-size="15" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="#2E7D32">40</text>
+   <text x="${Q.sx(14)-6}" y="${(y1+y2)/2+5}" text-anchor="end" font-size="15" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="#2E7D32">Preisspanne: 40 ≤ p ≤ 110</text>
+   <text x="${Q.sx(2)}" y="${ya+34}" text-anchor="middle" font-size="13" font-family="Calibri,Arial,sans-serif" font-weight="bold" fill="#2E7D32">x<tspan font-size="10" dy="3">GS</tspan></text>
+   <text x="${Q.sx(9)}" y="${ya+34}" text-anchor="middle" font-size="13" font-family="Calibri,Arial,sans-serif" font-weight="bold" fill="#2E7D32">x<tspan font-size="10" dy="3">GG</tspan></text>
+  </g><g id="pdot2"></g>`);
+  const sl=$('#sl2'), cb=$('#cb2');
+  function upd(){ const p=+sl.value, x=(130-p)/10, g=G2(x);
+    $('#sl2v').textContent=fmt(p,1);
+    Q.dg.innerHTML=`<line x1="${Q.sx(0)}" y1="${Q.sy(p)}" x2="${Q.sx(x)}" y2="${Q.sy(p)}" stroke="${C.P}" stroke-dasharray="5 4" stroke-width="1.6"/><line x1="${Q.sx(x)}" y1="${Q.sy(Math.min(0,g,p))}" x2="${Q.sx(x)}" y2="${Q.sy(Math.max(g,p,0))}" stroke="#555" stroke-dasharray="5 4" stroke-width="1.6"/><circle cx="${Q.sx(x)}" cy="${Q.sy(p)}" r="6" fill="${C.P}"/><circle cx="${Q.sx(x)}" cy="${Q.sy(g)}" r="6" fill="${C.G}"/>`;
+    const inz=g>-0.01;
+    $('#pdot2').innerHTML=`<circle cx="${Z.sx(0)}" cy="${Z.sy(p)}" r="7.5" fill="${inz?'#2E7D32':'#B00020'}" stroke="#fff" stroke-width="2"/>`;
+    $('#r2x').textContent=fmt(x,2)+' ME'; $('#r2e').textContent=fmt(E2(x),1)+' GE'; $('#r2k').textContent=fmt(K2(x),1)+' GE'; $('#r2g').textContent=fmt(g,1)+' GE';
+    const st=$('#st2'); if(Math.abs(p-70)<0.01){st.className='status g';st.textContent='Cournot-Preis: größter Gewinn (144 GE)!';}
+    else if(g>0.01){st.className='status g';st.textContent='Gewinnzone: Der Monopolist macht Gewinn.';}
+    else if(g>-0.01){st.className='status y';st.textContent='Genau an der Grenze: kein Gewinn, kein Verlust.';}
+    else {st.className='status r';st.textContent= p>110?'Verlust: Der Preis ist zu hoch. Es wird zu wenig verkauft.':'Verlust: Der Preis ist zu niedrig. Der Erlös ist kleiner als die Kosten.';}
+    $('#band2').style.display=cb.checked?'':'none';
+  }
+  sl.oninput=upd; cb.onchange=upd; upd();
+})();
+
+/* ---------- Station 3 ---------- */
+(function(){
+  const E3=x=>60*x, G3=x=>E3(x)-K3(x);
+  const P=Plot('p3',{xmin:0,xmax:12.6,ymin:-160,ymax:860,xg:1,yg:50,labels:false,L:44,H:400});
+  P.fn(K3,0,12.6,C.K); P.fn(E3,0,12.6,C.E); P.fn(G3,0,12.6,C.G);
+  const gs=bisect(G3,2,5), gg=bisect(G3,9,12.5);
+  P.box(10.3,G3(10.3),'A',C.G,20,-4); P.box(9.3,E3(9.3),'B',C.E,4,-22); P.box(11.9,K3(11.9),'C',C.K,-28,-2);
+  P.badge(0,98,1,24,-24); P.badge(gs,K3(gs),2,-22,-24); P.badge(gs,0,3,-18,20); P.badge(gg,0,4,18,20); P.badge(8,158,5,0,-26);
+  // Marktdiagramm
+  const M=Plot('pmarkt',{xmin:0,xmax:10,ymin:0,ymax:10,xg:1,yg:1,labels:false,W:320,H:230,L:20,R:24,T:18,B:14});
+  M.fn(x=>1+0.8*x,0,10,C.E); M.fn(x=>9-0.8*x,0,10,C.G);
+  M.fg.insertAdjacentHTML('beforeend',`<line x1="${M.sx(0)}" y1="${M.sy(5)}" x2="${M.sx(5)}" y2="${M.sy(5)}" stroke="#555" stroke-dasharray="5 4"/><line x1="${M.sx(5)}" y1="${M.sy(0)}" x2="${M.sx(5)}" y2="${M.sy(5)}" stroke="#555" stroke-dasharray="5 4"/><circle cx="${M.sx(5)}" cy="${M.sy(5)}" r="5" fill="#333"/>`);
+  M.tg.insertAdjacentHTML('beforeend',`<g font-family="Calibri,Arial,sans-serif" font-size="14" font-weight="bold" paint-order="stroke" stroke="#fff" stroke-width="4"><text x="${M.sx(5.6)}" y="${M.sy(8.6)}" fill="${C.E}">Angebot</text><text x="${M.sx(7.3)}" y="${M.sy(4.2)}" fill="${C.G}">Nachfrage</text><text x="${M.sx(0)+4}" y="${M.sy(5)-6}" fill="#333">Marktpreis</text><text x="${M.sx(10)-2}" y="${M.sy(0)-6}" text-anchor="end" fill="#555" font-weight="normal">Menge</text><text x="${M.sx(0)+6}" y="${M.sy(10)+12}" fill="#555" font-weight="normal">Preis</text></g>`);
+})();
+
+/* ---------- Station 4 ---------- */
+(function(){
+  const P=Plot('p4',{xmin:0,xmax:12.5,ymin:0,ymax:900,xg:1,yg:50,xt:2,yt:100,xlab:'x in ME',ylab:'GE'});
+  P.fn(K3,0,12.5,C.K); P.lab(11.7,K3(11.7),'K',C.K,8,6);
+  const Kv=x=>K3(x)-98;
+  const sl=$('#sl4'), cb=$('#cb4'), F='font-family="Calibri,Arial,sans-serif" font-weight="bold" font-size="15" paint-order="stroke" stroke="#fff" stroke-width="4"';
+  const area=(f,g,a,b,col,op)=>{ let d=''; const n=60;
+    for(let i=0;i<=n;i++){const x=a+(b-a)*i/n; d+=(i?'L':'M')+P.sx(x)+','+P.sy(f(x));}
+    for(let i=n;i>=0;i--){const x=a+(b-a)*i/n; d+='L'+P.sx(x)+','+P.sy(g(x));}
+    return `<path d="${d}Z" fill="${col}" opacity="${op}"/>`; };
+  function upd(){ const p=+sl.value, E=x=>p*x, kvOn=cb.checked;
+    $('#sl4v').textContent=p;
+    let s='';
+    if(kvOn){ const rv=roots(x=>E(x)-Kv(x),0.05,12.5).filter(x=>x>0.1);
+      if(rv.length>=2) s+=area(E,Kv,rv[0],rv[1],'#E07B00',.16);
+      s+=`<path d="${P.path(Kv,0,12.5)}" fill="none" stroke="${C.o}" stroke-width="2.4" stroke-dasharray="8 5"/><text x="${P.sx(11.1)}" y="${P.sy(Kv(11.1))}" ${F} fill="${C.o}" dx="12" dy="14">K<tspan font-size="11" dy="4">v</tspan></text>`; }
+    const r=roots(x=>E(x)-K3(x),0.01,12.5).filter(x=>x>0.05);
+    if(r.length>=2) s+=area(E,K3,r[0],r[1],'#2E7D32',.28);
+    s+=`<path d="${P.path(E,0,12.5)}" fill="none" stroke="${C.E}" stroke-width="2.6"/>`;
+    const xl=Math.min(5.5,850/p);
+    s+=`<text x="${P.sx(xl)-6}" y="${P.sy(E(xl))-10}" ${F} fill="${C.E}" text-anchor="end">E(x) = ${p}x</text>`;
+    if(p===39) s+=`<circle cx="${P.sx(7)}" cy="${P.sy(273)}" r="7" fill="${C.k}" stroke="#fff" stroke-width="2"/><text x="${P.sx(7)+12}" y="${P.sy(273)+22}" ${F} fill="${C.k}">BO (7 | 273)</text>`;
+    if(p===24 && kvOn) s+=`<circle cx="${P.sx(6)}" cy="${P.sy(144)}" r="7" fill="${C.o}" stroke="#fff" stroke-width="2"/><text x="${P.sx(6)+12}" y="${P.sy(144)+22}" ${F} fill="${C.o}">BM (6 | 144)</text>`;
+    P.dg.innerHTML=s;
+    const st=$('#st4');
+    if(p>39){ st.className='status g'; st.textContent=`Gewinnzone von x ≈ ${fmt(r[0],2)} bis x ≈ ${fmt(r[1],2)} ME`; }
+    else if(p===39){ st.className='status y'; st.innerHTML='Die Erlösgerade berührt K nur in einem Punkt.<br>Betriebsoptimum BO (7 | 273)<br>→ langfristige Preisuntergrenze (LPU): 39 GE/ME'; }
+    else if(!kvOn){ st.className='status r'; st.textContent='Keine Gewinnzone mehr. Die Kosten sind immer höher als der Erlös.'; }
+    else if(p>24){ st.className='status y'; st.innerHTML='Keine Gewinnzone mehr.<br>Aber die Erlösgerade liegt noch über K<sub>v</sub>: Die variablen Kosten sind bezahlt.'; }
+    else if(p===24){ st.className='status y'; st.innerHTML='Die Erlösgerade berührt K<sub>v</sub> nur in einem Punkt.<br>Betriebsminimum BM (6 | 144)<br>→ kurzfristige Preisuntergrenze (KPU): 24 GE/ME'; }
+    else { st.className='status r'; st.innerHTML='Die Erlösgerade liegt immer unter K<sub>v</sub>.<br>Nicht einmal die variablen Kosten sind bezahlt.'; }
+  }
+  sl.oninput=upd; cb.onchange=upd; upd();
+  window.set4=(o)=>{ if(o.p!=null){ sl.value=o.p; } if(o.kv!=null){ cb.checked=o.kv; } upd(); };
+})();
+
+/* ---------- Station 5 ---------- */
+(function(){
+  const P=Plot('p5',{xmin:0,xmax:12.5,ymin:0,ymax:110,xg:1,yg:10,xt:2,yt:20,xlab:'x in ME',ylab:'GE/ME'});
+  P.fn(kv3,0,12.5,C.o); P.lab(11,kv3(11),'k<tspan font-size="12" dy="4">v</tspan>',C.o,10,4);
+  const sl=$('#sl5'),sx=$('#sx5'),cb=$('#cb5'),ct=$('#cb5t');
+  function upd(){ const p=+sl.value, x=+sx.value, kx=kv3(x), d=p-kx, DB=d*x, G=DB-98;
+    $('#sl5v').textContent=p; $('#sx5v').textContent=fmt(x,1);
+    let s=`<rect x="${P.sx(0)}" y="${P.sy(Math.max(p,kx))}" width="${P.sx(x)-P.sx(0)}" height="${Math.abs(P.sy(p)-P.sy(kx))}" fill="${d>=0?'#2E7D32':'#B00020'}" opacity=".22"/>`;
+    if(cb.checked) s+=`<path d="${P.path(dK3,0,12.5)}" fill="none" stroke="${C.d}" stroke-width="2.2" stroke-dasharray="7 4"/><text x="${P.sx(9.2)}" y="${P.sy(dK3(9.2))}" font-size="16" font-weight="bold" fill="${C.d}" dx="10">K′</text>`;
+    if(ct.checked) s+=`<line x1="${P.sx(6)}" y1="${P.sy(0)}" x2="${P.sx(6)}" y2="${P.sy(24)}" stroke="${C.o}" stroke-dasharray="5 4"/><line x1="${P.sx(0)}" y1="${P.sy(24)}" x2="${P.sx(6)}" y2="${P.sy(24)}" stroke="${C.o}" stroke-dasharray="5 4"/><circle cx="${P.sx(6)}" cy="${P.sy(24)}" r="6" fill="${C.o}"/><text x="${P.sx(6)}" y="${P.sy(24)+22}" text-anchor="middle" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${C.o}" paint-order="stroke" stroke="#fff" stroke-width="4">BM (6 | 24)</text>`;
+    s+=`<line x1="${P.sx(0)}" y1="${P.sy(p)}" x2="${P.sx(12.5)}" y2="${P.sy(p)}" stroke="${C.E}" stroke-width="2.4"/><text x="${P.sx(12.3)}" y="${P.sy(p)-7}" text-anchor="end" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${C.E}" paint-order="stroke" stroke="#fff" stroke-width="4">Preis p = ${p}</text>`;
+    s+=`<line x1="${P.sx(x)}" y1="${P.sy(0)}" x2="${P.sx(x)}" y2="${P.sy(Math.max(p,kx))}" stroke="#555" stroke-dasharray="4 3"/><circle cx="${P.sx(x)}" cy="${P.sy(kx)}" r="5.5" fill="${C.o}"/><circle cx="${P.sx(x)}" cy="${P.sy(p)}" r="5.5" fill="${C.E}"/>`;
+    P.dg.innerHTML=s;
+    $('#r5k').textContent=fmt(kx,2)+' GE/ME'; $('#r5d').textContent=(d>0?'+':'')+fmt(d,2)+' GE'; $('#r5db').textContent=(DB>0?'+':'')+fmt(DB,1)+' GE'; $('#r5g').textContent=(G>0?'+':'')+fmt(G,1)+' GE';
+    const st=$('#st5');
+    if(Math.abs(DB)<1e-9){ st.className='status y'; st.innerHTML='Die variablen Kosten sind genau bezahlt.<br>Der Verlust ist 98 GE – so viel wie ohne Produktion.'; }
+    else if(DB>0){ st.className='status g'; st.innerHTML=`Jedes Stück bringt ${fmt(d,2)} GE mehr, als es variabel kostet.<br>Damit wird ein Teil der Fixkosten bezahlt.<br>`+(G>=0?`Es gibt sogar Gewinn: ${fmt(G,1)} GE.`:`Verlust: ${fmt(-G,1)} GE. Das ist weniger als 98 GE. Produzieren lohnt sich.`); }
+    else { st.className='status r'; st.innerHTML=`Jedes Stück kostet ${fmt(-d,2)} GE mehr, als es bringt.<br>Verlust: ${fmt(-G,1)} GE. Das ist mehr als 98 GE.<br>Ohne Produktion wäre der Verlust kleiner.`; }
+  }
+  [sl,sx].forEach(e=>e.oninput=upd); [cb,ct].forEach(e=>e.onchange=upd); upd();
+})();
+
+/* ---------- Station 6 ---------- */
+(function(){
+  const P=Plot('p6',{xmin:0,xmax:12.5,ymin:0,ymax:110,xg:1,yg:10,xt:2,yt:20,xlab:'x in ME',ylab:'GE/ME'});
+  P.fn(k3,0.5,12.5,C.k); P.lab(1.75,k3(1.75),'k',C.k,9,4);
+  const sl=$('#sl6'),sx=$('#sx6'),ca=$('#cb6a'),cb=$('#cb6b'),ct=$('#cb6t');
+  function upd(){ const p=+sl.value, x=+sx.value, kx=k3(x), d=p-kx, G=d*x;
+    $('#sl6v').textContent=p; $('#sx6v').textContent=fmt(x,1);
+    let s=`<rect x="${P.sx(0)}" y="${P.sy(Math.max(p,kx))}" width="${P.sx(x)-P.sx(0)}" height="${Math.abs(P.sy(p)-P.sy(kx))}" fill="${d>=0?'#2E7D32':'#B00020'}" opacity=".22"/>`;
+    if(ca.checked) s+=`<path d="${P.path(kv3,0,12.5)}" fill="none" stroke="${C.o}" stroke-width="2" opacity=".75"/><text x="${P.sx(11.2)}" y="${P.sy(kv3(11.2))+18}" font-size="15" font-weight="bold" fill="${C.o}" dx="6">k<tspan font-size="11" dy="4">v</tspan></text>`;
+    if(cb.checked) s+=`<path d="${P.path(dK3,0,12.5)}" fill="none" stroke="${C.d}" stroke-width="2.2" stroke-dasharray="7 4"/><text x="${P.sx(9.2)}" y="${P.sy(dK3(9.2))}" font-size="16" font-weight="bold" fill="${C.d}" dx="10">K′</text>`;
+    if(ct.checked) s+=`<line x1="${P.sx(7)}" y1="${P.sy(0)}" x2="${P.sx(7)}" y2="${P.sy(39)}" stroke="${C.k}" stroke-dasharray="5 4"/><line x1="${P.sx(0)}" y1="${P.sy(39)}" x2="${P.sx(7)}" y2="${P.sy(39)}" stroke="${C.k}" stroke-dasharray="5 4"/><circle cx="${P.sx(7)}" cy="${P.sy(39)}" r="6" fill="${C.k}"/><text x="${P.sx(7)}" y="${P.sy(39)-12}" text-anchor="middle" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${C.k}" paint-order="stroke" stroke="#fff" stroke-width="4">BO (7 | 39)</text>`;
+    s+=`<line x1="${P.sx(0)}" y1="${P.sy(p)}" x2="${P.sx(12.5)}" y2="${P.sy(p)}" stroke="${C.E}" stroke-width="2.4"/><text x="${P.sx(12.3)}" y="${P.sy(p)-7}" text-anchor="end" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${C.E}" paint-order="stroke" stroke="#fff" stroke-width="4">Preis p = ${p}</text>`;
+    s+=`<line x1="${P.sx(x)}" y1="${P.sy(0)}" x2="${P.sx(x)}" y2="${P.sy(Math.max(p,kx))}" stroke="#555" stroke-dasharray="4 3"/><circle cx="${P.sx(x)}" cy="${P.sy(kx)}" r="5.5" fill="${C.k}"/><circle cx="${P.sx(x)}" cy="${P.sy(p)}" r="5.5" fill="${C.E}"/>`;
+    P.dg.innerHTML=s;
+    $('#r6k').textContent=fmt(kx,2)+' GE/ME'; $('#r6d').textContent=(d>0?'+':'')+fmt(d,2)+' GE'; $('#r6g').textContent=(G>0?'+':'')+fmt(G,1)+' GE';
+    const st=$('#st6');
+    if(Math.abs(G)<1e-9){ st.className='status y'; st.innerHTML='Alle Kosten sind genau bezahlt.<br>Kein Gewinn und kein Verlust.'; }
+    else if(G>0){ st.className='status g'; st.innerHTML=`Der Preis ist höher als die Stückkosten.<br>Gewinn: ${fmt(G,1)} GE.`; }
+    else { st.className='status r'; st.innerHTML=`Der Preis ist kleiner als die Stückkosten.<br>Verlust: ${fmt(-G,1)} GE.`; }
+  }
+  [sl,sx].forEach(e=>e.oninput=upd); [ca,cb,ct].forEach(e=>e.onchange=upd); upd();
+})();
+
+/* ---------- Station 7 ---------- */
+(function(){
+  const P=Plot('p7',{xmin:0,xmax:12.5,ymin:0,ymax:80,xg:1,yg:10,xt:2,yt:10,xlab:'x in ME',ylab:'GE/ME',H:360});
+  P.fn(kv3,0,12.5,C.o,2); P.fn(k3,0.5,12.5,C.k); P.fn(dK3,0,12.5,C.d,2,'7 4');
+  P.lab(2.6,78,'k',C.k,8,8); P.lab(1.6,kv3(1.6),'k<tspan font-size="12" dy="4">v</tspan>',C.o,-24,24); P.lab(10.1,78,'K′',C.d,10,8);
+  // Lineal
+  const R=document.getElementById('ruler'); const W=600, x=v=>30+v/75*(W-60);
+  R.innerHTML=`<svg viewBox="0 0 ${W} 86" class="plot" style="margin-top:8px"><rect x="${x(0)}" y="22" width="${x(24)-x(0)}" height="22" fill="#FDECEA" stroke="#B00020"/><rect x="${x(24)}" y="22" width="${x(39)-x(24)}" height="22" fill="#FFF4D6" stroke="#E0A800"/><rect x="${x(39)}" y="22" width="${x(75)-x(39)}" height="22" fill="#EAF5EA" stroke="#2E7D32"/>
+  <g font-family="Calibri,Arial,sans-serif" font-size="12.5" font-weight="bold"><text x="${(x(0)+x(24))/2}" y="37" text-anchor="middle" fill="#B00020">einstellen</text><text x="${(x(24)+x(39))/2}" y="37" text-anchor="middle" fill="#7a5600">kurzfristig</text><text x="${(x(39)+x(75))/2}" y="37" text-anchor="middle" fill="#2E7D32">Gewinnzone</text>
+  <text x="${x(24)}" y="62" text-anchor="middle" fill="#333">KPU = 24</text><text x="${x(39)}" y="62" text-anchor="middle" fill="#333">LPU = 39</text><text x="${x(75)}" y="62" text-anchor="end" fill="#555" font-weight="normal">Preis in GE/ME</text></g>
+  <g id="rmark"></g></svg>`;
+  const sl=$('#sl7');
+  function upd(){ const p=+sl.value; $('#sl7v').textContent=fmt(p,1);
+    let s=`<line x1="${P.sx(0)}" y1="${P.sy(p)}" x2="${P.sx(12.5)}" y2="${P.sy(p)}" stroke="${C.E}" stroke-width="2.4"/><text x="${P.sx(12.3)}" y="${P.sy(p)-7}" text-anchor="end" font-size="14" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${C.E}">p = ${fmt(p,1)}</text>`;
+    const st=$('#st7');
+    if(p<24){ $('#r7x').textContent='0 ME'; $('#r7k').textContent='–'; $('#r7g').textContent='−98 GE';
+      st.className='status r'; st.textContent='Sofort aufhören zu produzieren. Sonst ist der Verlust größer als die Fixkosten (98 GE).'; }
+    else { const xs=4+Math.sqrt(12*p-144)/6, kx=k3(xs), g=(p-kx)*xs;
+      s+=`<rect x="${P.sx(0)}" y="${P.sy(Math.max(p,kx))}" width="${P.sx(xs)-P.sx(0)}" height="${Math.abs(P.sy(p)-P.sy(kx))}" fill="${g>=0?'#2E7D32':'#B00020'}" opacity=".25"/><line x1="${P.sx(xs)}" y1="${P.sy(0)}" x2="${P.sx(xs)}" y2="${P.sy(Math.max(p,kx))}" stroke="#555" stroke-dasharray="5 4"/><circle cx="${P.sx(xs)}" cy="${P.sy(p)}" r="5" fill="${C.d}"/><circle cx="${P.sx(xs)}" cy="${P.sy(kx)}" r="5" fill="${C.k}"/>`;
+      $('#r7x').textContent=fmt(xs,2)+' ME'; $('#r7k').textContent=fmt(kx,2)+' GE/ME'; $('#r7g').textContent=(g>0?'+':'')+fmt(g,1)+' GE';
+      if(p<39-1e-9){ st.className='status y'; st.textContent=`Kurzfristig weiter produzieren. Der Verlust (${fmt(-g,1)} GE) ist kleiner als die Fixkosten (98 GE).`; }
+      else if(Math.abs(p-39)<1e-9){ st.className='status y'; st.textContent='Preis = LPU: kein Gewinn und kein Verlust.'; }
+      else { st.className='status g'; st.textContent=`Gewinnzone: Gewinn von ${fmt(g,1)} GE.`; }
+    }
+    P.dg.innerHTML=s;
+    $('#rmark').innerHTML=`<path d="M${x(p)},20 l-7,-12 h14 Z" fill="${C.E}"/><line x1="${x(p)}" y1="20" x2="${x(p)}" y2="46" stroke="${C.E}" stroke-width="2.5"/>`;
+  }
+  sl.oninput=upd; upd();
+})();
+
+/* ---------- Drag & Drop ---------- */
+function initDnD(root){
+  const bank=$('.bank',root), chips=$$('.chip',root), zones=$$('.zone',root), fb=$('.fb',root);
+  chips.forEach(c=>c.dataset.v=c.textContent.trim());
+  for(let i=chips.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); bank.appendChild(chips[j]); chips.splice(j,1)[0]; }
+  let sel=null;
+  const clear=()=>{ zones.forEach(z=>z.classList.remove('ok','bad')); fb.textContent=''; fb.className='fb'; };
+  const place=(chip,target)=>{
+    if(target.classList.contains('zone')){ const slot=$('.slot',target), old=$('.chip',slot); if(old&&old!==chip) bank.appendChild(old); slot.appendChild(chip); }
+    else bank.appendChild(chip);
+    chip.classList.remove('sel'); sel=null; clear();
+  };
+  $$('.chip',root).forEach(chip=>{
+    let sx,sy,drag=false;
+    chip.addEventListener('pointerdown',e=>{ if(e.button>0) return; sx=e.clientX; sy=e.clientY; drag=false; chip.setPointerCapture(e.pointerId); });
+    chip.addEventListener('pointermove',e=>{ if(!chip.hasPointerCapture(e.pointerId)) return;
+      if(!drag && Math.hypot(e.clientX-sx,e.clientY-sy)>6){ drag=true; const r=chip.getBoundingClientRect(); chip._ox=sx-r.left; chip._oy=sy-r.top; chip.style.width=r.width+'px'; chip.classList.add('dragging'); }
+      if(drag){ chip.style.left=(e.clientX-chip._ox)+'px'; chip.style.top=(e.clientY-chip._oy)+'px';
+        zones.forEach(z=>z.classList.remove('hover')); const t=document.elementFromPoint(e.clientX,e.clientY); const z=t&&t.closest('.zone'); if(z&&root.contains(z)) z.classList.add('hover'); }
+    });
+    chip.addEventListener('pointerup',e=>{
+      if(drag){ chip.classList.remove('dragging'); chip.style.left=chip.style.top=chip.style.width='';
+        zones.forEach(z=>z.classList.remove('hover'));
+        const t=document.elementFromPoint(e.clientX,e.clientY); const z=t&&t.closest('.zone');
+        if(z&&root.contains(z)) place(chip,z); else if(t&&t.closest('.bank')===bank) place(chip,bank);
+        drag=false; e.stopPropagation(); return; }
+      // Tippen
+      if(chip.parentElement!==bank && !sel){ place(chip,bank); return; }
+      if(sel===chip){ chip.classList.remove('sel'); sel=null; return; }
+      if(sel) sel.classList.remove('sel'); sel=chip; chip.classList.add('sel');
+    });
+    chip.addEventListener('pointercancel',()=>{ chip.classList.remove('dragging'); chip.style.left=chip.style.top=chip.style.width=''; drag=false; });
+    chip.addEventListener('click',e=>e.stopPropagation());
+  });
+  zones.forEach(z=>z.addEventListener('click',()=>{ if(sel) place(sel,z); }));
+  bank.addEventListener('click',()=>{ if(sel) place(sel,bank); });
+  $$('button[data-act]',root).forEach(b=>b.onclick=()=>{
+    const a=b.dataset.act;
+    if(a==='check'){ let ok=0,filled=0; zones.forEach(z=>{ const c=$('.chip',z); z.classList.remove('ok','bad'); if(!c) return; filled++; if(c.dataset.v===z.dataset.ans){z.classList.add('ok');ok++;} else z.classList.add('bad'); });
+      if(ok===zones.length){ fb.className='fb ok'; fb.textContent='Super – alles richtig!'; markDone(root); }
+      else { fb.className='fb bad'; fb.textContent=`${ok} von ${zones.length} richtig.`+(filled<zones.length?' Es sind noch Felder leer.':' Rote Felder noch einmal prüfen.'); } }
+    if(a==='solve'){ zones.forEach(z=>{ const c=$$('.chip',root).find(c=>c.dataset.v===z.dataset.ans); if(c) $('.slot',z).appendChild(c); }); zones.forEach(z=>{z.classList.remove('bad');z.classList.add('ok');}); fb.className='fb'; fb.textContent='So ist es richtig.'; }
+    if(a==='reset'){ $$('.chip',root).forEach(c=>bank.appendChild(c)); clear(); }
+  });
+}
+$$('.dnd').forEach(initDnD);
+
+/* ---------- MC, Eingaben ---------- */
+$$('.opt').forEach(o=>{o.innerHTML='<span>'+o.innerHTML+'</span>';});
+$$('.mc').forEach(mc=>$$('.opt',mc).forEach(o=>o.onclick=()=>{ $$('.opt',mc).forEach(x=>x.classList.remove('sel','right','wrong')); o.classList.add('sel'); }));
+function chk(btn){
+  const t=btn.closest('.task'), fb=$('.fb',t); let ok=0,n=0,empty=0;
+  $$('input.num',t).forEach(i=>{ n++; i.classList.remove('ok','bad'); const v=parseFloat(i.value.replace(',','.').replace(/\s/g,''));
+    if(i.value.trim()===''){empty++;return;} if(Math.abs(v-+i.dataset.ans)<=+i.dataset.tol){i.classList.add('ok');ok++;} else i.classList.add('bad'); });
+  $$('.mc',t).forEach(mc=>{ n++; const s=$('.opt.sel',mc); if(!s){empty++;return;} if(s.dataset.ok){s.classList.add('right');ok++;} else s.classList.add('wrong'); });
+  if(ok===n){ fb.className='fb ok'; fb.textContent='Richtig!'; markDone(t); }
+  else { fb.className='fb bad'; fb.textContent=`${ok} von ${n} richtig.`+(empty?' Es fehlen noch Antworten.':' Versuche es noch einmal.'); }
+}
+function rev(btn){ const s=$('.sol',btn.closest('.task')); s.classList.toggle('show'); btn.textContent=s.classList.contains('show')?btn.textContent.replace('zeigen','ausblenden'):btn.textContent.replace('ausblenden','zeigen'); }
+
+
+/* ---------- Jeder Satz in eine eigene Zeile ---------- */
+(function(){
+  const SEL='.ctx, .merke, .st > p, .sol, .auftrag, td, .idea p, .opt, .task > p, .q';
+  const re=/(?<!\bz)(?<!\bd)(?<!\bbzw)(?<!z\.[\s\u00a0]B)([.?!])\s+(?=[A-ZÄÖÜ„(0-9])/g;
+  function walk(el){
+    [...el.childNodes].forEach(n=>{
+      if(n.nodeType===1){ if(!n.classList.contains('m') && n.tagName!=='svg') walk(n); return; }
+      if(n.nodeType!==3) return;
+      let t=n.nodeValue;
+      const parts=t.split(re); // [text, punct, text, punct, ...]
+      const frag=document.createDocumentFragment(); let changed=false;
+      for(let i=0;i<parts.length;i+=2){
+        let seg=parts[i]+(parts[i+1]||'');
+        frag.appendChild(document.createTextNode(seg));
+        if(i+1<parts.length){ frag.appendChild(document.createElement('br')); changed=true; }
+      }
+      // Satzende am Knotenende, danach folgt noch Inhalt
+      const last=frag.lastChild;
+      if(last&&last.nodeType===3&&/[.?!]\s+$/.test(last.nodeValue)&&!/\bz\.\s+$/.test(last.nodeValue)){
+        let nx=n.nextSibling; while(nx&&nx.nodeType===3&&!nx.nodeValue.trim()) nx=nx.nextSibling;
+        if(nx && nx.nodeName!=='BR'){ frag.appendChild(document.createElement('br')); changed=true; }
+      }
+      if(changed) n.replaceWith(frag);
+    });
+  }
+  document.querySelectorAll(SEL).forEach(walk);
+})();
+
+/* ---------- Schritt-für-Schritt ---------- */
+function initStepper(sp){
+  const items=$$('.stp',sp), cnt=$('.scount',sp); let n=0;
+  const render=()=>{ items.forEach((e,i)=>e.classList.toggle('on',i<n)); cnt.textContent=`Schritt ${n} von ${items.length}`;
+    $('[data-s=next]',sp).disabled=n>=items.length; $('[data-s=back]',sp).disabled=n<=0;
+    if(n>0){ const last=items[n-1]; const r=last.getBoundingClientRect(); if(r.bottom>window.innerHeight-20) window.scrollBy({top:r.bottom-window.innerHeight+80,behavior:'smooth'}); } };
+  const act=()=>{ if(sp.id!=='sp4'||!window.set4) return; let p=60,kv=false; items.slice(0,n).forEach(e=>{ if(e.dataset.p) p=+e.dataset.p; if(e.dataset.kv) kv=true; }); window.set4({p,kv}); };
+  sp._next=()=>{ if(n<items.length){n++;render();act();return true;} return false; };
+  sp._back=()=>{ if(n>0){n--;render();act();return true;} return false; };
+  $('[data-s=next]',sp).onclick=sp._next; $('[data-s=back]',sp).onclick=sp._back;
+  $('[data-s=all]',sp).onclick=()=>{n=items.length;render();act();}; $('[data-s=reset]',sp).onclick=()=>{n=0;render();act();};
+  render();
+}
+$$('.stepper').forEach(initStepper);
+$$('.tabs').forEach(t=>$$('.tab',t).forEach((b,i)=>b.onclick=()=>{ $$('.tab',t).forEach((x,j)=>x.classList.toggle('on',i===j)); $$('.tabpane',t).forEach((x,j)=>x.classList.toggle('on',i===j)); }));
+// Tastatur / Presenter: → oder Bild↓ = nächster Schritt, ← oder Bild↑ = zurück
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input[type=range],input[type=text],input.num,textarea')) return;
+  const sec=$('.st.active'); if(!sec) return;
+  const sp=$('.tabpane.on .stepper',sec)||$('.stepper',sec); if(!sp) return;
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ if(sp._next()) e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ if(sp._back()) e.preventDefault(); }
+});
+
+/* ---------- Lösungsweg wählen ---------- */
+$$('.choice').forEach(ch=>$$('.cb',ch).forEach(b=>b.onclick=()=>{ const i=+b.dataset.c, open=!b.classList.contains('on');
+  $$('.cb',ch).forEach((x,j)=>x.classList.toggle('on',open&&j===i)); $$('.cpane',ch).forEach((p,j)=>p.classList.toggle('show',open&&j===i)); }));
+/* ---------- Navigation ---------- */
+const secs=$$('.st'), nav=$('#nav'); let cur=0;
+secs.forEach((s,i)=>{ const b=document.createElement('button'); b.innerHTML=(i+1)+' · '+s.dataset.title; b.onclick=()=>show(i); nav.appendChild(b); });
+function show(i){ cur=i; secs.forEach((s,j)=>s.classList.toggle('active',j===i)); $$('button',nav).forEach((b,j)=>b.classList.toggle('now',j===i));
+  $('#prev').disabled=i===0; $('#next').disabled=i===secs.length-1; window.scrollTo({top:0,behavior:'smooth'}); }
+function markDone(el){ const s=el.closest('.st'); if(!s) return; const i=secs.indexOf(s); $$('button',nav)[i].classList.add('done'); }
+$('#prev').onclick=()=>show(Math.max(0,cur-1)); $('#next').onclick=()=>show(Math.min(secs.length-1,cur+1));
+show(0);
+window.addEventListener('beforeprint',()=>{});
+</script>
+</body></html>
