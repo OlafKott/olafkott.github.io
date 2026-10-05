@@ -22,6 +22,9 @@ body{ font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:
 svg.plot{ width:100%; height:auto; display:block; touch-action:none; user-select:none; }
 .step{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:0 0 12px; }
 .step.locked{ display:none; }
+.ch{ font-weight:700; border-radius:8px; padding:7px 18px; cursor:pointer; background:#fff; border:2.5px solid; font-size:15px; font-family:Calibri,Arial,sans-serif; }
+.ch.no{ opacity:.35; text-decoration:line-through; }
+.ch.yes{ color:#fff!important; }
 .step.done{ border-color:var(--ok); }
 .sh{ display:flex; align-items:center; gap:10px; margin:0 0 6px; }
 .sh .no{ background:var(--rwb); color:#fff; font:700 15px Calibri,Arial,sans-serif; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; flex:0 0 28px; }
@@ -60,12 +63,13 @@ button.big{ font-size:16px; padding:9px 18px; }
       <p>Ein Punkt passt nicht zu den anderen. <b>Klickt im Diagramm auf diesen Punkt.</b></p>
       <div class="fb" id="f1"></div>
       <div class="btns"><button class="sec" data-sol="1">Lösung zeigen</button></div></div>
-    <div class="step locked" id="s2"><div class="sh"><div class="no">2</div><h2>Gerade nach Augenmaß ziehen</h2></div>
-      <p>Zieht die beiden roten Griffe. Die Gerade soll möglichst gut durch die Punktwolke laufen. Der Ausreißer zählt nicht.</p>
-      <div class="btns"><button class="pr" id="c2">Prüfen</button><button class="sec" data-sol="2">Vorschlag zeigen</button></div>
+    <div class="step locked" id="s2"><div class="sh"><div class="no">2</div><h2>Die passende Gerade auswählen</h2></div>
+      <p>Im Diagramm seht ihr drei Geraden. <b>Welche ist eine gute Regressionsgerade nach Augenmaß?</b> Der Ausreißer zählt nicht.</p>
+      <div class="btns" id="choice"></div>
+      <div class="btns"><button class="sec" data-sol="2">Lösung zeigen</button></div>
       <div class="fb" id="f2"></div></div>
     <div class="step locked" id="s3"><div class="sh"><div class="no">3</div><h2>Prognosen ablesen</h2></div>
-      <p>Ab jetzt arbeiten wir mit der <b>grauen Geraden</b>. Lest am Graphen ab.</p>
+      <p>Ab jetzt arbeiten wir nur noch mit <b id="gname">der Regressionsgeraden</b>. Lest am Graphen ab.</p>
       <div class="row"><span id="q3a"></span><input class="num" id="i3a"><span id="u3a"></span></div>
       <div class="row"><span id="q3b"></span><input class="num" id="i3b"><span id="u3b"></span></div>
       <div class="btns"><button class="pr" id="c3">Prüfen</button><button class="sec" data-sol="3">Lösung zeigen</button></div>
@@ -125,7 +129,17 @@ function gen(){
   // Berechnen
   const xc=Math.round((c.X*0.2+Math.random()*(xmax-c.X*0.2))*100)/100, yc=m*xc+b;
   const yd=Math.floor(b+m*c.X*(0.25+Math.random()*0.6))+R(1,9)/10, xd=(yd-b)/m;
-  S={c,P1,P2,m,b,pts,oi,xa,ya,xb,yb,xc,yc,xd,yd,h:{h1:{x:c.gx,y:Math.round(c.Y*0.55)},h2:{x:c.X-c.gx,y:Math.round(c.Y*0.62)}},outFound:false,showGray:false};
+  // drei Geraden: richtig, verschoben (vom Ausreißer gezogen), falsche Steigung
+  const pts9=pts.filter((p,i)=>i!==oi), xm=pts9.reduce((s,p)=>s+p[0],0)/9;
+  const up=pts[oi][1]>m*pts[oi][0]+b?1:-1, sh=up*3*c.gy;
+  const half=(pts9[8][0]-pts9[0][0])/2, dm=4.2*c.gy/half;
+  let sg=Math.random()<0.5?-1:1; if(m-dm<0.2*m) sg=1;
+  const m2=m+sg*dm, b2=(m*xm+b)-m2*xm;
+  const kinds=[{m,b,ok:true,k:'ok'},{m,b:b+sh,ok:false,k:up>0?'hoch':'tief'},{m:m2,b:b2,ok:false,k:sg<0?'flach':'steil'}];
+  kinds.sort(()=>Math.random()-0.5);
+  const COL=['#1D70B8','#E07B00','#7B1FA2'];
+  const L=kinds.map((g,i)=>({...g,lab:'ABC'[i],col:COL[i],out:false}));
+  S={c,P1,P2,m,b,pts,oi,xa,ya,xb,yb,xc,yc,xd,yd,L,outFound:false,chosen:false};
   solved={};
   document.querySelectorAll('.step').forEach((s,i)=>{s.classList.toggle('locked',i>0);s.classList.remove('done');});
   document.querySelectorAll('.fb').forEach(f=>{f.textContent='';f.className='fb';});
@@ -133,6 +147,9 @@ function gen(){
   document.querySelectorAll('input.num').forEach(i=>{i.value='';i.className='num';});
   document.getElementById('fin').classList.remove('show');
   document.getElementById('ctx').innerHTML=c.t;
+  document.getElementById('choice').innerHTML=S.L.map((g,i)=>`<button class="ch" data-g="${i}" style="color:${g.col};border-color:${g.col}">Gerade ${g.lab}</button>`).join('');
+  document.querySelectorAll('.ch').forEach(e=>e.onclick=()=>pick(+e.dataset.g));
+  document.getElementById('gname').textContent='der Regressionsgeraden';
   document.getElementById('q3a').innerHTML=`a) ${c.xn}: <b>${de(xa)} ${c.xu}</b> ➔ ${c.yn} ≈`; document.getElementById('u3a').textContent=c.yu;
   document.getElementById('q3b').innerHTML=`b) ${c.yn}: <b>${de(yb)} ${c.yu}</b> ➔ ${c.xn} ≈`; document.getElementById('u3b').textContent=c.xu;
   document.getElementById('pp').textContent=`P₁(${de(P1[0])} | ${de(P1[1])}) und P₂(${de(P2[0])} | ${de(P2[1])})`;
@@ -153,34 +170,43 @@ function draw(){
   for(let y=c.ly;y<=c.Y;y+=c.ly) s+=`<text x="${L-7}" y="${py(y)+4}" font-size="13" text-anchor="end" font-family="Calibri,Arial" fill="#444">${y}</text>`;
   s+=`<path d="M${L},${B} H${Rr+12}" stroke="#222" stroke-width="1.6" marker-end="url(#ah)"/><path d="M${L},${B} V${T-12}" stroke="#222" stroke-width="1.6" marker-end="url(#ah)"/>`;
   s+=`<text x="${Rr}" y="${B-8}" text-anchor="end" font-family="Calibri,Arial" font-size="15" font-weight="700">${c.x}</text><text x="${L+8}" y="${T+6}" font-family="Calibri,Arial" font-size="15" font-weight="700">${c.y}</text>`;
-  s+=`<g id="extra"></g><path id="gray" stroke="#7a8699" stroke-width="3" fill="none" style="display:none"/><path id="usr" stroke="#C8102E" stroke-width="3" fill="none" style="display:none"/>`;
+  s+=`<g id="lines"></g><g id="extra"></g>`;
   S.pts.forEach((p,i)=>s+=`<circle class="pt" data-i="${i}" cx="${px(p[0])}" cy="${py(p[1])}" r="8" fill="#3F51B5" stroke="#1a237e" style="cursor:pointer"/>`);
-  s+=`<circle id="h1" r="11" fill="#fff" stroke="#C8102E" stroke-width="3" style="display:none;cursor:grab"/><circle id="h2" r="11" fill="#fff" stroke="#C8102E" stroke-width="3" style="display:none;cursor:grab"/></svg>`;
+  s+=`</svg>`;
   document.getElementById('plot').innerHTML=s;
   document.querySelectorAll('.pt').forEach(e=>e.addEventListener('click',()=>clickPt(+e.dataset.i)));
-  const svg=document.getElementById('svg');let drag=null;
-  const toY=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());return Math.max(0,Math.min(S.c.Y,(B-q.y)/(B-T)*S.c.Y));};
-  ['h1','h2'].forEach(k=>document.getElementById(k).addEventListener('pointerdown',e=>{drag=k;e.target.setPointerCapture(e.pointerId);}));
-  svg.addEventListener('pointermove',e=>{if(!drag)return;S.h[drag].y=toY(e);upd();});
-  svg.addEventListener('pointerup',()=>drag=null);
   document.getElementById('plothint').textContent='';
   upd();
 }
+function ends(m,b){const c=S.c;let xa=0,xb=c.X;if(b<0)xa=-b/m;if(b>c.Y)xa=(c.Y-b)/m;if(m*xb+b>c.Y)xb=(c.Y-b)/m;if(m*xb+b<0)xb=-b/m;return [xa,xb];}
 function seg(m,b){const c=S.c;let xa=0,xb=c.X;if(b<0)xa=-b/m;if(b>c.Y)xa=(c.Y-b)/m;if(m*xb+b>c.Y)xb=(c.Y-b)/m;if(m*xb+b<0)xb=-b/m;return `M${C.px(xa)},${C.py(m*xa+b)} L${C.px(xb)},${C.py(m*xb+b)}`;}
 function upd(){
-  const h=S.h,m=(h.h2.y-h.h1.y)/(h.h2.x-h.h1.x),b=h.h1.y-m*h.h1.x;
-  const step2=!document.getElementById('s2').classList.contains('locked');
-  ['h1','h2'].forEach(k=>{const e=document.getElementById(k);e.style.display=step2&&!S.showGray?'':'none';e.setAttribute('cx',C.px(h[k].x));e.setAttribute('cy',C.py(h[k].y));});
-  const u=document.getElementById('usr');u.style.display=step2?'':'none';u.setAttribute('d',seg(m,b));u.style.opacity=S.showGray?.2:1;
-  const g=document.getElementById('gray');g.style.display=S.showGray?'':'none';g.setAttribute('d',seg(S.m,S.b));
+  const show=!document.getElementById('s2').classList.contains('locked');
+  let h='';const labs=[];
+  if(show) S.L.forEach((g,i)=>{ if(S.chosen&&!g.ok) return;
+    const [xa,xb]=ends(g.m,g.b); let lx=C.px(xb)-14, ly=C.py(g.m*xb+g.b);
+    if(labs.some(q=>Math.abs(q[0]-lx)<30&&Math.abs(q[1]-ly)<26)){lx=C.px(xa)+16;ly=C.py(g.m*xa+g.b);}
+    ly=Math.max(C.T+14,Math.min(C.B-14,ly)); labs.push([lx,ly]);
+    const w=g.out?1.5:(S.chosen?4:3);
+    h+=`<path d="${seg(g.m,g.b)}" stroke="${g.col}" stroke-width="${w}" fill="none" opacity="${g.out?0.35:1}" ${g.out?'stroke-dasharray="6 5"':''}/>`;
+    h+=`<path d="${seg(g.m,g.b)}" stroke="transparent" stroke-width="18" fill="none" style="cursor:pointer" onclick="pick(${i})"/>`;
+    h+=`<circle cx="${lx}" cy="${ly}" r="13" fill="#fff" stroke="${g.col}" stroke-width="2.5" style="cursor:pointer" onclick="pick(${i})"/><text x="${lx}" y="${ly+5}" text-anchor="middle" font-family="Calibri,Arial" font-weight="700" font-size="15" fill="${g.col}" style="pointer-events:none">${g.lab}</text>`;});
+  document.getElementById('lines').innerHTML=h;
   document.querySelectorAll('.pt').forEach(e=>{const i=+e.dataset.i;if(i===S.oi&&S.outFound){e.setAttribute('fill','#fff');e.setAttribute('stroke','#C8102E');e.setAttribute('stroke-width','3');}});
+}
+function pick(i){
+  if(document.getElementById('s2').classList.contains('locked')||S.chosen) return;
+  const g=S.L[i], btn=document.querySelector(`.ch[data-g="${i}"]`);
+  if(g.ok){btn.classList.add('yes');btn.style.background=g.col;fb(2,`Richtig! Gerade ${g.lab} läuft mittig durch die Punktwolke – ungefähr gleich viele Punkte liegen darüber und darunter.`,'ok');setOk(2);return;}
+  g.out=true;btn.classList.add('no');upd();
+  const t={hoch:'liegt zu hoch. Der Ausreißer hat sie nach oben gezogen – fast alle Punkte liegen unter ihr.',tief:'liegt zu tief. Der Ausreißer hat sie nach unten gezogen – fast alle Punkte liegen über ihr.',flach:'ist zu flach. Links liegen die Punkte unter ihr, rechts darüber.',steil:'ist zu steil. Links liegen die Punkte über ihr, rechts darunter.'}[g.k];
+  fb(2,`Gerade ${g.lab} ${t} Versucht es noch einmal.`,'bad');
 }
 function mark(html){document.getElementById('extra').innerHTML=html;}
 function setOk(n){if(!solved[n]){solved[n]=true;}document.getElementById('s'+n).classList.add('done');const nx=document.getElementById('s'+(n+1));if(nx)nx.classList.remove('locked');score();
-  if(n===2){S.showGray=true;upd();document.getElementById('plothint').textContent='Graue Gerade: Mit dieser Geraden geht es weiter.';}
+  if(n===2){S.chosen=true;const g=S.L.find(q=>q.ok);document.getElementById('gname').textContent='Gerade '+g.lab;document.getElementById('gname').style.color=g.col;document.getElementById('plothint').textContent='Die falschen Geraden sind ausgeblendet. Mit Gerade '+g.lab+' geht es weiter.';upd();}
   if(n===3){mark(`<circle cx="${C.px(S.P1[0])}" cy="${C.py(S.P1[1])}" r="10" fill="none" stroke="#2E7D32" stroke-width="3"/><circle cx="${C.px(S.P2[0])}" cy="${C.py(S.P2[1])}" r="10" fill="none" stroke="#2E7D32" stroke-width="3"/><text x="${C.px(S.P1[0])+12}" y="${C.py(S.P1[1])+24}" font-family="Calibri" font-weight="700" font-size="15" fill="#2E7D32">P₁</text><text x="${C.px(S.P2[0])+12}" y="${C.py(S.P2[1])+24}" font-family="Calibri" font-weight="700" font-size="15" fill="#2E7D32">P₂</text>`);}
   if(n===5) document.getElementById('fin').classList.add('show');
-  if(n===2) upd();
 }
 function score(){document.getElementById('sc').textContent=Object.keys(solved).length;document.getElementById('sm').textContent=total;}
 function fb(n,t,cls){const f=document.getElementById('f'+n);f.textContent=t;f.className='fb '+cls;}
@@ -189,18 +215,9 @@ function clickPt(i){
   if(i===S.oi){S.outFound=true;upd();fb(1,'Richtig! Dieser Punkt liegt weit weg von den anderen.','ok');setOk(1);}
   else fb(1,'Nicht ganz. Dieser Punkt passt gut zu den anderen. Sucht den Punkt, der weit abseits liegt.','bad');
 }
-function check2(){
-  const h=S.h,m=(h.h2.y-h.h1.y)/(h.h2.x-h.h1.x),b=h.h1.y-m*h.h1.x;
-  const pts=S.pts.filter((p,i)=>i!==S.oi);const xm=pts.reduce((s,p)=>s+p[0],0)/pts.length,ym=pts.reduce((s,p)=>s+p[1],0)/pts.length;
-  let sx=0,sxy=0;pts.forEach(p=>{sx+=(p[0]-xm)**2;sxy+=(p[0]-xm)*(p[1]-ym);});const mr=sxy/sx;
-  const dev=Math.abs(m*xm+b-ym), rel=Math.abs(m-mr)/Math.abs(mr);
-  if(rel<0.22&&dev<2.2*S.c.gy){fb(2,'Gut gemacht! Eure Gerade passt gut zur Punktwolke.','ok');setOk(2);}
-  else if(rel>=0.22) fb(2,m<mr?'Die Gerade ist noch zu flach. Zieht den rechten Griff höher oder den linken tiefer.':'Die Gerade ist noch zu steil.','bad');
-  else fb(2,m*xm+b>ym?'Die Gerade liegt insgesamt zu hoch. Verschiebt beide Griffe etwas nach unten.':'Die Gerade liegt insgesamt zu tief. Verschiebt beide Griffe etwas nach oben.','bad');
-}
 function chk(id,val,tol){const e=document.getElementById(id);const v=parse(e.value);const ok=!isNaN(v)&&Math.abs(v-val)<=tol;e.className='num '+(ok?'ok':'bad');return ok;}
 function check3(){const c=S.c;const a=chk('i3a',S.ya,c.gy*0.7),b=chk('i3b',S.xb,c.gx*0.7);
-  if(a&&b){fb(3,'Richtig abgelesen!','ok');setOk(3);}else fb(3,'Noch nicht ganz. Geht senkrecht bis zur grauen Geraden und dann waagerecht zur Achse (bei b umgekehrt).','bad');}
+  if(a&&b){fb(3,'Richtig abgelesen!','ok');setOk(3);}else fb(3,'Noch nicht ganz. Geht senkrecht bis zur Geraden und dann waagerecht zur Achse (bei b umgekehrt).','bad');}
 function check4(){const a=chk('i4m',S.m,0.011),b=chk('i4b',S.b,0.011);
   if(a&&b){fb(4,'Richtig! Die Gleichung lautet f(x) = '+document.getElementById('feq').textContent+'.','ok');setOk(4);}
   else if(!a) fb(4,'Prüft m: Differenz der y-Werte geteilt durch Differenz der x-Werte.','bad'); else fb(4,'m stimmt. Prüft b: P₁ einsetzen und nach b auflösen. Achtet auf das Vorzeichen!','bad');}
@@ -208,7 +225,7 @@ function check5(){const a=chk('i5a',S.yc,0.011),b=chk('i5b',S.xd,0.011);
   if(a&&b){fb(5,'Perfekt gerechnet!','ok');setOk(5);}else if(!a) fb(5,'Prüft a: x in die Gleichung einsetzen.','bad'); else fb(5,'Prüft b: f(x) gleich dem y-Wert setzen und nach x auflösen.','bad');}
 function showSol(n){const c=S.c;
   if(n===1){S.outFound=true;upd();fb(1,'Der Ausreißer ist rot markiert.','info');setOk(1);solved[1]=false;delete solved[1];score();}
-  if(n===2){S.h.h1.y=S.m*S.h.h1.x+S.b;S.h.h2.y=S.m*S.h.h2.x+S.b;fb(2,'So könnte eine gute Gerade aussehen.','info');setOk(2);delete solved[2];score();}
+  if(n===2){if(S.chosen)return;const i=S.L.findIndex(q=>q.ok),g=S.L[i];const bt=document.querySelector(`.ch[data-g="${i}"]`);bt.classList.add('yes');bt.style.background=g.col;fb(2,`Gerade ${g.lab} ist die passende Regressionsgerade: Sie läuft mittig durch die Punktwolke.`,'info');setOk(2);delete solved[2];score();}
   if(n===3){document.getElementById('sol3').innerHTML=`a) ≈ ${de(S.ya,1)} ${c.yu} &nbsp;&nbsp; b) ≈ ${de(S.xb,1)} ${c.xu}<br><span class="hint">Beim Ablesen sind kleine Abweichungen in Ordnung.</span>`;document.getElementById('sol3').classList.add('show');setOk(3);delete solved[3];score();}
   if(n===4){const[x1,y1]=S.P1,[x2,y2]=S.P2;document.getElementById('sol4').innerHTML=`m = (${de(y2)} − ${de(y1)}) : (${de(x2)} − ${de(x1)}) = ${de(y2-y1)} : ${de(x2-x1)} = <b>${de(S.m)}</b>
    <div class="calc"><span class="l">${de(y1)}</span><span>=</span><span>${de(S.m)} · ${de(x1)} + b</span><span class="op"></span>
@@ -220,7 +237,7 @@ function showSol(n){const c=S.c;
    <span class="l">x</span><span>≈</span><span><b>${de(S.xd)}</b></span><span class="op"></span></div>`;document.getElementById('sol5').classList.add('show');setOk(5);delete solved[5];score();}
 }
 document.getElementById('neu').onclick=gen;
-document.getElementById('c2').onclick=check2;document.getElementById('c3').onclick=check3;document.getElementById('c4').onclick=check4;document.getElementById('c5').onclick=check5;
+document.getElementById('c3').onclick=check3;document.getElementById('c4').onclick=check4;document.getElementById('c5').onclick=check5;
 document.querySelectorAll('[data-sol]').forEach(b=>b.onclick=()=>showSol(+b.dataset.sol));
 const _origSetOk=setOk;
 gen();
