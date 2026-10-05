@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Boxplots</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --rwb:#c80046; --rwb-dark:#9e0037; --rwb-soft:#fbe8ef; --rwb-line:#f1c4d4;
+    --ink:#1e1e24; --muted:#6b6b76; --line:#e3e3e8; --paper:#ffffff; --bg:#f6f5f7; --box:#f1f2f4;
+    --ok:#1f7a3d; --ok-soft:#e7f5ec; --bad:#b3261e; --bad-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:20px;line-height:1.7}
+  .app{min-height:100%;display:flex;flex-direction:column}
+
+  header.kopf{background:var(--paper);border-bottom:4px solid var(--rwb);
+    break-inside:avoid;page-break-inside:avoid;break-after:avoid;page-break-after:avoid}
+  .kopf-inner{max-width:1040px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:22px}
+  .kopf img{height:46px;width:auto;display:block;flex:none}
+  .kopf .titel{flex:1;min-width:0}
+  .kopf h1{margin:0;font-size:1.3rem;line-height:1.25;font-weight:700}
+  .kopf .unter{margin:0;color:var(--muted);font-size:.85rem}
+  .kopf .stand{font-weight:700;color:var(--rwb);white-space:nowrap;font-size:1rem}
+
+  .punkte-leiste{max-width:1040px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--rwb-line);background:#fff;
+    color:var(--muted);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
+  .dot.aktiv{border-color:var(--rwb);color:var(--rwb);box-shadow:0 0 0 4px var(--rwb-soft)}
+  .dot.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  .dot.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+  .dot.ende{border-style:dashed}
+
+  main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:18px 20px 12px}
+
+  .card{display:none;background:var(--paper);border-radius:16px;border:1px solid var(--line);
+    border-top:6px solid var(--rwb);padding:26px 32px 24px;box-shadow:0 6px 24px rgba(30,30,36,.06);
+    break-inside:avoid;page-break-inside:avoid}
+  .card.sichtbar{display:block;animation:rein .25s ease}
+  @keyframes rein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card .label{color:var(--rwb);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;margin:0}
+  .card h2{margin:2px 0 14px;font-size:1.45rem;line-height:1.3}
+  .frage{margin:0 0 14px}
+  .sub{display:inline-block;background:var(--rwb-soft);color:var(--rwb-dark);border-radius:6px;
+    padding:2px 12px;font-size:.9rem;margin:0 0 14px}
+
+  .merk{border:2px solid var(--rwb-line);background:#fffafb;border-radius:12px;padding:10px 16px;margin:0 0 16px;font-size:.9rem}
+  .merk b{color:var(--rwb-dark)}
+
+  .optionen{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+  .opt{display:flex;align-items:center;gap:16px;border:2px solid var(--line);border-radius:12px;
+    padding:12px 18px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:var(--rwb-line);background:#fffafb}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .buchst{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:var(--box);font-weight:700;color:var(--muted)}
+  .opt.gewaehlt{border-color:var(--rwb);background:var(--rwb-soft)}
+  .opt.gewaehlt .buchst{background:var(--rwb);color:#fff}
+  .opt.richtig{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.richtig .buchst{background:var(--ok);color:#fff}
+  .opt.falsch{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.falsch .buchst{background:var(--bad);color:#fff}
+
+  .datenreihe{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px}
+  .datenreihe span{display:inline-block;min-width:3em;text-align:center;padding:8px 10px;font-size:1.15rem;font-weight:600;
+    border:2px solid var(--rwb-line);border-radius:10px;background:#fffafb;font-variant-numeric:tabular-nums}
+
+  .felder{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .feld{display:flex;flex-direction:column;gap:4px}
+  .feld .name{font-size:.85rem;color:var(--muted);line-height:1.3;min-height:2.6em;display:flex;align-items:flex-end}
+  .feld input{font:inherit;font-size:1.3rem;width:100%;padding:8px 12px;border:2px solid var(--line);
+    border-radius:10px;background:var(--box);font-variant-numeric:tabular-nums}
+  .feld input:focus{outline:none;border-color:var(--rwb);background:#fff}
+  .feld input.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .feld input.bad{border-color:var(--bad);background:var(--bad-soft)}
+
+  .boxplot{width:100%;height:auto;display:block;margin:0 0 16px}
+
+  .aktionen{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  button.knopf{font:inherit;font-size:1rem;font-weight:600;border:2px solid var(--rwb);background:var(--rwb);
+    color:#fff;border-radius:10px;padding:8px 22px;cursor:pointer}
+  button.knopf:hover{background:var(--rwb-dark);border-color:var(--rwb-dark)}
+  button.knopf.leise{background:#fff;color:var(--rwb)}
+  button.knopf.leise:hover{background:var(--rwb-soft)}
+  button.knopf:disabled{opacity:.35;cursor:default}
+
+  .feedback{display:none;margin-top:18px;border-radius:12px;padding:14px 18px}
+  .feedback.ok{display:block;background:var(--ok-soft);border-left:6px solid var(--ok)}
+  .feedback.bad{display:block;background:var(--bad-soft);border-left:6px solid var(--bad)}
+  .feedback strong{display:block;font-size:1.05rem}
+  .feedback .loesung{margin-top:6px}
+  .feedback details{margin-top:6px}
+  .feedback summary{cursor:pointer;color:var(--rwb-dark);font-weight:600}
+  .feedback ul{margin:4px 0;padding-left:1.2em}
+  .rang{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+  .rang span{min-width:2.6em;text-align:center;border:1px solid #ccc;border-radius:6px;background:#fff;padding:0 6px;font-variant-numeric:tabular-nums}
+  .rang span.q{border-color:var(--rwb);background:var(--rwb-soft);font-weight:700}
+  .rang span.m{border-color:var(--rwb);background:var(--rwb);color:#fff;font-weight:700}
+
+  nav.navi{max-width:1040px;width:100%;margin:0 auto;padding:6px 20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  nav.navi .tipp{color:var(--muted);font-size:.8rem;text-align:center}
+
+  .ergebnis-zahl{font-size:3.4rem;font-weight:800;color:var(--rwb);line-height:1.1;margin:8px 0}
+  .ergebnis-liste{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+  .ergebnis-liste li{display:flex;gap:12px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .ergebnis-liste li:hover{background:#fffafb}
+  .marke{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem;flex:none;background:#b9b9c2}
+  .marke.ok{background:var(--ok)} .marke.bad{background:var(--bad)}
+
+  @media (max-width:760px){
+    body{font-size:17px}
+    .optionen{grid-template-columns:1fr}
+    .felder{grid-template-columns:repeat(2,1fr)}
+    .card{padding:20px 18px}
+    .kopf img{height:34px}
+    .kopf .stand{display:none}
+    .dot{width:36px;height:36px}
+  }
+
+  @page{size:A4;margin:14mm 15mm}
+  @media print{
+    body{background:#fff;font-size:12pt;line-height:1.55}
+    header.kopf{border-bottom:2px solid var(--rwb);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .kopf-inner{padding:0 0 8px}
+    .kopf .stand,.punkte-leiste,nav.navi,.aktionen,.feedback,#ende{display:none!important}
+    main{padding:6px 0 0}
+    .card{display:block!important;animation:none;box-shadow:none;border:1px solid #bbb;border-top:4px solid var(--rwb);
+      padding:12px 16px;margin:0 0 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card h2{font-size:1.15rem;margin-bottom:8px}
+    .opt{padding:5px 12px;border-width:1px}
+    .opt.gewaehlt,.opt.richtig,.opt.falsch{background:#fff;border-color:#ccc}
+    .opt .buchst,.opt.gewaehlt .buchst,.opt.richtig .buchst,.opt.falsch .buchst{width:28px;height:28px;background:#fff;border:1.5px solid #555;color:#333}
+    .datenreihe span{padding:3px 8px;font-size:1rem}
+    .feld input,.feld input.ok,.feld input.bad{border:1px solid #999;background:#f1f2f4;color:transparent;height:34px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .merk,.boxplot{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .boxplot{max-height:62mm}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="kopf">
+  <div class="kopf-inner">
+    <img src="data:image/png;base64,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" alt="rwb">
+    <div class="titel">
+      <h1>Quiz: Quartile und Boxplots</h1>
+      <p class="unter">Quartile · Spannweite · Quartilsabstand · Boxplots lesen</p>
+    </div>
+    <div class="stand" id="stand"></div>
+  </div>
+</header>
+
+<div class="punkte-leiste" id="dots"></div>
+
+<main>
+
+<!-- Urliste 1: 11 Werte -->
+<section class="card" data-typ="felder" id="u1">
+  <p class="label">Kennzahlen bestimmen</p>
+  <h2>Shakes pro Stunde</h2>
+  <p class="frage">Mehr Nutrition verkauft auf einer Sportmesse Protein-Shakes.<br>
+  Das ist die Anzahl verkaufter Shakes in 11 Stunden:</p>
+  <div class="datenreihe"><span>7</span><span>3</span><span>12</span><span>5</span><span>9</span><span>15</span><span>4</span><span>8</span><span>11</span><span>6</span><span>10</span></div>
+  <div class="merk">Werte zuerst <b>der Größe nach ordnen</b>.<br>
+  \(q_1\) ist der Median der unteren Hälfte, \(q_3\) ist der Median der oberen Hälfte.<br>
+  Bei einer ungeraden Anzahl gehört der Median zu <b>keiner</b> Hälfte.</div>
+  <p class="frage">Bestimmen Sie die Kennzahlen.</p>
+  <div class="felder">
+    <label class="feld"><span class="name">unteres Quartil<br>\(q_1\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
+    <label class="feld"><span class="name">Median<br>\(q_2\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
+    <label class="feld"><span class="name">oberes Quartil<br>\(q_3\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
+    <label class="feld"><span class="name">Spannweite</span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
+    <label class="feld"><span class="name">Quartilsabstand</span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('u1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Urliste 2: 10 Werte -->
+<section class="card" data-typ="felder" id="u2">
+  <p class="label">Kennzahlen bestimmen</p>
+  <h2>Retouren pro Tag</h2>
+  <p class="frage">Im Onlineshop von Mehr Nutrition werden Pakete zurückgeschickt.<br>
+  Das ist die Anzahl der Retouren an 10 Tagen:</p>
+  <div class="datenreihe"><span>11</span><span>4</span><span>14</span><span>7</span><span>2</span><span>16</span><span>8</span><span>13</span><span>5</span><span>10</span></div>
+  <div class="merk">Bei einer <b>geraden</b> Anzahl teilt der Median die Rangliste genau in zwei Hälften.<br>
+  Jede Hälfte hat hier 5 Werte.</div>
+  <p class="frage">Bestimmen Sie die Kennzahlen.</p>
+  <div class="felder">
+    <label class="feld"><span class="name">unteres Quartil<br>\(q_1\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
+    <label class="feld"><span class="name">Median<br>\(q_2\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
+    <label class="feld"><span class="name">oberes Quartil<br>\(q_3\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
+    <label class="feld"><span class="name">Spannweite</span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
+    <label class="feld"><span class="name">Quartilsabstand</span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('u2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Boxplot A -->
+<section class="card" data-typ="single" data-richtig="a" id="b1">
+  <p class="label">Boxplot lesen</p>
+  <h2>Wartezeit an der Hotline</h2>
+  <p class="frage">Der Boxplot zeigt die Wartezeiten von Kunden an der Hotline von Mehr Nutrition.</p>
+  <svg class="boxplot" data-bp="2,5,8,10,18" data-achse="0,20,2" data-einheit="Wartezeit in Minuten"></svg>
+  <p class="sub">Genau <strong>eine</strong> Aussage ist richtig.</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="b1"><span class="buchst">A</span>
+      <span>50 % der Kunden warten zwischen 5 und 10 Minuten.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="b1"><span class="buchst">B</span>
+      <span>25 % der Kunden warten länger als 8 Minuten.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="b1"><span class="buchst">C</span>
+      <span>Die Spannweite beträgt 8 Minuten.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="b1"><span class="buchst">D</span>
+      <span>75 % der Kunden warten höchstens 5 Minuten.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('b1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('b1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Boxplot B (zwei richtig) -->
+<section class="card" data-typ="multi" data-richtig="a,b" id="b2">
+  <p class="label">Boxplot lesen</p>
+  <h2>Punkte im Produkttest</h2>
+  <p class="frage">Testkunden bewerten einen neuen Proteinriegel mit 0 bis 40 Punkten.<br>
+  Der Boxplot zeigt die vergebenen Punkte.</p>
+  <svg class="boxplot" data-bp="8,18,24,30,38" data-achse="0,40,4" data-einheit="Punkte"></svg>
+  <p class="sub"><strong>Zwei</strong> Aussagen sind richtig.</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="checkbox"><span class="buchst">A</span>
+      <span>Etwa 25 % der Testkunden vergeben höchstens 18 Punkte.</span></label>
+    <label class="opt" data-wert="b"><input type="checkbox"><span class="buchst">B</span>
+      <span>Der Quartilsabstand beträgt 12 Punkte.</span></label>
+    <label class="opt" data-wert="c"><input type="checkbox"><span class="buchst">C</span>
+      <span>50 % der Testkunden vergeben mehr als 30 Punkte.</span></label>
+    <label class="opt" data-wert="d"><input type="checkbox"><span class="buchst">D</span>
+      <span>Etwa 75 % der Testkunden vergeben mindestens 24 Punkte.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('b2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('b2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Boxplot C -->
+<section class="card" data-typ="single" data-richtig="b" id="b3">
+  <p class="label">Boxplot lesen</p>
+  <h2>Gewicht der Proteinriegel</h2>
+  <p class="frage">Mehr Nutrition wiegt Proteinriegel aus der Produktion.<br>
+  Der Boxplot zeigt die Gewichte.</p>
+  <svg class="boxplot" data-bp="54,58,59,61,66" data-achse="52,68,2" data-einheit="Gewicht in g"></svg>
+  <p class="sub">Genau <strong>eine</strong> Aussage ist richtig.</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="b3"><span class="buchst">A</span>
+      <span>Zwischen 58 g und 59 g liegen weniger Riegel als zwischen 59 g und 61 g.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="b3"><span class="buchst">B</span>
+      <span>Zwischen 58 g und 59 g liegen etwa genauso viele Riegel wie zwischen 59 g und 61 g.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="b3"><span class="buchst">C</span>
+      <span>Die rechte Antenne ist am längsten. Also liegen dort die meisten Riegel.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="b3"><span class="buchst">D</span>
+      <span>50 % der Riegel wiegen mehr als 61 g.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('b3')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('b3')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- Boxplot D -->
+<section class="card" data-typ="single" data-richtig="c" id="b4">
+  <p class="label">Boxplot lesen</p>
+  <h2>Trainingsdauer im Fitnessstudio</h2>
+  <p class="frage">Mehr Nutrition befragt Kunden in einem Fitnessstudio.<br>
+  Der Boxplot zeigt, wie lange sie trainieren.</p>
+  <svg class="boxplot" data-bp="20,40,50,55,90" data-achse="10,100,10" data-einheit="Trainingsdauer in Minuten"></svg>
+  <p class="sub">Genau <strong>eine</strong> Aussage ist richtig.</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="b4"><span class="buchst">A</span>
+      <span>25 % der Kunden trainieren zwischen 20 und 50 Minuten.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="b4"><span class="buchst">B</span>
+      <span>Der Quartilsabstand beträgt 70 Minuten.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="b4"><span class="buchst">C</span>
+      <span>75 % der Kunden trainieren höchstens 55 Minuten.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="b4"><span class="buchst">D</span>
+      <span>Die Hälfte der Kunden trainiert länger als 55 Minuten.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('b4')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('b4')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<section class="card" id="ende">
+  <p class="label">Auswertung</p>
+  <h2>Geschafft!</h2>
+  <div class="ergebnis-zahl" id="ergebnis-zahl"></div>
+  <p id="ergebnis-text" style="margin:0"></p>
+  <ul class="ergebnis-liste" id="ergebnis-liste"></ul>
+  <div class="aktionen"><button class="knopf" onclick="allesZuruecksetzen()">Quiz neu starten</button></div>
+</section>
+
+</main>
+
+<nav class="navi">
+  <button class="knopf leise" id="zurueck" onclick="gehe(aktuell-1)">← Zurück</button>
+  <span class="tipp">Pfeiltasten ← → zum Blättern</span>
+  <button class="knopf" id="weiter" onclick="gehe(aktuell+1)">Weiter →</button>
+</nav>
+
+</div>
+
+<script>
+const ids = ["u1","u2","b1","b2","b3","b4"];
+const titel = {u1:"Kennzahlen: Shakes pro Stunde",u2:"Kennzahlen: Retouren pro Tag",b1:"Boxplot: Wartezeit an der Hotline",
+  b2:"Boxplot: Punkte im Produkttest",b3:"Boxplot: Gewicht der Proteinriegel",b4:"Boxplot: Trainingsdauer"};
+const ergebnis = {};
+let aktuell = 0;
+
+/* ---------- Boxplots zeichnen ---------- */
+function zeichneBoxplot(svg){
+  const [mn,q1,md,q3,mx] = svg.dataset.bp.split(",").map(Number);
+  const [von,bis,schritt] = svg.dataset.achse.split(",").map(Number);
+  const W=900, H=190, L=40, R=860, yBox=70, hBox=56, yAchse=150;
+  const x = v => L + (v-von)/(bis-von)*(R-L);
+  const ns="http://www.w3.org/2000/svg";
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label",`Boxplot: Minimum ${mn}, unteres Quartil ${q1}, Median ${md}, oberes Quartil ${q3}, Maximum ${mx}`);
+  const el=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
+  // Raster
+  for(let v=von; v<=bis+1e-9; v+=schritt){
+    el("line",{x1:x(v),x2:x(v),y1:20,y2:yAchse,stroke:"#ececf0","stroke-width":1});
+  }
+  // Achse mit Pfeil
+  el("line",{x1:L-10,x2:R+28,y1:yAchse,y2:yAchse,stroke:"#1e1e24","stroke-width":2});
+  el("path",{d:`M${R+36},${yAchse} l-12,-6 v12 z`,fill:"#1e1e24"});
+  for(let v=von; v<=bis+1e-9; v+=schritt){
+    el("line",{x1:x(v),x2:x(v),y1:yAchse-6,y2:yAchse+6,stroke:"#1e1e24","stroke-width":2});
+    const t=el("text",{x:x(v),y:yAchse+28,"text-anchor":"middle","font-size":18,fill:"#1e1e24"});
+    t.textContent=String(v).replace(".",",");
+  }
+  const lab=el("text",{x:R+36,y:yAchse-14,"text-anchor":"end","font-size":16,fill:"#6b6b76"});
+  lab.textContent=svg.dataset.einheit;
+  // Antennen
+  const ym=yBox+hBox/2;
+  el("line",{x1:x(mn),x2:x(q1),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+  el("line",{x1:x(q3),x2:x(mx),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+  el("line",{x1:x(mn),x2:x(mn),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
+  el("line",{x1:x(mx),x2:x(mx),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
+  // Box
+  el("rect",{x:x(q1),y:yBox,width:x(q3)-x(q1),height:hBox,fill:"#fbe8ef",stroke:"#c80046","stroke-width":3,rx:3});
+  el("line",{x1:x(md),x2:x(md),y1:yBox,y2:yBox+hBox,stroke:"#c80046","stroke-width":5});
+}
+
+/* ---------- Lösungen ---------- */
+const texte = {
+  b1:{ok:"Richtig! Zwischen \\(q_1=5\\) und \\(q_3=10\\) liegt die Box – dort liegen 50 % der Werte.",
+    loesung:"Richtig ist A.<br>Die Box reicht von \\(q_1=5\\) bis \\(q_3=10\\). In der Box liegen 50 % der Werte.<br>B: Länger als der Median 8 warten 50 %, nicht 25 %.<br>C: Spannweite = 18 − 2 = 16 Minuten. 8 ist der Median.<br>D: Höchstens 5 Minuten (bis \\(q_1\\)) warten nur 25 %."},
+  b2:{ok:"Richtig! A und B stimmen.",
+    loesung:"Richtig sind A und B.<br>A: Bis zum unteren Quartil \\(q_1=18\\) liegen etwa 25 % der Werte.<br>B: Quartilsabstand = \\(q_3-q_1=30-18=12\\).<br>C: Mehr als \\(q_3=30\\) Punkte vergeben nur etwa 25 %.<br>D: Mindestens 24 Punkte (ab dem Median) vergeben etwa 50 %, nicht 75 %."},
+  b3:{ok:"Richtig! Jeder Teil der Box enthält etwa 25 % der Werte – egal wie breit er ist.",
+    loesung:"Richtig ist B.<br>Der linke Teil der Box (58 bis 59 g) und der rechte Teil (59 bis 61 g) enthalten jeweils etwa 25 % der Riegel.<br>Ein schmaler Teil bedeutet: Die Werte liegen dort <b>dichter</b> beieinander – nicht, dass es weniger sind.<br>C: Auch jede Antenne enthält etwa 25 %. Eine lange Antenne heißt nur: Die Werte sind dort weit verstreut.<br>D: Mehr als \\(q_3=61\\) g wiegen nur etwa 25 %."},
+  b4:{ok:"Richtig! Bis zum oberen Quartil \\(q_3=55\\) liegen 75 % der Werte.",
+    loesung:"Richtig ist C.<br>Bis zum oberen Quartil \\(q_3=55\\) liegen 75 % der Werte.<br>A: Von 20 (Minimum) bis 50 (Median) liegen 50 %, nicht 25 %.<br>B: 70 Minuten ist die Spannweite (90 − 20). Der Quartilsabstand ist 55 − 40 = 15 Minuten.<br>D: Länger als 55 Minuten trainieren nur etwa 25 %."}
+};
+
+const feldAufgaben = {
+  u1:{
+    ziel:{q1:5,q2:8,q3:11,R:12,QA:6},
+    fehler:{
+      q1:[{w:5.5,t:"\\(q_1=5{,}5\\): Sie haben den Median zur unteren Hälfte gezählt. Bei 11 Werten gehört er zu keiner Hälfte."},
+          {w:12,t:"\\(q_1=12\\): Sie haben die Werte nicht sortiert."}],
+      q2:[{w:15,t:"Median 15: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."},
+          {w:7.5,t:"Median 7,5: Bei 11 Werten gibt es genau einen mittleren Wert – den 6. Wert."}],
+      q3:[{w:10.5,t:"\\(q_3=10{,}5\\): Sie haben den Median zur oberen Hälfte gezählt. Bei 11 Werten gehört er zu keiner Hälfte."}],
+      R:[{w:3,t:"Spannweite 3: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
+         {w:18,t:"Spannweite 18: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
+      QA:[{w:12,t:"Quartilsabstand 12: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
+          {w:-6,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
+    },
+    loesung:"Rangliste (11 Werte):"+
+      "<div class='rang'><span>3</span><span>4</span><span class='q'>5</span><span>6</span><span>7</span><span class='m'>8</span><span>9</span><span>10</span><span class='q'>11</span><span>12</span><span>15</span></div>"+
+      "Median: 6. Wert → \\(q_2=8\\)<br>Untere Hälfte 3, 4, 5, 6, 7 → \\(q_1=5\\)<br>Obere Hälfte 9, 10, 11, 12, 15 → \\(q_3=11\\)<br>"+
+      "Spannweite = 15 − 3 = 12<br>Quartilsabstand = \\(q_3-q_1=11-5=6\\)"
+  },
+  u2:{
+    ziel:{q1:5,q2:9,q3:13,R:14,QA:8},
+    fehler:{
+      q1:[{w:14,t:"\\(q_1=14\\): Sie haben die Werte nicht sortiert."},
+          {w:4.5,t:"\\(q_1=4{,}5\\): Die untere Hälfte hat 5 Werte. Ihr Median ist der 3. Wert."}],
+      q2:[{w:8,t:"Median 8: Bei 10 Werten gibt es zwei mittlere Werte (8 und 10). Bilden Sie ihren Mittelwert."},
+          {w:10,t:"Median 10: Bei 10 Werten gibt es zwei mittlere Werte (8 und 10). Bilden Sie ihren Mittelwert."},
+          {w:12,t:"Median 12: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."}],
+      q3:[{w:13.5,t:"\\(q_3=13{,}5\\): Die obere Hälfte hat 5 Werte. Ihr Median ist der mittlere davon, also der 8. Wert."}],
+      R:[{w:-1,t:"Spannweite −1: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
+         {w:18,t:"Spannweite 18: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
+      QA:[{w:14,t:"Quartilsabstand 14: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
+          {w:-8,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
+    },
+    loesung:"Rangliste (10 Werte):"+
+      "<div class='rang'><span>2</span><span>4</span><span class='q'>5</span><span>7</span><span class='m'>8</span><span class='m'>10</span><span>11</span><span class='q'>13</span><span>14</span><span>16</span></div>"+
+      "Median: zwischen 5. und 6. Wert → \\(q_2=\\dfrac{8+10}{2}=9\\)<br>Untere Hälfte 2, 4, 5, 7, 8 → \\(q_1=5\\)<br>Obere Hälfte 10, 11, 13, 14, 16 → \\(q_3=13\\)<br>"+
+      "Spannweite = 16 − 2 = 14<br>Quartilsabstand = \\(q_3-q_1=13-5=8\\)"
+  }
+};
+const feldNamen = {q1:"\\(q_1\\)",q2:"Median",q3:"\\(q_3\\)",R:"Spannweite",QA:"Quartilsabstand"};
+
+function leseZahl(s){
+  s = s.replace(/\s/g,"").replace(",",".").replace("−","-");
+  if(s==="" || isNaN(Number(s))) return null;
+  return Number(s);
+}
+function rendere(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{delimiters:[{left:"\\(",right:"\\)",display:false}],throwOnError:false});
+  }
+}
+function zeige(card, ok, t, text){
+  const fb = card.querySelector(".feedback");
+  fb.className = "feedback " + (ok ? "ok" : "bad");
+  fb.innerHTML = "<strong>"+t+"</strong>"+(text ? "<div class='loesung'>"+text+"</div>" : "");
+  rendere(fb);
+}
+
+function pruefe(id){
+  const card = document.getElementById(id);
+  const typ = card.dataset.typ;
+
+  if(typ==="felder"){
+    const a = feldAufgaben[id];
+    const inputs = [...card.querySelectorAll(".feld input")];
+    if(inputs.every(i=>i.value.trim()==="")){ zeige(card,false,"Bitte tragen Sie Ihre Ergebnisse ein.",""); return; }
+    let richtig = 0; const hinweise = [];
+    inputs.forEach(i=>{
+      const k = i.dataset.k, z = leseZahl(i.value);
+      i.classList.remove("ok","bad");
+      if(z!==null && Math.abs(z-a.ziel[k])<1e-6){ i.classList.add("ok"); richtig++; }
+      else{
+        i.classList.add("bad");
+        const f = z===null ? null : (a.fehler[k]||[]).find(f=>Math.abs(z-f.w)<1e-6);
+        hinweise.push(f ? f.t : feldNamen[k]+": "+(z===null ? "noch kein Ergebnis." : "noch nicht richtig."));
+      }
+    });
+    const ok = richtig===inputs.length;
+    ergebnis[id] = ok;
+    if(ok) zeige(card,true,"Richtig! Alle 5 Kennzahlen stimmen.",a.loesung);
+    else zeige(card,false,richtig+" von "+inputs.length+" Kennzahlen richtig.",
+      "<ul>"+hinweise.map(h=>"<li>"+h+"</li>").join("")+"</ul><details><summary>Lösungsweg anzeigen</summary>"+a.loesung+"</details>");
+  } else {
+    const richtig = card.dataset.richtig.split(",");
+    const opts = [...card.querySelectorAll(".opt")];
+    const gewaehlt = opts.filter(o=>o.querySelector("input").checked).map(o=>o.dataset.wert);
+    if(gewaehlt.length===0){ zeige(card,false,"Bitte wählen Sie eine Antwort aus.",""); return; }
+    if(typ==="multi" && gewaehlt.length!==richtig.length){
+      zeige(card,false,"Bitte wählen Sie genau zwei Aussagen aus.","Ausgewählt: "+gewaehlt.length); return;
+    }
+    const ok = gewaehlt.length===richtig.length && gewaehlt.every(g=>richtig.includes(g));
+    opts.forEach(o=>{
+      o.classList.remove("richtig","falsch","gewaehlt");
+      if(richtig.includes(o.dataset.wert)) o.classList.add("richtig");
+      else if(o.querySelector("input").checked) o.classList.add("falsch");
+    });
+    ergebnis[id] = ok;
+    zeige(card, ok, ok ? texte[id].ok : "Leider falsch.", ok ? "" : texte[id].loesung);
+  }
+  zeichneDots();
+}
+
+function zuruecksetzen(id){
+  const card = document.getElementById(id);
+  card.querySelectorAll("input").forEach(i=>{ if(i.type==="text"){ i.value=""; i.classList.remove("ok","bad"); } else i.checked=false; });
+  card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch","gewaehlt"));
+  const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+  delete ergebnis[id];
+  zeichneDots();
+}
+function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); gehe(0); }
+
+document.addEventListener("change",e=>{
+  const opt = e.target.closest(".opt"); if(!opt) return;
+  const card = opt.closest(".card");
+  if(card.querySelector(".opt.richtig,.opt.falsch")){
+    card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch"));
+    const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+    delete ergebnis[card.id]; zeichneDots();
+  }
+  card.querySelectorAll(".opt").forEach(o=>o.classList.toggle("gewaehlt",o.querySelector("input").checked));
+});
+
+function gehe(i){
+  if(i<0 || i>ids.length) return;
+  aktuell = i;
+  document.querySelectorAll("main .card").forEach(c=>c.classList.remove("sichtbar"));
+  (i<ids.length ? document.getElementById(ids[i]) : document.getElementById("ende")).classList.add("sichtbar");
+  if(i===ids.length) zeichneAuswertung();
+  document.getElementById("stand").textContent = i<ids.length ? "Frage "+(i+1)+" von "+ids.length : "Auswertung";
+  document.getElementById("zurueck").disabled = i===0;
+  const w = document.getElementById("weiter");
+  w.disabled = i===ids.length;
+  w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
+  zeichneDots();
+  window.scrollTo({top:0});
+}
+function zeichneDots(){
+  const box = document.getElementById("dots"); box.innerHTML = "";
+  ids.forEach((id,i)=>{
+    const b = document.createElement("button");
+    b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
+    b.textContent = i+1; b.title = titel[id]; b.onclick = ()=>gehe(i);
+    box.appendChild(b);
+  });
+  const e = document.createElement("button");
+  e.className = "dot ende" + (aktuell===ids.length?" aktiv":"");
+  e.textContent = "✓"; e.title = "Auswertung"; e.onclick = ()=>gehe(ids.length);
+  box.appendChild(e);
+}
+function zeichneAuswertung(){
+  const n = ids.filter(id=>ergebnis[id]===true).length;
+  document.getElementById("ergebnis-zahl").textContent = n+" / "+ids.length;
+  document.getElementById("ergebnis-text").textContent =
+    n===ids.length ? "Alles richtig – super!" : n>=ids.length-2 ? "richtig beantwortet – gut gemacht!" : "richtig beantwortet – schauen wir uns die anderen noch einmal an.";
+  const ul = document.getElementById("ergebnis-liste"); ul.innerHTML="";
+  ids.forEach((id,i)=>{
+    const li = document.createElement("li");
+    const st = id in ergebnis ? (ergebnis[id]?"ok":"bad") : "";
+    li.innerHTML = "<span class='marke "+st+"'>"+(st==="ok"?"✓":st==="bad"?"✗":"–")+"</span><span>Frage "+(i+1)+": "+titel[id]+"</span>";
+    li.onclick = ()=>gehe(i);
+    ul.appendChild(li);
+  });
+}
+
+document.addEventListener("keydown",e=>{
+  const inInput = e.target.tagName==="INPUT" && e.target.type==="text";
+  if(inInput){ if(e.key==="Enter") pruefe(e.target.closest(".card").id); return; }
+  const vor = e.key==="ArrowRight" || e.key==="PageDown", zur = e.key==="ArrowLeft" || e.key==="PageUp";
+  if(!vor && !zur) return;
+  e.preventDefault();
+  if(document.activeElement) document.activeElement.blur();
+  gehe(aktuell + (vor ? 1 : -1));
+});
+
+document.addEventListener("DOMContentLoaded",()=>{
+  ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Frage "+(i+1)+" · "+l.textContent; });
+  document.querySelectorAll("svg.boxplot").forEach(zeichneBoxplot);
+  rendere(document.body); gehe(0);
+});
+</script>
+</body>
+</html>
