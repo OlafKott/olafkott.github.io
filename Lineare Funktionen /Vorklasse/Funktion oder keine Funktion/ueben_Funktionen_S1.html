@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zuordnungen und Funktionen &ndash; Funktion oder keine Funktion?</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  background:#f2f4f7;color:#1d1d1f;line-height:1.55;font-size:17px}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+header{background:#C8102E;color:#fff;padding:16px 0 14px;margin-bottom:14px}
+header .wrap{padding-bottom:0}
+.knr{font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+h1{font-size:22px;margin:2px 0 0;line-height:1.25}
+.karte{background:#fff;border-radius:12px;padding:16px 18px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.09)}
+.karte.aus{opacity:.45;pointer-events:none}
+h2{font-size:17px;margin:0 0 4px;color:#C8102E}
+h2 .s{display:inline-block;background:#C8102E;color:#fff;width:24px;height:24px;border-radius:50%;
+  font-size:14px;text-align:center;line-height:24px;margin-right:7px;vertical-align:2px}
+h2.fertig{color:#1E7B3C} h2.fertig .s{background:#1E7B3C}
+p{margin:8px 0}
+.hint{color:#6b7280;font-size:15px;margin:0 0 10px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{padding:8px 13px;font-size:15px;margin:0}
+.tabs button.an{background:#C8102E;color:#fff}
+.sachtext{background:#F4F9FE;border-left:4px solid #1D70B8;border-radius:0 8px 8px 0;padding:12px 14px;margin:10px 0;font-size:19px}
+table.wt{border-collapse:collapse;width:100%;table-layout:fixed;margin:10px 0}
+table.wt th,table.wt td{border:1.5px solid #c9cfd6;text-align:center;padding:8px 4px;font-size:19px}
+table.wt th{background:#f4efe6;width:16%}
+.bild{text-align:center;margin:8px 0}
+.bild svg{width:100%;max-width:420px;height:auto;border:1px solid #dbe6f0;border-radius:8px;background:#fff}
+.lineal{display:flex;align-items:center;gap:10px;justify-content:center;font-size:15px;color:#6b7280;margin-top:6px}
+.lineal input{width:60%}
+button{font-family:inherit;font-size:17px;font-weight:600;padding:13px 22px;border-radius:9px;border:0;cursor:pointer;margin:4px 6px 4px 0}
+.bp{background:#C8102E;color:#fff} .bl{background:#5B3E90;color:#fff} .bn{background:#e8ebef;color:#1d1d1f}
+button:disabled{opacity:.4;cursor:default}
+button.ok:disabled,button.no:disabled{opacity:1}
+button:focus-visible{outline:3px solid #1D70B8;outline-offset:2px}
+.wahl button{display:block;width:100%;text-align:left;background:#fff;border:2px solid #c9cfd6;font-weight:500;margin:6px 0}
+.wahl button.ok{border-color:#1E7B3C;background:#E6F4EA}
+.wahl button.no{border-color:#C8102E;background:#FDECEC}
+.jn button{min-width:150px}
+.jn button.ok{background:#1E7B3C;color:#fff} .jn button.no{background:#C8102E;color:#fff}
+.rueck{margin:10px 0 0;padding:0;border-radius:9px;font-size:16px}
+.rueck.ok{background:#E6F4EA;border-left:4px solid #1E7B3C;padding:12px 14px}
+.rueck.no{background:#FDECEC;border-left:4px solid #C8102E;padding:12px 14px}
+.zaehler{font-size:14px;color:#6b7280;margin-top:12px}
+.merk{background:#E9F2FB;border:1.5px solid #1D70B8;border-radius:12px;padding:14px 18px;margin:14px 0}
+.merk b.t{display:block;color:#1D70B8;font-size:17px;margin-bottom:4px}
+.merk p{margin:4px 0}
+.merk .klein{font-size:15px;color:#4b5563;margin-top:8px}
+.fuss{text-align:center;color:#6b7280;font-size:14px;margin-top:18px}
+</style></head><body>
+<header><div class="wrap"><div class="knr">Zuordnungen und Funktionen &middot; Stunde 1</div>
+<h1>Funktion oder keine Funktion?</h1></div></header>
+<div class="wrap">
+
+<div class="karte">
+  <p class="hint" style="margin-bottom:8px">Was m&ouml;chtest du &uuml;ben?</p>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="merk">
+  <b class="t">Definition: Funktion</b>
+  <p>Eine <b>eindeutige Zuordnung</b> ordnet einem beliebigen Wert <b>genau einen</b> anderen Wert zu.<br>Eine solche Zuordnung nennt man <b>Funktion</b>.</p>
+  <p class="klein">Pfeilbild: Von jedem Element links geht genau ein Pfeil los.<br>
+  Wertetabelle: Jedem x-Wert (Argument) wird genau ein y-Wert (Funktionswert) zugeordnet.<br>
+  Graph: Ein senkrechtes Lineal trifft den Graphen an jeder Stelle höchstens einmal.</p>
+</div>
+
+<div class="karte" id="k0">
+  <div id="aufgabe"></div>
+</div>
+
+<div class="karte" id="k1">
+  <h2 id="h1t"><span class="s">1</span>Entscheide</h2>
+  <p class="hint">Ist diese Zuordnung eine Funktion?</p>
+  <div class="jn"><button class="bn" id="bj" onclick="entscheide(true)">Funktion</button><button class="bn" id="bk" onclick="entscheide(false)">keine Funktion</button></div>
+  <div class="rueck" id="r1"></div>
+</div>
+
+<div class="karte aus" id="k2">
+  <h2 id="h2t"><span class="s">2</span>Begr&uuml;nde</h2>
+  <p class="hint">Welcher Satz begr&uuml;ndet deine Entscheidung richtig?</p>
+  <div class="wahl" id="wahl"></div>
+  <div class="rueck" id="r2"></div>
+  <button class="bp" onclick="neueAufgabe()" style="margin-top:10px">Neue Aufgabe</button>
+  <div class="zaehler" id="zaehler">Geschafft: 0 Aufgaben</div>
+</div>
+
+<div class="fuss">Zuordnungen und Funktionen &middot; Vorklasse &middot; RWB Essen</div>
+</div>
+<script>
+var TYPEN={pfeil:'Pfeilbild',sachtext:'Sachtext',tabelle:'Wertetabelle',graph:'Graph'};
+var aktiv=['pfeil','sachtext','tabelle','graph'];
+var A=null, schritt=1, fertig=0, fehlversuch=false;
+
+(function(){ var q=new URLSearchParams(location.search).get('typ');
+  if(q){ var l=q.split(',').filter(function(t){return TYPEN[t];}); if(l.length) aktiv=l; } })();
+
+function zuf(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function wahl(l){return l[zuf(0,l.length-1)];}
+function misch(l){l=l.slice();for(var i=l.length-1;i>0;i--){var j=zuf(0,i),t=l[i];l[i]=l[j];l[j]=t;}return l;}
+function zs(x){return String(x).replace('-','\u2212');}
+function $(id){return document.getElementById(id);}
+
+function tabs(){
+  var h='<button class="bn '+(aktiv.length===4?'an':'')+'" onclick="setze(\'alle\')">Alles gemischt</button>';
+  for(var t in TYPEN) h+='<button class="bn '+(aktiv.length===1&&aktiv[0]===t?'an':(aktiv.length>1&&aktiv.length<4&&aktiv.indexOf(t)>=0?'an':''))+'" onclick="setze(\''+t+'\')">'+TYPEN[t]+'</button>';
+  $('tabs').innerHTML=h;
+}
+function setze(t){ aktiv = t==='alle'?['pfeil','sachtext','tabelle','graph']:[t]; tabs(); neueAufgabe(); }
+
+var SATZ_JA={tabelle:'Jedem Argument wird genau ein Funktionswert zugeordnet.',
+  graph:'Jedem x-Wert wird genau ein y-Wert zugeordnet.',
+  pfeil:'Von jedem Element links geht genau ein Pfeil los.'};
+
+/* ---------------- Sachtexte ---------------- */
+var TEXTE=[
+ ['Jedem Menschen wird sein Geburtstag zugeordnet.',true,'Jedem Menschen kann nur genau ein Geburtstag zugeordnet werden.','Einigen Menschen können mehr als ein Geburtstag zugeordnet werden.'],
+ ['Jedem Geburtstag wird ein Mensch zugeordnet, der an diesem Tag Geburtstag hat.',false,'Jedem Geburtstag kann nur genau ein Mensch zugeordnet werden.','Einigen Geburtstagen können mehr als ein Mensch zugeordnet werden.'],
+ ['Jeder Schülerin und jedem Schüler wird die eigene Klasse zugeordnet.',true,'Jeder Person kann nur genau eine Klasse zugeordnet werden.','Einigen Personen können mehr als eine Klasse zugeordnet werden.'],
+ ['Jeder Klasse wird eine Schülerin oder ein Schüler dieser Klasse zugeordnet.',false,'Jeder Klasse kann nur genau eine Person zugeordnet werden.','Einigen Klassen können mehr als eine Person zugeordnet werden.'],
+ ['Jeder Zahl wird ihr Doppeltes zugeordnet.',true,'Jeder Zahl kann nur genau ein Doppeltes zugeordnet werden.','Einigen Zahlen können mehr als ein Doppeltes zugeordnet werden.'],
+ ['Jedem Land wird eine Stadt in diesem Land zugeordnet.',false,'Jedem Land kann nur genau eine Stadt zugeordnet werden.','Einigen Ländern können mehr als eine Stadt zugeordnet werden.'],
+ ['Jeder Stadt wird das Land zugeordnet, in dem sie liegt.',true,'Jeder Stadt kann nur genau ein Land zugeordnet werden.','Einigen Städten können mehr als ein Land zugeordnet werden.'],
+ ['Jedem Buch wird seine Seitenzahl (Anzahl der Seiten) zugeordnet.',true,'Jedem Buch kann nur genau eine Seitenzahl zugeordnet werden.','Einigen Büchern können mehr als eine Seitenzahl zugeordnet werden.'],
+ ['Jeder Mutter wird ihr Kind zugeordnet.',false,'Jeder Mutter kann nur genau ein Kind zugeordnet werden.','Einigen Müttern können mehr als ein Kind zugeordnet werden.'],
+ ['Jedem Kind wird seine leibliche Mutter zugeordnet.',true,'Jedem Kind kann nur genau eine leibliche Mutter zugeordnet werden.','Einigen Kindern können mehr als eine leibliche Mutter zugeordnet werden.'],
+ ['Jeder Uhrzeit an einem Tag wird die Temperatur in Essen zugeordnet.',true,'Jeder Uhrzeit kann nur genau eine Temperatur zugeordnet werden.','Einigen Uhrzeiten können mehr als eine Temperatur zugeordnet werden.'],
+ ['Jeder Temperatur wird die Uhrzeit zugeordnet, zu der es in Essen so warm war.',false,'Jeder Temperatur kann nur genau eine Uhrzeit zugeordnet werden.','Einigen Temperaturen können mehr als eine Uhrzeit zugeordnet werden.'],
+ ['Jedem Auto wird seine Farbe zugeordnet.',true,'Jedem Auto kann nur genau eine Farbe zugeordnet werden.','Einigen Autos können mehr als eine Farbe zugeordnet werden.'],
+ ['Jeder Postleitzahl wird eine Straße mit dieser Postleitzahl zugeordnet.',false,'Jeder Postleitzahl kann nur genau eine Straße zugeordnet werden.','Einigen Postleitzahlen können mehr als eine Straße zugeordnet werden.']
+];
+function aufgSachtext(){
+  var t=wahl(TEXTE);
+  return {typ:'sachtext',ja:t[1],html:'<div class="sachtext">&bdquo;'+t[0]+'&ldquo;</div>',
+    saetze:[[t[2],t[1]],[t[3],!t[1]]],
+    erkl:t[1]?'Es gibt immer nur <b>eine</b> Antwort.':'Es gibt <b>mehrere</b> mögliche Antworten.'};
+}
+/* ---------------- Wertetabelle ---------------- */
+function aufgTabelle(){
+  var ja=Math.random()<0.5, xs=misch([-2,-1,0,1,2,3,4]).slice(0,5).sort(function(a,b){return a-b;});
+  var ys=xs.map(function(){return zuf(-3,8);});
+  if(Math.random()<0.6){ var i=zuf(0,3); ys[i+1]=ys[i]; }            // gleicher y-Wert – erlaubt
+  var doppel=null;
+  if(!ja){ var k=zuf(0,4), j; do{j=zuf(0,4);}while(j===k);
+    doppel=xs[k]; xs[j]=xs[k]; var y2; do{y2=zuf(-3,8);}while(y2===ys[k]); ys[j]=y2; }
+  var h='<table class="wt"><tr><th>x</th>'+xs.map(function(v){return '<td>'+zs(v)+'</td>';}).join('')+'</tr><tr><th>y</th>'+ys.map(function(v){return '<td>'+zs(v)+'</td>';}).join('')+'</tr></table>';
+  var anderer; do{anderer=wahl(xs);}while(anderer===doppel);
+  var yd=null; for(var a=0;a<5;a++)for(var b=a+1;b<5;b++) if(ys[a]===ys[b]) yd=ys[a];
+  var s=[[SATZ_JA.tabelle,ja]];
+  if(ja){ s.push(['Dem Argument x = '+zs(anderer)+' wird mehr als ein Funktionswert zugeordnet.',false]);
+          if(yd!==null) s.push(['Der Funktionswert '+zs(yd)+' kommt zweimal vor, also ist es keine Funktion.',false]); }
+  else { s.push(['Dem Argument x = '+zs(doppel)+' wird mehr als ein Funktionswert zugeordnet.',true]);
+         s.push(['Dem Argument x = '+zs(anderer)+' wird mehr als ein Funktionswert zugeordnet.',false]); }
+  return {typ:'tabelle',ja:ja,html:h,saetze:s,
+    erkl: ja ? 'In der <b>oberen</b> Zeile kommt kein x-Wert mit zwei verschiedenen y-Werten vor.'+(yd!==null?' Dass ein y-Wert doppelt vorkommt, ist erlaubt.':'')
+             : 'Der x-Wert '+zs(doppel)+' steht zweimal oben – mit verschiedenen y-Werten darunter.'};
+}
+/* ---------------- Pfeilbild ---------------- */
+var THEMEN=[
+ [['Lena','Tom','Aylin','Max'],['Mathe','Sport','Kunst','Musik'],'Lieblingsfach'],
+ [['1','2','3','4'],['2','4','6','8']],
+ [['Paris','Rom','Lyon','Köln'],['Frankreich','Italien','Deutschland','Spanien']],
+ [['Ben','Mia','Can','Ida'],['Bus','Rad','Auto','Bahn']],
+ [['−2','−1','1','2'],['1','4','0','3']]
+];
+function aufgPfeil(){
+  var th=wahl(THEMEN), L=th[0].slice(0,zuf(3,4)), R=th[1].slice(0,4), ja=Math.random()<0.5, arrows=[];
+  for(var i=0;i<L.length;i++) arrows.push([i,zuf(0,R.length-1)]);
+  if(L.length>1 && arrows.every(function(a){return a[1]!==arrows[0][1];})) arrows[1][1]=arrows[0][1]; // zwei Pfeile kommen an
+  var doppel=null;
+  if(!ja){ var k=zuf(0,L.length-1), z; do{z=zuf(0,R.length-1);}while(z===arrows[k][1]); arrows.push([k,z]); doppel=L[k]; }
+  var ziel=null, cnt={}; arrows.forEach(function(a){cnt[a[1]]=(cnt[a[1]]||0)+1; if(cnt[a[1]]>1) ziel=R[a[1]];});
+  var s=[[SATZ_JA.pfeil,ja]];
+  if(ja){ if(ziel) s.push(['Bei '+ziel+' kommen zwei Pfeile an, also ist es keine Funktion.',false]);
+          s.push(['Von '+wahl(L)+' gehen zwei Pfeile los.',false]); }
+  else { s.push(['Von '+doppel+' gehen zwei Pfeile los.',true]);
+         if(ziel) s.push(['Bei '+ziel+' kommen zwei Pfeile an.',false]); }
+  return {typ:'pfeil',ja:ja,html:'<div class="bild">'+pfeilSVG(L,R,arrows)+'</div>',saetze:s,
+    erkl: ja?'Von jedem Element links geht genau ein Pfeil los. Dass zwei Pfeile beim selben Ziel ankommen, ist erlaubt.'
+            :'Von '+doppel+' gehen zwei Pfeile los. Gezählt wird nur, wie viele Pfeile <b>losgehen</b>.'};
+}
+function pfeilSVG(L,R,arrows){
+  var W=420,H=250, ly=function(i,n){return 30+(H-50)/n*(i+0.5);};
+  var p=['<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="border:none">',
+   '<defs><marker id="pm" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4 L0,8 Z" fill="#1D70B8"/></marker></defs>',
+   '<ellipse cx="85" cy="'+(H/2+5)+'" rx="70" ry="'+(H/2-12)+'" fill="#f7f5f2" stroke="#8e877a"/>',
+   '<ellipse cx="'+(W-85)+'" cy="'+(H/2+5)+'" rx="75" ry="'+(H/2-12)+'" fill="#f7f5f2" stroke="#8e877a"/>'];
+  L.forEach(function(t,i){p.push('<text x="85" y="'+(ly(i,L.length)+6)+'" font-size="17" text-anchor="middle">'+t+'</text>');});
+  R.forEach(function(t,i){p.push('<text x="'+(W-85)+'" y="'+(ly(i,R.length)+6)+'" font-size="17" text-anchor="middle">'+t+'</text>');});
+  arrows.forEach(function(a){p.push('<line x1="135" y1="'+ly(a[0],L.length)+'" x2="'+(W-150)+'" y2="'+ly(a[1],R.length)+'" stroke="#1D70B8" stroke-width="2" marker-end="url(#pm)"/>');});
+  return p.join('')+'</svg>';
+}
+/* ---------------- Graph ---------------- */
+var N=5, PAD=24, S=(420-2*PAD)/(2*N);
+function px(x){return PAD+(x+N)*S;} function py(y){return 420-PAD-(y+N)*S;}
+function pfad(pts){return pts.map(function(q,i){return (i?'L':'M')+px(q[0]).toFixed(1)+','+py(q[1]).toFixed(1);}).join(' ');}
+function bereich(a,b,f,n){var r=[];for(var i=0;i<=n;i++){var x=a+(b-a)*i/n;r.push([x,f(x)]);}return r;}
+function aufgGraph(){
+  var ja=Math.random()<0.5, pfade, stelle=null;
+  if(ja){
+    var v=wahl([0,1,2,3,4]);
+    var c=zuf(-2,2), m=wahl([-1.5,-1,-0.5,0.5,1,2]);
+    pfade=[ [bereich(-5,5,function(x){return m*x+c;},2)],
+            [bereich(-3.2,3.2,function(x){return 0.5*(x-0.3)*(x-0.3)-3;},60)],
+            [bereich(-5,5,function(){return c;},2)],
+            [bereich(-2.4,2.4,function(x){return 0.3*x*x*x-1.5*x;},60)],
+            [[[-5,-2],[-2,2],[0,0],[3,3],[5,1]]] ][v];
+    pfade=pfade.map(function(p){return p.filter(function(q){return Math.abs(q[1])<=N;});});
+  } else {
+    var w=zuf(0,2);
+    if(w===0){ var cx=zuf(-2,2), cy=zuf(-1,1), r=wahl([2,3]); stelle=cx;
+      pfade=[bereich(0,2*Math.PI,function(){},72).map(function(q){return [cx+r*Math.cos(q[0]),cy+r*Math.sin(q[0])];})]; }
+    else if(w===1){ var k=wahl([-3,-2,-1,1,2,3]); stelle=k; pfade=[[[k,-4.5],[k,4.5]]]; }
+    else { var vx=zuf(-4,-2); stelle=vx+2; pfade=[bereich(-3,3,function(){},60).map(function(q){var y=q[0];return [vx+0.5*y*y,y];}).filter(function(q){return q[0]<=N;})]; }
+  }
+  var s=[[SATZ_JA.graph,ja]], falsch;
+  if(ja){ s.push(['Dem Argument x = '+zs(zuf(-3,3))+' wird mehr als ein Funktionswert zugeordnet.',false]); }
+  else { s.push(['Dem Argument x = '+zs(stelle)+' wird mehr als ein Funktionswert zugeordnet.',true]);
+         do{falsch=zuf(-4,4);}while(Math.abs(falsch-stelle)<3); s.push(['Dem Argument x = '+zs(falsch)+' wird mehr als ein Funktionswert zugeordnet.',false]); }
+  var A={typ:'graph',ja:ja,pfade:pfade,saetze:s,
+    erkl: ja?'Das senkrechte Lineal trifft den Graphen überall höchstens einmal.'
+            :'Bei x = '+zs(stelle)+' trifft das senkrechte Lineal den Graphen mehr als einmal.'};
+  A.html='<div class="bild"><svg id="ks" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg"></svg></div>'+
+    '<div class="lineal"><span>Lineal</span><input type="range" min="-5" max="5" step="0.25" value="-5" oninput="zeichneGraph(+this.value)" aria-label="Lineal verschieben"></div>';
+  return A;
+}
+function zeichneGraph(lx){
+  var p=[];
+  for(var i=-N;i<=N;i++){
+    p.push('<line x1="'+px(i)+'" y1="'+py(-N)+'" x2="'+px(i)+'" y2="'+py(N)+'" stroke="#dbe6f0"/>');
+    p.push('<line x1="'+px(-N)+'" y1="'+py(i)+'" x2="'+px(N)+'" y2="'+py(i)+'" stroke="#dbe6f0"/>');
+  }
+  p.push('<line x1="'+(px(-N)-6)+'" y1="'+py(0)+'" x2="414" y2="'+py(0)+'" stroke="#333" stroke-width="1.6"/><polygon points="414,'+py(0)+' 405,'+(py(0)-4)+' 405,'+(py(0)+4)+'" fill="#333"/>');
+  p.push('<line x1="'+px(0)+'" y1="'+(py(-N)+6)+'" x2="'+px(0)+'" y2="6" stroke="#333" stroke-width="1.6"/><polygon points="'+px(0)+',6 '+(px(0)-4)+',15 '+(px(0)+4)+',15" fill="#333"/>');
+  for(var v=-N;v<=N;v++){ if(!v) continue;
+    p.push('<line x1="'+px(v)+'" y1="'+(py(0)-3)+'" x2="'+px(v)+'" y2="'+(py(0)+3)+'" stroke="#333"/><line x1="'+(px(0)-3)+'" y1="'+py(v)+'" x2="'+(px(0)+3)+'" y2="'+py(v)+'" stroke="#333"/>');
+    p.push('<text x="'+px(v)+'" y="'+(py(0)+16)+'" font-size="12" fill="#555" text-anchor="middle">'+zs(v)+'</text><text x="'+(px(0)-6)+'" y="'+(py(v)+4)+'" font-size="12" fill="#555" text-anchor="end">'+zs(v)+'</text>'); }
+  p.push('<text x="410" y="'+(py(0)-8)+'" font-size="14" font-style="italic" text-anchor="end">x</text><text x="'+(px(0)+8)+'" y="16" font-size="14" font-style="italic">y</text>');
+  A.pfade.forEach(function(q){ p.push('<path d="'+pfad(q)+'" fill="none" stroke="#1D70B8" stroke-width="3" stroke-linejoin="round"/>'); });
+  if(lx!==undefined && lx>-5) p.push('<rect x="'+(px(lx)-5)+'" y="'+py(N)+'" width="10" height="'+(py(-N)-py(N))+'" fill="#F2B705" opacity=".35"/><line x1="'+px(lx)+'" y1="'+py(N)+'" x2="'+px(lx)+'" y2="'+py(-N)+'" stroke="#C8102E" stroke-width="2" stroke-dasharray="6 4"/>');
+  $('ks').innerHTML=p.join('');
+}
+/* ---------------- Ablauf ---------------- */
+function setRueck(id,txt,ok){ var r=$(id); r.className='rueck'+(txt?(ok?' ok':' no'):''); r.innerHTML=txt; }
+function neueAufgabe(){
+  var t=wahl(aktiv);
+  A = t==='sachtext'?aufgSachtext(): t==='tabelle'?aufgTabelle(): t==='pfeil'?aufgPfeil(): aufgGraph();
+  $('aufgabe').innerHTML='<h2 style="margin-bottom:6px">'+TYPEN[t]+'</h2>'+A.html+
+    (t==='graph'?'<p class="hint" style="margin:6px 0 0">Schiebe das Lineal von links nach rechts.</p>':'');
+  if(t==='graph') zeichneGraph();
+  schritt=1; fehlversuch=false;
+  $('bj').className='bn'; $('bk').className='bn'; $('bj').disabled=false; $('bk').disabled=false;
+  $('k2').className='karte aus'; $('h1t').className=''; $('h2t').className='';
+  setRueck('r1',''); setRueck('r2','');
+  $('wahl').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function entscheide(j){
+  if(schritt!==1) return;
+  var btn=j?$('bj'):$('bk');
+  if(j===A.ja){
+    btn.className='ok'; $('bj').disabled=true; $('bk').disabled=true;
+    setRueck('r1','<b>Richtig!</b> '+A.erkl,true); $('h1t').className='fertig';
+    schritt=2; $('k2').className='karte';
+    $('wahl').innerHTML=misch(A.saetze).map(function(s,i){return '<button data-ok="'+(s[1]?1:0)+'" onclick="begruende(this)">'+s[0]+'</button>';}).join('');
+    $('k2').scrollIntoView({behavior:'smooth',block:'center'});
+  } else {
+    btn.className='no'; fehlversuch=true;
+    var tipp={pfeil:'Zähle bei jedem Element links, wie viele Pfeile <b>losgehen</b>.',
+      sachtext:'Frag dich: Kann es zu einem Wert <b>mehrere</b> Antworten geben?',
+      tabelle:'Schau in die <b>obere</b> Zeile: Kommt ein x-Wert zweimal vor – mit verschiedenen y-Werten?',
+      graph:'Nutze das Lineal: Trifft es irgendwo <b>mehr als einen</b> Punkt?'}[A.typ];
+    setRueck('r1','<b>Noch nicht.</b> '+tipp+' Versuch es noch einmal.',false);
+  }
+}
+function begruende(b){
+  if(schritt!==2) return;
+  if(b.getAttribute('data-ok')==='1'){
+    b.className='ok'; schritt=3; fertig++;
+    [].forEach.call($('wahl').children,function(x){x.disabled=true;});
+    $('h2t').className='fertig';
+    setRueck('r2','<b>Genau so begründest du es.</b> Weiter mit einer neuen Aufgabe.',true);
+    $('zaehler').textContent='Geschafft: '+fertig+' Aufgabe'+(fertig===1?'':'n');
+  } else {
+    b.className='no'; b.disabled=true;
+    setRueck('r2','<b>Dieser Satz passt nicht.</b> '+(A.typ==='pfeil'?'Achte darauf, ob Pfeile <b>losgehen</b> oder <b>ankommen</b>.':A.typ==='tabelle'?'Entscheidend ist der x-Wert (Argument), nicht der y-Wert.':'Lies die Sätze genau und vergleiche mit deiner Entscheidung.'),false);
+  }
+}
+tabs(); neueAufgabe();
+</script>
+</body></html>
