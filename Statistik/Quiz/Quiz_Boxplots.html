@@ -173,11 +173,11 @@
   Bei einer ungeraden Anzahl gehört der Median zu <b>keiner</b> Hälfte.</div>
   <p class="frage">Bestimmen Sie die Kennzahlen.</p>
   <div class="felder">
-    <label class="feld"><span class="name">unteres Quartil<br>\(q_1\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
-    <label class="feld"><span class="name">Median<br>\(q_2\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
-    <label class="feld"><span class="name">oberes Quartil<br>\(q_3\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
-    <label class="feld"><span class="name">Spannweite</span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
-    <label class="feld"><span class="name">Quartilsabstand</span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+    <label class="feld"><span class="name"><span>unteres Quartil \(q_1\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
+    <label class="feld"><span class="name"><span>Median \(q_2\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
+    <label class="feld"><span class="name"><span>oberes Quartil \(q_3\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
+    <label class="feld"><span class="name"><span>Spannweite</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
+    <label class="feld"><span class="name"><span>Quartilsabstand</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
   </div>
   <div class="aktionen"><button class="knopf" onclick="pruefe('u1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u1')">Nochmal</button></div>
   <div class="feedback"></div>
@@ -194,11 +194,11 @@
   Jede Hälfte hat hier 5 Werte.</div>
   <p class="frage">Bestimmen Sie die Kennzahlen.</p>
   <div class="felder">
-    <label class="feld"><span class="name">unteres Quartil<br>\(q_1\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
-    <label class="feld"><span class="name">Median<br>\(q_2\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
-    <label class="feld"><span class="name">oberes Quartil<br>\(q_3\)</span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
-    <label class="feld"><span class="name">Spannweite</span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
-    <label class="feld"><span class="name">Quartilsabstand</span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+    <label class="feld"><span class="name"><span>unteres Quartil \(q_1\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
+    <label class="feld"><span class="name"><span>Median \(q_2\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
+    <label class="feld"><span class="name"><span>oberes Quartil \(q_3\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
+    <label class="feld"><span class="name"><span>Spannweite</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
+    <label class="feld"><span class="name"><span>Quartilsabstand</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
   </div>
   <div class="aktionen"><button class="knopf" onclick="pruefe('u2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u2')">Nochmal</button></div>
   <div class="feedback"></div>
@@ -291,6 +291,29 @@
   <div class="feedback"></div>
 </section>
 
+<!-- Vergleich zweier Boxplots -->
+<section class="card" data-typ="single" data-richtig="b" id="b5">
+  <p class="label">Boxplots vergleichen</p>
+  <h2>Welche Abfüllanlage ist zuverlässiger?</h2>
+  <p class="frage">Zwei Anlagen füllen Dosen mit Proteinpulver. Sollwert: 500 g.<br>
+  Die Boxplots zeigen die Füllmengen von je 40 Dosen.</p>
+  <svg class="boxplot" data-bp="Anlage A:488,494,500,506,512;Anlage B:487,498,500,502,515" data-achse="484,516,4" data-einheit="Füllmenge in g"></svg>
+  <p class="frage">Welche Anlage ist zuverlässiger? Wählen Sie die Antwort mit der richtigen Begründung.</p>
+  <p class="sub">Genau <strong>eine</strong> Antwort ist richtig.</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="b5"><span class="buchst">A</span>
+      <span>Anlage A, weil ihre Spannweite kleiner ist.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="b5"><span class="buchst">B</span>
+      <span>Anlage B, weil ihr Quartilsabstand kleiner ist. Die mittleren 50 % der Dosen liegen dichter bei 500 g.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="b5"><span class="buchst">C</span>
+      <span>Beide sind gleich zuverlässig, weil beide Mediane bei 500 g liegen.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="b5"><span class="buchst">D</span>
+      <span>Anlage A, weil ihre Box größer ist. Darin liegen mehr Dosen.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('b5')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('b5')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
 <section class="card" id="ende">
   <p class="label">Auswertung</p>
   <h2>Geschafft!</h2>
@@ -311,28 +334,30 @@
 </div>
 
 <script>
-const ids = ["u1","u2","b1","b2","b3","b4"];
+const ids = ["u1","u2","b1","b2","b3","b4","b5"];
 const titel = {u1:"Kennzahlen: Shakes pro Stunde",u2:"Kennzahlen: Retouren pro Tag",b1:"Boxplot: Wartezeit an der Hotline",
-  b2:"Boxplot: Punkte im Produkttest",b3:"Boxplot: Gewicht der Proteinriegel",b4:"Boxplot: Trainingsdauer"};
+  b2:"Boxplot: Punkte im Produkttest",b3:"Boxplot: Gewicht der Proteinriegel",b4:"Boxplot: Trainingsdauer",b5:"Vergleich: Abfüllanlagen"};
 const ergebnis = {};
 let aktuell = 0;
 
 /* ---------- Boxplots zeichnen ---------- */
 function zeichneBoxplot(svg){
-  const [mn,q1,md,q3,mx] = svg.dataset.bp.split(",").map(Number);
+  // data-bp: "2,5,8,10,18"  oder mehrere: "Anlage A:488,494,500,506,512;Anlage B:..."
+  const reihen = svg.dataset.bp.split(";").map(s=>{
+    const t=s.split(":"); const name=t.length>1?t[0]:""; return {name, w:t[t.length-1].split(",").map(Number)};
+  });
   const [von,bis,schritt] = svg.dataset.achse.split(",").map(Number);
-  const W=900, H=190, L=40, R=860, yBox=70, hBox=56, yAchse=150;
+  const mitNamen = reihen.some(r=>r.name);
+  const W=900, L=mitNamen?140:40, R=860, hBox=56, abst=90, yStart=42;
+  const yAchse = yStart + reihen.length*abst + 10, H = yAchse + 44;
   const x = v => L + (v-von)/(bis-von)*(R-L);
   const ns="http://www.w3.org/2000/svg";
   svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
   svg.setAttribute("role","img");
-  svg.setAttribute("aria-label",`Boxplot: Minimum ${mn}, unteres Quartil ${q1}, Median ${md}, oberes Quartil ${q3}, Maximum ${mx}`);
+  svg.setAttribute("aria-label", reihen.map(r=>`${r.name||"Boxplot"}: Minimum ${r.w[0]}, unteres Quartil ${r.w[1]}, Median ${r.w[2]}, oberes Quartil ${r.w[3]}, Maximum ${r.w[4]}`).join("; "));
   const el=(t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;};
-  // Raster
-  for(let v=von; v<=bis+1e-9; v+=schritt){
+  for(let v=von; v<=bis+1e-9; v+=schritt)
     el("line",{x1:x(v),x2:x(v),y1:20,y2:yAchse,stroke:"#ececf0","stroke-width":1});
-  }
-  // Achse mit Pfeil
   el("line",{x1:L-10,x2:R+28,y1:yAchse,y2:yAchse,stroke:"#1e1e24","stroke-width":2});
   el("path",{d:`M${R+36},${yAchse} l-12,-6 v12 z`,fill:"#1e1e24"});
   for(let v=von; v<=bis+1e-9; v+=schritt){
@@ -342,15 +367,16 @@ function zeichneBoxplot(svg){
   }
   const lab=el("text",{x:R+36,y:yAchse-14,"text-anchor":"end","font-size":16,fill:"#6b6b76"});
   lab.textContent=svg.dataset.einheit;
-  // Antennen
-  const ym=yBox+hBox/2;
-  el("line",{x1:x(mn),x2:x(q1),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
-  el("line",{x1:x(q3),x2:x(mx),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
-  el("line",{x1:x(mn),x2:x(mn),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
-  el("line",{x1:x(mx),x2:x(mx),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
-  // Box
-  el("rect",{x:x(q1),y:yBox,width:x(q3)-x(q1),height:hBox,fill:"#fbe8ef",stroke:"#c80046","stroke-width":3,rx:3});
-  el("line",{x1:x(md),x2:x(md),y1:yBox,y2:yBox+hBox,stroke:"#c80046","stroke-width":5});
+  reihen.forEach((r,i)=>{
+    const [mn,q1,md,q3,mx]=r.w, yBox=yStart+i*abst, ym=yBox+hBox/2;
+    if(r.name){ const n=el("text",{x:10,y:ym+7,"font-size":20,"font-weight":700,fill:"#1e1e24"}); n.textContent=r.name; }
+    el("line",{x1:x(mn),x2:x(q1),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+    el("line",{x1:x(q3),x2:x(mx),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+    el("line",{x1:x(mn),x2:x(mn),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
+    el("line",{x1:x(mx),x2:x(mx),y1:yBox+12,y2:yBox+hBox-12,stroke:"#1e1e24","stroke-width":3});
+    el("rect",{x:x(q1),y:yBox,width:x(q3)-x(q1),height:hBox,fill:"#fbe8ef",stroke:"#c80046","stroke-width":3,rx:3});
+    el("line",{x1:x(md),x2:x(md),y1:yBox,y2:yBox+hBox,stroke:"#c80046","stroke-width":5});
+  });
 }
 
 /* ---------- Lösungen ---------- */
@@ -361,6 +387,8 @@ const texte = {
     loesung:"Richtig sind A und B.<br>A: Bis zum unteren Quartil \\(q_1=18\\) liegen etwa 25 % der Werte.<br>B: Quartilsabstand = \\(q_3-q_1=30-18=12\\).<br>C: Mehr als \\(q_3=30\\) Punkte vergeben nur etwa 25 %.<br>D: Mindestens 24 Punkte (ab dem Median) vergeben etwa 50 %, nicht 75 %."},
   b3:{ok:"Richtig! Jeder Teil der Box enthält etwa 25 % der Werte – egal wie breit er ist.",
     loesung:"Richtig ist B.<br>Der linke Teil der Box (58 bis 59 g) und der rechte Teil (59 bis 61 g) enthalten jeweils etwa 25 % der Riegel.<br>Ein schmaler Teil bedeutet: Die Werte liegen dort <b>dichter</b> beieinander – nicht, dass es weniger sind.<br>C: Auch jede Antenne enthält etwa 25 %. Eine lange Antenne heißt nur: Die Werte sind dort weit verstreut.<br>D: Mehr als \\(q_3=61\\) g wiegen nur etwa 25 %."},
+  b5:{ok:"Richtig! Der Quartilsabstand von B ist nur 4 g, der von A 12 g. Die mittlere Hälfte der Dosen liegt bei B viel dichter am Sollwert.",
+    loesung:"Richtig ist B.<br>Quartilsabstand A: 506 − 494 = 12 g. Quartilsabstand B: 502 − 498 = 4 g.<br>Bei B liegen die mittleren 50 % der Dosen zwischen 498 g und 502 g – also sehr nah am Sollwert. Das ist zuverlässiger.<br>A: Die Spannweite hängt nur von zwei Werten ab – der leichtesten und der schwersten Dose. Ein einzelner Ausreißer macht sie groß. Der Quartilsabstand ist robuster.<br>C: Gleicher Median heißt nicht gleiche Streuung.<br>D: In jeder Box liegen 50 % der Dosen – bei beiden Anlagen gleich viele. Eine größere Box heißt: mehr Streuung."},
   b4:{ok:"Richtig! Bis zum oberen Quartil \\(q_3=55\\) liegen 75 % der Werte.",
     loesung:"Richtig ist C.<br>Bis zum oberen Quartil \\(q_3=55\\) liegen 75 % der Werte.<br>A: Von 20 (Minimum) bis 50 (Median) liegen 50 %, nicht 25 %.<br>B: 70 Minuten ist die Spannweite (90 − 20). Der Quartilsabstand ist 55 − 40 = 15 Minuten.<br>D: Länger als 55 Minuten trainieren nur etwa 25 %."}
 };
