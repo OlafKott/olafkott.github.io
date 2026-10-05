@@ -203,7 +203,7 @@ function pick(i){
   fb(2,`Gerade ${g.lab} ${t} Versucht es noch einmal.`,'bad');
 }
 function mark(html){document.getElementById('extra').innerHTML=html;}
-function setOk(n){if(!solved[n]){solved[n]=true;}document.getElementById('s'+n).classList.add('done');const nx=document.getElementById('s'+(n+1));if(nx)nx.classList.remove('locked');score();
+function setOk(n){if(!solved[n]){solved[n]=true;}document.getElementById('s'+n).classList.add('done');const nx=document.getElementById('s'+(n+1));if(nx)nx.classList.remove('locked');score();upd();
   if(n===2){S.chosen=true;const g=S.L.find(q=>q.ok);document.getElementById('gname').textContent='Gerade '+g.lab;document.getElementById('gname').style.color=g.col;document.getElementById('plothint').textContent='Die falschen Geraden sind ausgeblendet. Mit Gerade '+g.lab+' geht es weiter.';upd();}
   if(n===3){mark(`<circle cx="${C.px(S.P1[0])}" cy="${C.py(S.P1[1])}" r="10" fill="none" stroke="#2E7D32" stroke-width="3"/><circle cx="${C.px(S.P2[0])}" cy="${C.py(S.P2[1])}" r="10" fill="none" stroke="#2E7D32" stroke-width="3"/><text x="${C.px(S.P1[0])+12}" y="${C.py(S.P1[1])+24}" font-family="Calibri" font-weight="700" font-size="15" fill="#2E7D32">P₁</text><text x="${C.px(S.P2[0])+12}" y="${C.py(S.P2[1])+24}" font-family="Calibri" font-weight="700" font-size="15" fill="#2E7D32">P₂</text>`);}
   if(n===5) document.getElementById('fin').classList.add('show');
