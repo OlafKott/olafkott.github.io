@@ -98,6 +98,7 @@
   .feedback.bad{display:block;background:var(--bad-soft);border-left:6px solid var(--bad)}
   .feedback strong{display:block;font-size:1.05rem}
   .feedback .loesung{margin-top:6px}
+  .feedback .loesung .katex .mfrac{display:inline-block;margin:6px 0}
   .feedback details{margin-top:6px}
   .feedback summary{cursor:pointer;color:var(--rwb-dark);font-weight:600}
   .feedback ul{margin:4px 0;padding-left:1.2em}
@@ -167,15 +168,15 @@
 
 <main>
 
-<!-- Urliste: 16 Werte -->
+<!-- Urliste: 9 Werte -->
 <section class="card" data-typ="felder" id="u1">
   <p class="label">Kennzahlen bestimmen</p>
   <h2>Shakes pro Stunde</h2>
   <p class="frage">Mehr Nutrition verkauft auf einer Sportmesse Protein-Shakes.<br>
-  Das ist die Anzahl verkaufter Shakes in 16 Stunden:</p>
-  <div class="datenreihe"><span>13</span><span>5</span><span>20</span><span>9</span><span>2</span><span>17</span><span>11</span><span>25</span><span>6</span><span>14</span><span>3</span><span>19</span><span>10</span><span>22</span><span>8</span><span>15</span></div>
-  <div class="merk">Werte zuerst <b>der Größe nach ordnen</b>.<br>
-  Der Median \(q_2\) teilt die Rangliste in zwei Hälften mit je 8 Werten.<br>
+  Das ist die Anzahl verkaufter Shakes in 9 Stunden – schon der Größe nach geordnet:</p>
+  <div class="datenreihe"><span>2</span><span>3</span><span>5</span><span>8</span><span>10</span><span>11</span><span>13</span><span>17</span><span>20</span></div>
+  <div class="merk">Der Median \(q_2\) ist der mittlere Wert der Rangliste.<br>
+  Bei einer <b>ungeraden</b> Anzahl gehört der Median zu <b>keiner</b> Hälfte. Jede Hälfte hat hier 4 Werte.<br>
   \(q_1\) ist der Median der unteren Hälfte, \(q_3\) ist der Median der oberen Hälfte.<br>
   Stehen zwei Werte in der Mitte, nimmt man ihren <b>Mittelwert</b>.</div>
   <p class="frage">Bestimmen Sie die Kennzahlen.</p>
@@ -190,12 +191,35 @@
   <div class="feedback"></div>
 </section>
 
+<!-- Urliste: 12 Werte -->
+<section class="card" data-typ="felder" id="u2">
+  <p class="label">Kennzahlen bestimmen</p>
+  <h2>Retouren pro Tag</h2>
+  <p class="frage">Im Onlineshop von Mehr Nutrition werden Pakete zurückgeschickt.<br>
+  Das ist die Anzahl der Retouren an 12 Tagen – schon der Größe nach geordnet:</p>
+  <div class="datenreihe"><span>3</span><span>4</span><span>6</span><span>8</span><span>9</span><span>11</span><span>13</span><span>14</span><span>16</span><span>18</span><span>21</span><span>24</span></div>
+  <div class="merk">Bei einer <b>geraden</b> Anzahl teilt der Median die Rangliste genau in zwei Hälften. Jede Hälfte hat hier 6 Werte.<br>
+  \(q_1\) ist der Median der unteren Hälfte, \(q_3\) ist der Median der oberen Hälfte.<br>
+  Stehen zwei Werte in der Mitte, nimmt man ihren <b>Mittelwert</b>.</div>
+  <p class="frage">Bestimmen Sie die Kennzahlen.</p>
+  <div class="felder">
+    <label class="feld"><span class="name"><span>unteres Quartil \(q_1\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
+    <label class="feld"><span class="name"><span>Median \(q_2\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
+    <label class="feld"><span class="name"><span>oberes Quartil \(q_3\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
+    <label class="feld"><span class="name"><span>Spannweite</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
+    <label class="feld"><span class="name"><span>Quartilsabstand</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('u2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
 <!-- Boxplot zur Urliste (keine Frage) -->
 <section class="card" id="bp1">
-  <p class="label">Boxplot zu Frage 1</p>
+  <p class="label">Boxplot zu Frage 2</p>
   <h2>So sieht die Urliste als Boxplot aus</h2>
-  <p class="frage">Jeder Punkt ist eine Stunde. Die Zahl darüber zeigt die verkauften Shakes.</p>
-  <svg class="boxplot erklaer" id="bp1-svg" data-werte="13,5,20,9,2,17,11,25,6,14,3,19,10,22,8,15" data-achse="0,26,2" data-einheit="verkaufte Shakes pro Stunde"></svg>
+  <p class="frage">Das ist die Rangliste aus Frage 2.<br>
+  Jeder Punkt ist ein Tag. Die Zahl darüber zeigt die Anzahl der Retouren.</p>
+  <svg class="boxplot erklaer" id="bp1-svg" data-werte="3,4,6,8,9,11,13,14,16,18,21,24" data-achse="0,26,2" data-einheit="Retouren pro Tag"></svg>
   <div class="aktionen schritte">
     <button class="knopf" id="bp1-weiter" onclick="schritt(+1)">Boxplot zeigen</button>
     <button class="knopf leise" onclick="schritt(-99)">Von vorn</button>
@@ -333,9 +357,9 @@
 </div>
 
 <script>
-const seiten = ["u1","bp1","b1","b2","b3","b4","b5"];   // alle Seiten in Reihenfolge
+const seiten = ["u1","u2","bp1","b1","b2","b3","b4","b5"];   // alle Seiten in Reihenfolge
 const ids = seiten.filter(s=>s!=="bp1");                // nur Fragen (zählen für Punkte)
-const titel = {u1:"Kennzahlen: Shakes pro Stunde",b1:"Boxplot: Wartezeit an der Hotline",
+const titel = {u1:"Kennzahlen: Shakes pro Stunde",u2:"Kennzahlen: Retouren pro Tag",b1:"Boxplot: Wartezeit an der Hotline",
   b2:"Boxplot: Punkte im Produkttest",b3:"Boxplot: Gewicht der Proteinriegel",b4:"Boxplot: Trainingsdauer",b5:"Vergleich: Abfüllanlagen"};
 const ergebnis = {};
 let aktuell = 0;
@@ -441,9 +465,9 @@ function zeichneErklaer(svg){
 }
 
 const bpSchritte = [
-  {knopf:"Boxplot zeigen", text:"Die 16 Werte, der Größe nach auf dem Zahlenstrahl."},
-  {knopf:"Anteile zeigen", text:"Die Box reicht von \\(q_1=7\\) bis \\(q_3=18\\). Der Strich in der Box ist der Median \\(q_2=12\\).<br>Die Antennen reichen bis zum kleinsten (2) und größten Wert (25)."},
-  {knopf:"Fertig ✓", text:"Zählen Sie nach: In jedem Teil liegen genau 4 von 16 Werten – also jeweils 25 %.<br>Die Box enthält 25 % + 25 % = 50 % der Werte.<br>Ein breiter Teil enthält nicht mehr Werte. Die Werte liegen dort nur weiter auseinander."}
+  {knopf:"Boxplot zeigen", text:"Die 12 Werte, der Größe nach auf dem Zahlenstrahl."},
+  {knopf:"Anteile zeigen", text:"Die Box reicht von \\(q_1=7\\) bis \\(q_3=17\\). Der Strich in der Box ist der Median \\(q_2=12\\).<br>Die Antennen reichen bis zum kleinsten (3) und größten Wert (24)."},
+  {knopf:"Fertig ✓", text:"Zählen Sie nach: In jedem Teil liegen genau 3 von 12 Werten – also jeweils 25 %.<br>Die Box enthält 25 % + 25 % = 50 % der Werte.<br>Ein breiter Teil enthält nicht mehr Werte. Die Werte liegen dort nur weiter auseinander."}
 ];
 let bpStufe = 0;
 function schritt(d){
@@ -472,28 +496,43 @@ const texte = {
 
 const feldAufgaben = {
   u1:{
-    ziel:{q1:7,q2:12,q3:18,R:23,QA:11},
+    ziel:{q1:4,q2:10,q3:15,R:18,QA:11},
     fehler:{
-      q1:[{w:6,t:"\\(q_1=6\\): Die untere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."},
-          {w:8,t:"\\(q_1=8\\): Die untere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."},
-          {w:5.5,t:"\\(q_1=5{,}5\\): Sie haben die Werte nicht sortiert."}],
-      q2:[{w:11,t:"Median 11: Bei 16 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."},
-          {w:13,t:"Median 13: Bei 16 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."},
-          {w:15.5,t:"Median 15,5: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."}],
-      q3:[{w:17,t:"\\(q_3=17\\): Die obere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (17 und 19). Nehmen Sie ihren Mittelwert."},
-          {w:19,t:"\\(q_3=19\\): Die obere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (17 und 19). Nehmen Sie ihren Mittelwert."},
-          {w:14.5,t:"\\(q_3=14{,}5\\): Sie haben die Werte nicht sortiert."}],
-      R:[{w:2,t:"Spannweite 2: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
-         {w:27,t:"Spannweite 27: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
-      QA:[{w:23,t:"Quartilsabstand 23: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
+      q1:[{w:3,t:"\\(q_1=3\\): Die untere Hälfte 2, 3, 5, 8 hat zwei mittlere Werte (3 und 5). Nehmen Sie ihren Mittelwert."},
+          {w:5,t:"\\(q_1=5\\): Haben Sie den Median 10 zur unteren Hälfte gezählt? Bei 9 Werten gehört er zu keiner Hälfte. Die untere Hälfte ist 2, 3, 5, 8."}],
+      q2:[{w:10.5,t:"Median 10,5: Bei 9 Werten gibt es genau einen mittleren Wert – den 5. Wert."}],
+      q3:[{w:17,t:"\\(q_3=17\\): Die obere Hälfte 11, 13, 17, 20 hat zwei mittlere Werte (13 und 17). Nehmen Sie ihren Mittelwert."},
+          {w:13,t:"\\(q_3=13\\): Haben Sie den Median 10 zur oberen Hälfte gezählt? Bei 9 Werten gehört er zu keiner Hälfte. Die obere Hälfte ist 11, 13, 17, 20."}],
+      R:[{w:22,t:"Spannweite 22: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
+      QA:[{w:18,t:"Quartilsabstand 18: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
           {w:-11,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
     },
-    loesung:"Rangliste (16 Werte):"+
-      "<div class='rang'><span>2</span><span>3</span><span>5</span><span class='q'>6</span><span class='q'>8</span><span>9</span><span>10</span><span class='m'>11</span><span class='m'>13</span><span>14</span><span>15</span><span class='q'>17</span><span class='q'>19</span><span>20</span><span>22</span><span>25</span></div>"+
-      "Median: zwischen 8. und 9. Wert → \\(q_2=\\dfrac{11+13}{2}=12\\)<br>"+
-      "Untere Hälfte 2, 3, 5, <b>6, 8</b>, 9, 10, 11 → \\(q_1=\\dfrac{6+8}{2}=7\\)<br>"+
-      "Obere Hälfte 13, 14, 15, <b>17, 19</b>, 20, 22, 25 → \\(q_3=\\dfrac{17+19}{2}=18\\)<br>"+
-      "Spannweite = 25 − 2 = 23<br>Quartilsabstand = \\(q_3-q_1=18-7=11\\)"
+    loesung:"Rangliste (9 Werte):"+
+      "<div class='rang'><span>2</span><span class='q'>3</span><span class='q'>5</span><span>8</span><span class='m'>10</span><span>11</span><span class='q'>13</span><span class='q'>17</span><span>20</span></div>"+
+      "Median: 5. Wert → \\(q_2=10\\)<br>"+
+      "Untere Hälfte 2, <b>3, 5</b>, 8 → \\(q_1=\\dfrac{3+5}{2}=4\\)<br>"+
+      "Obere Hälfte 11, <b>13, 17</b>, 20 → \\(q_3=\\dfrac{13+17}{2}=15\\)<br>"+
+      "Spannweite = 20 − 2 = 18<br>Quartilsabstand = \\(q_3-q_1=15-4=11\\)"
+  },
+  u2:{
+    ziel:{q1:7,q2:12,q3:17,R:21,QA:10},
+    fehler:{
+      q1:[{w:6,t:"\\(q_1=6\\): Die untere Hälfte hat 6 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."},
+          {w:8,t:"\\(q_1=8\\): Die untere Hälfte hat 6 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."}],
+      q2:[{w:11,t:"Median 11: Bei 12 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."},
+          {w:13,t:"Median 13: Bei 12 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."}],
+      q3:[{w:16,t:"\\(q_3=16\\): Die obere Hälfte hat 6 Werte. In der Mitte stehen zwei Werte (16 und 18). Nehmen Sie ihren Mittelwert."},
+          {w:18,t:"\\(q_3=18\\): Die obere Hälfte hat 6 Werte. In der Mitte stehen zwei Werte (16 und 18). Nehmen Sie ihren Mittelwert."}],
+      R:[{w:27,t:"Spannweite 27: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
+      QA:[{w:21,t:"Quartilsabstand 21: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
+          {w:-10,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
+    },
+    loesung:"Rangliste (12 Werte):"+
+      "<div class='rang'><span>3</span><span>4</span><span class='q'>6</span><span class='q'>8</span><span>9</span><span class='m'>11</span><span class='m'>13</span><span>14</span><span class='q'>16</span><span class='q'>18</span><span>21</span><span>24</span></div>"+
+      "Median: zwischen 6. und 7. Wert → \\(q_2=\\dfrac{11+13}{2}=12\\)<br>"+
+      "Untere Hälfte 3, 4, <b>6, 8</b>, 9, 11 → \\(q_1=\\dfrac{6+8}{2}=7\\)<br>"+
+      "Obere Hälfte 13, 14, <b>16, 18</b>, 21, 24 → \\(q_3=\\dfrac{16+18}{2}=17\\)<br>"+
+      "Spannweite = 24 − 3 = 21<br>Quartilsabstand = \\(q_3-q_1=17-7=10\\)"
   }
 };
 const feldNamen = {q1:"\\(q_1\\)",q2:"Median",q3:"\\(q_3\\)",R:"Spannweite",QA:"Quartilsabstand"};
@@ -588,7 +627,7 @@ function gehe(i){
   if(i===seiten.length) zeichneAuswertung();
   const id = seiten[i];
   document.getElementById("stand").textContent =
-    i===seiten.length ? "Auswertung" : id==="bp1" ? "Boxplot zu Frage 1" : "Frage "+(ids.indexOf(id)+1)+" von "+ids.length;
+    i===seiten.length ? "Auswertung" : id==="bp1" ? "Boxplot zu Frage 2" : "Frage "+(ids.indexOf(id)+1)+" von "+ids.length;
   document.getElementById("zurueck").disabled = i===0;
   const w = document.getElementById("weiter");
   w.disabled = i===seiten.length;
@@ -603,7 +642,7 @@ function zeichneDots(){
     const b = document.createElement("button");
     if(id==="bp1"){
       b.className = "dot info" + (i===aktuell?" aktiv":"");
-      b.innerHTML = bpIcon; b.title = "Boxplot zu Frage 1";
+      b.innerHTML = bpIcon; b.title = "Boxplot zu Frage 2";
     } else {
       b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
       b.textContent = ids.indexOf(id)+1; b.title = titel[id];
