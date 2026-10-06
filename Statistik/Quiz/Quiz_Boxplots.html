@@ -80,6 +80,10 @@
   .feld input.bad{border-color:var(--bad);background:var(--bad-soft)}
 
   .boxplot{width:100%;height:auto;display:block;margin:0 0 16px}
+  svg.erklaer .schritt{opacity:0;transition:opacity .45s ease}
+  svg.erklaer .schritt.an{opacity:1}
+  .erklaer-text{margin-top:16px;font-size:1rem;min-height:3.4em}
+  .dot.info svg{width:22px;height:14px;display:block}
 
   .aktionen{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
   button.knopf{font:inherit;font-size:1rem;font-weight:600;border:2px solid var(--rwb);background:var(--rwb);
@@ -140,6 +144,8 @@
       -webkit-print-color-adjust:exact;print-color-adjust:exact}
     .merk,.boxplot{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .boxplot{max-height:62mm}
+    svg.erklaer{max-height:80mm} svg.erklaer .schritt{opacity:1!important}
+    .erklaer-text{display:none}
   }
 </style>
 </head>
@@ -161,16 +167,17 @@
 
 <main>
 
-<!-- Urliste 1: 11 Werte -->
+<!-- Urliste: 16 Werte -->
 <section class="card" data-typ="felder" id="u1">
   <p class="label">Kennzahlen bestimmen</p>
   <h2>Shakes pro Stunde</h2>
   <p class="frage">Mehr Nutrition verkauft auf einer Sportmesse Protein-Shakes.<br>
-  Das ist die Anzahl verkaufter Shakes in 11 Stunden:</p>
-  <div class="datenreihe"><span>7</span><span>3</span><span>12</span><span>5</span><span>9</span><span>15</span><span>4</span><span>8</span><span>11</span><span>6</span><span>10</span></div>
+  Das ist die Anzahl verkaufter Shakes in 16 Stunden:</p>
+  <div class="datenreihe"><span>13</span><span>5</span><span>20</span><span>9</span><span>2</span><span>17</span><span>11</span><span>25</span><span>6</span><span>14</span><span>3</span><span>19</span><span>10</span><span>22</span><span>8</span><span>15</span></div>
   <div class="merk">Werte zuerst <b>der Größe nach ordnen</b>.<br>
+  Der Median \(q_2\) teilt die Rangliste in zwei Hälften mit je 8 Werten.<br>
   \(q_1\) ist der Median der unteren Hälfte, \(q_3\) ist der Median der oberen Hälfte.<br>
-  Bei einer ungeraden Anzahl gehört der Median zu <b>keiner</b> Hälfte.</div>
+  Stehen zwei Werte in der Mitte, nimmt man ihren <b>Mittelwert</b>.</div>
   <p class="frage">Bestimmen Sie die Kennzahlen.</p>
   <div class="felder">
     <label class="feld"><span class="name"><span>unteres Quartil \(q_1\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
@@ -183,25 +190,17 @@
   <div class="feedback"></div>
 </section>
 
-<!-- Urliste 2: 10 Werte -->
-<section class="card" data-typ="felder" id="u2">
-  <p class="label">Kennzahlen bestimmen</p>
-  <h2>Retouren pro Tag</h2>
-  <p class="frage">Im Onlineshop von Mehr Nutrition werden Pakete zurückgeschickt.<br>
-  Das ist die Anzahl der Retouren an 10 Tagen:</p>
-  <div class="datenreihe"><span>11</span><span>4</span><span>14</span><span>7</span><span>2</span><span>16</span><span>8</span><span>13</span><span>5</span><span>10</span></div>
-  <div class="merk">Bei einer <b>geraden</b> Anzahl teilt der Median die Rangliste genau in zwei Hälften.<br>
-  Jede Hälfte hat hier 5 Werte.</div>
-  <p class="frage">Bestimmen Sie die Kennzahlen.</p>
-  <div class="felder">
-    <label class="feld"><span class="name"><span>unteres Quartil \(q_1\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q1"></label>
-    <label class="feld"><span class="name"><span>Median \(q_2\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q2"></label>
-    <label class="feld"><span class="name"><span>oberes Quartil \(q_3\)</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="q3"></label>
-    <label class="feld"><span class="name"><span>Spannweite</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="R"></label>
-    <label class="feld"><span class="name"><span>Quartilsabstand</span></span><input type="text" inputmode="decimal" autocomplete="off" data-k="QA"></label>
+<!-- Boxplot zur Urliste (keine Frage) -->
+<section class="card" id="bp1">
+  <p class="label">Boxplot zu Frage 1</p>
+  <h2>So sieht die Urliste als Boxplot aus</h2>
+  <p class="frage">Jeder Punkt ist eine Stunde. Die Zahl darüber zeigt die verkauften Shakes.</p>
+  <svg class="boxplot erklaer" id="bp1-svg" data-werte="13,5,20,9,2,17,11,25,6,14,3,19,10,22,8,15" data-achse="0,26,2" data-einheit="verkaufte Shakes pro Stunde"></svg>
+  <div class="aktionen schritte">
+    <button class="knopf" id="bp1-weiter" onclick="schritt(+1)">Boxplot zeigen</button>
+    <button class="knopf leise" onclick="schritt(-99)">Von vorn</button>
   </div>
-  <div class="aktionen"><button class="knopf" onclick="pruefe('u2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('u2')">Nochmal</button></div>
-  <div class="feedback"></div>
+  <div class="merk erklaer-text" id="bp1-text"></div>
 </section>
 
 <!-- Boxplot A -->
@@ -334,8 +333,9 @@
 </div>
 
 <script>
-const ids = ["u1","u2","b1","b2","b3","b4","b5"];
-const titel = {u1:"Kennzahlen: Shakes pro Stunde",u2:"Kennzahlen: Retouren pro Tag",b1:"Boxplot: Wartezeit an der Hotline",
+const seiten = ["u1","bp1","b1","b2","b3","b4","b5"];   // alle Seiten in Reihenfolge
+const ids = seiten.filter(s=>s!=="bp1");                // nur Fragen (zählen für Punkte)
+const titel = {u1:"Kennzahlen: Shakes pro Stunde",b1:"Boxplot: Wartezeit an der Hotline",
   b2:"Boxplot: Punkte im Produkttest",b3:"Boxplot: Gewicht der Proteinriegel",b4:"Boxplot: Trainingsdauer",b5:"Vergleich: Abfüllanlagen"};
 const ergebnis = {};
 let aktuell = 0;
@@ -379,6 +379,83 @@ function zeichneBoxplot(svg){
   });
 }
 
+/* ---------- Erklär-Boxplot zur Urliste ---------- */
+function median(a){ const n=a.length; return n%2 ? a[(n-1)/2] : (a[n/2-1]+a[n/2])/2; }
+function zeichneErklaer(svg){
+  const w = svg.dataset.werte.split(",").map(Number).sort((a,b)=>a-b);
+  const n = w.length, h1 = w.slice(0,Math.floor(n/2)), h2 = w.slice(Math.ceil(n/2));
+  const mn=w[0], mx=w[n-1], q1=median(h1), md=median(w), q3=median(h2);
+  const [von,bis,schritt] = svg.dataset.achse.split(",").map(Number);
+  const W=900, L=40, R=860, yP50=34, yP25=104, yBox=150, hBox=64, ym=yBox+hBox/2, yAchse=300, H=350;
+  const x = v => L + (v-von)/(bis-von)*(R-L);
+  const ns="http://www.w3.org/2000/svg";
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label",`Boxplot der Urliste mit ${n} Werten: Minimum ${mn}, unteres Quartil ${q1}, Median ${md}, oberes Quartil ${q3}, Maximum ${mx}. Jeder Teil enthält 25 Prozent der Werte, die Box 50 Prozent.`);
+  const grp = cls => { const g=document.createElementNS(ns,"g"); if(cls) g.setAttribute("class",cls); svg.appendChild(g); return g; };
+  const el=(g,t,a,txt)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;g.appendChild(e);return e;};
+  const fmt = v => String(v).replace(".",",");
+
+  // Grundgerüst: Raster + Achse
+  const g0 = grp("");
+  for(let v=von; v<=bis+1e-9; v+=schritt) el(g0,"line",{x1:x(v),x2:x(v),y1:yBox-20,y2:yAchse,stroke:"#ececf0","stroke-width":1});
+  el(g0,"line",{x1:L-10,x2:R+28,y1:yAchse,y2:yAchse,stroke:"#1e1e24","stroke-width":2});
+  el(g0,"path",{d:`M${R+36},${yAchse} l-12,-6 v12 z`,fill:"#1e1e24"});
+  for(let v=von; v<=bis+1e-9; v+=schritt){
+    el(g0,"line",{x1:x(v),x2:x(v),y1:yAchse-6,y2:yAchse+6,stroke:"#1e1e24","stroke-width":2});
+    el(g0,"text",{x:x(v),y:yAchse+28,"text-anchor":"middle","font-size":18,fill:"#1e1e24"},fmt(v));
+  }
+  el(g0,"text",{x:R+36,y:yAchse-14,"text-anchor":"end","font-size":16,fill:"#6b6b76"},svg.dataset.einheit);
+
+  // Schritt 2: Boxplot (unter den Punkten gezeichnet)
+  const g2 = grp("schritt s2");
+  el(g2,"line",{x1:x(mn),x2:x(q1),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+  el(g2,"line",{x1:x(q3),x2:x(mx),y1:ym,y2:ym,stroke:"#1e1e24","stroke-width":3});
+  [mn,mx].forEach(v=>el(g2,"line",{x1:x(v),x2:x(v),y1:ym-11,y2:ym+11,stroke:"#1e1e24","stroke-width":3}));
+  el(g2,"rect",{x:x(q1),y:yBox,width:x(q3)-x(q1),height:hBox,fill:"#fbe8ef",stroke:"#c80046","stroke-width":3,rx:3});
+  el(g2,"line",{x1:x(md),x2:x(md),y1:yBox,y2:yBox+hBox,stroke:"#c80046","stroke-width":5});
+  // Kennzahlen unter dem Boxplot
+  const yK = yBox+hBox+30;
+  [[mn,"Min",mn],[q1,"q₁",q1],[md,"q₂",md],[q3,"q₃",q3],[mx,"Max",mx]].forEach(([v,name,wert])=>{
+    el(g2,"text",{x:x(v),y:yK,"text-anchor":"middle","font-size":17,"font-weight":700,fill:"#9e0037"},name+" = "+fmt(wert));
+  });
+
+  // Schritt 1: Punkte mit Werten (auf der Mittellinie)
+  const g1 = grp("schritt s1 an");
+  w.forEach(v=>{
+    el(g1,"circle",{cx:x(v),cy:ym,r:8,fill:"#1e1e24",stroke:"#fff","stroke-width":2.5});
+    el(g1,"text",{x:x(v),y:ym-19,"text-anchor":"middle","font-size":15,"font-weight":700,fill:"#1e1e24"},fmt(v));
+  });
+
+  // Schritt 3: Anteile
+  const g3 = grp("schritt s3");
+  const klammer=(a,b,y,txt,gross)=>{
+    const xa=x(a)+3, xb=x(b)-3;
+    el(g3,"path",{d:`M${xa},${y+14} v-10 H${xb} v10`,fill:"none",stroke:gross?"#c80046":"#1e1e24","stroke-width":gross?3:2});
+    el(g3,"text",{x:(xa+xb)/2,y:y-6,"text-anchor":"middle","font-size":gross?22:18,"font-weight":800,fill:gross?"#c80046":"#1e1e24"},txt);
+  };
+  klammer(mn,q1,yP25,"25 %"); klammer(q1,md,yP25,"25 %"); klammer(md,q3,yP25,"25 %"); klammer(q3,mx,yP25,"25 %");
+  klammer(q1,q3,yP50,"50 %",true);
+  // gestrichelte Hilfslinien von den Kennzahlen nach oben
+  [mn,q1,md,q3,mx].forEach(v=>el(g3,"line",{x1:x(v),x2:x(v),y1:yP25+16,y2:yBox-8,stroke:"#9e0037","stroke-width":1.5,"stroke-dasharray":"4 4"}));
+}
+
+const bpSchritte = [
+  {knopf:"Boxplot zeigen", text:"Die 16 Werte, der Größe nach auf dem Zahlenstrahl."},
+  {knopf:"Anteile zeigen", text:"Die Box reicht von \\(q_1=7\\) bis \\(q_3=18\\). Der Strich in der Box ist der Median \\(q_2=12\\).<br>Die Antennen reichen bis zum kleinsten (2) und größten Wert (25)."},
+  {knopf:"Fertig ✓", text:"Zählen Sie nach: In jedem Teil liegen genau 4 von 16 Werten – also jeweils 25 %.<br>Die Box enthält 25 % + 25 % = 50 % der Werte.<br>Ein breiter Teil enthält nicht mehr Werte. Die Werte liegen dort nur weiter auseinander."}
+];
+let bpStufe = 0;
+function schritt(d){
+  bpStufe = Math.max(0, Math.min(bpSchritte.length-1, bpStufe+d));
+  const svg = document.getElementById("bp1-svg");
+  svg.querySelector(".s2").classList.toggle("an", bpStufe>=1);
+  svg.querySelector(".s3").classList.toggle("an", bpStufe>=2);
+  const k = document.getElementById("bp1-weiter");
+  k.textContent = bpSchritte[bpStufe].knopf; k.disabled = bpStufe===bpSchritte.length-1;
+  const t = document.getElementById("bp1-text"); t.innerHTML = bpSchritte[bpStufe].text; rendere(t);
+}
+
 /* ---------- Lösungen ---------- */
 const texte = {
   b1:{ok:"Richtig! Zwischen \\(q_1=5\\) und \\(q_3=10\\) liegt die Box – dort liegen 50 % der Werte.",
@@ -395,41 +472,28 @@ const texte = {
 
 const feldAufgaben = {
   u1:{
-    ziel:{q1:5,q2:8,q3:11,R:12,QA:6},
+    ziel:{q1:7,q2:12,q3:18,R:23,QA:11},
     fehler:{
-      q1:[{w:5.5,t:"\\(q_1=5{,}5\\): Sie haben den Median zur unteren Hälfte gezählt. Bei 11 Werten gehört er zu keiner Hälfte."},
-          {w:12,t:"\\(q_1=12\\): Sie haben die Werte nicht sortiert."}],
-      q2:[{w:15,t:"Median 15: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."},
-          {w:7.5,t:"Median 7,5: Bei 11 Werten gibt es genau einen mittleren Wert – den 6. Wert."}],
-      q3:[{w:10.5,t:"\\(q_3=10{,}5\\): Sie haben den Median zur oberen Hälfte gezählt. Bei 11 Werten gehört er zu keiner Hälfte."}],
-      R:[{w:3,t:"Spannweite 3: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
-         {w:18,t:"Spannweite 18: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
-      QA:[{w:12,t:"Quartilsabstand 12: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
-          {w:-6,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
+      q1:[{w:6,t:"\\(q_1=6\\): Die untere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."},
+          {w:8,t:"\\(q_1=8\\): Die untere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (6 und 8). Nehmen Sie ihren Mittelwert."},
+          {w:5.5,t:"\\(q_1=5{,}5\\): Sie haben die Werte nicht sortiert."}],
+      q2:[{w:11,t:"Median 11: Bei 16 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."},
+          {w:13,t:"Median 13: Bei 16 Werten stehen zwei Werte in der Mitte (11 und 13). Nehmen Sie ihren Mittelwert."},
+          {w:15.5,t:"Median 15,5: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."}],
+      q3:[{w:17,t:"\\(q_3=17\\): Die obere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (17 und 19). Nehmen Sie ihren Mittelwert."},
+          {w:19,t:"\\(q_3=19\\): Die obere Hälfte hat 8 Werte. In der Mitte stehen zwei Werte (17 und 19). Nehmen Sie ihren Mittelwert."},
+          {w:14.5,t:"\\(q_3=14{,}5\\): Sie haben die Werte nicht sortiert."}],
+      R:[{w:2,t:"Spannweite 2: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
+         {w:27,t:"Spannweite 27: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
+      QA:[{w:23,t:"Quartilsabstand 23: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
+          {w:-11,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
     },
-    loesung:"Rangliste (11 Werte):"+
-      "<div class='rang'><span>3</span><span>4</span><span class='q'>5</span><span>6</span><span>7</span><span class='m'>8</span><span>9</span><span>10</span><span class='q'>11</span><span>12</span><span>15</span></div>"+
-      "Median: 6. Wert → \\(q_2=8\\)<br>Untere Hälfte 3, 4, 5, 6, 7 → \\(q_1=5\\)<br>Obere Hälfte 9, 10, 11, 12, 15 → \\(q_3=11\\)<br>"+
-      "Spannweite = 15 − 3 = 12<br>Quartilsabstand = \\(q_3-q_1=11-5=6\\)"
-  },
-  u2:{
-    ziel:{q1:5,q2:9,q3:13,R:14,QA:8},
-    fehler:{
-      q1:[{w:14,t:"\\(q_1=14\\): Sie haben die Werte nicht sortiert."},
-          {w:4.5,t:"\\(q_1=4{,}5\\): Die untere Hälfte hat 5 Werte. Ihr Median ist der 3. Wert."}],
-      q2:[{w:8,t:"Median 8: Bei 10 Werten gibt es zwei mittlere Werte (8 und 10). Bilden Sie ihren Mittelwert."},
-          {w:10,t:"Median 10: Bei 10 Werten gibt es zwei mittlere Werte (8 und 10). Bilden Sie ihren Mittelwert."},
-          {w:12,t:"Median 12: Sie haben die Werte nicht sortiert. Zuerst der Größe nach ordnen."}],
-      q3:[{w:13.5,t:"\\(q_3=13{,}5\\): Die obere Hälfte hat 5 Werte. Ihr Median ist der mittlere davon, also der 8. Wert."}],
-      R:[{w:-1,t:"Spannweite −1: Sie haben letzter minus erster Wert der unsortierten Liste gerechnet. Nehmen Sie den größten und den kleinsten Wert."},
-         {w:18,t:"Spannweite 18: Sie haben addiert. Spannweite = größter Wert − kleinster Wert."}],
-      QA:[{w:14,t:"Quartilsabstand 14: Das ist die Spannweite. Quartilsabstand = \\(q_3-q_1\\)."},
-          {w:-8,t:"Andersherum: Quartilsabstand = \\(q_3-q_1\\)."}]
-    },
-    loesung:"Rangliste (10 Werte):"+
-      "<div class='rang'><span>2</span><span>4</span><span class='q'>5</span><span>7</span><span class='m'>8</span><span class='m'>10</span><span>11</span><span class='q'>13</span><span>14</span><span>16</span></div>"+
-      "Median: zwischen 5. und 6. Wert → \\(q_2=\\dfrac{8+10}{2}=9\\)<br>Untere Hälfte 2, 4, 5, 7, 8 → \\(q_1=5\\)<br>Obere Hälfte 10, 11, 13, 14, 16 → \\(q_3=13\\)<br>"+
-      "Spannweite = 16 − 2 = 14<br>Quartilsabstand = \\(q_3-q_1=13-5=8\\)"
+    loesung:"Rangliste (16 Werte):"+
+      "<div class='rang'><span>2</span><span>3</span><span>5</span><span class='q'>6</span><span class='q'>8</span><span>9</span><span>10</span><span class='m'>11</span><span class='m'>13</span><span>14</span><span>15</span><span class='q'>17</span><span class='q'>19</span><span>20</span><span>22</span><span>25</span></div>"+
+      "Median: zwischen 8. und 9. Wert → \\(q_2=\\dfrac{11+13}{2}=12\\)<br>"+
+      "Untere Hälfte 2, 3, 5, <b>6, 8</b>, 9, 10, 11 → \\(q_1=\\dfrac{6+8}{2}=7\\)<br>"+
+      "Obere Hälfte 13, 14, 15, <b>17, 19</b>, 20, 22, 25 → \\(q_3=\\dfrac{17+19}{2}=18\\)<br>"+
+      "Spannweite = 25 − 2 = 23<br>Quartilsabstand = \\(q_3-q_1=18-7=11\\)"
   }
 };
 const feldNamen = {q1:"\\(q_1\\)",q2:"Median",q3:"\\(q_3\\)",R:"Spannweite",QA:"Quartilsabstand"};
@@ -503,7 +567,7 @@ function zuruecksetzen(id){
   delete ergebnis[id];
   zeichneDots();
 }
-function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); gehe(0); }
+function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); schritt(-99); gehe(0); }
 
 document.addEventListener("change",e=>{
   const opt = e.target.closest(".opt"); if(!opt) return;
@@ -517,30 +581,39 @@ document.addEventListener("change",e=>{
 });
 
 function gehe(i){
-  if(i<0 || i>ids.length) return;
+  if(i<0 || i>seiten.length) return;
   aktuell = i;
   document.querySelectorAll("main .card").forEach(c=>c.classList.remove("sichtbar"));
-  (i<ids.length ? document.getElementById(ids[i]) : document.getElementById("ende")).classList.add("sichtbar");
-  if(i===ids.length) zeichneAuswertung();
-  document.getElementById("stand").textContent = i<ids.length ? "Frage "+(i+1)+" von "+ids.length : "Auswertung";
+  (i<seiten.length ? document.getElementById(seiten[i]) : document.getElementById("ende")).classList.add("sichtbar");
+  if(i===seiten.length) zeichneAuswertung();
+  const id = seiten[i];
+  document.getElementById("stand").textContent =
+    i===seiten.length ? "Auswertung" : id==="bp1" ? "Boxplot zu Frage 1" : "Frage "+(ids.indexOf(id)+1)+" von "+ids.length;
   document.getElementById("zurueck").disabled = i===0;
   const w = document.getElementById("weiter");
-  w.disabled = i===ids.length;
-  w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
+  w.disabled = i===seiten.length;
+  w.textContent = i===seiten.length-1 ? "Auswertung →" : "Weiter →";
   zeichneDots();
   window.scrollTo({top:0});
 }
+const bpIcon = '<svg viewBox="0 0 22 14"><line x1="1" y1="7" x2="6" y2="7" stroke="currentColor" stroke-width="2"/><rect x="6" y="2" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="11" y1="2" x2="11" y2="12" stroke="currentColor" stroke-width="2"/><line x1="16" y1="7" x2="21" y2="7" stroke="currentColor" stroke-width="2"/></svg>';
 function zeichneDots(){
   const box = document.getElementById("dots"); box.innerHTML = "";
-  ids.forEach((id,i)=>{
+  seiten.forEach((id,i)=>{
     const b = document.createElement("button");
-    b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
-    b.textContent = i+1; b.title = titel[id]; b.onclick = ()=>gehe(i);
+    if(id==="bp1"){
+      b.className = "dot info" + (i===aktuell?" aktiv":"");
+      b.innerHTML = bpIcon; b.title = "Boxplot zu Frage 1";
+    } else {
+      b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
+      b.textContent = ids.indexOf(id)+1; b.title = titel[id];
+    }
+    b.onclick = ()=>gehe(i);
     box.appendChild(b);
   });
   const e = document.createElement("button");
-  e.className = "dot ende" + (aktuell===ids.length?" aktiv":"");
-  e.textContent = "✓"; e.title = "Auswertung"; e.onclick = ()=>gehe(ids.length);
+  e.className = "dot ende" + (aktuell===seiten.length?" aktiv":"");
+  e.textContent = "✓"; e.title = "Auswertung"; e.onclick = ()=>gehe(seiten.length);
   box.appendChild(e);
 }
 function zeichneAuswertung(){
@@ -553,7 +626,7 @@ function zeichneAuswertung(){
     const li = document.createElement("li");
     const st = id in ergebnis ? (ergebnis[id]?"ok":"bad") : "";
     li.innerHTML = "<span class='marke "+st+"'>"+(st==="ok"?"✓":st==="bad"?"✗":"–")+"</span><span>Frage "+(i+1)+": "+titel[id]+"</span>";
-    li.onclick = ()=>gehe(i);
+    li.onclick = ()=>gehe(seiten.indexOf(id));
     ul.appendChild(li);
   });
 }
@@ -570,7 +643,8 @@ document.addEventListener("keydown",e=>{
 
 document.addEventListener("DOMContentLoaded",()=>{
   ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Frage "+(i+1)+" · "+l.textContent; });
-  document.querySelectorAll("svg.boxplot").forEach(zeichneBoxplot);
+  document.querySelectorAll("svg.boxplot:not(.erklaer)").forEach(zeichneBoxplot);
+  zeichneErklaer(document.getElementById("bp1-svg")); schritt(0);
   rendere(document.body); gehe(0);
 });
 </script>
