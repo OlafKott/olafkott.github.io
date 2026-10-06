@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Fehlersuche Standardabweichung</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --rwb:#c80046; --rwb-dark:#9e0037; --rwb-soft:#fbe8ef; --rwb-line:#f1c4d4;
+    --ink:#1e1e24; --muted:#6b6b76; --line:#e3e3e8; --paper:#ffffff; --bg:#f6f5f7; --box:#f1f2f4;
+    --ok:#1f7a3d; --ok-soft:#e7f5ec; --bad:#b3261e; --bad-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:20px;line-height:1.7}
+
+  .app{min-height:100%;display:flex;flex-direction:column}
+
+  /* Kopfzeile */
+  header.kopf{background:var(--paper);border-bottom:4px solid var(--rwb);
+    break-inside:avoid;page-break-inside:avoid;break-after:avoid;page-break-after:avoid}
+  .kopf-inner{max-width:1040px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:22px}
+  .kopf img{height:46px;width:auto;display:block;flex:none}
+  .kopf .titel{flex:1;min-width:0}
+  .kopf h1{margin:0;font-size:1.3rem;line-height:1.25;font-weight:700}
+  .kopf .unter{margin:0;color:var(--muted);font-size:.85rem}
+  .kopf .stand{font-weight:700;color:var(--rwb);white-space:nowrap;font-size:1rem}
+
+  /* Fortschritt */
+  .punkte-leiste{max-width:1040px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--rwb-line);background:#fff;
+    color:var(--muted);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
+  .dot.aktiv{border-color:var(--rwb);color:var(--rwb);box-shadow:0 0 0 4px var(--rwb-soft)}
+  .dot.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  .dot.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+  .dot.ende{border-style:dashed}
+
+  main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:18px 20px 12px}
+
+  /* Aufgabenkarten */
+  .card{display:none;background:var(--paper);border-radius:16px;border:1px solid var(--line);
+    border-top:6px solid var(--rwb);padding:26px 32px 24px;box-shadow:0 6px 24px rgba(30,30,36,.06);
+    break-inside:avoid;page-break-inside:avoid}
+  .card.sichtbar{display:block;animation:rein .25s ease}
+  @keyframes rein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card .label{color:var(--rwb);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;margin:0}
+  .card h2{margin:2px 0 14px;font-size:1.45rem;line-height:1.3}
+  .frage{margin:0 0 14px}
+  .sub{display:inline-block;background:var(--rwb-soft);color:var(--rwb-dark);border-radius:6px;
+    padding:2px 12px;font-size:.9rem;margin:0 0 14px}
+
+  .optionen{display:grid;gap:12px}
+  .optionen.zwei{grid-template-columns:1fr 1fr}
+  .opt{display:flex;align-items:center;gap:16px;border:2px solid var(--line);border-radius:12px;
+    padding:12px 18px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:var(--rwb-line);background:#fffafb}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .buchst{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:var(--box);font-weight:700;color:var(--muted)}
+  .opt.gewaehlt{border-color:var(--rwb);background:var(--rwb-soft)}
+  .opt.gewaehlt .buchst{background:var(--rwb);color:#fff}
+  .opt.richtig{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.richtig .buchst{background:var(--ok);color:#fff}
+  .opt.falsch{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.falsch .buchst{background:var(--bad);color:#fff}
+  .opt .katex{font-size:1.2em}
+
+  .datenreihe{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px}
+  .datenreihe span{display:inline-block;min-width:3.4em;text-align:center;padding:8px 10px;font-size:1.15rem;font-weight:600;
+    border:2px solid var(--rwb-line);border-radius:10px;background:#fffafb;font-variant-numeric:tabular-nums}
+  table.daten{border-collapse:collapse;margin:4px 0 18px;font-variant-numeric:tabular-nums;width:100%}
+  table.daten th,table.daten td{border:1px solid var(--line);padding:6px 10px}
+  table.daten th{background:var(--rwb-soft);color:var(--rwb-dark);text-align:left;white-space:nowrap}
+  table.daten td{text-align:right}
+  table.daten tr:first-child td{text-align:center;color:var(--muted)}
+
+  .eingabe{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:1.15rem}
+  .eingabe input{font:inherit;font-size:1.3rem;width:170px;padding:8px 14px;border:2px solid var(--line);
+    border-radius:10px;background:var(--box);font-variant-numeric:tabular-nums}
+  .eingabe input:focus{outline:none;border-color:var(--rwb);background:#fff}
+
+  .aktionen{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  button.knopf{font:inherit;font-size:1rem;font-weight:600;border:2px solid var(--rwb);background:var(--rwb);
+    color:#fff;border-radius:10px;padding:8px 22px;cursor:pointer}
+  button.knopf:hover{background:var(--rwb-dark);border-color:var(--rwb-dark)}
+  button.knopf.leise{background:#fff;color:var(--rwb)}
+  button.knopf.leise:hover{background:var(--rwb-soft)}
+  button.knopf:disabled{opacity:.35;cursor:default}
+
+  .feedback{display:none;margin-top:18px;border-radius:12px;padding:14px 18px}
+  .feedback.ok{display:block;background:var(--ok-soft);border-left:6px solid var(--ok)}
+  .feedback.bad{display:block;background:var(--bad-soft);border-left:6px solid var(--bad)}
+  .feedback strong{display:block;font-size:1.05rem}
+  .feedback .loesung{margin-top:6px}
+  .feedback details{margin-top:6px}
+  .feedback summary{cursor:pointer;color:var(--rwb-dark);font-weight:600}
+
+  /* Navigation */
+  nav.navi{max-width:1040px;width:100%;margin:0 auto;padding:6px 20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  nav.navi .tipp{color:var(--muted);font-size:.8rem;text-align:center}
+
+  /* Auswertung */
+  .ergebnis-zahl{font-size:3.4rem;font-weight:800;color:var(--rwb);line-height:1.1;margin:8px 0}
+  .ergebnis-liste{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+  .ergebnis-liste li{display:flex;gap:12px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .ergebnis-liste li:hover{background:#fffafb}
+  .marke{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem;flex:none;background:#b9b9c2}
+  .marke.ok{background:var(--ok)} .marke.bad{background:var(--bad)}
+
+  @media (max-width:700px){
+    body{font-size:17px}
+    .optionen.zwei{grid-template-columns:1fr}
+    .card{padding:20px 18px}
+    .kopf img{height:34px}
+    .kopf .stand{display:none}
+    .dot{width:36px;height:36px}
+    table.daten{font-size:.85rem}
+    table.daten th,table.daten td{padding:4px 5px}
+  }
+
+  /* Druck: alle Aufgaben untereinander */
+  @page{size:A4;margin:14mm 15mm}
+  @media print{
+    body{background:#fff;font-size:12pt;line-height:1.55}
+    header.kopf{border-bottom:2px solid var(--rwb);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .kopf-inner{padding:0 0 8px}
+    .kopf .stand,.punkte-leiste,nav.navi,.aktionen,.feedback,#ende{display:none!important}
+    main{padding:6px 0 0}
+    .card{display:block!important;animation:none;box-shadow:none;border:1px solid #bbb;border-top:4px solid var(--rwb);
+      padding:12px 16px;margin:0 0 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card h2{font-size:1.15rem;margin-bottom:8px}
+    .opt{padding:5px 12px;border-width:1px}
+    #f2 .optionen.zwei{grid-template-columns:1fr}
+    .opt.gewaehlt,.opt.richtig,.opt.falsch{background:#fff;border-color:#ccc}
+    .opt .buchst,.opt.gewaehlt .buchst,.opt.richtig .buchst,.opt.falsch .buchst{width:28px;height:28px;background:#fff;border:1.5px solid #555;color:#333}
+    .datenreihe span{padding:3px 8px;font-size:1rem}
+    .eingabe input{border:1px solid #999;background:#f1f2f4;color:transparent;height:34px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+
+  .rechnung-kopf{margin:6px 0 8px;color:var(--muted);font-size:.9rem}
+  .schmal{display:none}
+  .schmal .katex-display{margin:2px 0;text-align:left}
+  .schmal .katex-display > .katex{text-align:left}
+  .korrektur .mathe{flex:1;min-width:0}
+  .korrektur .katex-display > .katex{text-align:left}
+  @media (max-width:700px){ nav.navi .tipp{display:none} .breit{display:none} .schmal{display:block} }
+  .rechnung-kopf b{color:var(--ink)}
+  .zeilen{display:grid;gap:10px}
+  .zeile{position:relative;display:flex;align-items:center;gap:14px;border:2px solid var(--line);border-radius:12px;
+    padding:10px 16px;cursor:pointer;background:#fff;overflow-x:auto}
+  .zeile:hover{border-color:var(--rwb-line);background:#fffafb}
+  .zeile input{position:absolute;opacity:0;pointer-events:none}
+  .zeile .nr{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+    background:var(--box);font-weight:700;color:var(--muted);font-size:1.1rem}
+  .zeile .mathe{flex:1;min-width:0}
+  .zeile .katex{font-size:1.12em}
+  .zeile.gewaehlt{border-color:var(--rwb);background:var(--rwb-soft)}
+  .zeile.gewaehlt .nr{background:var(--rwb);color:#fff}
+  .zeile.richtig{border-color:var(--ok);background:var(--ok-soft)}
+  .zeile.richtig .nr{background:var(--ok);color:#fff}
+  .zeile.falsch{border-color:var(--bad);background:var(--bad-soft)}
+  .zeile.falsch .nr{background:var(--bad);color:#fff}
+  .teil{margin:20px 0 8px;font-weight:700}
+  .teil span{display:inline-block;background:var(--rwb);color:#fff;border-radius:6px;padding:0 10px;margin-right:8px;font-size:.9rem}
+  .korrektur{margin-top:8px;display:grid;gap:4px}
+  .feedback,.feedback .loesung,.feedback details,.korrektur{min-width:0;max-width:100%}
+  .korrektur{grid-template-columns:minmax(0,1fr)}
+  .korrektur .kz{position:relative;display:flex;align-items:center;gap:10px;overflow-x:auto;min-width:0}
+  .korrektur .kz .katex-display{min-width:0}
+  .zeilen{grid-template-columns:minmax(0,1fr)}
+  .korrektur .knr{flex:none;font-weight:700}
+  .korrektur .katex-display{margin:2px 0;text-align:left}
+  .hinweis-box{background:#fff8e1;border-left:6px solid #d6a300;border-radius:10px;padding:10px 16px;margin:0 0 16px;font-size:.95rem}
+  @media print{
+    .zeile{padding:4px 10px;border-width:1px}
+    .zeile.gewaehlt,.zeile.richtig,.zeile.falsch{background:#fff;border-color:#ccc}
+    .zeile .nr,.zeile.gewaehlt .nr,.zeile.richtig .nr,.zeile.falsch .nr{width:28px;height:28px;background:#fff;border:1.5px solid #555;color:#333}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="kopf">
+  <div class="kopf-inner">
+    <img src="data:image/png;base64,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" alt="rwb">
+    <div class="titel">
+      <h1>Quiz: Fehler finden – Standardabweichung</h1>
+      <p class="unter">Mittelwert · Varianz · Standardabweichung · Wir teilen durch n</p>
+    </div>
+    <div class="stand" id="stand"></div>
+  </div>
+</header>
+
+<div class="punkte-leiste" id="dots"></div>
+
+<main>
+
+<section class="card" id="q1">
+  <p class="label">Fehlersuche</p>
+  <h2>Lieferzeiten</h2>
+  <p class="frage">Ein Versanddienst liefert fünf Pakete aus. Die Lieferzeiten in Tagen:</p>
+  <div class="datenreihe"><span>3</span><span>5</span><span>2</span><span>6</span><span>4</span></div>
+  <div class="rechnung-kopf">So hat <b>Tim</b> die Standardabweichung berechnet:</div>
+  <div class="zeilen"><label class="zeile" data-wert="0"><input type="radio" name="q1"><span class="nr">①</span><span class="mathe"><span class="breit">\[\bar{x}=\dfrac{3+5+2+6+4}{5}=\dfrac{20}{5}=4\]</span><span class="schmal">\[\bar{x}=\dfrac{3+5+2+6+4}{5}\]\[=\dfrac{20}{5}=4\]</span></span></label><label class="zeile" data-wert="1"><input type="radio" name="q1"><span class="nr">②</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(3-4)^2+(5-4)^2+(2-4)^2+(6-4)^2+(4-4)^2}{5}\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(3-4)^2+(5-4)^2\\ +(2-4)^2+(6-4)^2\\ +(4-4)^2\end{array}}{5}\]</span></span></label><label class="zeile" data-wert="2"><input type="radio" name="q1"><span class="nr">③</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(-1)^2+1^2+(-2)^2+2^2+0^2}{5}=\dfrac{1+1+(-4)+4+0}{5}=\dfrac{2}{5}=0{,}4\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(-1)^2+1^2+(-2)^2\\ +2^2+0^2\end{array}}{5}\]\[=\dfrac{1+1+(-4)+4+0}{5}=\dfrac{2}{5}=0{,}4\]</span></span></label><label class="zeile" data-wert="3"><input type="radio" name="q1"><span class="nr">④</span><span class="mathe"><span class="breit">\[\sigma=\sqrt{0{,}4}\approx0{,}63\]</span><span class="schmal">\[\sigma=\sqrt{0{,}4}\approx0{,}63\]</span></span></label></div>
+  <p class="teil"><span>a</span>In welcher Zeile steckt der <u>erste</u> Fehler? Tippen Sie die Zeile an.</p>
+  <p class="teil"><span>b</span>Rechnen Sie richtig. Wie groß ist die Standardabweichung?</p>
+  <div class="eingabe"><span>\(\sigma\approx\)</span><input type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 2,35"><span>Tage</span></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('q1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('q1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+<section class="card" id="q2">
+  <p class="label">Fehlersuche</p>
+  <h2>Füllmengen</h2>
+  <p class="frage">Eine Abfüllanlage füllt fünf Proteindosen. Die Füllmengen in g:</p>
+  <div class="datenreihe"><span>498</span><span>503</span><span>497</span><span>501</span><span>506</span></div>
+  <div class="rechnung-kopf">So hat <b>Elif</b> die Standardabweichung berechnet:</div>
+  <div class="zeilen"><label class="zeile" data-wert="0"><input type="radio" name="q2"><span class="nr">①</span><span class="mathe"><span class="breit">\[\bar{x}=\dfrac{498+503+497+501+506}{5}=\dfrac{2500}{5}=500\]</span><span class="schmal">\[\bar{x}=\dfrac{498+503+497+501+506}{5}\]\[=\dfrac{2500}{5}=500\]</span></span></label><label class="zeile" data-wert="1"><input type="radio" name="q2"><span class="nr">②</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(498-500)^2+(503-500)^2+(497-500)^2+(501-500)^2+(506-500)^2}{5}\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(498-500)^2+(503-500)^2\\ +(497-500)^2+(501-500)^2\\ +(506-500)^2\end{array}}{5}\]</span></span></label><label class="zeile" data-wert="2"><input type="radio" name="q2"><span class="nr">③</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(-2)^2+3^2+(-3)^2+1^2+6^2}{5}=\dfrac{4+9+9+1+36}{5}=\dfrac{59}{5}=11{,}8\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(-2)^2+3^2+(-3)^2\\ +1^2+6^2\end{array}}{5}\]\[=\dfrac{4+9+9+1+36}{5}=\dfrac{59}{5}=11{,}8\]</span></span></label><label class="zeile" data-wert="3"><input type="radio" name="q2"><span class="nr">④</span><span class="mathe"><span class="breit">\[\sigma=\sqrt{11{,}8}\approx3{,}44\]</span><span class="schmal">\[\sigma=\sqrt{11{,}8}\approx3{,}44\]</span></span></label></div>
+  <p class="teil"><span>a</span>In welcher Zeile steckt der <u>erste</u> Fehler? Tippen Sie die Zeile an.</p>
+  <p class="teil"><span>b</span>Rechnen Sie richtig. Wie groß ist die Standardabweichung?</p>
+  <div class="eingabe"><span>\(\sigma\approx\)</span><input type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 2,35"><span>g</span></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('q2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('q2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+<section class="card" id="q3">
+  <p class="label">Fehlersuche</p>
+  <h2>Trainingstage</h2>
+  <p class="frage">Fünf Kunden von Mehr Nutrition geben an, an wie vielen Tagen pro Woche sie trainieren:</p>
+  <div class="datenreihe"><span>4</span><span>1</span><span>5</span><span>3</span><span>7</span></div>
+  <div class="rechnung-kopf">So hat <b>Jonas</b> die Standardabweichung berechnet:</div>
+  <div class="zeilen"><label class="zeile" data-wert="0"><input type="radio" name="q3"><span class="nr">①</span><span class="mathe"><span class="breit">\[\bar{x}=\dfrac{4+1+5+3+7}{5}=\dfrac{20}{5}=4\]</span><span class="schmal">\[\bar{x}=\dfrac{4+1+5+3+7}{5}\]\[=\dfrac{20}{5}=4\]</span></span></label><label class="zeile" data-wert="1"><input type="radio" name="q3"><span class="nr">②</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(4-4)^2+(1-4)^2+(5-4)^2+(3-4)^2+(7-4)^2}{5}\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(4-4)^2+(1-4)^2\\ +(5-4)^2+(3-4)^2\\ +(7-4)^2\end{array}}{5}\]</span></span></label><label class="zeile" data-wert="2"><input type="radio" name="q3"><span class="nr">③</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{0^2+(-3)^2+1^2+(-1)^2+3^2}{5}=\dfrac{0+9+1+1+9}{5}=\dfrac{20}{5}=4\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}0^2+(-3)^2+1^2\\ +(-1)^2+3^2\end{array}}{5}\]\[=\dfrac{0+9+1+1+9}{5}=\dfrac{20}{5}=4\]</span></span></label><label class="zeile" data-wert="3"><input type="radio" name="q3"><span class="nr">④</span><span class="mathe"><span class="breit">\[\sigma=4\]</span><span class="schmal">\[\sigma=4\]</span></span></label></div>
+  <p class="teil"><span>a</span>In welcher Zeile steckt der <u>erste</u> Fehler? Tippen Sie die Zeile an.</p>
+  <p class="teil"><span>b</span>Rechnen Sie richtig. Wie groß ist die Standardabweichung?</p>
+  <div class="eingabe"><span>\(\sigma\approx\)</span><input type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 2,35"><span>Tage</span></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('q3')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('q3')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+<section class="card" id="q4">
+  <p class="label">Fehlersuche</p>
+  <h2>Tagesumsatz</h2>
+  <p class="frage">Der Online-Shop notiert an fünf Tagen den Umsatz in Tsd. €:</p>
+  <div class="datenreihe"><span>18</span><span>22</span><span>25</span><span>15</span><span>20</span></div>
+  <div class="rechnung-kopf">So hat <b>Greta</b> die Standardabweichung berechnet:</div>
+  <div class="zeilen"><label class="zeile" data-wert="0"><input type="radio" name="q4"><span class="nr">①</span><span class="mathe"><span class="breit">\[\bar{x}=\dfrac{18+22+25+15+20}{5}=\dfrac{100}{5}=20\]</span><span class="schmal">\[\bar{x}=\dfrac{18+22+25+15+20}{5}\]\[=\dfrac{100}{5}=20\]</span></span></label><label class="zeile" data-wert="1"><input type="radio" name="q4"><span class="nr">②</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(18-20)^2+(22-20)^2+(25-20)^2+(15-20)^2+(20-20)^2}{4}\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(18-20)^2+(22-20)^2\\ +(25-20)^2+(15-20)^2\\ +(20-20)^2\end{array}}{4}\]</span></span></label><label class="zeile" data-wert="2"><input type="radio" name="q4"><span class="nr">③</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(-2)^2+2^2+5^2+(-5)^2+0^2}{4}=\dfrac{4+4+25+25+0}{4}=\dfrac{58}{4}=14{,}5\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(-2)^2+2^2+5^2\\ +(-5)^2+0^2\end{array}}{4}\]\[=\dfrac{4+4+25+25+0}{4}=\dfrac{58}{4}=14{,}5\]</span></span></label><label class="zeile" data-wert="3"><input type="radio" name="q4"><span class="nr">④</span><span class="mathe"><span class="breit">\[\sigma=\sqrt{14{,}5}\approx3{,}81\]</span><span class="schmal">\[\sigma=\sqrt{14{,}5}\approx3{,}81\]</span></span></label></div>
+  <p class="teil"><span>a</span>In welcher Zeile steckt der <u>erste</u> Fehler? Tippen Sie die Zeile an.</p>
+  <p class="teil"><span>b</span>Rechnen Sie richtig. Wie groß ist die Standardabweichung?</p>
+  <div class="eingabe"><span>\(\sigma\approx\)</span><input type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 2,35"><span>Tsd. €</span></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('q4')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('q4')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+<section class="card" id="q5">
+  <p class="label">Fehlersuche</p>
+  <h2>Eiweißriegel</h2>
+  <p class="frage">Sechs Eiweißriegel werden gewogen. Das Gewicht in g:</p>
+  <div class="datenreihe"><span>62</span><span>58</span><span>61</span><span>57</span><span>60</span><span>62</span></div>
+  <div class="rechnung-kopf">So hat <b>Hamza</b> die Standardabweichung berechnet:</div>
+  <div class="zeilen"><label class="zeile" data-wert="0"><input type="radio" name="q5"><span class="nr">①</span><span class="mathe"><span class="breit">\[\bar{x}=\dfrac{62+58+61+57+60+62}{6}=\dfrac{360}{6}=60\]</span><span class="schmal">\[\bar{x}=\dfrac{\begin{array}{c}62+58+61\\ +57+60+62\end{array}}{6}\]\[=\dfrac{360}{6}=60\]</span></span></label><label class="zeile" data-wert="1"><input type="radio" name="q5"><span class="nr">②</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{(62-60)^2+(58-60)^2+(57-60)^2+(60-60)^2+(62-60)^2}{6}\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}(62-60)^2+(58-60)^2\\ +(57-60)^2+(60-60)^2\\ +(62-60)^2\end{array}}{6}\]</span></span></label><label class="zeile" data-wert="2"><input type="radio" name="q5"><span class="nr">③</span><span class="mathe"><span class="breit">\[\sigma^2=\dfrac{2^2+(-2)^2+(-3)^2+0^2+2^2}{6}=\dfrac{4+4+9+0+4}{6}=\dfrac{21}{6}=3{,}5\]</span><span class="schmal">\[\sigma^2=\dfrac{\begin{array}{c}2^2+(-2)^2+(-3)^2\\ +0^2+2^2\end{array}}{6}\]\[=\dfrac{4+4+9+0+4}{6}=\dfrac{21}{6}=3{,}5\]</span></span></label><label class="zeile" data-wert="3"><input type="radio" name="q5"><span class="nr">④</span><span class="mathe"><span class="breit">\[\sigma=\sqrt{3{,}5}\approx1{,}87\]</span><span class="schmal">\[\sigma=\sqrt{3{,}5}\approx1{,}87\]</span></span></label></div>
+  <p class="teil"><span>a</span>In welcher Zeile steckt der <u>erste</u> Fehler? Tippen Sie die Zeile an.</p>
+  <p class="teil"><span>b</span>Rechnen Sie richtig. Wie groß ist die Standardabweichung?</p>
+  <div class="eingabe"><span>\(\sigma\approx\)</span><input type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 2,35"><span>g</span></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('q5')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('q5')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<section class="card" id="ende">
+  <p class="label">Auswertung</p>
+  <h2>Ihr Ergebnis</h2>
+  <div class="ergebnis-zahl" id="ergebnis-zahl"></div>
+  <p id="ergebnis-text"></p>
+  <ul class="ergebnis-liste" id="ergebnis-liste"></ul>
+  <div class="aktionen"><button class="knopf leise" onclick="allesZuruecksetzen()">Alles zurücksetzen</button></div>
+</section>
+</main>
+
+<nav class="navi">
+  <button class="knopf leise" id="zurueck" onclick="gehe(aktuell-1)">← Zurück</button>
+  <span class="tipp">Eine Aufgabe zählt als richtig, wenn Zeile <b>und</b> Ergebnis stimmen.</span>
+  <button class="knopf" id="weiter" onclick="gehe(aktuell+1)">Weiter →</button>
+</nav>
+</div>
+
+<script>
+const DATEN = {"q1": {"zeile": 2, "ziel": 1.41, "schueler": 0.63, "loesung": "<div>In Zeile ③ steht \\((-2)^2=-4\\). Das ist falsch: Minus mal Minus ergibt Plus, also \\((-2)^2=4\\). Ein Quadrat ist nie negativ.</div><div style='margin-top:8px'><b>Richtige Rechnung:</b></div><div class='korrektur'><div class='kz'><span class='knr'>①</span><span class='mathe'><span class=\"breit\">\\[\\bar{x}=\\dfrac{3+5+2+6+4}{5}=\\dfrac{20}{5}=4\\]</span><span class=\"schmal\">\\[\\bar{x}=\\dfrac{3+5+2+6+4}{5}\\]\\[=\\dfrac{20}{5}=4\\]</span></span></div><div class='kz'><span class='knr'>②</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(3-4)^2+(5-4)^2+(2-4)^2+(6-4)^2+(4-4)^2}{5}\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(3-4)^2+(5-4)^2\\\\ +(2-4)^2+(6-4)^2\\\\ +(4-4)^2\\end{array}}{5}\\]</span></span></div><div class='kz'><span class='knr'>③</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(-1)^2+1^2+(-2)^2+2^2+0^2}{5}=\\dfrac{1+1+4+4+0}{5}=\\dfrac{10}{5}=2\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(-1)^2+1^2+(-2)^2\\\\ +2^2+0^2\\end{array}}{5}\\]\\[=\\dfrac{1+1+4+4+0}{5}=\\dfrac{10}{5}=2\\]</span></span></div><div class='kz'><span class='knr'>④</span><span class='mathe'><span class=\"breit\">\\[\\sigma=\\sqrt{2}\\approx1{,}41\\]</span><span class=\"schmal\">\\[\\sigma=\\sqrt{2}\\approx1{,}41\\]</span></span></div></div>", "einheit": "Tage"}, "q2": {"zeile": 0, "ziel": 3.29, "schueler": 3.44, "loesung": "<div>In Zeile ① ist die Summe falsch: \\(498+503+497+501+506=2505\\), nicht 2500. Der Mittelwert ist also \\(\\bar{x}=501\\). Alle weiteren Zeilen rechnen mit dem falschen Mittelwert weiter (Folgefehler).</div><div style='margin-top:8px'><b>Richtige Rechnung:</b></div><div class='korrektur'><div class='kz'><span class='knr'>①</span><span class='mathe'><span class=\"breit\">\\[\\bar{x}=\\dfrac{498+503+497+501+506}{5}=\\dfrac{2505}{5}=501\\]</span><span class=\"schmal\">\\[\\bar{x}=\\dfrac{498+503+497+501+506}{5}\\]\\[=\\dfrac{2505}{5}=501\\]</span></span></div><div class='kz'><span class='knr'>②</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(498-501)^2+(503-501)^2+(497-501)^2+(501-501)^2+(506-501)^2}{5}\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(498-501)^2+(503-501)^2\\\\ +(497-501)^2+(501-501)^2\\\\ +(506-501)^2\\end{array}}{5}\\]</span></span></div><div class='kz'><span class='knr'>③</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(-3)^2+2^2+(-4)^2+0^2+5^2}{5}=\\dfrac{9+4+16+0+25}{5}=\\dfrac{54}{5}=10{,}8\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(-3)^2+2^2+(-4)^2\\\\ +0^2+5^2\\end{array}}{5}\\]\\[=\\dfrac{9+4+16+0+25}{5}=\\dfrac{54}{5}=10{,}8\\]</span></span></div><div class='kz'><span class='knr'>④</span><span class='mathe'><span class=\"breit\">\\[\\sigma=\\sqrt{10{,}8}\\approx3{,}29\\]</span><span class=\"schmal\">\\[\\sigma=\\sqrt{10{,}8}\\approx3{,}29\\]</span></span></div></div>", "einheit": "g"}, "q3": {"zeile": 3, "ziel": 2.0, "schueler": 4.0, "loesung": "<div>In Zeile ④ fehlt die Wurzel. \\(4\\) ist die Varianz \\(\\sigma^2\\). Die Standardabweichung ist \\(\\sigma=\\sqrt{\\sigma^2}\\).</div><div style='margin-top:8px'><b>Richtige Rechnung:</b></div><div class='korrektur'><div class='kz'><span class='knr'>①</span><span class='mathe'><span class=\"breit\">\\[\\bar{x}=\\dfrac{4+1+5+3+7}{5}=\\dfrac{20}{5}=4\\]</span><span class=\"schmal\">\\[\\bar{x}=\\dfrac{4+1+5+3+7}{5}\\]\\[=\\dfrac{20}{5}=4\\]</span></span></div><div class='kz'><span class='knr'>②</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(4-4)^2+(1-4)^2+(5-4)^2+(3-4)^2+(7-4)^2}{5}\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(4-4)^2+(1-4)^2\\\\ +(5-4)^2+(3-4)^2\\\\ +(7-4)^2\\end{array}}{5}\\]</span></span></div><div class='kz'><span class='knr'>③</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{0^2+(-3)^2+1^2+(-1)^2+3^2}{5}=\\dfrac{0+9+1+1+9}{5}=\\dfrac{20}{5}=4\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}0^2+(-3)^2+1^2\\\\ +(-1)^2+3^2\\end{array}}{5}\\]\\[=\\dfrac{0+9+1+1+9}{5}=\\dfrac{20}{5}=4\\]</span></span></div><div class='kz'><span class='knr'>④</span><span class='mathe'><span class=\"breit\">\\[\\sigma=\\sqrt{4}=2\\]</span><span class=\"schmal\">\\[\\sigma=\\sqrt{4}=2\\]</span></span></div></div>", "einheit": "Tage"}, "q4": {"zeile": 1, "ziel": 3.41, "schueler": 3.81, "loesung": "<div>In Zeile ② wird durch \\(4\\) geteilt. Wir teilen immer durch \\(n=5\\).</div><div style='margin-top:8px'><b>Richtige Rechnung:</b></div><div class='korrektur'><div class='kz'><span class='knr'>①</span><span class='mathe'><span class=\"breit\">\\[\\bar{x}=\\dfrac{18+22+25+15+20}{5}=\\dfrac{100}{5}=20\\]</span><span class=\"schmal\">\\[\\bar{x}=\\dfrac{18+22+25+15+20}{5}\\]\\[=\\dfrac{100}{5}=20\\]</span></span></div><div class='kz'><span class='knr'>②</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(18-20)^2+(22-20)^2+(25-20)^2+(15-20)^2+(20-20)^2}{5}\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(18-20)^2+(22-20)^2\\\\ +(25-20)^2+(15-20)^2\\\\ +(20-20)^2\\end{array}}{5}\\]</span></span></div><div class='kz'><span class='knr'>③</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(-2)^2+2^2+5^2+(-5)^2+0^2}{5}=\\dfrac{4+4+25+25+0}{5}=\\dfrac{58}{5}=11{,}6\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(-2)^2+2^2+5^2\\\\ +(-5)^2+0^2\\end{array}}{5}\\]\\[=\\dfrac{4+4+25+25+0}{5}=\\dfrac{58}{5}=11{,}6\\]</span></span></div><div class='kz'><span class='knr'>④</span><span class='mathe'><span class=\"breit\">\\[\\sigma=\\sqrt{11{,}6}\\approx3{,}41\\]</span><span class=\"schmal\">\\[\\sigma=\\sqrt{11{,}6}\\approx3{,}41\\]</span></span></div></div>", "einheit": "Tsd. €"}, "q5": {"zeile": 1, "ziel": 1.91, "schueler": 1.87, "loesung": "<div>In Zeile ② fehlt ein Wert: Es gibt 6 Werte, aber nur 5 Klammern. Der Wert 61 wurde vergessen. Im Zähler muss für <b>jeden</b> Wert eine Klammer stehen.</div><div style='margin-top:8px'><b>Richtige Rechnung:</b></div><div class='korrektur'><div class='kz'><span class='knr'>①</span><span class='mathe'><span class=\"breit\">\\[\\bar{x}=\\dfrac{62+58+61+57+60+62}{6}=\\dfrac{360}{6}=60\\]</span><span class=\"schmal\">\\[\\bar{x}=\\dfrac{\\begin{array}{c}62+58+61\\\\ +57+60+62\\end{array}}{6}\\]\\[=\\dfrac{360}{6}=60\\]</span></span></div><div class='kz'><span class='knr'>②</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{(62-60)^2+(58-60)^2+(61-60)^2+(57-60)^2+(60-60)^2+(62-60)^2}{6}\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}(62-60)^2+(58-60)^2\\\\ +(61-60)^2+(57-60)^2\\\\ +(60-60)^2+(62-60)^2\\end{array}}{6}\\]</span></span></div><div class='kz'><span class='knr'>③</span><span class='mathe'><span class=\"breit\">\\[\\sigma^2=\\dfrac{2^2+(-2)^2+1^2+(-3)^2+0^2+2^2}{6}=\\dfrac{4+4+1+9+0+4}{6}=\\dfrac{22}{6}\\approx3{,}67\\]</span><span class=\"schmal\">\\[\\sigma^2=\\dfrac{\\begin{array}{c}2^2+(-2)^2+1^2\\\\ +(-3)^2+0^2+2^2\\end{array}}{6}\\]\\[=\\dfrac{4+4+1+9+0+4}{6}=\\dfrac{22}{6}\\approx3{,}67\\]</span></span></div><div class='kz'><span class='knr'>④</span><span class='mathe'><span class=\"breit\">\\[\\sigma=\\sqrt{3{,}67}\\approx1{,}91\\]</span><span class=\"schmal\">\\[\\sigma=\\sqrt{3{,}67}\\approx1{,}91\\]</span></span></div></div>", "einheit": "g"}};
+const titel = {"q1": "Lieferzeiten", "q2": "Füllmengen", "q3": "Trainingstage", "q4": "Tagesumsatz", "q5": "Eiweißriegel"};
+const ids = Object.keys(DATEN);
+const ergebnis = {};
+let aktuell = 0;
+const NR = ["①","②","③","④"];
+
+function leseZahl(s){
+  s = s.replace(/\s/g,"").replace(/g|tage|tsd\.?|€/gi,"").replace("−","-").replace(",",".");
+  if(s==="" || isNaN(Number(s))) return null;
+  return Number(s);
+}
+function rendere(el){
+  if(window.renderMathInElement){
+    renderMathInElement(el,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false}],throwOnError:false});
+  }
+}
+function zeige(card, ok, t, text){
+  const fb = card.querySelector(".feedback");
+  fb.className = "feedback " + (ok ? "ok" : "bad");
+  fb.innerHTML = "<strong>"+t+"</strong>"+(text ? "<div class='loesung'>"+text+"</div>" : "");
+  rendere(fb);
+  passeFormelnAn();
+  fb.addEventListener("toggle",()=>passeFormelnAn(),true);
+}
+function pruefe(id){
+  const card = document.getElementById(id), d = DATEN[id];
+  const zeilen = [...card.querySelectorAll(".zeile")];
+  const gew = zeilen.find(z=>z.querySelector("input").checked);
+  const z = leseZahl(card.querySelector(".eingabe input").value);
+  if(!gew){ zeige(card,false,"Bitte tippen Sie zuerst die Zeile mit dem Fehler an (Teil a).",""); return; }
+  if(z===null){ zeige(card,false,"Bitte geben Sie in Teil b die richtige Standardabweichung ein.",""); return; }
+  const zeileOk = Number(gew.dataset.wert) === d.zeile;
+  const zahlOk = Math.abs(z - d.ziel) <= 0.011;
+  zeilen.forEach(zz=>{
+    zz.classList.remove("richtig","falsch","gewaehlt");
+    if(Number(zz.dataset.wert)===d.zeile) zz.classList.add("richtig");
+    else if(zz.querySelector("input").checked) zz.classList.add("falsch");
+  });
+  const ok = zeileOk && zahlOk;
+  ergebnis[id] = ok;
+  let t;
+  if(ok) t = "Richtig! Fehler gefunden und richtig gerechnet.";
+  else if(zeileOk) t = "Teil a richtig: Der Fehler steckt in Zeile " + NR[d.zeile] + ". Teil b stimmt noch nicht.";
+  else if(zahlOk) t = "Teil b richtig! Aber der erste Fehler steckt in Zeile " + NR[d.zeile] + ".";
+  else t = "Leider falsch. Der erste Fehler steckt in Zeile " + NR[d.zeile] + ".";
+  let extra = "";
+  if(!zahlOk && Math.abs(z - d.schueler) <= 0.011)
+    extra = "<div style='margin-bottom:6px'><b>Achtung:</b> Das ist genau das falsche Ergebnis aus der Rechnung oben.</div>";
+  zeige(card, ok, t, extra + (ok ? d.loesung : "<details><summary>Erklärung und richtige Rechnung</summary>"+d.loesung+"</details>"));
+  zeichneDots();
+}
+/* lange Formeln an die Breite anpassen, damit nichts abgeschnitten wird */
+function passeFormelnAn(root){
+  (root||document).querySelectorAll(".card.sichtbar .mathe").forEach(box=>{
+    if(box.offsetParent===null) return;
+    const ks = [...box.querySelectorAll(".katex-display > .katex")].filter(k=>k.offsetParent!==null);
+    ks.forEach(k=>k.style.fontSize="");
+    const platz = box.clientWidth - 4;
+    let f = 1;
+    ks.forEach(k=>{ let b=0; k.querySelectorAll(".katex-html > .base").forEach(x=>b+=x.getBoundingClientRect().width);
+      if(b>platz) f = Math.min(f, platz/b); });
+    if(f<1) ks.forEach(k=>{ const fs=parseFloat(getComputedStyle(k).fontSize); k.style.fontSize=(fs*Math.max(0.6,f)*0.98).toFixed(2)+"px"; });
+  });
+}
+window.addEventListener("resize",()=>passeFormelnAn());
+function zuruecksetzen(id){
+  const card = document.getElementById(id);
+  card.querySelectorAll("input").forEach(i=>{ if(i.type==="text") i.value=""; else i.checked=false; });
+  card.querySelectorAll(".zeile").forEach(o=>o.classList.remove("richtig","falsch","gewaehlt"));
+  const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+  delete ergebnis[id]; zeichneDots();
+}
+function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); gehe(0); }
+document.addEventListener("change",e=>{
+  const z = e.target.closest(".zeile"); if(!z) return;
+  const card = z.closest(".card");
+  if(card.querySelector(".zeile.richtig,.zeile.falsch")){
+    card.querySelectorAll(".zeile").forEach(o=>o.classList.remove("richtig","falsch"));
+    const fb = card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+    delete ergebnis[card.id]; zeichneDots();
+  }
+  card.querySelectorAll(".zeile").forEach(o=>o.classList.toggle("gewaehlt",o.querySelector("input").checked));
+});
+function gehe(i){
+  if(i<0 || i>ids.length) return;
+  aktuell = i;
+  document.querySelectorAll("main .card").forEach(c=>c.classList.remove("sichtbar"));
+  const ziel = i<ids.length ? document.getElementById(ids[i]) : document.getElementById("ende");
+  ziel.classList.add("sichtbar");
+  if(i===ids.length) zeichneAuswertung();
+  document.getElementById("stand").textContent = i<ids.length ? "Aufgabe "+(i+1)+" von "+ids.length : "Auswertung";
+  document.getElementById("zurueck").disabled = i===0;
+  const w = document.getElementById("weiter");
+  w.disabled = i===ids.length;
+  w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
+  zeichneDots(); passeFormelnAn(); window.scrollTo({top:0});
+}
+function zeichneDots(){
+  const box = document.getElementById("dots"); box.innerHTML = "";
+  ids.forEach((id,i)=>{
+    const b = document.createElement("button");
+    b.className = "dot" + (i===aktuell?" aktiv":"") + (id in ergebnis ? (ergebnis[id]?" ok":" bad") : "");
+    b.textContent = i+1; b.title = titel[id]; b.onclick = ()=>gehe(i); box.appendChild(b);
+  });
+  const e = document.createElement("button");
+  e.className = "dot ende" + (aktuell===ids.length?" aktiv":"");
+  e.textContent = "✓"; e.title = "Auswertung"; e.onclick = ()=>gehe(ids.length); box.appendChild(e);
+}
+function zeichneAuswertung(){
+  const n = ids.filter(id=>ergebnis[id]===true).length;
+  document.getElementById("ergebnis-zahl").textContent = n+" / "+ids.length;
+  document.getElementById("ergebnis-text").textContent =
+    n===ids.length ? "Alle Fehler gefunden – super!" : n>=ids.length-1 ? "richtig – gut gemacht!" : "richtig – schauen Sie sich die anderen Aufgaben noch einmal an.";
+  const ul = document.getElementById("ergebnis-liste"); ul.innerHTML="";
+  ids.forEach((id,i)=>{
+    const li = document.createElement("li");
+    const st = id in ergebnis ? (ergebnis[id]?"ok":"bad") : "";
+    li.innerHTML = "<span class='marke "+st+"'>"+(st==="ok"?"✓":st==="bad"?"✗":"–")+"</span><span>Aufgabe "+(i+1)+": "+titel[id]+"</span>";
+    li.onclick = ()=>gehe(i); ul.appendChild(li);
+  });
+}
+document.addEventListener("keydown",e=>{
+  const inInput = e.target.tagName==="INPUT" && e.target.type==="text";
+  if(inInput){ if(e.key==="Enter") pruefe(e.target.closest(".card").id); return; }
+  const vor = e.key==="ArrowRight" || e.key==="PageDown", zur = e.key==="ArrowLeft" || e.key==="PageUp";
+  if(!vor && !zur) return;
+  e.preventDefault(); if(document.activeElement) document.activeElement.blur();
+  gehe(aktuell + (vor ? 1 : -1));
+});
+document.addEventListener("DOMContentLoaded",()=>{
+  ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Aufgabe "+(i+1)+" · "+l.textContent; });
+  rendere(document.body); gehe(0);
+});
+</script>
+</body>
+</html>
