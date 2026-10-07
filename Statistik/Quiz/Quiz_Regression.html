@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Regression</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --rwb:#c80046; --rwb-dark:#9e0037; --rwb-soft:#fbe8ef; --rwb-line:#f1c4d4;
+    --ink:#1e1e24; --muted:#6b6b76; --line:#e3e3e8; --paper:#ffffff; --bg:#f6f5f7; --box:#f1f2f4;
+    --ok:#1f7a3d; --ok-soft:#e7f5ec; --bad:#b3261e; --bad-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:20px;line-height:1.7}
+  .app{min-height:100%;display:flex;flex-direction:column}
+
+  header.kopf{background:var(--paper);border-bottom:4px solid var(--rwb);
+    break-inside:avoid;page-break-inside:avoid;break-after:avoid;page-break-after:avoid}
+  .kopf-inner{max-width:1040px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:22px}
+  .kopf img{height:46px;width:auto;display:block;flex:none}
+  .kopf .titel{flex:1;min-width:0}
+  .kopf h1{margin:0;font-size:1.3rem;line-height:1.25;font-weight:700}
+  .kopf .unter{margin:0;color:var(--muted);font-size:.85rem}
+  .kopf .stand{font-weight:700;color:var(--rwb);white-space:nowrap;font-size:1rem}
+
+  .punkte-leiste{max-width:1040px;margin:18px auto 0;padding:0 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .dot{width:42px;height:42px;border-radius:50%;border:2px solid var(--rwb-line);background:#fff;
+    color:var(--muted);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
+  .dot.aktiv{border-color:var(--rwb);color:var(--rwb);box-shadow:0 0 0 4px var(--rwb-soft)}
+  .dot.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+  .dot.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+  .dot.ende{border-style:dashed}
+
+  main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:18px 20px 12px}
+
+  .card{display:none;background:var(--paper);border-radius:16px;border:1px solid var(--line);
+    border-top:6px solid var(--rwb);padding:26px 32px 24px;box-shadow:0 6px 24px rgba(30,30,36,.06);
+    break-inside:avoid;page-break-inside:avoid}
+  .card.sichtbar{display:block;animation:rein .25s ease}
+  @keyframes rein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card .label{color:var(--rwb);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;margin:0}
+  .card h2{margin:2px 0 14px;font-size:1.45rem;line-height:1.3}
+  .frage{margin:0 0 14px}
+  .sub{display:inline-block;background:var(--rwb-soft);color:var(--rwb-dark);border-radius:6px;
+    padding:2px 12px;font-size:.9rem;margin:0 0 14px}
+  .teil{margin:18px 0 10px;font-weight:700}
+  .teil .tb{display:inline-block;background:var(--rwb);color:#fff;border-radius:6px;padding:0 10px;margin-right:8px;font-size:.9rem}
+
+  .merk{border:2px solid var(--rwb-line);background:#fffafb;border-radius:12px;padding:10px 16px;margin:0 0 16px;font-size:.92rem}
+  .merk b{color:var(--rwb-dark)}
+  .gleichung{display:inline-block;font-size:1.25rem;background:#fffafb;border:2px solid var(--rwb-line);border-radius:10px;padding:6px 18px;margin:0 0 14px}
+
+  .optionen{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+  .opt{display:flex;align-items:center;gap:16px;border:2px solid var(--line);border-radius:12px;
+    padding:12px 18px;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+  .opt:hover{border-color:var(--rwb-line);background:#fffafb}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  .opt .buchst{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background:var(--box);font-weight:700;color:var(--muted)}
+  .opt.gewaehlt{border-color:var(--rwb);background:var(--rwb-soft)}
+  .opt.gewaehlt .buchst{background:var(--rwb);color:#fff}
+  .opt.richtig{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.richtig .buchst{background:var(--ok);color:#fff}
+  .opt.falsch{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.falsch .buchst{background:var(--bad);color:#fff}
+
+  .felder{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center}
+  .feld{display:flex;align-items:center;gap:10px;font-size:1.15rem}
+  .feld input{font:inherit;font-size:1.25rem;width:130px;padding:6px 12px;border:2px solid var(--line);
+    border-radius:10px;background:var(--box);font-variant-numeric:tabular-nums}
+  .feld input:focus{outline:none;border-color:var(--rwb);background:#fff}
+  .feld input.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .feld input.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .feld .einheit{color:var(--muted);font-size:1rem}
+  .feldzeile{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 0 12px}
+  .feldzeile .text{flex:1 1 380px}
+
+  svg.ks{width:100%;height:auto;display:block;margin:0 0 14px}
+  svg.ks .loesung{opacity:0;transition:opacity .4s}
+  svg.ks.zeige-loesung .loesung{opacity:1}
+
+  .aktionen{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  button.knopf{font:inherit;font-size:1rem;font-weight:600;border:2px solid var(--rwb);background:var(--rwb);
+    color:#fff;border-radius:10px;padding:8px 22px;cursor:pointer}
+  button.knopf:hover{background:var(--rwb-dark);border-color:var(--rwb-dark)}
+  button.knopf.leise{background:#fff;color:var(--rwb)}
+  button.knopf.leise:hover{background:var(--rwb-soft)}
+  button.knopf:disabled{opacity:.35;cursor:default}
+
+  .feedback{display:none;margin-top:18px;border-radius:12px;padding:14px 18px}
+  .feedback.ok{display:block;background:var(--ok-soft);border-left:6px solid var(--ok)}
+  .feedback.bad{display:block;background:var(--bad-soft);border-left:6px solid var(--bad)}
+  .feedback strong{display:block;font-size:1.05rem}
+  .feedback .loesung{margin-top:6px}
+  .feedback .loesung .katex .mfrac{display:inline-block;margin:6px 0}
+  .feedback details{margin-top:6px}
+  .feedback summary{cursor:pointer;color:var(--rwb-dark);font-weight:600}
+  .feedback ul{margin:4px 0;padding-left:1.2em}
+
+  nav.navi{max-width:1040px;width:100%;margin:0 auto;padding:6px 20px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  nav.navi .tipp{color:var(--muted);font-size:.8rem;text-align:center}
+
+  .ergebnis-zahl{font-size:3.4rem;font-weight:800;color:var(--rwb);line-height:1.1;margin:8px 0}
+  .ergebnis-liste{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+  .ergebnis-liste li{display:flex;gap:12px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .ergebnis-liste li:hover{background:#fffafb}
+  .marke{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem;flex:none;background:#b9b9c2}
+  .marke.ok{background:var(--ok)} .marke.bad{background:var(--bad)}
+
+  @media (max-width:760px){
+    body{font-size:17px}
+    .optionen{grid-template-columns:1fr}
+    .card{padding:20px 16px}
+    .kopf img{height:30px}
+    .kopf .stand,nav.navi .tipp{display:none}
+    .dot{width:36px;height:36px}
+    .feld input{width:84px}
+    .feld{gap:6px;font-size:1.05rem}
+  }
+
+  @page{size:A4;margin:14mm 15mm}
+  @media print{
+    body{background:#fff;font-size:12pt;line-height:1.5}
+    header.kopf{border-bottom:2px solid var(--rwb);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .kopf-inner{padding:0 0 8px}
+    .kopf .stand,.punkte-leiste,nav.navi,.aktionen,.feedback,#ende{display:none!important}
+    main{padding:6px 0 0}
+    .card{display:block!important;animation:none;box-shadow:none;border:1px solid #bbb;border-top:4px solid var(--rwb);
+      padding:12px 16px;margin:0 0 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card h2{font-size:1.15rem;margin-bottom:8px}
+    svg.ks{max-height:95mm;width:auto;max-width:100%;margin:0 auto 8px}
+    svg.ks .loesung{opacity:0!important}
+    .opt{padding:5px 12px;border-width:1px}
+    .opt.gewaehlt,.opt.richtig,.opt.falsch{background:#fff;border-color:#ccc}
+    .opt .buchst,.opt.gewaehlt .buchst,.opt.richtig .buchst,.opt.falsch .buchst{width:28px;height:28px;background:#fff;border:1.5px solid #555;color:#333}
+    .feld input,.feld input.ok,.feld input.bad{border:1px solid #999;background:#f1f2f4;color:transparent;height:32px;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .merk,.gleichung{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="kopf">
+  <div class="kopf-inner">
+    <img src="data:image/png;base64,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" alt="rwb ahr">
+    <div class="titel">
+      <h1>Quiz: Lineare Regression</h1>
+      <p class="unter">Augenmaß · Gleichung bestimmen · Prognosen</p>
+    </div>
+    <div class="stand" id="stand"></div>
+  </div>
+</header>
+
+<div class="punkte-leiste" id="dots"></div>
+
+<main>
+
+<!-- 1: Gerade liegt zu hoch -->
+<section class="card" id="r1" data-richtig="b">
+  <p class="label">Augenmaß prüfen</p>
+  <h2>Werbung und Umsatz</h2>
+  <p class="frage">Mehr Nutrition vergleicht Werbeausgaben und Umsatz in 9 Monaten.<br>
+  Jana hat eine Regressionsgerade nach Augenmaß eingezeichnet.</p>
+  <svg class="ks" data-ks='{"x1":10,"xs":1,"y1":50,"ys":5,"xl":"Werbeausgaben x in Tsd. €","yl":"Umsatz y in Tsd. €",
+    "p":[[1,14],[2,15],[3,20],[4,21],[5,26],[6,27],[7,32],[8,33],[9,38]],
+    "g":[{"m":3,"b":19,"xa":0,"xb":10,"art":"falsch"},{"m":3,"b":10,"xa":0,"xb":10,"art":"loesung"}]}'></svg>
+  <p class="frage">Ist die Gerade nach Augenmaß gut eingezeichnet?</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="r1"><span class="buchst">A</span><span>Ja, die Gerade ist gut eingezeichnet.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r1"><span class="buchst">B</span><span>Nein. Fast alle Punkte liegen unterhalb der Geraden.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="r1"><span class="buchst">C</span><span>Nein. Die Gerade ist zu steil.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="r1"><span class="buchst">D</span><span>Nein. Die Gerade muss durch den Nullpunkt gehen.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r1')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 2: Gerade vom Ausreißer eingefangen -->
+<section class="card" id="r2" data-richtig="b">
+  <p class="label">Augenmaß prüfen</p>
+  <h2>Iso-Drink an warmen Tagen</h2>
+  <p class="frage">Mehr Nutrition notiert an 9 Tagen die Temperatur und den Verkauf von Iso-Drink.<br>
+  Am Tag mit 16 °C war ein Stadtlauf – dort hatte Mehr Nutrition einen Stand.<br>
+  Can hat eine Regressionsgerade nach Augenmaß eingezeichnet.</p>
+  <svg class="ks" data-ks='{"x1":34,"xs":2,"y1":80,"ys":10,"xl":"Temperatur x in °C","yl":"Verkauf y in Kartons",
+    "p":[[14,37],[16,64],[18,47],[20,49],[22,55],[24,57],[26,63],[28,65],[30,71]],
+    "g":[{"m":0.9,"b":35,"xa":10,"xb":32,"art":"falsch"},{"m":2,"b":10,"xa":10,"xb":32,"art":"loesung"}]}'></svg>
+  <p class="frage">Ist die Gerade nach Augenmaß gut eingezeichnet?</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="r2"><span class="buchst">A</span><span>Ja, die Gerade ist gut eingezeichnet.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r2"><span class="buchst">B</span><span>Nein. Die Gerade richtet sich nach dem Ausreißer und ist dadurch zu flach.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="r2"><span class="buchst">C</span><span>Nein. Die Gerade muss genau durch möglichst viele Punkte gehen.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="r2"><span class="buchst">D</span><span>Nein. Die Gerade müsste fallen.</span></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r2')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 3: m und b ablesen -->
+<section class="card" id="r3">
+  <p class="label">Gleichung ablesen</p>
+  <h2>Werbung und Umsatz</h2>
+  <p class="frage">Das ist eine Regressionsgerade für Werbeausgaben und Umsatz.</p>
+  <svg class="ks" data-ks='{"x1":10,"xs":1,"y1":50,"ys":5,"xl":"Werbeausgaben x in Tsd. €","yl":"Umsatz y in Tsd. €",
+    "g":[{"m":3,"b":10,"xa":0,"xb":10,"art":"gerade"}]}'></svg>
+  <div class="merk"><b>b</b> ist der y-Achsenabschnitt: Dort schneidet die Gerade die y-Achse.<br>
+  <b>m</b> ist die Steigung: Gehen Sie nach rechts und schauen Sie, wie weit es nach oben geht. \(m=\dfrac{\text{nach oben}}{\text{nach rechts}}\)</div>
+  <p class="frage">Lesen Sie m und b ab. Wie lautet die Gleichung?</p>
+  <div class="felder">
+    <label class="feld">\(f(x)=\)<input type="text" inputmode="decimal" autocomplete="off" data-k="m">\(\cdot x+\)<input type="text" inputmode="decimal" autocomplete="off" data-k="b"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r3')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r3')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 4: Achsenbruch, b nicht ablesbar -->
+<section class="card" id="r4" data-richtig="c">
+  <p class="label">Gleichung bestimmen</p>
+  <h2>Iso-Drink an warmen Tagen</h2>
+  <p class="frage">Das ist die Regressionsgerade für den Iso-Drink. Die Punkte \(P_1\) und \(P_2\) liegen auf der Geraden.</p>
+  <svg class="ks" data-ks='{"x1":34,"xs":2,"y1":75,"ys":5,"yBruch":30,"xl":"Temperatur x in °C","yl":"Verkauf y in Kartons",
+    "g":[{"m":2,"b":10,"xa":12,"xb":32,"art":"gerade"}],
+    "mark":[[20,50,"P₁"],[30,70,"P₂"]]}'></svg>
+  <p class="teil"><span class="tb">a</span>Kann man b hier direkt ablesen?</p>
+  <div class="optionen">
+    <label class="opt" data-wert="a"><input type="radio" name="r4"><span class="buchst">A</span><span>Ja, b = 30. Das ist der erste Wert an der y-Achse.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r4"><span class="buchst">B</span><span>Ja, b = 34. Dort beginnt die Gerade.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="r4"><span class="buchst">C</span><span>Nein. Die y-Achse ist unterbrochen und die Gerade reicht nicht bis zur y-Achse.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="r4"><span class="buchst">D</span><span>Ja, b = 0. Die y-Achse beginnt bei 0.</span></label>
+  </div>
+  <p class="teil"><span class="tb">b</span>Bestimmen Sie die Gleichung mit \(P_1\) und \(P_2\).</p>
+  <div class="merk">\(m=\dfrac{y_2-y_1}{x_2-x_1}\). Dann \(P_1\) in \(f(x)=m\cdot x+b\) einsetzen und nach b auflösen.</div>
+  <div class="felder">
+    <label class="feld">\(f(x)=\)<input type="text" inputmode="decimal" autocomplete="off" data-k="m">\(\cdot x+\)<input type="text" inputmode="decimal" autocomplete="off" data-k="b"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r4')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r4')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 5: Gleichung durch zwei Punkte -->
+<section class="card" id="r5">
+  <p class="label">Gleichung bestimmen</p>
+  <h2>Gerade durch zwei Punkte</h2>
+  <p class="frage">Eine Regressionsgerade verläuft durch die Punkte</p>
+  <div class="gleichung">\(P_1(4\,|\,10)\) und \(P_2(8\,|\,22)\)</div>
+  <div class="merk">\(m=\dfrac{y_2-y_1}{x_2-x_1}\). Dann \(P_1\) in \(f(x)=m\cdot x+b\) einsetzen und nach b auflösen.</div>
+  <p class="frage">Bestimmen Sie die Gleichung der Geraden.</p>
+  <div class="felder">
+    <label class="feld">\(f(x)=\)<input type="text" inputmode="decimal" autocomplete="off" data-k="m">\(\cdot x+\)<input type="text" inputmode="decimal" autocomplete="off" data-k="b"></label>
+  </div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r5')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r5')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 6: Prognosen ablesen -->
+<section class="card" id="r6">
+  <p class="label">Prognosen ablesen</p>
+  <h2>Posts und Bestellungen</h2>
+  <p class="frage">Mehr Nutrition postet auf Instagram. Die Regressionsgerade zeigt den Zusammenhang zwischen Posts pro Woche und Bestellungen pro Woche.</p>
+  <svg class="ks" data-ks='{"x1":10,"xs":1,"y1":70,"ys":5,"xl":"Posts pro Woche x","yl":"Bestellungen y",
+    "g":[{"m":5,"b":15,"xa":0,"xb":10,"art":"gerade"}]}'></svg>
+  <p class="frage">Lesen Sie die Prognosen ab.</p>
+  <div class="feldzeile"><span class="text"><b>a)</b> Wie viele Bestellungen sind bei 7 Posts pro Woche zu erwarten?</span>
+    <label class="feld"><input type="text" inputmode="decimal" autocomplete="off" data-k="a"><span class="einheit">Bestellungen</span></label></div>
+  <div class="feldzeile"><span class="text"><b>b)</b> Wie viele Posts braucht man für 40 Bestellungen?</span>
+    <label class="feld"><input type="text" inputmode="decimal" autocomplete="off" data-k="b"><span class="einheit">Posts</span></label></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r6')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r6')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<!-- 7: Prognosen berechnen -->
+<section class="card" id="r7">
+  <p class="label">Prognosen berechnen</p>
+  <h2>Iso-Drink an heißen Tagen</h2>
+  <p class="frage">Für den Iso-Drink hat Mehr Nutrition diese Regressionsgerade berechnet:</p>
+  <div class="gleichung">\(f(x)=2{,}4\cdot x+3\)</div>
+  <p class="frage">x ist die Temperatur in °C, f(x) der Verkauf in Kartons.</p>
+  <div class="feldzeile"><span class="text"><b>a)</b> Der Wetterdienst meldet 31,5 °C. Wie viele Kartons werden verkauft?</span>
+    <label class="feld"><input type="text" inputmode="decimal" autocomplete="off" data-k="a"><span class="einheit">Kartons</span></label></div>
+  <div class="feldzeile"><span class="text"><b>b)</b> Ab welcher Temperatur werden 63 Kartons verkauft?</span>
+    <label class="feld"><input type="text" inputmode="decimal" autocomplete="off" data-k="b"><span class="einheit">°C</span></label></div>
+  <div class="aktionen"><button class="knopf" onclick="pruefe('r7')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r7')">Nochmal</button></div>
+  <div class="feedback"></div>
+</section>
+
+<section class="card" id="ende">
+  <p class="label">Auswertung</p>
+  <h2>Geschafft!</h2>
+  <div class="ergebnis-zahl" id="ergebnis-zahl"></div>
+  <p id="ergebnis-text" style="margin:0"></p>
+  <ul class="ergebnis-liste" id="ergebnis-liste"></ul>
+  <div class="aktionen"><button class="knopf" onclick="allesZuruecksetzen()">Quiz neu starten</button></div>
+</section>
+
+</main>
+
+<nav class="navi">
+  <button class="knopf leise" id="zurueck" onclick="gehe(aktuell-1)">← Zurück</button>
+  <span class="tipp">Pfeiltasten ← → zum Blättern</span>
+  <button class="knopf" id="weiter" onclick="gehe(aktuell+1)">Weiter →</button>
+</nav>
+
+</div>
+
+<script>
+const ids = ["r1","r2","r3","r4","r5","r6","r7"];
+const titel = {r1:"Augenmaß: Werbung und Umsatz", r2:"Augenmaß: Iso-Drink", r3:"m und b ablesen",
+  r4:"Gleichung mit Achsenbruch", r5:"Gerade durch zwei Punkte", r6:"Prognosen ablesen", r7:"Prognosen berechnen"};
+const ergebnis = {};
+let aktuell = 0;
+const de = v => String(Math.round(v*100)/100).replace(".",",");
+
+/* ---------- Koordinatensystem ---------- */
+function zeichneKS(svg){
+  const c = JSON.parse(svg.dataset.ks);
+  const W=900, H=545, L=90, R=840, T=30, B=440;
+  const yb = c.yBruch || 0, gap = yb ? 46 : 0;
+  const X = x => L + x/c.x1*(R-L);
+  const Y = y => (yb && y<yb) ? B - y/yb*gap : B - gap - (y-yb)/(c.y1-yb)*(B-gap-T);
+  const ns="http://www.w3.org/2000/svg";
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const el=(t,a,txt,g)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;(g||svg).appendChild(e);return e;};
+  // Raster
+  for(let x=c.xs; x<=c.x1+1e-9; x+=c.xs) el("line",{x1:X(x),x2:X(x),y1:Y(yb||0)-(yb?0:0),y2:T,stroke:"#e6e6ec","stroke-width":1});
+  for(let y=yb||c.ys; y<=c.y1+1e-9; y+=c.ys) el("line",{x1:L,x2:R,y1:Y(y),y2:Y(y),stroke:"#e6e6ec","stroke-width":1});
+  // x-Achse mit Pfeil
+  el("line",{x1:L,x2:R+30,y1:B,y2:B,stroke:"#1e1e24","stroke-width":2.5});
+  el("path",{d:`M${R+40},${B} l-14,-7 v14 z`,fill:"#1e1e24"});
+  // y-Achse mit Pfeil (ggf. mit Bruch)
+  if(yb){
+    el("line",{x1:L,x2:L,y1:B,y2:B-10,stroke:"#1e1e24","stroke-width":2.5});
+    el("path",{d:`M${L},${B-10} l-9,-6 l18,-12 l-18,-12 l9,-6`,fill:"none",stroke:"#1e1e24","stroke-width":2.5,"stroke-linejoin":"round"});
+    el("line",{x1:L,x2:L,y1:B-gap,y2:T-20,stroke:"#1e1e24","stroke-width":2.5});
+  } else el("line",{x1:L,x2:L,y1:B,y2:T-20,stroke:"#1e1e24","stroke-width":2.5});
+  el("path",{d:`M${L},${T-30} l-7,14 h14 z`,fill:"#1e1e24"});
+  // Beschriftung
+  for(let x=c.xs; x<=c.x1+1e-9; x+=c.xs){
+    el("line",{x1:X(x),x2:X(x),y1:B-6,y2:B+6,stroke:"#1e1e24","stroke-width":2});
+    const n = Math.round(x*100)/100;
+    el("text",{x:X(x),y:B+30,"text-anchor":"middle","font-size":18,fill:"#1e1e24"},de(n));
+  }
+  el("text",{x:L-12,y:B+24,"text-anchor":"end","font-size":18,fill:"#1e1e24"},"0");
+  for(let y=yb||c.ys; y<=c.y1+1e-9; y+=c.ys){
+    el("line",{x1:L-6,x2:L+6,y1:Y(y),y2:Y(y),stroke:"#1e1e24","stroke-width":2});
+    el("text",{x:L-14,y:Y(y)+6,"text-anchor":"end","font-size":18,fill:"#1e1e24"},de(y));
+  }
+  el("text",{x:R+40,y:B+62,"text-anchor":"end","font-size":17,fill:"#6b6b76"},c.xl);
+  el("text",{x:L+14,y:T-14,"text-anchor":"start","font-size":17,fill:"#6b6b76"},c.yl);
+  // Geraden
+  const gl = document.createElementNS(ns,"g"); gl.setAttribute("class","loesung");
+  (c.g||[]).forEach(g=>{
+    const ziel = g.art==="loesung" ? gl : svg;
+    const farbe = g.art==="loesung" ? "#1f7a3d" : g.art==="falsch" ? "#c80046" : "#c80046";
+    el("line",{x1:X(g.xa),x2:X(g.xb),y1:Y(g.m*g.xa+g.b),y2:Y(g.m*g.xb+g.b),stroke:farbe,"stroke-width":4,
+      "stroke-dasharray":g.art==="loesung"?"12 8":"none","stroke-linecap":"round"},undefined,ziel);
+  });
+  // Punkte
+  (c.p||[]).forEach(([x,y])=>el("circle",{cx:X(x),cy:Y(y),r:8,fill:"#1e1e24",stroke:"#fff","stroke-width":2}));
+  // markierte Punkte
+  (c.mark||[]).forEach(([x,y,n])=>{
+    el("line",{x1:X(x),x2:X(x),y1:Y(y),y2:B,stroke:"#1f7a3d","stroke-width":2,"stroke-dasharray":"5 5"});
+    el("line",{x1:L,x2:X(x),y1:Y(y),y2:Y(y),stroke:"#1f7a3d","stroke-width":2,"stroke-dasharray":"5 5"});
+    el("circle",{cx:X(x),cy:Y(y),r:9,fill:"#1f7a3d",stroke:"#fff","stroke-width":2.5});
+    el("text",{x:X(x)-14,y:Y(y)-14,"text-anchor":"end","font-size":22,"font-weight":800,fill:"#1f7a3d"},n);
+  });
+  svg.appendChild(gl);
+  if(gl.childNodes.length){
+    el("line",{x1:L+20,x2:L+60,y1:T+14,y2:T+14,stroke:"#1f7a3d","stroke-width":4,"stroke-dasharray":"12 8"},undefined,gl);
+    el("text",{x:L+70,y:T+20,"text-anchor":"start","font-size":17,"font-weight":700,fill:"#1f7a3d"},"bessere Gerade",gl);
+  }
+}
+
+/* ---------- Aufgaben ---------- */
+const wahlTexte = {
+  r1:{ok:"Richtig! Fast alle Punkte liegen unterhalb der Geraden. Die Gerade liegt zu hoch.",
+      loesung:"Richtig ist B.<br>Eine gute Regressionsgerade liegt <b>mitten in der Punktwolke</b>: Oberhalb und unterhalb liegen etwa gleich viele Punkte.<br>Hier liegen alle Punkte unterhalb. Die Steigung passt, aber die Gerade muss weiter nach unten (grün gestrichelt).<br>D: Eine Regressionsgerade muss nicht durch den Nullpunkt gehen."},
+  r2:{ok:"Richtig! Der Ausreißer am Tag des Stadtlaufs zieht die Gerade nach oben links. Dadurch wird sie zu flach.",
+      loesung:"Richtig ist B.<br>Der Punkt (16 | 64) ist ein Ausreißer – an diesem Tag war der Stadtlauf.<br>Beim Zeichnen nach Augenmaß beachten wir den Ausreißer <b>nicht</b>.<br>Die Gerade hat sich nach ihm gerichtet und ist zu flach. Die grün gestrichelte Gerade passt zu den übrigen Punkten.<br>C: Die Gerade muss nicht genau durch Punkte gehen. Sie soll mitten durch die Punktwolke verlaufen."},
+  r4:{loesung:"a) Richtig ist C. Die y-Achse ist zwischen 0 und 30 unterbrochen (Zickzack). Die Gerade endet bei 12 °C und reicht nicht bis zur y-Achse. b kann man deshalb nicht ablesen – man muss b <b>berechnen</b>."}
+};
+const feldAufgaben = {
+  r3:{ziel:{m:3,b:10},
+    fehler:{m:[{w:1/3,tol:0.01,t:"m ≈ 0,33: Sie haben „nach rechts“ durch „nach oben“ geteilt. Andersherum: \\(m=\\dfrac{\\text{nach oben}}{\\text{nach rechts}}\\)."},
+               {w:15,t:"m = 15: Bei 5 nach rechts geht es 15 nach oben. Teilen Sie noch durch 5."}],
+            b:[{w:0,t:"b = 0: Die Gerade schneidet die y-Achse nicht im Nullpunkt. Schauen Sie, wo sie die y-Achse trifft."}]},
+    loesung:"Die Gerade schneidet die y-Achse bei 10 → \\(b=10\\).<br>Von \\((0\\,|\\,10)\\) nach \\((5\\,|\\,25)\\): 5 nach rechts, 15 nach oben → \\(m=\\dfrac{15}{5}=3\\).<br>\\(f(x)=3\\cdot x+10\\)"},
+  r4:{ziel:{m:2,b:10},
+    fehler:{m:[{w:0.5,t:"m = 0,5: Sie haben die x-Differenz durch die y-Differenz geteilt. Richtig: \\(m=\\dfrac{y_2-y_1}{x_2-x_1}\\)."},
+               {w:20,t:"m = 20: Das ist nur \\(y_2-y_1\\). Teilen Sie noch durch \\(x_2-x_1=10\\)."}],
+            b:[{w:30,t:"b = 30: Das ist nur die erste Beschriftung nach dem Achsenbruch. b muss berechnet werden."},
+               {w:34,t:"b = 34: Dort beginnt die Gerade – aber bei x = 12, nicht bei x = 0. b muss berechnet werden."},
+               {w:90,t:"b = 90: Vorzeichenfehler beim Auflösen. Aus \\(50=40+b\\) folgt \\(b=50-40=10\\)."},
+               {w:0,t:"b = 0: Die Gerade geht nicht durch den Nullpunkt. Setzen Sie \\(P_1\\) ein und lösen Sie nach b auf."}]},
+    loesung:"Abgelesen: \\(P_1(20\\,|\\,50)\\) und \\(P_2(30\\,|\\,70)\\)<br>\\(m=\\dfrac{70-50}{30-20}=\\dfrac{20}{10}=2\\)<br>\\(P_1\\) einsetzen: \\(50=2\\cdot 20+b\\)<br>\\(50=40+b\\quad|-40\\)<br>\\(10=b\\)<br>\\(f(x)=2\\cdot x+10\\)"},
+  r5:{ziel:{m:3,b:-2},
+    fehler:{m:[{w:1/3,tol:0.01,t:"m ≈ 0,33: Sie haben x-Differenz durch y-Differenz geteilt. Richtig: \\(m=\\dfrac{y_2-y_1}{x_2-x_1}\\)."},
+               {w:12,t:"m = 12: Das ist nur \\(y_2-y_1\\). Teilen Sie noch durch \\(x_2-x_1=4\\)."}],
+            b:[{w:2,t:"b = 2: Vorzeichenfehler! Aus \\(10=12+b\\) folgt \\(b=10-12=-2\\)."},
+               {w:22,t:"b = 22: Beim Auflösen muss man \\(-12\\) rechnen, nicht \\(+12\\)."},
+               {w:10,t:"b = 10: Das ist der y-Wert von \\(P_1\\). Setzen Sie \\(P_1\\) in \\(f(x)=m\\cdot x+b\\) ein und lösen Sie nach b auf."}]},
+    loesung:"\\(m=\\dfrac{22-10}{8-4}=\\dfrac{12}{4}=3\\)<br>\\(P_1\\) einsetzen: \\(10=3\\cdot 4+b\\)<br>\\(10=12+b\\quad|-12\\)<br>\\(-2=b\\)<br>\\(f(x)=3\\cdot x-2\\)"},
+  r6:{ziel:{a:50,b:5}, tol:0.5,
+    fehler:{a:[],b:[]},
+    loesung:"a) Bei x = 7 senkrecht nach oben bis zur Geraden, dann waagerecht zur y-Achse: etwa <b>50 Bestellungen</b>.<br>b) Bei y = 40 waagerecht bis zur Geraden, dann senkrecht nach unten zur x-Achse: etwa <b>5 Posts</b>."},
+  r7:{ziel:{a:78.6,b:25}, tol:0.011,
+    fehler:{a:[{w:75.6,t:"75,6: Sie haben + 3 vergessen. \\(f(31{,}5)=2{,}4\\cdot 31{,}5+3\\)."},
+               {w:39.6,tol:0.05,t:"Achtung Punkt-vor-Strich: Erst \\(2{,}4\\cdot 31{,}5\\), dann \\(+3\\)."}],
+            b:[{w:26.25,t:"26,25: Sie haben die 3 nicht abgezogen. Zuerst \\(-3\\), dann \\(:2{,}4\\)."},
+               {w:154.2,tol:0.05,t:"154,2: Sie haben 63 eingesetzt. Hier ist der Verkauf gegeben: \\(2{,}4\\cdot x+3=63\\) nach x auflösen."}]},
+    loesung:"a) \\(f(31{,}5)=2{,}4\\cdot 31{,}5+3=75{,}6+3=78{,}6\\) → etwa <b>78,6 Kartons</b><br>"+
+      "b) \\(2{,}4\\cdot x+3=63\\quad|-3\\)<br>\\(2{,}4\\cdot x=60\\quad|:2{,}4\\)<br>\\(x=25\\) → ab <b>25 °C</b>"}
+};
+const feldNamen = {m:"m",b:"b",a:"a)"};
+
+function leseZahl(s){
+  s = s.replace(/\s/g,"").replace("−","-").replace(",",".").replace(/[a-zA-Z°€]+$/,"");
+  if(s==="" || isNaN(Number(s))) return null;
+  return Number(s);
+}
+function rendere(el){
+  if(window.renderMathInElement) renderMathInElement(el,{delimiters:[{left:"\\(",right:"\\)",display:false}],throwOnError:false});
+}
+function zeige(card, ok, t, text){
+  const fb = card.querySelector(".feedback");
+  fb.className = "feedback " + (ok ? "ok" : "bad");
+  fb.innerHTML = "<strong>"+t+"</strong>"+(text ? "<div class='loesung'>"+text+"</div>" : "");
+  rendere(fb);
+}
+
+function pruefeWahl(card){
+  const opts=[...card.querySelectorAll(".opt")]; if(!opts.length) return null;
+  const richtig=card.dataset.richtig;
+  const gew=opts.find(o=>o.querySelector("input").checked);
+  if(!gew) return "leer";
+  opts.forEach(o=>{ o.classList.remove("richtig","falsch","gewaehlt");
+    if(o.dataset.wert===richtig) o.classList.add("richtig"); else if(o.querySelector("input").checked) o.classList.add("falsch"); });
+  return gew.dataset.wert===richtig;
+}
+function pruefeFelder(card,id){
+  const a=feldAufgaben[id]; if(!a) return null;
+  const inputs=[...card.querySelectorAll(".felder input, .feldzeile input")];
+  if(inputs.every(i=>i.value.trim()==="")) return {leer:true};
+  let n=0; const hinweise=[];
+  inputs.forEach(i=>{
+    const k=i.dataset.k, z=leseZahl(i.value), tol=a.tol??0.001;
+    i.classList.remove("ok","bad");
+    if(z!==null && Math.abs(z-a.ziel[k])<=tol){ i.classList.add("ok"); n++; }
+    else{ i.classList.add("bad");
+      const f = z===null?null:(a.fehler[k]||[]).find(f=>Math.abs(z-f.w)<=(f.tol??0.001));
+      hinweise.push(f?f.t:(id==="r6"||id==="r7"?(k==="a"?"a)":"b)"):feldNamen[k])+(z===null?": noch kein Ergebnis.":": noch nicht richtig.")); }
+  });
+  return {ok:n===inputs.length,n,gesamt:inputs.length,hinweise};
+}
+
+function pruefe(id){
+  const card=document.getElementById(id);
+  const w=pruefeWahl(card), f=pruefeFelder(card,id);
+  if(w==="leer"){ zeige(card,false,f?"Bitte wählen Sie in Teil a eine Antwort aus.":"Bitte wählen Sie eine Antwort aus.",""); return; }
+  if(f && f.leer){ zeige(card,false,"Bitte tragen Sie Ihre Ergebnisse ein.",""); return; }
+  const svg=card.querySelector("svg.ks");
+  if(w===null){ // nur Felder
+    ergebnis[id]=f.ok;
+    if(f.ok) zeige(card,true,"Richtig!",feldAufgaben[id].loesung);
+    else zeige(card,false,f.n+" von "+f.gesamt+" richtig.","<ul>"+f.hinweise.map(h=>"<li>"+h+"</li>").join("")+"</ul><details><summary>Lösungsweg anzeigen</summary>"+feldAufgaben[id].loesung+"</details>");
+  } else if(f===null){ // nur Auswahl
+    ergebnis[id]=w;
+    if(svg) svg.classList.add("zeige-loesung");
+    zeige(card,w,w?wahlTexte[id].ok:"Leider falsch.",w?"":wahlTexte[id].loesung);
+  } else { // Auswahl + Felder (Aufgabe 4)
+    const ok=w&&f.ok; ergebnis[id]=ok;
+    const kopf = ok ? "Richtig! Teil a und b stimmen." : (w?"Teil a richtig. ":"Teil a falsch. ")+(f.ok?"Teil b richtig.":"Teil b: "+f.n+" von "+f.gesamt+" richtig.");
+    let txt = (!w ? wahlTexte[id].loesung+"<br>" : "") + (!f.ok ? "<ul>"+f.hinweise.map(h=>"<li>"+h+"</li>").join("")+"</ul>" : "");
+    txt += ok ? feldAufgaben[id].loesung : "<details><summary>Lösungsweg anzeigen</summary>"+feldAufgaben[id].loesung+"</details>";
+    zeige(card,ok,kopf,txt);
+  }
+  zeichneDots();
+}
+
+function zuruecksetzen(id){
+  const card=document.getElementById(id);
+  card.querySelectorAll("input").forEach(i=>{ if(i.type==="text"){ i.value=""; i.classList.remove("ok","bad"); } else i.checked=false; });
+  card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch","gewaehlt"));
+  const svg=card.querySelector("svg.ks"); if(svg) svg.classList.remove("zeige-loesung");
+  const fb=card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+  delete ergebnis[id]; zeichneDots();
+}
+function allesZuruecksetzen(){ ids.forEach(zuruecksetzen); gehe(0); }
+
+document.addEventListener("change",e=>{
+  const opt=e.target.closest(".opt"); if(!opt) return;
+  const card=opt.closest(".card");
+  if(card.querySelector(".opt.richtig,.opt.falsch")){
+    card.querySelectorAll(".opt").forEach(o=>o.classList.remove("richtig","falsch"));
+    const svg=card.querySelector("svg.ks"); if(svg) svg.classList.remove("zeige-loesung");
+    const fb=card.querySelector(".feedback"); fb.className="feedback"; fb.innerHTML="";
+    delete ergebnis[card.id]; zeichneDots();
+  }
+  card.querySelectorAll(".opt").forEach(o=>o.classList.toggle("gewaehlt",o.querySelector("input").checked));
+});
+
+function gehe(i){
+  if(i<0 || i>ids.length) return;
+  aktuell=i;
+  document.querySelectorAll("main .card").forEach(c=>c.classList.remove("sichtbar"));
+  (i<ids.length?document.getElementById(ids[i]):document.getElementById("ende")).classList.add("sichtbar");
+  if(i===ids.length) zeichneAuswertung();
+  document.getElementById("stand").textContent = i<ids.length ? "Frage "+(i+1)+" von "+ids.length : "Auswertung";
+  document.getElementById("zurueck").disabled = i===0;
+  const w=document.getElementById("weiter"); w.disabled = i===ids.length;
+  w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
+  zeichneDots(); window.scrollTo({top:0});
+}
+function zeichneDots(){
+  const box=document.getElementById("dots"); box.innerHTML="";
+  ids.forEach((id,i)=>{ const b=document.createElement("button");
+    b.className="dot"+(i===aktuell?" aktiv":"")+(id in ergebnis?(ergebnis[id]?" ok":" bad"):"");
+    b.textContent=i+1; b.title=titel[id]; b.onclick=()=>gehe(i); box.appendChild(b); });
+  const e=document.createElement("button");
+  e.className="dot ende"+(aktuell===ids.length?" aktiv":""); e.textContent="✓"; e.title="Auswertung"; e.onclick=()=>gehe(ids.length); box.appendChild(e);
+}
+function zeichneAuswertung(){
+  const n=ids.filter(id=>ergebnis[id]===true).length;
+  document.getElementById("ergebnis-zahl").textContent=n+" / "+ids.length;
+  document.getElementById("ergebnis-text").textContent =
+    n===ids.length?"Alles richtig – super!":n>=ids.length-2?"richtig beantwortet – gut gemacht!":"richtig beantwortet – schauen wir uns die anderen noch einmal an.";
+  const ul=document.getElementById("ergebnis-liste"); ul.innerHTML="";
+  ids.forEach((id,i)=>{ const li=document.createElement("li"); const st=id in ergebnis?(ergebnis[id]?"ok":"bad"):"";
+    li.innerHTML="<span class='marke "+st+"'>"+(st==="ok"?"✓":st==="bad"?"✗":"–")+"</span><span>Frage "+(i+1)+": "+titel[id]+"</span>";
+    li.onclick=()=>gehe(i); ul.appendChild(li); });
+}
+document.addEventListener("keydown",e=>{
+  const inInput=e.target.tagName==="INPUT"&&e.target.type==="text";
+  if(inInput){ if(e.key==="Enter") pruefe(e.target.closest(".card").id); return; }
+  const vor=e.key==="ArrowRight"||e.key==="PageDown", zur=e.key==="ArrowLeft"||e.key==="PageUp";
+  if(!vor&&!zur) return;
+  e.preventDefault(); if(document.activeElement) document.activeElement.blur();
+  gehe(aktuell+(vor?1:-1));
+});
+document.addEventListener("DOMContentLoaded",()=>{
+  ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Frage "+(i+1)+" · "+l.textContent; });
+  document.querySelectorAll("svg.ks").forEach(zeichneKS);
+  rendere(document.body); gehe(0);
+});
+</script>
+</body>
+</html>
