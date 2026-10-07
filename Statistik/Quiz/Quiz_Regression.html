@@ -171,12 +171,10 @@
   <svg class="ks" data-ks='{"x1":10,"xs":1,"y1":50,"ys":5,"xl":"Werbeausgaben x in Tsd. €","yl":"Umsatz y in Tsd. €",
     "p":[[1,14],[2,15],[3,20],[4,21],[5,26],[6,27],[7,32],[8,33],[9,38]],
     "g":[{"m":3,"b":19,"xa":0,"xb":10,"art":"falsch"},{"m":3,"b":10,"xa":0,"xb":10,"art":"loesung"}]}'></svg>
-  <p class="frage">Ist die Gerade nach Augenmaß gut eingezeichnet?</p>
+  <p class="frage">Wurde die Gerade nach Augenmaß richtig eingezeichnet?</p>
   <div class="optionen">
-    <label class="opt" data-wert="a"><input type="radio" name="r1"><span class="buchst">A</span><span>Ja, die Gerade ist gut eingezeichnet.</span></label>
-    <label class="opt" data-wert="b"><input type="radio" name="r1"><span class="buchst">B</span><span>Nein. Fast alle Punkte liegen unterhalb der Geraden.</span></label>
-    <label class="opt" data-wert="c"><input type="radio" name="r1"><span class="buchst">C</span><span>Nein. Die Gerade ist zu steil.</span></label>
-    <label class="opt" data-wert="d"><input type="radio" name="r1"><span class="buchst">D</span><span>Nein. Die Gerade muss durch den Nullpunkt gehen.</span></label>
+    <label class="opt" data-wert="a"><input type="radio" name="r1"><span class="buchst">A</span><span>Ja, die Gerade ist richtig eingezeichnet.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r1"><span class="buchst">B</span><span>Nein, die Gerade ist nicht richtig eingezeichnet.</span></label>
   </div>
   <div class="aktionen"><button class="knopf" onclick="pruefe('r1')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r1')">Nochmal</button></div>
   <div class="feedback"></div>
@@ -192,12 +190,10 @@
   <svg class="ks" data-ks='{"x1":34,"xs":2,"y1":80,"ys":10,"xl":"Temperatur x in °C","yl":"Verkauf y in Kartons",
     "p":[[14,37],[16,64],[18,47],[20,49],[22,55],[24,57],[26,63],[28,65],[30,71]],
     "g":[{"m":0.9,"b":35,"xa":10,"xb":32,"art":"falsch"},{"m":2,"b":10,"xa":10,"xb":32,"art":"loesung"}]}'></svg>
-  <p class="frage">Ist die Gerade nach Augenmaß gut eingezeichnet?</p>
+  <p class="frage">Wurde die Gerade nach Augenmaß richtig eingezeichnet?</p>
   <div class="optionen">
-    <label class="opt" data-wert="a"><input type="radio" name="r2"><span class="buchst">A</span><span>Ja, die Gerade ist gut eingezeichnet.</span></label>
-    <label class="opt" data-wert="b"><input type="radio" name="r2"><span class="buchst">B</span><span>Nein. Die Gerade richtet sich nach dem Ausreißer und ist dadurch zu flach.</span></label>
-    <label class="opt" data-wert="c"><input type="radio" name="r2"><span class="buchst">C</span><span>Nein. Die Gerade muss genau durch möglichst viele Punkte gehen.</span></label>
-    <label class="opt" data-wert="d"><input type="radio" name="r2"><span class="buchst">D</span><span>Nein. Die Gerade müsste fallen.</span></label>
+    <label class="opt" data-wert="a"><input type="radio" name="r2"><span class="buchst">A</span><span>Ja, die Gerade ist richtig eingezeichnet.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r2"><span class="buchst">B</span><span>Nein, die Gerade ist nicht richtig eingezeichnet.</span></label>
   </div>
   <div class="aktionen"><button class="knopf" onclick="pruefe('r2')">Prüfen</button><button class="knopf leise" onclick="zuruecksetzen('r2')">Nochmal</button></div>
   <div class="feedback"></div>
@@ -225,15 +221,15 @@
   <p class="label">Gleichung bestimmen</p>
   <h2>Iso-Drink an warmen Tagen</h2>
   <p class="frage">Das ist die Regressionsgerade für den Iso-Drink. Die Punkte \(P_1\) und \(P_2\) liegen auf der Geraden.</p>
-  <svg class="ks" data-ks='{"x1":34,"xs":2,"y1":75,"ys":5,"yBruch":30,"xl":"Temperatur x in °C","yl":"Verkauf y in Kartons",
-    "g":[{"m":2,"b":10,"xa":12,"xb":32,"art":"gerade"}],
-    "mark":[[20,50,"P₁"],[30,70,"P₂"]]}'></svg>
+  <svg class="ks" data-ks='{"x1":34,"xs":2,"xBruch":10,"y1":95,"ys":5,"yBruch":40,"xl":"Temperatur x in °C","yl":"Verkauf y in Kartons",
+    "g":[{"m":2,"b":24,"bisAchse":true,"xb":34,"art":"gerade"}],
+    "mark":[[18,60,"P₁"],[28,80,"P₂"]]}'></svg>
   <p class="teil"><span class="tb">a</span>Kann man b hier direkt ablesen?</p>
   <div class="optionen">
-    <label class="opt" data-wert="a"><input type="radio" name="r4"><span class="buchst">A</span><span>Ja, b = 30. Das ist der erste Wert an der y-Achse.</span></label>
-    <label class="opt" data-wert="b"><input type="radio" name="r4"><span class="buchst">B</span><span>Ja, b = 34. Dort beginnt die Gerade.</span></label>
-    <label class="opt" data-wert="c"><input type="radio" name="r4"><span class="buchst">C</span><span>Nein. Die y-Achse ist unterbrochen und die Gerade reicht nicht bis zur y-Achse.</span></label>
-    <label class="opt" data-wert="d"><input type="radio" name="r4"><span class="buchst">D</span><span>Ja, b = 0. Die y-Achse beginnt bei 0.</span></label>
+    <label class="opt" data-wert="a"><input type="radio" name="r4"><span class="buchst">A</span><span>Ja, b = 40. Dort trifft die Gerade die y-Achse.</span></label>
+    <label class="opt" data-wert="b"><input type="radio" name="r4"><span class="buchst">B</span><span>Ja, b = 0. Die y-Achse beginnt bei 0.</span></label>
+    <label class="opt" data-wert="c"><input type="radio" name="r4"><span class="buchst">C</span><span>Nein. Die Achsen sind am Anfang gestaucht. Die Gerade trifft die y-Achse nicht wirklich bei x = 0.</span></label>
+    <label class="opt" data-wert="d"><input type="radio" name="r4"><span class="buchst">D</span><span>Ja, b = 60. Das ist der y-Wert von \(P_1\).</span></label>
   </div>
   <p class="teil"><span class="tb">b</span>Bestimmen Sie die Gleichung mit \(P_1\) und \(P_2\).</p>
   <div class="merk">\(m=\dfrac{y_2-y_1}{x_2-x_1}\). Dann \(P_1\) in \(f(x)=m\cdot x+b\) einsetzen und nach b auflösen.</div>
@@ -321,27 +317,37 @@ const de = v => String(Math.round(v*100)/100).replace(".",",");
 function zeichneKS(svg){
   const c = JSON.parse(svg.dataset.ks);
   const W=900, H=545, L=90, R=840, T=30, B=440;
-  const yb = c.yBruch || 0, gap = yb ? 46 : 0;
-  const X = x => L + x/c.x1*(R-L);
+  const yb = c.yBruch || 0, gap = yb ? 80 : 0;
+  const xb = c.xBruch || 0, gapx = xb ? 60 : 0;
+  const X  = x => (xb && x<xb) ? L + x/xb*gapx : L + gapx + (x-xb)/(c.x1-xb)*(R-L-gapx);
+  const XL = x => L + gapx + (x-xb)/(c.x1-xb)*(R-L-gapx);            // echter Maßstab für Geraden
+  const XLinv = px => xb + (px-L-gapx)/(R-L-gapx)*(c.x1-xb);
   const Y = y => (yb && y<yb) ? B - y/yb*gap : B - gap - (y-yb)/(c.y1-yb)*(B-gap-T);
+  const YL = y => B - gap - (y-yb)/(c.y1-yb)*(B-gap-T);   // echter Maßstab für Geraden
   const ns="http://www.w3.org/2000/svg";
   svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
   const el=(t,a,txt,g)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;(g||svg).appendChild(e);return e;};
   // Raster
-  for(let x=c.xs; x<=c.x1+1e-9; x+=c.xs) el("line",{x1:X(x),x2:X(x),y1:Y(yb||0)-(yb?0:0),y2:T,stroke:"#e6e6ec","stroke-width":1});
-  for(let y=yb||c.ys; y<=c.y1+1e-9; y+=c.ys) el("line",{x1:L,x2:R,y1:Y(y),y2:Y(y),stroke:"#e6e6ec","stroke-width":1});
+  for(let x=xb||c.xs; x<=c.x1+1e-9; x+=c.xs) el("line",{x1:X(x),x2:X(x),y1:Y(yb||0),y2:T,stroke:"#e6e6ec","stroke-width":1});
+  for(let y=yb||c.ys; y<=c.y1+1e-9; y+=c.ys) el("line",{x1:X(xb||0),x2:R,y1:Y(y),y2:Y(y),stroke:"#e6e6ec","stroke-width":1});
   // x-Achse mit Pfeil
-  el("line",{x1:L,x2:R+30,y1:B,y2:B,stroke:"#1e1e24","stroke-width":2.5});
+  if(xb){
+    const zx = L+gapx/2;
+    el("line",{x1:L,x2:zx-18,y1:B,y2:B,stroke:"#1e1e24","stroke-width":2.5});
+    el("path",{d:`M${zx-18},${B} l6,9 l12,-18 l12,18 l6,-9`,fill:"none",stroke:"#1e1e24","stroke-width":2.5,"stroke-linejoin":"round"});
+    el("line",{x1:zx+18,x2:R+30,y1:B,y2:B,stroke:"#1e1e24","stroke-width":2.5});
+  } else el("line",{x1:L,x2:R+30,y1:B,y2:B,stroke:"#1e1e24","stroke-width":2.5});
   el("path",{d:`M${R+40},${B} l-14,-7 v14 z`,fill:"#1e1e24"});
   // y-Achse mit Pfeil (ggf. mit Bruch)
   if(yb){
-    el("line",{x1:L,x2:L,y1:B,y2:B-10,stroke:"#1e1e24","stroke-width":2.5});
-    el("path",{d:`M${L},${B-10} l-9,-6 l18,-12 l-18,-12 l9,-6`,fill:"none",stroke:"#1e1e24","stroke-width":2.5,"stroke-linejoin":"round"});
-    el("line",{x1:L,x2:L,y1:B-gap,y2:T-20,stroke:"#1e1e24","stroke-width":2.5});
+    const zm = B-gap/2;   // Zickzack in der Mitte des gestauchten Abschnitts
+    el("line",{x1:L,x2:L,y1:B,y2:zm+18,stroke:"#1e1e24","stroke-width":2.5});
+    el("path",{d:`M${L},${zm+18} l-9,-6 l18,-12 l-18,-12 l9,-6`,fill:"none",stroke:"#1e1e24","stroke-width":2.5,"stroke-linejoin":"round"});
+    el("line",{x1:L,x2:L,y1:zm-18,y2:T-20,stroke:"#1e1e24","stroke-width":2.5});
   } else el("line",{x1:L,x2:L,y1:B,y2:T-20,stroke:"#1e1e24","stroke-width":2.5});
   el("path",{d:`M${L},${T-30} l-7,14 h14 z`,fill:"#1e1e24"});
   // Beschriftung
-  for(let x=c.xs; x<=c.x1+1e-9; x+=c.xs){
+  for(let x=xb||c.xs; x<=c.x1+1e-9; x+=c.xs){
     el("line",{x1:X(x),x2:X(x),y1:B-6,y2:B+6,stroke:"#1e1e24","stroke-width":2});
     const n = Math.round(x*100)/100;
     el("text",{x:X(x),y:B+30,"text-anchor":"middle","font-size":18,fill:"#1e1e24"},de(n));
@@ -357,8 +363,9 @@ function zeichneKS(svg){
   const gl = document.createElementNS(ns,"g"); gl.setAttribute("class","loesung");
   (c.g||[]).forEach(g=>{
     const ziel = g.art==="loesung" ? gl : svg;
-    const farbe = g.art==="loesung" ? "#1f7a3d" : g.art==="falsch" ? "#c80046" : "#c80046";
-    el("line",{x1:X(g.xa),x2:X(g.xb),y1:Y(g.m*g.xa+g.b),y2:Y(g.m*g.xb+g.b),stroke:farbe,"stroke-width":4,
+    const farbe = g.art==="loesung" ? "#1f7a3d" : "#c80046";
+    if(g.bisAchse) g.xa = XLinv(L);
+    el("line",{x1:XL(g.xa),x2:XL(g.xb),y1:YL(g.m*g.xa+g.b),y2:YL(g.m*g.xb+g.b),stroke:farbe,"stroke-width":4,
       "stroke-dasharray":g.art==="loesung"?"12 8":"none","stroke-linecap":"round"},undefined,ziel);
   });
   // Punkte
@@ -379,11 +386,11 @@ function zeichneKS(svg){
 
 /* ---------- Aufgaben ---------- */
 const wahlTexte = {
-  r1:{ok:"Richtig! Fast alle Punkte liegen unterhalb der Geraden. Die Gerade liegt zu hoch.",
-      loesung:"Richtig ist B.<br>Eine gute Regressionsgerade liegt <b>mitten in der Punktwolke</b>: Oberhalb und unterhalb liegen etwa gleich viele Punkte.<br>Hier liegen alle Punkte unterhalb. Die Steigung passt, aber die Gerade muss weiter nach unten (grün gestrichelt).<br>D: Eine Regressionsgerade muss nicht durch den Nullpunkt gehen."},
-  r2:{ok:"Richtig! Der Ausreißer am Tag des Stadtlaufs zieht die Gerade nach oben links. Dadurch wird sie zu flach.",
-      loesung:"Richtig ist B.<br>Der Punkt (16 | 64) ist ein Ausreißer – an diesem Tag war der Stadtlauf.<br>Beim Zeichnen nach Augenmaß beachten wir den Ausreißer <b>nicht</b>.<br>Die Gerade hat sich nach ihm gerichtet und ist zu flach. Die grün gestrichelte Gerade passt zu den übrigen Punkten.<br>C: Die Gerade muss nicht genau durch Punkte gehen. Sie soll mitten durch die Punktwolke verlaufen."},
-  r4:{loesung:"a) Richtig ist C. Die y-Achse ist zwischen 0 und 30 unterbrochen (Zickzack). Die Gerade endet bei 12 °C und reicht nicht bis zur y-Achse. b kann man deshalb nicht ablesen – man muss b <b>berechnen</b>."}
+  r1:{ok:"Richtig! Die Gerade ist nicht richtig eingezeichnet: Fast alle Punkte liegen unterhalb der Geraden. Sie liegt zu hoch.",
+      loesung:"Die Gerade ist <b>nicht</b> richtig eingezeichnet.<br>Eine gute Regressionsgerade liegt <b>mitten in der Punktwolke</b>: Oberhalb und unterhalb liegen etwa gleich viele Punkte.<br>Hier liegen alle Punkte unterhalb. Die Steigung passt, aber die Gerade muss weiter nach unten (grün gestrichelt)."},
+  r2:{ok:"Richtig! Die Gerade ist nicht richtig eingezeichnet: Sie richtet sich nach dem Ausreißer am Tag des Stadtlaufs und ist dadurch zu flach.",
+      loesung:"Die Gerade ist <b>nicht</b> richtig eingezeichnet.<br>Der Punkt (16 | 64) ist ein Ausreißer – an diesem Tag war der Stadtlauf.<br>Beim Zeichnen nach Augenmaß beachten wir den Ausreißer <b>nicht</b>.<br>Die Gerade hat sich nach ihm gerichtet und ist zu flach. Die grün gestrichelte Gerade passt zu den übrigen Punkten."},
+  r4:{loesung:"a) Richtig ist C. Beide Achsen sind am Anfang <b>gestaucht</b> (Zickzack): Die y-Achse springt von 0 auf 40, die x-Achse von 0 auf 10. Die Gerade sieht so aus, als träfe sie die y-Achse bei 40 – aber dort ist gar nicht x = 0. Abgelesen wäre b = 40, richtig ist b = 24. b muss man <b>berechnen</b>."}
 };
 const feldAufgaben = {
   r3:{ziel:{m:3,b:10},
@@ -391,14 +398,14 @@ const feldAufgaben = {
                {w:15,t:"m = 15: Bei 5 nach rechts geht es 15 nach oben. Teilen Sie noch durch 5."}],
             b:[{w:0,t:"b = 0: Die Gerade schneidet die y-Achse nicht im Nullpunkt. Schauen Sie, wo sie die y-Achse trifft."}]},
     loesung:"Die Gerade schneidet die y-Achse bei 10 → \\(b=10\\).<br>Von \\((0\\,|\\,10)\\) nach \\((5\\,|\\,25)\\): 5 nach rechts, 15 nach oben → \\(m=\\dfrac{15}{5}=3\\).<br>\\(f(x)=3\\cdot x+10\\)"},
-  r4:{ziel:{m:2,b:10},
+  r4:{ziel:{m:2,b:24},
     fehler:{m:[{w:0.5,t:"m = 0,5: Sie haben die x-Differenz durch die y-Differenz geteilt. Richtig: \\(m=\\dfrac{y_2-y_1}{x_2-x_1}\\)."},
                {w:20,t:"m = 20: Das ist nur \\(y_2-y_1\\). Teilen Sie noch durch \\(x_2-x_1=10\\)."}],
-            b:[{w:30,t:"b = 30: Das ist nur die erste Beschriftung nach dem Achsenbruch. b muss berechnet werden."},
-               {w:34,t:"b = 34: Dort beginnt die Gerade – aber bei x = 12, nicht bei x = 0. b muss berechnet werden."},
-               {w:90,t:"b = 90: Vorzeichenfehler beim Auflösen. Aus \\(50=40+b\\) folgt \\(b=50-40=10\\)."},
+            b:[{w:40,t:"b = 40: abgelesen! Die Achsen sind gestaucht – die Gerade trifft die y-Achse nicht bei x = 0. b muss berechnet werden."},
+               {w:96,t:"b = 96: Vorzeichenfehler beim Auflösen. Aus \\(60=36+b\\) folgt \\(b=60-36=24\\)."},
+               {w:60,t:"b = 60: Das ist der y-Wert von \\(P_1\\). Setzen Sie \\(P_1\\) in \\(f(x)=m\\cdot x+b\\) ein und lösen Sie nach b auf."},
                {w:0,t:"b = 0: Die Gerade geht nicht durch den Nullpunkt. Setzen Sie \\(P_1\\) ein und lösen Sie nach b auf."}]},
-    loesung:"Abgelesen: \\(P_1(20\\,|\\,50)\\) und \\(P_2(30\\,|\\,70)\\)<br>\\(m=\\dfrac{70-50}{30-20}=\\dfrac{20}{10}=2\\)<br>\\(P_1\\) einsetzen: \\(50=2\\cdot 20+b\\)<br>\\(50=40+b\\quad|-40\\)<br>\\(10=b\\)<br>\\(f(x)=2\\cdot x+10\\)"},
+    loesung:"Abgelesen: \\(P_1(18\\,|\\,60)\\) und \\(P_2(28\\,|\\,80)\\)<br>\\(m=\\dfrac{80-60}{28-18}=\\dfrac{20}{10}=2\\)<br>\\(P_1\\) einsetzen: \\(60=2\\cdot 18+b\\)<br>\\(60=36+b\\quad|-36\\)<br>\\(24=b\\)<br>\\(f(x)=2\\cdot x+24\\)<br>Zum Vergleich: Abgelesen hätte man 40 – richtig ist 24."},
   r5:{ziel:{m:3,b:-2},
     fehler:{m:[{w:1/3,tol:0.01,t:"m ≈ 0,33: Sie haben x-Differenz durch y-Differenz geteilt. Richtig: \\(m=\\dfrac{y_2-y_1}{x_2-x_1}\\)."},
                {w:12,t:"m = 12: Das ist nur \\(y_2-y_1\\). Teilen Sie noch durch \\(x_2-x_1=4\\)."}],
