@@ -84,13 +84,12 @@
   table.daten{border-collapse:collapse;margin:4px 0 16px;font-variant-numeric:tabular-nums}
   table.daten th,table.daten td{border:1px solid var(--line);padding:6px 18px;text-align:center}
   table.daten th{background:var(--rwb-soft);color:var(--rwb-dark);text-align:left}
-  .optionen.formeln{grid-template-columns:1fr}
-  .optionen.formeln .katex{font-size:2.4em}
-  @media (max-width:1100px){ .optionen.formeln .katex{font-size:1.9em} }
-  @media (max-width:900px){ .optionen.formeln .katex{font-size:1.4em} }
+  .optionen.formeln{grid-template-columns:minmax(0,1fr)}
+  .optionen.formeln .opt > span:last-child{flex:1;overflow:visible}
+  .optionen.formeln .katex{font-size:2.4em;white-space:nowrap}
   .optionen.formeln .opt{padding:16px 20px}
   .optionen > .opt{min-width:0}
-  .opt > span:last-child{min-width:0;overflow-x:auto}
+  .opt > span:last-child{min-width:0;overflow:visible}
   .merk{overflow-x:auto}
   svg.ks .loesung{opacity:0;transition:opacity .4s}
   svg.ks.zeige-loesung .loesung{opacity:1}
@@ -131,7 +130,6 @@
     .kopf .stand,nav.navi .tipp{display:none}
     .dot{width:36px;height:36px}
     .feld input{width:84px}
-    .optionen.formeln .katex{font-size:.9em}
     .optionen.formeln .buchst{width:32px;height:32px}
     .optionen.formeln .opt{padding:10px 10px;gap:10px}
     .merk .katex{font-size:.85em}
@@ -567,7 +565,7 @@ function gehe(i){
   document.getElementById("zurueck").disabled = i===0;
   const w=document.getElementById("weiter"); w.disabled = i===ids.length;
   w.textContent = i===ids.length-1 ? "Auswertung →" : "Weiter →";
-  zeichneDots(); window.scrollTo({top:0});
+  zeichneDots(); window.scrollTo({top:0}); passeFormelnAn(); requestAnimationFrame(passeFormelnAn); setTimeout(passeFormelnAn,400);
 }
 function zeichneDots(){
   const box=document.getElementById("dots"); box.innerHTML="";
@@ -595,6 +593,24 @@ document.addEventListener("keydown",e=>{
   e.preventDefault(); if(document.activeElement) document.activeElement.blur();
   gehe(aktuell+(vor?1:-1));
 });
+/* Formeln in Frage 7 so groß wie möglich, aber immer ganz sichtbar */
+function passeFormelnAn(){
+  const boxen=[...document.querySelectorAll(".optionen.formeln .opt > span:last-child")].filter(b=>b.offsetParent!==null);
+  if(!boxen.length) return;
+  let f=1, max=0;
+  boxen.forEach(box=>{
+    const k=box.querySelector(".katex"); k.style.fontSize="";
+    const opt=box.closest(".opt"), cs=getComputedStyle(opt), bu=opt.querySelector(".buchst");
+    const platz=opt.parentElement.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)
+               -parseFloat(cs.borderLeftWidth)-parseFloat(cs.borderRightWidth)-(bu?bu.offsetWidth:0)-parseFloat(cs.columnGap||16)-4;
+    max=parseFloat(getComputedStyle(k).fontSize);
+    f=Math.min(f, platz/k.getBoundingClientRect().width);
+  });
+  if(f<1) boxen.forEach(box=>box.querySelector(".katex").style.fontSize=(max*f*0.97).toFixed(1)+"px");   // alle gleich groß
+}
+window.addEventListener("resize",passeFormelnAn);
+window.addEventListener("load",passeFormelnAn);
+if(document.fonts){ document.fonts.ready.then(passeFormelnAn); document.fonts.addEventListener("loadingdone",passeFormelnAn); }
 document.addEventListener("DOMContentLoaded",()=>{
   ids.forEach((id,i)=>{ const l=document.querySelector("#"+id+" .label"); l.textContent="Frage "+(i+1)+" · "+l.textContent; });
   document.querySelectorAll("svg.ks").forEach(zeichneKS);
