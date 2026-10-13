@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAS Schritt für Schritt: Regressionsgerade</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner ---------- */
+.calc{ width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18); }
+.body{ background:#2b2b2f; border-radius:22px; padding:12px 12px 16px; }
+.face{ background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px; }
+.brand{ text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px; }
+.brand b{ color:#fff; margin-left:6px; }
+.scrwrap{ background:#000; border-radius:4px; padding:4px; }
+.scr{ width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto; }
+.nav{ display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center; }
+.nav .col{ display:flex; flex-direction:column; gap:7px; }
+.pad{ width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative; }
+.pad .k{ position:absolute; background:transparent; color:#aaa; font-size:10px; border:0; }
+.pad .k[data-k=up]{ left:38px; top:2px; width:36px; height:20px; }
+.pad .k[data-k=down]{ left:38px; bottom:2px; width:36px; height:20px; }
+.pad .k[data-k=left]{ left:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=right]{ right:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=click]{ left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd; }
+.k{ font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:default; transition:transform .15s, box-shadow .15s; }
+.k.lt{ background:#8e8e95; color:#111; font-size:14px; }
+.k.ctrl{ background:#D93A2B; }
+.k.bk{ background:#26262a; border:1px solid #555; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative; }
+.pad .k.hit{ position:absolute; }
+.row4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0; }
+.main7{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px; }
+.main7 .gap{ grid-column:span 1; }
+.let9{ display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px; }
+.let9 .k{ height:20px; font-size:10px; }
+.span2{ grid-column:span 2; } .span3{ grid-column:span 3; }
+
+/* ---------- Bildschirm-Inhalte ---------- */
+.tb{ height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf; }
+.tb .tab{ background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; }
+.tb .tab.off{ background:#eef1f5; color:#777; }
+.tb .sp{ flex:1; } .tb .bat{ width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative; }
+.tb .bat:after{ content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3; }
+table.sh{ border-collapse:collapse; table-layout:fixed; width:280px; }
+table.sh td{ border:1px solid #c9ced6; height:15px; padding:0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:10.5px; }
+table.sh td.rn{ width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px; }
+table.sh tr.hd td{ height:18px; background:#eef1f5; font-weight:bold; }
+table.sh tr.hd td span{ color:#888; font-weight:normal; margin-right:4px; }
+table.sh tr.fm td{ background:#f7f8fa; color:#777; font-style:italic; font-size:9px; height:13px; }
+table.sh td.num{ text-align:right; }
+table.sh td.cur{ outline:2px solid #000; outline-offset:-2px; }
+table.sh td.good{ background:#FFF3C4; }
+table.sh td.star{ background:#FFE07A; font-weight:bold; }
+table.sh td.dim{ color:#aaa; text-decoration:line-through; }
+.menu{ position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; }
+.menu div{ padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.menu div.sel{ background:#3b78c2; color:#fff; }
+.dlg{ position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; }
+.dlg .tt{ background:#c9d3df; font-weight:bold; padding:2px 6px; }
+.dlg .ff{ display:grid; grid-template-columns:112px 1fr; gap:4px 5px; padding:6px 7px 4px; align-items:center; }
+.dlg .lb{ text-align:right; }
+.dlg .ct{ background:#fff; border:1px solid #9aa5b3; height:15px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; }
+.dlg .ct.fo{ outline:2px solid #3b78c2; }
+.dlg .ct.mark{ background:#FFF3C4; }
+.dlg .bt{ display:flex; justify-content:flex-end; gap:6px; padding:3px 7px 6px; }
+.dlg .bt span{ border:1px solid #8a95a3; background:#fff; padding:0 10px; border-radius:3px; }
+.dlg .bt span.fo{ outline:2px solid #3b78c2; }
+.drop{ position:absolute; background:#fff; border:1px solid #6b7a8c; font-size:10.5px; width:80px; box-shadow:2px 2px 6px rgba(0,0,0,.3); }
+.drop div{ padding:0 5px; } .drop div.sel{ background:#3b78c2; color:#fff; }
+.home{ padding:6px 10px; font-size:11px; }
+.home h4{ margin:2px 0 3px; font-size:10px; color:#666; border-bottom:1px solid #ddd; }
+.home .it{ padding:1px 6px; } .home .it.sel{ background:#3b78c2; color:#fff; }
+.calcapp{ padding:4px 6px; font-size:11.5px; }
+.calcapp .ln{ display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:3px 0; }
+.calcapp .cur{ border:1px solid #888; height:16px; margin-top:4px; }
+
+/* ---------- Panel ---------- */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.keys{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.ctrl{ background:#D93A2B; } .chip.lt{ background:#8e8e95; color:#111; }
+.chip.hit{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.plus{ background:none; color:var(--mute); padding:3px 2px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); margin-left:auto; }
+.btns button:disabled{ opacity:.4; cursor:default; }
+.hint{ font-size:12.5px; color:var(--mute); margin-top:10px; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+
+.k{ cursor:pointer; } .k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+@keyframes wack{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.caret{ animation:blink 1s steps(1) infinite; font-weight:normal; } @keyframes blink{ 50%{opacity:0} }
+.opt{ font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+#next{ margin-left:auto; }
+.task{ border:1px solid var(--line); border-left:4px solid var(--lf); border-radius:8px; padding:9px 13px; margin:0 0 14px; font-size:14.5px; background:#fafbfc; }
+.task b{ color:var(--lf); }
+table.tt{ border-collapse:collapse; margin:7px 0 1px; font-size:14.5px; }
+table.tt th, table.tt td{ border:1px solid #c3c8d0; padding:2px 9px; text-align:center; min-width:30px; background:#fff; }
+table.tt th{ background:#eef0f3; font-style:italic; font-family:Cambria,Georgia,serif; }
+</style></head><body>
+<div class="top"><div class="in"><h1>CAS Schritt für Schritt: Regressionsgerade<small>TI-Nspire CX CAS · Lineare Regression · Beispielzahlen, nicht die Zahlen vom Arbeitsblatt</small></h1><img src="data:image/png;base64,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" alt="RWB Essen AHR"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="calc"><div class="body">
+    <div class="face">
+      <div class="brand">TI-Nspire CX<b>CAS</b></div>
+      <div class="scrwrap"><div class="scr" id="scr"></div></div>
+      <div class="nav">
+        <div class="col"><button class="k bk" data-k="esc">esc</button><button class="k bk" data-k="pad2">✎</button><button class="k bk" data-k="tab">tab</button></div>
+        <div class="pad"><button class="k" data-k="up">▲</button><button class="k" data-k="left">◀</button><button class="k" data-k="click">●</button><button class="k" data-k="right">▶</button><button class="k" data-k="down">▼</button></div>
+        <div class="col"><button class="k bk" data-k="on">⌂ on</button><button class="k bk" data-k="doc">doc ▸</button><button class="k bk" data-k="menu">menu</button></div>
+      </div>
+    </div>
+    <div class="row4"><button class="k ctrl" data-k="ctrl">ctrl</button><button class="k" data-k="shift">⇧ shift</button><button class="k" data-k="var">var</button><button class="k" data-k="del">del</button></div>
+    <div class="main7">
+      <button class="k" data-k="=">=</button><button class="k" data-k="trig">trig</button><button class="k lt" data-k="7">7</button><button class="k lt" data-k="8">8</button><button class="k lt" data-k="9">9</button><button class="k" data-k="tmpl">⊞</button><button class="k" data-k="cat">📖</button>
+      <button class="k" data-k="^">^</button><button class="k" data-k="x2">x²</button><button class="k lt" data-k="4">4</button><button class="k lt" data-k="5">5</button><button class="k lt" data-k="6">6</button><button class="k" data-k="*">×</button><button class="k" data-k="/">÷</button>
+      <button class="k" data-k="ex">eˣ</button><button class="k" data-k="10x">10ˣ</button><button class="k lt" data-k="1">1</button><button class="k lt" data-k="2">2</button><button class="k lt" data-k="3">3</button><button class="k" data-k="+">+</button><button class="k" data-k="-">−</button>
+      <button class="k" data-k="(">(</button><button class="k" data-k=")">)</button><button class="k lt" data-k="0">0</button><button class="k lt" data-k=".">.</button><button class="k lt" data-k="neg">(−)</button><button class="k span2" data-k="enter">enter</button>
+    </div>
+    <div class="let9" id="let9"></div>
+  </div></div>
+
+  
+  <div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="keys" id="keys"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+    <label class="opt"><input type="checkbox" id="hilfe" checked> Gesuchte Taste am Rechner aufleuchten lassen</label>
+    <div class="hint">Klicken Sie die Tasten am Rechner an. Ziffern, Buchstaben, enter, tab und die Pfeiltasten gehen auch über Ihre Tastatur.</div>
+  </div>
+</main>
+<script>
+
+// ---------- Buchstabentasten ----------
+(function(){
+  const rows=[["EE","a","b","c","d","e","f","g","?!"],["π","h","i","j","k","l","m","n","⚑"],[",","o","p","q","r","s","t","u","↵"],["","v","w","x","y","z","␣"]];
+  const el=document.getElementById('let9'); let h='';
+  rows.forEach(r=>r.forEach((c,i)=>{
+    if(c==="") h+='<span></span>';
+    else if(c==="␣") h+='<button class="k span3" data-k="space">␣</button>';
+    else { const k=/^[a-z]$/.test(c)?c:c; h+=`<button class="k" data-k="${k}">${/^[a-z]$/.test(c)?c.toUpperCase():c}</button>`; }
+  }));
+  el.innerHTML=h;
+})();
+
+// ---------- Bildschirm-Bausteine ----------
+const esc=s=>String(s);
+function topbar(tabs,cur){
+  return '<div class="tb">'+tabs.map(t=>`<span class="tab ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+// cols: [{n:'ur', f:'', v:[..], txt:true}]  (genau 4 Spalten A–D)
+function sheet(o){
+  const L=["A","B","C","D"], top=o.top||0, rows=10, cols=o.cols.concat([{},{},{},{}]).slice(0,4);
+  let h=topbar(o.tabs||['1.1'],o.tab||'1.1')+'<table class="sh"><tr class="hd"><td class="rn"></td>';
+  cols.forEach((c,i)=>{ const cur=o.cur&&o.cur[0]===i&&o.cur[1]===-1; h+=`<td class="${cur?'cur':''}"><span>${L[i]}</span>${cur&&o.buf?o.buf+'<span class="caret">|</span>':(c.n||'')}</td>`; });
+  h+='</tr><tr class="fm"><td class="rn">◆</td>'; cols.forEach(c=>h+=`<td>${c.f||''}</td>`); h+='</tr>';
+  for(let r=top;r<top+rows;r++){
+    const cls=(o.hl&&o.hl[r])||'';
+    h+=`<tr><td class="rn">${r+1}</td>`;
+    cols.forEach((c,i)=>{ let v=(c.v&&c.v[r]!==undefined)?c.v[r]:''; const cur=o.cur&&o.cur[0]===i&&o.cur[1]===r; if(cur&&o.buf) v=o.buf+'<span class="caret">|</span>';
+      h+=`<td class="${c.txt?'':'num'} ${cur?'cur':''} ${c.res?cls:''}">${v}</td>`; });
+    h+='</tr>';
+  }
+  return h+'</table>';
+}
+const M1=["1: Aktionen","2: Einfügen","3: Daten","4: Statistik","5: Tabelle"];
+const M2=["1: Statistische Berechnungen","2: Verteilungen","3: Konfidenzintervalle","4: Statistische Tests"];
+const M3=["1: Statistik mit einer Variablen…","2: Statistik mit zwei Variablen…","3: Lineare Regression (mx+b)…","4: Lineare Regression (a+bx)…","5: Mediane Regression…","6: Quadratische Regression…","7: Kubische Regression…","8: Regression 4. Grades…"];
+function menus(levels){ // [{items,sel}]
+  return levels.map((m,i)=>`<div class="menu" style="left:${6+i*44}px;top:${22+i*30}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join('');
+}
+function dialog(title,fields,okFocus){
+  return `<div class="dlg"><div class="tt">${title}</div><div class="ff">`+fields.map(f=>`<div class="lb">${f[0]}</div><div class="ct ${f[2]||''}"><span>${f[1]}</span>${f[3]===false?'':'<span>▼</span>'}</div>`).join('')+
+   `</div><div class="bt"><span class="${okFocus?'fo':''}">OK</span><span>Abbrechen</span></div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists & Spreadsheet hinzufügen","5: Data & Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel){ return topbar(tabs,cur)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function home(sel){
+  const it=(t,i)=>`<div class="it ${i===sel?'sel':''}">${t}</div>`;
+  return '<div class="tb"><span class="tab">Startbildschirm</span><span class="sp"></span><span class="bat"></span></div><div class="home"><h4>Notizblock</h4>'+it('A&nbsp; Berechnen',-1)+it('B&nbsp; Graph',-2)+'<h4 style="margin-top:6px">Dokumente</h4>'+
+   [it('1&nbsp; Neu',0),it('2&nbsp; Meine Dokumente',-3),it('3&nbsp; Zuletzt verwendet',-4),it('4&nbsp; Aktuell',-5),it('5&nbsp; Einstellungen',-6)].join('')+'</div>';
+}
+function calcApp(tabs,cur,lines,buf){ return topbar(tabs,cur)+'<div class="calcapp">'+lines.map(l=>`<div class="ln"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')+`<div class="cur">${buf||''}<span class="caret">|</span></div></div>`; }
+
+// ---------- Daten (Beispielzahlen) ----------
+const A=[5,3,8,6,4,7,9,6];
+const BX=[1,2,3,4], BH=[3,5,4,2];
+const RX=[1,2,3,4,5], RY=[2.1,3.9,6.2,7.8,10.1];
+const resA=[["Titel","Statistik mit einer Variablen"],["x̄","6."],["Σx","48."],["Σx²","316."],["sx := sₙ₋₁x","2."],["σx := σₙx","1.87083"],["n","8."],["MinX","3."],["Q₁X","4.5"],["MedianX","6."],["Q₃X","7.5"],["MaxX","9."],["SSX","28."]];
+const resB=[["Titel","Statistik mit einer Variablen"],["x̄","2.35714"],["Σx","33."],["Σx²","91."],["sx := sₙ₋₁x","1.00821"],["σx := σₙx","0.971534"],["n","14."],["MinX","1."],["Q₁X","2."],["MedianX","2."],["Q₃X","3."],["MaxX","4."],["SSX","13.2143"]];
+const resR=[["Titel","Lineare Regression (mx+b)"],["RegEqn","m*x+b"],["m","1.99"],["b","0.05"],["r²","0.997305"],["r","0.998652"],["Resid","{0.06,-0.13,0.18,-0.21,0.1}"]];
+const col=(n,v,f,txt)=>({n,v,f,txt});
+const lab=r=>Object.assign(col('',r.map(x=>x[0]),'',true),{res:1}), val=(r,f)=>Object.assign(col('',r.map(x=>x[1]),f,false),{res:1});
+const typ=vals=>vals.flatMap(v=>String(v).split('').concat(['enter']));
+const name=s=>s.split('').concat(['enter']);
+const T=['1.1'], T2=['1.1','1.2'], T3=['1.1','1.2','1.3'], T4=['1.1','1.2','1.3','1.4'];
+const HL=(o)=>o; // Lesbarkeit
+
+
+// ---------- Eingabe-Simulation ----------
+const clone=o=>JSON.parse(JSON.stringify(o));
+const CHARS=/^([0-9a-z.()]|neg)$/;
+function typeSheet(base,keys){
+  const o=clone(base); let buf='';
+  for(const k of keys){
+    let [c,r]=o.cur;
+    if(CHARS.test(k)){ buf+=(k==='neg'?'-':k); }
+    else if(k==='enter'){ if(!o.cols[c]) o.cols[c]={n:'',v:[]}; if(r===-1) o.cols[c].n=buf; else { o.cols[c].v=o.cols[c].v||[]; o.cols[c].v[r]=buf; } buf=''; o.cur=[c,r+1]; }
+    else if(k==='up'){ o.cur=[c,Math.max(-1,r-1)]; }
+    else if(k==='down'){ o.cur=[c,r+1]; }
+    else if(k==='right'){ o.cur=[c+1,r]; if(!o.cols[c+1]) o.cols[c+1]={n:'',v:[]}; }
+  }
+  o.buf=buf; return o;
+}
+const SH=(base,keys)=>i=>sheet(typeSheet(base,keys.slice(0,i)));
+const RES={"f1(8)":"15.97"};
+function typeCalc(tabs,cur,keys){
+  let buf='', lines=[];
+  for(const k of keys){ if(k==='enter'){ lines.push([buf,RES[buf]||'']); buf=''; } else buf+=k; }
+  return calcApp(tabs,cur,lines,buf);
+}
+function off(){ return '<div style="position:absolute;inset:0;background:#20242a;color:#9aa3ad;display:flex;align-items:center;justify-content:center;font-size:12px;">Der Rechner ist aus.</div>'; }
+// Bildschirm für Teilschritte: Array oder Funktion; fehlt es, bleibt das vorige Bild stehen
+function pick(arr){ return i=>arr[Math.min(i,arr.length)-1]; }
+
+// ---------- Fertige Zustände ----------
+const dropAt=(row,opts,sel)=>`<div class="drop" style="left:133px;top:${61+19*row}px;width:70px">${opts.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')}</div>`;
+const sA0={cols:[{n:'',v:[]}],cur:[0,0]};
+const sA2={cols:[{n:'',v:A.map(String)}],cur:[0,8]};
+const shA=()=>sheet(sA2);
+const dlgA=(x1,cls,drop)=>shA()+dialog("Statistik mit einer Variablen",[["X1-Liste:",x1,cls],["Häufigkeitsliste:","1"],["Kategorienliste:",""],["Kategorien einschließen:",""],["1. Ergebnisspalte:","b[]","",false]],false)+(drop!==undefined?dropAt(0,['a[]'],drop):'');
+const resAsheet=(o)=>sheet(Object.assign({cols:[col('',A),lab(resA),val(resA,'=OneVar(a[],1)')]},o));
+
+const sB0={tabs:T2,tab:'1.2',cols:[{n:'',v:[]}],cur:[0,0]};
+const sB1={tabs:T2,tab:'1.2',cols:[{n:'',v:BX.map(String)}],cur:[0,4]};
+const sB2={tabs:T2,tab:'1.2',cols:[{n:'',v:BX.map(String)},{n:'',v:BH.map(String)}],cur:[1,4]};
+const shB=()=>sheet(sB2);
+// x1: Inhalt X1-Feld, hf: Inhalt Haeufigkeitsfeld, foc: 'x1'|'hf'|'x1m'|'hfm', drop: [zeile,sel]
+const dlgB=(x1,hf,foc,drop)=>shB()+dialog("Statistik mit einer Variablen",[["X1-Liste:",x1,foc==='x1'?'fo':(foc==='x1m'?'mark fo':(x1?'mark':''))],["Häufigkeitsliste:",hf,foc==='hf'?'fo':(foc==='hfm'?'mark fo':'')],["Kategorienliste:",""],["Kategorien einschließen:",""],["1. Ergebnisspalte:","c[]","",false]],false)+(drop?dropAt(drop[0],drop[0]===0?['a[]','b[]']:['1','a[]','b[]'],drop[1]):'');
+const resBsheet=(o)=>sheet(Object.assign({tabs:T2,tab:'1.2',cols:[col('',BX),col('',BH),lab(resB),val(resB,'=OneVar(a[],b[])')]},o));
+
+const TR=['1.1'];
+const sR0={tabs:TR,tab:'1.1',cols:[{n:'',v:[]}],cur:[0,0]};
+const sR1={tabs:TR,tab:'1.1',cols:[{n:'',v:RX.map(String)}],cur:[0,5]};
+const sR2={tabs:TR,tab:'1.1',cols:[{n:'',v:RX.map(String)},{n:'',v:RY.map(String)}],cur:[1,5]};
+const shR=()=>sheet(sR2);
+const dlgR=(x,y,foc,drop)=>shR()+dialog("Lineare Regression (mx+b)",[["X-Liste:",x,foc==='x'?'fo':(x?'mark':'')],["Y-Liste:",y,foc==='y'?'fo':(y?'mark':'')],["Gleichung speichern in:","f1"],["Häufigkeitsliste:","1"],["Kategorienliste:",""],["1. Ergebnisspalte:","c[]","",false]],false)+(drop?dropAt(drop[0],['a[]','b[]'],drop[1]):'');
+const resRsheet=(o)=>sheet(Object.assign({tabs:TR,tab:'1.1',cols:[col('',RX),col('',RY),lab(resR),val(resR,'=LinRegMx(a[],b[],1)')]},o));
+const TR2=['1.1','1.2'];
+
+// ---------- Aufgaben ----------
+const tbl=rows=>'<table class="tt">'+rows.map(r=>'<tr>'+r.map((c,i)=>i===0&&r.length>1&&isNaN(c)?`<th>${c}</th>`:`<td>${String(c).replace('.',',')}</td>`).join('')+'</tr>').join('')+'</table>';
+
+// ---------- Schritte ----------
+const vA=typ(A), kB1=typ(BX), kB2=["up","up","up","up","right"].concat(typ(BH));
+const kX=typ(RX), kY=["up","up","up","up","up","right"].concat(typ(RY));
+const kF=["f","1","(","8",")","enter"];
+const TRACKS={
+ a:{ name:"1a · Urliste", start:off,
+  task:"<b>Beispielaufgabe 1a:</b> Bestimmen Sie mit dem CAS die Lage- und Streuungsmaße dieser Urliste."+tbl([A]),
+  steps:[
+  {t:"Rechner einschalten", k:["on"], s:()=>home(0),
+   d:"<p>Drücken Sie <b>on</b>. Der Startbildschirm erscheint.</p>"},
+  {t:"Neues Dokument anlegen", k:["1"], s:()=>appList(T,'1.1',0),
+   d:"<p>Drücken Sie <b>1</b> für <i>Neu</i>. Das CAS fragt, welche Anwendung auf die erste Seite soll.</p>",
+   n:"Ist schon ein Dokument offen? Dann fügen Sie mit <b>ctrl</b> + <b>doc</b> eine neue Seite ein."},
+  {t:"Lists & Spreadsheet wählen", k:["4"], s:()=>sheet(sA0),
+   d:"<p>Drücken Sie <b>4</b>. Eine leere Tabelle erscheint. Der schwarze Rahmen (Cursor) steht in Zelle A1.</p>"},
+  {t:"Urliste in Spalte A eintippen", k:vA, p:SH(sA0,vA),
+   d:"<p>Tippen Sie jeden Wert der Urliste ein und bestätigen Sie mit <b>enter</b>. Der Cursor springt danach eine Zeile tiefer.</p>",
+   n:"Die Spalte müssen Sie nicht benennen. Das CAS nennt Spalte A später einfach <b>a[]</b>."},
+  {t:"Menü öffnen", k:["menu"], s:()=>shA()+menus([{items:M1,sel:3}]),
+   d:"<p>Drücken Sie <b>menu</b>. Das Menü von Lists &amp; Spreadsheet öffnet sich.</p>"},
+  {t:"4: Statistik", k:["4"], s:()=>shA()+menus([{items:M1,sel:3},{items:M2,sel:0}]),
+   d:"<p>Drücken Sie <b>4</b> für <i>Statistik</i>.</p>"},
+  {t:"1: Statistische Berechnungen", k:["1"], s:()=>shA()+menus([{items:M1,sel:3},{items:M2,sel:0},{items:M3,sel:0}]),
+   d:"<p>Drücken Sie <b>1</b> für <i>Statistische Berechnungen</i>.</p>"},
+  {t:"1: Statistik mit einer Variablen", k:["1"], s:()=>shA()+dialog("Statistik mit einer Variablen",[["Anzahl der Listen:","1","",false]],true),
+   d:"<p>Drücken Sie <b>1</b>. Das CAS fragt nach der Anzahl der Listen. Die <b>1</b> bleibt stehen.</p>"},
+  {t:"Fenster öffnen", k:["enter"], s:()=>dlgA('','fo'),
+   d:"<p>Drücken Sie <b>enter</b>. Ein Fenster öffnet sich. Das Feld <b>X1-Liste</b> ist noch leer.</p>"},
+  {t:"X1-Liste: a[] wählen", k:["click","click"], p:pick([dlgA('','fo',0),dlgA('a[]','mark fo')]),
+   d:"<p>Öffnen Sie die Auswahl mit <b>Klick</b> (Mitte des Touchpads). Wählen Sie mit <b>Klick</b> den Eintrag <b>a[]</b>. Das ist Spalte A.</p>",
+   n:"Die <b>Häufigkeitsliste</b> bleibt <b>1</b>: In einer Urliste zählt jeder Wert einmal."},
+  {t:"Berechnen", k:["enter"], s:()=>resAsheet({cur:[2,0]}),
+   d:"<p>Drücken Sie <b>enter</b> (OK). Die Ergebnisse stehen in den Spalten <b>B</b> (Name) und <b>C</b> (Wert).</p>"},
+  {t:"Mittelwert und Standardabweichung", k:[], s:()=>resAsheet({hl:{1:'good',4:'dim',5:'star'}}),
+   d:"<p><b>x̄</b> ist das arithmetische Mittel.</p><p><b>σx</b> (Sigma x) ist die <b>Standardabweichung</b>. Diesen Wert tragen Sie ein.</p>",
+   n:"Die Zeile <b>sx</b> direkt darüber brauchen Sie <b>nicht</b>. Sie ist hier durchgestrichen."},
+  {t:"Nach unten scrollen", k:["down","down","down"], p:i=>resAsheet({top:i,hl:i===3?{5:'star',6:'good',7:'good',8:'good',9:'good',10:'good',11:'good'}:{}}),
+   d:"<p>Drücken Sie dreimal <b>▼</b> auf dem Touchpad. Jetzt sehen Sie auch <b>n</b>, <b>MinX</b>, <b>Q₁X</b>, <b>MedianX</b>, <b>Q₃X</b> und <b>MaxX</b>.</p><p>Spannweite und Quartilsabstand rechnen Sie selbst aus: MaxX − MinX und Q₃X − Q₁X.</p>"}
+ ]},
+ b:{ name:"1b · Häufigkeitstabelle", start:()=>TRACKS.a.steps[TRACKS.a.steps.length-1].p(3),
+  task:"<b>Beispielaufgabe 1b:</b> Bestimmen Sie mit dem CAS die Lage- und Streuungsmaße dieser Häufigkeitstabelle."+tbl([["x<sub>i</sub>"].concat(BX),["h<sub>i</sub>"].concat(BH)]),
+  steps:[
+  {t:"Neue Seite einfügen", k:["ctrl","doc"], s:()=>appList(T2,'1.2',0),
+   d:"<p>Drücken Sie <b>ctrl</b> und dann <b>doc</b>. Eine neue Seite (1.2) wird eingefügt.</p>"},
+  {t:"Lists & Spreadsheet wählen", k:["4"], s:()=>sheet(sB0),
+   d:"<p>Drücken Sie <b>4</b>. Eine leere Tabelle erscheint. Der Cursor steht in Zelle A1.</p>"},
+  {t:"Spalte A: die Werte xᵢ", k:kB1, p:SH(sB0,kB1),
+   d:"<p>In Spalte A stehen die <b>Werte xᵢ</b> der Tabelle, jeder nur einmal.</p><p>Tippen Sie die Werte ein, jeweils mit <b>enter</b>.</p>"},
+  {t:"Spalte B: die Häufigkeiten hᵢ", k:kB2, p:SH(sB1,kB2),
+   d:"<p>Gehen Sie mit <b>▲</b> zurück in Zeile 1 und mit <b>▶</b> in Spalte B.</p><p>In Spalte B steht, <b>wie oft</b> jeder Wert vorkommt.</p>",
+   n:"Wert und Häufigkeit müssen in derselben Zeile stehen."},
+  {t:"Menü: Statistik ▸ Statistische Berechnungen", k:["menu","4","1"], p:pick([()=>shB()+menus([{items:M1,sel:3}]),()=>shB()+menus([{items:M1,sel:3},{items:M2,sel:0}]),()=>shB()+menus([{items:M1,sel:3},{items:M2,sel:0},{items:M3,sel:0}])].map(f=>f())),
+   d:"<p>Wie bei der Urliste: <b>menu</b> ▸ <b>4</b> ▸ <b>1</b>.</p>"},
+  {t:"1: Statistik mit einer Variablen", k:["1"], s:()=>shB()+dialog("Statistik mit einer Variablen",[["Anzahl der Listen:","1","",false]],true),
+   d:"<p>Drücken Sie <b>1</b>. Die Anzahl der Listen bleibt <b>1</b>.</p>"},
+  {t:"Fenster öffnen", k:["enter"], s:()=>dlgB('','1','x1'),
+   d:"<p>Drücken Sie <b>enter</b>. Das Feld <b>X1-Liste</b> ist noch leer.</p>"},
+  {t:"X1-Liste: a[] wählen", k:["click","click"], p:pick([dlgB('','1','x1',[0,0]),dlgB('a[]','1','x1m')]),
+   d:"<p>Öffnen Sie die Auswahl mit <b>Klick</b> und wählen Sie mit <b>Klick</b> den Eintrag <b>a[]</b>. Das ist Spalte A mit den Werten.</p>"},
+  {t:"Häufigkeitsliste öffnen", k:["tab","click"], p:pick([dlgB('a[]','1','hf'),dlgB('a[]','1','hf',[1,0])]),
+   d:"<p>Springen Sie mit <b>tab</b> in das Feld <b>Häufigkeitsliste</b>. Dort steht noch <b>1</b>. Mit <b>Klick</b> öffnen Sie die Auswahl.</p>"},
+  {t:"Häufigkeitsliste: b[] wählen", k:["down","down","click"], p:pick([dlgB('a[]','1','hf',[1,1]),dlgB('a[]','1','hf',[1,2]),dlgB('a[]','b[]','hfm')]),
+   d:"<p>Gehen Sie mit <b>▼</b> zweimal nach unten zu <b>b[]</b> und bestätigen Sie mit <b>Klick</b>. Das ist Spalte B mit den Häufigkeiten.</p>",
+   n:"Das ist der wichtigste Schritt bei einer Häufigkeitstabelle. Ohne b[] rechnet das CAS mit nur 4 Werten."},
+  {t:"Berechnen", k:["enter"], s:()=>resBsheet({cur:[3,0]}),
+   d:"<p>Drücken Sie <b>enter</b>. Die Ergebnisse stehen jetzt in den Spalten <b>C</b> und <b>D</b>.</p>"},
+  {t:"Kontrolle mit n", k:["down","down","down"], p:i=>resBsheet({top:i,hl:i===3?{1:'good',4:'dim',5:'star',6:'star'}:{}}),
+   d:"<p>Scrollen Sie mit dreimal <b>▼</b> nach unten und prüfen Sie <b>n</b>.</p><p>n muss die Summe der Häufigkeiten sein: 3 + 5 + 4 + 2 = <b>14</b>. Dann haben Sie die Häufigkeitsliste richtig gewählt.</p>",
+   n:"Auch hier gilt: <b>σx</b> ist die Standardabweichung, <b>sx</b> brauchen Sie nicht."}
+ ]},
+ r:{ name:"Regressionsgerade", start:off,
+  task:"<b>Beispielaufgabe:</b> Bestimmen Sie mit dem CAS die Regressionsgerade und berechnen Sie die Prognose für <i>x</i> = 8."+tbl([["x"].concat(RX),["y"].concat(RY)]),
+  steps:[
+  {t:"Rechner einschalten", k:["on"], s:()=>home(0),
+   d:"<p>Drücken Sie <b>on</b>. Der Startbildschirm erscheint.</p>"},
+  {t:"Neues Dokument anlegen", k:["1"], s:()=>appList(TR,'1.1',0),
+   d:"<p>Drücken Sie <b>1</b> für <i>Neu</i>.</p>",
+   n:"Ist schon ein Dokument offen? Dann fügen Sie mit <b>ctrl</b> + <b>doc</b> eine neue Seite ein."},
+  {t:"Lists & Spreadsheet wählen", k:["4"], s:()=>sheet(sR0),
+   d:"<p>Drücken Sie <b>4</b>. Eine leere Tabelle erscheint. Der Cursor steht in Zelle A1.</p>"},
+  {t:"Spalte A: die x-Werte", k:kX, p:SH(sR0,kX),
+   d:"<p>Tippen Sie alle <b>x-Werte</b> in Spalte A ein, jeweils mit <b>enter</b>.</p>"},
+  {t:"Spalte B: die y-Werte", k:kY, p:SH(sR1,kY),
+   d:"<p>Mit <b>▲</b> zurück in Zeile 1, mit <b>▶</b> in Spalte B. Tippen Sie die <b>y-Werte</b> ein.</p>",
+   n:"Kommazahlen tippen Sie mit <b>Punkt</b> ein: 2.1 statt 2,1."},
+  {t:"Menü: Statistik ▸ Statistische Berechnungen", k:["menu","4","1"], p:pick([()=>shR()+menus([{items:M1,sel:3}]),()=>shR()+menus([{items:M1,sel:3},{items:M2,sel:0}]),()=>shR()+menus([{items:M1,sel:3},{items:M2,sel:0},{items:M3,sel:0}])].map(f=>f())),
+   d:"<p><b>menu</b> ▸ <b>4</b> (Statistik) ▸ <b>1</b> (Statistische Berechnungen).</p>"},
+  {t:"3: Lineare Regression (mx+b)", k:["3"], s:()=>dlgR('','','x'),
+   d:"<p>Drücken Sie <b>3</b>. Ein Fenster öffnet sich. <b>X-Liste</b> und <b>Y-Liste</b> sind noch leer.</p>"},
+  {t:"X-Liste: a[] wählen", k:["click","click"], p:pick([dlgR('','','x',[0,0]),dlgR('a[]','','x')]),
+   d:"<p>Öffnen Sie die Auswahl mit <b>Klick</b> und wählen Sie mit <b>Klick</b> den Eintrag <b>a[]</b> (Spalte A, die x-Werte).</p>"},
+  {t:"Y-Liste: b[] wählen", k:["tab","click","down","click"], p:pick([dlgR('a[]','','y'),dlgR('a[]','','y',[1,0]),dlgR('a[]','','y',[1,1]),dlgR('a[]','b[]','y')]),
+   d:"<p>Mit <b>tab</b> ins Feld <b>Y-Liste</b>, mit <b>Klick</b> öffnen, mit <b>▼</b> zu <b>b[]</b> und mit <b>Klick</b> übernehmen.</p>",
+   n:"Die Gerade wird als <b>f1</b> gespeichert. Das brauchen Sie später für die Prognose."},
+  {t:"Berechnen", k:["enter"], s:()=>resRsheet({cur:[3,0]}),
+   d:"<p>Drücken Sie <b>enter</b>. Die Ergebnisse stehen in den Spalten <b>C</b> und <b>D</b>.</p>"},
+  {t:"m, b und r ablesen", k:[], s:()=>resRsheet({hl:{2:'star',3:'star',4:'dim',5:'star'}}),
+   d:"<p><b>m</b> ist die Steigung, <b>b</b> der y-Achsenabschnitt. Hier: y = 1,99x + 0,05.</p><p><b>r</b> ist der Korrelationskoeffizient.</p>",
+   n:"Verwechseln Sie <b>r</b> nicht mit <b>r²</b> in der Zeile darüber."},
+  {t:"Prognose: Calculator-Seite", k:["ctrl","doc","1"], p:pick([resRsheet({}),appList(TR2,'1.2',0),calcApp(TR2,'1.2',[])]),
+   d:"<p>Für die Prognose: <b>ctrl</b> + <b>doc</b>, dann <b>1</b> für eine Calculator-Seite.</p>"},
+  {t:"f1 an einer Stelle berechnen", k:kF, p:i=>typeCalc(TR2,'1.2',kF.slice(0,i)),
+   d:"<p>Tippen Sie <b>f1(8)</b> und <b>enter</b>. Das CAS setzt x = 8 in die Regressionsgerade ein: <b>y ≈ 15,97</b>.</p><p>Auf dem Arbeitsblatt nehmen Sie den x-Wert aus Ihrer Aufgabe.</p>",
+   n:"Das CAS rechnet mit den ungerundeten Werten. Ihr Ergebnis von Hand kann deshalb minimal abweichen."}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["r"];
+let tr=ORDER[0], st=0, pos=0, blinkT=null, lock=false;
+const $=id=>document.getElementById(id);
+const LBL={on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀"};
+function chip(k,i){ const l=LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k); const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${l}</span>`; }
+function screenOf(t,s,i){ // Bildschirm von Schritt s nach i Tasten
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.length>1?ORDER.map(k=>`<button class="${k===tr?'on':''}" data-t="${k}">${TRACKS[k].name}</button>`).join(''):'';
+  $('prog').innerHTML=T.steps.map((_,i)=>`<i class="${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').innerHTML=T.task;
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):'<span class="chip plus">Nur ablesen – keine Taste drücken</span>';
+  $('dd').innerHTML=S.d+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const done=pos>=S.k.length;
+  $('next').className=done?'go':'';
+  $('next').textContent=done ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=done&&last&&!nextT;
+  $('stat').innerHTML=S.k.length? (done?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit').forEach(e=>e.classList.remove('hit'));
+  const S=TRACKS[tr].steps[st];
+  if(!$('hilfe').checked || pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    const l=LBL[S.k[pos]]||(/^[a-z]$/.test(S.k[pos])?S.k[pos].toUpperCase():S.k[pos]);
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+    if(!$('hilfe').checked){ const t=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(t){ t.classList.add('hit'); setTimeout(()=>t.classList.remove('hit'),1200); } }
+  }
+}
+function advance(){
+  const T=TRACKS[tr];
+  if(st<T.steps.length-1){ st++; pos=0; render(); }
+  else render();
+}
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }      // ueberspringen: Ergebnis zeigen
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+$('hilfe').onchange=hint;
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',' ':'click'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && e.key.length===1 && /[0-9a-zA-Z.()]/.test(e.key)) k=e.key.toLowerCase();
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]&&ORDER.includes(h)) tr=h;
+render();
+
+</script>
+</body></html>

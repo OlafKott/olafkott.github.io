@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lösung Regressionsgerade mit dem CAS</title></head>
+<body style="margin:0;background:#f4f6f9;font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;">
+<div id="lock" style="max-width:420px;margin:60px auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.12);padding:24px;text-align:center;line-height:1.6;">
+<h2 style="color:#1F4E99;margin:0 0 6px;">Lösung gesperrt</h2>
+<p style="margin:0 0 14px;color:#333;">Geben Sie den vierstelligen Code von Ihrem Arbeitsblatt ein.</p>
+<input id="pw" inputmode="numeric" maxlength="4" autocomplete="off" style="font-size:28px;letter-spacing:12px;width:170px;text-align:center;padding:6px;border:2px solid #1F4E99;border-radius:6px;">
+<br><button id="go" style="margin-top:14px;font-size:17px;padding:8px 26px;background:#1F4E99;color:#fff;border:0;border-radius:6px;cursor:pointer;">Öffnen</button>
+<p id="msg" style="color:#c00;min-height:1.6em;margin:10px 0 0;"></p></div>
+<div id="out" style="background:#fff;"></div>
+<script>
+const D={"s": "CsOL4KVR+q2pz7b0jl4F+g==", "iv": "uIlggHe1m2z/nTxs", "ct": "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", "it": 150000};
+const u=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function open_(){
+  const pw=document.getElementById('pw').value.trim(), msg=document.getElementById('msg');
+  if(!/^\d{4}$/.test(pw)){msg.textContent='Bitte genau vier Ziffern eingeben.';return;}
+  try{
+    const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:u(D.s),iterations:D.it,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+    const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:u(D.iv)},key,u(D.ct));
+    document.getElementById('lock').style.display='none';
+    document.getElementById('out').innerHTML=new TextDecoder().decode(pt);
+  }catch(e){msg.textContent='Falscher Code – überprüfen Sie Ihre Rundungen.';}
+}
+document.getElementById('go').onclick=open_;
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')open_();});
+</script></body></html>
