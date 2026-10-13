@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Übung 3.2 – Extrem- und Wendepunkte mit Parameter</title><style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f1ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Calibri,sans-serif;color:#1d1d1f;line-height:1.6}
+.wrap{max-width:900px;margin:0 auto;padding:20px 14px 40px}
+.head{background:linear-gradient(135deg,#C8102E 0%,#8b0000 100%);color:#fff;padding:20px 25px;border-radius:8px 8px 0 0}
+.head .over{font-size:13px;opacity:.9;letter-spacing:.5pt;margin-bottom:4px;text-transform:uppercase}
+.head h1{margin:0 0 4px;font-size:24px;font-weight:600}
+.head p{margin:0;font-size:14px;opacity:.95}
+.card{background:#fff;border:1px solid #e0e0e0;border-top:none;padding:22px 25px;border-radius:0 0 8px 8px}
+.auftrag{background:#fdf2f3;border-left:4px solid #C8102E;padding:12px 18px;border-radius:4px;margin-bottom:20px;font-size:15px}
+.auftrag b.t{color:#C8102E;display:block;margin-bottom:4px}
+#aufgabe{font-family:Cambria,'Cambria Math',Georgia,serif;font-size:16.5px;border:1px solid #ddd;border-radius:8px;padding:16px 18px}
+#aufgabe p{margin:6px 0 10px}
+.row{margin:8px 0;line-height:2.5}
+.row.eq{font-size:15.5px}
+.in{font-family:Cambria,Georgia,serif;font-size:16px;padding:5px 8px;margin:0 3px;vertical-align:middle;border:2px solid #c9c9c9;border-radius:6px;width:110px;background:#fff}
+.in.w{width:230px}.in.s{width:62px;text-align:center}
+.sel{width:auto;max-width:100%}
+.in.ok{border-color:#2e7d32;background:#e8f5e9}.in.no{border-color:#c62828;background:#fdecea}
+.big{font-size:18px}
+.g{color:#2E7D32}.r{color:#C8102E}
+.hint{font-family:-apple-system,'Segoe UI',Calibri,sans-serif;font-size:12.5px;color:#777}
+.small{font-size:13px;color:#666}
+code{background:#f2f2f2;border:1px solid #ddd;border-radius:3px;padding:0 4px;font-size:13.5px;word-break:break-all}
+.pw{display:inline-flex;align-items:center;gap:8px;margin:4px 0 8px;font-size:17px}
+.pwb{width:10px;align-self:stretch;border:2px solid #333;border-right:none;border-radius:10px 0 0 10px}
+.pwr{display:grid;grid-template-columns:auto auto;gap:4px 22px}.pw .cond{color:#555}
+table.lgs{border-collapse:collapse;margin:4px 0 10px}table.lgs td{padding:3px 12px 3px 0}
+svg.plot{width:100%;max-width:560px;height:auto;display:block;border:1px solid #ead7da;border-radius:6px;background:#fff;margin:6px 0;font-family:Cambria,Georgia,serif}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btns button{padding:11px 20px;border:none;border-radius:5px;font-size:15px;font-weight:600;cursor:pointer;color:#fff}
+.b1{background:#2e7d32}.b2{background:#f9a825;color:#3a2e00 !important}.b3{background:#1D70B8}.b4{background:#C8102E}
+.fb{margin-top:16px;padding:12px 16px;border-radius:5px;font-weight:500}
+.fb.gut{background:#e8f5e9;color:#1b5e20;border:1px solid #66bb6a}.fb.mittel{background:#fff8e1;color:#5d4e00;border:1px solid #f9a825}.fb.schlecht{background:#fdecea;color:#a72824;border:1px solid #ef5350}
+.box{display:none;margin-top:14px;padding:12px 16px;border-radius:5px;font-size:15px}
+#tipp{background:#fff8e1;border-left:4px solid #f9a825}#loesung{background:#f7f9fc;border-left:4px solid #1D70B8;font-family:Cambria,Georgia,serif}
+.st{display:inline-block;min-width:20px;height:20px;border-radius:50%;color:#fff;font-family:Calibri,Arial,sans-serif;font-weight:bold;font-size:12px;line-height:20px;text-align:center;margin-right:4px;vertical-align:1px}
+.merke{margin-top:20px;padding:12px 16px;background:#F6F1EA;border-left:4px solid #8a7a5c;border-radius:4px;font-size:14px}
+.zaehler{margin-top:14px;font-size:13px;color:#666}
+</style></head><body><div class="wrap">
+<div class="head"><div class="over">Übung 3.2 · Funktionenscharen und Ortskurven</div><h1>Extrem- und Wendepunkte mit Parameter</h1><p>Kann-Liste Vertiefung der Differentialrechnung · HAW Jg. 12</p></div>
+<div class="card">
+<div class="auftrag"><b class="t">Aufgabe</b>Bestimme die gesuchten Punkte in Abhängigkeit von a (a &gt; 0). Gib die Koordinaten als Terme mit a ein.</div>
+<div id="aufgabe"></div>
+<div class="btns"><button class="b1" onclick="pruefen()">✓ Prüfen</button><button class="b2" onclick="zeige('tipp')">💡 Tipp</button><button class="b3" onclick="zeige('loesung')">Lösung zeigen</button><button class="b4" onclick="neu()">↻ Neue Aufgabe</button></div>
+<div id="fb" class="fb" style="display:none"></div>
+<div id="tipp" class="box"></div><div id="loesung" class="box"></div>
+<div class="zaehler">Richtig gelöste Aufgaben in dieser Sitzung: <b id="zaehler">0</b></div>
+<div class="merke"><b>Merke:</b> Vorgehen wie ohne Parameter: f<sub>a</sub>′(x) = 0 bzw. f<sub>a</sub>″(x) = 0 lösen, hinreichende Bedingung prüfen, x-Wert in f<sub>a</sub> einsetzen.</div>
+</div></div>
+<script>
+// ===== Hilfsfunktionen =====
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const MINUS = '−';
+function num(n) {
+  if (Math.abs(n - Math.round(n)) < 1e-9) n = Math.round(n);
+  let s = String(Math.round(n * 1000) / 1000).replace('.', ',');
+  return s.replace('-', MINUS);
+}
+function poly(terms) {
+  let out = '';
+  terms.forEach(([c, m]) => {
+    if (Math.abs(c) < 1e-12) return;
+    const neg = c < 0, ac = Math.abs(c);
+    const cs = (m && Math.abs(ac - 1) < 1e-12) ? '' : num(ac);
+    const t = cs + m;
+    if (out === '') out = (neg ? MINUS : '') + t;
+    else out += (neg ? ' ' + MINUS + ' ' : ' + ') + t;
+  });
+  return out || '0';
+}
+function pt(x, y) { return `(${x}&nbsp;|&nbsp;${y})`; }
+
+// ===== Eingaben =====
+function inp(id, w) { return `<input id="${id}" class="in${w ? ' ' + w : ''}" autocomplete="off" spellcheck="false">`; }
+function sel(id, opts) {
+  return `<select id="${id}" class="in sel"><option value="">– wählen –</option>${opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select>`;
+}
+
+// ===== Termparser (für Eingaben wie 3a*x^2-6x, 32/x, 1/2x) =====
+function parseExpr(str) {
+  let s = String(str).replace(/\s+/g, '').replace(/[−–]/g, '-').replace(/[·×⋅]/g, '*')
+    .replace(/²/g, '^2').replace(/³/g, '^3').replace(/,/g, '.').replace(/:/g, '/').replace(/pi/gi, '(3.141592653589793)').replace(/π/g, '(3.141592653589793)');
+  if (!s) throw 'leer';
+  let i = 0;
+  const peek = () => s[i];
+  function number() { const j = i; while (i < s.length && /[0-9.]/.test(s[i])) i++; const v = parseFloat(s.slice(j, i)); if (isNaN(v)) throw 'zahl'; return () => v; }
+  function primary() {
+    const c = peek();
+    if (c === '(') { i++; const e = expr(); if (peek() !== ')') throw 'klammer'; i++; return e; }
+    if (c !== undefined && /[0-9.]/.test(c)) return number();
+    if (c !== undefined && /[a-zA-Z]/.test(c)) { i++; const n = c.toLowerCase(); return v => { if (!(n in v)) throw 'var'; return v[n]; }; }
+    throw 'unerwartet';
+  }
+  function power() { const b = primary(); if (peek() === '^') { i++; const e = unary(); return v => Math.pow(b(v), e(v)); } return b; }
+  function unary() { if (peek() === '-') { i++; const u = unary(); return v => -u(v); } if (peek() === '+') { i++; return unary(); } return power(); }
+  function term() {
+    let f = unary();
+    while (i < s.length) {
+      const c = peek();
+      if (c === '*') { i++; const g = unary(), a = f; f = v => a(v) * g(v); }
+      else if (c === '/') { i++; const g = unary(), a = f; f = v => a(v) / g(v); }
+      else if (c === '(' || /[0-9.a-zA-Z]/.test(c)) { const g = power(), a = f; f = v => a(v) * g(v); }
+      else break;
+    }
+    return f;
+  }
+  function expr() { let f = term(); while (peek() === '+' || peek() === '-') { const op = s[i++]; const g = term(), a = f; f = op === '+' ? v => a(v) + g(v) : v => a(v) - g(v); } return f; }
+  const f = expr(); if (i !== s.length) throw 'rest'; return f;
+}
+function sameFn(f, g, vars) {
+  const xs = [0.7, 1.3, 1.9, 2.6, 3.4, 1.15];
+  const as = [0.6, 1.7, 2.3, 1.1, 0.9, 2.8];
+  for (let k = 0; k < xs.length; k++) {
+    const v = {}; if (vars.includes('x')) v.x = xs[k]; if (vars.includes('a')) v.a = as[k];
+    const u = f(v), w = g(v);
+    if (!isFinite(u) || Math.abs(u - w) > 1e-6 * Math.max(1, Math.abs(w))) return false;
+  }
+  return true;
+}
+
+// ===== Schaubild (SVG) =====
+function niceStep(range, n) { const raw = range / n; const p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+function svgPlot(o) {
+  const W = o.w || 460, H = o.h || 300, pl = 44, pb = 30, pt_ = 14, pr = 16;
+  const X = x => pl + x / o.xmax * (W - pl - pr), Y = y => H - pb - y / o.ymax * (H - pb - pt_);
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="plot" xmlns="http://www.w3.org/2000/svg">`;
+  for (let x = o.xstep; x <= o.xmax + 1e-9; x += o.xstep) { s += `<line x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(o.ymax)}" stroke="#e8e0e2"/><text x="${X(x)}" y="${Y(0) + 15}" font-size="11" text-anchor="middle" fill="#444">${num(x)}</text>`; }
+  for (let y = o.ystep; y <= o.ymax + 1e-9; y += o.ystep) { s += `<line x1="${X(0)}" y1="${Y(y)}" x2="${X(o.xmax)}" y2="${Y(y)}" stroke="#e8e0e2"/><text x="${X(0) - 5}" y="${Y(y) + 4}" font-size="11" text-anchor="end" fill="#444">${num(y)}</text>`; }
+  if (o.minor) {
+    for (let x = o.minor[0]; x <= o.xmax + 1e-9; x += o.minor[0]) s += `<line x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(o.ymax)}" stroke="#f3eef0" stroke-width="0.7"/>`;
+    for (let y = o.minor[1]; y <= o.ymax + 1e-9; y += o.minor[1]) s += `<line x1="${X(0)}" y1="${Y(y)}" x2="${X(o.xmax)}" y2="${Y(y)}" stroke="#f3eef0" stroke-width="0.7"/>`;
+  }
+  s += `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(o.xmax) + 8}" y2="${Y(0)}" stroke="#333" stroke-width="1.4"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(o.ymax) - 8}" stroke="#333" stroke-width="1.4"/>`;
+  s += `<text x="${X(o.xmax)}" y="${Y(0) - 6}" font-size="12" font-style="italic" text-anchor="end">${o.xlabel || 'x'}</text><text x="${X(0) + 6}" y="${Y(o.ymax) + 4}" font-size="12" font-style="italic">${o.ylabel || 'y'}</text>`;
+  (o.curves || []).forEach(c => {
+    let seg = [], segs = [];
+    for (let k = 0; k <= 300; k++) {
+      const x = c.from + (c.to - c.from) * k / 300, y = c.f(x);
+      if (!isFinite(y) || y < 0 || y > o.ymax * 1.02) { if (seg.length > 1) segs.push(seg); seg = []; continue; }
+      seg.push(`${X(x).toFixed(1)},${Y(y).toFixed(1)}`);
+    }
+    if (seg.length > 1) segs.push(seg);
+    segs.forEach(p => s += `<polyline points="${p.join(' ')}" fill="none" stroke="${c.color}" stroke-width="2.4" ${c.dash ? 'stroke-dasharray="7 4"' : ''}/>`);
+    if (c.label) s += `<text x="${X(c.label[0])}" y="${Y(c.label[1])}" font-size="13" font-weight="bold" fill="${c.color}">${c.label[2]}</text>`;
+  });
+  (o.points || []).forEach(p => s += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4" fill="${p[2]}"/>`);
+  s += '</svg>';
+  return s;
+}
+
+// ===== Ablauf =====
+let T = null, geloest = 0, gezaehlt = false;
+function neu() {
+  T = EX.gen(); gezaehlt = false;
+  document.getElementById('aufgabe').innerHTML = T.html;
+  document.getElementById('loesung').style.display = 'none';
+  document.getElementById('loesung').innerHTML = '<b>Lösung:</b><br>' + T.loesung;
+  document.getElementById('tipp').style.display = 'none';
+  document.getElementById('tipp').innerHTML = '<b>Tipp:</b> ' + (T.tipp || EX.tipp);
+  document.getElementById('fb').style.display = 'none';
+  document.querySelectorAll('#aufgabe input').forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') pruefen(); }));
+}
+function mark(el, ok) { el.classList.remove('ok', 'no'); el.classList.add(ok ? 'ok' : 'no'); }
+function pruefen() {
+  let ok = 0, n = 0;
+  T.checks.forEach(c => {
+    if (c.kind === 'row') {
+      n++;
+      const els = c.ids.map(id => document.getElementById(id));
+      let r = false;
+      try {
+        const v = els.map(e => parseExpr(e.value)({}));
+        const k = c.val.findIndex(z => Math.abs(z) > 1e-9);
+        const f = v[k] / c.val[k];
+        r = Math.abs(f) > 1e-9 && c.val.every((z, j) => Math.abs(v[j] - f * z) < 1e-6 * Math.max(1, Math.abs(f * z)));
+      } catch (e) { r = false; }
+      els.forEach(e => mark(e, r)); if (r) ok++;
+      return;
+    }
+    n++;
+    const el = document.getElementById(c.id);
+    let r = false;
+    try {
+      if (c.kind === 'sel') r = el.value === String(c.val);
+      else if (c.kind === 'num') { const v = parseExpr(el.value)({}); r = Math.abs(v - c.val) <= (c.tol || 0.01) + 1e-9 * Math.abs(c.val); }
+      else if (c.kind === 'expr') r = sameFn(parseExpr(el.value), c.f, c.vars || ['x']);
+    } catch (e) { r = false; }
+    mark(el, r); if (r) ok++;
+  });
+  const fb = document.getElementById('fb');
+  fb.style.display = 'block';
+  if (ok === n) {
+    fb.className = 'fb gut'; fb.innerHTML = `✓ Super! Alles richtig (${ok} von ${n}).`;
+    if (!gezaehlt) { geloest++; gezaehlt = true; document.getElementById('zaehler').textContent = geloest; }
+  } else if (ok >= n / 2) { fb.className = 'fb mittel'; fb.innerHTML = `${ok} von ${n} richtig. Die rot markierten Felder musst du noch einmal prüfen.`; }
+  else { fb.className = 'fb schlecht'; fb.innerHTML = `${ok} von ${n} richtig. Schau dir den Tipp an und versuche es noch einmal.`; }
+}
+function zeige(id) { const e = document.getElementById(id); e.style.display = e.style.display === 'block' ? 'none' : 'block'; }
+window.addEventListener('DOMContentLoaded', neu);
+
+// Bruchdarstellung
+function fr(x) {
+  if (Math.abs(x - Math.round(x)) < 1e-9) return num(Math.round(x));
+  for (let d = 2; d <= 2000; d++) { const n = x * d; if (Math.abs(n - Math.round(n)) < 1e-7) return (x < 0 ? MINUS : '') + Math.abs(Math.round(n)) + '/' + d; }
+  return num(x);
+}
+const STC = ['#6B6B6B', '#1D70B8', '#C8102E', '#E07B00', '#2E7D32', '#7B3FA0', '#00838F', '#B8860B', '#AD1457', '#3949AB', '#5D4037'];
+function st(n) { return `<span class="st" style="background:${STC[n]}">${n}</span>`; }
+function solveLin(A, b) { const n = b.length; const M = A.map((r, i) => [...r, b[i]]);
+  for (let i = 0; i < n; i++) { let p = i; for (let r = i + 1; r < n; r++) if (Math.abs(M[r][i]) > Math.abs(M[p][i])) p = r; [M[i], M[p]] = [M[p], M[i]];
+    for (let r = 0; r < n; r++) if (r !== i) { const f = M[r][i] / M[i][i]; for (let c = i; c <= n; c++) M[r][c] -= f * M[i][c]; } }
+  return M.map((r, i) => r[n] / r[i]); }
+
+// ===== gemeinsame Bausteine für die Übungen =====
+function pw(name, rows) {
+  return `<div class="pw"><span class="pwn">${name} =</span><span class="pwb"></span><div class="pwr">${rows.map(r => `<span class="${r[2] || ''}">${r[0]}</span><span class="cond">${r[1]}</span>`).join('')}</div></div>`;
+}
+// Auswahlfeld mit gemischten Optionen; correct = Index in opts
+function selMix(id, opts, correct) {
+  const order = shuffle(opts.map((_, i) => i));
+  return { html: sel(id, order.map(i => opts[i])), val: order.indexOf(correct) };
+}
+function rowInputs(id) {
+  return `${inp(id + 'a', 's')} a &nbsp;+&nbsp; ${inp(id + 'b', 's')} b &nbsp;+&nbsp; ${inp(id + 'c', 's')} c &nbsp;+&nbsp; ${inp(id + 'd', 's')} d &nbsp;=&nbsp; ${inp(id + 'r', 's')}`;
+}
+function rowIds(id) { return ['a', 'b', 'c', 'd', 'r'].map(z => id + z); }
+function eqStr(v) { return poly([[v[0], 'a'], [v[1], 'b'], [v[2], 'c'], [v[3], 'd']]) + ' = ' + num(v[4]); }
+function casStr(v) { return poly([[v[0], 'a'], [v[1], 'b'], [v[2], 'c'], [v[3], 'd']]).replace(/ /g, '').replace(/−/g, '-') + '=' + String(v[4]); }
+function abcdInputs() {
+  return `<div class="row">a = ${inp('ra', 's')} &nbsp; b = ${inp('rb', 's')} &nbsp; c = ${inp('rc', 's')} &nbsp; d = ${inp('rd', 's')}</div>`;
+}
+function abcdChecks(a, b, c, d) { return [{ id: 'ra', kind: 'num', val: a }, { id: 'rb', kind: 'num', val: b }, { id: 'rc', kind: 'num', val: c }, { id: 'rd', kind: 'num', val: d }]; }
+
+// Kostenfunktion aus Betriebsminimum / Betriebsoptimum (a = 1, ganzzahlige Ergebnisse)
+const PAARE = [[3, 4, 32], [2, 3, 18], [4, 5, 50], [2, 4, 64], [5, 6, 72], [3, 5, 100], [1, 3, 36]];
+function kostenBMBO() {
+  const [xb, xo, d] = pick(PAARE);
+  const pmin = Math.floor(xb * xb / 3) + 2;
+  const p = R(pmin, pmin + 8);
+  const b = -2 * xb, c = p + xb * xb;
+  const K = x => x ** 3 + b * x * x + c * x + d;
+  const kv = x => x * x + b * x + c, k = x => kv(x) + d / x, Kp = x => 3 * x * x + 2 * b * x + c;
+  const lpu = k(xo);
+  return { xb, xo, d, b, c, p, lpu, K, kv, k, Kp,
+    Kstr: poly([[1, 'x³'], [b, 'x²'], [c, 'x'], [d, '']]),
+    kvstr: poly([[1, 'x²'], [b, 'x'], [c, '']]),
+    kstr: poly([[1, 'x²'], [b, 'x'], [c, '']]) + ` + ${d}/x` };
+}
+
+// Funktionenscharen-Vorlagen (a > 0)
+function schar() {
+  const k = pick([1, 2, 3]), t = R(1, 5);
+  const K = k;
+  const T = {
+    1: { f: poly([[k, 'x³'], [-3 * k, 'a·x²']]), typ: 1, ex: '2a', ey: poly([[-4 * k, 'a³']]), xE: v => 2 * v.a, yE: v => -4 * k * v.a ** 3,
+         W: { xs: 'a', ys: poly([[-2 * k, 'a³']]), x: v => v.a, y: v => -2 * k * v.a ** 3 },
+         aE: 'x/2', oE: v => -k * v.x ** 3 / 2, oEs: poly([[-k / 2, 'x³']]), aW: 'x', oW: v => -2 * k * v.x ** 3, oWs: poly([[-2 * k, 'x³']]),
+         abl: `f<sub>a</sub>′(x) = ${poly([[3 * k, 'x²'], [-6 * k, 'a·x']])} = 0 → x = 0 oder x = 2a`, wbl: `f<sub>a</sub>″(x) = ${poly([[6 * k, 'x'], [-6 * k, 'a']])} = 0 → x = a`,
+         txt: 'den Extrempunkt, der von a abhängt' },
+    2: { f: poly([[k, 'a·x³'], [-3 * k, 'x²']]), typ: 1, ex: '2/a', ey: `${MINUS}${4 * k}/a²`, xE: v => 2 / v.a, yE: v => -4 * k / v.a ** 2,
+         W: { xs: '1/a', ys: `${MINUS}${2 * k}/a²`, x: v => 1 / v.a, y: v => -2 * k / v.a ** 2 },
+         aE: '2/x', oE: v => -k * v.x ** 2, oEs: poly([[-k, 'x²']]), aW: '1/x', oW: v => -2 * k * v.x ** 2, oWs: poly([[-2 * k, 'x²']]),
+         abl: `f<sub>a</sub>′(x) = ${poly([[3 * k, 'a·x²'], [-6 * k, 'x']])} = 0 → x = 0 oder x = 2/a`, wbl: `f<sub>a</sub>″(x) = ${poly([[6 * k, 'a·x'], [-6 * k, '']])} = 0 → x = 1/a`,
+         txt: 'den Extrempunkt, der von a abhängt' },
+    3: { f: poly([[-k, 'x³'], [3 * k, 'a·x²']]), typ: 0, ex: '2a', ey: poly([[4 * k, 'a³']]), xE: v => 2 * v.a, yE: v => 4 * k * v.a ** 3,
+         W: { xs: 'a', ys: poly([[2 * k, 'a³']]), x: v => v.a, y: v => 2 * k * v.a ** 3 },
+         aE: 'x/2', oE: v => k * v.x ** 3 / 2, oEs: poly([[k / 2, 'x³']]), aW: 'x', oW: v => 2 * k * v.x ** 3, oWs: poly([[2 * k, 'x³']]),
+         abl: `f<sub>a</sub>′(x) = ${poly([[-3 * k, 'x²'], [6 * k, 'a·x']])} = 0 → x = 0 oder x = 2a`, wbl: `f<sub>a</sub>″(x) = ${poly([[-6 * k, 'x'], [6 * k, 'a']])} = 0 → x = a`,
+         txt: 'den Extrempunkt, der von a abhängt' },
+    4: { f: poly([[k, 'x³'], [-3 * k, 'a²·x']]), typ: 1, ex: 'a', ey: poly([[-2 * k, 'a³']]), xE: v => v.a, yE: v => -2 * k * v.a ** 3,
+         W: { xs: '0', ys: '0', x: v => 0, y: v => 0, fest: true },
+         aE: 'x', oE: v => -2 * k * v.x ** 3, oEs: poly([[-2 * k, 'x³']]),
+         abl: `f<sub>a</sub>′(x) = ${poly([[3 * k, 'x²'], [-3 * k, 'a²']])} = 0 → x = a oder x = ${MINUS}a`, wbl: `f<sub>a</sub>″(x) = ${poly([[6 * k, 'x']])} = 0 → x = 0`,
+         txt: 'den Tiefpunkt' },
+    5: { f: poly([[k, 'x²'], [-2 * k, 'a·x']]), typ: 1, ex: 'a', ey: poly([[-k, 'a²']]), xE: v => v.a, yE: v => -k * v.a ** 2,
+         W: null, aE: 'x', oE: v => -k * v.x ** 2, oEs: poly([[-k, 'x²']]),
+         abl: `f<sub>a</sub>′(x) = ${poly([[2 * k, 'x'], [-2 * k, 'a']])} = 0 → x = a`, wbl: '',
+         txt: 'den Extrempunkt' },
+  };
+  return T[t];
+}
+
+
+const EX = { tipp: 'Klammere bei f<sub>a</sub>′(x) = 0 das x aus (Satz vom Nullprodukt). Für den y-Wert setzt du den x-Wert in <b>f<sub>a</sub></b> ein.',
+gen() {
+  const s = schar();
+  const wTeil = s.W ? `<p><b>Wendepunkt</b></p><div class="row">x<sub>W</sub> = ${inp('w1', 'w')} &nbsp; y<sub>W</sub> = ${inp('w2', 'w')}</div>` : '';
+  const ch = [{ id: 'e1', kind: 'expr', vars: ['a'], f: s.xE }, { id: 'e0', kind: 'sel', val: s.typ }, { id: 'e2', kind: 'expr', vars: ['a'], f: s.yE }];
+  if (s.W) ch.push({ id: 'w1', kind: 'expr', vars: ['a'], f: s.W.x }, { id: 'w2', kind: 'expr', vars: ['a'], f: s.W.y });
+  return {
+    html: `<p>Gegeben ist die Funktionenschar &nbsp;<span class="big">f<sub>a</sub>(x) = ${s.f}</span> &nbsp;(a &gt; 0).</p>
+      <p><b>Bestimme ${s.txt}.</b></p>
+      <div class="row">x<sub>E</sub> = ${inp('e1', 'w')} &nbsp; Art: ${sel('e0', ['Hochpunkt', 'Tiefpunkt'])}</div>
+      <div class="row">y<sub>E</sub> = ${inp('e2', 'w')}</div>${wTeil}<p class="hint">Eingabe: Potenzen mit ^ (z.&nbsp;B. <code>3a*x^2-6x</code>), Brüche mit / (z.&nbsp;B. <code>32/x</code>), Dezimalzahlen mit Komma.</p>`,
+    checks: ch,
+    loesung: `${s.abl}<br>${['Hochpunkt', 'Tiefpunkt'][s.typ]}: <b>${pt(s.ex, s.ey)}</b><br>` + (s.W ? `${s.wbl} → Wendepunkt <b>W${pt(s.W.xs, s.W.ys)}</b>` : '')
+  };
+} };
+</script></body></html>
