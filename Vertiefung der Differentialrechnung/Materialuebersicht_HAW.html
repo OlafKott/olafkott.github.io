@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vertiefung der Differentialrechnung &ndash; Material&uuml;bersicht HAW</title>
+<style>
+summary:hover{text-decoration:underline}
+a:focus,summary:focus{outline:3px solid #1D70B8;outline-offset:2px}
+@media print{
+  body{background:#fff !important}
+  details{page-break-inside:avoid;break-inside:avoid;box-shadow:none !important;border:1px solid #d9dde2}
+  div[style*="border-radius:0 0 14px"]{page-break-after:avoid;break-after:avoid}
+  a{border:1px solid #999 !important}
+  a::after{content:" (" attr(href) ")";font-size:10px;font-weight:400}
+}
+@page{margin:18mm 15mm}
+</style>
+<script>
+/* Beim Drucken alle Themen aufklappen, danach alten Zustand wiederherstellen */
+var zu=[];
+window.addEventListener('beforeprint',function(){zu=[];document.querySelectorAll('details').forEach(function(d){if(!d.open){zu.push(d);d.open=true;}});});
+window.addEventListener('afterprint',function(){zu.forEach(function(d){d.open=false;});});
+</script>
+</head>
+<body style="margin:0;padding:0;background:#f2f4f7">
+<div style="max-width:760px;margin:0 auto;padding:0 14px 40px;color:#1d1d1f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.55;font-size:17px">
+  <div style="background:#C8102E;color:#fff;border-radius:0 0 14px 14px;padding:18px 20px;margin:0 0 18px">
+    <h1 style="font-size:23px;margin:0 0 4px;line-height:1.25;color:#fff">Material Vertiefung der Differentialrechnung</h1>
+    <div style="font-size:15px;opacity:.9">Wiederholung, Lernvideos, Arbeitsbl&auml;tter, Musterl&ouml;sungen und Tipps</div>
+    <div style="font-size:15px;opacity:.9;margin-top:2px">Berufliches Gymnasium &middot; Wirtschaft und Verwaltung (HAW)</div>
+  </div>
+  <p style="margin:0 0 14px;font-size:16px;color:#3a3f45">
+    &Uuml;bersicht &uuml;ber alle Materialien der Reihe. Ein Klick auf ein Thema klappt das Material auf.
+    Arbeitsbl&auml;tter liegen als PDF zum Drucken und als HTML f&uuml;r den Bildschirm vor.
+  </p>
+  <p style="margin:0 0 18px;font-size:14px;color:#6b7280">
+    <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E;padding:4px 9px;font-size:13px">PDF</span> zum Drucken &middot; <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280;padding:4px 9px;font-size:13px">HTML</span> am Bildschirm &middot; <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D1D1F;padding:4px 9px;font-size:13px">Lernvideo</span> auf YouTube &middot;
+    <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8;padding:4px 9px;font-size:13px">L&ouml;sung</span> Musterl&ouml;sung &middot; <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32;padding:4px 9px;font-size:13px">Tipp</span> Hilfe beim Festh&auml;ngen &middot;
+    <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90;padding:4px 9px;font-size:13px">Interaktiv</span> am Bildschirm bearbeiten &middot; <span style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#B00020;padding:4px 9px;font-size:13px">Test</span> Leistungs&uuml;berpr&uuml;fung
+  </p>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Wiederholung zum Start<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Arbeitsblatt &middot; Musterl&ouml;sungen &middot; Tipps</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Wiederholung zum Start</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Ableitungsregeln, Extrem- und Wendepunkte, Funktionsscharen, abschnittsweise definierte Funktionen und das Gau&szlig;-Verfahren. Leitfunktion: f<sub>a</sub>(x) = x&sup3; &minus; ax&sup2; &minus; 3ax + 11.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/AB_Wiederholung_Vertiefung_Differentialrechnung.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Musterl&ouml;sungen</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Vollst&auml;ndige Rechenwege zu den drei Aufgaben.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Musterloesung_Wiederholung_Aufgabe1.html">L&ouml;sung Aufgabe 1</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Musterloesung_Wiederholung_Aufgabe2.html">L&ouml;sung Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Musterloesung_Wiederholung_Aufgabe3.html">L&ouml;sung Aufgabe 3</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Tipps</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Kleine Hilfen f&uuml;r alle, die bei einer Aufgabe festh&auml;ngen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Tipps_Wiederholung_Aufgabe1.html">Tipp Aufgabe 1</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Tipps_Wiederholung_Aufgabe2.html">Tipp Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Wiederholung/Tipps_Wiederholung_Aufgabe3.html">Tipp Aufgabe 3</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Stetigkeit<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Lernvideo &middot; Arbeitsblatt &middot; Musterl&ouml;sungen &middot; Tipps</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Lernvideo &ndash; Stetigkeit</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Grundlage f&uuml;r das Arbeitsblatt: Wann ist eine abschnittsweise definierte Funktion an der Nahtstelle stetig?</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D1D1F" href="https://youtu.be/be02VU74G_k">Lernvideo</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Stetigkeit</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Nahtstelle untersuchen, Grenzwerte von links und rechts vergleichen, Parameter so bestimmen, dass die Funktion stetig ist.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/AB_Stetigkeit.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/AB_Stetigkeit_Lernvideo.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Musterl&ouml;sungen und Tipps</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Rechenwege zu Aufgabe 2 und 3 sowie ein Tipp zur Aufgabe 3.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/Musterloesung_Stetigkeit_Aufgabe_2.html">L&ouml;sung Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/Musterloesung_Stetigkeit_Aufgabe_3.html">L&ouml;sung Aufgabe 3</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/Tipps_Stetigkeit_Aufgabe_3.html">Tipp Aufgabe 3</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Pr&auml;sentation zur Sicherung, Ablaufplan f&uuml;r Moodle und die QR-Seite mit den L&ouml;sungen f&uuml;r das Lehrerpult.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/P_Stetigkeit.pdf">Pr&auml;sentation</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#8A5A00" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/Ablaufplan_Moodle-2.html">Ablaufplan Moodle</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#8A5A00" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Stetigkeit/Musterloesungen_QR_Moodle.html">QR-Seite L&ouml;sungen</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Differenzierbarkeit<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Lernvideo &middot; Arbeitsblatt &middot; Musterl&ouml;sungen &middot; Zusatz</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Lernvideo &ndash; Differenzierbarkeit</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Knick oder glatter &Uuml;bergang? Linksseitige und rechtsseitige Ableitung an der Nahtstelle vergleichen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D1D1F" href="https://youtu.be/JHHImm6VEqQ">Lernvideo</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Differenzierbarkeit</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Nahtstelle auf Differenzierbarkeit pr&uuml;fen und Parameter so bestimmen, dass die Funktion stetig <em>und</em> differenzierbar ist.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/AB_Differenzierbarkeit.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/AB_Differenzierbarkeit_Lernvideo.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Musterl&ouml;sungen und Tipps</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Rechenwege zu Aufgabe 2 und 3 sowie ein Tipp zur Aufgabe 3.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/Musterloesung_Diffbarkeit_Aufgabe_2.html">L&ouml;sung Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/Musterloesung_Diffbarkeit_Aufgabe_3.html">L&ouml;sung Aufgabe 3</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/Tipps_Diffbarkeit_Aufgabe_3.html">Tipp Aufgabe 3</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Zusatz &ndash; Unstetig, also auch nicht differenzierbar</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Erg&auml;nzendes Video mit Pr&auml;sentation zum Zusammenhang der beiden Begriffe. <strong>Nicht klausurrelevant.</strong></div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D1D1F" href="https://youtu.be/l4a2_12Jauo">Zusatzvideo</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/Praesentation_Unstetig_nicht_diffbar.pdf">Pr&auml;sentation</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Pr&auml;sentation zur Sicherung der Ergebnisse.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Differenzierbarkeit/P_Differenzierbarkeit.pdf">Pr&auml;sentation</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Steckbriefaufgaben<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Lernlandkarte &middot; Quiz &middot; Leitbeispiel &middot; Werkzeugkasten &middot; &Uuml;bungen &middot; Test</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Lernlandkarte</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">&Uuml;berblick &uuml;ber die Stationen der Reihe &ndash; von der Wiederholung bis zu den Aufgaben im Sachkontext.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Lernlandkarte_Steckbriefaufgaben.html">HTML</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Lernlandkarte_Steckbriefaufgaben.png">Bild (PNG)</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Quiz &ndash; Wiederholung zum Einstieg</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Interaktives Quiz zu den Grundlagen, die f&uuml;r die Steckbriefaufgaben gebraucht werden. Direkt am Bildschirm zu bearbeiten, mit sofortiger R&uuml;ckmeldung.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Quiz_Wiederholung_Steckbriefaufgaben.html">Quiz starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Leitbeispiel &ndash; Drei Punkte und ein Hochpunkt</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Gemeinsamer Einstieg: Aus den Angaben Bedingungen gewinnen und das Gleichungssystem aufstellen. Das L&ouml;sen des LGS mit dem Gau&szlig;-Verfahren ist bereits bekannt.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Arbeitsblatt_Leitbeispiel_Steckbriefaufgaben.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Arbeitsblatt_Leitbeispiel_Steckbriefaufgaben.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Werkzeugkasten &ndash; Bedingungen &uuml;bersetzen</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Zwei Seiten mit den typischen Formulierungen und der zugeh&ouml;rigen mathematischen Bedingung. In Gruppen von drei bis vier Personen ausf&uuml;llen &ndash; anschlie&szlig;end mit dem interaktiven Werkzeugkasten selbst kontrollieren.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Werkzeugkasten_Steckbriefaufgaben.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Werkzeugkasten_Steckbriefaufgaben.html">HTML</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Werkzeugkasten_interaktiv_Steckbriefaufgaben.html">Interaktiv zur Selbstkontrolle</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Quiz &ndash; Bedingungen aufstellen</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">22 Fragen zum Werkzeugkasten, teils mit Graphen zum Ablesen, mit Mehrfachauswahl. Zum &Uuml;ben vor dem Test.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Quiz_Bedingungen_Steckbriefaufgaben.html">Quiz starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">&Uuml;bungsaufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Von der Grundaufgabe bis zu abschnittsweise definierten Funktionen und Symmetrie. Das Aufstellen der Bedingungen ist das Entscheidende, gel&ouml;st werden darf mit dem CAS.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Arbeitsblatt_Steckbriefaufgaben.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Arbeitsblatt_Steckbriefaufgaben.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Test &ndash; Bedingungen aufstellen (HAW)</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Eine A4-Seite, 20 Punkte: sechs Formulierungen &uuml;bersetzen, Bedingungen aus einem Graphen ablesen (nur drei Gitterpunkte, einer davon Extrempunkt) und eine Parabel aus Scheitelpunkt und Schnittpunkten bestimmen. Seite 2 enth&auml;lt L&ouml;sung und Notentabelle.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#B00020" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Test_Bedingungen_Steckbriefaufgaben_HAW.pdf">Test PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Test_Bedingungen_Steckbriefaufgaben_HAW.html">HTML</a></div><div style="margin:8px 0 2px;display:inline-block;border:2px dashed #C8102E;border-radius:8px;padding:6px 12px;font-size:15px"><strong style="color:#B00020">Seite&nbsp;2 enth&auml;lt die L&ouml;sung</strong> &ndash; f&uuml;r die Klasse nur Seite&nbsp;1 drucken.</div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">QR-&Uuml;bersicht der L&ouml;sungen &ndash; Lehrertisch</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Aushang f&uuml;r vorne: neun QR-Codes im 3&nbsp;&times;&nbsp;3-Raster zu Werkzeugkasten, Leitbeispiel und den Aufgaben 1 bis 7. Jeder Code f&uuml;hrt zu genau einer L&ouml;sung.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Loesungen_QR_Uebersicht_Steckbriefaufgaben.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Loesungen_QR_Uebersicht_Steckbriefaufgaben.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Ablaufplan f&uuml;r Moodle und die beiden Gesamt&uuml;bersichten der L&ouml;sungen. <strong>Die L&ouml;sungen gibt es im Unterricht nur vorne beim Lehrerpult.</strong></div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#8A5A00" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Ablaufplan_Steckbriefaufgaben.html">Ablaufplan Moodle</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Loesungen_Werkzeugkasten_Steckbriefaufgaben.html">L&ouml;sung Werkzeugkasten</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Steckbriefaufgaben/Loesungen_Steckbriefaufgaben.html">L&ouml;sung &Uuml;bungsaufgaben</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Ortskurven<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Leitbeispiel &middot; Arbeitsblatt &middot; Training &middot; L&ouml;sung</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Leitbeispiel mit GeoGebra</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Gemeinsamer Einstieg an g<sub>a</sub>(x) = a&middot;x&sup3; &minus; 3x&sup2;: Der Hochpunkt bleibt im Ursprung, der Tiefpunkt wandert auf y&nbsp;=&nbsp;&minus;x&sup2;, der Wendepunkt auf y&nbsp;=&nbsp;&minus;2x&sup2;. Vier Seiten, die L&ouml;sungsschritte werden nacheinander aufgedeckt.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Ortskurven_Leitbeispiel.html">Leitbeispiel &ouml;ffnen</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Ortskurven_Leitbeispiel_Loesung.html">L&ouml;sung zum Leitbeispiel</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Ortskurven</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Vier Aufgaben mit abnehmender Hilfe: Ortslinie aus Graphen ablesen, L&uuml;ckenaufgabe, Rechnung im Heft und zum Schluss eine Funktion vierten Grades.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Arbeitsblatt_Ortskurven.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Ortskurven trainieren</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Interaktive &Uuml;bung mit immer neuen Aufgaben zu Ortskurven von Extrem- und Wendepunkten &ndash; auch zum Weiter&uuml;ben zu Hause.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Ortskurven_Training.html">Training starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">L&ouml;sung zum Arbeitsblatt</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Gesperrte Fassung f&uuml;r die Sch&uuml;ler, verlinkt &uuml;ber den QR-Code auf der letzten Seite des Arbeitsblatts. Den Code erhalten die Sch&uuml;ler im Unterricht.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Loesung_Arbeitsblatt_Ortskurven.html">L&ouml;sung (mit Code)</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Ablaufplan f&uuml;r Moodle und die offene L&ouml;sung ohne Codeabfrage.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#8A5A00" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Ablaufplan_Ortskurven_Moodle.html">Ablaufplan Moodle</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Ortskurven/Loesung_Arbeitsblatt_Ortskurven_Lehrkraft.html">L&ouml;sung offen (Lehrkraft)</a></div><div style="margin:8px 0 2px;display:inline-block;border:2px dashed #C8102E;border-radius:8px;padding:6px 12px;font-size:15px">Code f&uuml;r die gesperrte L&ouml;sung: <strong style="font-size:18px;letter-spacing:3px;color:#C8102E">3714</strong></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Anwendung: Betriebsminimum und Betriebsoptimum<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Wiederholung &middot; Quiz &middot; Arbeitsblatt &middot; Tipps &middot; &Uuml;bung &middot; Zusammenfassung</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Wiederholung &ndash; &Ouml;konomische Anwendungen</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Interaktive Pr&auml;sentation in acht Stationen: Kosten- und Grenzkostenfunktion, Kosten/Erl&ouml;s/Gewinn im Monopol und im Polypol, dann Betriebsminimum mit kurzfristiger und Betriebsoptimum mit langfristiger Preisuntergrenze. Mit Schiebereglern, Zuordnen per Drag&nbsp;&amp;&nbsp;Drop und schrittweise aufdeckbaren Rechenwegen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Wiederholung_Oekonomische_Anwendungen.html">Wiederholung starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Betriebsminimum und Betriebsoptimum</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Drei Seiten: Preisuntergrenzen im Graphen finden, Grenzkosten und St&uuml;ckkosten gegen&uuml;berstellen, Preisuntergrenzen rechnerisch bestimmen (CAS erlaubt, Befehl wird notiert), dazu weitere &Uuml;bungsaufgaben. Die QR-Codes auf dem Blatt f&uuml;hren zu den Tipps, zur &Uuml;bung und zur L&ouml;sung.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/AB_Preisuntergrenzen.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/AB_Preisuntergrenzen.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Tipps zu den einzelnen Aufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Hilfe f&uuml;r alle, die festh&auml;ngen &ndash; jeweils am Beispiel aus der Wiederholung. Auf dem Arbeitsblatt stehen sie als QR-Code neben der Aufgabe.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Tipp_A1_Animation.html">Tipp 1 &ndash; Animation</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Tipp_A2_Funktionen_aufstellen.html">Tipp 2 &ndash; Funktionen aufstellen</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Tipp_A3b_Betriebsminimum.html">Tipp 3b &ndash; Betriebsminimum</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Tipp_A3c_Betriebsoptimum.html">Tipp 3c &ndash; Betriebsoptimum</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Tipp_A3d_Preiszonen.html">Tipp 3d &ndash; Preiszonen</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Plenumsquiz &ndash; Betriebsoptimum</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Fragen f&uuml;r den Beamer: Tangenten an die Kostenkurve, St&uuml;ckkosten-Schaubild und Grenzkostenfunktion. Zum gemeinsamen Sichern nach der Wiederholung.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Plenumsquiz_Betriebsoptimum.html">Quiz starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">&Uuml;bung &ndash; immer neue Aufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Interaktive Seite, die sich selbst neue Kostenfunktionen erzeugt: Betriebsminimum und Betriebsoptimum berechnen und entscheiden, was das Unternehmen tun soll. Auch zum Weiter&uuml;ben zu Hause.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Uebung_Preisuntergrenzen.html">Training starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Zusammenfassung</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Merkblatt mit den Formeln und Begriffen auf einen Blick &ndash; Grenzkosten, variable St&uuml;ckkosten, St&uuml;ckkosten, BM, BO, KPU, LPU und die Preiszonen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Zusammenfassung_Preisuntergrenzen.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Zusammenfassung_Preisuntergrenzen.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">L&ouml;sung zum Arbeitsblatt</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Gesperrte Fassung f&uuml;r die Sch&uuml;ler, verlinkt &uuml;ber den QR-Code auf dem Arbeitsblatt. Der Code sind die eigenen Ergebnisse aus Aufgabe&nbsp;3: erst die KPU, dann die LPU, je zweistellig. Wer richtig gerechnet hat, kommt also hinein.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Loesung_Preisuntergrenzen.html">L&ouml;sung (mit Code)</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Die offene L&ouml;sung ohne Codeabfrage, mit vollst&auml;ndigen Rechenwegen und CAS-Befehlen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Loesung_Preisuntergrenzen_Lehrkraft.html">L&ouml;sung offen (Lehrkraft)</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Loesung_Preisuntergrenzen_Lehrkraft.pdf">L&ouml;sung PDF (Lehrkraft)</a></div><div style="margin:8px 0 2px;display:inline-block;border:2px dashed #C8102E;border-radius:8px;padding:6px 12px;font-size:15px">Code f&uuml;r die gesperrte L&ouml;sung: <strong style="font-size:18px;letter-spacing:3px;color:#C8102E">1230</strong> &nbsp;<span style="color:#6b7280">(KPU&nbsp;12, LPU&nbsp;30)</span></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">&Uuml;bersicht f&uuml;r Moodle</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Kleine Seite, die den Sch&uuml;lern beide Arbeitsbl&auml;tter der Reihe mit Vorschaubild anbietet &ndash; einmal als Textbaustein f&uuml;r Moodle, einmal als eigenst&auml;ndige Seite.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#8A5A00" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Moodle_Uebersicht_Oekonomische_Anwendungen.html">Baustein f&uuml;r Moodle</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Oekonomische_Anwendungen/Uebersicht_Oekonomische_Anwendungen.html">Eigenst&auml;ndige Seite</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Anwendungsaufgaben &ndash; zusammenfassende &Uuml;bung<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Arbeitsblatt &middot; Werkzeugkasten &middot; &Uuml;bung &middot; Tipps &middot; L&ouml;sungen</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Arbeitsblatt &ndash; Anwendungsaufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Drei gr&ouml;&szlig;ere Aufgaben, die alles zusammenbringen: eine abschnittsweise Kostenfunktion (Stetigkeit, Differenzierbarkeit, Gewinnzone), ein Steckbrief einer Kostenfunktion mit Betriebsminimum und Betriebsoptimum und eine Gewinnfunktionsschar mit Ortskurve. Gerechnet wird im Heft.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/AB_Anwendungsaufgaben.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/AB_Anwendungsaufgaben.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Werkzeugkasten Wirtschaft</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Nachschlagseite zu den Bedingungen aus der Wirtschaft, dazu die Ableitungen der St&uuml;ckkostenfunktionen. Erg&auml;nzt den Werkzeugkasten aus den Steckbriefaufgaben um die &ouml;konomischen Formulierungen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Werkzeugkasten_Wirtschaft.html">HTML</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">&Uuml;bung &ndash; Steckbriefaufgaben Wirtschaft</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Interaktive &Uuml;bung zum Aufstellen der Bedingungen im wirtschaftlichen Kontext, mit aufdeckbarer L&ouml;sung.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Uebung_Steckbrief_Wirtschaft.html">Training starten</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Tipps zu den drei Aufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Je eine Seite mit dem L&ouml;sungsweg zum Ausf&uuml;llen &ndash; ohne das Ergebnis zu verraten. Auf dem Arbeitsblatt stehen sie als QR-Code neben der Aufgabe.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Tipp_Anwendung_Aufgabe_1.html">Tipp Aufgabe 1</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Tipp_Anwendung_Aufgabe_2.html">Tipp Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#2E7D32" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Tipp_Anwendung_Aufgabe_3.html">Tipp Aufgabe 3</a></div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">L&ouml;sungen zu den einzelnen Aufgaben</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Pro Aufgabe eine eigene gesperrte Seite, damit beim Kontrollieren nicht die n&auml;chste L&ouml;sung mitgelesen wird. Der Code sind jeweils die eigenen Ergebnisse, je zweistellig.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Loesung_Anwendung_Aufgabe_1.html">L&ouml;sung Aufgabe 1</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Loesung_Anwendung_Aufgabe_2.html">L&ouml;sung Aufgabe 2</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Loesung_Anwendung_Aufgabe_3.html">L&ouml;sung Aufgabe 3</a></div><div style="margin:8px 0 2px;display:inline-block;border:2px dashed #C8102E;border-radius:8px;padding:6px 12px;font-size:15px">Codes: <strong style="letter-spacing:2px;color:#C8102E">0410</strong> (Gewinnschwelle/-grenze aus 1c) &middot; <strong style="letter-spacing:2px;color:#C8102E">2048</strong> (KPU/LPU aus 2b und 2c) &middot; <strong style="letter-spacing:2px;color:#C8102E">0302</strong> (t aus 3c und Grenze aus 3d)</div>
+      </div>
+      <div style="padding:12px 0 8px;border-top:1px solid #e6e9ed">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">F&uuml;r den Unterricht</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Alle drei L&ouml;sungen offen in einem Dokument, mit vollst&auml;ndigen Rechenwegen.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Loesung_Anwendungsaufgaben_Lehrkraft.html">L&ouml;sungen offen (Lehrkraft)</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#1D70B8" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Anwendungsaufgaben/Loesung_Anwendungsaufgaben_Lehrkraft.pdf">L&ouml;sungen PDF (Lehrkraft)</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Kann-Liste zur Reihe<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Selbsteinsch&auml;tzung mit &Uuml;bungen per QR-Code</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Kann-Liste HAW</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Vier Seiten Selbsteinsch&auml;tzung mit Ampel: Stetigkeit und Differenzierbarkeit, Steckbriefaufgaben, Funktionenscharen und Ortskurven, &ouml;konomische Anwendungen. Zu jeder Zeile gibt es Beispiel, Rechenweg und einen QR-Code zu einer passenden &Uuml;bung &ndash; vierzehn St&uuml;ck insgesamt. Zeilen mit Euro-Zeichen zeigen den wirtschaftlichen Bezug.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#C8102E" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Kannliste_HAW/KannListe_Differentialrechnung_HAW.pdf">PDF</a><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#6b7280" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Kannliste_HAW/KannListe_Differentialrechnung_HAW.html">HTML</a></div>
+      </div>
+    </div>
+  </details>
+
+  <details style="background:#fff;border-radius:12px;padding:0 18px;margin:0 0 12px;box-shadow:0 1px 3px rgba(0,0,0,.09)">
+    <summary style="cursor:pointer;padding:14px 0;font-size:18px;font-weight:700;color:#C8102E">Fit-Aufgaben f&uuml;r den Stundenbeginn<span style="display:block;font-size:14px;font-weight:400;color:#6b7280;margin:2px 0 0 22px">Interaktive Sammlung f&uuml;r die ganze Reihe</span></summary>
+    <div style="border-top:1px solid #e6e9ed;padding:0 0 10px">
+      <div style="padding:12px 0 8px">
+        <div style="font-size:16.5px;font-weight:700;margin:0 0 2px">Interaktive Fit-Aufgaben &ndash; alle Themen der Reihe</div>
+        <div style="font-size:15px;color:#5b616a;margin:0 0 6px">Zu Beginn jeder Stunde liegt eine kurze Aufgabe zu den Grundlagen auf dem Tisch. Nach f&uuml;nf Minuten werden die Bl&auml;tter eingesammelt, das Feedback gibt es am Stundenende. Die Sammlung l&auml;uft &uuml;ber die ganze Reihe: Start sind die Aufgaben zu Stetigkeit und Differenzierbarkeit, die weiteren Themen kommen nach und nach dazu. Mit 5-Minuten-Timer und L&ouml;sung auf Knopfdruck.</div>
+        <div><a style="display:inline-block;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:9px 15px;border-radius:8px;margin:4px 7px 4px 0;background:#5B3E90" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Fit-Aufgaben_interaktiv_Jg12.html">Interaktive &Uuml;bung</a></div>
+      </div>
+    </div>
+  </details>
+
+  <p style="margin:18px 0 0;font-size:14px;color:#6b7280">RWB Essen &ndash; Mathematik &ndash; Vertiefung der Differentialrechnung &ndash; HAW</p>
+</div>
+</body></html>
