@@ -99,10 +99,10 @@ function eqHtml(r,b,v){
   return t+' = '+mi(b);
 }
 const MODES={2:'Zwei Unbekannte',3:'Drei Unbekannte',4:'Vier Unbekannte'};
-let mode=2, A=null, stat={a:0,r:0};
+let mode=3, A=null, stat={a:0,r:0};
 function neu(){
   A=gen(mode);
-  document.getElementById('tabs').innerHTML=[2,3,4].map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k]}</button>`).join('');
+  document.getElementById('tabs').innerHTML='';
   document.getElementById('h').textContent='Aufgabe: '+MODES[mode];
   document.getElementById('lgs').innerHTML='<span class="lgs">'+A.M.map((r,i)=>`<span><span class="rn">${['I','II','III','IV'][i]}</span>${eqHtml(r,A.b[i],A.v)}</span>`).join('')+'</span>';
   document.getElementById('vorlage').innerHTML=`Vorlage: menu ▸ 3 ▸ 7 ▸ 2 · Anzahl der Gleichungen <span class="liste">${mode}</span> · Variablen <span class="liste">${A.v.join(',')}</span>`;
@@ -134,7 +134,7 @@ document.getElementById('pruefen').onclick=pruefen;
 document.getElementById('zeigen').onclick=zeigen;
 document.getElementById('neu').onclick=neu;
 document.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=+m; neu(); } };
-const hh=(location.hash||'').slice(1); if(['2','3','4'].includes(hh)) mode=+hh;
+const hh=(location.hash||'').slice(1); 
 neu();
 </script>
 </body></html>

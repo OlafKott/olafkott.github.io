@@ -350,54 +350,30 @@ const E3=[`${V('a')} + ${V('b')} + ${V('c')} + ${V('d')} = 4`,`2${V('a')} − ${
 const K=s=>s.split(' ');
 
 const TRACKS={
- z:track("1 · Zwei Unbekannte",1,[
+ d:track("LGS mit drei Unbekannten",1,[
   {t:"Einschalten", a:"Rechner einschalten", k:["on"], d:"<p>Wir rechnen im <b>Notizblock</b>.</p>"},
   {t:"Notizblock öffnen", a:"Notizblock: Berechnen", k:["a"], d:"<p><b>A</b> = Berechnen.</p>"},
   {t:"Variablen löschen", a:"Alte Werte für a … z löschen", k:K("menu 1 4 enter"),
-   d:"<p>menu ▸ Aktionen ▸ a–z löschen, mit <b>enter</b> bestätigen.</p>", n:"Sonst rechnet das CAS mit Werten, die noch in <i>x</i>, <i>y</i> … gespeichert sind."},
-  {t:"Vorlage linSolve", a:LGS(E1), k:K("menu 3 7 2"),
+   d:"<p>menu ▸ Aktionen ▸ a–z löschen, mit <b>enter</b> bestätigen.</p>", n:"Sonst rechnet das CAS mit Werten, die noch in <i>x</i>, <i>y</i>, <i>z</i> gespeichert sind."},
+  {t:"Vorlage linSolve", a:LGS(E2), k:K("menu 3 7 2"),
    d:"<p>menu ▸ Algebra ▸ Gleichungssystem lösen ▸ <b>System linearer Gleichungen lösen</b></p>"},
-  {t:"Anzahl und Variablen", a:LGS(E1), k:["enter"],
-   d:"<p>Voreingestellt: <b>2</b> Gleichungen, Variablen <b>x,y</b>. Passt, also <b>enter</b> (OK).</p>"},
-  {t:"Gleichung I eintippen", a:LGS(E1), k:K("3 x + 2 y = 1 6"),
-   d:"<p>3x tippen reicht, das Malzeichen setzt das CAS selbst.</p>", n:"Das <b>=</b> ist die Taste oben links."},
-  {t:"Gleichung II eintippen", a:LGS(E1), k:K("tab x - y = 2"),
-   d:"<p><b>tab</b> springt in das nächste Feld.</p>"},
-  {t:"Lösen", a:LGS(E1), k:["enter"], d:"<p>Das CAS zeigt <b>{4,2}</b>.</p>"},
-  {t:"Lösung ablesen", a:LGS(E1), k:[],
-   d:"<p>Die Zahlen stehen in der Reihenfolge der Variablen {x,y}:</p><p style='font-size:19px'><i>x</i> = 4, &nbsp;<i>y</i> = 2 &nbsp;&nbsp;→&nbsp; 𝕃 = {(4 | 2)}</p>"},
-  {t:"Selbst lösen", k:[], ab:1, d:AB(1,["LGS mit zwei Unbekannten lösen","Lösung ablesen und als Lösungsmenge notieren"])}
- ]),
- d:track("2 · Drei Unbekannte",2,[
-  {t:"Vorlage öffnen", a:LGS(E2), k:K("menu 3 7 2"), d:"<p>Wieder menu ▸ 3 ▸ 7 ▸ 2.</p>"},
   {t:"3 Gleichungen, x,y,z", a:LGS(E2), k:K("3 tab x , y , z enter"),
-   d:"<p>Anzahl <b>3</b> eintippen, mit <b>tab</b> zu den Variablen, <b>x,y,z</b> eintippen, <b>enter</b>.</p>", n:"Das Komma finden Sie links in der Buchstabentastatur."},
-  {t:"Gleichung I", a:LGS(E2), k:K("x + y + z = 6"), d:""},
-  {t:"Gleichung II", a:LGS(E2), k:K("tab 2 x - y + 3 z = 9"), d:""},
-  {t:"Gleichung III", a:LGS(E2), k:K("tab y = 2 z - 4"),
+   d:"<p>Anzahl <b>3</b> eintippen, mit <b>tab</b> zu den Variablen, <b>x,y,z</b> eintippen, <b>enter</b> (OK).</p>", n:"Das Komma finden Sie links in der Buchstabentastatur."},
+  {t:"Gleichung I eintippen", a:LGS(E2), k:K("x + y + z = 6"),
+   d:"<p>Das <b>=</b> ist die Taste oben links.</p>"},
+  {t:"Gleichung II eintippen", a:LGS(E2), k:K("tab 2 x - y + 3 z = 9"),
+   d:"<p><b>tab</b> springt in das nächste Feld. 2x tippen reicht, das Malzeichen setzt das CAS selbst.</p>"},
+  {t:"Gleichung III eintippen", a:LGS(E2), k:K("tab y = 2 z - 4"),
    d:"<p>Die Gleichung so eintippen, wie sie dasteht.</p>", n:"<i>x</i> fehlt in III? Kein Problem. Sortieren ist auch nicht nötig."},
   {t:"Lösen", a:LGS(E2), k:["enter"], d:"<p>Das CAS zeigt <b>{1,2,3}</b>.</p>"},
-  {t:"Lösung ablesen", a:LGS(E2), k:[], d:"<p style='font-size:19px'><i>x</i> = 1, &nbsp;<i>y</i> = 2, &nbsp;<i>z</i> = 3 &nbsp;&nbsp;→&nbsp; 𝕃 = {(1 | 2 | 3)}</p>"},
-  {t:"Selbst lösen", k:[], ab:1, d:AB(2,["LGS mit drei Unbekannten","Eine Gleichung enthält nicht alle Variablen"])}
- ]),
- v:track("3 · Vier Unbekannte",3,[
-  {t:"Vorlage öffnen", a:LGS(E3), k:K("menu 3 7 2"), d:"<p>menu ▸ 3 ▸ 7 ▸ 2</p>"},
-  {t:"4 Gleichungen, a,b,c,d", a:LGS(E3), k:K("4 tab a , b , c , d enter"),
-   d:"<p>Anzahl <b>4</b>, Variablen <b>a,b,c,d</b>.</p>", n:"Die Variablen müssen genau so heißen wie im Gleichungssystem."},
-  {t:"Gleichung I", a:LGS(E3), k:K("a + b + c + d = 4"), d:""},
-  {t:"Gleichung II", a:LGS(E3), k:K("tab 2 a - b + c - d = 2"), d:""},
-  {t:"Gleichung III", a:LGS(E3), k:K("tab a + 2 b - c + d = 3"), d:""},
-  {t:"Gleichung IV", a:LGS(E3), k:K("tab 3 a + b + 2 c - 2 d = neg 1"),
-   d:"<p>Rechts steht −1: Vorzeichen mit <b>(−)</b>.</p>"},
-  {t:"Lösen", a:LGS(E3), k:["enter"], d:"<p>Das CAS zeigt <b>{2,−1,0,3}</b>.</p>"},
-  {t:"Lösung ablesen", a:LGS(E3), k:[],
-   d:"<p style='font-size:19px'><i>a</i> = 2, &nbsp;<i>b</i> = −1, &nbsp;<i>c</i> = 0, &nbsp;<i>d</i> = 3</p>", n:"Auch <b>0</b> ist ein Lösungswert: <i>c</i> = 0."},
-  {t:"Selbst lösen", k:[], ab:1, d:AB(3,["LGS mit vier Unbekannten a, b, c, d","Danach: Lösungscode eintragen"])}
+  {t:"Lösung ablesen", a:LGS(E2), k:[],
+   d:"<p>Die Zahlen stehen in der Reihenfolge der Variablen {x,y,z}:</p><p style='font-size:19px'><i>x</i> = 1, &nbsp;<i>y</i> = 2, &nbsp;<i>z</i> = 3 &nbsp;&nbsp;→&nbsp; 𝕃 = {(1 | 2 | 3)}</p>"},
+  {t:"Selbst lösen", k:[], ab:1, d:AB("1 und 2",["LGS mit drei Unbekannten lösen und ablesen","Probe und das Wichtigste notieren","Danach: Lösungscode eintragen"])}
  ])
 };
 
 // ---------- Steuerung ----------
-const ORDER=["z","d","v"];
+const ORDER=["d"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const LBL={on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
