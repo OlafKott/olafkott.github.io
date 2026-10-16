@@ -150,9 +150,10 @@ const DATA={
      ["funk","fx991_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Funktionswerte.pdf","fx991_Uebung_Funktionswerte.html"]],
  dx:[["grund","fx991DEX_Grundlagen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Grundlagen.pdf",null],
      ["stat","fx991DEX_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Lage_Streuung.pdf","fx991DEX_Uebung_Lage_Streuung.html"],
-     ["funk","fx991DEX_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Funktionswerte.pdf","fx991DEX_Uebung_Funktionswerte.html"]]
+     ["funk","fx991DEX_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Funktionswerte.pdf","fx991DEX_Uebung_Funktionswerte.html"],
+     ["gl","fx991DEX_Gleichungen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Gleichungen.pdf","fx991DEX_Uebung_Gleichungen.html"]]
 };
-const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte"};
+const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte",gl:"Gleichungen lösen"};
 const stage=document.getElementById('stage'), toc=document.getElementById('toc');
 function pick(m){
   toc.innerHTML=`<div class="model">${m==='cw'?'fx-991DE CW':'fx-991DE X'}</div>`+DATA[m].map(([ic,tour,pdf,ueb],i)=>`<div class="topic"><div class="th"><span class="num">${i+1}</span><span class="ttl">${NAME[ic]}</span></div>
