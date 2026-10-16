@@ -257,7 +257,7 @@ const EX={
  "~3+5":"2", "Ans−3":"−1", "Ans÷4":"21", "100−Ans":"79",
  "(1)/(3)+(1)/(6)":F(1,2), "3÷4":F(3,4), "1÷3":F(1,3), "0,75":F(3,4),
  "7^(2)":"49", "2^(10)":"1024", "2^(3)+1":"9", "2^(3+1)":"16", "√(144)":"12", "√(8)":W(2,2),
- "~2^(2)":"−4", "(~2)^(2)":"4"
+ "~2^(2)":"−4", "(~2)^(2)":"4", "2,5×4,8":"12", "20÷2,5":"8", "A×B":"96", "(A+B)÷4":"5"
 };
 const AP={ "3÷4":"0,75", "1÷3":"0,3333333333", "√(8)":"2,828427125", "(1)/(3)+(1)/(6)":"0,5" };
 
@@ -269,7 +269,8 @@ const SETM=["Recheneinstell.","Systemeinstell.","Zurücksetzen"];
 const RESM=["Einstell.&Daten","Variablenspeich.","Alle initialis."];
 const FMT=["Voreinstellung","Dezimal","Primfaktor","Periodendarstell."];
 const APPS=["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung","Ungleichung","Komplex","Basis-N","Matrix","Vektor","Verhältnis","Mathebox"];
-function fresh(mode){ return {mode:mode||'calc', sel:0, entry:new Entry(), last:null, view:'input', hist:[], hidx:-1, shift:false}; }
+const VARS=["A","B","C","D","E","F","x","y","z"], VSUB=["Speichern","Abrufen"];
+function fresh(mode){ return {mode:mode||'calc', sel:0, entry:new Entry(), last:null, view:'input', hist:[], hidx:-1, shift:false, vars:{}, vsub:-1}; }
 function evalEntry(S,approx){
   const s=ser(S.entry.root);
   const res=approx?(AP[s]||'?'):(EX[s]||'?');
@@ -285,6 +286,8 @@ function step(S,k){
       if(k==='ac'){ S.mode='off'; return; }
       if(k==='exe'){ evalEntry(S,true); return; }
       if(k==='-'){ if(S.view!=='input'){ S.entry=new Entry(); S.view='input'; } S.entry.key('neg'); return; }
+      const VK={'4':'A','5':'B','6':'C','1':'D','2':'E','3':'F'};
+      if(VK[k]){ if(S.view!=='input'){ S.entry=new Entry(); S.view='input'; } S.entry.key(VK[k]); return; }
     }
     return;
   }
@@ -314,9 +317,21 @@ function step(S,k){
    case 'done':
      if(k==='ac'||k==='ok'||k==='back'){ S.mode='calc'; S.view='input'; }
      return;
+   case 'vars':
+     if(S.vsub>=0){
+       if(k==='down') S.vsub=Math.min(VSUB.length-1,S.vsub+1); else if(k==='up') S.vsub=Math.max(0,S.vsub-1);
+       else if(k==='back'||k==='ac') S.vsub=-1;
+       else if((k==='ok'||k==='exe')&&S.vsub===0){ const H=S.hist[S.hist.length-1]; S.vars[VARS[S.sel]]=H?H.res:'0'; S.vsub=-1; }
+       return;
+     }
+     if(k==='down') S.sel=Math.min(VARS.length-1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='ok') S.vsub=0;
+     else if(k==='ac'||k==='back'||k==='var'){ S.mode='calc'; S.entry=new Entry(); S.view='input'; }
+     return;
   }
   // ---- App Berechnung ----
   if(k==='settings'){ S.mode='settings'; S.sel=0; return; }
+  if(k==='var'){ S.mode='vars'; S.sel=0; S.vsub=-1; return; }
   if(k==='exe'){ if(S.view==='input') evalEntry(S,false); return; }
   if(k==='ac'){ S.entry=new Entry(); S.view='input'; return; }
   if(S.view==='history'){
@@ -373,6 +388,11 @@ function draw(S,ziel){
     const L=S.mode==='settings'?SETM:S.mode==='reset'?RESM:FMT;
     const T=S.mode==='settings'?'SETTINGS':S.mode==='reset'?'Zurücksetzen':'FORMAT';
     return sbar(S)+`<div class="list"><div class="ti">${T}</div>`+L.map((t,i)=>`<div class="it${i===S.sel?' sel':''}${zl(t,ziel)}">${t}</div>`).join('')+'</div>';
+  }
+  if(S.mode==='vars'){
+    if(S.vsub>=0) return sbar(S)+`<div class="list"><div class="ti">${VARS[S.sel]}=</div>`+VSUB.map((t,i)=>`<div class="it${i===S.vsub?' sel':''}${zl(t,ziel)}">${t}</div>`).join('')+'</div>';
+    const o=Math.max(0,Math.min(S.sel-1,VARS.length-4));
+    return sbar(S)+`<div class="list"><div class="ti">Variable</div>`+VARS.slice(o,o+4).map((v,i)=>`<div class="it${i+o===S.sel?' sel':''}${zl(v,ziel)}">${v}=${S.vars[v]||'0'}</div>`).join('')+'</div>';
   }
   if(S.mode==='confirm') return sbar(S)+`<div class="msg">Einstellungen &amp; Daten<br>zurücksetzen?<div class="bt"><span class="sel${zl('Ja',ziel)}">Ja [OK]</span><span>Abbrechen [↶]</span></div></div>`;
   if(S.mode==='done') return sbar(S)+'<div class="msg" style="top:34px"><b>Zurückgesetzt!</b><div style="font-size:11px;margin-top:4px">Weiter mit AC</div></div>';
@@ -451,18 +471,37 @@ const TRACKS={
   {t:"Ohne Klammer", a:"−2²", k:["shift","-","2","sq","exe"], d:"<p>Ergebnis: <b>−4</b>, denn −(2²).</p>"},
   {t:"Mit Klammer", a:"(−2)²", k:["(","shift","-","2",")","sq","exe"], d:"<p>Ergebnis: <b>4</b></p>",
    n:"Negative Zahl hoch 2 → <b>Klammern</b> setzen."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB(4,["Potenzen und Wurzeln","Wurzel exakt und als Dezimalzahl","−3² und (−3)²","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB(4,["Potenzen und Wurzeln","Wurzel exakt und als Dezimalzahl","−3² und (−3)²"])}
+ ]},
+ m:{ name:"5 · Werte speichern", start:calcStart, steps:[
+  {t:"Ergebnis berechnen", a:"2,5 · 4,8", k:["2",",","5","*","4",",","8","exe"], d:"<p>Ergebnis: <b>12</b>. Diesen Wert wollen wir speichern.</p>"},
+  {t:"In A speichern: VARIABLE", a:"12 in A speichern", k:["var","ok","ok"], z:["A","Speichern"],
+   d:"<p><b>VARIABLE</b> öffnet die Liste der Speicher. <b>A=</b> ist markiert: <b>OK</b> ▸ <b>Speichern</b> ▸ <b>OK</b>. Jetzt ist <b>A = 12</b>.</p>",
+   n:"Es gibt die Speicher A bis F sowie x, y und z."},
+  {t:"Zweiten Wert berechnen", a:"20 : 2,5", k:["ac","2","0","/","2",",","5","exe"],
+   d:"<p><b>AC</b> führt zurück zur Rechnung. Ergebnis: <b>8</b></p>"},
+  {t:"In B speichern", a:"8 in B speichern", k:["var","down","ok","ok"], z:["B","Speichern"],
+   d:"<p><b>VARIABLE</b>, mit <b>▼</b> zu <b>B=</b>, dann <b>OK</b> ▸ <b>Speichern</b> ▸ <b>OK</b>. Jetzt ist <b>B = 8</b>.</p>"},
+  {t:"Mit A und B rechnen", a:"A · B", k:["ac","shift","4","*","shift","5","exe"],
+   d:"<p>Über der <b>4</b> steht <b>A</b>, über der <b>5</b> steht <b>B</b>. Mit <b>SHIFT</b> davor schreibt der Rechner den Buchstaben. 12 · 8 = <b>96</b></p>",
+   n:"Der Rechner nimmt den <b>genauen</b> gespeicherten Wert – nichts abtippen, keine Rundungsfehler."},
+  {t:"Noch eine Rechnung", a:"(A + B) : 4", k:["(","shift","4","+","shift","5",")","/","4","exe"],
+   d:"<p>(12 + 8) : 4 = <b>5</b></p>"},
+  {t:"Speicher ansehen", a:"Liste der Speicher öffnen", k:["var"],
+   d:"<p>Die Liste zeigt <b>A = 12</b> und <b>B = 8</b>. Mit <b>AC</b> geht es zurück.</p>",
+   n:"Die Werte bleiben gespeichert, auch nach dem Ausschalten. Ein neuer Wert in A ersetzt den alten."},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB(5,["Werte in A und B speichern","Mit A und B rechnen","Danach: Lösungscode eintragen"])}
  ]}
 };
 
 // =====================================================================
 //  Steuerung
 // =====================================================================
-const ORDER=["s","v","b","p"];
+const ORDER=["s","v","b","p","m"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const BX='<span class="bx"></span>';
-const LBL={on:"ON",home:"HOME ⌂",settings:"SETTINGS",back:"↶",ok:"OK",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
+const LBL={on:"ON",home:"HOME ⌂",settings:"SETTINGS",var:"VARIABLE",back:"↶",ok:"OK",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
  exe:"EXE",ac:"AC",del:"⌫",ans:"Ans",format:"FORMAT","*":"×","/":"÷","-":"−",
  frac:'<span class="mf"><i></i><b></b><i></i></span>', sqrt:'√'+BX, sq:BX+'<sup>2</sup>', pow:BX+'<sup>▫</sup>'};
 const lbl=k=>LBL[k]||k;

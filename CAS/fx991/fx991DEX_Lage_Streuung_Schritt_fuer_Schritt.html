@@ -199,8 +199,8 @@ table.ed td.cur{ background:#141a14; color:#d3ded4; }
       <div class="c"><span class="sl">10<sup>x</sup></span><button class="k" data-k="log" style="font-size:10px">log<span class="bx" style="width:5px;height:6px"></span></button></div>
       <div class="c"><span class="sl">e<sup>x</sup></span><button class="k" data-k="ln">ln</button></div>
 
-      <div class="c"><span class="sl">log<span class="bx" style="width:4px;height:5px"></span></span><button class="k" data-k="neg">(−)</button></div>
-      <div class="c"><span class="sl">FACT</span><button class="k" data-k="deg" style="font-size:10px">°′″</button></div>
+      <div class="c"><span class="sl">log<span class="bx" style="width:4px;height:5px"></span> <i class="al">A</i></span><button class="k" data-k="neg">(−)</button></div>
+      <div class="c"><span class="sl">FACT <i class="al">B</i></span><button class="k" data-k="deg" style="font-size:10px">°′″</button></div>
       <div class="c"><span class="sl">x!</span><button class="k it" data-k="inv">x<sup>−1</sup></button></div>
       <div class="c"><span class="sl">sin<sup>−1</sup></span><button class="k" data-k="sin">sin</button></div>
       <div class="c"><span class="sl">cos<sup>−1</sup></span><button class="k" data-k="cos">cos</button></div>
@@ -448,7 +448,7 @@ let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const BX='<span class="bx"></span>';
 const LBL={on:"ON",menu:"MENU",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",optn:"OPTN",
- exe:"=",ac:"AC",del:"DEL",ans:"Ans",sd:"S⇔D",neg:"(−)","*":"×","/":"÷","-":"−",
+ exe:"=",ac:"AC",del:"DEL",ans:"Ans",sd:"S⇔D",neg:"(−)",sto:"STO",alpha:"ALPHA",deg:"°′″","*":"×","/":"÷","-":"−",
  frac:'<span class="mf"><i></i><b></b><i></i></span>', sqrt:'√'+BX, sq:'<i>x</i><sup>2</sup>', pow:'<i>x</i><sup>▫</sup>'};
 const lbl=k=>LBL[k]||k;
 function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${k==='shift'?'shift':''} ${s}">${lbl(k)}</span>`; }
