@@ -1168,11 +1168,20 @@ button{ font-family:inherit; }
 .topic:nth-child(7){ animation-delay:.3s }
 .tmain .ttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); }
 .act.phold{ visibility:hidden; pointer-events:none; }
+/* Gliederung: Buttons rechts neben der Überschrift */
+.topic{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; padding:10px 12px 10px 14px; }
+.topic .tmain{ flex:1 1 200px; min-width:0; padding:0; }
+.topic .acts{ flex:0 0 auto; flex-wrap:nowrap; padding:0; gap:6px; }
+.topic .act{ min-width:108px; padding:0 10px; }
+.stage{ max-width:1140px; }
+.right{ max-width:720px; }
 .calc-cap{ margin:8px 4px 0; font-size:12.5px; color:var(--mute); text-align:center; min-height:19px; transition:opacity .2s; }
 .shell[data-mode="g"] .calc-cap{ opacity:0; }
 @media (max-width:720px){
   .calcwrap{ margin:0 auto; }
   .act.phold{ display:none; }
+  .topic .acts{ flex:1 1 100%; }
+  .topic .act{ flex:1 1 0; min-width:0; }
 }
 @media (max-width:380px){ .calcwrap{ transform:scale(.9); transform-origin:top left; margin-bottom:-60px; } }
 </style></head><body>
@@ -4510,14 +4519,14 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": ""}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": ""}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": ""}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y-Werte) berechnen", "sub": ""}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": ""}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": ""}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": ""}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": ""}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": ""}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": ""}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": ""}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": ""}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
  pdf:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 2h7l4 4v12H5z"/><path d="M12 2v4h4M8 10h5M8 13h5" stroke-linecap="round"/></svg>',
  ueb:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l4.5 4.5L17 5"/></svg>'
 };
-const plain=s=>s.replace(/&shy;/g,'');
+const plain=s=>s.replace(/&shy;/g,'').replace(/&#8209;/g,'\u2011');
 const pdfUrl=t=>BASE+TOP[t].dir+'/'+TOP[t].pdf;
 
 const $=id=>document.getElementById(id);

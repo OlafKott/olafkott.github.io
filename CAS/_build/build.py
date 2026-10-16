@@ -14,7 +14,7 @@ TOPICS = [
     ('stat', 'Lage_und_Streuung', 'Lage_Streuung', 'Lage_Streuung', 'Lage- und Streuungs&shy;maße', '', 'Arbeitsblatt_CAS_Lage_Streuung.pdf'),
     ('reg', 'Regression', 'Regression', 'Regression', 'Lineare Regression und Korrelation', '', 'Arbeitsblatt_CAS_Regression.pdf'),
     ('wreg', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere Regressionen', 'quadratisch, kubisch, exponentiell', 'Arbeitsblatt_CAS_Weitere_Regressionen.pdf'),
-    ('funk', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte (y-Werte) berechnen', '', 'Arbeitsblatt_CAS_Funktionswerte.pdf'),
+    ('funk', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte (y&#8209;Werte) berechnen', '', 'Arbeitsblatt_CAS_Funktionswerte.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
 ]
