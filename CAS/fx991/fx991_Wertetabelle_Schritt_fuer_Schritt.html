@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-991DE CW Wertetabelle</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; --gold:#d2ad5b; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.tabs button.fertig::after{ content:" ✓"; color:var(--ab); font-weight:bold; }
+.tabs button.on.fertig::after{ color:#9fe0a5; }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner fx-991DE CW ---------- */
+.calc{ width:330px; flex:0 0 330px; background:#1b1b1e; border-radius:30px; padding:16px 14px 18px; box-shadow:0 6px 22px rgba(0,0,0,.25), inset 0 0 0 2px #2c2c31; }
+.head{ display:flex; justify-content:space-between; align-items:flex-start; padding:0 6px 8px; }
+.logo{ color:#e9e9ec; font:900 19px Arial,sans-serif; letter-spacing:.5px; line-height:1; }
+.logo small{ display:block; font:bold 10.5px Arial,sans-serif; letter-spacing:.3px; margin-top:5px; color:#cfcfd4; }
+.solar{ width:104px; height:34px; border-radius:5px; background:linear-gradient(135deg,#2a1a1a,#3a2222 60%,#2a1818); box-shadow:inset 0 0 0 1px #000; }
+.bezel{ background:#232327; border-radius:10px; padding:9px 9px 6px; box-shadow:inset 0 0 0 1px #111; }
+.scr{ width:280px; height:118px; margin:0 auto; background:#d3ded4; border-radius:3px; position:relative; overflow:hidden; color:#141a14; font-family:Arial,Helvetica,sans-serif; box-shadow:inset 0 0 6px rgba(0,0,0,.25); }
+.cw{ text-align:right; font:12px Arial,sans-serif; letter-spacing:5px; color:#bdbdc4; margin-top:5px; padding-right:4px; }
+.keys{ display:grid; grid-template-columns:repeat(6,1fr); column-gap:4px; row-gap:2px; margin-top:12px; position:relative; }
+.nums{ display:grid; grid-template-columns:repeat(5,1fr); column-gap:7px; row-gap:3px; margin-top:4px; }
+.c{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; position:relative; z-index:1; }
+.lb{ font:bold 9px Arial,sans-serif; color:#e3e3e7; height:12px; letter-spacing:.2px; white-space:nowrap; }
+.sl{ font:bold 10px 'Times New Roman',Georgia,serif; color:var(--gold); height:13px; line-height:13px; white-space:nowrap; }
+.sl.sm{ font:bold 9px Arial,sans-serif; }
+.k{ font:600 13px Arial,sans-serif; color:#f1f1f3; background:radial-gradient(circle at 50% 35%,#55555c,#3a3a40 70%); border:0; border-radius:50%; width:34px; height:30px; padding:0; cursor:pointer; box-shadow:0 2px 0 #0b0b0d; transition:transform .15s, box-shadow .15s; display:flex; align-items:center; justify-content:center; line-height:1; }
+.k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.nums .k{ width:46px; height:38px; font-size:19px; border-radius:48%; }
+.k.small{ width:26px; height:24px; font-size:9px; }
+.k.shift{ background:radial-gradient(circle at 50% 35%,#efe3bf,#b99b55 75%); color:#3a2c0a; }
+.k.ok{ background:#121214; color:#9a9aa1; font-size:11px; width:32px; height:32px; border-radius:9px; }
+.k.ar{ background:#121214; color:#9a9aa1; font-size:11px; }
+.k.txt{ font-size:9.5px; letter-spacing:-.2px; }
+.k sup{ font-size:8px; } .nums .k sup{ font-size:10px; }
+.bx{ display:inline-block; width:7px; height:8px; border:1.3px solid currentColor; border-radius:1px; vertical-align:middle; }
+.bx.f{ background:currentColor; }
+.mf{ display:inline-flex; flex-direction:column; align-items:center; gap:1px; }
+.mf i{ display:block; width:9px; height:6px; border:1.3px solid currentColor; border-radius:1px; }
+.mf b{ display:block; width:12px; height:1.3px; background:currentColor; }
+.dpad{ grid-column:3/6; grid-row:1/4; position:relative; z-index:0; }
+.dpad::before,.dpad::after{ content:""; position:absolute; background:#0d0d0f; border-radius:16px; }
+.dpad::before{ left:31%; right:31%; top:6px; bottom:4px; }
+.dpad::after{ top:36%; bottom:28%; left:2px; right:2px; }
+.pg{ grid-column:6; grid-row:1/3; justify-self:center; align-self:center; width:34px; height:64px; background:#2d2d32; border-radius:17px; display:flex; flex-direction:column; justify-content:space-around; align-items:center; color:#bbb; font-size:12px; z-index:1; }
+.pg .k{ width:28px; height:26px; background:transparent; box-shadow:none; color:#bbb; font-size:13px; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.14); z-index:3; position:relative; }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+.k.held{ box-shadow:0 0 0 3px #fff, 0 0 12px 3px rgba(255,255,255,.75); }
+@keyframes wack{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+
+/* ---------- Display ---------- */
+.sb{ height:13px; display:flex; align-items:center; gap:4px; padding:1px 4px 0; font:bold 9px Arial,sans-serif; }
+.sb .ind{ background:#141a14; color:#d3ded4; padding:0 2px; border-radius:1px; line-height:10px; height:10px; }
+.sb .sp{ flex:1; }
+.app{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; justify-content:space-between; }
+.ein{ font-size:17px; min-height:34px; display:flex; align-items:center; white-space:nowrap; }
+.vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:19px; padding:0 1px; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 2px; font-size:13px; line-height:1.15; }
+.fr > span{ padding:0 2px; min-width:9px; }
+.fr > span:first-child{ border-bottom:1.5px solid currentColor; }
+.ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
+.ng{ display:inline-block; transform:scaleX(.62); margin:0 -1px; }
+.caret{ display:inline-block; width:1.5px; height:18px; background:#141a14; animation:blink 1s steps(1) infinite; vertical-align:middle; margin-left:1px; } @keyframes blink{ 50%{opacity:0} }
+.defl{ font-size:15px; margin-right:2px; }
+.list{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 0; font-size:13.5px; }
+.list .ti{ font-size:10px; font-weight:bold; padding:0 7px 1px; border-bottom:1px solid #141a14; margin-bottom:2px; }
+.list div.it{ padding:1px 9px; height:19px; line-height:18px; white-space:nowrap; display:flex; justify-content:space-between; }
+.list div.it.sel{ background:#141a14; color:#d3ded4; }
+.list div.it .val{ min-width:60px; text-align:right; }
+.ziel{ outline:2.5px solid var(--hit); outline-offset:-2px; animation:pulse 1.1s ease-in-out infinite; }
+@keyframes pulse{ 50%{ outline-color:rgba(242,183,5,.25); } }
+.home{ position:absolute; inset:0; padding:6px 14px 4px 8px; }
+.home .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px 6px; }
+.home .ic{ position:relative; height:49px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:2px 0 3px; border-radius:2px; }
+.home .ic svg{ width:40px; height:17px; margin-bottom:1px; }
+.home .ic .an{ font:13.5px 'Arial Narrow','Roboto Condensed',Arial,sans-serif; letter-spacing:-.3px; line-height:1.1; white-space:nowrap; }
+.home .ic .bd{ position:absolute; top:3px; right:5px; width:11px; height:11px; border-radius:50%; background:#141a14; color:#d3ded4; font:bold 8.5px Arial,sans-serif; line-height:11px; text-align:center; }
+.home .ic.sel{ background:#141a14; color:#d3ded4; }
+.home .ic.sel .bd{ background:#d3ded4; color:#141a14; }
+/* Wertetabelle */
+.tb{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 4px 0; }
+.tb table{ border-collapse:collapse; width:100%; table-layout:fixed; font-size:13px; }
+.tb th{ font-size:11px; font-weight:bold; border-bottom:1.3px solid #141a14; height:14px; line-height:12px; text-align:center; }
+.tb th.n,.tb td.n{ width:16px; font-size:9px; text-align:left; color:#3e4a3e; }
+.tb td{ height:15px; line-height:14px; text-align:right; padding:0 5px; border-right:1px solid #8fa08f; white-space:nowrap; overflow:hidden; }
+.tb td:last-child{ border-right:0; }
+.tb td.cur{ background:#141a14; color:#d3ded4; }
+.tb .unten{ position:absolute; left:6px; right:6px; bottom:1px; font-size:14px; line-height:17px; text-align:right; font-weight:bold; border-top:1px solid #8fa08f; height:18px; }
+.tb .unten.leer{ font-size:10px; font-weight:normal; text-align:left; }
+
+/* ---------- Panel ---------- */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.prog i.abp{ background:#bfe3c3; } .prog i.abp.done{ background:#7cbf84; } .prog i.abp.now{ background:var(--ab); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.chips{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.shift{ background:#c9a54a; color:#2b2005; }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.chip sup{ font-size:9px; }
+.chip i.v{ font-family:'Times New Roman',serif; font-size:15px; }
+.chip .bx{ width:7px; height:8px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.ab{ border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px; }
+.ab .abt{ font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.ab .abt span{ font-size:22px; }
+.ab ul{ margin:0 0 8px; padding-left:20px; font-size:15px; }
+.ab li{ margin-bottom:3px; }
+.ab p{ font-size:14.5px; }
+.task{ border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc; }
+.task .auf{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute); }
+.task .term{ font-family:Cambria,Georgia,serif; font-size:22px; line-height:1.6; color:var(--ink); }
+.task .bereich{ font-size:14.5px; color:var(--ink); }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+.btns button:disabled{ opacity:.4; cursor:default; }
+#next{ margin-left:auto; }
+.opt{ font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px; }
+.hint{ font-size:12.5px; color:var(--mute); margin-top:10px; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+</style></head><body>
+<div class="top"><div class="in"><h1>Schritt für Schritt: Wertetabellen erstellen<small>CASIO fx-991DE CW · Am eigenen Rechner mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,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" alt="RWB Essen fhr"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="calc">
+    <div class="head"><div class="logo">CASIO<small>fx-991DE CW</small></div><div class="solar"></div></div>
+    <div class="bezel"><div class="scr" id="scr"></div><div class="cw">CLASSWIZ</div></div>
+    <div class="keys">
+      <div class="dpad"></div>
+      <div class="c" style="grid-column:1;grid-row:1"><span class="lb">ON</span><button class="k small" data-k="on">●</button></div>
+      <div class="c" style="grid-column:2;grid-row:1"><span class="lb">HOME</span><button class="k" data-k="home">⌂</button></div>
+      <div class="c" style="grid-column:4;grid-row:1"><button class="k ar" data-k="up">▲</button></div>
+      <div class="pg"><button class="k" data-k="pgup">︽</button><button class="k" data-k="pgdn">︾</button></div>
+      <div class="c" style="grid-column:1;grid-row:2"><span class="lb">SETTINGS</span><button class="k" data-k="settings">☰</button></div>
+      <div class="c" style="grid-column:2;grid-row:2"><button class="k" data-k="back">↶</button></div>
+      <div class="c" style="grid-column:3;grid-row:2"><button class="k ar" data-k="left">◀</button></div>
+      <div class="c" style="grid-column:4;grid-row:2"><button class="k ok" data-k="ok">OK</button></div>
+      <div class="c" style="grid-column:5;grid-row:2"><button class="k ar" data-k="right">▶</button></div>
+      <div class="c" style="grid-column:1;grid-row:3"><span class="lb" style="color:var(--gold)">SHIFT</span><button class="k shift" data-k="shift">⇧</button></div>
+      <div class="c" style="grid-column:2;grid-row:3"><span class="lb">VARIABLE</span><button class="k" data-k="var">⇄<i>x</i></button></div>
+      <div class="c" style="grid-column:3;grid-row:3"><span class="lb">FUNCTION</span><button class="k" data-k="func"><i>f(x)</i></button></div>
+      <div class="c" style="grid-column:4;grid-row:3"><button class="k ar" data-k="down">▼</button></div>
+      <div class="c" style="grid-column:5;grid-row:3"><span class="lb">CATALOG</span><button class="k" data-k="cat">▤</button></div>
+      <div class="c" style="grid-column:6;grid-row:3"><span class="lb">TOOLS</span><button class="k" data-k="tools">∘∘∘</button></div>
+
+      <div class="c"><span class="sl sm">QR</span><button class="k" data-k="x" style="font-family:'Times New Roman',serif;font-style:italic;font-size:17px">x</button></div>
+      <div class="c"><span class="sl"><span class="bx f" style="width:5px;height:6px"></span>▭</span><button class="k" data-k="frac"><span class="mf"><i></i><b></b><i></i></span></button></div>
+      <div class="c"><span class="sl"><sup>n</sup>√</span><button class="k" data-k="sqrt">√<span class="bx"></span></button></div>
+      <div class="c"><span class="sl"><span class="bx f" style="width:5px;height:6px"></span><sup>−1</sup></span><button class="k" data-k="pow"><span class="bx"></span><sup><span class="bx" style="width:5px;height:5px"></span></sup></button></div>
+      <div class="c"><span class="sl sm">log</span><button class="k" data-k="sq"><span class="bx"></span><sup>2</sup></button></div>
+      <div class="c"><span class="sl sm">ln</span><button class="k txt" data-k="log">log<span class="bx" style="width:5px;height:6px"></span></button></div>
+
+      <div class="c"><span class="sl"></span><button class="k txt" data-k="ans" style="font-size:12px">Ans</button></div>
+      <div class="c"><span class="sl">sin<sup>−1</sup></span><button class="k txt" data-k="sin" style="font-size:12px">sin</button></div>
+      <div class="c"><span class="sl">cos<sup>−1</sup></span><button class="k txt" data-k="cos" style="font-size:12px">cos</button></div>
+      <div class="c"><span class="sl">tan<sup>−1</sup></span><button class="k txt" data-k="tan" style="font-size:12px">tan</button></div>
+      <div class="c"><span class="sl">=</span><button class="k" data-k="(">(</button></div>
+      <div class="c"><span class="sl">;</span><button class="k" data-k=")">)</button></div>
+    </div>
+    <div class="nums">
+      <div class="c"><span class="sl">π</span><button class="k" data-k="7">7</button></div>
+      <div class="c"><span class="sl"><i>e</i></span><button class="k" data-k="8">8</button></div>
+      <div class="c"><span class="sl"><i>i</i></span><button class="k" data-k="9">9</button></div>
+      <div class="c"><span class="sl sm">INS</span><button class="k" data-k="del" style="font-size:17px">⌫</button></div>
+      <div class="c"><span class="sl sm">OFF</span><button class="k" data-k="ac" style="font-size:16px">AC</button></div>
+      <div class="c"><span class="sl sm">A</span><button class="k" data-k="4">4</button></div>
+      <div class="c"><span class="sl sm">B</span><button class="k" data-k="5">5</button></div>
+      <div class="c"><span class="sl sm">C</span><button class="k" data-k="6">6</button></div>
+      <div class="c"><span class="sl"></span><button class="k" data-k="*">×</button></div>
+      <div class="c"><span class="sl"></span><button class="k" data-k="/">÷</button></div>
+      <div class="c"><span class="sl sm">D</span><button class="k" data-k="1">1</button></div>
+      <div class="c"><span class="sl sm">E</span><button class="k" data-k="2">2</button></div>
+      <div class="c"><span class="sl sm">F</span><button class="k" data-k="3">3</button></div>
+      <div class="c"><span class="sl">°′″</span><button class="k" data-k="+">+</button></div>
+      <div class="c"><span class="sl sm">(−)</span><button class="k" data-k="-">−</button></div>
+      <div class="c"><span class="sl"><i>x</i></span><button class="k" data-k="0">0</button></div>
+      <div class="c"><span class="sl"><i>y</i></span><button class="k" data-k=",">,</button></div>
+      <div class="c"><span class="sl"><i>z</i></span><button class="k" data-k="e10" style="font-size:13px">×10<sup><span class="bx" style="width:5px;height:6px"></span></sup></button></div>
+      <div class="c"><span class="sl"></span><button class="k txt" data-k="format" style="font-size:9px">FORMAT</button></div>
+      <div class="c"><span class="sl">≈</span><button class="k" data-k="exe" style="font-size:15px">EXE</button></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="chips" id="chips"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+// =====================================================================
+//  HOME-Bildschirm fx-991DE CW
+// =====================================================================
+const T_=(t,sz)=>`<text x="17" y="12" text-anchor="middle" font-size="${sz||11}" font-weight="bold" fill="currentColor">${t}</text>`;
+const ICON={
+ Berechnung:'<svg viewBox="0 0 34 14"><text x="17" y="6.8" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">×÷</text><text x="17" y="14" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">+−</text></svg>',
+ Statistik:'<svg viewBox="0 0 34 14"><path d="M9 1v12h17" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="7" width="2.6" height="5" fill="currentColor"/><rect x="14.5" y="3" width="2.6" height="9" fill="currentColor"/><rect x="18" y="5" width="2.6" height="7" fill="currentColor"/><rect x="21.5" y="8" width="2.6" height="4" fill="currentColor"/></svg>',
+ Verteilung:'<svg viewBox="0 0 34 14"><path d="M5 13C11 13 12 2 17 2s6 11 12 11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M14 13V4.5h6V13" fill="currentColor" opacity=".55"/><path d="M4 13h26" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Tabellenk.':'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="1.5" width="16" height="3" fill="currentColor"/><path d="M9 8.5h16M14.3 4.5v8.5M19.6 4.5v8.5" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Wertetab.':'<svg viewBox="0 0 34 14"><rect x="10" y="1.5" width="14" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="1.5" width="14" height="3" fill="currentColor"/><path d="M17 4.5v8.5M10 8.5h14" stroke="currentColor" stroke-width="1"/></svg>',
+ Gleichung:'<svg viewBox="0 0 34 14">'+T_('xy=0',9.5)+'<path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>'
+};
+const APPS=["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung"];
+function zl(lbl,ziel){ return (ziel||[]).includes(lbl)?' ziel':''; }
+function drawHome(S,ziel){
+  return `<div class="home"><div class="grid">`+APPS.map((a,i)=>`<div class="ic${i===S.sel?' sel':''}${zl(a,ziel)}"><span class="bd">${i+1}</span>${ICON[a]}<span class="an">${a}</span></div>`).join('')+`</div></div>`;
+}
+function sbar(S,extra){ return `<div class="sb">${S.shift?'<span class="ind">S</span>':''}<span class="ind">D</span><span class="sp"></span>${extra||''}</div>`; }
+
+// =====================================================================
+//  Exakte Rechnung mit Brüchen
+// =====================================================================
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const R=(p,q=1)=>{ if(q<0){ p=-p; q=-q; } const g=gcd(p,q); return {p:p/g,q:q/g}; };
+const addR=(a,b)=>R(a.p*b.q+b.p*a.q,a.q*b.q), mulR=(a,b)=>R(a.p*b.p,a.q*b.q), negR=a=>R(-a.p,a.q);
+function numR(s){ const [i,f='']=s.split(','); return R(parseInt((i||'0')+f,10), 10**f.length); }
+function evalT(t,x){
+  let total=R(0), sign=1, fs=[], num='';
+  const flush=()=>{ if(num){ fs.push(numR(num)); num=''; } };
+  const endTerm=()=>{ flush(); if(fs.length){ let p=fs.reduce(mulR); total=addR(total, sign<0?negR(p):p); } fs=[]; };
+  for(const k of t){
+    if(/^[0-9,]$/.test(k)){ num+=k; continue; }
+    if(k==='x'){ flush(); fs.push(x||R(0)); continue; }
+    if(k==='sq'){ flush(); const l=fs.pop(); if(l) fs.push(mulR(l,l)); continue; }
+    if(k==='+'||k==='-'||k==='neg'){ flush(); const s=k==='+'?1:-1; if(fs.length){ endTerm(); sign=s; } else sign*=s; }
+  }
+  endTerm(); return total;
+}
+const dez=r=>{ const v=r.p/r.q; return Number(v.toPrecision(10)).toString().replace('.',',').replace('-','−'); };
+const TK={neg:'<span class="ng">−</span>','-':'−','+':'+',x:'<span class="vx">x</span>',sq:'<sup>2</sup>'};
+const renderT=(t,caret)=>t.map(k=>TK[k]||k).join('')+(caret?'<span class="caret"></span>':'');
+// Zahl-Eingabe (Tabellenbereich): Token-Liste -> rationale Zahl
+const numTok=t=>evalT(t,null);
+
+// =====================================================================
+//  Rechnerzustand: App Wertetab.
+// =====================================================================
+const TOOLS=["Tabellentyp","f(x)/g(x) defin.","Tabellenbereich","Neu berechnen","Editieren"];
+const TTYP=["f(x)/g(x)","f(x)","g(x)"];
+const FMENU=["f(x)","g(x)","f(x) definieren","g(x) definieren"];
+const RNAME=["Start","Ende","Schritt"];
+function fresh(){ return {mode:'calc', sel:0, shift:false, typ:0, def:{f:null,g:['0',',','5','x','sq','-','3','x','+','2',',','5']},
+  dEd:[], which:'f', rng:[['1'],['5'],['1']], rEd:null, rRow:0, tab:null, row:0, col:0}; }
+function genTab(S){
+  const st=numTok(S.rng[0]), en=numTok(S.rng[1]), sw=numTok(S.rng[2]);
+  const xs=[]; let x=st;
+  for(let i=0;i<45 && (x.p/x.q)<=(en.p/en.q)+1e-9;i++){ xs.push(x); x=addR(x,sw); }
+  S.tab=xs; S.row=0; S.col=0;
+}
+function cols(S){ const c=['x']; if(S.typ!==2) c.push('f'); if(S.typ!==1) c.push('g'); return c; }
+function step(S,k){
+  if(k==='shift'){ S.shift=!S.shift; return; }
+  if(S.shift){ S.shift=false; if(k==='-') k='neg'; else return; }
+  if(k==='home'){ S.mode='home'; S.sel=0; return; }
+  switch(S.mode){
+   case 'home':
+     if(k==='right') S.sel=Math.min(APPS.length-1,S.sel+1); else if(k==='left') S.sel=Math.max(0,S.sel-1);
+     else if(k==='down') S.sel=Math.min(APPS.length-1,S.sel+3); else if(k==='up') S.sel=Math.max(0,S.sel-3);
+     else if((k==='ok'||k==='exe')&&S.sel===4){ S.mode='app'; }
+     return;
+   case 'app':
+     if(k==='tools'){ S.mode='tools'; S.sel=0; return; }
+     if(k==='func'){ S.mode='fmenu'; S.sel=0; return; }
+     if(S.tab){ const n=cols(S).length;
+       if(k==='down') S.row=Math.min(S.tab.length-1,S.row+1); else if(k==='up') S.row=Math.max(0,S.row-1);
+       else if(k==='right') S.col=Math.min(n-1,S.col+1); else if(k==='left') S.col=Math.max(0,S.col-1); }
+     return;
+   case 'tools':
+     if(k==='down') S.sel=Math.min(TOOLS.length-1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='back'||k==='ac') S.mode='app';
+     else if(k==='ok'||k==='exe'){
+       if(S.sel===0){ S.mode='ttyp'; S.sel=S.typ; }
+       else if(S.sel===2){ S.mode='range'; S.rRow=0; S.rEd=null; }
+       else S.mode='app';
+     }
+     return;
+   case 'ttyp':
+     if(k==='down') S.sel=Math.min(TTYP.length-1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='back'||k==='ac') S.mode='tools';
+     else if(k==='ok'||k==='exe'){ S.typ=S.sel; S.tab=null; S.mode='app'; }
+     return;
+   case 'fmenu':
+     if(k==='down') S.sel=Math.min(FMENU.length-1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='back'||k==='ac') S.mode='app';
+     else if((k==='ok'||k==='exe')&&S.sel>=2){ S.which=S.sel===2?'f':'g'; S.dEd=[]; S.mode='def'; }
+     return;
+   case 'def':
+     if(k==='exe'){ S.def[S.which]=S.dEd; S.mode='app'; return; }
+     if(k==='back'){ S.mode='app'; return; }
+     if(k==='ac'){ S.dEd=[]; return; }
+     if(k==='del'){ S.dEd.pop(); return; }
+     if(/^[0-9,]$/.test(k)||['x','sq','+','-','neg'].includes(k)) S.dEd.push(k);
+     return;
+   case 'range':
+     if(S.rRow<3){
+       if(/^[0-9,]$/.test(k)||k==='neg'){ if(!S.rEd) S.rEd=[]; S.rEd.push(k); return; }
+       if(k==='del'&&S.rEd){ S.rEd.pop(); return; }
+       if(k==='exe'||k==='ok'){ if(S.rEd&&S.rEd.length) S.rng[S.rRow]=S.rEd; S.rEd=null; S.rRow++; return; }
+       if(k==='down'){ S.rEd=null; S.rRow=Math.min(3,S.rRow+1); return; }
+       if(k==='up'){ S.rEd=null; S.rRow=Math.max(0,S.rRow-1); return; }
+     } else {
+       if(k==='exe'||k==='ok'){ genTab(S); S.mode='app'; return; }
+       if(k==='up'){ S.rRow=2; return; }
+     }
+     if(k==='back'||k==='ac') S.mode='app';
+     return;
+   case 'calc':
+     return;
+  }
+}
+function run(S,keys){ keys.forEach(k=>step(S,k)); return S; }
+function cellVal(S,c,x){ if(c==='x') return dez(x); const d=S.def[c]; return d&&d.length?dez(evalT(d,x)):''; }
+function drawTab(S,ziel){
+  const C=cols(S), names={x:'x',f:'f(x)',g:'g(x)'};
+  let h=sbar(S)+`<div class="tb"><table><tr><th class="n"></th>${C.map(c=>`<th>${names[c]}</th>`).join('')}</tr>`;
+  const n=S.tab?S.tab.length:0, top=S.tab?Math.max(0,Math.min(S.row-3,n-4)):0;
+  for(let i=top;i<top+4;i++){
+    const x=S.tab&&S.tab[i];
+    h+=`<tr><td class="n">${x?i+1:''}</td>`+C.map((c,j)=>`<td class="${x&&i===S.row&&j===S.col?'cur'+zl('cell',ziel):''}">${x?cellVal(S,c,x):''}</td>`).join('')+'</tr>';
+  }
+  h+='</table>';
+  if(S.tab) h+=`<div class="unten">${cellVal(S,C[S.col],S.tab[S.row])}</div>`;
+  else h+=`<div class="unten leer">Tabellenbereich mit TOOLS festlegen</div>`;
+  return h+'</div>';
+}
+function draw(S,ziel){
+  if(S.mode==='calc') return sbar(S)+'<div class="app"><div class="ein"><span class="caret"></span></div><div></div></div>';
+  if(S.mode==='home') return drawHome(S,ziel);
+  if(S.mode==='app') return drawTab(S,ziel);
+  if(['tools','ttyp','fmenu'].includes(S.mode)){
+    const L={tools:TOOLS,ttyp:TTYP,fmenu:FMENU}[S.mode], T={tools:'TOOLS',ttyp:'Tabellentyp',fmenu:'FUNCTION'}[S.mode];
+    const off=Math.max(0,S.sel-3);
+    return sbar(S)+`<div class="list"><div class="ti">${T}</div>`+L.slice(off,off+4).map((t,i)=>`<div class="it${i+off===S.sel?' sel':''}${zl(t,ziel)}"><span>${t}</span></div>`).join('')+'</div>';
+  }
+  if(S.mode==='def') return sbar(S)+`<div class="app"><div class="ein"><span class="defl"><span class="vx">${S.which}</span>(<span class="vx">x</span>)=</span>${renderT(S.dEd,true)}</div><div></div></div>`;
+  if(S.mode==='range'){
+    let h=sbar(S)+`<div class="list"><div class="ti">Tabellenbereich</div>`;
+    RNAME.forEach((nm,i)=>{ const ed=i===S.rRow&&S.rEd; const v=ed?renderT(S.rEd,true):renderT(S.rng[i],false);
+      h+=`<div class="it${i===S.rRow?' sel':''}${zl(nm,ziel)}"><span>${nm}:</span><span class="val">${v}</span></div>`; });
+    h+=`<div class="it${S.rRow===3?' sel':''}${zl('Ausführen',ziel)}"><span>Ausführen</span></div>`;
+    return h+'</div>';
+  }
+  return '';
+}
+
+// =====================================================================
+//  Tour-Inhalte
+// =====================================================================
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Rechner arbeiten, Ergebnisse auf dem Blatt eintragen, dann <b>Weiter</b>.</p></div>`;
+const termF=`<i>f</i>(<i>x</i>) = −0,5<i>x</i><sup>2</sup> + 2<i>x</i> + 1`;
+const termF2=`<i>f</i>(<i>x</i>) = 2<i>x</i><sup>2</sup> − 3<i>x</i> − 1`;
+const B1=termF+'<div class="bereich">Wertetabelle: Start −1 · Ende 5 · Schritt 1</div>';
+const B2=termF2+'<div class="bereich">Wertetabelle: Start 0 · Ende 2 · Schritt 0,5</div>';
+const T1=[
+  {t:"App Wertetab. öffnen", a:B1, k:["home","down","right","ok"], z:["Wertetab."],
+   d:"<p>Drücken Sie <b>HOME</b>. Gehen Sie mit <b>▼</b> und <b>▶</b> zur App <b>Wertetab.</b> und öffnen Sie sie mit <b>OK</b>.</p><p>Sie sehen eine leere Tabelle.</p>"},
+  {t:"Tabellentyp: nur f(x)", a:B1, k:["tools","ok","down","ok"], z:["Tabellentyp","f(x)"],
+   d:"<p><b>TOOLS</b> ▸ <b>Tabellentyp</b> ▸ <b>OK</b>. Wählen Sie mit <b>▼</b> den Typ <b>f(x)</b> und bestätigen Sie mit <b>OK</b>.</p>",
+   n:"Ab Werk zeigt die Tabelle <b>f(x) und g(x)</b>. Mit nur einer Funktion passen bis zu <b>45 Zeilen</b> in die Tabelle (sonst 30)."},
+  {t:"f(x) definieren", a:B1, k:["func","down","down","ok"], z:["f(x) definieren"],
+   d:"<p><b>FUNCTION</b> ▸ mit <b>▼</b> zu <b>f(x) definieren</b> ▸ <b>OK</b>. Im Display steht <b>f(x)=</b>.</p>",
+   n:"Das kennen Sie schon vom Thema Funktionswerte. Eine alte Funktion f wird überschrieben."},
+  {t:"Term eingeben und speichern", a:B1, k:["shift","-","0",",","5","x","sq","+","2","x","+","1","exe"],
+   d:"<p>Minus am Anfang: <b>SHIFT</b> und <b>−</b>. Die Variable <b>x</b> hat eine eigene Taste. Mit <b>EXE</b> speichern.</p>"},
+  {t:"Tabellenbereich öffnen", a:B1, k:["tools","down","down","ok"], z:["Tabellenbereich"],
+   d:"<p><b>TOOLS</b> ▸ mit <b>▼</b> zu <b>Tabellenbereich</b> ▸ <b>OK</b>.</p><p>Hier legen Sie fest, welche x-Werte in der Tabelle stehen.</p>"},
+  {t:"Start: −1", a:B1, k:["shift","-","1","exe"], z:["Start"],
+   d:"<p><b>Start</b> ist der erste x-Wert. Tippen Sie −1 (mit <b>SHIFT −</b>) und drücken Sie <b>EXE</b>.</p>"},
+  {t:"Ende: 5", a:B1, k:["5","exe"], z:["Ende"],
+   d:"<p><b>Ende</b> ist der letzte x-Wert.</p>"},
+  {t:"Schritt: 1", a:B1, k:["1","exe"], z:["Schritt"],
+   d:"<p><b>Schritt</b> ist der Abstand zwischen zwei x-Werten. Hier: −1, 0, 1, 2, …</p>"},
+  {t:"Ausführen", a:B1, k:["exe"], z:["Ausführen"],
+   d:"<p>Der Cursor steht auf <b>Ausführen</b>. Mit <b>EXE</b> wird die Tabelle erstellt.</p>"},
+  {t:"Tabelle ablesen", a:B1, k:["right","down","down","down"], z:["cell"],
+   d:"<p>Mit <b>▶</b> in die Spalte <b>f(x)</b>, mit <b>▼</b> nach unten blättern.</p><p>Bei <b>x = 2</b> steht <b>f(2) = 3</b>. Das ist der größte Wert in dieser Tabelle.</p>",
+   n:"Unten im Display steht der Wert der markierten Zelle noch einmal groß."},
+  {t:"Selbst arbeiten", k:[], ab:1, d:AB("Aufgabe 1",["<b>FUNCTION</b> ▸ <b>f(x) definieren</b> ▸ neuen Term eingeben ▸ <b>EXE</b>","<b>TOOLS</b> ▸ <b>Tabellenbereich</b> ▸ Start, Ende, Schritt ▸ <b>Ausführen</b>","Werte in die Tabelle übertragen – danach die zweite Tabelle mit Schrittweite 0,2"])}
+];
+const T2=[
+  {t:"Neue Funktion definieren", a:B2, k:["func","down","down","ok"], z:["f(x) definieren"],
+   d:"<p>Wieder <b>FUNCTION</b> ▸ <b>f(x) definieren</b>. Die alte Funktion wird überschrieben.</p>"},
+  {t:"Term eingeben", a:B2, k:["2","x","sq","-","3","x","-","1","exe"],
+   d:"<p>Hier ist das Minus <b>zwischen</b> zwei Summanden – dafür nur die Taste <b>−</b>.</p>",
+   n:"Merke: <b>SHIFT −</b> = Vorzeichen am Anfang, <b>−</b> = Rechenzeichen in der Mitte."},
+  {t:"Tabellenbereich öffnen", a:B2, k:["tools","down","down","ok"], z:["Tabellenbereich"],
+   d:"<p><b>TOOLS</b> ▸ <b>Tabellenbereich</b>. Die alten Werte stehen noch da – Sie überschreiben sie.</p>"},
+  {t:"Start 0, Ende 2", a:B2, k:["0","exe","2","exe"], z:["Start","Ende"],
+   d:"<p>Start <b>0</b> ▸ <b>EXE</b>, Ende <b>2</b> ▸ <b>EXE</b>.</p>"},
+  {t:"Feinere Schrittweite: 0,5", a:B2, k:["0",",","5","exe","exe"], z:["Schritt","Ausführen"],
+   d:"<p>Schritt <b>0,5</b> ▸ <b>EXE</b>, dann auf <b>Ausführen</b> noch einmal <b>EXE</b>.</p><p>Jetzt stehen in der Tabelle 0; 0,5; 1; 1,5; 2.</p>",
+   n:"Eine kleine Schrittweite macht die Tabelle genauer – aber auch länger."},
+  {t:"Vorzeichenwechsel finden", a:B2, k:["right","down","down","down","down"], z:["cell"],
+   d:"<p>In die Spalte <b>f(x)</b> und nach unten blättern.</p><p>f(1,5) = <b>−1</b>, f(2) = <b>1</b>: Das Vorzeichen wechselt. Also liegt zwischen <b>x = 1,5</b> und <b>x = 2</b> eine <b>Nullstelle</b>.</p>"},
+  {t:"Selbst arbeiten", k:[], ab:1, d:AB("Aufgabe 2",["Funktion <b>g</b> als f(x) definieren","Tabelle mit Schritt 2 erstellen und den Vorzeichenwechsel suchen","Feinere Tabelle (Schritt 0,5) erstellen und die Nullstelle ablesen","Danach: Lösungscode eintragen"])}
+];
+const allK=a=>a.flatMap(s=>s.k);
+const TRACKS={
+  c:{name:"1 · Wertetabelle erstellen", start:()=>fresh(), steps:T1},
+  n:{name:"2 · Neue Funktion und feinere Schritte", start:()=>run(fresh(),allK(T1)), steps:T2}
+};
+
+// =====================================================================
+//  Steuerung
+// =====================================================================
+const ORDER=["c","n"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const LBL={on:"ON",home:"HOME ⌂",back:"↶",ok:"OK",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",func:"FUNCTION",tools:"TOOLS",
+ exe:"EXE",ac:"AC",del:"⌫","-":"−","+":"+",x:'<i class="v">x</i>', sq:'<span class="bx"></span><sup>2</sup>'};
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${k==='shift'?'shift':''} ${s}">${lbl(k)}</span>`; }
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?(S.z||[]).filter(z=>z==='cell'):(S.z||[]).filter(z=>z!=='cell'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='shift'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="shift"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1600); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    let extra='';
+    if(k==='-'&&S.k[pos]==='shift'&&S.k[pos+1]==='-') extra=' Für das Vorzeichen erst <b>SHIFT</b>, dann <b>−</b>.';
+    if(k==='ok'&&S.k[pos]==='exe') extra=' Hier bestätigen Sie mit <b>EXE</b>.';
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}${extra}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+</script>
+</body></html>
