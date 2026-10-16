@@ -211,8 +211,6 @@ main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap
     <div class="stat" id="stat"></div>
     <div id="dd"></div>
     <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
-    <label class="opt"><input type="checkbox" id="hilfe" checked> Gesuchte Taste am Rechner aufleuchten lassen</label>
-    <div class="hint">Tasten am Bild-Rechner anklicken oder die Computertastatur benutzen (Ziffern, Komma, + − * /, Enter = EXE, Rücktaste = ⌫, Esc = AC, Pfeiltasten). SHIFT bitte anklicken.</div>
   </div>
 </main>
 <script>
@@ -500,7 +498,7 @@ function hint(){
   document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
   const S=TRACKS[tr].steps[st];
   if(pos>0&&S.k[pos-1]==='shift'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="shift"]'); if(c) c.classList.add('held'); }
-  if(!$('hilfe').checked || pos>=S.k.length) return;
+  if(pos>=S.k.length) return;
   const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
 }
 function press(k){
@@ -515,7 +513,6 @@ function press(k){
   } else {
     if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
     $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
-    if(!$('hilfe').checked){ const t=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(t){ t.classList.add('hit'); setTimeout(()=>t.classList.remove('hit'),1200); } }
   }
 }
 function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
@@ -530,7 +527,7 @@ document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>
 $('next').onclick=next; $('back').onclick=back;
 $('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
 $('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
-$('hilfe').onchange=hint;
+
 const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del',Home:'home','.':',',',':',','*':'*','/':'/','+':'+','-':'-','(':'(',')':')','^':'pow'};
 document.addEventListener('keydown',e=>{
   let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
