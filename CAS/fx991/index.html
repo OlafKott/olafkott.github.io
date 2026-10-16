@@ -140,16 +140,19 @@ const IC={
  stat:`<svg viewBox="0 0 120 84"><rect x="4" y="4" width="112" height="76" rx="14" fill="#eef2fa"/><g stroke="#1F4E99" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M16 42h14M90 42h14M16 32v20M104 32v20"/><rect x="30" y="26" width="60" height="32" rx="3" fill="#c9d6ee"/><path d="M58 26v32"/></g><g fill="#1F4E99"><circle cx="22" cy="70" r="3"/><circle cx="40" cy="70" r="3"/><circle cx="52" cy="70" r="3"/><circle cx="62" cy="70" r="3"/><circle cx="74" cy="70" r="3"/><circle cx="98" cy="70" r="3"/></g></svg>`,
  tour:`<svg viewBox="0 0 58 58" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="4" width="26" height="46" rx="5"/><rect x="15" y="10" width="16" height="10" rx="1.5" fill="#fff" stroke="none" opacity=".9"/><circle cx="17" cy="28" r="1.4" fill="#fff"/><circle cx="23" cy="28" r="1.4" fill="#fff"/><circle cx="29" cy="28" r="1.4" fill="#fff"/><circle cx="17" cy="35" r="1.4" fill="#fff"/><circle cx="23" cy="35" r="1.4" fill="#fff"/><circle cx="29" cy="35" r="1.4" fill="#fff"/><path d="M38 40l8 4 4-8-8-4M40 46l-4 8" stroke-width="3"/><path d="M33 22l7 13 3-6 6 1z" fill="#F2B705" stroke="#fff" stroke-width="2"/></svg>`,
  ueb:`<svg viewBox="0 0 58 58" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30l12 12 30-30"/><path d="M8 50h42" opacity=".6"/></svg>`,
+ funk:`<svg viewBox="0 0 120 84"><rect x="4" y="4" width="112" height="76" rx="14" fill="#eef2fa"/><path d="M18 68h86M30 74V12" stroke="#1F4E99" stroke-width="3" stroke-linecap="round"/><path d="M38 18C50 76 74 76 90 18" fill="none" stroke="#1F4E99" stroke-width="4" stroke-linecap="round"/><path d="M78 68V44H30" fill="none" stroke="#F2B705" stroke-width="3" stroke-dasharray="5 4"/><circle cx="78" cy="44" r="4.5" fill="#F2B705"/></svg>`,
  pdf:`<svg viewBox="0 0 58 58" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"><path d="M12 4h24l12 12v38H12z"/><path d="M36 4v12h12"/><path d="M19 28h20M19 36h20M19 44h14" stroke-linecap="round"/><path d="M38 40l5 5 8-10" stroke="#9fe0a5" stroke-width="4" stroke-linecap="round"/></svg>`
 };
 const BASE='https://olafkott.github.io/CAS/fx991/';
 const DATA={
  cw:[["grund","fx991_Grundlagen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Grundlagen.pdf",null],
-     ["stat","fx991_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Lage_Streuung.pdf","fx991_Uebung_Lage_Streuung.html"]],
+     ["stat","fx991_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Lage_Streuung.pdf","fx991_Uebung_Lage_Streuung.html"],
+     ["funk","fx991_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Funktionswerte.pdf",null]],
  dx:[["grund","fx991DEX_Grundlagen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Grundlagen.pdf",null],
-     ["stat","fx991DEX_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Lage_Streuung.pdf","fx991DEX_Uebung_Lage_Streuung.html"]]
+     ["stat","fx991DEX_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Lage_Streuung.pdf","fx991DEX_Uebung_Lage_Streuung.html"],
+     ["funk","fx991DEX_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Funktionswerte.pdf",null]]
 };
-const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße"};
+const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte"};
 const stage=document.getElementById('stage'), toc=document.getElementById('toc');
 function pick(m){
   toc.innerHTML=`<div class="model">${m==='cw'?'fx-991DE CW':'fx-991DE X'}</div>`+DATA[m].map(([ic,tour,pdf,ueb],i)=>`<div class="topic"><div class="th"><span class="num">${i+1}</span><span class="ttl">${NAME[ic]}</span></div>
