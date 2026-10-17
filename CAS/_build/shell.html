@@ -73,19 +73,6 @@ button{ font-family:inherit; }
 .gpanel[hidden], .uhost[hidden]{ display:none; }
 .uhost{ display:block; }
 
-@media (max-width:720px){
-  .stage{ flex-wrap:wrap; gap:16px; }
-  .right{ flex:1 1 100%; max-width:none; }
-  .acts{ padding-left:14px; }
-  .act{ flex:1 1 0; min-width:0; padding:0 6px; }
-}
-@media (max-width:620px){
-  .bar img{ display:none; }
-  .ttlbox h1{ font-size:17px; } .ttlbox h1 small{ display:none; }
-  .seg span{ display:none; } .seg button,.seg a{ padding:6px 9px; }
-  .toToc span{ display:none; }
-  .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ padding:7px 10px; }
-}
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 
 
@@ -115,13 +102,7 @@ button{ font-family:inherit; }
 .right{ max-width:720px; }
 .calc-cap{ margin:8px 4px 0; font-size:12.5px; color:var(--mute); text-align:center; min-height:19px; transition:opacity .2s; }
 .shell[data-mode="g"] .calc-cap{ opacity:0; }
-@media (max-width:720px){
-  .calcwrap{ margin:0 auto; }
-  .act.phold{ display:none; }
-  .topic .acts{ flex:1 1 100%; }
-  .topic .act{ flex:1 1 0; min-width:0; }
-}
-@media (max-width:380px){ .calcwrap{ transform:scale(.9); transform-origin:top left; margin-bottom:-60px; } }
+.shell.scaled .calc{ transform:none !important; }
 </style></head><body>
 <div class="shell" id="app" data-mode="toc">
 <header class="bar"><div class="in">
@@ -262,7 +243,7 @@ let busy=null;
 function setTitle(html){ const h=$('hT'); h.classList.add('swap'); setTimeout(()=>{ h.innerHTML=html; h.classList.remove('swap'); },170); }
 function toTopOfContent(){
   const r=$('right').getBoundingClientRect(), barH=document.querySelector('.bar').offsetHeight;
-  const narrow=window.matchMedia('(max-width:720px)').matches;
+  const narrow=false; // Layout bleibt nebeneinander (auf kleinen Bildschirmen verkleinert)
   const y = narrow ? window.scrollY + r.top - barH - 8 : 0;
   if(Math.abs(window.scrollY-y)>4) window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
 }
@@ -326,6 +307,22 @@ window.addEventListener('popstate',()=>route({nohist:true}));
 // Start
 showHome();
 route({nohist:true, instant:true});
+// ---------- Kleine Bildschirme: ganze Ansicht verkleinern (Layout wie am PC), Zoomen per Fingergeste ----------
+const FIT_W=760; let SCALE=1;
+function fit(){
+  const w=document.documentElement.clientWidth; let h=window.innerHeight;
+  // Im Moodle-iframe ist innerHeight die Rahmenhöhe: auf Handys die echte Bildschirmhöhe je nach Ausrichtung nehmen
+  const sh=Math.min(screen.width,screen.height), lh=Math.max(screen.width,screen.height);
+  const landscape=(screen.orientation&&/landscape/.test(screen.orientation.type))||Math.abs(window.orientation||0)===90||screen.width>screen.height;
+  if(sh<500) h=Math.min(h, landscape?sh:lh);
+  // schmal (Handy hochkant): auf 760 px Layoutbreite verkleinern; niedrig (Handy quer): so weit, dass ~800 px Höhe passen
+  SCALE=Math.min(1, w/FIT_W, h<600 ? h/800 : 1);
+  if(SCALE<1){ APP.classList.add('scaled'); APP.style.width=(w/SCALE)+'px'; APP.style.transformOrigin='top left'; APP.style.transform='scale('+SCALE+')'; }
+  else { APP.classList.remove('scaled'); APP.style.width=''; APP.style.transform=''; }
+  document.body.style.height = SCALE!==1 ? (APP.offsetHeight*SCALE)+'px' : '';
+}
+new ResizeObserver(()=>{ if(SCALE!==1) document.body.style.height=(APP.offsetHeight*SCALE)+'px'; }).observe(APP);
+window.addEventListener('resize',fit); window.addEventListener('orientationchange',()=>setTimeout(fit,150)); fit();
 })();
 </script>
 </body></html>
