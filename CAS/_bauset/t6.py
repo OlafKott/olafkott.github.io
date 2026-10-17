@@ -1,6 +1,6 @@
 import asyncio,sys
 from playwright.async_api import async_playwright
-TOP=['grund','stat','funk','gl','wt','abl','int','lgs','mat','kombi','binom']
+TOP=['grund','stat','funk','gl','wt','abl','int','lgs','mat','stufe','kombi','binom']
 async def run(pg,root,t,errs,shots,tag):
     await pg.evaluate('window.scrollTo(0,0)')
     sel=f'.topic[data-t="{t}"] .act.tour'

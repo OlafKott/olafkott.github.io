@@ -1,7 +1,10 @@
 GUIDES["grund"]={
  title:"Grundlagen",
- css:String.raw``,
+ css:String.raw`[data-g="grund"] .panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+[data-g="grund"] #next{ margin-left:auto; }
+@media (max-width:380px){ [data-g="grund"] .calc{ transform:scale(.92); transform-origin:top center; } }`,
  make:function(){
+
 // =====================================================================
 //  Eingabezeile mit Vorlagen (Bruch, Hochzahl, Wurzel)
 // =====================================================================
@@ -314,9 +317,9 @@ function render(){
   const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
   const fin=pos>=S.k.length;
   if(last&&fin) done[tr]=true;
-  $('next').className=fin?'go':'';
-  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').className='go';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Weiter ▶';
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -352,11 +355,20 @@ function next(){
 function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
 
 const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del',Home:'home','.':',',',':',','*':'*','/':'/','+':'+','-':'-','(':'(',')':')','^':'pow'};
-  return {
-    ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
-    render, press, next, back, KMAP,
-    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); }
-  };
+return {
+  ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
+  render, press, next, back, KMAP,
+  selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
+};
  }
 };

@@ -75,10 +75,10 @@ let mode='pick', model=null, active=null;   // mode: pick | toc | g | u ; active
 // ---------------------------------------------------------------
 //  Anleitungen: je ein eigenes Panel, ein gemeinsamer Rechner pro Modell
 // ---------------------------------------------------------------
-const PANEL={}, G={};
-const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="chips" id="chips"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="next" class="nx">Überspringen</button></div>';
+const PANEL={}, G={}; let measuring=false;
+const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="chips" id="chips"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="skip" title="Direkt zum nächsten Schritt">Überspringen ⏭</button><button id="next" class="go">Weiter ▶</button></div>';
 function scope(id,m){
-  const on=()=>active===id&&mode==='g';
+  const on=()=>active===id&&mode==='g'&&!measuring;
   return {
     getElementById:x=> x==='scr' ? (on()?SCR[m]:DUMMY) : PANEL[id].querySelector('#'+x),
     querySelector:s=> on()?CALC[m].querySelector(s):null,
@@ -90,8 +90,9 @@ Object.keys(MODEL).forEach(m=>THEMEN.forEach(t=>{
   const id=gid(m,t); if(!GUIDES[id]) return;
   const p=document.createElement('div'); p.className='panel gpanel'; p.hidden=true; p.innerHTML=PANEL_HTML; vG.appendChild(p); PANEL[id]=p;
   const g=G[id]=GUIDES[id].make(scope(id,m));
-  p.querySelector('#next').onclick=()=>g.next();
-  p.querySelector('#back').onclick=()=>g.back();
+  p.querySelector('#next').onclick=()=>g.weiter();
+  p.querySelector('#skip').onclick=()=>g.fwd();
+  p.querySelector('#back').onclick=()=>g.bwd();
   p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
   p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };
 }));
@@ -177,12 +178,27 @@ function apply(m,t,v){
   $('segPdf').href=BASE+MODEL[m].pdf+PDFNAME[t]+'.pdf'; $('segPdf').hidden=!HASPDF(m,t);
   document.querySelector('#seg button[data-v="u"]').hidden=!HASU(m,t);
   document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  if(v==='g'){ Object.keys(PANEL).forEach(k=>PANEL[k].hidden=(k!==id)); G[id].render(); }
+  if(v==='g'){ Object.keys(PANEL).forEach(k=>PANEL[k].hidden=(k!==id)); fixHeight(id); G[id].render(); }
   else{ uebung(id); Object.keys(UHOST).forEach(k=>UHOST[k].hidden=(k!==id)); homeScreen(m,MODEL[m].app[t],false); }
   flash(m);
 }
 // Rechner-Wrapper ein-/ausblenden; der gewählte gleitet an seinen Platz (FLIP)
 // Beide Rechner bei der Auswahl gleich groß (gleiche Höhe), passend zur verfügbaren Breite
+// Feste Panelhöhe je Anleitung: höchster Schritt (mind. Rechnerhöhe) -> Buttonzeile bleibt an derselben Stelle
+function fixHeight(t){
+  const g=G[t], p=PANEL[t]; if(!g||!g.snap) return;
+  const calc=CALC[model];
+  const wasHidden=vG.hidden; vG.hidden=false;
+  const s=g.snap(); measuring=true; p.style.minHeight='0px'; let mx=0;
+  try{
+    g.ORDER.forEach(tr=>g.TRACKS[tr].steps.forEach((x,i)=>{
+      g.goto(tr,i,0); mx=Math.max(mx,p.offsetHeight);
+      if(x.k.length){ g.goto(tr,i,x.k.length); mx=Math.max(mx,p.offsetHeight); }
+    }));
+  }finally{ measuring=false; g.restore(s); vG.hidden=wasHidden; }
+  p.style.minHeight=Math.max(mx, calc.offsetHeight)+'px';
+}
+let rzT=null; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ if(mode==='g'&&active) fixHeight(active); },200); });
 function sizePick(on){
   const cs=[CALC.cw,CALC.dx];
   const clear=c=>{ c.style.transform=''; c.style.transformOrigin=''; c.style.marginRight=''; c.style.marginBottom=''; };

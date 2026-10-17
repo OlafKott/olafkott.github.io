@@ -25,12 +25,17 @@ table.d th{ background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:it
 .f label .z{ color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px; }
 .f input{ font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
 .f .m{ font-weight:bold; font-size:18px; text-align:center; }
-.f.ok{ background:var(--okbg); } .f.ok .m{ color:var(--ok); }
-.f.no{ background:var(--nobg); } .f.no .m{ color:var(--no); }
-.f.fmt{ background:var(--warnbg); } .f.fmt .m{ color:var(--warn); }
+.f.ok{ background:var(--okbg); }
+.f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); }
+.f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); }
+.f.fmt .m{ color:var(--warn); }
 .f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; }
 .f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
-.f.no .msg{ color:var(--no); } .f.fmt .msg{ color:var(--warn); } .f.show .msg{ color:var(--mute); }
+.f.no .msg{ color:var(--no); }
+.f.fmt .msg{ color:var(--warn); }
+.f.show .msg{ color:var(--mute); }
 .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
 .btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
 .btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
@@ -59,6 +64,7 @@ table.d th{ background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:it
   <p class="hinweis">Komma oder Punkt sind beide erlaubt. Die Anzahl <i>n</i> tragen Sie als ganze Zahl ein.</p>
 </div>`,
  init:function(root){
+
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
 const de=(v,d=2)=>r2(v).toFixed(d).replace('.',',');
@@ -149,5 +155,6 @@ root.getElementById('zeigen').onclick=zeigen;
 root.getElementById('neu').onclick=neu;
 root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
 neu();
+
  }
 };

@@ -14,7 +14,7 @@ GUIDES["dx_wt"]={
 [data-g="dx_wt"] .tb{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 4px 0; }
 [data-g="dx_wt"] .tb table{ border-collapse:collapse; width:100%; table-layout:fixed; font-size:14px; }
 [data-g="dx_wt"] .tb th{ font-size:11.5px; font-weight:bold; border-bottom:1.3px solid #141a14; height:16px; text-align:center; }
-[data-g="dx_wt"] .tb th.n,[data-g="dx_wt"] .tb td.n{ width:16px; font-size:9px; text-align:left; color:#3e4a3e; }
+[data-g="dx_wt"] .tb th.n, [data-g="dx_wt"] .tb td.n{ width:16px; font-size:9px; text-align:left; color:#3e4a3e; }
 [data-g="dx_wt"] .tb td{ height:21px; text-align:right; padding:0 6px; border-right:1px solid #8fa08f; white-space:nowrap; overflow:hidden; }
 [data-g="dx_wt"] .tb td:last-child{ border-right:0; }
 [data-g="dx_wt"] .tb td.cur{ background:#141a14; color:#d3ded4; }
@@ -25,6 +25,7 @@ GUIDES["dx_wt"]={
 [data-g="dx_wt"] .chip.w{ background:#f1f1f3; color:#111; border-color:#c9cbd1; }
 [data-g="dx_wt"] .chip.b{ background:#2463c9; }`,
  make:function(){
+
 // =====================================================================
 //  Hauptmenü fx-991DE X
 // =====================================================================
@@ -218,9 +219,9 @@ function render(){
   $('back').disabled=st===0&&pos===0;
   const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
   if(last&&fin) done[tr]=true;
-  $('next').className=fin?'go':'';
-  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').className='go';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Weiter ▶';
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -258,11 +259,20 @@ function next(){
 }
 function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
 const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x'};
-  return {
-    ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
-    render, press, next, back, KMAP,
-    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); }
-  };
+return {
+  ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
+  render, press, next, back, KMAP,
+  selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
+};
  }
 };

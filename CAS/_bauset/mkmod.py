@@ -21,6 +21,7 @@ def blocks(css):
         i = k + 1
     return out
 
+TITLE = {'kombi':'Kombinatorik', 'stufe':'Zeilenstufenform (Ref/Rref)'}
 norm = lambda s: re.sub(r'\s+', ' ', s).strip()
 
 def rules_flat(css):
@@ -56,6 +57,7 @@ def guide(html, gid, base):
     css = html[html.index('<style>') + 7: html.index('</style>')]
     h1 = re.search(r'<h1>(.*?)<small>', html).group(1)
     title = re.sub(r'^(Taschenrechner )?Schritt für Schritt: ', '', h1).strip()
+    title = TITLE.get(gid.replace('dx_',''), title)
     sc = html[html.index('<script>') + 8: html.rindex('</script>')]
     m = re.search(r'// =+\n//  Steuerung', sc)
     eng, ctl = sc[:m.start()], sc[m.start():]
@@ -74,12 +76,28 @@ def guide(html, gid, base):
         out.pop()
     ctl = '\n'.join(out)
     assert 'KMAP' in ctl, gid
+    # Buttonzeile wie beim CAS-Führerschein: „Weiter“ drückt die leuchtende Taste, „Überspringen“ springt zum nächsten Schritt
+    ctl, n1 = re.subn(r"\$\('next'\)\.className=fin\?'go':'';", "$('next').className='go';", ctl)
+    ctl, n2 = re.subn(r"\$\('next'\)\.textContent=fin \? (\(last \? .*?: 'Weiter ▶'\)) : 'Überspringen';",
+                      r"$('next').textContent=fin ? \1 : 'Weiter ▶';", ctl)
+    ctl, n3 = re.subn(r"(\$\('next'\)\.disabled=fin&&last&&!nextT;)",
+                      r"\1 { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }", ctl)
+    assert n1 == n2 == n3 == 1, (gid, 'btns', n1, n2, n3)
     ret = """
 return {
   ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
   render, press, next, back, KMAP,
   selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-  selectStep:function(i){ st=+i; pos=0; render(); }
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
 };"""
     return (f'GUIDES["{gid}"]={{\n title:"{title}",\n css:String.raw`{guide_css(css, base, gid)}`,\n make:function(){{\n'
             + eng + ctl + ret + '\n }\n};\n')
@@ -110,7 +128,7 @@ def uebung(html, gid):
 if __name__ == '__main__':
     D = pathlib.Path('/home/claude/olafkott.github.io/CAS/fx991')
     T=[('grund','Grundlagen'),('stat','Lage_Streuung'),('funk','Funktionswerte'),('gl','Gleichungen'),('wt','Wertetabelle'),
-       ('abl','Ableitung'),('int','Integrale'),('lgs','LGS'),('kombi','Kombinatorik'),('binom','Binomialverteilung'),('mat','Matrizen')]
+       ('abl','Ableitung'),('int','Integrale'),('lgs','LGS'),('kombi','Kombinatorik'),('binom','Binomialverteilung'),('mat','Matrizen'),('stufe','Stufenform')]
     import sys as _s
     only=_s.argv[1:]
     JOBS=[]

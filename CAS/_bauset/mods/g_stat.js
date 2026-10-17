@@ -1,6 +1,9 @@
 GUIDES["stat"]={
  title:"Lage- und Streuungsmaße",
- css:String.raw`[data-g="stat"] .edw{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 6px 0; }
+ css:String.raw`[data-g="stat"] .panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+[data-g="stat"] #next{ margin-left:auto; }
+@media (max-width:380px){ [data-g="stat"] .calc{ transform:scale(.92); transform-origin:top center; } }
+[data-g="stat"] .edw{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 6px 0; }
 [data-g="stat"] table.ed{ border-collapse:collapse; width:100%; table-layout:fixed; font-size:13px; }
 [data-g="stat"] table.ed td{ border:1px solid #141a14; height:17px; padding:0 5px; text-align:right; }
 [data-g="stat"] table.ed td.rn{ width:22px; text-align:center; font-size:10.5px; border-left:0; }
@@ -15,6 +18,7 @@ GUIDES["stat"]={
 [data-g="stat"] .task .term table.dt td, [data-g="stat"] .task .term table.dt th{ border:1px solid #c3c8d0; padding:2px 10px; text-align:center; }
 [data-g="stat"] .task .term table.dt th{ background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic; }`,
  make:function(){
+
 // =====================================================================
 //  Statistik-App: Zustandsmaschine
 // =====================================================================
@@ -214,7 +218,7 @@ const ORDER=["u","h"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const BX='<span class="bx"></span>';
-const LBL={on:"ON",home:"HOME ⌂",settings:"SETTINGS",back:"↶",ok:"OK",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
+const LBL={on:"ON",home:"HOME ⌂",settings:"SETTINGS",var:"VARIABLE",back:"↶",ok:"OK",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
  exe:"EXE",ac:"AC",del:"⌫",ans:"Ans",format:"FORMAT","*":"×","/":"÷","-":"−",
  frac:'<span class="mf"><i></i><b></b><i></i></span>', sqrt:'√'+BX, sq:BX+'<sup>2</sup>', pow:BX+'<sup>▫</sup>'};
 const lbl=k=>LBL[k]||k;
@@ -239,9 +243,9 @@ function render(){
   const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
   const fin=pos>=S.k.length;
   if(last&&fin) done[tr]=true;
-  $('next').className=fin?'go':'';
-  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').className='go';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Weiter ▶';
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -277,11 +281,20 @@ function next(){
 function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
 
 const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del',Home:'home','.':',',',':',','*':'*','/':'/','+':'+','-':'-','(':'(',')':')','^':'pow'};
-  return {
-    ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
-    render, press, next, back, KMAP,
-    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); }
-  };
+return {
+  ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
+  render, press, next, back, KMAP,
+  selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
+};
  }
 };

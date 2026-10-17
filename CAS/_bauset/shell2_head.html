@@ -89,6 +89,12 @@ button{ font-family:inherit; }
 .seg [hidden]{ display:none !important; }
 
 /* Anleitung / Übung */
+/* Buttonzeile wie beim CAS-Führerschein: immer eine Zeile, immer auf gleicher Höhe (feste Panelhöhe je Anleitung) */
+.gpanel{ display:flex; flex-direction:column; container-type:inline-size; }
+.gpanel .btns{ flex-wrap:nowrap; gap:8px; margin-top:auto; padding-top:10px; }
+.gpanel .btns button{ white-space:nowrap; padding:9px 16px; flex:0 1 auto; min-width:0; }
+.gpanel #skip{ margin-left:auto; }
+@container (max-width:430px){ .gpanel .btns button{ padding:8px 10px; font-size:14.5px; } }
 .gpanel[hidden], .uhost[hidden]{ display:none; }
 .uhost{ display:block; }
 

@@ -10,7 +10,8 @@ GUIDES["dx_gl"]={
 [data-g="dx_gl"] .klein{ font-size:13px; display:flex; justify-content:space-between; }
 [data-g="dx_gl"] .vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:18px; padding:0 1px; }
 [data-g="dx_gl"] .ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
-[data-g="dx_gl"] .wz{ white-space:nowrap; } [data-g="dx_gl"] .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
+[data-g="dx_gl"] .wz{ white-space:nowrap; }
+[data-g="dx_gl"] .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
 [data-g="dx_gl"] .lst{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:4px 9px; font:bold 16px 'Courier New',monospace; line-height:1.55; }
 [data-g="dx_gl"] .lst .s{ background:#141a14; color:#d3ded4; }
 [data-g="dx_gl"] .koef{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; }
@@ -27,6 +28,7 @@ GUIDES["dx_gl"]={
 [data-g="dx_gl"] .task .term{ font-family:Cambria,Georgia,serif; font-size:21px; line-height:1.6; color:var(--ink); }
 [data-g="dx_gl"] .task .term small{ font-size:15px; color:var(--mute); }`,
  make:function(){
+
 // =====================================================================
 //  Hauptmenü fx-991DE X
 // =====================================================================
@@ -372,9 +374,9 @@ function render(){
   $('back').disabled=st===0&&pos===0;
   const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
   if(last&&fin) done[tr]=true;
-  $('next').className=fin?'go':'';
-  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').className='go';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Weiter ▶';
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '<span style="color:var(--mute)">Lesen – dann <b>Weiter</b>.</span>';
   hint();
@@ -415,11 +417,20 @@ function next(){
 function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
 
 const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x','(':'(',')':')'};
-  return {
-    ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
-    render, press, next, back, KMAP,
-    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); }
-  };
+return {
+  ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
+  render, press, next, back, KMAP,
+  selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
+};
  }
 };

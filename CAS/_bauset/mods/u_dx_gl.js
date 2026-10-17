@@ -26,12 +26,17 @@ svg.graph{ display:block; max-width:100%; height:auto; margin:4px 0 2px; }
 .f label .z{ color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px; }
 .f input{ font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
 .f .m{ font-weight:bold; font-size:18px; text-align:center; }
-.f.ok{ background:var(--okbg); } .f.ok .m{ color:var(--ok); }
-.f.no{ background:var(--nobg); } .f.no .m{ color:var(--no); }
-.f.fmt{ background:var(--warnbg); } .f.fmt .m{ color:var(--warn); }
+.f.ok{ background:var(--okbg); }
+.f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); }
+.f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); }
+.f.fmt .m{ color:var(--warn); }
 .f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; }
 .f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
-.f.no .msg{ color:var(--no); } .f.fmt .msg{ color:var(--warn); } .f.show .msg{ color:var(--mute); }
+.f.no .msg{ color:var(--no); }
+.f.fmt .msg{ color:var(--warn); }
+.f.show .msg{ color:var(--mute); }
 .umf{ margin-top:10px; display:none; background:#F1F8F1; border:2px solid var(--ok); border-radius:10px; padding:8px 14px; font-size:14.5px; }
 .umf.on{ display:block; }
 .umf table{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:18px; margin:4px 0; }
@@ -69,6 +74,7 @@ svg.graph{ display:block; max-width:100%; height:auto; margin:4px 0 2px; }
   <p class="hinweis">Komma oder Punkt sind beide erlaubt. Steht beim Rechner ein <i>i</i> im Ergebnis, hat die Gleichung keine Lösung: Anzahl 0 eintragen.</p>
 </div>`,
  init:function(root){
+
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
@@ -216,5 +222,6 @@ function zeigen(){
 $('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
 $('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
 neu();
+
  }
 };

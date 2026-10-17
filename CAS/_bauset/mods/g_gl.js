@@ -7,7 +7,8 @@ GUIDES["gl"]={
 [data-g="gl"] .klein{ font-size:13px; display:flex; justify-content:space-between; }
 [data-g="gl"] .vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:18px; padding:0 1px; }
 [data-g="gl"] .ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
-[data-g="gl"] .wz{ white-space:nowrap; } [data-g="gl"] .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
+[data-g="gl"] .wz{ white-space:nowrap; }
+[data-g="gl"] .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
 [data-g="gl"] .lst{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:4px 9px; font:bold 16px 'Courier New',monospace; line-height:1.55; }
 [data-g="gl"] .lst .s{ background:#141a14; color:#d3ded4; }
 [data-g="gl"] .koef{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; }
@@ -17,13 +18,17 @@ GUIDES["gl"]={
 [data-g="gl"] .koef td{ text-align:center; padding:1px 8px; min-width:62px; }
 [data-g="gl"] .koef td.cur{ background:#141a14; color:#d3ded4; }
 [data-g="gl"] .koef .inp{ margin-top:auto; text-align:right; font-size:18px; font-weight:bold; min-height:24px; }
+[data-g="gl"] .panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
 [data-g="gl"] .chip.alpha{ background:#b8324a; }
 [data-g="gl"] .chip.w{ background:#f1f1f3; color:#111; border-color:#c9cbd1; }
 [data-g="gl"] .chip.b{ background:#2463c9; }
 [data-g="gl"] .chip i.v{ font-family:'Times New Roman',serif; font-size:15px; }
 [data-g="gl"] .task .term{ font-family:Cambria,Georgia,serif; font-size:21px; line-height:1.6; color:var(--ink); }
-[data-g="gl"] .task .term small{ font-size:15px; color:var(--mute); }`,
+[data-g="gl"] .task .term small{ font-size:15px; color:var(--mute); }
+[data-g="gl"] #next{ margin-left:auto; }
+@media (max-width:380px){ [data-g="gl"] .calc{ transform:scale(.92); transform-origin:top center; } }`,
  make:function(){
+
 // =====================================================================
 //  HOME-Bildschirm fx-991DE CW
 // =====================================================================
@@ -382,9 +387,9 @@ function render(){
   $('back').disabled=st===0&&pos===0;
   const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
   if(last&&fin) done[tr]=true;
-  $('next').className=fin?'go':'';
-  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').className='go';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Weiter ▶';
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=fin&&last&&!nextT; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '<span style="color:var(--mute)">Lesen – dann <b>Weiter</b>.</span>';
   hint();
@@ -426,7 +431,16 @@ return {
   ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
   render, press, next, back, KMAP,
   selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-  selectStep:function(i){ st=+i; pos=0; render(); }
+  selectStep:function(i){ st=+i; pos=0; render(); },
+  fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+    if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+    const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(pos<S.k.length){ pos=S.k.length; render(); } },
+  weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+  bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); },
+  goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+  snap:function(){ return {tr,st,pos,D:Object.assign({},done)}; },
+  restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); render(); }
 };
  }
 };
