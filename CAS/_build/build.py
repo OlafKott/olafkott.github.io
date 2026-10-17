@@ -17,6 +17,7 @@ TOPICS = [
     ('funk', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte (y&#8209;Werte) berechnen', '', 'Arbeitsblatt_CAS_Funktionswerte.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
+    ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '1., 2. und 3. Ableitung', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
 ]
 
 def read(p):
