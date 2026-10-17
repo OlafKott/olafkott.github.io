@@ -644,31 +644,10 @@ const T3=[
   {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",[`Reduzierte Stufenform: ${MOD.t.rref}, Matrix, <b>)</b>, ${E}`,`Rref(A) eintragen`,`Lösungsmenge <i>L</i> aus der letzten Spalte ablesen`,"Danach: Lösungscode eintragen"])}
 ];
 
-// ---------------- Teil 4: Sonderfälle
-const RREFB=[[1,0,-2,-5],[0,1,3,11],[0,0,0,0]];
-const RREFB8=[[1,0,-2,0],[0,1,3,0],[0,0,0,1]];
-const MB8=[[1,1,1,6],[2,1,-1,1],[3,2,0,'<b style="color:#C62828">8</b>']];
-const T4=[
-  {t:"Zweites LGS als MatB", a:GLB+MXP(MB,'B','erw'), k:MOD.DEF('B',3,4).concat(RK([1,1,1,6,2,1,-1,1,3,2,0,7]),['ac']), z:[],
-   d:`<p>Speichern Sie das LGS als <b>MatB</b> (3 Zeilen, 4 Spalten): ${MOD.t.def}.</p><p>Bei Gleichung III fehlt <i>z</i>: dort eine <b>0</b> eintragen. Am Ende <b>AC</b>.</p>`},
-  {t:"Rref(B): eine Nullzeile", a:GLB, k:MOD.RREF.concat(kB,[')',EX]), z:['res'],
-   d:`<p>${MOD.t.rref}, dann ${mB}, <b>)</b> und ${E}.</p>`+MXP(RREFB,'Rref(B)','erw')+`<p>Die letzte Zeile ist <b>0 0 0 | 0</b>, also 0 = 0. Das ist immer wahr – diese Gleichung sagt nichts mehr aus.</p>`},
-  {t:"Unendlich viele Lösungen", a:MXP(RREFB,'Rref(B)','erw'), k:[],
-   d:`<p>Es bleiben zwei Gleichungen für drei Unbekannte: <i>z</i> ist <b>frei wählbar</b>.</p><p style="font-family:Cambria,Georgia,serif;font-size:18px"><i>x</i> − 2<i>z</i> = −5 &nbsp;→&nbsp; <i>x</i> = −5 + 2<i>z</i><br><i>y</i> + 3<i>z</i> = 11 &nbsp;→&nbsp; <i>y</i> = 11 − 3<i>z</i></p><p>Das LGS hat <b>unendlich viele Lösungen</b>, z. B. <i>z</i> = 0: (−5 | 11 | 0).</p>`,
-   n:'Der Rechner meldet keinen Fehler! Sie müssen die Matrix selbst <b>lesen</b>.'},
-  {t:"Rechte Seite ändern: 7 → 8", a:GLB8+MXP(MB8,'B','erw'), k:['ac'].concat(MOD.EDIT('B'),['down','down','right','right','right','8',EX,'ac']),
-   d:`<p>Jetzt ändern wir in Gleichung III die rechte Seite von 7 auf <b>8</b>.</p><p>${MOD.t.edit} (MatB). Mit <b>▼ ▼</b> in Zeile 3, mit <b>▶ ▶ ▶</b> in Spalte 4. <b>8</b> und ${E}, dann <b>AC</b>.</p>`},
-  {t:"Rref(B): keine Lösung", a:GLB8, k:MOD.RREF.concat(kB,[')',EX]), z:['res'],
-   d:`<p>${MOD.t.rref}, ${mB}, <b>)</b>, ${E}.</p>`+MXP(RREFB8,'Rref(B)','erw')+`<p>Die letzte Zeile ist <b>0 0 0 | 1</b>, also <b>0 = 1</b>. Das ist ein <b>Widerspruch</b>.</p><p>Das LGS hat <b>keine Lösung</b>.</p>`},
-  {t:"Merkregel", k:[],
-   d:`<p>Schauen Sie immer auf die <b>letzte Zeile</b> von Rref:</p><ul style="font-size:15.5px;margin:0 0 10px;padding-left:20px"><li><b>0 0 1 | c</b> → genau eine Lösung</li><li><b>0 0 0 | 0</b> → unendlich viele Lösungen</li><li><b>0 0 0 | 1</b> → keine Lösung</li></ul>`,
-   n:'Ein LGS mit 2 Unbekannten speichern Sie als <b>2×3</b>-Matrix. Mehr als 3 Unbekannte gehen nicht: Die Matrix darf höchstens 4 Spalten haben.'},
-];
 const TRACKS={
   m:{name:"1 · LGS als Matrix speichern", start:()=>fresh(), steps:T1},
   r:{name:"2 · Ref: Stufenform", start:()=>fresh(PRE), steps:T2},
-  rr:{name:"3 · Rref: Lösung ablesen", start:()=>fresh(PRE), steps:T3},
-  s:{name:"4 · Keine oder unendlich viele Lösungen", start:()=>fresh(PRE), steps:T4}
+  rr:{name:"3 · Rref: Lösung ablesen", start:()=>fresh(PRE), steps:T3}
 };
 
 
@@ -676,7 +655,7 @@ const TRACKS={
 // =====================================================================
 //  Steuerung
 // =====================================================================
-const ORDER=["m","r","rr","s"];
+const ORDER=["m","r","rr"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const lbl=k=>LBL[k]||k;
