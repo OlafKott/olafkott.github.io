@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Übung Ableitung fx-991DE X</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:860px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.home{ display:inline-flex; align-items:center; gap:6px; text-decoration:none; font:600 14px system-ui,Arial,sans-serif; color:#1F4E99; border:1px solid var(--line); border-radius:999px; padding:5px 12px; white-space:nowrap; }
+.wrap{ max-width:860px; margin:16px auto 40px; padding:0 16px; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+.card h2{ margin:0 0 6px; font-size:18px; }
+.auftrag{ font-size:15.5px; margin:0 0 8px; }
+.term{ font-family:Cambria,Georgia,serif; font-size:24px; margin:4px 0 8px 18px; }
+.bereich{ display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 10px 18px; }
+.bereich span{ background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:3px 12px; font-size:15px; }
+.bereich b{ font-family:Cambria,Georgia,serif; font-size:17px; }
+.weg{ font-size:14px; color:var(--mute); line-height:1.9; }
+.taste{ display:inline-block; font:bold 12px Arial,sans-serif; background:#2f2f34; color:#fff; border-radius:7px; padding:1px 7px; }
+.taste.w{ background:#f4f4f6; color:#111; border:1px solid #9a9aa2; }
+.taste.b{ background:#2f6fd6; }
+.taste.sh{ background:#d9bf7c; color:#3a2c0a; }
+.round{ display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px; }
+.round b{ color:var(--warn); }
+.rows{ display:flex; flex-direction:column; gap:6px; }
+.f{ display:grid; grid-template-columns:150px 1fr 26px; align-items:center; gap:10px; padding:6px 8px; border-radius:8px; }
+.f .lab{ font-family:Cambria,Georgia,serif; font-size:18px; }
+.f .ins{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-family:Cambria,Georgia,serif; font-size:18px; }
+.f input{ font:inherit; font-family:system-ui,Arial,sans-serif; font-size:16px; width:110px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
+.f input.xs{ width:80px; }
+.f .m{ font-weight:bold; font-size:18px; text-align:center; }
+.f.ok{ background:var(--okbg); } .f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); } .f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); } .f.fmt .m{ color:var(--warn); }
+.f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; font-family:system-ui,Arial,sans-serif; }
+.f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
+.f.no .msg{ color:var(--no); } .f.fmt .msg{ color:var(--warn); } .f.show .msg{ color:var(--mute); }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
+.score{ font-size:16px; font-weight:bold; margin-top:12px; min-height:24px; }
+.stats{ font-size:13.5px; color:var(--mute); margin-top:4px; }
+.hinweis{ font-size:13.5px; color:var(--mute); }
+table.loes{ border-collapse:collapse; margin:10px 0 0; font-family:Cambria,Georgia,serif; font-size:15px; display:none; }
+table.loes.zeig{ display:table; }
+table.loes th, table.loes td{ border:1px solid #c3c8d0; padding:3px 10px; text-align:right; }
+table.loes th{ background:#e8edf5; font-weight:normal; }
+table.loes td.vw{ background:var(--warnbg); font-weight:bold; }
+@media (max-width:520px){ .f{ grid-template-columns:1fr 26px; } .f .lab{ grid-column:1 / -1; } }
+</style></head><body>
+<div class="top"><div class="in"><a class="home" href="index.html#dx" title="Übersicht">◀ Übersicht</a><h1>Übung: Ableitung an einer Stelle<small>CASIO fx-991DE X · Immer neue Aufgaben</small></h1><img src="data:image/png;base64,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" alt="RWB Essen fhr"></div></div>
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+    <div class="bereich" id="bereich"></div>
+    <div class="weg" id="weg"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div class="rows" id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+    <table class="loes" id="loes"></table>
+  </div>
+  <p class="hinweis">Komma oder Punkt sind beide erlaubt. Für das Minus können Sie - oder − tippen.</p>
+</div>
+<script>
+const MODEL='dex';
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[R(0,a.length-1)];
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const de=(v,d=2)=>r2(v).toFixed(d).replace('.',',').replace('-','−');
+const fmt=v=>String(Number(v.toPrecision(10))).replace('.',',').replace('-','−');
+// Polynom c=[c0,c1,c2,c3]
+function termHTML(nm,c){
+  let s='', first=true;
+  for(let n=3;n>=0;n--){ const v=c[n]; if(!v) continue;
+    const ab=Math.abs(v), xs=n===0?'':n===1?'<i>x</i>':`<i>x</i><sup>${n}</sup>`;
+    const k=(ab===1&&n>0)?'':fmt(ab);
+    s+=(first?(v<0?'−':''):(v<0?' − ':' + '))+k+xs; first=false; }
+  return `<i>${nm}</i>(<i>x</i>) = ${s}`;
+}
+const TC=['#1565C0','#D96C00','#7B1FA2'], TH=['#E3EEFB','#FFF1DF','#F3E7F7'];
+const fv=(c,x)=>c[0]+c[1]*x+c[2]*x*x+c[3]*x*x*x;
+const dv=(c,x)=>c[1]+2*c[2]*x+3*c[3]*x*x;
+const WEG={
+ dex:'<span class="taste">MENU</span> <span class="taste w">1</span> ▸ <span class="taste sh">SHIFT</span> <span class="taste">∫▭</span> (d/dx) ▸ Term eingeben ▸ <span class="taste">▶</span> ▸ Stelle ▸ <span class="taste w">=</span> · Neue Stelle: <span class="taste">◀</span> <span class="taste b">DEL</span> ▸ Zahl ▸ <span class="taste w">=</span> · Vorzeichen mit <span class="taste">(−)</span> · Bruch? <span class="taste">S⇔D</span>',
+ cw:'<span class="taste">CATALOG</span> ▸ Funktionsanalyse ▸ Ableitung(d/dx) ▸ Term eingeben ▸ <span class="taste">▶</span> ▸ Stelle ▸ <span class="taste">EXE</span> · Neue Stelle: <span class="taste">◀</span> <span class="taste">⌫</span> ▸ Zahl ▸ <span class="taste">EXE</span> · Vorzeichen mit <span class="taste sh">SHIFT</span> <span class="taste">−</span> · Bruch? <span class="taste">FORMAT</span> Dezimal'
+}[MODEL];
+const RUND='<b>Wichtig:</b> Ergebnisse auf <b>2 Stellen nach dem Komma</b> runden, z.&nbsp;B. <b>3,25</b> oder <b>−4,00</b>.';
+const stellen=(pool,n)=>{ const s=[...pool].sort(()=>Math.random()-.5).slice(0,n); return s.sort((a,b)=>a-b); };
+
+// ---------- Modus 1: Ableitung berechnen ----------
+function genAbl(){
+  const c=[pick([-3,-2,-1,1,2,4,5,0.5]), pick([-4,-3,-2,-1.5,1,2,3,0.5]), pick([-2,-1.5,-1,-0.5,0.5,1,1.5,2,3]), pick([1,-1,0.5,-0.5,0.25,2,-0.2,0.1])];
+  const xs=stellen([-3,-2,-1.5,-1,-0.5,0.5,1,1.5,2,2.5,3,4],4);
+  return {typ:'abl', nm:'f', h:"Ableitung an einer Stelle", auftrag:"Berechnen Sie mit dem Rechner die Ableitung der Funktion <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Gesucht", xs.map(x=>`<i>f</i> ′(${fmt(x)})`).join(', ')]], round:RUND,
+    zeilen:xs.map((x,i)=>({id:'z'+i, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs};
+}
+// ---------- Modus 2: Steigt oder fällt? ----------
+function genDeut(){
+  let c,xs;
+  for(let n=0;n<300;n++){
+    c=[pick([-2,-1,1,2,3]), 0, 0, pick([1,-1,0.5,-0.5,2])];
+    const p=pick([1,2,3,-1,-2]), q=pick([-3,-2,-1,1,2,3,4].filter(v=>v!==p)); // Nullstellen von f'
+    // f'(x)=3a(x-p)(x-q) -> c2=-1.5a(p+q), c1=3a*p*q
+    c[2]=-1.5*c[3]*(p+q); c[1]=3*c[3]*p*q;
+    if(Math.abs(c[2]*100-Math.round(c[2]*100))>1e-9) continue;
+    const pool=[-3,-2,-1,0,1,2,3,4,5].filter(x=>x!==p&&x!==q);
+    xs=stellen(pool,3).concat([p]).sort((a,b)=>a-b);
+    const sg=xs.map(x=>Math.sign(r2(dv(c,x))));
+    if(sg.includes(1)&&sg.includes(-1)) break;
+  }
+  return {typ:'deut', nm:'f', h:"Steigt oder fällt der Graph?", auftrag:"Berechnen Sie die Ableitung der Funktion <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Stellen", xs.map(fmt).join(' · ')]],
+    round:'<b>Gesucht:</b> <i>f</i> ′(<i>a</i>) und ob der Graph dort <b>steigt</b>, <b>fällt</b> oder eine <b>waagerechte</b> Tangente hat.',
+    zeilen:xs.map((x,i)=>({id:'d'+i, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs};
+}
+// ---------- Modus 3: Tangentensteigung an einer Parabel ----------
+function svgPar(c,xs,X0,X1){
+  const f=x=>fv(c,x), ys=xs.map(f);
+  let Y0=Math.min(-1,...ys)-1.5, Y1=Math.max(1,...ys)+1.5;
+  const u=Math.min(46, 400/(Y1-Y0), 560/(X1-X0)), W=(X1-X0)*u, H=(Y1-Y0)*u, X=x=>(x-X0)*u, Y=y=>(Y1-y)*u;
+  let o=`<svg viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" style="width:100%;max-width:${Math.round(W)}px;display:block;margin:6px 0 4px 18px;background:#fff;border:1px solid var(--line);border-radius:8px" font-family="Cambria,Georgia,serif"><defs><clipPath id="cpu"><rect width="${W}" height="${H}"/></clipPath><marker id="aru" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#333"/></marker></defs>`;
+  const st=(Y1-Y0)>14?2:1;
+  for(let i=Math.ceil(X0);i<=X1;i++) o+=`<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="${H}" stroke="#eceef2"/>`;
+  for(let j=Math.ceil(Y0/st)*st;j<=Y1;j+=st) o+=`<line x1="0" y1="${Y(j)}" x2="${W}" y2="${Y(j)}" stroke="#eceef2"/>`;
+  o+=`<line x1="2" y1="${Y(0)}" x2="${W-2}" y2="${Y(0)}" stroke="#333" stroke-width="1.3" marker-end="url(#aru)"/><line x1="${X(0)}" y1="${H-2}" x2="${X(0)}" y2="2" stroke="#333" stroke-width="1.3" marker-end="url(#aru)"/>`;
+  o+=`<text x="${W-6}" y="${Y(0)-6}" text-anchor="end" font-style="italic" font-size="14">x</text><text x="${X(0)+7}" y="13" font-style="italic" font-size="14">y</text>`;
+  for(let i=Math.ceil(X0);i<=X1-0.3;i++) if(i) o+=`<text x="${X(i)}" y="${Y(0)+14}" text-anchor="middle" font-size="10.5" fill="#555">${fmt(i)}</text>`;
+  for(let j=Math.ceil(Y0/st)*st;j<=Y1-0.5;j+=st) if(j) o+=`<text x="${X(0)-5}" y="${Y(j)+3.5}" text-anchor="end" font-size="10.5" fill="#555">${fmt(j)}</text>`;
+  let p=''; for(let k=0;k<=160;k++){ const x=X0+(X1-X0)*k/160; p+=`${X(x).toFixed(1)},${Y(f(x)).toFixed(1)} `; }
+  o+=`<polyline clip-path="url(#cpu)" fill="none" stroke="#9a9ea6" stroke-width="2.2" points="${p}"/>`;
+  xs.forEach((a,n)=>{ const m=dv(c,a), ya=f(a);
+    const [dl,dr]= n===0?[2.1,1.0]: n===2?[1.0,2.1]:[1.2,1.2];
+    o+=`<line clip-path="url(#cpu)" x1="${X(a-dl)}" y1="${Y(ya-m*dl)}" x2="${X(a+dr)}" y2="${Y(ya+m*dr)}" stroke="${TC[n]}" stroke-width="2.2"/><circle cx="${X(a)}" cy="${Y(ya)}" r="3.8" fill="${TC[n]}"/>`;
+    // Beschriftung senkrecht zur Tangente, auf der Außenseite der Parabel
+    const s=c[2]<0?1:-1, nx=-m*s, ny=s, L=Math.hypot(nx,ny), px=X(a)+nx/L*u*0.55, py=Y(ya)-ny/L*u*0.55;
+    o+=`<text x="${px}" y="${py+5}" text-anchor="middle" font-size="13" font-style="italic" fill="${TC[n]}" font-weight="bold">t<tspan font-size="9.5" dy="3">${n+1}</tspan></text>`; });
+  return o+'</svg>';
+}
+function genTan(){
+  const a=pick([0.25,-0.25]), h=pick([-1,0,1,2]), k=pick([-2,-1,1,2,3]);
+  const c=[a*h*h+k, -2*a*h, a, 0];
+  const off = [[-3,0,3],[-3,-1,2],[-2,1,3],[-3,0,2],[-2,0,3],[-3,1,3]];
+  const xs=pick(off).map(o=>h+o);
+  return {typ:'tan', nm:'f', h:"Tangentensteigung an einer Parabel", auftrag:"Im Schaubild sind Tangenten an die Parabel <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Gesucht","Steigung <i>m</i><sub>t</sub> jeder Tangente"]], round:RUND,
+    zeilen:xs.map((x,i)=>({id:'t'+i, nr:i+1, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs,
+    bild:svgPar(c,xs,Math.min(-1.5,xs[0]-1.6),Math.max(1.5,xs[2]+1.6))};
+}
+
+const MODES={abl:{name:"Ableitung berechnen",gen:genAbl}, deut:{name:"Steigt oder fällt?",gen:genDeut}, tan:{name:"Tangentensteigung",gen:genTan}};
+const ORDER=["abl","deut","tan"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+const $=id=>document.getElementById(id);
+const VERL=[["","– wählen –"],["s","steigt"],["f","fällt"],["w","waagerecht"]];
+const verl=v=>{ const r=r2(v); return r>0?'s':r<0?'f':'w'; };
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('h').textContent="Aufgabe: "+A.h; $('auftrag').innerHTML=A.auftrag+(A.typ==='tan'?' eingezeichnet. Bestimmen Sie die Steigungen mit dem Rechner.':''); $('term').innerHTML=A.term; $('weg').innerHTML=WEG;
+  $('bereich').innerHTML=A.bereich.map(([n,v])=>`<span>${n}: <b>${v}</b></span>`).join('')+(A.bild?`<div style="flex-basis:100%">${A.bild}</div>`:'');
+  $('round').innerHTML=A.round;
+  const nm=A.nm;
+  $('felder').innerHTML=A.zeilen.map(z=>`<div class="f" id="f_${z.id}"><span class="lab">${A.typ==='tan'?`<b style="color:${TC[z.nr-1]}">Tangente t<sub>${z.nr}</sub></b>`:`<i>x</i> = ${fmt(z.x)}`}</span><span class="ins"><i>${nm}</i> ′(${fmt(z.x)}) = ${A.typ==='tan'?'<span><i>m</i><sub>t</sub> =</span> ':''}<input id="i_${z.id}" inputmode="decimal" autocomplete="off" placeholder="0,00"${A.typ==='tan'?` style="border:2px solid ${TC[z.nr-1]};background:${TH[z.nr-1]}"`:''}>`+
+    (A.typ==='deut'?` <select id="s_${z.id}" style="font:inherit;font-family:system-ui,Arial,sans-serif;font-size:15px;padding:4px 6px;border:1px solid #b8bdc6;border-radius:6px;background:#f7f8fa">${VERL.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select>`:'')+
+    `</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  $('score').textContent=''; $('loes').className='loes'; $('loes').innerHTML='';
+  document.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+const near=(a,b)=>Math.abs(a-b)<0.0051;
+function pruefen(){
+  let ok=0, tot=A.zeilen.length;
+  A.zeilen.forEach(z=>{
+    const f=$('f_'+z.id), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.className='f'; m.textContent=''; msg.textContent='';
+    const raw=$('i_'+z.id).value;
+    if(!raw.trim()) return;
+    const p=parse(raw);
+    if(!p){ f.classList.add('fmt'); m.textContent='?'; msg.textContent='Bitte nur eine Zahl eintragen, z. B. 3,25.'; return; }
+    const soll=r2(z.soll), richtig=near(p.v,soll);
+    if(p.dec!==2){ f.classList.add('fmt'); m.textContent='!'; msg.textContent=`Bitte genau 2 Stellen nach dem Komma eintragen${richtig||Math.abs(p.v-z.soll)<0.01?' – der Wert selbst stimmt.':'.'}`; return; }
+    if(richtig){
+      if(A.typ==='deut'){
+        const sv=$('s_'+z.id).value;
+        if(!sv){ f.classList.add('fmt'); m.textContent='!'; msg.textContent='Der Wert stimmt. Wählen Sie noch: steigt, fällt oder waagerecht.'; return; }
+        if(sv!==verl(z.soll)){ f.classList.add('no'); m.textContent='✗'; msg.textContent='Der Wert stimmt, aber die Deutung nicht: positiv = steigt, negativ = fällt, 0 = waagerecht.'; return; }
+      }
+      f.classList.add('ok'); m.textContent='✓'; ok++; return; }
+    f.classList.add('no'); m.textContent='✗';
+    let t='Das stimmt noch nicht. Prüfen Sie den Term – besonders die Exponenten (mit ▶ aus dem Exponenten heraus).';
+    if(Math.abs(p.v-z.soll)<0.011) t='Fast: Achten Sie auf das Runden (ab 5 aufrunden).';
+    else if(near(p.v,r2(z.fw))) t='Das ist der Funktionswert '+A.nm+'('+fmt(z.x)+'), nicht die Ableitung. Nutzen Sie d/dx.';
+    else if(near(p.v,r2(z.flip))) t='Das ist der Wert für −x. Geben Sie die Stelle mit dem richtigen Vorzeichen ein – negative Zahlen mit '+(MODEL==='dex'?'(−)':'SHIFT −')+'.';
+    else if(A.zeilen.some(w=>w!==z&&near(p.v,r2(w.soll)))) t='Dieser Wert gehört zu einer anderen Stelle.';
+    else if(near(p.v,-soll)) t='Das Vorzeichen stimmt nicht. Haben Sie das Minus im Term richtig eingegeben?';
+    msg.textContent=t;
+  });
+  stat.a++; if(ok===tot) stat.r++;
+  $('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  $('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  const WT={s:'steigt',f:'fällt',w:'waagerecht'};
+  A.zeilen.forEach(z=>{
+    const f=$('f_'+z.id), msg=f.querySelector('.msg');
+    f.className='f show'; f.querySelector('.m').textContent='';
+    $('i_'+z.id).value=de(z.soll);
+    if(A.typ==='deut') $('s_'+z.id).value=verl(z.soll);
+    msg.textContent = (Math.abs(z.soll-r2(z.soll))>1e-9 ? 'Rechner: '+fmt(z.soll)+' → gerundet '+de(z.soll) : 'Genau '+de(z.soll)) + (A.typ==='deut'?' → Graph '+WT[verl(z.soll)]:'');
+  });
+  $('loes').innerHTML=`<tr><th><i>x</i></th><th><i>${A.nm}</i>(<i>x</i>)</th><th><i>${A.nm}</i> ′(<i>x</i>)</th></tr>`+A.xs.map(x=>`<tr><td>${fmt(x)}</td><td>${fmt(fv(A.c,x))}</td><td>${fmt(dv(A.c,x))}</td></tr>`).join('');
+  $('loes').className='loes zeig';
+  $('score').textContent='';
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+neu();
+</script>
+</body></html>

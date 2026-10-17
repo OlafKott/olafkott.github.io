@@ -150,19 +150,25 @@ const DATA={
      ["stat","fx991_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Lage_Streuung.pdf","fx991_Uebung_Lage_Streuung.html"],
      ["funk","fx991_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Funktionswerte.pdf","fx991_Uebung_Funktionswerte.html"],
      ["gl","fx991_Gleichungen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Gleichungen.pdf","fx991_Uebung_Gleichungen.html"],
-     ["wt","fx991_Wertetabelle_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Wertetabelle.pdf","fx991_Uebung_Wertetabelle.html"]],
+     ["wt","fx991_Wertetabelle_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Wertetabelle.pdf","fx991_Uebung_Wertetabelle.html"],
+     ["abl","fx991_Ableitung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Ableitung.pdf","fx991_Uebung_Ableitung.html"],
+     ["int","fx991_Integrale_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_Integrale.pdf","fx991_Uebung_Integrale.html"],
+     ["lgs","fx991_LGS_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991_LGS.pdf","fx991_Uebung_LGS.html"]],
  dx:[["grund","fx991DEX_Grundlagen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Grundlagen.pdf","fx991DEX_Uebung_Grundlagen.html"],
      ["stat","fx991DEX_Lage_Streuung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Lage_Streuung.pdf","fx991DEX_Uebung_Lage_Streuung.html"],
      ["funk","fx991DEX_Funktionswerte_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Funktionswerte.pdf","fx991DEX_Uebung_Funktionswerte.html"],
      ["gl","fx991DEX_Gleichungen_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Gleichungen.pdf","fx991DEX_Uebung_Gleichungen.html"],
-     ["wt","fx991DEX_Wertetabelle_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Wertetabelle.pdf","fx991DEX_Uebung_Wertetabelle.html"]]
+     ["wt","fx991DEX_Wertetabelle_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Wertetabelle.pdf","fx991DEX_Uebung_Wertetabelle.html"],
+     ["abl","fx991DEX_Ableitung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Ableitung.pdf","fx991DEX_Uebung_Ableitung.html"],
+     ["int","fx991DEX_Integrale_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Integrale.pdf","fx991DEX_Uebung_Integrale.html"],
+     ["lgs","fx991DEX_LGS_Schritt_fuer_Schritt.html","",""]]
 };
-const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte",gl:"Gleichungen lösen",wt:"Wertetabellen"};
+const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte",gl:"Gleichungen lösen",wt:"Wertetabellen",abl:"Ableitung an einer Stelle",int:"Integrale",lgs:"Lineare Gleichungssysteme"};
 const stage=document.getElementById('stage'), toc=document.getElementById('toc');
 function pick(m){
   toc.innerHTML=`<div class="model">${m==='cw'?'fx-991DE CW':'fx-991DE X'}</div>`+DATA[m].map(([ic,tour,pdf,ueb],i)=>`<div class="topic"><div class="th"><span class="num">${i+1}</span><span class="ttl">${NAME[ic]}</span></div>
     <div class="acts"><a class="act tour" href="${BASE+tour}" target="_blank" rel="noopener">${IC.tour}<span>Anleitung</span></a>
-    <a class="act pdf" href="${BASE+pdf}" target="_blank" rel="noopener">${IC.pdf}<span>Arbeitsblatt</span></a>
+    ${pdf?`<a class="act pdf" href="${BASE+pdf}" target="_blank" rel="noopener">${IC.pdf}<span>Arbeitsblatt</span></a>`:'<span class="act gap"></span>'}
     ${ueb?`<a class="act ueb" href="${BASE+ueb}" target="_blank" rel="noopener">${IC.ueb}<span>Übung</span></a>`:'<span class="act gap"></span>'}</div></div>`).join('');
   stage.className='stage pick pick-'+m;
   try{ history.replaceState(null,'','#'+m); }catch(e){}
