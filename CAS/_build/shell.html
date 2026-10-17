@@ -90,6 +90,9 @@ button{ font-family:inherit; }
 .right .gpanel .tabs.solo{ display:none; }
 .right .gpanel .pnote{ font-size:13px; color:var(--mute); margin:-4px 0 10px; }
 .right .gpanel .pnote:empty{ display:none; }
+.right .gpanel .btns{ flex-wrap:wrap; }
+.right .gpanel #skip{ margin-left:auto; }
+.right .gpanel #next{ margin-left:0; }
 .topic:nth-child(7){ animation-delay:.3s }
 .tmain .ttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); }
 .act.phold{ visibility:hidden; pointer-events:none; }
@@ -180,7 +183,8 @@ TOPICS.forEach(t=>{
   const g=G[t.id]=GUIDES[t.id].make(scope(t.id));
   p.querySelector('#pnote').innerHTML=GUIDES[t.id].note||'';
   if(g.ORDER.length<2) p.querySelector('#tabs').classList.add('solo');
-  p.querySelector('#next').onclick=()=>g.fwd();
+  p.querySelector('#next').onclick=()=>g.weiter();
+  p.querySelector('#skip').onclick=()=>g.fwd();
   p.querySelector('#back').onclick=()=>g.bwd();
   p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
   p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };

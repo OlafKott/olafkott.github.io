@@ -1152,6 +1152,9 @@ button{ font-family:inherit; }
 .right .gpanel .tabs.solo{ display:none; }
 .right .gpanel .pnote{ font-size:13px; color:var(--mute); margin:-4px 0 10px; }
 .right .gpanel .pnote:empty{ display:none; }
+.right .gpanel .btns{ flex-wrap:wrap; }
+.right .gpanel #skip{ margin-left:auto; }
+.right .gpanel #next{ margin-left:0; }
 .topic:nth-child(7){ animation-delay:.3s }
 .tmain .ttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); }
 .act.phold{ visibility:hidden; pointer-events:none; }
@@ -1501,7 +1504,7 @@ function render(){
   if(last&&fin) done[tr]=true;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -1561,6 +1564,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -1813,7 +1817,7 @@ function render(){
   const done=pos>=S.k.length;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=done&&last&&!nextT;
+  $('next').disabled=done&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').innerHTML=S.k.length? (done?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
 }
@@ -1867,6 +1871,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -2298,7 +2303,7 @@ function render(){
   const done=pos>=S.k.length;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=done&&last&&!nextT;
+  $('next').disabled=done&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').innerHTML=S.k.length? (done?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
 }
@@ -2352,6 +2357,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -2785,7 +2791,7 @@ function render(){
   if(last&&fin){ done[tr]=true; $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join(''); }
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').style.display=(S.ab||!S.k.length)?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -2847,6 +2853,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -3271,7 +3278,7 @@ function render(){
   if(last&&fin) done[tr]=true;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -3331,6 +3338,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -3807,7 +3815,7 @@ function render(){
   if(last&&fin) done[tr]=true;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').style.display=S.ab?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -3867,6 +3875,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -4323,7 +4332,7 @@ function render(){
   if(last&&fin) done[tr]=true;
   $('next').className='go';
   $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT;
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
   $('stat').style.display=(S.ab||!S.k.length)?'none':'flex';
   $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
   hint();
@@ -4383,6 +4392,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };
  }
@@ -4555,7 +4565,7 @@ let mode='toc', active=null;   // mode: toc | g | u
 //  Anleitungen: je ein eigenes Panel, ein gemeinsamer Rechner
 // ---------------------------------------------------------------
 const PANEL={}, G={};
-const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="pnote" id="pnote"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="keys" id="keys"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>';
+const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="pnote" id="pnote"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="keys" id="keys"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="skip" title="Direkt zum nächsten Schritt">Überspringen ⏭</button><button id="next">Weiter ▶</button></div>';
 function scope(id){
   const on=()=>active===id&&mode==='g';
   return {
@@ -4570,7 +4580,8 @@ TOPICS.forEach(t=>{
   const g=G[t.id]=GUIDES[t.id].make(scope(t.id));
   p.querySelector('#pnote').innerHTML=GUIDES[t.id].note||'';
   if(g.ORDER.length<2) p.querySelector('#tabs').classList.add('solo');
-  p.querySelector('#next').onclick=()=>g.fwd();
+  p.querySelector('#next').onclick=()=>g.weiter();
+  p.querySelector('#skip').onclick=()=>g.fwd();
   p.querySelector('#back').onclick=()=>g.bwd();
   p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
   p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };

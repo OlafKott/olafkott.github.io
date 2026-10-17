@@ -119,6 +119,9 @@ def guide(gid, folder, core):
     js2, n1 = re.subn(r"\$\('next'\)\.textContent=\w+ \? (\(last \? .*?: 'Weiter ▶'\)) : 'Überspringen';", r"$('next').textContent=\1;", js2)
     js2, n2 = re.subn(r"\$\('next'\)\.className=\w+\?'go':'';", "$('next').className='go';", js2)
     assert n1 == 1 and n2 == 1, (gid, 'weiter', n1, n2)
+    # Überspringen-Button mitführen (am Ende der letzten Spur gesperrt)
+    js2, n3 = re.subn(r"(\$\('next'\)\.disabled=[^;]*;)", r"\1 { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }", js2)
+    assert n3 == 1, (gid, 'skip', n3)
     api = '''
   return {
     ORDER, TRACKS, KMAP, render, press, next, back,
@@ -130,6 +133,7 @@ def guide(gid, folder, core):
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };'''
     mod = f'/* ===== Anleitung: {gid} ===== */\nGUIDES["{gid}"]={{\n note:{json.dumps(small, ensure_ascii=False)},\n make:function(__D){{\n{js2.strip()}\n{api}\n }}\n}};\n'
@@ -167,6 +171,9 @@ assert 'id="scr"' in calc
 panels_same = len({g['panel'] for g in G.values()}) == 1
 PANEL_HTML = '<div class="tabs" id="tabs"></div><div class="pnote" id="pnote"></div>' + G['grund']['panel'].strip()
 PANEL_HTML = re.sub(r'\s*\n\s*', '', PANEL_HTML)
+_b = '<button id="back">◀ Zurück</button><button id="next">Überspringen</button>'
+assert _b in PANEL_HTML, 'btns'
+PANEL_HTML = PANEL_HTML.replace(_b, '<button id="back">◀ Zurück</button><button id="skip" title="Direkt zum nächsten Schritt">Überspringen ⏭</button><button id="next">Weiter ▶</button>')
 
 
 topics_js = json.dumps([dict(id=g, dir=f, pdf=p, ueb=bool(u), title=ti, sub=su) for g, f, c, u, ti, su, p in TOPICS], ensure_ascii=False)
