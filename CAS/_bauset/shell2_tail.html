@@ -31,10 +31,12 @@
   <div class="cwrap m-cw" id="w_cw" data-m="cw">
 {{CALC_CW}}
     <button class="pickcap" data-pick="cw">fx-991DE CW<small>schwarz</small></button>
+    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="cwrap m-dx" id="w_dx" data-m="dx">
 {{CALC_DX}}
     <button class="pickcap" data-pick="dx">fx-991DE X<small>weiß</small></button>
+    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="right" id="right">
     <section class="view toc" id="vToc">
@@ -287,6 +289,22 @@ window.addEventListener('popstate',()=>route({nohist:true}));
 vToc.hidden=true;
 homeScreen('cw',0,false); homeScreen('dx',0,false); sizePick(true);
 if(location.hash) route({nohist:true, instant:true});
+// ---------- Handy: Display oben festhalten, Tasten einblendbar, Taste im Text antippbar ----------
+(function(){
+  const mq=window.matchMedia('(max-width:620px), (max-height:520px)');
+  const upd=()=>{ APP.classList.toggle('phone',mq.matches); document.documentElement.style.setProperty('--barh',document.querySelector('.bar').offsetHeight+'px'); };
+  window.addEventListener('resize',upd);
+  mq.addEventListener ? mq.addEventListener('change',upd) : mq.addListener(upd); upd();
+  document.querySelectorAll('.keytog').forEach(b=>b.addEventListener('click',()=>{
+    const open=APP.classList.toggle('keys-open');
+    document.querySelectorAll('.keytog').forEach(x=>x.textContent=open?'Tasten ausblenden':'Tasten einblenden');
+  }));
+  $('right').addEventListener('click',e=>{
+    if(!APP.classList.contains('phone')||mode!=='g') return;
+    const c=e.target.closest('.stat .chip.now, .chips .chip.now'); if(!c) return;
+    const k=STAGE.querySelector('.cwrap:not([hidden]) .calc .k.hit'); if(k) k.click();
+  });
+})();
 })();
 </script>
 </body></html>

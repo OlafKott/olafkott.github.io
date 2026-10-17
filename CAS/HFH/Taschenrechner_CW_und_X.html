@@ -928,6 +928,28 @@ button{ font-family:inherit; }
 .shell[data-mode="pick"] .calc .k{ pointer-events:none; }
 .cwrap.gone{ opacity:0; transform:scale(.94) translateY(8px) !important; }
 .cwrap.fly{ transition:transform .55s cubic-bezier(.2,.7,.2,1) !important; }
+
+/* ---------- Handy (schmale oder niedrige Bildschirme) ---------- */
+.keytog{ display:none; margin:6px auto 0; border:1px solid var(--line); background:#fff; border-radius:999px; padding:5px 14px; font:600 13px system-ui,Arial,sans-serif; color:var(--lf); cursor:pointer; }
+.shell.phone[data-mode="g"] .keytog{ display:inline-block; }
+.shell.phone[data-mode="g"]:not(.keys-open) .calc{ padding-top:10px !important; padding-bottom:10px !important; border-radius:18px !important; }
+.shell.phone[data-mode="g"]:not(.keys-open) .calc .head,
+.shell.phone[data-mode="g"]:not(.keys-open) .calc .keys,
+.shell.phone[data-mode="g"]:not(.keys-open) .calc .nums,
+.shell.phone[data-mode="g"]:not(.keys-open) .calc .ctl,
+.shell.phone[data-mode="g"]:not(.keys-open) .calc .fk{ display:none !important; }
+.shell.phone .stat .chip.now, .shell.phone .chips .chip.now{ cursor:pointer; }
+.shell.phone .stat:has(.chip.now)::after{ content:"antippen"; font-size:12.5px; color:var(--mute); }
+@media (max-width:620px){
+  .shell.phone[data-mode="toc"] .cwrap, .shell.phone[data-mode="u"] .cwrap{ display:none !important; }
+  .shell.phone[data-mode="g"] .cwrap{ position:sticky; top:var(--barh,0px); z-index:5; flex:1 1 100%; margin:-16px -16px 0; padding:8px 16px 6px; background:var(--bg); box-shadow:0 6px 12px -8px rgba(0,0,0,.25); }
+  .shell.phone[data-mode="g"].keys-open .cwrap{ position:static; }
+}
+@media (min-width:621px) and (max-height:520px){
+  .shell.phone[data-mode="g"] .cwrap{ position:sticky; top:calc(var(--barh,0px) + 8px); z-index:5; }
+  .shell.phone[data-mode="g"].keys-open .cwrap{ position:static; }
+}
+
 .right{ flex:1 1 360px; max-width:680px; min-width:0; position:relative; }
 
 /* Rechner-Zustände */
@@ -1060,6 +1082,7 @@ button{ font-family:inherit; }
   </div>
 
     <button class="pickcap" data-pick="cw">fx-991DE CW<small>schwarz</small></button>
+    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="cwrap m-dx" id="w_dx" data-m="dx">
 <div class="calc ex">
@@ -1129,6 +1152,7 @@ button{ font-family:inherit; }
   </div>
 
     <button class="pickcap" data-pick="dx">fx-991DE X<small>weiß</small></button>
+    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="right" id="right">
     <section class="view toc" id="vToc">
@@ -13462,6 +13486,22 @@ window.addEventListener('popstate',()=>route({nohist:true}));
 vToc.hidden=true;
 homeScreen('cw',0,false); homeScreen('dx',0,false); sizePick(true);
 if(location.hash) route({nohist:true, instant:true});
+// ---------- Handy: Display oben festhalten, Tasten einblendbar, Taste im Text antippbar ----------
+(function(){
+  const mq=window.matchMedia('(max-width:620px), (max-height:520px)');
+  const upd=()=>{ APP.classList.toggle('phone',mq.matches); document.documentElement.style.setProperty('--barh',document.querySelector('.bar').offsetHeight+'px'); };
+  window.addEventListener('resize',upd);
+  mq.addEventListener ? mq.addEventListener('change',upd) : mq.addListener(upd); upd();
+  document.querySelectorAll('.keytog').forEach(b=>b.addEventListener('click',()=>{
+    const open=APP.classList.toggle('keys-open');
+    document.querySelectorAll('.keytog').forEach(x=>x.textContent=open?'Tasten ausblenden':'Tasten einblenden');
+  }));
+  $('right').addEventListener('click',e=>{
+    if(!APP.classList.contains('phone')||mode!=='g') return;
+    const c=e.target.closest('.stat .chip.now, .chips .chip.now'); if(!c) return;
+    const k=STAGE.querySelector('.cwrap:not([hidden]) .calc .k.hit'); if(k) k.click();
+  });
+})();
 })();
 </script>
 </body></html>
