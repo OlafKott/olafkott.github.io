@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-991DE CW Zeilenstufenform</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; --gold:#d2ad5b; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.tabs button.fertig::after{ content:" ✓"; color:var(--ab); font-weight:bold; }
+.tabs button.on.fertig::after{ color:#9fe0a5; }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner fx-991DE CW ---------- */
+.calc{ width:330px; flex:0 0 330px; background:#1b1b1e; border-radius:30px; padding:16px 14px 18px; box-shadow:0 6px 22px rgba(0,0,0,.25), inset 0 0 0 2px #2c2c31; }
+.head{ display:flex; justify-content:space-between; align-items:flex-start; padding:0 6px 8px; }
+.logo{ color:#e9e9ec; font:900 19px Arial,sans-serif; letter-spacing:.5px; line-height:1; }
+.logo small{ display:block; font:bold 10.5px Arial,sans-serif; letter-spacing:.3px; margin-top:5px; color:#cfcfd4; }
+.solar{ width:104px; height:34px; border-radius:5px; background:linear-gradient(135deg,#2a1a1a,#3a2222 60%,#2a1818); box-shadow:inset 0 0 0 1px #000; }
+.bezel{ background:#232327; border-radius:10px; padding:9px 9px 6px; box-shadow:inset 0 0 0 1px #111; }
+.scr{ width:280px; height:118px; margin:0 auto; background:#d3ded4; border-radius:3px; position:relative; overflow:hidden; color:#141a14; font-family:Arial,Helvetica,sans-serif; box-shadow:inset 0 0 6px rgba(0,0,0,.25); }
+.cw{ text-align:right; font:12px Arial,sans-serif; letter-spacing:5px; color:#bdbdc4; margin-top:5px; padding-right:4px; }
+.keys{ display:grid; grid-template-columns:repeat(6,1fr); column-gap:4px; row-gap:2px; margin-top:12px; position:relative; }
+.nums{ display:grid; grid-template-columns:repeat(5,1fr); column-gap:7px; row-gap:3px; margin-top:4px; }
+.c{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; position:relative; z-index:1; }
+.lb{ font:bold 9px Arial,sans-serif; color:#e3e3e7; height:12px; letter-spacing:.2px; white-space:nowrap; }
+.sl{ font:bold 10px 'Times New Roman',Georgia,serif; color:var(--gold); height:13px; line-height:13px; white-space:nowrap; }
+.sl.sm{ font:bold 9px Arial,sans-serif; }
+.k{ font:600 13px Arial,sans-serif; color:#f1f1f3; background:radial-gradient(circle at 50% 35%,#55555c,#3a3a40 70%); border:0; border-radius:50%; width:34px; height:30px; padding:0; cursor:pointer; box-shadow:0 2px 0 #0b0b0d; transition:transform .15s, box-shadow .15s; display:flex; align-items:center; justify-content:center; line-height:1; }
+.k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.nums .k{ width:46px; height:38px; font-size:19px; border-radius:48%; }
+.k.small{ width:26px; height:24px; font-size:9px; }
+.k.shift{ background:radial-gradient(circle at 50% 35%,#efe3bf,#b99b55 75%); color:#3a2c0a; }
+.k.ok{ background:#121214; color:#9a9aa1; font-size:11px; width:32px; height:32px; border-radius:9px; }
+.k.ar{ background:#121214; color:#9a9aa1; font-size:11px; }
+.k.txt{ font-size:9.5px; letter-spacing:-.2px; }
+.k sup{ font-size:8px; } .nums .k sup{ font-size:10px; }
+.bx{ display:inline-block; width:7px; height:8px; border:1.3px solid currentColor; border-radius:1px; vertical-align:middle; }
+.bx.f{ background:currentColor; }
+.mf{ display:inline-flex; flex-direction:column; align-items:center; gap:1px; }
+.mf i{ display:block; width:9px; height:6px; border:1.3px solid currentColor; border-radius:1px; }
+.mf b{ display:block; width:12px; height:1.3px; background:currentColor; }
+.dpad{ grid-column:3/6; grid-row:1/4; position:relative; z-index:0; }
+.dpad::before,.dpad::after{ content:""; position:absolute; background:#0d0d0f; border-radius:16px; }
+.dpad::before{ left:31%; right:31%; top:6px; bottom:4px; }
+.dpad::after{ top:36%; bottom:28%; left:2px; right:2px; }
+.pg{ grid-column:6; grid-row:1/3; justify-self:center; align-self:center; width:34px; height:64px; background:#2d2d32; border-radius:17px; display:flex; flex-direction:column; justify-content:space-around; align-items:center; color:#bbb; font-size:12px; z-index:1; }
+.pg .k{ width:28px; height:26px; background:transparent; box-shadow:none; color:#bbb; font-size:13px; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.14); z-index:3; position:relative; }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+.k.held{ box-shadow:0 0 0 3px #fff, 0 0 12px 3px rgba(255,255,255,.75); }
+@keyframes wack{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+
+.list{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 0; font-size:13.5px; }
+.list .ti{ font-size:10px; font-weight:bold; padding:0 7px 1px; border-bottom:1px solid #141a14; margin-bottom:2px; }
+.list div.it{ padding:1px 9px; height:19px; line-height:18px; white-space:nowrap; }
+.list div.it.sel{ background:#141a14; color:#d3ded4; }
+.home{ position:absolute; inset:0; padding:6px 14px 4px 8px; }
+.home .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px 6px; }
+.home .ic{ position:relative; height:49px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:2px 0 3px; border-radius:2px; }
+.home .ic svg{ width:40px; height:17px; margin-bottom:1px; }
+.home .ic .an{ font:13.5px 'Arial Narrow','Roboto Condensed',Arial,sans-serif; letter-spacing:-.3px; line-height:1.1; white-space:nowrap; }
+.home .ic .bd{ position:absolute; top:3px; right:5px; width:11px; height:11px; border-radius:50%; background:#141a14; color:#d3ded4; font:bold 8.5px Arial,sans-serif; line-height:11px; text-align:center; }
+.home .ic.sel{ background:#141a14; color:#d3ded4; }
+.home .ic.sel .bd{ background:#d3ded4; color:#141a14; }
+
+/* Display */
+.sb{ height:13px; display:flex; align-items:center; gap:4px; padding:1px 4px 0; font:bold 9px Arial,sans-serif; }
+.sb .ind{ background:#141a14; color:#d3ded4; padding:0 2px; border-radius:1px; line-height:10px; height:10px; }
+.sb .ind.a{ background:#7a1a2a; }
+.sb .sp{ flex:1; }
+.app{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; justify-content:space-between; }
+.ein{ font-size:16px; min-height:30px; display:flex; align-items:center; flex-wrap:nowrap; white-space:nowrap; overflow:hidden; }
+.aus{ font-size:21px; text-align:right; min-height:30px; display:flex; justify-content:flex-end; align-items:center; font-weight:bold; white-space:nowrap; gap:6px; }
+.aus .lab{ font-size:17px; font-weight:normal; margin-right:auto; }
+.klein{ font-size:13px; display:flex; justify-content:space-between; }
+.vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:18px; padding:0 1px; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 2px; font-size:13px; line-height:1.15; }
+.fr > span{ padding:0 2px; min-width:9px; }
+.fr > span:first-child{ border-bottom:1.5px solid currentColor; }
+.aus .fr{ font-size:15px; }
+.ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
+.wz{ white-space:nowrap; } .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
+.caret{ display:inline-block; width:1.5px; height:18px; background:#141a14; animation:blink 1s steps(1) infinite; vertical-align:middle; margin-left:1px; } @keyframes blink{ 50%{opacity:0} }
+.ziel{ outline:2.5px solid var(--hit); outline-offset:-2px; animation:pulse 1.1s ease-in-out infinite; }
+@keyframes pulse{ 50%{ outline-color:rgba(242,183,5,.25); } }
+.offs{ position:absolute; inset:0; background:#c9d4ca; }
+.lst{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:4px 9px; font:bold 16px 'Courier New',monospace; line-height:1.55; }
+.lst .s{ background:#141a14; color:#d3ded4; }
+.koef{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; }
+.koef .kt{ font-size:14px; text-align:center; font-family:'Times New Roman',serif; }
+.koef table{ border-collapse:collapse; margin:3px auto 0; font-size:14px; }
+.koef th{ font:italic bold 14px 'Times New Roman',serif; padding:0 10px; border-bottom:1.5px solid #141a14; }
+.koef td{ text-align:center; padding:1px 8px; min-width:62px; }
+.koef td.cur{ background:#141a14; color:#d3ded4; }
+.koef .inp{ margin-top:auto; text-align:right; font-size:18px; font-weight:bold; min-height:24px; }
+
+/* Panel */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.prog i.abp{ background:#bfe3c3; } .prog i.abp.done{ background:#7cbf84; } .prog i.abp.now{ background:var(--ab); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.chips{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.shift{ background:#c9a54a; color:#2b2005; }
+.chip.alpha{ background:#b8324a; }
+.chip.w{ background:#f1f1f3; color:#111; border-color:#c9cbd1; }
+.chip.b{ background:#2463c9; }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.chip sup{ font-size:9px; }
+.chip i.v{ font-family:'Times New Roman',serif; font-size:15px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.ab{ border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px; }
+.ab .abt{ font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.ab .abt span{ font-size:22px; }
+.ab ul{ margin:0 0 8px; padding-left:20px; font-size:15px; }
+.ab li{ margin-bottom:3px; }
+.ab p{ font-size:14.5px; }
+.task{ border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc; }
+.task .auf{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute); }
+.task .term{ font-family:Cambria,Georgia,serif; font-size:21px; line-height:1.6; color:var(--ink); }
+.task .term small{ font-size:15px; color:var(--mute); }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+.btns button:disabled{ opacity:.4; cursor:default; }
+#next{ margin-left:auto; }
+.opt{ font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px; }
+.hint{ font-size:12.5px; color:var(--mute); margin-top:10px; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+
+/* ---------- Matrizen: Display ---------- */
+.list{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 0; font-size:13.5px; }
+.list .ti{ font-size:10px; font-weight:bold; padding:0 7px 1px; border-bottom:1px solid #141a14; margin-bottom:2px; }
+.list div.it{ padding:1px 9px; height:19px; line-height:18px; white-space:nowrap; }
+.list div.it.sel{ background:#141a14; color:#d3ded4; }
+.lst.xs{ font:bold 13.5px 'Courier New',monospace; line-height:1.38; padding:2px 8px; }
+.lst.xs div{ white-space:nowrap; }
+.mat{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 6px 3px; display:flex; flex-direction:column; }
+.mat .mh{ position:absolute; left:6px; top:2px; font:bold 11px Arial,sans-serif; }
+.mat table{ border-collapse:collapse; margin:0 auto; font-size:14px; }
+.mat th{ font:bold 11px Arial,sans-serif; padding:0 6px; border-bottom:1.5px solid #141a14; }
+.mat td{ text-align:center; padding:0 5px; min-width:54px; height:19px; line-height:19px; }
+.mat td.rn{ min-width:12px; font-size:11px; padding:0 3px 0 0; border-right:1px solid #141a14; }
+.mat td.cur{ background:#141a14; color:#d3ded4; }
+.mat.m3 table{ font-size:13px; } .mat.m3 td{ height:17px; line-height:17px; min-width:44px; }
+.mat .inp{ margin-top:auto; text-align:right; font-size:17px; font-weight:bold; min-height:22px; }
+.mres{ position:absolute; left:0; right:0; top:13px; bottom:0; display:flex; align-items:center; justify-content:center; padding:2px 6px; }
+.mres .ml{ position:absolute; left:6px; top:2px; font:bold 11px Arial,sans-serif; }
+table.mx{ border-collapse:separate; border-spacing:0; border-left:1.6px solid #141a14; border-right:1.6px solid #141a14; border-radius:5px; font-size:15px; font-weight:bold; }
+table.mx td{ padding:0 7px; text-align:right; height:21px; }
+table.mx .fr{ font-size:11px; }
+.aus.meld{ font-size:19px; text-align:center; justify-content:center; line-height:1.15; white-space:normal; }
+/* ---------- Matrizen: Panel ---------- */
+.mxw{ display:inline-flex; align-items:center; gap:6px; margin:0 16px 4px 0; font-family:Cambria,Georgia,serif; font-size:19px; white-space:nowrap; }
+table.mxp{ border-collapse:separate; border-spacing:0; border-left:2px solid #1d1d1f; border-right:2px solid #1d1d1f; border-radius:7px; font-family:Cambria,Georgia,serif; font-size:17px; display:inline-table; vertical-align:middle; }
+table.mxp td{ padding:1px 9px; text-align:right; }
+.frp{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:13px; line-height:1.1; }
+.frp > span:first-child{ border-bottom:1.2px solid currentColor; }
+.task .term small{ display:block; }
+#dd .mxw{ margin:2px 0 10px; }
+
+table.mxp td.rs{ border-left:1.5px solid #1d1d1f; }
+table.lgs{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:17px; margin:0 0 6px; }
+table.lgs td{ padding:0 3px; text-align:right; }
+table.lgs td:first-child{ font:bold 12px Arial,sans-serif; color:var(--mute); padding-right:10px; text-align:left; }
+.mat.m4 td{ min-width:38px; } .mat.m4 table{ font-size:13px; }
+table.mx td{ padding:0 5px; }
+</style></head><body>
+<div class="top"><div class="in"><a href="index.html#cw" title="Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap">&#8592; Übersicht</a><h1>Gauß auf Knopfdruck: Ref und Rref<small>CASIO fx-991DE CW · Am eigenen Rechner mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,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" alt="RWB Essen fhr"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="calc">
+    <div class="head"><div class="logo">CASIO<small>fx-991DE CW</small></div><div class="solar"></div></div>
+    <div class="bezel"><div class="scr" id="scr"></div><div class="cw">CLASSWIZ</div></div>
+    <div class="keys">
+      <div class="dpad"></div>
+      <div class="c" style="grid-column:1;grid-row:1"><span class="lb">ON</span><button class="k small" data-k="on">●</button></div>
+      <div class="c" style="grid-column:2;grid-row:1"><span class="lb">HOME</span><button class="k" data-k="home">⌂</button></div>
+      <div class="c" style="grid-column:4;grid-row:1"><button class="k ar" data-k="up">▲</button></div>
+      <div class="pg"><button class="k" data-k="pgup">︽</button><button class="k" data-k="pgdn">︾</button></div>
+      <div class="c" style="grid-column:1;grid-row:2"><span class="lb">SETTINGS</span><button class="k" data-k="settings">☰</button></div>
+      <div class="c" style="grid-column:2;grid-row:2"><button class="k" data-k="back">↶</button></div>
+      <div class="c" style="grid-column:3;grid-row:2"><button class="k ar" data-k="left">◀</button></div>
+      <div class="c" style="grid-column:4;grid-row:2"><button class="k ok" data-k="ok">OK</button></div>
+      <div class="c" style="grid-column:5;grid-row:2"><button class="k ar" data-k="right">▶</button></div>
+      <div class="c" style="grid-column:1;grid-row:3"><span class="lb" style="color:var(--gold)">SHIFT</span><button class="k shift" data-k="shift">⇧</button></div>
+      <div class="c" style="grid-column:2;grid-row:3"><span class="lb">VARIABLE</span><button class="k" data-k="var">⇄<i>x</i></button></div>
+      <div class="c" style="grid-column:3;grid-row:3"><span class="lb">FUNCTION</span><button class="k" data-k="func"><i>f(x)</i></button></div>
+      <div class="c" style="grid-column:4;grid-row:3"><button class="k ar" data-k="down">▼</button></div>
+      <div class="c" style="grid-column:5;grid-row:3"><span class="lb">CATALOG</span><button class="k" data-k="cat">▤</button></div>
+      <div class="c" style="grid-column:6;grid-row:3"><span class="lb">TOOLS</span><button class="k" data-k="tools">∘∘∘</button></div>
+
+      <div class="c"><span class="sl sm">QR</span><button class="k" data-k="x" style="font-family:'Times New Roman',serif;font-style:italic;font-size:17px">x</button></div>
+      <div class="c"><span class="sl"><span class="bx f" style="width:5px;height:6px"></span>▭</span><button class="k" data-k="frac"><span class="mf"><i></i><b></b><i></i></span></button></div>
+      <div class="c"><span class="sl"><sup>n</sup>√</span><button class="k" data-k="sqrt">√<span class="bx"></span></button></div>
+      <div class="c"><span class="sl"><span class="bx f" style="width:5px;height:6px"></span><sup>−1</sup></span><button class="k" data-k="pow"><span class="bx"></span><sup><span class="bx" style="width:5px;height:5px"></span></sup></button></div>
+      <div class="c"><span class="sl sm">log</span><button class="k" data-k="sq"><span class="bx"></span><sup>2</sup></button></div>
+      <div class="c"><span class="sl sm">ln</span><button class="k txt" data-k="log">log<span class="bx" style="width:5px;height:6px"></span></button></div>
+
+      <div class="c"><span class="sl"></span><button class="k txt" data-k="ans" style="font-size:12px">Ans</button></div>
+      <div class="c"><span class="sl">sin<sup>−1</sup></span><button class="k txt" data-k="sin" style="font-size:12px">sin</button></div>
+      <div class="c"><span class="sl">cos<sup>−1</sup></span><button class="k txt" data-k="cos" style="font-size:12px">cos</button></div>
+      <div class="c"><span class="sl">tan<sup>−1</sup></span><button class="k txt" data-k="tan" style="font-size:12px">tan</button></div>
+      <div class="c"><span class="sl">=</span><button class="k" data-k="(">(</button></div>
+      <div class="c"><span class="sl">;</span><button class="k" data-k=")">)</button></div>
+    </div>
+    <div class="nums">
+      <div class="c"><span class="sl">π</span><button class="k" data-k="7">7</button></div>
+      <div class="c"><span class="sl"><i>e</i></span><button class="k" data-k="8">8</button></div>
+      <div class="c"><span class="sl"><i>i</i></span><button class="k" data-k="9">9</button></div>
+      <div class="c"><span class="sl sm">INS</span><button class="k" data-k="del" style="font-size:17px">⌫</button></div>
+      <div class="c"><span class="sl sm">OFF</span><button class="k" data-k="ac" style="font-size:16px">AC</button></div>
+      <div class="c"><span class="sl sm">A</span><button class="k" data-k="4">4</button></div>
+      <div class="c"><span class="sl sm">B</span><button class="k" data-k="5">5</button></div>
+      <div class="c"><span class="sl sm">C</span><button class="k" data-k="6">6</button></div>
+      <div class="c"><span class="sl"></span><button class="k" data-k="*">×</button></div>
+      <div class="c"><span class="sl"></span><button class="k" data-k="/">÷</button></div>
+      <div class="c"><span class="sl sm">D</span><button class="k" data-k="1">1</button></div>
+      <div class="c"><span class="sl sm">E</span><button class="k" data-k="2">2</button></div>
+      <div class="c"><span class="sl sm">F</span><button class="k" data-k="3">3</button></div>
+      <div class="c"><span class="sl">°′″</span><button class="k" data-k="+">+</button></div>
+      <div class="c"><span class="sl sm">(−)</span><button class="k" data-k="-">−</button></div>
+      <div class="c"><span class="sl"><i>x</i></span><button class="k" data-k="0">0</button></div>
+      <div class="c"><span class="sl"><i>y</i></span><button class="k" data-k=",">,</button></div>
+      <div class="c"><span class="sl"><i>z</i></span><button class="k" data-k="e10" style="font-size:13px">×10<sup><span class="bx" style="width:5px;height:6px"></span></sup></button></div>
+      <div class="c"><span class="sl"></span><button class="k txt" data-k="format" style="font-size:9px">FORMAT</button></div>
+      <div class="c"><span class="sl">≈</span><button class="k" data-k="exe" style="font-size:15px">EXE</button></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="chips" id="chips"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+// =====================================================================
+//  Zahlen: exakte Brüche
+// =====================================================================
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const R=(p,q=1)=>{ if(q<0){ p=-p; q=-q; } const g=gcd(p,q); return {p:p/g,q:q/g}; };
+const addR=(a,b)=>R(a.p*b.q+b.p*a.q,a.q*b.q), mulR=(a,b)=>R(a.p*b.p,a.q*b.q), negR=a=>R(-a.p,a.q), divR=(a,b)=>R(a.p*b.q,a.q*b.p);
+const subR=(a,b)=>addR(a,negR(b));
+const valR=r=>r.p/r.q;
+function numR(s){ const [i,f='']=s.split(','); return R(parseInt((i||'0')+f,10), 10**f.length); }
+function dec(v){ if(Math.abs(v)<1e-12) v=0; return Number(v.toPrecision(10)).toString().replace('.',',').replace('-','−'); }
+function fmtR(r){
+  if(r.q===1) return String(r.p).replace('-','−');
+  return (r.p<0?'−':'')+`<span class="fr"><span>${Math.abs(r.p)}</span><span>${r.q}</span></span>`;
+}
+function koefR(t){
+  let s=1, n='';
+  for(const k of t){ if(k==='neg'||k==='-') s=-s; else n+=k; }
+  const r=numR(n||'0'); return s<0?negR(r):r;
+}
+
+// =====================================================================
+//  Matrizenrechnung (exakt)
+// =====================================================================
+const zeros=(r,c)=>Array.from({length:r},()=>Array.from({length:c},()=>R(0)));
+const toM=a=>a.map(r=>r.map(v=>typeof v==='number'?numR(String(v).replace('.',',')):v));
+function mAdd(a,b,s){ if(a.length!==b.length||a[0].length!==b[0].length) throw 'dim'; return a.map((r,i)=>r.map((v,j)=>s<0?subR(v,b[i][j]):addR(v,b[i][j]))); }
+function mMul(a,b){ if(a[0].length!==b.length) throw 'dim'; return a.map(r=>b[0].map((_,j)=>r.reduce((s,v,k)=>addR(s,mulR(v,b[k][j])),R(0)))); }
+const mScal=(k,a)=>a.map(r=>r.map(v=>mulR(k,v)));
+const mTrn=a=>a[0].map((_,j)=>a.map(r=>r[j]));
+function mDet(a){
+  const n=a.length; if(a[0].length!==n) throw 'dim';
+  const A=a.map(r=>r.slice()); let d=R(1);
+  for(let c=0;c<n;c++){
+    let p=-1; for(let i=c;i<n;i++) if(A[i][c].p!==0){ p=i; break; }
+    if(p<0) return R(0);
+    if(p!==c){ [A[c],A[p]]=[A[p],A[c]]; d=negR(d); }
+    d=mulR(d,A[c][c]);
+    for(let i=c+1;i<n;i++){ const f=divR(A[i][c],A[c][c]); for(let j=c;j<n;j++) A[i][j]=subR(A[i][j],mulR(f,A[c][j])); }
+  }
+  return d;
+}
+function mInv(a){
+  const n=a.length; if(a[0].length!==n) throw 'dim';
+  const A=a.map((r,i)=>r.concat(Array.from({length:n},(_,j)=>R(i===j?1:0))));
+  for(let c=0;c<n;c++){
+    let p=-1; for(let i=c;i<n;i++) if(A[i][c].p!==0){ p=i; break; }
+    if(p<0) throw 'math';
+    [A[c],A[p]]=[A[p],A[c]]; const pv=A[c][c];
+    for(let j=0;j<2*n;j++) A[c][j]=divR(A[c][j],pv);
+    for(let i=0;i<n;i++) if(i!==c&&A[i][c].p!==0){ const f=A[i][c]; for(let j=0;j<2*n;j++) A[i][j]=subR(A[i][j],mulR(f,A[c][j])); }
+  }
+  return A.map(r=>r.slice(n));
+}
+
+// Zeilenstufenform wie der Rechner: Spaltenpivot (betragsgrößte Zahl), führende Einsen
+function mRef(a){
+  const A=a.map(r=>r.slice()), m=A.length, n=A[0].length; let r=0;
+  for(let c=0;c<n&&r<m;c++){
+    let p=-1, best=0; for(let i=r;i<m;i++){ const v=Math.abs(valR(A[i][c])); if(v>best+1e-12){ best=v; p=i; } }
+    if(p<0) continue;
+    [A[r],A[p]]=[A[p],A[r]]; const pv=A[r][c];
+    for(let j=0;j<n;j++) A[r][j]=divR(A[r][j],pv);
+    for(let i=r+1;i<m;i++) if(A[i][c].p!==0){ const f=A[i][c]; for(let j=0;j<n;j++) A[i][j]=subR(A[i][j],mulR(f,A[r][j])); }
+    r++;
+  }
+  return A;
+}
+function mRref(a){
+  const A=mRef(a), m=A.length, n=A[0].length;
+  for(let r=m-1;r>=0;r--){
+    const c=A[r].findIndex(v=>v.p!==0); if(c<0) continue;
+    for(let i=0;i<r;i++) if(A[i][c].p!==0){ const f=A[i][c]; for(let j=0;j<n;j++) A[i][j]=subR(A[i][j],mulR(f,A[r][j])); }
+  }
+  return A;
+}
+// Werte: {s:Bruch} oder {m:Matrix}
+function vAdd(x,y,s){ if(x.s&&y.s) return {s:s<0?subR(x.s,y.s):addR(x.s,y.s)}; if(x.m&&y.m) return {m:mAdd(x.m,y.m,s)}; throw 'dim'; }
+function vMul(x,y){ if(x.s&&y.s) return {s:mulR(x.s,y.s)}; if(x.s) return {m:mScal(x.s,y.m)}; if(y.s) return {m:mScal(y.s,x.m)}; return {m:mMul(x.m,y.m)}; }
+function vDiv(x,y){ if(!y.s) throw 'math'; if(y.s.p===0) throw 'math'; const k=divR(R(1),y.s); return x.s?{s:mulR(x.s,k)}:{m:mScal(k,x.m)}; }
+function vInv(x){ if(x.s){ if(x.s.p===0) throw 'math'; return {s:divR(R(1),x.s)}; } return {m:mInv(x.m)}; }
+// Ausdruck aus Tasten-Token auswerten
+function evalTok(T,S){
+  let i=0;
+  const peek=()=>T[i];
+  function prim(){
+    const t=T[i];
+    if(t===undefined) throw 'syntax';
+    if(/^[0-9,]$/.test(t)){ let n=''; while(i<T.length&&/^[0-9,]$/.test(T[i])) n+=T[i++]; return {s:numR(n)}; }
+    if('ABCD'.includes(t)&&t.length===1){ i++; if(!S.M[t]) throw 'math'; return {m:S.M[t]}; }
+    if(t==='Ans'){ i++; if(!S.Ans) throw 'math'; return {m:S.Ans}; }
+    if(t==='('||t==='det'||t==='trn'||t==='ref'||t==='rref'){ i++; const v=expr(); if(peek()===')') i++; else if(i<T.length) throw 'syntax';
+      if(t==='det'){ if(!v.m) throw 'math'; return {s:mDet(v.m)}; }
+      if(t==='trn'){ if(!v.m) throw 'math'; return {m:mTrn(v.m)}; }
+      if(t==='ref'){ if(!v.m) throw 'math'; return {m:mRef(v.m)}; }
+      if(t==='rref'){ if(!v.m) throw 'math'; return {m:mRref(v.m)}; }
+      return v; }
+    throw 'syntax';
+  }
+  function post(){ let v=prim(); while(['sq','cube','inv'].includes(peek())){ const t=T[i++];
+      if(t==='inv') v=vInv(v); else { const w=vMul(v,v); v=t==='sq'?w:vMul(w,v); } } return v; }
+  function fac(){ if(peek()==='neg'){ i++; return vMul({s:R(-1)},fac()); } return post(); }
+  function term(){ let v=fac(); while(peek()==='*'||peek()==='/'){ const o=T[i++]; const w=fac(); v=o==='*'?vMul(v,w):vDiv(v,w); } return v; }
+  function expr(){ let v=term(); while(peek()==='+'||peek()==='-'){ const o=T[i++]; v=vAdd(v,term(),o==='-'?-1:1); } return v; }
+  const v=expr(); if(i<T.length) throw 'syntax'; return v;
+}
+
+// =====================================================================
+//  Anzeige
+// =====================================================================
+const TOKTXT={neg:'−','-':'−','+':'+','*':'×','/':'÷','(':'(',')':')',sq:'<sup>2</sup>',cube:'<sup>3</sup>',inv:'<sup>−1</sup>',
+  A:'MatA',B:'MatB',C:'MatC',D:'MatD',Ans:'MatAns',det:'Det(',trn:'Trn(',ref:'Ref(',rref:'Rref('};
+const lineTxt=(t,caret)=>t.map(k=>TOKTXT[k]||k).join('')+(caret?'<span class="caret"></span>':'');
+function mxHTML(m,fmt,cls){
+  return `<table class="mx ${cls||''}">`+m.map(r=>'<tr>'+r.map(v=>`<td>${fmt?fmt(v):fmtR(v)}</td>`).join('')+'</tr>').join('')+'</table>';
+}
+const sizeTxt=m=>m?`${m.length}×${m[0].length}`:(MODEL==='cw'?'Keine':'—');
+
+// =====================================================================
+//  Gemeinsame Zustandslogik
+// =====================================================================
+const MN='ABCD';
+function fresh(pre){
+  const S={mode:MODEL==='cw'?'home':'calc', sel:0, shift:false, alpha:false, M:{A:null,B:null,C:null,D:null}, Ans:null,
+    line:[], out:null, err:null, v:'A', nr:2, nc:2, r:0, c:0, inp:[], page:0, pur:'def', lvl:0, back:'calc'};
+  if(pre){ for(const k in pre) S.M[k]=toM(pre[k]); S.mode='calc'; }
+  return S;
+}
+function openEd(S,v){ S.v=v; S.mode='edit'; S.r=0; S.c=0; S.inp=[]; }
+function edKey(S,k){
+  const m=S.M[S.v], R_=m.length, C_=m[0].length;
+  if(k==='exe'){ if(S.inp.length){ m[S.r][S.c]=koefR(S.inp); S.inp=[]; if(S.c<C_-1) S.c++; else if(S.r<R_-1){ S.r++; S.c=0; } } return; }
+  if(k==='del'){ S.inp.pop(); return; }
+  if(k==='left'){ S.inp=[]; if(S.c>0) S.c--; return; }
+  if(k==='right'){ S.inp=[]; if(S.c<C_-1) S.c++; return; }
+  if(k==='up'){ S.inp=[]; if(S.r>0) S.r--; return; }
+  if(k==='down'){ S.inp=[]; if(S.r<R_-1) S.r++; return; }
+  if(/^[0-9,]$/.test(k)||k==='neg') S.inp.push(k);
+}
+function pushTok(S,t){ if(S.out!==null){ S.line=[]; S.out=null; } S.line.push(t); S.mode='calc'; }
+function calcKey(S,k){
+  if(k==='ac'){ S.line=[]; S.out=null; return true; }
+  if(k==='del'){ if(S.out===null) S.line.pop(); return true; }
+  if(k==='exe'){
+    if(!S.line.length) return true;
+    try{ const v=evalTok(S.line,S);
+      if(v.m){ S.Ans=v.m; S.mode='res'; S.out=null; } else { S.out=fmtR(v.s); }
+    }catch(e){ S.err=(e==='dim'?'dim':e==='syntax'?'syn':'math'); S.mode='err'; }
+    return true;
+  }
+  if(/^[0-9,]$/.test(k)||['+','-','*','/','(',')','neg','sq','cube','inv'].includes(k)){ pushTok(S,k); return true; }
+  return false;
+}
+function resKey(S,k){
+  if(['+','-','*','/'].includes(k)){ S.mode='calc'; S.line=['Ans',k]; S.out=null; return; }
+  if(k==='ac'||k==='back'){ S.mode='calc'; S.line=[]; S.out=null; }
+}
+function errKey(S,k){ if(k==='ac'||k==='back'||k==='left'||k==='right'){ S.mode='calc'; S.line=[]; S.out=null; S.err=null; } }
+
+// =====================================================================
+//  fx-991DE CW: HOME, Listen, Matrix-App
+// =====================================================================
+const MODEL='cw';
+const T_=(t,sz)=>`<text x="17" y="12" text-anchor="middle" font-size="${sz||11}" font-weight="bold" fill="currentColor">${t}</text>`;
+const ICON={
+ Berechnung:'<svg viewBox="0 0 34 14"><text x="17" y="6.8" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">×÷</text><text x="17" y="14" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">+−</text></svg>',
+ Statistik:'<svg viewBox="0 0 34 14"><path d="M9 1v12h17" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="7" width="2.6" height="5" fill="currentColor"/><rect x="14.5" y="3" width="2.6" height="9" fill="currentColor"/><rect x="18" y="5" width="2.6" height="7" fill="currentColor"/><rect x="21.5" y="8" width="2.6" height="4" fill="currentColor"/></svg>',
+ Verteilung:'<svg viewBox="0 0 34 14"><path d="M5 13C11 13 12 2 17 2s6 11 12 11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M14 13V4.5h6V13" fill="currentColor" opacity=".55"/><path d="M4 13h26" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Tabellenk.':'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="1.5" width="16" height="3" fill="currentColor"/><path d="M9 8.5h16M14.3 4.5v8.5M19.6 4.5v8.5" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Wertetab.':'<svg viewBox="0 0 34 14"><rect x="10" y="1.5" width="14" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="1.5" width="14" height="3" fill="currentColor"/><path d="M17 4.5v8.5M10 8.5h14" stroke="currentColor" stroke-width="1"/></svg>',
+ Gleichung:'<svg viewBox="0 0 34 14">'+T_('xy=0',9.5)+'<path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ Ungleichung:'<svg viewBox="0 0 34 14">'+T_('xy&gt;0',9.5)+'<path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ Komplex:'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="13.5" y="11" text-anchor="middle" font-size="9" font-weight="bold" font-style="italic" fill="currentColor">i</text><path d="M17.5 11.5l6-8M17.5 11.5h6" stroke="currentColor" stroke-width="1.1" fill="none"/></svg>',
+ 'Basis-N':'<svg viewBox="0 0 34 14"><text x="17" y="12" text-anchor="middle" font-size="6.5" font-weight="bold" fill="currentColor">2 8 10 16</text></svg>',
+ Matrix:'<svg viewBox="0 0 34 14"><path d="M10 1.5h-2v11h2M24 1.5h2v11h-2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="11" y="7.6" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="7.6" width="5.4" height="4.4" fill="currentColor"/></svg>',
+ Vektor:'<svg viewBox="0 0 34 14"><path d="M12 12L21 3M12 12h11M12 12V3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+ 'Verhältnis':'<svg viewBox="0 0 34 14"><rect x="8" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="19" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="17" cy="5" r=".9" fill="currentColor"/><circle cx="17" cy="9" r=".9" fill="currentColor"/></svg>'
+};
+const APPS=["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung","Ungleichung","Komplex","Basis-N","Matrix","Vektor","Verhältnis"];
+const zl=(lbl,ziel)=>(ziel||[]).includes(lbl)?' ziel':'';
+function drawHome(S,ziel){
+  const pg=Math.floor(S.sel/6);
+  return `<div class="home"><div class="grid">`+APPS.slice(pg*6,pg*6+6).map((a,j)=>{ const i=pg*6+j;
+    return `<div class="ic${i===S.sel?' sel':''}${zl(a,ziel)}"><span class="bd">${i+1}</span>${ICON[a]}<span class="an">${a}</span></div>`; }).join('')+`</div></div>`;
+}
+function sbar(S){ return `<div class="sb">${S.shift?'<span class="ind">S</span>':''}<span class="ind">D</span><span class="sp"></span>${S.mode==='home'?'':'<span style="font-weight:bold">Matrix</span>'}</div>`; }
+// Liste mit Bildlauf (höchstens 4 Zeilen sichtbar)
+function drawList(S,title,L,ziel){
+  const top=Math.max(0,Math.min(S.sel-3,L.length-4));
+  return sbar(S)+`<div class="list"><div class="ti">${title}</div>`+L.slice(top,top+4).map((t,j)=>{ const i=top+j;
+    return `<div class="it${i===S.sel?' sel':''}${zl(t,ziel)}">${t}</div>`; }).join('')+'</div>';
+}
+const CATS=['Matrix','Num. Berechnung','Wahrscheinlichk.','Winkel/Koord.'];
+const CMAT=['MatA','MatB','MatC','MatD','MatAns','Matrizenrechnung'];
+const CCALC=['Matrix quadrieren','Matrix hoch drei','Inverse Matrix','Determinante','Transponierte','Einheitsmatrix','Stufenform REF','Stufenform RREF'];
+const VSUB=['Neu definieren','Editieren'];
+const ZEILEN=['1 Zeile','2 Zeilen','3 Zeilen','4 Zeilen'], SPALTEN=['1 Spalte','2 Spalten','3 Spalten','4 Spalten'];
+const vItems=S=>MN.split('').map(v=>`Mat${v}: ${sizeTxt(S.M[v])}`);
+const vPlain=S=>MN.split('').map(v=>'Mat'+v);
+
+function step(S,k){
+  if(S.mode==='off'){ if(k==='on') S.mode='calc'; return; }
+  if(k==='shift'){ S.shift=!S.shift; return; }
+  if(S.shift){ S.shift=false; if(k==='ac'){ S.mode='off'; return; } if(k==='-') k='neg'; else if(k==='pow') k='inv'; else return; }
+  if(k==='home'){ S.mode='home'; S.sel=0; return; }
+  const up=()=>{ S.sel=Math.max(0,S.sel-1); }, dn=n=>{ S.sel=Math.min(n-1,S.sel+1); };
+  switch(S.mode){
+   case 'home':
+     if(k==='right') S.sel=Math.min(APPS.length-1,S.sel+1); else if(k==='left') S.sel=Math.max(0,S.sel-1);
+     else if(k==='down') S.sel=Math.min(APPS.length-1,S.sel+3); else if(k==='up') S.sel=Math.max(0,S.sel-3);
+     else if((k==='ok'||k==='exe')&&S.sel===9){ S.mode='calc'; S.line=[]; S.out=null; }
+     return;
+   case 'calc':
+     if(k==='tools'){ S.mode='vlist'; S.sel=0; return; }
+     if(k==='cat'){ S.mode='cat'; S.lvl=0; S.sel=0; return; }
+     calcKey(S,k); return;
+   case 'vlist':
+     if(k==='up') up(); else if(k==='down') dn(4);
+     else if(k==='ok'||k==='exe'){ S.v=MN[S.sel]; if(S.M[S.v]){ S.mode='vsub'; S.sel=0; } else { S.mode='size'; S.nr=2; S.nc=2; S.sel=0; } }
+     else if(k==='ac'||k==='back') S.mode='calc';
+     return;
+   case 'vsub':
+     if(k==='up') up(); else if(k==='down') dn(2);
+     else if(k==='ok'||k==='exe'){ if(S.sel===0){ S.mode='size'; S.nr=2; S.nc=2; S.sel=0; } else openEd(S,S.v); }
+     else if(k==='back'){ S.mode='vlist'; S.sel=MN.indexOf(S.v); } else if(k==='ac') S.mode='calc';
+     return;
+   case 'size':
+     if(k==='up') up(); else if(k==='down') dn(3);
+     else if(k==='ok'||k==='exe'){ if(S.sel===0){ S.mode='rlist'; S.sel=S.nr-1; } else if(S.sel===1){ S.mode='clist'; S.sel=S.nc-1; } else { S.M[S.v]=zeros(S.nr,S.nc); openEd(S,S.v); } }
+     else if(k==='back'||k==='ac') S.mode='calc';
+     return;
+   case 'rlist': case 'clist':
+     if(k==='up') up(); else if(k==='down') dn(4);
+     else if(k==='ok'||k==='exe'){ if(S.mode==='rlist'){ S.nr=S.sel+1; S.sel=0; } else { S.nc=S.sel+1; S.sel=1; } S.mode='size'; }
+     else if(k==='back'){ S.sel=S.mode==='rlist'?0:1; S.mode='size'; }
+     return;
+   case 'edit':
+     if(k==='ac'||k==='back'){ S.mode='calc'; S.line=[]; S.out=null; return; }
+     if(k==='-') k='neg';
+     edKey(S,k); return;
+   case 'cat': {
+     const L=[CATS,CMAT,CCALC][S.lvl];
+     if(k==='up') up(); else if(k==='down') dn(L.length);
+     else if(k==='back'){ if(S.lvl===0) S.mode='calc'; else { S.lvl--; S.sel=S.lvl===1?5:0; } }
+     else if(k==='ac') S.mode='calc';
+     else if(k==='ok'||k==='exe'){
+       if(S.lvl===0){ if(S.sel===0){ S.lvl=1; S.sel=0; } }
+       else if(S.lvl===1){ if(S.sel<4) pushTok(S,MN[S.sel]); else if(S.sel===4) pushTok(S,'Ans'); else { S.lvl=2; S.sel=0; } }
+       else { const tk=['sq','cube','inv','det','trn',null,'ref','rref'][S.sel]; if(tk) pushTok(S,tk); }
+     }
+     return; }
+   case 'res': resKey(S,k); return;
+   case 'err': errKey(S,k); return;
+  }
+}
+function run(S,keys){ keys.forEach(k=>step(S,k)); return S; }
+function drawEd(S,Z){
+  const m=S.M[S.v], C_=m[0].length;
+  let h=`<div class="mat${m.length>2||C_>2?' m3':''}${C_>3?' m4':''}"><div class="mh">Mat${S.v}</div><table><tr><th></th>${m[0].map((_,j)=>`<th>${j+1}</th>`).join('')}</tr>`;
+  m.forEach((row,i)=>{ h+=`<tr><td class="rn">${i+1}</td>`+row.map((v,j)=>`<td class="${i===S.r&&j===S.c?'cur':''}">${dec(valR(v))}</td>`).join('')+'</tr>'; });
+  const inp=S.inp.length?lineTxt(S.inp,true):dec(valR(m[S.r][S.c]));
+  return sbar(S)+h+`</table><div class="inp${Z('inp')}">${inp}</div></div>`;
+}
+function draw(S,ziel){
+  const Z=n=>(ziel||[]).includes(n)?' ziel':'';
+  if(S.mode==='off') return '<div class="offs"></div>';
+  if(S.mode==='home') return drawHome(S,ziel);
+  if(S.mode==='vlist') return drawList(S,'Matrix-Variable',vItems(S),(ziel||[]).map(z=>vItems(S).find(t=>t.startsWith(z+':'))||z));
+  if(S.mode==='vsub') return drawList(S,'Mat'+S.v,VSUB,ziel);
+  if(S.mode==='size') return drawList(S,'Mat'+S.v+' Größe',[`Zeilen: ${S.nr}`,`Spalten: ${S.nc}`,'Bestätigen'],ziel);
+  if(S.mode==='rlist') return drawList(S,'Zeilen',ZEILEN,ziel);
+  if(S.mode==='clist') return drawList(S,'Spalten',SPALTEN,ziel);
+  if(S.mode==='cat') return drawList(S,['Katalog','Matrix','Matrizenrechnung'][S.lvl],[CATS,CMAT,CCALC][S.lvl],ziel);
+  if(S.mode==='edit') return drawEd(S,Z);
+  if(S.mode==='res') return sbar(S)+`<div class="mres${Z('res')}"><span class="ml">MatAns</span>${mxHTML(S.Ans)}</div>`;
+  if(S.mode==='err') return sbar(S)+`<div class="app"><div class="aus meld${Z('res')}">${S.err==='dim'?'Dimensionsfehler':S.err==='syn'?'Syntaxfehler':'Mathemat. Fehler'}</div><div class="klein"><span>↶ oder AC: zurück</span></div></div>`;
+  return sbar(S)+`<div class="app"><div class="ein">${lineTxt(S.line,S.out===null)}</div><div class="aus${Z('res')}">${S.out!==null?S.out:''}</div></div>`;
+}
+// ---- Modell-Angaben für die Tour
+const dn=n=>Array(n).fill('down');
+const MOD={
+  NEG:['shift','-'], EXE:'exe', AC:'ac',
+  OPEN:['home','down','down','down','ok'], OPENZ:['Matrix'],
+  // Matrix definieren (ex = Variable schon belegt)
+  DEF(v,r,c,ex){ const i=MN.indexOf(v); let k=['tools'].concat(dn(i),['ok']); if(ex) k.push('ok');
+    let sel=0;
+    if(r!==2){ k.push('ok'); k=k.concat(r>2?dn(r-2):['up']); k.push('ok'); }
+    if(c!==2){ k.push('down','ok'); k=k.concat(c>2?dn(c-2):['up']); k.push('ok'); sel=1; }
+    return k.concat(dn(2-sel),['ok']); },
+  EDIT(v){ return ['tools'].concat(dn(MN.indexOf(v)),['ok','down','ok']); },
+  MAT(v){ return ['cat','ok'].concat(dn(MN.indexOf(v)),['ok']); },
+  ANS:['cat','ok','down','down','down','down','ok'],
+  DET:['cat','ok'].concat(dn(5),['ok'],dn(3),['ok']),
+  TRN:['cat','ok'].concat(dn(5),['ok'],dn(4),['ok']),
+  REF:['cat','ok'].concat(dn(5),['ok'],dn(6),['ok']), RREF:['cat','ok'].concat(dn(5),['ok'],dn(7),['ok']),
+  SQ:['cat','ok'].concat(dn(5),['ok','ok']), CUBE:['cat','ok'].concat(dn(5),['ok','down','ok']), INV:['cat','ok'].concat(dn(5),['ok'],dn(2),['ok']),
+  t:{ exe:'<b>EXE</b>', neg:'<b>SHIFT</b> und dann <b>−</b>', negK:'<b>SHIFT −</b>', back:'<b>AC</b>',
+      open:'<p>Matrizen berechnet der Rechner in der App <b>Matrix</b>. Drücken Sie <b>HOME</b>. Gehen Sie mit <b>▼</b> zum Symbol <b>Matrix</b> (Nummer 10). Noch nicht bestätigen.</p>',
+      matA:'<b>CATALOG</b> ▸ Matrix ▸ MatA', mat:v=>`<b>CATALOG</b> ▸ Matrix ▸ Mat${v}`,
+      det:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ Determinante', trn:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ Transponierte',
+      inv:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ Inverse Matrix', sq:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ Matrix quadrieren', cube:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ Matrix hoch drei',
+      ref:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ <b>Stufenform REF</b>', rref:'<b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ <b>Stufenform RREF</b>',
+      def:'<b>TOOLS</b> ▸ Matrix wählen ▸ <b>OK</b> ▸ Größe ▸ Bestätigen', edit:'<b>TOOLS</b> ▸ Matrix wählen ▸ <b>OK</b> ▸ Editieren' }
+};
+// Startschritte Teil 1 (Modell-spezifisch)
+function T1start(){
+  return [
+  {t:"Matrix-App öffnen", k:MOD.OPEN.slice(0,4), z:MOD.OPENZ, d:MOD.t.open},
+  {t:"Matrix-App starten", k:['ok'], d:'<p>Mit <b>OK</b> starten Sie die App. Oben im Display steht jetzt <b>Matrix</b>.</p>'},
+  {t:"Variablenliste öffnen", k:['tools'], z:['MatA'],
+   d:'<p>Der Rechner hat vier Speicherplätze für Matrizen: <b>MatA</b>, <b>MatB</b>, <b>MatC</b> und <b>MatD</b>. Drücken Sie <b>TOOLS</b>.</p><p>Bei jedem Platz steht <b>Keine</b> – er ist noch leer.</p>'},
+  {t:"MatA wählen", k:['ok'], z:['Bestätigen'],
+   d:'<p><b>MatA</b> ist markiert. Mit <b>OK</b> wählen.</p><p>Jetzt fragt der Rechner nach der <b>Größe</b>. Voreingestellt ist 2 Zeilen und 2 Spalten.</p>'},
+  {t:"Größe bestätigen", k:['down','down','ok'], z:['inp'],
+   d:'<p>Unsere Matrix hat 2 Zeilen und 2 Spalten. Das passt schon. Gehen Sie mit <b>▼</b> zu <b>Bestätigen</b> und drücken Sie <b>OK</b>.</p><p>Sie sehen den <b>Matrix-Editor</b>: eine Tabelle voller Nullen.</p>',
+   n:'Erst die <b>Zeilen</b> (waagerecht), dann die <b>Spalten</b> (senkrecht). Man sagt: eine <b>2×2</b>-Matrix („zwei Kreuz zwei“).'}
+  ];
+}
+function T1defB(){ return MOD.DEF('B',2,2); }
+function T1defC(){ return MOD.DEF('C',2,3); }
+const DEFTXT={
+  B:'<p><b>TOOLS</b> ▸ mit <b>▼</b> zu <b>MatB</b> ▸ <b>OK</b>. Jetzt die Größe ändern: <b>Zeilen</b> ist markiert ▸ <b>OK</b> ▸ <b>▼</b> zu <b>3 Zeilen</b> ▸ <b>OK</b>. Spalten bleiben 2. Dann mit <b>▼ ▼</b> zu <b>Bestätigen</b> ▸ <b>OK</b>.</p>',
+  C:'<p><b>TOOLS</b> ▸ <b>▼ ▼</b> zu <b>MatC</b> ▸ <b>OK</b>. Jetzt die Größe ändern: <b>▼</b> zu <b>Spalten</b> ▸ <b>OK</b> ▸ <b>▼</b> zu <b>3 Spalten</b> ▸ <b>OK</b>. Danach <b>▼</b> zu <b>Bestätigen</b> ▸ <b>OK</b>.</p>',
+  D:'<p><b>TOOLS</b> ▸ <b>▼ ▼ ▼</b> zu <b>MatD</b> ▸ <b>OK</b> ▸ <b>▼ ▼</b> zu <b>Bestätigen</b> ▸ <b>OK</b>. Dann die Zahlen eingeben und mit <b>AC</b> zurück.</p>',
+  edit:'<p><b>TOOLS</b> ▸ <b>MatA</b> ist markiert ▸ <b>OK</b>. Weil MatA schon belegt ist, fragt der Rechner: <b>Neu definieren</b> oder <b>Editieren</b>? Mit <b>▼</b> zu <b>Editieren</b> ▸ <b>OK</b>.</p>'
+};
+const A3K=()=>MOD.MAT('A').concat(MOD.CUBE,['exe']);
+const A3TXT='<p>Für <b>A³</b>: MatA, dann <b>CATALOG</b> ▸ Matrix ▸ Matrizenrechnung ▸ <b>Matrix hoch drei</b>, dann <b>EXE</b>.</p>';
+const LBL={on:"ON",home:"HOME",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",ok:"OK",back:"↶",format:"FORMAT",var:"VARIABLE",cat:"CATALOG",tools:"TOOLS",
+ exe:"EXE",ac:"AC",del:"⌫","-":"−","+":"+","*":"×","/":"÷",x:'<i class="v">x</i>',"(":"(",")":")",sq:'<span class="bx"></span><sup>2</sup>',pow:'x<sup>■</sup>'};
+const WHITE=/^$/;
+const NEGHINT=(k,want)=>(k==='-'&&want==='shift')?' Für ein Vorzeichen zuerst <b>SHIFT</b>, dann <b>−</b>.':'';
+
+// =====================================================================
+//  Tour-Inhalte (beide Modelle): Zeilenstufenform mit Ref und Rref
+// =====================================================================
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Rechner rechnen, Ergebnisse auf dem Blatt eintragen, dann <b>Weiter</b>.</p></div>`;
+const RK=v=>v.flatMap(x=>(x<0?MOD.NEG:[]).concat(String(Math.abs(x)).replace('.',',').split(''),[MOD.EXE]));
+const E=MOD.t.exe, EX=MOD.EXE;
+const zf=v=>String(v).replace('.',',').replace('-','−');
+function MXP(m,name,cls){
+  const t=`<table class="mxp ${cls||''}">`+m.map(r=>'<tr>'+r.map((v,j)=>`<td${j===r.length-1&&cls&&cls.includes('erw')?' class="rs"':''}>${typeof v==='string'?v:zf(v)}</td>`).join('')+'</tr>').join('')+'</table>';
+  return name?`<span class="mxw"><i>${name}</i> = ${t}</span>`:t;
+}
+const FR=(p,q)=>(p<0?'−':'')+`<span class="frp"><span>${Math.abs(p)}</span><span>${q}</span></span>`;
+const GL=rows=>'<table class="lgs">'+rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</table>';
+// LGS 1: eindeutig lösbar (x = 1, y = 2, z = 3)
+const MA=[[2,1,-1,1],[1,3,2,13],[1,-1,1,2]];
+const GLA=GL([['I','2<i>x</i>','+','<i>y</i>','−','<i>z</i>','=','1'],['II','<i>x</i>','+','3<i>y</i>','+','2<i>z</i>','=','13'],['III','<i>x</i>','−','<i>y</i>','+','<i>z</i>','=','2']]);
+// LGS 2: unendlich viele Lösungen, nach Änderung 7 → 8 keine Lösung
+const MB=[[1,1,1,6],[2,1,-1,1],[3,2,0,7]];
+const GLB=GL([['I','<i>x</i>','+','<i>y</i>','+','<i>z</i>','=','6'],['II','2<i>x</i>','+','<i>y</i>','−','<i>z</i>','=','1'],['III','3<i>x</i>','+','2<i>y</i>','','','=','7']]);
+const GLB8=GL([['I','<i>x</i>','+','<i>y</i>','+','<i>z</i>','=','6'],['II','2<i>x</i>','+','<i>y</i>','−','<i>z</i>','=','1'],['III','3<i>x</i>','+','2<i>y</i>','','','=','<b style="color:#C62828">8</b>']]);
+const PRE={A:MA}, PRE2={A:MA,B:MB};
+const kA=MOD.MAT('A'), kB=MOD.MAT('B');
+const mA=MOD.t.mat('A'), mB=MOD.t.mat('B');
+const AUFA=GLA+MXP(MA,'A','erw');
+const REFA=[[1,FR(1,2),FR(-1,2),FR(1,2)],[0,1,1,5],[0,0,1,3]];
+const RREFA=[[1,0,0,1],[0,1,0,2],[0,0,1,3]];
+const VOR='Die Matrix <b>A</b> aus Teil 1 ist gespeichert. Falls nicht, definieren Sie sie zuerst (3 Zeilen, 4 Spalten).';
+
+// ---------------- Teil 1: LGS als erweiterte Matrix speichern
+const T1open = MODEL==='cw' ? [
+  {t:"Matrix-App öffnen", k:MOD.OPEN.slice(0,4), z:MOD.OPENZ, d:MOD.t.open},
+  {t:"Matrix-App starten", k:['ok'], d:'<p>Mit <b>OK</b> starten Sie die App. Oben im Display steht jetzt <b>Matrix</b>.</p>'},
+  {t:"MatA: 3 Zeilen, 4 Spalten", k:MOD.DEF('A',3,4), z:['inp'],
+   d:'<p><b>TOOLS</b> ▸ <b>MatA</b> ist markiert ▸ <b>OK</b>. Jetzt die Größe ändern:</p><p><b>Zeilen</b> ist markiert ▸ <b>OK</b> ▸ <b>▼</b> zu <b>3 Zeilen</b> ▸ <b>OK</b>.<br><b>▼</b> zu <b>Spalten</b> ▸ <b>OK</b> ▸ <b>▼ ▼</b> zu <b>4 Spalten</b> ▸ <b>OK</b>.<br><b>▼</b> zu <b>Bestätigen</b> ▸ <b>OK</b>.</p>',
+   n:'3 Gleichungen = <b>3 Zeilen</b>. 3 Unbekannte + rechte Seite = <b>4 Spalten</b>.'}
+] : [
+  {t:"Matrix-Modus öffnen", k:MOD.OPEN, z:MOD.OPENZ,
+   d:'<p>Die Stufenform berechnet der Rechner im Modus <b>4: Matrizen</b>. Drücken Sie <b>MENU</b> und dann <b>4</b>.</p><p>Der Rechner zeigt sofort die Liste <b>Matrix definieren</b>.</p>'},
+  {t:"MatA wählen", k:['1'], d:'<p>Wir speichern das LGS in <b>MatA</b>: Taste <b>1</b>.</p><p>Der Rechner fragt: <b>Anzahl Zeilen?</b></p>'},
+  {t:"Größe festlegen: 3 × 4", k:['3','4'], z:['inp'],
+   d:'<p>Drücken Sie <b>3</b> (Zeilen) und dann <b>4</b> (Spalten).</p><p>Sie sehen den <b>Matrix-Editor</b> mit 3 Zeilen und 4 Spalten.</p>',
+   n:'3 Gleichungen = <b>3 Zeilen</b>. 3 Unbekannte + rechte Seite = <b>4 Spalten</b>.'}
+];
+const T1=[
+  {t:"Vom LGS zur Matrix", a:GLA, k:[],
+   d:`<p>Der Rechner rechnet nicht mit <i>x</i>, <i>y</i> und <i>z</i>, sondern nur mit den <b>Zahlen davor</b>. Jede Gleichung wird eine <b>Zeile</b>:</p>`+MXP(MA,'A','erw')+`<p>Spalte 1: Zahlen vor <i>x</i> · Spalte 2: vor <i>y</i> · Spalte 3: vor <i>z</i> · Spalte 4: <b>rechte Seite</b>.</p><p>Diese Matrix heißt <b>erweiterte Koeffizientenmatrix</b>.</p>`,
+   n:'Steht keine Zahl vor der Variablen, ist es eine <b>1</b>. Bei Minus eine <b>−1</b>. Fehlt eine Variable ganz, tragen Sie <b>0</b> ein.'}
+].concat(T1open.map(s=>Object.assign({a:AUFA},s))).concat([
+  {t:"Zahlen eingeben", a:AUFA, k:RK([2,1,-1,1,1,3,2,13,1,-1,1,2]),
+   d:`<p>Tippen Sie <b>zeilenweise</b>: erst Gleichung I (2, 1, −1, 1), dann II, dann III. Jede Zahl mit ${E} bestätigen.</p><p>Vorzeichen mit ${MOD.t.neg}.</p>`},
+  {t:"Zurück zur Rechenzeile", a:AUFA, k:['ac'],
+   d:`<p>Mit <b>AC</b> verlassen Sie den Editor. Das LGS ist jetzt als <b>MatA</b> gespeichert.</p>`,
+   n:`Tippfehler? ${MOD.t.edit}, mit den Pfeilen zum Feld, neue Zahl, ${E}.`},
+  {t:"Arbeitsblatt vorbereiten", k:[], ab:1, d:`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: Aufgabe 1</div><ul><li>Erweiterte Matrix zu jedem LGS aufschreiben</li><li>Speichern: ${MOD.t.def}</li><li>3 Gleichungen, 3 Unbekannte → <b>3 Zeilen, 4 Spalten</b></li></ul><p>Dann <b>Weiter</b> mit Teil 2.</p></div>`}
+]);
+
+// ---------------- Teil 2: Ref
+const T2=[
+  {t:"Stufenform: Ref(A)", a:AUFA, k:['ac'].concat(MOD.REF,kA,[')',EX]), z:['res'],
+   d:`<p><b>AC</b>, dann ${MOD.t.ref}. Der Rechner schreibt <b>Ref(</b>. Dann ${mA}, Klammer zu <b>)</b> und ${E}.</p>`+MXP(REFA,'Ref(A)','erw')+`<p>Unten links stehen nur noch <b>Nullen</b> – wie eine Treppe. Das ist die <b>Zeilenstufenform</b>. Der Rechner hat das <b>Gauß-Verfahren</b> für Sie gemacht.</p>`,
+   n:VOR},
+  {t:"Letzte Zeile lesen", a:MXP(REFA,'Ref(A)','erw'), k:[],
+   d:`<p>Die letzte Zeile <b>0 0 1 | 3</b> bedeutet:</p><p style="font-family:Cambria,Georgia,serif;font-size:19px">0<i>x</i> + 0<i>y</i> + 1<i>z</i> = 3 &nbsp;→&nbsp; <b><i>z</i> = 3</b></p>`},
+  {t:"Rückwärts einsetzen", a:MXP(REFA,'Ref(A)','erw'), k:[],
+   d:`<p>Zeile 2 bedeutet: <i>y</i> + <i>z</i> = 5. Mit <i>z</i> = 3 folgt <b><i>y</i> = 2</b>.</p><p>Zeile 1 bedeutet: <i>x</i> + ${FR(1,2)}<i>y</i> − ${FR(1,2)}<i>z</i> = ${FR(1,2)}. Einsetzen: <i>x</i> + 1 − 1,5 = 0,5, also <b><i>x</i> = 1</b>.</p>`,
+   n:'Die Stufenform ist <b>nicht eindeutig</b>. Der Rechner teilt jede Zeile so, dass vorne eine <b>1</b> steht. Ihre Rechnung von Hand darf andere Zahlen haben – die Lösung ist trotzdem gleich.'},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",[`Stufenform: ${MOD.t.ref}, Matrix, <b>)</b>, ${E}`,`Brüche genau abschreiben – oder mit ${MODEL==='cw'?'<b>FORMAT</b>':'<b>S⇔D</b>'} umschalten`,`Letzte Zeile lesen, dann rückwärts einsetzen`])}
+];
+
+// ---------------- Teil 3: Rref
+const T3=[
+  {t:"Reduzierte Stufenform: Rref(A)", a:AUFA, k:['ac'].concat(MOD.RREF,kA,[')',EX]), z:['res'],
+   d:`<p><b>AC</b>, dann ${MOD.t.rref}. Der Rechner schreibt <b>Rref(</b>. Dann ${mA}, <b>)</b> und ${E}.</p>`+MXP(RREFA,'Rref(A)','erw')+`<p>Jetzt stehen auch <b>oberhalb</b> der Einsen Nullen. Links steht die <b>Einheitsmatrix</b>.</p>`,
+   n:VOR},
+  {t:"Lösung ablesen", a:MXP(RREFA,'Rref(A)','erw'), k:[],
+   d:`<p>Jede Zeile ist jetzt fertig gelöst:</p><p style="font-family:Cambria,Georgia,serif;font-size:19px">1<i>x</i> = 1 &nbsp;·&nbsp; 1<i>y</i> = 2 &nbsp;·&nbsp; 1<i>z</i> = 3</p><p>Die Lösung steht in der <b>letzten Spalte</b>: <b><i>x</i> = 1, <i>y</i> = 2, <i>z</i> = 3</b>.</p>`,
+   n:'<b>Ref</b> = Stufenform (dann rückwärts einsetzen). <b>Rref</b> = reduzierte Stufenform (Lösung direkt ablesen). Die reduzierte Stufenform ist <b>eindeutig</b>.'},
+  {t:"Probe", a:GLA, k:[],
+   d:`<p>Setzen Sie zur Kontrolle in eine Gleichung ein, z. B. II:</p><p style="font-family:Cambria,Georgia,serif;font-size:19px">1 + 3 · 2 + 2 · 3 = 13 ✓</p>`},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 3",[`Reduzierte Stufenform: ${MOD.t.rref}, Matrix, <b>)</b>, ${E}`,`Lösung aus der letzten Spalte ablesen`,`Probe in einer Gleichung`])}
+];
+
+// ---------------- Teil 4: Sonderfälle
+const RREFB=[[1,0,-2,-5],[0,1,3,11],[0,0,0,0]];
+const RREFB8=[[1,0,-2,0],[0,1,3,0],[0,0,0,1]];
+const MB8=[[1,1,1,6],[2,1,-1,1],[3,2,0,'<b style="color:#C62828">8</b>']];
+const T4=[
+  {t:"Zweites LGS als MatB", a:GLB+MXP(MB,'B','erw'), k:MOD.DEF('B',3,4).concat(RK([1,1,1,6,2,1,-1,1,3,2,0,7]),['ac']), z:[],
+   d:`<p>Speichern Sie das LGS als <b>MatB</b> (3 Zeilen, 4 Spalten): ${MOD.t.def}.</p><p>Bei Gleichung III fehlt <i>z</i>: dort eine <b>0</b> eintragen. Am Ende <b>AC</b>.</p>`},
+  {t:"Rref(B): eine Nullzeile", a:GLB, k:MOD.RREF.concat(kB,[')',EX]), z:['res'],
+   d:`<p>${MOD.t.rref}, dann ${mB}, <b>)</b> und ${E}.</p>`+MXP(RREFB,'Rref(B)','erw')+`<p>Die letzte Zeile ist <b>0 0 0 | 0</b>, also 0 = 0. Das ist immer wahr – diese Gleichung sagt nichts mehr aus.</p>`},
+  {t:"Unendlich viele Lösungen", a:MXP(RREFB,'Rref(B)','erw'), k:[],
+   d:`<p>Es bleiben zwei Gleichungen für drei Unbekannte: <i>z</i> ist <b>frei wählbar</b>.</p><p style="font-family:Cambria,Georgia,serif;font-size:18px"><i>x</i> − 2<i>z</i> = −5 &nbsp;→&nbsp; <i>x</i> = −5 + 2<i>z</i><br><i>y</i> + 3<i>z</i> = 11 &nbsp;→&nbsp; <i>y</i> = 11 − 3<i>z</i></p><p>Das LGS hat <b>unendlich viele Lösungen</b>, z. B. <i>z</i> = 0: (−5 | 11 | 0).</p>`,
+   n:'Der Rechner meldet keinen Fehler! Sie müssen die Matrix selbst <b>lesen</b>.'},
+  {t:"Rechte Seite ändern: 7 → 8", a:GLB8+MXP(MB8,'B','erw'), k:['ac'].concat(MOD.EDIT('B'),['down','down','right','right','right','8',EX,'ac']),
+   d:`<p>Jetzt ändern wir in Gleichung III die rechte Seite von 7 auf <b>8</b>.</p><p>${MOD.t.edit} (MatB). Mit <b>▼ ▼</b> in Zeile 3, mit <b>▶ ▶ ▶</b> in Spalte 4. <b>8</b> und ${E}, dann <b>AC</b>.</p>`},
+  {t:"Rref(B): keine Lösung", a:GLB8, k:MOD.RREF.concat(kB,[')',EX]), z:['res'],
+   d:`<p>${MOD.t.rref}, ${mB}, <b>)</b>, ${E}.</p>`+MXP(RREFB8,'Rref(B)','erw')+`<p>Die letzte Zeile ist <b>0 0 0 | 1</b>, also <b>0 = 1</b>. Das ist ein <b>Widerspruch</b>.</p><p>Das LGS hat <b>keine Lösung</b>.</p>`},
+  {t:"Merkregel", k:[],
+   d:`<p>Schauen Sie immer auf die <b>letzte Zeile</b> von Rref:</p><ul style="font-size:15.5px;margin:0 0 10px;padding-left:20px"><li><b>0 0 1 | c</b> → genau eine Lösung</li><li><b>0 0 0 | 0</b> → unendlich viele Lösungen</li><li><b>0 0 0 | 1</b> → keine Lösung</li></ul>`,
+   n:'Ein LGS mit 2 Unbekannten speichern Sie als <b>2×3</b>-Matrix. Mehr als 3 Unbekannte gehen nicht: Die Matrix darf höchstens 4 Spalten haben.'},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 4",[`LGS speichern, dann ${MOD.t.rref}`,`Letzte Zeile ansehen: eine, keine oder unendlich viele Lösungen?`,`Ankreuzen, Lösung notieren`,"Danach: Lösungscode eintragen"])}
+];
+const TRACKS={
+  m:{name:"1 · LGS als Matrix speichern", start:()=>fresh(), steps:T1},
+  r:{name:"2 · Ref: Stufenform", start:()=>fresh(PRE), steps:T2},
+  rr:{name:"3 · Rref: Lösung ablesen", start:()=>fresh(PRE), steps:T3},
+  s:{name:"4 · Keine oder unendlich viele Lösungen", start:()=>fresh(PRE), steps:T4}
+};
+
+
+
+// =====================================================================
+//  Steuerung
+// =====================================================================
+const ORDER=["m","r","rr","s"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); const c=k==='shift'?'shift':k==='alpha'?'alpha':(MODEL==='dx'&&(k==='ac'||k==='del'))?'b':WHITE.test(k)?'w':''; return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?S.z:(S.z||[]).filter(z=>z!=='res'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '<span style="color:var(--mute)">Lesen – dann <b>Weiter</b>.</span>';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit').forEach(e=>e.classList.remove('hit'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1400); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    const want=S.k[pos]; let extra=NEGHINT(k,want);
+    if(k==='exe'&&want!=='exe') extra=` Erst die Zahl eintippen, dann mit ${E} bestätigen.`;
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(want,pos).replace('now','now big')}${extra}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-','*':'*','/':'/','(':'(',')':')'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+
+</script>
+</body></html>
