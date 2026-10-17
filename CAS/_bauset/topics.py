@@ -13,8 +13,8 @@ TOPICS = [
   dict(id='abl',   pdf='Ableitung',      app_cw=0, app_dx=0),
   dict(id='int',   pdf='Integrale',      app_cw=0, app_dx=0),
   dict(id='lgs',   pdf='LGS',            app_cw=5, app_dx=9),
-  dict(id='mat',   pdf='Matrizen',       app_cw=0, app_dx=3),
   dict(id='stufe', pdf='Stufenform',     app_cw=0, app_dx=3),
+  dict(id='mat',   pdf='Matrizen',       app_cw=0, app_dx=3),
   dict(id='kombi', pdf='Kombinatorik',   app_cw=0, app_dx=0),
   dict(id='binom', pdf='Binomialverteilung', app_cw=2, app_dx=6),
 ]

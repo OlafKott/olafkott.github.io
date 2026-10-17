@@ -213,8 +213,8 @@ function genS(){
     h:`${HK.rref} ▸ ${HK.mat} ▸ ${T(')')} ${HK.exe} · Schauen Sie auf die letzte Zeile.`,
     erkl:MXv(R,'Rref(A)')+'<br>'+(art==='eine'?'Genau eine Lösung: '+sol.map((v,i)=>VN[i]+' = '+zt(v)).join(', '):art==='keine'?'Letzte Zeile 0 0 0 | c mit c ≠ 0: Widerspruch → <b>keine Lösung</b>.':'Letzte Zeile 0 0 0 | 0: immer wahr → <b>unendlich viele Lösungen</b>.')};
 }
-const MODES={m:{name:"LGS als Matrix",gen:genM}, r:{name:"Ref: Stufenform",gen:genR}, l:{name:"Rref: Lösung",gen:genL}, s:{name:"Wie viele Lösungen?",gen:genS}};
-const ORDER=["m","r","l","s"];
+const MODES={m:{name:"LGS als Matrix",gen:genM}, r:{name:"Ref: Stufenform",gen:genR}, l:{name:"Rref: Lösung",gen:genL}};
+const ORDER=["m","r","l"];
 let mode=ORDER[0], AU=null, stat={a:0,r:0};
 const $=id=>root.getElementById(id);
 const inp=(id,c='')=>`<input class="zel ${c}" id="${id}" inputmode="decimal" autocomplete="off">`;
