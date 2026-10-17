@@ -363,8 +363,6 @@ const kTab=["ctrl","t"];
 const kUp=["up","up","up"];
 const kSet=["menu","2","5"];
 const kEin=["neg","2","tab","0",".","5","enter"];
-const kSet2=["menu","2","5"];
-const kFein=["tab","0",".","1","enter"];
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const FTERM='<i>f</i>(<i>x</i>) = 0,5<i>x</i>² − <i>x</i> − 3';
@@ -388,26 +386,13 @@ const TRACKS={
   {t:"Anfang und Schrittweite", a:"Tabellenanfang −2, Tabellenschritt 0,5", k:kEin,
    d:"<p>Tippen Sie <b>(−) 2</b>. Mit <b>tab</b> zum nächsten Feld, dort <b>0.5</b>. Mit <b>enter</b> bestätigen.</p>"+tbl([["−2","1"],["−1,5","−0,375"],["−1","−1,5"],["−0,5","−2,375"],["0","−3"]]),
    n:"Ein Ende gibt es nicht: Mit <b>▼</b> geht die Tabelle immer weiter."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen"])}
- ]},
- n:{ name:"Nullstelle eingrenzen", start:null, steps:[
-  {t:"Vorzeichenwechsel finden", a:"Wo wechselt <i>f</i>(<i>x</i>) das Vorzeichen?", k:[], hl:[-2,-1.5],
-   d:"<p><i>f</i>(−2) = 1 ist <b>positiv</b>, <i>f</i>(−1,5) = −0,375 ist <b>negativ</b>.</p><p>Der Graph schneidet die <i>x</i>-Achse also <b>zwischen −2 und −1,5</b>. Dort liegt eine Nullstelle.</p>",
-   n:"Vorzeichenwechsel in der Tabelle = Nullstelle dazwischen."},
-  {t:"Einstellungen öffnen", a:"Öffnen Sie wieder die Einstellungen", k:kSet2,
-   d:"<p><b>menu ▸ 2: Wertetabelle ▸ 5: Funktionseinstellungen bearbeiten</b></p>"},
-  {t:"Feinere Schrittweite", a:"Tabellenanfang −2 bleibt, Tabellenschritt 0,1", k:kFein,
-   d:"<p>Der Anfang −2 stimmt schon. Mit <b>tab</b> zum Tabellenschritt, <b>0.1</b> tippen, <b>enter</b>.</p>"},
-  {t:"Genauer ablesen", a:"Zwischen welchen Werten liegt die Nullstelle?", k:[], hl:[-1.7,-1.6],
-   d:"<p><i>f</i>(−1,7) = 0,145 ist positiv, <i>f</i>(−1,6) = −0,12 ist negativ.</p><p>Die Nullstelle liegt <b>zwischen −1,7 und −1,6</b>.</p>",
-   n:"Noch genauer geht es mit Tabellenschritt <b>0.01</b>."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",["Neues Dokument mit Graphs, <i>g</i> eingeben","Vorzeichenwechsel in der Tabelle suchen","Mit feinerem Tabellenschritt eingrenzen","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1 und 2",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen","Aufgabe 2 genauso mit <i>g</i>","Danach: Lösungscode eintragen"])}
  ]}
 };
 // Tastenfolgen aneinanderhängen: jeder Schritt beginnt mit dem Zustand am Ende des vorigen
 (function(){
   let pre=[];
-  ["t","n"].forEach(t=>{
+  ["t"].forEach(t=>{
     const T=TRACKS[t], p0=pre.slice();
     if(!T.start) T.start=()=>SIM(p0);
     T.steps.forEach(S=>{
@@ -419,7 +404,7 @@ const TRACKS={
 })();
 
 // ---------- Steuerung ----------
-const ORDER=["t","n"];
+const ORDER=["t"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};

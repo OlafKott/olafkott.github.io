@@ -4284,8 +4284,6 @@ const kTab=["ctrl","t"];
 const kUp=["up","up","up"];
 const kSet=["menu","2","5"];
 const kEin=["neg","2","tab","0",".","5","enter"];
-const kSet2=["menu","2","5"];
-const kFein=["tab","0",".","1","enter"];
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const FTERM='<i>f</i>(<i>x</i>) = 0,5<i>x</i>² − <i>x</i> − 3';
@@ -4309,26 +4307,13 @@ const TRACKS={
   {t:"Anfang und Schrittweite", a:"Tabellenanfang −2, Tabellenschritt 0,5", k:kEin,
    d:"<p>Tippen Sie <b>(−) 2</b>. Mit <b>tab</b> zum nächsten Feld, dort <b>0.5</b>. Mit <b>enter</b> bestätigen.</p>"+tbl([["−2","1"],["−1,5","−0,375"],["−1","−1,5"],["−0,5","−2,375"],["0","−3"]]),
    n:"Ein Ende gibt es nicht: Mit <b>▼</b> geht die Tabelle immer weiter."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen"])}
- ]},
- n:{ name:"Nullstelle eingrenzen", start:null, steps:[
-  {t:"Vorzeichenwechsel finden", a:"Wo wechselt <i>f</i>(<i>x</i>) das Vorzeichen?", k:[], hl:[-2,-1.5],
-   d:"<p><i>f</i>(−2) = 1 ist <b>positiv</b>, <i>f</i>(−1,5) = −0,375 ist <b>negativ</b>.</p><p>Der Graph schneidet die <i>x</i>-Achse also <b>zwischen −2 und −1,5</b>. Dort liegt eine Nullstelle.</p>",
-   n:"Vorzeichenwechsel in der Tabelle = Nullstelle dazwischen."},
-  {t:"Einstellungen öffnen", a:"Öffnen Sie wieder die Einstellungen", k:kSet2,
-   d:"<p><b>menu ▸ 2: Wertetabelle ▸ 5: Funktionseinstellungen bearbeiten</b></p>"},
-  {t:"Feinere Schrittweite", a:"Tabellenanfang −2 bleibt, Tabellenschritt 0,1", k:kFein,
-   d:"<p>Der Anfang −2 stimmt schon. Mit <b>tab</b> zum Tabellenschritt, <b>0.1</b> tippen, <b>enter</b>.</p>"},
-  {t:"Genauer ablesen", a:"Zwischen welchen Werten liegt die Nullstelle?", k:[], hl:[-1.7,-1.6],
-   d:"<p><i>f</i>(−1,7) = 0,145 ist positiv, <i>f</i>(−1,6) = −0,12 ist negativ.</p><p>Die Nullstelle liegt <b>zwischen −1,7 und −1,6</b>.</p>",
-   n:"Noch genauer geht es mit Tabellenschritt <b>0.01</b>."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",["Neues Dokument mit Graphs, <i>g</i> eingeben","Vorzeichenwechsel in der Tabelle suchen","Mit feinerem Tabellenschritt eingrenzen","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1 und 2",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen","Aufgabe 2 genauso mit <i>g</i>","Danach: Lösungscode eintragen"])}
  ]}
 };
 // Tastenfolgen aneinanderhängen: jeder Schritt beginnt mit dem Zustand am Ende des vorigen
 (function(){
   let pre=[];
-  ["t","n"].forEach(t=>{
+  ["t"].forEach(t=>{
     const T=TRACKS[t], p0=pre.slice();
     if(!T.start) T.start=()=>SIM(p0);
     T.steps.forEach(S=>{
@@ -4340,7 +4325,7 @@ const TRACKS={
 })();
 
 // ---------- Steuerung ----------
-const ORDER=["t","n"];
+const ORDER=["t"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>__D.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
@@ -4598,33 +4583,14 @@ function genTab(){
     auftrag:"Geben Sie die Funktion in Graphs ein, blenden Sie die Tabelle mit <b>ctrl + T</b> ein und stellen Sie Tabellenanfang und Tabellenschritt ein. Übertragen Sie die Werte.",
     hinweis:'Tipp: In Graphs tippen Sie hinter <span class="liste">f1(x)=</span> nur <span class="liste">'+casTerm(co)+'</span>. Einstellungen: <b>menu ▸ 2: Wertetabelle ▸ 5: Funktionseinstellungen bearbeiten</b>.'};
 }
-function genNS(){
-  let a,b,c,f,r,start,ok;
-  do{
-    a=pick([-1,-0.5,-0.25,0.25,0.5,1]); b=R(-6,6)/2; c=R(-12,12)/2;
-    f=x=>a*x*x+b*x+c; const D=b*b-4*a*c; ok=false; if(D<=0) continue;
-    const rs=[(-b-Math.sqrt(D))/(2*a),(-b+Math.sqrt(D))/(2*a)].sort((p,q)=>p-q);
-    if(rs[1]-rs[0]<9) continue;                       // nur eine Nullstelle im Fenster
-    r=pick(rs); if(Math.abs(r)>8) continue;
-    const fr=Math.abs(r*10-Math.round(r*10)); if(fr<0.15) continue;  // nicht zu nah am 0,1-Raster
-    start=Math.floor(r)-R(1,5); const other=rs[0]===r?rs[1]:rs[0];
-    if(other>=start&&other<=start+7) continue;
-    ok=true;
-  }while(!ok);
-  const i0=Math.floor(r), f0=cl(Math.floor(r*10)/10);
-  return {typ:'ns', h:"Nullstelle eingrenzen", co:[a,b,c], f, r, start, step:1, xs:Array.from({length:8},(_,i)=>start+i),
-    soll:[[i0,i0+1],[f0,cl(f0+0.1)]],
-    auftrag:"Erstellen Sie die Wertetabelle mit den angegebenen Einstellungen. Suchen Sie den Vorzeichenwechsel und grenzen Sie die Nullstelle danach mit Tabellenschritt 0,1 genauer ein.",
-    hinweis:'Tipp: Vorzeichenwechsel = ein Wert ist positiv, der nächste negativ (oder umgekehrt). Für die feinere Tabelle setzen Sie den Tabellenanfang auf die linke Grenze und den Tabellenschritt auf <span class="liste">0.1</span>.'};
-}
-const MODES={tab:{name:"Wertetabelle ausfüllen",gen:genTab}, ns:{name:"Nullstelle eingrenzen",gen:genNS}};
-const ORDER=["tab","ns"];
+const MODES={tab:{name:"Wertetabelle ausfüllen",gen:genTab}};
+const ORDER=["tab"];
 let mode=ORDER[0], A=null, stat={a:0,r:0};
 const $=id=>root.getElementById(id);
 const inp=(id,ph)=>`<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}">`;
 function neu(){
   A=MODES[mode].gen();
-  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('tabs').innerHTML=ORDER.length<2?'':ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
   $('h').textContent="Aufgabe: "+A.h;
   $('auftrag').innerHTML=A.auftrag;
   $('term').innerHTML=termHTML('f',A.co);
@@ -4633,10 +4599,6 @@ function neu(){
   if(A.typ==='tab'){
     $('round').innerHTML='<b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>3,68</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen.';
     $('felder').innerHTML='<div class="dt"><table class="e"><tr><th><i>x</i></th>'+A.xs.map(x=>`<td class="xv">${deN(x)}</td>`).join('')+'</tr><tr><th><i>f</i>(<i>x</i>)</th>'+A.xs.map((x,i)=>`<td id="c${i}">${inp('i'+i,'')}</td>`).join('')+'</tr></table></div><div class="tmsg" id="tmsg"></div>';
-  } else {
-    $('round').innerHTML='<b>So geht es:</b> Erst die Tabelle mit Schritt 1, dann eine feinere Tabelle mit Schritt 0,1. Tragen Sie jeweils die <b>kleinere</b> Zahl links ein.';
-    $('felder').innerHTML=`<div class="zr" id="z0">Vorzeichenwechsel (Schritt 1): zwischen <i>x</i> = ${inp('a0','')} und <i>x</i> = ${inp('b0','')}<span class="m"></span><div class="msg"></div></div>
-      <div class="zr" id="z1">Genauer (Schritt 0,1): zwischen <i>x</i> = ${inp('a1','')} und <i>x</i> = ${inp('b1','')}<span class="m"></span><div class="msg"></div></div>`;
   }
   $('score').textContent='';
   root.querySelectorAll('#felder input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
@@ -4661,18 +4623,6 @@ function pruefen(){
       c.classList.add(st); if(st==='ok') ok++;
     });
     $('tmsg').textContent=t;
-  } else {
-    tot=2;
-    A.soll.forEach((S,i)=>{
-      const z=$('z'+i), m=z.querySelector('.m'), msg=z.querySelector('.msg'); z.classList.remove('ok','no','fmt'); m.textContent=''; msg.textContent='';
-      const ra=$('a'+i).value, rb=$('b'+i).value; if(!ra.trim()&&!rb.trim()) return;
-      const pa=parse(ra), pb=parse(rb); let st, t='';
-      if(!pa||!pb){ st='fmt'; t='Bitte in beide Felder eine Zahl eintragen.'; }
-      else if(near(pa.v,S[0])&&near(pb.v,S[1])) st='ok';
-      else if(near(pa.v,S[1])&&near(pb.v,S[0])){ st='fmt'; t='Vertauscht: Die kleinere Zahl gehört nach links.'; }
-      else { st='no'; t= i===0 ? 'Dort wechselt das Vorzeichen nicht. Suchen Sie zwei Nachbarwerte mit + und −.' : 'Noch nicht. Tabellenanfang = linke Grenze aus der ersten Zeile, Tabellenschritt 0.1.'; }
-      z.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
-    });
   }
   stat.a++; if(ok===tot) stat.r++;
   $('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
@@ -4681,8 +4631,6 @@ function pruefen(){
 function zeigen(){
   if(A.typ==='tab'){
     A.xs.forEach((x,i)=>{ const c=$('c'+i); if(c.classList.contains('ok')) return; const s=c.querySelector('.sl'); if(s) s.textContent=de2(A.f(x)); else c.insertAdjacentHTML('beforeend','<span class="sl">'+de2(A.f(x))+'</span>'); });
-  } else {
-    A.soll.forEach((S,i)=>{ const z=$('z'+i); if(z.classList.contains('ok')) return; z.querySelector('.msg').innerHTML=`Lösung: zwischen ${deN(S[0])} und ${deN(S[1])}`; });
   }
 }
 $('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
