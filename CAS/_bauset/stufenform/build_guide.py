@@ -87,7 +87,7 @@ const T1=[
   {t:"Zurück zur Rechenzeile", a:AUFA, k:['ac'],
    d:`<p>Mit <b>AC</b> verlassen Sie den Editor. Das LGS ist jetzt als <b>MatA</b> gespeichert.</p>`,
    n:`Tippfehler? ${MOD.t.edit}, mit den Pfeilen zum Feld, neue Zahl, ${E}.`},
-  {t:"Arbeitsblatt vorbereiten", k:[], ab:1, d:`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: Aufgabe 1</div><ul><li>Erweiterte Matrix zu jedem LGS aufschreiben</li><li>Speichern: ${MOD.t.def}</li><li>3 Gleichungen, 3 Unbekannte → <b>3 Zeilen, 4 Spalten</b></li></ul><p>Dann <b>Weiter</b> mit Teil 2.</p></div>`}
+  {t:"Arbeitsblatt vorbereiten", k:[], ab:1, d:`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: LGS speichern</div><ul><li>Das LGS vom Arbeitsblatt als <b>MatA</b> speichern: ${MOD.t.def}</li><li>3 Gleichungen, 3 Unbekannte → <b>3 Zeilen, 4 Spalten</b></li></ul><p>Dann <b>Weiter</b> mit Teil 2.</p></div>`}
 ]);
 
 // ---------------- Teil 2: Ref
@@ -100,7 +100,7 @@ const T2=[
   {t:"Rückwärts einsetzen", a:MXP(REFA,'Ref(A)','erw'), k:[],
    d:`<p>Zeile 2 bedeutet: <i>y</i> + <i>z</i> = 5. Mit <i>z</i> = 3 folgt <b><i>y</i> = 2</b>.</p><p>Zeile 1 bedeutet: <i>x</i> + ${FR(1,2)}<i>y</i> − ${FR(1,2)}<i>z</i> = ${FR(1,2)}. Einsetzen: <i>x</i> + 1 − 1,5 = 0,5, also <b><i>x</i> = 1</b>.</p>`,
    n:'Die Stufenform ist <b>nicht eindeutig</b>. Der Rechner teilt jede Zeile so, dass vorne eine <b>1</b> steht. Ihre Rechnung von Hand darf andere Zahlen haben – die Lösung ist trotzdem gleich.'},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",[`Stufenform: ${MOD.t.ref}, Matrix, <b>)</b>, ${E}`,`Brüche genau abschreiben – oder mit ${MODEL==='cw'?'<b>FORMAT</b>':'<b>S⇔D</b>'} umschalten`,`Letzte Zeile lesen, dann rückwärts einsetzen`])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",[`Stufenform: ${MOD.t.ref}, Matrix, <b>)</b>, ${E}`,`Brüche genau abschreiben – oder mit ${MODEL==='cw'?'<b>FORMAT</b>':'<b>S⇔D</b>'} umschalten`,`Ref(A) in die Kästchen eintragen`])}
 ];
 
 // ---------------- Teil 3: Rref
@@ -113,7 +113,7 @@ const T3=[
    n:'<b>Ref</b> = Stufenform (dann rückwärts einsetzen). <b>Rref</b> = reduzierte Stufenform (Lösung direkt ablesen). Die reduzierte Stufenform ist <b>eindeutig</b>.'},
   {t:"Probe", a:GLA, k:[],
    d:`<p>Setzen Sie zur Kontrolle in eine Gleichung ein, z. B. II:</p><p style="font-family:Cambria,Georgia,serif;font-size:19px">1 + 3 · 2 + 2 · 3 = 13 ✓</p>`},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 3",[`Reduzierte Stufenform: ${MOD.t.rref}, Matrix, <b>)</b>, ${E}`,`Lösung aus der letzten Spalte ablesen`,`Probe in einer Gleichung`])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",[`Reduzierte Stufenform: ${MOD.t.rref}, Matrix, <b>)</b>, ${E}`,`Rref(A) eintragen`,`Lösungsmenge <i>L</i> aus der letzten Spalte ablesen`,"Danach: Lösungscode eintragen"])}
 ];
 
 // ---------------- Teil 4: Sonderfälle
@@ -135,7 +135,6 @@ const T4=[
   {t:"Merkregel", k:[],
    d:`<p>Schauen Sie immer auf die <b>letzte Zeile</b> von Rref:</p><ul style="font-size:15.5px;margin:0 0 10px;padding-left:20px"><li><b>0 0 1 | c</b> → genau eine Lösung</li><li><b>0 0 0 | 0</b> → unendlich viele Lösungen</li><li><b>0 0 0 | 1</b> → keine Lösung</li></ul>`,
    n:'Ein LGS mit 2 Unbekannten speichern Sie als <b>2×3</b>-Matrix. Mehr als 3 Unbekannte gehen nicht: Die Matrix darf höchstens 4 Spalten haben.'},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 4",[`LGS speichern, dann ${MOD.t.rref}`,`Letzte Zeile ansehen: eine, keine oder unendlich viele Lösungen?`,`Ankreuzen, Lösung notieren`,"Danach: Lösungscode eintragen"])}
 ];
 const TRACKS={
   m:{name:"1 · LGS als Matrix speichern", start:()=>fresh(), steps:T1},

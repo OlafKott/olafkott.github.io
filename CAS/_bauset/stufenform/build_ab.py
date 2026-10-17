@@ -78,6 +78,10 @@ table.mxl.f td > span{ height:8.6mm; width:10.5mm; }
 .pfeil{ font-size:18px; color:#555; }
 .txt.k{ font-size:12.4px; color:#444; margin-left:4mm; }
 .an.weg b.k{ min-width:19mm !important; }
+.aufg.big{ font-size:17px; } .aufg.big table.lgs{ font-size:18px; } .aufg.big table.lgs td{ padding:0.8mm 0.6mm; }
+table.mxl.f td > span{ height:10mm; width:14mm; font-size:15px; }
+table.mxl td > span{ width:12mm; height:7.5mm; }
+.lue.o{ width:46mm; height:9mm; font-size:15px; justify-content:center; }
 .lue.o3{ width:92mm; height:6.6mm; font-size:12px; justify-content:flex-start; padding:0 2mm; }
 .gegeben.nw{ flex-wrap:nowrap; justify-content:space-between; }
 table.mxl.k td > span{ width:8mm; height:5.4mm; }
@@ -108,52 +112,28 @@ def page(model, fill):
     h1 = 'Lösung: Gauß auf Knopfdruck' if fill else 'Taschenrechner-Führerschein: Gauß auf Knopfdruck'
     app = 'App Matrix' if model == 'cw' else 'Modus Matrizen'
     out = [head, f'<body class="{"lsg" if fill else ""}">\n<div class="page"><div class="page-content">\n',
-           f'<div class="page-header"><div><h1>{h1}</h1><div class="sub">Zeilenstufenform mit Ref und Rref · LGS lösen · Sonderfälle · {app} · {mname}</div></div>\n<img class="logo" src="{logo}" alt="RWB Essen fhr"></div>\n']
+           f'<div class="page-header"><div><h1>{h1}</h1><div class="sub">Zeilenstufenform mit Ref und Rref · LGS lösen · {app} · {mname}</div></div>\n<img class="logo" src="{logo}" alt="RWB Essen fhr"></div>\n']
     if not fill: out.append('<div class="namebar"><span>Name:</span><span class="d">Datum:</span></div>\n')
     out.append('<div class="anleitung"><div class="links">\n<p class="an">QR-Code scannen und die <b>Tour</b> am <b>eigenen Rechner</b> mitmachen.</p>\n'
                f'<p class="an weg" style="font-size:12.2px">{wege}</p>\n<p class="an tipp" style="font-size:11.6px"><b class="t">Wichtig:</b> {tipp}</p>\n'
                f'</div><div class="qrs"><a class="qrlink" href="{gurl}">{frame}</a></div></div>\n')
     out.append('<div class="aufgaben">')
-    # 1
-    out.append('<div class="blk"><div class="sec"><span class="nr">1</span>LGS als Matrix<span class="teil">✍ nach Tour-Teil 1</span></div>\n'
-               '<p class="txt">Schreiben Sie die erweiterte Koeffizientenmatrix auf. Speichern Sie sie im Rechner: a) als <b>MatA</b>, b) als <b>MatB</b>.</p>\n'
-               '<div class="gegeben zw nw">'
-               f'<span class="aufg"><span class="nr">a)</span> {lgs(A)} <span class="pfeil">→</span> <i>A</i> = {boxes(A, fill, "k")}</span>'
-               f'<span class="aufg"><span class="nr">b)</span> {lgs(B)} <span class="pfeil">→</span> <i>B</i> = {boxes(B, fill, "k")}</span>'
-               '</div></div>\n')
-    # 2
-    out.append('<div class="blk"><div class="sec"><span class="nr">2</span>Ref: Zeilenstufenform<span class="teil">✍ nach Tour-Teil 2</span></div>\n'
-               '<p class="txt">Speichern Sie das LGS als <b>MatC</b>. Bestimmen Sie <b>Ref(<i>C</i>)</b>. Lesen Sie <i>z</i> ab und setzen Sie rückwärts ein.</p>\n'
-               '<div class="gegeben zw">'
-               f'<span class="aufg">{lgs(C)}</span><span class="aufg">Ref(<i>C</i>) = {boxes(RC, fill, "f")}</span>'
-               f'<span class="aufg"><i>z</i> = {lue(zt(RC[2][3]), fill)}<br><br><i>y</i> = {lue(zt(4), fill)}<br><br><i>x</i> = {lue(zt(1), fill)}</span>'
-               '</div></div>\n')
-    # 3
-    out.append('<div class="blk"><div class="sec"><span class="nr">3</span>Rref: Lösung ablesen<span class="teil">✍ nach Tour-Teil 3</span></div>\n'
-               '<p class="txt">Lösen Sie die LGS aus Aufgabe 1 mit <b>Rref</b>.</p>\n'
-               '<div class="gegeben zw">'
-               f'<span class="aufg">Rref(<i>A</i>) = {boxes(RA, fill, "k")}</span>'
-               f'<span class="aufg"><span class="nr">a)</span> {xyz([r[-1] for r in RA], fill)}<br><br><span class="nr">b)</span> {xyz([r[-1] for r in RB], fill)}</span>'
-               '</div></div>\n')
-    # 4
-    def fall(lbl, M, last, art, loes):
-        arts = ['genau eine', 'keine', 'unendlich viele']
-        kz = ''.join(f'{kreuz(a == art, fill)}{a}' for a in arts)
-        L = M if isinstance(M, str) else lgs(M)
-        return (f'<span class="lab">{lbl}</span><span class="aufg">{L}</span>'
-                f'<span><span class="hilf">letzte Zeile von Rref:</span> {boxes([last], fill, "k")} <span class="art">{kz}</span><br>'
-                f'<span class="hilf">Lösung:</span> {lue(loes, fill, "o3")}</span>')
-    out.append('<div class="blk"><div class="sec"><span class="nr">4</span>Eine, keine oder unendlich viele Lösungen?<span class="teil">✍ nach Tour-Teil 4</span></div>\n'
-               '<p class="txt">Speichern Sie jedes LGS und bestimmen Sie <b>Rref</b>. Kreuzen Sie an: Wie viele Lösungen gibt es? <span class="hilf">(c: 2 Unbekannte → 2×3-Matrix)</span></p>\n'
-               '<div class="fall">'
-               + fall('a)', D1, R1[2], 'unendlich viele', '<i>x</i> = 4 − 2<i>z</i>, <i>y</i> = 2 + <i>z</i>, <i>z</i> beliebig')
-               + fall('b)', '<span style="font-size:13.5px">wie a), aber Gleichung III:<br>2<i>x</i> + 4<i>z</i> = <b>9</b></span>', R2[2], 'keine', 'keine Lösung, denn 0 = 1 ist falsch')
-               + fall('c)', D3, R3[1], 'genau eine', '<i>x</i> = 3, <i>y</i> = 2')
-               + '</div></div>\n')
-    out.append('</div>')
+    RRC = rref(C)
+    sol = [r[-1] for r in RRC]
+    Lm = '(' + ' | '.join(zt(v) for v in sol) + ')'
+    out.append('<div class="blk"><p class="txt" style="font-size:14.5px">Gegeben ist das lineare Gleichungssystem. Speichern Sie es als erweiterte Matrix <b>MatA</b> im Rechner (3 Zeilen, 4 Spalten).</p>\n'
+               f'<div class="gegeben" style="margin:2mm 0 0 8mm"><span class="aufg big">{lgs(C)}</span></div></div>\n')
+    out.append('<div class="blk"><div class="sec"><span class="nr">1</span>Ref: Zeilenstufenform<span class="teil">✍ nach Tour-Teil 2</span></div>\n'
+               '<p class="txt">Bestimmen Sie mit dem Rechner <b>Ref(<i>A</i>)</b> und tragen Sie das Ergebnis ein.</p>\n'
+               f'<div class="gegeben zw"><span class="aufg big">Ref(<i>A</i>) = {boxes(RC, fill, "f")}</span></div></div>\n')
+    out.append('<div class="blk"><div class="sec"><span class="nr">2</span>Rref: reduzierte Zeilenstufenform<span class="teil">✍ nach Tour-Teil 3</span></div>\n'
+               '<p class="txt">Bestimmen Sie mit dem Rechner <b>Rref(<i>A</i>)</b>. Lesen Sie die Lösungsmenge ab.</p>\n'
+               f'<div class="gegeben zw" style="gap:2mm 16mm"><span class="aufg big">Rref(<i>A</i>) = {boxes(RRC, fill, "f")}</span>'
+               f'<span class="aufg big"><i>L</i> = {{ {lue(Lm, fill, "o")} }}</span></div></div>\n')
+
     # Code
-    bx = ['4', '2', '3', '1']
-    labs = ['<i>y</i> in<br>Aufgabe 2', '<i>x</i> in<br>Aufgabe 3 a)', '<i>z</i> in<br>Aufgabe 3 b)', 'rechts unten in<br>Rref bei 4 b)']
+    bx = ['7', '3', '1', '4']
+    labs = ['Ref(<i>A</i>): Zeile 2,<br>Spalte 4', 'Anzahl der<br>Nullen in Ref(<i>A</i>)', '<i>x</i>-Wert<br>in <i>L</i>', '<i>y</i>-Wert<br>in <i>L</i>']
     lurl, uurl = BASE + 'Loesung_' + pre + 'Stufenform.html', BASE + pre + 'Uebung_Stufenform.html'
     out.append('<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein – das ist der Code für die Lösung.</div>\n<div class="ziff">'
                + ''.join(f'<div class="z"><span class="bx">{b if fill else ""}</span><span class="lab">{l}</span></div>' for b, l in zip(bx, labs))
