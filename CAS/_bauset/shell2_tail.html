@@ -277,7 +277,9 @@ const FIT_W=760; let SCALE=1;
 function fit(){
   const w=document.documentElement.clientWidth; let h=window.innerHeight;
   // Im Moodle-iframe ist innerHeight die Rahmenhöhe, nicht die Bildschirmhöhe: auf Handys im Querformat die kurze Bildschirmseite nehmen
-  const sh=Math.min(screen.width,screen.height); if(sh<500 && w>h*0.9) h=Math.min(h,sh);
+  const sh=Math.min(screen.width,screen.height), lh=Math.max(screen.width,screen.height);
+  const landscape=(screen.orientation&&/landscape/.test(screen.orientation.type))||Math.abs(window.orientation||0)===90||screen.width>screen.height;
+  if(sh<500) h=Math.min(h, landscape?sh:lh);
   // schmal (Handy hochkant): auf 760 px Layoutbreite verkleinern; niedrig (Handy quer): so weit, dass ~800 px Höhe passen
   SCALE=Math.min(1, w/FIT_W, h<600 ? h/800 : 1);
   if(SCALE<1){ APP.classList.add('scaled'); APP.style.width=(w/SCALE)+'px'; APP.style.transformOrigin='top left'; APP.style.transform='scale('+SCALE+')'; }
@@ -286,7 +288,7 @@ function fit(){
   if(mode==='pick') sizePick(true);
 }
 new ResizeObserver(()=>{ if(SCALE!==1) document.body.style.height=(APP.offsetHeight*SCALE)+'px'; }).observe(APP);
-window.addEventListener('resize',fit); fit();
+window.addEventListener('resize',fit); window.addEventListener('orientationchange',()=>setTimeout(fit,150)); fit();
 })();
 </script>
 </body></html>
