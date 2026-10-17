@@ -1152,7 +1152,10 @@ button{ font-family:inherit; }
 .right .gpanel .tabs.solo{ display:none; }
 .right .gpanel .pnote{ font-size:13px; color:var(--mute); margin:-4px 0 10px; }
 .right .gpanel .pnote:empty{ display:none; }
-.right .gpanel .btns{ flex-wrap:wrap; }
+.right .gpanel .btns{ flex-wrap:nowrap; gap:8px; }
+.right .gpanel .btns button{ white-space:nowrap; padding:9px 16px; flex:0 1 auto; min-width:0; }
+.right .gpanel{ container-type:inline-size; }
+@container (max-width:430px){ .right .gpanel .btns button{ padding:8px 10px; font-size:14.5px; } }
 .right .gpanel #skip{ margin-left:auto; }
 .right .gpanel #next{ margin-left:0; }
 .topic:nth-child(7){ animation-delay:.3s }
