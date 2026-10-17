@@ -180,8 +180,8 @@ TOPICS.forEach(t=>{
   const g=G[t.id]=GUIDES[t.id].make(scope(t.id));
   p.querySelector('#pnote').innerHTML=GUIDES[t.id].note||'';
   if(g.ORDER.length<2) p.querySelector('#tabs').classList.add('solo');
-  p.querySelector('#next').onclick=()=>g.next();
-  p.querySelector('#back').onclick=()=>g.back();
+  p.querySelector('#next').onclick=()=>g.fwd();
+  p.querySelector('#back').onclick=()=>g.bwd();
   p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
   p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };
 });

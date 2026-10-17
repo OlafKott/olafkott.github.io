@@ -115,13 +115,22 @@ def guide(gid, folder, core):
     js2, n = re.subn(r"^__D\.addEventListener\('keydown',e=>\{\n.*?\n\}\);\n", '', js2, flags=re.M | re.S)
     assert n == 1, (gid, 'keydown')
     assert 'location' not in js2 and 'window.' not in js2, gid
+    # Weiter-Button: immer „Weiter ▶“ (ein Klick = nächster Schritt), statt „Überspringen“
+    js2, n1 = re.subn(r"\$\('next'\)\.textContent=\w+ \? (\(last \? .*?: 'Weiter ▶'\)) : 'Überspringen';", r"$('next').textContent=\1;", js2)
+    js2, n2 = re.subn(r"\$\('next'\)\.className=\w+\?'go':'';", "$('next').className='go';", js2)
+    assert n1 == 1 and n2 == 1, (gid, 'weiter', n1, n2)
     api = '''
   return {
     ORDER, TRACKS, KMAP, render, press, next, back,
     screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
     home:(typeof home==='function'?home:null),
     selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); }
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };'''
     mod = f'/* ===== Anleitung: {gid} ===== */\nGUIDES["{gid}"]={{\n note:{json.dumps(small, ensure_ascii=False)},\n make:function(__D){{\n{js2.strip()}\n{api}\n }}\n}};\n'
     return dict(css=scope_css(css, gid), js=mod, calc=calc, panel=panel)
