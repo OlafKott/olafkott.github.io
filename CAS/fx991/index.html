@@ -171,7 +171,7 @@ const DATA={
      ["kombi","fx991DEX_Kombinatorik_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Kombinatorik.pdf","fx991DEX_Uebung_Kombinatorik.html"],
      ["binom","fx991DEX_Binomialverteilung_Schritt_fuer_Schritt.html","Arbeitsblatt_fx991DEX_Binomialverteilung.pdf","fx991DEX_Uebung_Binomialverteilung.html"]]
 };
-const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte",gl:"Gleichungen lösen",wt:"Wertetabellen",abl:"Ableitung an einer Stelle",int:"Integrale",lgs:"Lineare Gleichungssysteme",mat:"Matrizen",stufe:"Zeilenstufenform (Ref/Rref)",kombi:"Kombinatorik",binom:"Binomialverteilung"};
+const NAME={grund:"Grundlagen",stat:"Lage- und Streuungsmaße",funk:"Funktionswerte",gl:"Gleichungen lösen",wt:"Wertetabellen",abl:"Ableitung an einer Stelle",int:"Integrale",lgs:"Lineare Gleichungssysteme",mat:"Matrizenrechnung",stufe:"Zeilenstufenform (Ref/Rref)",kombi:"Kombinatorik (nPr und nCr)",binom:"Binomialverteilung"};
 const stage=document.getElementById('stage'), toc=document.getElementById('toc');
 function pick(m){
   toc.innerHTML=`<div class="model">${m==='cw'?'fx-991DE CW':'fx-991DE X'}</div>`+DATA[m].map(([ic,tour,pdf,ueb],i)=>`<div class="topic"><div class="th"><span class="num">${i+1}</span><span class="ttl">${NAME[ic]}</span></div>

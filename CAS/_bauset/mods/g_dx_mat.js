@@ -1,5 +1,5 @@
 GUIDES["dx_mat"]={
- title:"Matrizen",
+ title:"Matrizenrechnung",
  css:String.raw`[data-g="dx_mat"] .calc{ width:330px; flex:0 0 330px; border-radius:30px; box-shadow:0 6px 22px rgba(0,0,0,.25); background:radial-gradient(#2a2a2e 1px, transparent 1.2px) 0 0/5px 5px, #1e1e21; border:6px solid #e6e6ea; padding:14px 13px 16px; }
 [data-g="dx_mat"] .calc > *{ position:relative; }
 [data-g="dx_mat"] .k.rd.hit{ background:radial-gradient(circle at 40% 35%,#fff6d6,#f2b705 80%); }

@@ -1,5 +1,5 @@
 GUIDES["mat"]={
- title:"Matrizen",
+ title:"Matrizenrechnung",
  css:String.raw`[data-g="mat"] .sb .ind.a{ background:#7a1a2a; }
 [data-g="mat"] .ein{ font-size:16px; min-height:30px; display:flex; align-items:center; flex-wrap:nowrap; white-space:nowrap; overflow:hidden; }
 [data-g="mat"] .aus{ font-size:21px; text-align:right; min-height:30px; display:flex; justify-content:flex-end; align-items:center; font-weight:bold; white-space:nowrap; gap:6px; }
