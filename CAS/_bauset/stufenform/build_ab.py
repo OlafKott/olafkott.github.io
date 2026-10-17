@@ -82,6 +82,7 @@ table.mxl.f td > span{ height:8.6mm; width:10.5mm; }
 table.mxl.f td > span{ height:10mm; width:14mm; font-size:15px; }
 table.mxl td > span{ width:12mm; height:7.5mm; }
 .lue.o{ width:46mm; height:9mm; font-size:15px; justify-content:center; }
+.aufg.big .lue.t{ width:16mm; height:8mm; font-size:15px; }
 .lue.o3{ width:92mm; height:6.6mm; font-size:12px; justify-content:flex-start; padding:0 2mm; }
 .gegeben.nw{ flex-wrap:nowrap; justify-content:space-between; }
 table.mxl.k td > span{ width:8mm; height:5.4mm; }
@@ -127,9 +128,9 @@ def page(model, fill):
                '<p class="txt">Bestimmen Sie mit dem Rechner <b>Ref(<i>A</i>)</b> und tragen Sie das Ergebnis ein.</p>\n'
                f'<div class="gegeben zw"><span class="aufg big">Ref(<i>A</i>) = {boxes(RC, fill, "f")}</span></div></div>\n')
     out.append('<div class="blk"><div class="sec"><span class="nr">2</span>Rref: reduzierte Zeilenstufenform<span class="teil">✍ nach Tour-Teil 3</span></div>\n'
-               '<p class="txt">Bestimmen Sie mit dem Rechner <b>Rref(<i>A</i>)</b>. Lesen Sie die Lösungsmenge ab.</p>\n'
+               '<p class="txt">Bestimmen Sie mit dem Rechner <b>Rref(<i>A</i>)</b>. Lesen Sie <i>x</i>, <i>y</i>, <i>z</i> und die Lösungsmenge ab.</p>\n'
                f'<div class="gegeben zw" style="gap:2mm 16mm"><span class="aufg big">Rref(<i>A</i>) = {boxes(RRC, fill, "f")}</span>'
-               f'<span class="aufg big"><i>L</i> = {{ {lue(Lm, fill, "o")} }}</span></div></div>\n')
+               f'<span class="aufg big">{"<br><br>".join(f"<i>{n}</i> = {lue(zt(v), fill, chr(116))}" for n, v in zip("xyz", sol))}<br><br><i>L</i> = {{ {lue(Lm, fill, "o")} }}</span></div></div>\n')
 
     # Code
     bx = ['7', '3', '1', '4']
