@@ -133,6 +133,9 @@ def guide(gid, folder, core):
       if(st<T.steps.length-1){ st++; pos=0; render(); return; }
       const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
       if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
     weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
     bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
   };'''

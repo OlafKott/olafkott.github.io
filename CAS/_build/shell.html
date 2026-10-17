@@ -90,7 +90,8 @@ button{ font-family:inherit; }
 .right .gpanel .tabs.solo{ display:none; }
 .right .gpanel .pnote{ font-size:13px; color:var(--mute); margin:-4px 0 10px; }
 .right .gpanel .pnote:empty{ display:none; }
-.right .gpanel .btns{ flex-wrap:nowrap; gap:8px; }
+.right .gpanel .panel{ display:flex; flex-direction:column; }
+.right .gpanel .btns{ flex-wrap:nowrap; gap:8px; margin-top:auto; padding-top:10px; }
 .right .gpanel .btns button{ white-space:nowrap; padding:9px 16px; flex:0 1 auto; min-width:0; }
 .right .gpanel{ container-type:inline-size; }
 @container (max-width:430px){ .right .gpanel .btns button{ padding:8px 10px; font-size:14.5px; } }
@@ -170,10 +171,10 @@ let mode='toc', active=null;   // mode: toc | g | u
 // ---------------------------------------------------------------
 //  Anleitungen: je ein eigenes Panel, ein gemeinsamer Rechner
 // ---------------------------------------------------------------
-const PANEL={}, G={};
+const PANEL={}, G={}; let measuring=false;
 const PANEL_HTML='%PANEL_HTML%';
 function scope(id){
-  const on=()=>active===id&&mode==='g';
+  const on=()=>active===id&&mode==='g'&&!measuring;
   return {
     getElementById:x=> x==='scr' ? (on()?SCR:DUMMY) : PANEL[id].querySelector('#'+x),
     querySelector:s=> on()?CALC.querySelector(s):null,
@@ -268,10 +269,24 @@ function apply(t,v){
   }
   mode=v; APP.dataset.mode=v;
   if(v==='toc') showHome();
-  else if(v==='g'){ CALCW.dataset.g=t; SCR.className='scr'; CAP.textContent=''; G[t].render(); }
+  else if(v==='g'){ CALCW.dataset.g=t; SCR.className='scr'; CAP.textContent=''; fixHeight(t); G[t].render(); }
   else showPreview(t,'Rechnen Sie am eigenen Handheld.');
   flash();
 }
+// Feste Panelhöhe je Anleitung: höchster Schritt (mind. Rechnerhöhe) -> Buttonzeile bleibt an derselben Stelle
+function fixHeight(t){
+  const g=G[t], p=PANEL[t].querySelector('.panel'); if(!g.snap) return;
+  const wasHidden=vG.hidden; vG.hidden=false;
+  const s=g.snap(); measuring=true; p.style.minHeight='0px'; let mx=0;
+  try{
+    g.ORDER.forEach(tr=>g.TRACKS[tr].steps.forEach((x,i)=>{
+      g.goto(tr,i,0); mx=Math.max(mx,p.offsetHeight);
+      if(x.k.length){ g.goto(tr,i,x.k.length); mx=Math.max(mx,p.offsetHeight); }
+    }));
+  }finally{ measuring=false; g.restore(s); vG.hidden=wasHidden; }
+  p.style.minHeight=Math.max(mx, CALC.offsetHeight)+'px';
+}
+let rzT=null; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ if(mode==='g'&&active) fixHeight(active); },200); });
 function title(t,v){
   if(v==='toc') return 'CAS-Führerschein<small>TI-Nspire CX CAS</small>';
   return plain(TOP[t].title)+`<small>${v==='g'?'Anleitung':'Übung'}</small>`;
