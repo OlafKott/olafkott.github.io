@@ -1311,6 +1311,15 @@ button{ font-family:inherit; }
 [data-g="abl"] .fr > span:first-child{border-bottom:1px solid currentColor;}
 [data-g="abl"] .fr > span:empty::after, [data-g="abl"] .rad:empty::after, [data-g="abl"] sup:empty::after{content:"\25A1"; color:#999;}
 [data-g="abl"] .calcapp{overflow:hidden;}
+[data-g="abl"] .pal{position:absolute; left:16px; right:16px; top:30px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); z-index:4; display:grid; grid-template-columns:repeat(5,1fr); gap:3px; padding:5px; font-size:10px;}
+[data-g="abl"] .pal.pr{grid-template-columns:repeat(9,1fr); top:120px; font-size:13px;}
+[data-g="abl"] .pal > span{background:#fff; border:1px solid #c3cad4; border-radius:3px; height:30px; display:flex; align-items:center; justify-content:center; white-space:nowrap;}
+[data-g="abl"] .pal.pr > span{height:24px;}
+[data-g="abl"] .pal > span.ziel{background:#F2B705; border-color:#b88a00; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_abl 1.2s ease-in-out infinite;}
+[data-g="abl"] .pal .fr{font-size:9px;}
+[data-g="abl"] .pal sup{font-size:7px;}
+[data-g="abl"] .pb{display:inline-block; width:6px; height:7px; border:1px solid #888; vertical-align:middle;}
+[data-g="abl"] .chip.pick{background:#F2B705; color:#111;}
 [data-g="abl"] .calcapp > *{flex-shrink:0;}
 [data-g="abl"] .dvb:empty::after{content:"\25A1"; color:#999;}
 [data-g="abl"] .rt{white-space:nowrap;}
@@ -5668,10 +5677,10 @@ const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a�
 const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
 function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
 Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
-Entry.prototype.der=function(){ const d={t:'der',v:[],e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
+Entry.prototype.der=function(nth){ const d={t:'der',v:[],n:nth?[]:null,e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
 Entry.prototype.key=function(k){
   const T=this.top();
-  if(k==='tab'){ if(T.der&&T.a===T.der.v){ this.path.pop(); this.path.push({a:T.der.e,der:T.der}); } return; }
+  if(k==='tab'){ if(T.der&&T.a!==T.der.e){ const nx=(T.a===T.der.v&&T.der.n)?T.der.n:T.der.e; this.path.pop(); this.path.push({a:nx,der:T.der}); } return; }
   if(this.ctrl){ this.ctrl=false;
     if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
     if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
@@ -5693,12 +5702,12 @@ function rnd(arr,curA,caret){
   let h=arr.map(t=>typeof t==='string'?t:
     t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
     t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
-    t.t==='der'?`<span class="fr"><span>d</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span></span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
+    t.t==='der'?`<span class="fr"><span>d${t.n?`<sup class="dvb">${rnd(t.n,curA,false)}</sup>`:''}</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span>${t.n?`<sup class="dvb">${rnd(t.n,curA,caret)}</sup>`:''}</span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
     `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
   if(caret&&arr===curA) h+='<span class="caret">|</span>';
   return h;
 }
-function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?`d/d${ser(t.v)}(${ser(t.e)})`:`√(${ser(t.v)})`).join(''); }
+function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?(t.n?`d^${ser(t.n)}/d${ser(t.v)}^${ser(t.n)}(${ser(t.e)})`:`d/d${ser(t.v)}(${ser(t.e)})`):`√(${ser(t.v)})`).join(''); }
 Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
 
 // ---------- Simulation: Ergebnisse je Schritt ----------
@@ -5706,9 +5715,12 @@ Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!=
 function closeP(arr,html){ const s=ser(arr); const n=(s.match(/\(/g)||[]).length-(s.match(/\)/g)||[]).length; return html+')'.repeat(Math.max(0,n)); }
 const ANA=["1: Ableitung","2: Ableitung in einem Punkt","3: Integral","4: Limes","5: Summe","6: Produkt","7: Funktionsminimum","8: Funktionsmaximum","9: Tangente"];
 // simuliert Tastenfolge inkl. menu ▸ 4: Analysis ▸ 1: Ableitung (fügt die Vorlage d/d□(□) ein)
-function simT(hist,keys,res){
-  hist=hist.slice(); res=[].concat(res); let e=new Entry(), ri=0, m=0;
+function simT(hist,keys,res,pk){
+  hist=hist.slice(); res=[].concat(res); pk=(pk||[]).slice(); let e=new Entry(), ri=0, m=0;
   for(const k of keys){
+    if(m==='T'||m==='R'){ const w=m; m=0; if(k==='click'){ const p=pk.shift(); if(w==='R') e.top().a.push('|'); else e.der(p==='n'); } continue; }
+    if(k==='tmpl'&&!e.ctrl){ m='T'; continue; }
+    if(k==='='&&e.ctrl){ e.ctrl=false; m='R'; continue; }
     if(m===1){ m=(k==='4')?2:0; continue; }
     if(m===2){ m=0; if(k==='1') e.der(); continue; }
     if(k==='menu'){ m=1; continue; }
@@ -5720,12 +5732,22 @@ function simT(hist,keys,res){
 const CUR='<span class="caret">|</span>';
 const F1=['1.1'], O={doc:'abl'};
 const page=(hist,entry)=>calcApp(F1,'1.1',hist,entry===undefined?CUR:entry,O);
-function TS(base,keys,res){ return i=>{
-  const r=simT(base,keys.slice(0,i),res); let h=calcApp(F1,'1.1',r.hist,r.e.html(),O);
+function TS(base,keys,res,pk){ return i=>{
+  const r=simT(base,keys.slice(0,i),res,pk); let h=calcApp(F1,'1.1',r.hist,r.e.html(),O);
   if(r.m===1) h+=menus([{items:CM,sel:0}]);
   if(r.m===2) h+=menus([{items:CM,sel:3},{items:ANA,sel:0}]);
+  if(r.m==='T') h+=palT((pk||[])[keys.slice(0,i).filter((k,j,a)=>k==='click'&&j>0&&(a[j-1]==='tmpl'||a[j-1]==='=')).length]);
+  if(r.m==='R') h+=palR();
   return h; }; }
-const after=(base,keys,res)=>simT(base,keys,res).hist;
+const after=(base,keys,res,pk)=>simT(base,keys,res,pk).hist;
+// Auswahlfenster der Vorlagen-Taste ⊞ und von ctrl + =
+const PF=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`, BX='<span class="pb"></span>';
+function palT(w){
+  const it=[PF(BX,BX),BX+'<sup>'+BX+'</sup>','√'+BX,'<sup>'+BX+'</sup>√'+BX,'e<sup>'+BX+'</sup>','log<sub>'+BX+'</sub>',
+            '{'+BX,'|'+BX+'|','Σ','Π',['d',PF('d','d'+BX)+'('+BX+')'],['n',PF('d<sup>'+BX+'</sup>','d'+BX+'<sup>'+BX+'</sup>')+'('+BX+')'],'∫'+BX,'lim'];
+  return '<div class="pal">'+it.map(c=>Array.isArray(c)?`<span class="${c[0]===w?'ziel':''}">${c[1]}</span>`:`<span>${c}</span>`).join('')+'</div>';
+}
+function palR(){ return '<div class="pal pr">'+['=','≠','&lt;','≤','&gt;','≥','|','⇒','⇔'].map(c=>`<span class="${c==='|'?'ziel':''}">${c}</span>`).join('')+'</div>'; }
 const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
 
 // ---------- Spur 1: Ableitungen bestimmen ----------
@@ -5745,6 +5767,15 @@ const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kD1,D1R), a3=after(a2,kF1,'Fe
 // ---------- Spur 2: Ableitung an einer Stelle ----------
 const kA1=["f","1","(","2",")","enter"], kA2=["f","1","(","neg","1",")","enter"], kA3=["f","1","(","0",".","5",")","enter"], kA4=["f","2","(","3",")","enter"];
 const b1=after(a7,kA1,'0'), b2=after(b1,kA2,'9'), b3=after(b2,kA3,'−2.25'), b4=after(b3,kA4,'12');
+
+// ---------- Spur 3: direkt mit der Vorlagen-Taste ⊞ ----------
+const FX=["f","(","x",")"], BAR=["right","ctrl","=","click","x","="];
+const kT1=["tmpl","click","x","tab"].concat(FX,["enter"]);
+const kT2=["tmpl","click","x","tab","2","tab"].concat(FX,["enter"]);
+const kT3=["tmpl","click","x","tab","3","tab"].concat(FX,["enter"]);
+const kP1=["tmpl","click","x","tab"].concat(FX,BAR,["2","enter"]);
+const kP2=["tmpl","click","x","tab","2","tab"].concat(FX,BAR,["3","enter"]);
+const c0=b4, c1=after(c0,kT1,D1R,['d']), c2=after(c1,kT2,D2R,['n']), c3=after(c2,kT3,D3R,['n']), c4=after(c3,kP1,'0',['d','|']), c5=after(c4,kP2,'12',['n','|']);
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const fx=(t)=>`<i>${t}</i>`;
@@ -5786,14 +5817,32 @@ const TRACKS={
    d:"<p>Genauso mit <b>f2</b>: <b>f2(3)</b> = <b>12</b></p>",
    n:"Merke: <i>f</i> ′(<i>a</i>) &gt; 0 → Graph steigt · <i>f</i> ′(<i>a</i>) &lt; 0 → Graph fällt · <i>f</i> ′(<i>a</i>) = 0 → waagerechte Tangente"},
   {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b4), d:AB("Aufgabe 2 und 3",["Funktion <i>h</i> speichern und ableiten","Steigungen an den Stellen berechnen","steigt, fällt oder waagerecht?","<i>h</i> ″ an zwei Stellen berechnen","Danach: Lösungscode eintragen"])}
+ ]},
+ d:{ name:"Direkt mit ⊞ und |", start:()=>page(b4), steps:[
+  {t:"Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ′(<i>x</i>) direkt", k:kT1, p:TS(c0,kT1,D1R,['d']),
+   d:"<p>Taste <b>⊞</b> (rechts neben der 9) öffnet eine Auswahl. Gehen Sie mit den <b>Pfeiltasten</b> auf "+D+" (gelb) und drücken Sie <b>●</b>.</p><p>Dann wie vorher: <b>x</b>, <b>tab</b>, <b>f(x)</b>.</p>",
+   n:"Die Lage von "+D+" in der Auswahl kann je nach Betriebssystem etwas anders sein. Suchen Sie das Feld mit d/d□."},
+  {t:"2. Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ″(<i>x</i>) direkt", k:kT2, p:TS(c1,kT2,D2R,['n']),
+   d:"<p>In der Auswahl gibt es auch die Vorlage für die <b>n-te Ableitung</b> (mit Hochzahl).</p><p>Ins erste Feld <b>x</b>, mit <b>tab</b> zur Hochzahl: <b>2</b> = 2. Ableitung. Dann <b>tab</b> und <b>f(x)</b>.</p><p>Ergebnis: <b>6x − 6</b></p>"},
+  {t:"3. Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ‴(<i>x</i>) direkt", k:kT3, p:TS(c2,kT3,D3R,['n']),
+   d:"<p>Gleiche Vorlage, Hochzahl <b>3</b>. Ergebnis: <b>6</b></p>", n:"So geht auch die 4., 5., … Ableitung: nur die Hochzahl ändern."},
+  {t:"Ableitung an einer Stelle mit |", a:"Berechnen Sie "+fx('f')+" ′(2) direkt", k:kP1, p:TS(c3,kP1,'0',['d','|']),
+   d:"<p>Erst die Ableitung "+D+"(f(x)) eingeben. Mit <b>▶</b> aus der Vorlage heraus.</p><p><b>ctrl + =</b> öffnet eine Auswahl: dort <b>|</b> wählen. Dann <b>x=2</b>.</p><p>Ergebnis: <b>0</b></p>",
+   n:"Der Strich <b>|</b> heißt „mit“: Rechne die Ableitung <b>mit x = 2</b>."},
+  {t:"2. Ableitung an einer Stelle", a:"Berechnen Sie "+fx('f')+" ″(3) direkt", k:kP2, p:TS(c4,kP2,'12',['n','|']),
+   d:"<p>Vorlage mit Hochzahl <b>2</b>, dann <b>|x=3</b>. Ergebnis: <b>12</b></p>"},
+  {t:"Welcher Weg?", k:[], s:()=>page(c5),
+   d:"<table class='vgl'><tr><th></th><th>gespeichert</th><th>direkt</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x):="+D+"(f(x))</td><td>⊞ ▸ "+D+"(f(x))</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x):="+D+"(f1(x))</td><td>⊞ ▸ d²/dx²(f(x))</td></tr><tr><td><i>f</i> ′(2)</td><td>f1(2)</td><td>"+D+"(f(x))|x=2</td></tr></table>",
+   n:"Brauchen Sie eine Ableitung oft, ist <b>speichern</b> schneller. Für einen einzelnen Wert ist der <b>direkte</b> Weg schnell."},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(c5), d:AB("Aufgaben 1 bis 3",["Prüfen Sie Ihre Ergebnisse auf dem anderen Weg","Beide Wege müssen dasselbe ergeben","Danach: Lösungscode eintragen"])}
  ]}
 };
 
 // ---------- Steuerung ----------
-const ORDER=["a","s"];
+const ORDER=["a","s","d"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>__D.getElementById(id);
-const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
 const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
 function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
 function screenOf(t,s,i){
@@ -6090,7 +6139,7 @@ function genAF(){
     auftrag:"Speichern Sie die Funktion im CAS. Bestimmen Sie die 1., 2. und 3. Ableitung und tragen Sie die Zahlen ein.",
     term:polyHTML('f',P), plot:'',
     felder:[row("<i>f</i> ′(<i>x</i>) =",P1,'d1'), row("<i>f</i> ″(<i>x</i>) =",P2,'d2'), row("<i>f</i> ‴(<i>x</i>) =",P3,'d3')],
-    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann <b>menu ▸ 4: Analysis ▸ 1: Ableitung</b> und z.&nbsp;B. <span class="liste">f1(x):=d/dx(f(x))</span>. Ist eine Zahl 0, tragen Sie 0 ein.'};
+    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann <b>menu ▸ 4: Analysis ▸ 1: Ableitung</b> und z.&nbsp;B. <span class="liste">f1(x):=d/dx(f(x))</span>. Oder direkt: <b>⊞</b> ▸ d/dx bzw. d²/dx² mit Hochzahl. Ist eine Zahl 0, tragen Sie 0 ein.'};
 }
 function genST(){
   let P,xs,ok=false;
@@ -6107,7 +6156,7 @@ function genST(){
     auftrag:"Speichern Sie die Funktion und ihre Ableitungen im CAS. Berechnen Sie die Steigung an den Stellen mit Tangente und die 2. Ableitung an der violetten Stelle.",
     term:polyHTML('f',P), plot:plot(f,'f',marks),
     felder:tg.map((x,i)=>({k:'w'+i, lab:`<i>f</i> ′(${deN(x)})`, col:COL[i], soll:ev(P1,x)})).concat([{k:'w3', lab:`<i>f</i> ″(${deN(x2)})`, col:COL[3], soll:ev(P2,x2)}]),
-    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d/dx(f1(x))</span>, dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
+    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d/dx(f1(x))</span>, dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Oder direkt: <span class="liste">d/dx(f(x))|x=2.5</span> (| mit <b>ctrl + =</b>). Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
 }
 const MODES={af:{name:"Ableitungsfunktion",gen:genAF}, st:{name:"Ableitung an einer Stelle",gen:genST}};
 const ORDER=["af","st"];
