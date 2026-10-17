@@ -109,14 +109,17 @@ def uebung(html, gid):
 
 if __name__ == '__main__':
     D = pathlib.Path('/home/claude/olafkott.github.io/CAS/fx991')
-    for gid, model, g, u in [
-        ('abl', 'cw', 'fx991_Ableitung_Schritt_fuer_Schritt.html', 'fx991_Uebung_Ableitung.html'),
-        ('int', 'cw', 'fx991_Integrale_Schritt_fuer_Schritt.html', 'fx991_Uebung_Integrale.html'),
-        ('lgs', 'cw', 'fx991_LGS_Schritt_fuer_Schritt.html', 'fx991_Uebung_LGS.html'),
-        ('dx_abl', 'dx', 'fx991DEX_Ableitung_Schritt_fuer_Schritt.html', 'fx991DEX_Uebung_Ableitung.html'),
-        ('dx_int', 'dx', 'fx991DEX_Integrale_Schritt_fuer_Schritt.html', 'fx991DEX_Uebung_Integrale.html'),
-        ('dx_lgs', 'dx', 'fx991DEX_LGS_Schritt_fuer_Schritt.html', None)]:
+    T=[('grund','Grundlagen'),('stat','Lage_Streuung'),('funk','Funktionswerte'),('gl','Gleichungen'),('wt','Wertetabelle'),
+       ('abl','Ableitung'),('int','Integrale'),('lgs','LGS'),('kombi','Kombinatorik'),('binom','Binomialverteilung'),('mat','Matrizen')]
+    import sys as _s
+    only=_s.argv[1:]
+    JOBS=[]
+    for gid,nm in T:
+        if only and gid not in only: continue
+        JOBS.append((gid,'cw',f'fx991_{nm}_Schritt_fuer_Schritt.html',f'fx991_Uebung_{nm}.html'))
+        JOBS.append(('dx_'+gid,'dx',f'fx991DEX_{nm}_Schritt_fuer_Schritt.html',f'fx991DEX_Uebung_{nm}.html'))
+    for gid, model, g, u in JOBS:
         base = (W / ('base.css' if model == 'cw' else 'dx_base.css')).read_text()
         (W / 'mods' / f'g_{gid}.js').write_text(guide((D / g).read_text(), gid, base))
-        if u: (W / 'mods' / f'u_{gid}.js').write_text(uebung((D / u).read_text(), gid))
+        if (D / u).exists(): (W / 'mods' / f'u_{gid}.js').write_text(uebung((D / u).read_text(), gid))
         print('ok', gid)

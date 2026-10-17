@@ -1,0 +1,521 @@
+GUIDES["dx_mat"]={
+ title:"Matrizen",
+ css:String.raw`[data-g="dx_mat"] .calc{ width:330px; flex:0 0 330px; border-radius:30px; box-shadow:0 6px 22px rgba(0,0,0,.25); background:radial-gradient(#2a2a2e 1px, transparent 1.2px) 0 0/5px 5px, #1e1e21; border:6px solid #e6e6ea; padding:14px 13px 16px; }
+[data-g="dx_mat"] .calc > *{ position:relative; }
+[data-g="dx_mat"] .k.rd.hit{ background:radial-gradient(circle at 40% 35%,#fff6d6,#f2b705 80%); }
+[data-g="dx_mat"] .sb .ind.a{ background:#7a1a2a; }
+[data-g="dx_mat"] .ein{ font-size:16px; min-height:30px; display:flex; align-items:center; flex-wrap:nowrap; white-space:nowrap; overflow:hidden; }
+[data-g="dx_mat"] .aus{ font-size:21px; text-align:right; min-height:30px; display:flex; justify-content:flex-end; align-items:center; font-weight:bold; white-space:nowrap; gap:6px; }
+[data-g="dx_mat"] .aus .lab{ font-size:17px; font-weight:normal; margin-right:auto; }
+[data-g="dx_mat"] .klein{ font-size:13px; display:flex; justify-content:space-between; }
+[data-g="dx_mat"] .vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:18px; padding:0 1px; }
+[data-g="dx_mat"] .ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
+[data-g="dx_mat"] .wz{ white-space:nowrap; }
+[data-g="dx_mat"] .wz .ov{ border-top:1.5px solid currentColor; padding:0 1px; margin-left:-1px; }
+[data-g="dx_mat"] .lst{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:4px 9px; font:bold 16px 'Courier New',monospace; line-height:1.55; }
+[data-g="dx_mat"] .lst .s{ background:#141a14; color:#d3ded4; }
+[data-g="dx_mat"] .koef{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; }
+[data-g="dx_mat"] .koef .kt{ font-size:14px; text-align:center; font-family:'Times New Roman',serif; }
+[data-g="dx_mat"] .koef table{ border-collapse:collapse; margin:3px auto 0; font-size:14px; }
+[data-g="dx_mat"] .koef th{ font:italic bold 14px 'Times New Roman',serif; padding:0 10px; border-bottom:1.5px solid #141a14; }
+[data-g="dx_mat"] .koef td{ text-align:center; padding:1px 8px; min-width:62px; }
+[data-g="dx_mat"] .koef td.cur{ background:#141a14; color:#d3ded4; }
+[data-g="dx_mat"] .koef .inp{ margin-top:auto; text-align:right; font-size:18px; font-weight:bold; min-height:24px; }
+[data-g="dx_mat"] .chip.alpha{ background:#b8324a; }
+[data-g="dx_mat"] .chip.w{ background:#f1f1f3; color:#111; border-color:#c9cbd1; }
+[data-g="dx_mat"] .chip.b{ background:#2463c9; }
+[data-g="dx_mat"] .chip i.v{ font-family:'Times New Roman',serif; font-size:15px; }
+[data-g="dx_mat"] .task .term{ font-family:Cambria,Georgia,serif; font-size:21px; line-height:1.6; color:var(--ink); }
+[data-g="dx_mat"] .task .term small{ font-size:15px; color:var(--mute); }
+[data-g="dx_mat"] .lst.xs{ font:bold 13.5px 'Courier New',monospace; line-height:1.38; padding:2px 8px; }
+[data-g="dx_mat"] .lst.xs div{ white-space:nowrap; }
+[data-g="dx_mat"] .mat{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 6px 3px; display:flex; flex-direction:column; }
+[data-g="dx_mat"] .mat .mh{ position:absolute; left:6px; top:2px; font:bold 11px Arial,sans-serif; }
+[data-g="dx_mat"] .mat table{ border-collapse:collapse; margin:0 auto; font-size:14px; }
+[data-g="dx_mat"] .mat th{ font:bold 11px Arial,sans-serif; padding:0 6px; border-bottom:1.5px solid #141a14; }
+[data-g="dx_mat"] .mat td{ text-align:center; padding:0 5px; min-width:54px; height:19px; line-height:19px; }
+[data-g="dx_mat"] .mat td.rn{ min-width:12px; font-size:11px; padding:0 3px 0 0; border-right:1px solid #141a14; }
+[data-g="dx_mat"] .mat td.cur{ background:#141a14; color:#d3ded4; }
+[data-g="dx_mat"] .mat.m3 table{ font-size:13px; }
+[data-g="dx_mat"] .mat.m3 td{ height:17px; line-height:17px; min-width:44px; }
+[data-g="dx_mat"] .mat .inp{ margin-top:auto; text-align:right; font-size:17px; font-weight:bold; min-height:22px; }
+[data-g="dx_mat"] .mres{ position:absolute; left:0; right:0; top:13px; bottom:0; display:flex; align-items:center; justify-content:center; padding:2px 6px; }
+[data-g="dx_mat"] .mres .ml{ position:absolute; left:6px; top:2px; font:bold 11px Arial,sans-serif; }
+[data-g="dx_mat"] table.mx{ border-collapse:separate; border-spacing:0; border-left:1.6px solid #141a14; border-right:1.6px solid #141a14; border-radius:5px; font-size:15px; font-weight:bold; }
+[data-g="dx_mat"] table.mx td{ padding:0 7px; text-align:right; height:21px; }
+[data-g="dx_mat"] table.mx .fr{ font-size:11px; }
+[data-g="dx_mat"] .aus.meld{ font-size:19px; text-align:center; justify-content:center; line-height:1.15; white-space:normal; }
+[data-g="dx_mat"] .mxw{ display:inline-flex; align-items:center; gap:6px; margin:0 16px 4px 0; font-family:Cambria,Georgia,serif; font-size:19px; white-space:nowrap; }
+[data-g="dx_mat"] table.mxp{ border-collapse:separate; border-spacing:0; border-left:2px solid #1d1d1f; border-right:2px solid #1d1d1f; border-radius:7px; font-family:Cambria,Georgia,serif; font-size:17px; display:inline-table; vertical-align:middle; }
+[data-g="dx_mat"] table.mxp td{ padding:1px 9px; text-align:right; }
+[data-g="dx_mat"] .frp{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:13px; line-height:1.1; }
+[data-g="dx_mat"] .frp > span:first-child{ border-bottom:1.2px solid currentColor; }
+[data-g="dx_mat"] .task .term small{ display:block; }
+[data-g="dx_mat"] #dd .mxw{ margin:2px 0 10px; }`,
+ make:function(){
+
+// =====================================================================
+//  Zahlen: exakte Brüche
+// =====================================================================
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const R=(p,q=1)=>{ if(q<0){ p=-p; q=-q; } const g=gcd(p,q); return {p:p/g,q:q/g}; };
+const addR=(a,b)=>R(a.p*b.q+b.p*a.q,a.q*b.q), mulR=(a,b)=>R(a.p*b.p,a.q*b.q), negR=a=>R(-a.p,a.q), divR=(a,b)=>R(a.p*b.q,a.q*b.p);
+const subR=(a,b)=>addR(a,negR(b));
+const valR=r=>r.p/r.q;
+function numR(s){ const [i,f='']=s.split(','); return R(parseInt((i||'0')+f,10), 10**f.length); }
+function dec(v){ if(Math.abs(v)<1e-12) v=0; return Number(v.toPrecision(10)).toString().replace('.',',').replace('-','−'); }
+function fmtR(r){
+  if(r.q===1) return String(r.p).replace('-','−');
+  return (r.p<0?'−':'')+`<span class="fr"><span>${Math.abs(r.p)}</span><span>${r.q}</span></span>`;
+}
+function koefR(t){
+  let s=1, n='';
+  for(const k of t){ if(k==='neg'||k==='-') s=-s; else n+=k; }
+  const r=numR(n||'0'); return s<0?negR(r):r;
+}
+
+// =====================================================================
+//  Matrizenrechnung (exakt)
+// =====================================================================
+const zeros=(r,c)=>Array.from({length:r},()=>Array.from({length:c},()=>R(0)));
+const toM=a=>a.map(r=>r.map(v=>typeof v==='number'?numR(String(v).replace('.',',')):v));
+function mAdd(a,b,s){ if(a.length!==b.length||a[0].length!==b[0].length) throw 'dim'; return a.map((r,i)=>r.map((v,j)=>s<0?subR(v,b[i][j]):addR(v,b[i][j]))); }
+function mMul(a,b){ if(a[0].length!==b.length) throw 'dim'; return a.map(r=>b[0].map((_,j)=>r.reduce((s,v,k)=>addR(s,mulR(v,b[k][j])),R(0)))); }
+const mScal=(k,a)=>a.map(r=>r.map(v=>mulR(k,v)));
+const mTrn=a=>a[0].map((_,j)=>a.map(r=>r[j]));
+function mDet(a){
+  const n=a.length; if(a[0].length!==n) throw 'dim';
+  const A=a.map(r=>r.slice()); let d=R(1);
+  for(let c=0;c<n;c++){
+    let p=-1; for(let i=c;i<n;i++) if(A[i][c].p!==0){ p=i; break; }
+    if(p<0) return R(0);
+    if(p!==c){ [A[c],A[p]]=[A[p],A[c]]; d=negR(d); }
+    d=mulR(d,A[c][c]);
+    for(let i=c+1;i<n;i++){ const f=divR(A[i][c],A[c][c]); for(let j=c;j<n;j++) A[i][j]=subR(A[i][j],mulR(f,A[c][j])); }
+  }
+  return d;
+}
+function mInv(a){
+  const n=a.length; if(a[0].length!==n) throw 'dim';
+  const A=a.map((r,i)=>r.concat(Array.from({length:n},(_,j)=>R(i===j?1:0))));
+  for(let c=0;c<n;c++){
+    let p=-1; for(let i=c;i<n;i++) if(A[i][c].p!==0){ p=i; break; }
+    if(p<0) throw 'math';
+    [A[c],A[p]]=[A[p],A[c]]; const pv=A[c][c];
+    for(let j=0;j<2*n;j++) A[c][j]=divR(A[c][j],pv);
+    for(let i=0;i<n;i++) if(i!==c&&A[i][c].p!==0){ const f=A[i][c]; for(let j=0;j<2*n;j++) A[i][j]=subR(A[i][j],mulR(f,A[c][j])); }
+  }
+  return A.map(r=>r.slice(n));
+}
+// Werte: {s:Bruch} oder {m:Matrix}
+function vAdd(x,y,s){ if(x.s&&y.s) return {s:s<0?subR(x.s,y.s):addR(x.s,y.s)}; if(x.m&&y.m) return {m:mAdd(x.m,y.m,s)}; throw 'dim'; }
+function vMul(x,y){ if(x.s&&y.s) return {s:mulR(x.s,y.s)}; if(x.s) return {m:mScal(x.s,y.m)}; if(y.s) return {m:mScal(y.s,x.m)}; return {m:mMul(x.m,y.m)}; }
+function vDiv(x,y){ if(!y.s) throw 'math'; if(y.s.p===0) throw 'math'; const k=divR(R(1),y.s); return x.s?{s:mulR(x.s,k)}:{m:mScal(k,x.m)}; }
+function vInv(x){ if(x.s){ if(x.s.p===0) throw 'math'; return {s:divR(R(1),x.s)}; } return {m:mInv(x.m)}; }
+// Ausdruck aus Tasten-Token auswerten
+function evalTok(T,S){
+  let i=0;
+  const peek=()=>T[i];
+  function prim(){
+    const t=T[i];
+    if(t===undefined) throw 'syntax';
+    if(/^[0-9,]$/.test(t)){ let n=''; while(i<T.length&&/^[0-9,]$/.test(T[i])) n+=T[i++]; return {s:numR(n)}; }
+    if('ABCD'.includes(t)&&t.length===1){ i++; if(!S.M[t]) throw 'math'; return {m:S.M[t]}; }
+    if(t==='Ans'){ i++; if(!S.Ans) throw 'math'; return {m:S.Ans}; }
+    if(t==='('||t==='det'||t==='trn'){ i++; const v=expr(); if(peek()===')') i++; else if(i<T.length) throw 'syntax';
+      if(t==='det'){ if(!v.m) throw 'math'; return {s:mDet(v.m)}; }
+      if(t==='trn'){ if(!v.m) throw 'math'; return {m:mTrn(v.m)}; }
+      return v; }
+    throw 'syntax';
+  }
+  function post(){ let v=prim(); while(['sq','cube','inv'].includes(peek())){ const t=T[i++];
+      if(t==='inv') v=vInv(v); else { const w=vMul(v,v); v=t==='sq'?w:vMul(w,v); } } return v; }
+  function fac(){ if(peek()==='neg'){ i++; return vMul({s:R(-1)},fac()); } return post(); }
+  function term(){ let v=fac(); while(peek()==='*'||peek()==='/'){ const o=T[i++]; const w=fac(); v=o==='*'?vMul(v,w):vDiv(v,w); } return v; }
+  function expr(){ let v=term(); while(peek()==='+'||peek()==='-'){ const o=T[i++]; v=vAdd(v,term(),o==='-'?-1:1); } return v; }
+  const v=expr(); if(i<T.length) throw 'syntax'; return v;
+}
+
+// =====================================================================
+//  Anzeige
+// =====================================================================
+const TOKTXT={neg:'−','-':'−','+':'+','*':'×','/':'÷','(':'(',')':')',sq:'<sup>2</sup>',cube:'<sup>3</sup>',inv:'<sup>−1</sup>',
+  A:'MatA',B:'MatB',C:'MatC',D:'MatD',Ans:'MatAns',det:'Det(',trn:'Trn('};
+const lineTxt=(t,caret)=>t.map(k=>TOKTXT[k]||k).join('')+(caret?'<span class="caret"></span>':'');
+function mxHTML(m,fmt,cls){
+  return `<table class="mx ${cls||''}">`+m.map(r=>'<tr>'+r.map(v=>`<td>${fmt?fmt(v):fmtR(v)}</td>`).join('')+'</tr>').join('')+'</table>';
+}
+const sizeTxt=m=>m?`${m.length}×${m[0].length}`:(MODEL==='cw'?'Keine':'—');
+
+// =====================================================================
+//  Gemeinsame Zustandslogik
+// =====================================================================
+const MN='ABCD';
+function fresh(pre){
+  const S={mode:MODEL==='cw'?'home':'calc', sel:0, shift:false, alpha:false, M:{A:null,B:null,C:null,D:null}, Ans:null,
+    line:[], out:null, err:null, v:'A', nr:2, nc:2, r:0, c:0, inp:[], page:0, pur:'def', lvl:0, back:'calc'};
+  if(pre){ for(const k in pre) S.M[k]=toM(pre[k]); S.mode='calc'; }
+  return S;
+}
+function openEd(S,v){ S.v=v; S.mode='edit'; S.r=0; S.c=0; S.inp=[]; }
+function edKey(S,k){
+  const m=S.M[S.v], R_=m.length, C_=m[0].length;
+  if(k==='exe'){ if(S.inp.length){ m[S.r][S.c]=koefR(S.inp); S.inp=[]; if(S.c<C_-1) S.c++; else if(S.r<R_-1){ S.r++; S.c=0; } } return; }
+  if(k==='del'){ S.inp.pop(); return; }
+  if(k==='left'){ S.inp=[]; if(S.c>0) S.c--; return; }
+  if(k==='right'){ S.inp=[]; if(S.c<C_-1) S.c++; return; }
+  if(k==='up'){ S.inp=[]; if(S.r>0) S.r--; return; }
+  if(k==='down'){ S.inp=[]; if(S.r<R_-1) S.r++; return; }
+  if(/^[0-9,]$/.test(k)||k==='neg') S.inp.push(k);
+}
+function pushTok(S,t){ if(S.out!==null){ S.line=[]; S.out=null; } S.line.push(t); S.mode='calc'; }
+function calcKey(S,k){
+  if(k==='ac'){ S.line=[]; S.out=null; return true; }
+  if(k==='del'){ if(S.out===null) S.line.pop(); return true; }
+  if(k==='exe'){
+    if(!S.line.length) return true;
+    try{ const v=evalTok(S.line,S);
+      if(v.m){ S.Ans=v.m; S.mode='res'; S.out=null; } else { S.out=fmtR(v.s); }
+    }catch(e){ S.err=(e==='dim'?'dim':e==='syntax'?'syn':'math'); S.mode='err'; }
+    return true;
+  }
+  if(/^[0-9,]$/.test(k)||['+','-','*','/','(',')','neg','sq','cube','inv'].includes(k)){ pushTok(S,k); return true; }
+  return false;
+}
+function resKey(S,k){
+  if(['+','-','*','/'].includes(k)){ S.mode='calc'; S.line=['Ans',k]; S.out=null; return; }
+  if(k==='ac'||k==='back'){ S.mode='calc'; S.line=[]; S.out=null; }
+}
+function errKey(S,k){ if(k==='ac'||k==='back'||k==='left'||k==='right'){ S.mode='calc'; S.line=[]; S.out=null; S.err=null; } }
+
+// =====================================================================
+//  fx-991DE X: Hauptmenü, Listen, Matrix-Modus
+// =====================================================================
+const MODEL='dx';
+const ICON={
+ Berechnung:'<svg viewBox="0 0 34 14"><text x="17" y="6.8" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">×÷</text><text x="17" y="14" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">+−</text></svg>',
+ Komplex:'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="13.5" y="11" text-anchor="middle" font-size="9" font-weight="bold" font-style="italic" fill="currentColor">i</text><path d="M17.5 11.5l6-8M17.5 11.5h6" stroke="currentColor" stroke-width="1.1" fill="none"/></svg>',
+ 'Basis-N':'<svg viewBox="0 0 34 14"><text x="17" y="12" text-anchor="middle" font-size="6.5" font-weight="bold" fill="currentColor">2 8 10 16</text></svg>',
+ Matrix:'<svg viewBox="0 0 34 14"><path d="M10 1.5h-2v11h2M24 1.5h2v11h-2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="11" y="7.6" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="7.6" width="5.4" height="4.4" fill="currentColor"/></svg>',
+ Vektor:'<svg viewBox="0 0 34 14"><path d="M12 12L21 3M12 12h11M12 12V3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+ Statistik:'<svg viewBox="0 0 34 14"><path d="M9 1v12h17" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="7" width="2.6" height="5" fill="currentColor"/><rect x="14.5" y="3" width="2.6" height="9" fill="currentColor"/><rect x="18" y="5" width="2.6" height="7" fill="currentColor"/><rect x="21.5" y="8" width="2.6" height="4" fill="currentColor"/></svg>',
+ Verteilung:'<svg viewBox="0 0 34 14"><path d="M5 13C11 13 12 2 17 2s6 11 12 11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M14 13V4.5h6V13" fill="currentColor" opacity=".55"/><path d="M4 13h26" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Tabellenk.':'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="1.5" width="16" height="3" fill="currentColor"/><path d="M9 8.5h16M14.3 4.5v8.5M19.6 4.5v8.5" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Wertetab.':'<svg viewBox="0 0 34 14"><rect x="10" y="1.5" width="14" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="1.5" width="14" height="3" fill="currentColor"/><path d="M17 4.5v8.5M10 8.5h14" stroke="currentColor" stroke-width="1"/></svg>',
+ Gleichung:'<svg viewBox="0 0 34 14"><text x="17" y="11" text-anchor="middle" font-size="9.5" font-weight="bold" fill="currentColor">xy=0</text><path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ Ungleichung:'<svg viewBox="0 0 34 14"><text x="17" y="11" text-anchor="middle" font-size="9.5" font-weight="bold" fill="currentColor">xy&gt;0</text><path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ 'Verhältnis':'<svg viewBox="0 0 34 14"><rect x="8" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="19" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="17" cy="5" r=".9" fill="currentColor"/><circle cx="17" cy="9" r=".9" fill="currentColor"/></svg>'
+};
+const XAPPS=[["Berechnungen","Berechnung"],["Komplexe Zahlen","Komplex"],["Basis-N","Basis-N"],["Matrizen","Matrix"],["Vektoren","Vektor"],["Statistik","Statistik"],["Verteilungen","Verteilung"],["Tabellenkalk.","Tabellenk."],["Wertetabelle","Wertetab."],["Gleichungen","Gleichung"],["Ungleichungen","Ungleichung"],["Verhältnisse","Verhältnis"]];
+const XBADGE=["1","2","3","4","5","6","7","8","9","A","B","C"];
+function drawMenu(S,ziel){
+  const page=S.sel<8?0:1, items=XAPPS.map((a,i)=>[a,i]).slice(page*8,page*8+8);
+  return `<div class="xm">${page?'<span class="arr" style="left:50%">▲</span>':'<span class="arr" style="right:62px">▼</span>'}<div class="grid">`+
+    items.map(([a,i])=>`<div class="ic${i===S.sel?' sel':''}${(ziel||[]).includes(a[0])?' ziel':''}">${ICON[a[1]]}<span class="bd">${XBADGE[i]}</span></div>`).join('')+
+    `</div><div class="nm">${XBADGE[S.sel]}:${XAPPS[S.sel][0]}</div></div>`;
+}
+function menuNav(S,k){
+  if(k==='right') S.sel=Math.min(XAPPS.length-1,S.sel+1); else if(k==='left') S.sel=Math.max(0,S.sel-1);
+  else if(k==='down') S.sel=Math.min(XAPPS.length-1,S.sel+4); else if(k==='up') S.sel=Math.max(0,S.sel-4);
+  else return false;
+  return true;
+}
+function sbar(S){ return `<div class="sb">${S.shift?'<span class="ind">S</span>':''}${S.alpha?'<span class="ind a">A</span>':''}<span class="ind">D</span><span class="sp"></span>${S.mode==='menu'?'':'<span class="ind">MAT</span>'}</div>`; }
+const lst=(S,lines,ziel)=>sbar(S)+`<div class="lst xs">`+lines.map(t=>`<div class="${(ziel||[]).includes(t)?'ziel':''}">${t}</div>`).join('')+'</div>';
+const OPT1=['1:Matrix definieren','2:Matrix bearbeiten','3:MatA','4:MatB','5:MatC','6:MatD'];
+const OPT2=['1:MatAns','2:Determinante','3:Transposition','4:Einheitsmatrix','5:Zeilenstufenform','6:Red. Zeilenst.form'];
+
+function step(S,k){
+  if(k==='shift'){ S.shift=!S.shift; S.alpha=false; return; }
+  if(k==='alpha'){ S.alpha=!S.alpha; S.shift=false; return; }
+  const sh=S.shift; S.shift=false; S.alpha=false;
+  if(k==='on'){ if(S.mode==='off') S.mode='calc'; return; }
+  if(sh&&k==='ac'){ S.mode='off'; return; }
+  if(S.mode==='off') return;
+  if(sh&&k==='sq') k='cube';
+  if(k==='menu'){ S.mode='menu'; S.sel=0; return; }
+  switch(S.mode){
+   case 'menu':
+     if(menuNav(S,k)) return;
+     if(k==='4'||(k==='exe'&&S.sel===3)){ S.mode='deflist'; S.pur='def'; S.line=[]; S.out=null; }
+     return;
+   case 'deflist':
+     if(/^[1-4]$/.test(k)){ S.v=MN[+k-1];
+       if(S.pur==='def') S.mode='rows'; else if(S.M[S.v]) openEd(S,S.v); }
+     else if(k==='ac') S.mode='calc';
+     return;
+   case 'rows': if(/^[1-4]$/.test(k)){ S.nr=+k; S.mode='cols'; } else if(k==='ac') S.mode='calc'; return;
+   case 'cols': if(/^[1-4]$/.test(k)){ S.nc=+k; S.M[S.v]=zeros(S.nr,S.nc); openEd(S,S.v); } else if(k==='ac') S.mode='calc'; return;
+   case 'edit':
+     if(k==='ac'){ S.mode='calc'; S.line=[]; S.out=null; return; }
+     edKey(S,k); return;
+   case 'optn':
+     if(k==='down'&&S.page===0){ S.page=1; return; }
+     if(k==='up'&&S.page===1){ S.page=0; return; }
+     if(k==='ac'){ S.mode='calc'; return; }
+     if(S.page===0){
+       if(k==='1'){ S.mode='deflist'; S.pur='def'; } else if(k==='2'){ S.mode='deflist'; S.pur='edit'; }
+       else if(/^[3-6]$/.test(k)) pushTok(S,MN[+k-3]);
+     } else {
+       if(k==='1') pushTok(S,'Ans'); else if(k==='2') pushTok(S,'det'); else if(k==='3') pushTok(S,'trn');
+     }
+     return;
+   case 'calc':
+     if(k==='optn'){ S.mode='optn'; S.page=0; return; }
+     calcKey(S,k); return;
+   case 'res': resKey(S,k); return;
+   case 'err': errKey(S,k); return;
+  }
+}
+function run(S,keys){ keys.forEach(k=>step(S,k)); return S; }
+function drawEd(S,Z){
+  const m=S.M[S.v], C_=m[0].length;
+  let h=`<div class="mat${m.length>2||C_>2?' m3':''}"><div class="mh">Mat${S.v}</div><table><tr><th></th>${m[0].map((_,j)=>`<th>${j+1}</th>`).join('')}</tr>`;
+  m.forEach((row,i)=>{ h+=`<tr><td class="rn">${i+1}</td>`+row.map((v,j)=>`<td class="${i===S.r&&j===S.c?'cur':''}">${dec(valR(v))}</td>`).join('')+'</tr>'; });
+  const inp=S.inp.length?lineTxt(S.inp,true):dec(valR(m[S.r][S.c]));
+  return sbar(S)+h+`</table><div class="inp${Z('inp')}">${inp}</div></div>`;
+}
+function draw(S,ziel){
+  const Z=n=>(ziel||[]).includes(n)?' ziel':'';
+  if(S.mode==='off') return '<div class="offs"></div>';
+  if(S.mode==='menu') return drawMenu(S,ziel);
+  if(S.mode==='deflist') return lst(S,[S.pur==='def'?'Matrix definieren':'Matrix bearbeiten'].concat(MN.split('').map((v,i)=>`${i+1}:Mat${v}`+(S.pur==='edit'?'':'')+(S.M[v]?`  ${sizeTxt(S.M[v])}`:''))),(ziel||[]).map(z=>{ const i=MN.indexOf(z.slice(3)); return z.startsWith('Mat')&&i>=0?`${i+1}:${z}`+(S.M[z.slice(3)]?`  ${sizeTxt(S.M[z.slice(3)])}`:''):z; }));
+  if(S.mode==='rows') return lst(S,['Mat'+S.v,'Anzahl Zeilen?','1~4 wählen'],ziel);
+  if(S.mode==='cols') return lst(S,['Mat'+S.v+'  ('+S.nr+' Zeilen)','Anzahl Spalten?','1~4 wählen'],ziel);
+  if(S.mode==='optn') return lst(S,S.page?OPT2:OPT1,ziel);
+  if(S.mode==='edit') return drawEd(S,Z);
+  if(S.mode==='res') return sbar(S)+`<div class="mres${Z('res')}"><span class="ml">Ans</span>${mxHTML(S.Ans)}</div>`;
+  if(S.mode==='err') return sbar(S)+`<div class="app"><div class="aus meld${Z('res')}">${S.err==='dim'?'Dimension ERROR':S.err==='syn'?'Syntax ERROR':'Math ERROR'}</div><div class="klein"><span>[AC] :Abbrechen</span></div></div>`;
+  return sbar(S)+`<div class="app"><div class="ein">${lineTxt(S.line,S.out===null)}</div><div class="aus${Z('res')}">${S.out!==null?S.out:''}</div></div>`;
+}
+// ---- Modell-Angaben für die Tour
+const MOD={
+  NEG:['neg'], EXE:'exe', AC:'ac',
+  OPEN:['menu','4'], OPENZ:['MatA'],
+  DEF(v,r,c){ return ['optn','1',String(MN.indexOf(v)+1),String(r),String(c)]; },
+  EDIT(v){ return ['optn','2',String(MN.indexOf(v)+1)]; },
+  MAT(v){ return ['optn',String(MN.indexOf(v)+3)]; },
+  ANS:['optn','down','1'], DET:['optn','down','2'], TRN:['optn','down','3'],
+  SQ:['sq'], CUBE:['shift','sq'], INV:['inv'],
+  t:{ exe:'<b>=</b>', neg:'die Vorzeichen-Taste <b>(−)</b>', negK:'<b>(−)</b>', back:'<b>AC</b>',
+      matA:'<b>OPTN</b> <b>3</b> (MatA)', mat:v=>`<b>OPTN</b> <b>${MN.indexOf(v)+3}</b> (Mat${v})`,
+      det:'<b>OPTN</b> <b>▼</b> <b>2</b> (Determinante)', trn:'<b>OPTN</b> <b>▼</b> <b>3</b> (Transposition)',
+      inv:'<b>x<sup>−1</sup></b>', sq:'<b>x<sup>2</sup></b>', cube:'<b>SHIFT</b> <b>x<sup>2</sup></b>',
+      def:'<b>OPTN</b> <b>1</b> ▸ Matrix ▸ Zeilen ▸ Spalten', edit:'<b>OPTN</b> <b>2</b> ▸ Matrix' }
+};
+function T1start(){
+  return [
+  {t:"Matrix-Modus öffnen", k:MOD.OPEN, z:MOD.OPENZ,
+   d:'<p>Matrizen berechnet der Rechner im Modus <b>4: Matrizen</b>. Drücken Sie <b>MENU</b> und dann <b>4</b>.</p><p>Der Rechner zeigt sofort die Liste <b>Matrix definieren</b>. Es gibt vier Speicherplätze: <b>MatA</b> bis <b>MatD</b>.</p>'},
+  {t:"MatA wählen", k:['1'],
+   d:'<p>Wir beginnen mit <b>MatA</b>: Taste <b>1</b>.</p><p>Der Rechner fragt: <b>Anzahl Zeilen?</b></p>'},
+  {t:"Größe festlegen: 2 × 2", k:['2','2'], z:['inp'],
+   d:'<p>Unsere Matrix hat <b>2 Zeilen</b> und <b>2 Spalten</b>. Drücken Sie <b>2</b> (Zeilen) und noch einmal <b>2</b> (Spalten).</p><p>Sie sehen den <b>Matrix-Editor</b>: eine Tabelle voller Nullen.</p>',
+   n:'Erst die <b>Zeilen</b> (waagerecht), dann die <b>Spalten</b> (senkrecht). Man sagt: eine <b>2×2</b>-Matrix („zwei Kreuz zwei“).'}
+  ];
+}
+const DEFTXT={
+  B:'<p><b>OPTN</b> ▸ <b>1</b> (Matrix definieren) ▸ <b>2</b> (MatB) ▸ <b>3</b> Zeilen ▸ <b>2</b> Spalten.</p>',
+  C:'<p><b>OPTN</b> ▸ <b>1</b> ▸ <b>3</b> (MatC) ▸ <b>2</b> Zeilen ▸ <b>3</b> Spalten.</p>',
+  D:'<p><b>OPTN</b> ▸ <b>1</b> ▸ <b>4</b> (MatD) ▸ <b>2</b> ▸ <b>2</b>. Dann die Zahlen eingeben und mit <b>AC</b> zurück.</p>',
+  edit:'<p><b>OPTN</b> ▸ <b>2</b> (Matrix bearbeiten) ▸ <b>1</b> (MatA). Der Editor öffnet sich mit den gespeicherten Zahlen.</p>'
+};
+const A3K=()=>MOD.MAT('A').concat(['shift','sq','exe']);
+const A3TXT='<p>Für <b>A³</b>: MatA, dann <b>SHIFT</b> und <b>x<sup>2</sup></b> (gold: x³), dann <b>=</b>.</p>';
+const LBL={on:"ON",menu:"MENU",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",alpha:"ALPHA",optn:"OPTN",calc:"CALC",
+ exe:"=",ac:"AC",del:"DEL",sd:"S⇔D",neg:"(−)","-":"−","+":"+","*":"×","/":"÷",x:'<i class="v">x</i>',"(":"(",")":")",inv:'x<sup>−1</sup>',sq:'x<sup>2</sup>'};
+const WHITE=/^[0-9,+\-*/]$|^exe$/;
+const NEGHINT=(k,want)=>(k==='-'&&want==='neg')?' Für ein Vorzeichen nehmen Sie <b>(−)</b>.':'';
+
+// =====================================================================
+//  Tour-Inhalte (beide Modelle): nur A (2×2) und B (3×2)
+// =====================================================================
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Rechner rechnen, Ergebnisse auf dem Blatt eintragen, dann <b>Weiter</b>.</p></div>`;
+const RK=v=>v.flatMap(x=>(x<0?MOD.NEG:[]).concat(String(Math.abs(x)).replace('.',',').split(''),[MOD.EXE]));
+const E=MOD.t.exe, EX=MOD.EXE;
+const zf=v=>String(v).replace('.',',').replace('-','−');
+function MXP(m,name,cls){
+  const t=`<table class="mxp ${cls||''}">`+m.map(r=>'<tr>'+r.map(v=>`<td>${typeof v==='string'?v:zf(v)}</td>`).join('')+'</tr>').join('')+'</table>';
+  return name?`<span class="mxw"><i>${name}</i> = ${t}</span>`:t;
+}
+const FR=(p,q)=>(p<0?'−':'')+`<span class="frp"><span>${Math.abs(p)}</span><span>${q}</span></span>`;
+const MA=[[2,1],[3,4]], MB=[[1,0],[2,-1],[3,4]];
+const PRE={A:MA,B:MB};
+const AB2=MXP(MA,'A')+MXP(MB,'B');
+const kA=MOD.MAT('A'), kB=MOD.MAT('B');
+const mA=MOD.t.mat('A'), mB=MOD.t.mat('B');
+const DIMF=MODEL==='cw'?'Dimensionsfehler':'Dimension ERROR';
+const VOR='Die Matrizen aus Teil 1 sind gespeichert: <b>A</b> (2×2) und <b>B</b> (3×2). Falls nicht, definieren Sie sie zuerst.';
+
+// ---------------- Teil 1: Definieren und bearbeiten
+const MAfehler=[[2,1],[3,'<b style="color:#C62828">7</b>']];
+const T1=T1start().map(s=>Object.assign({a:MXP(MA,'A')},s)).concat([
+  {t:"Elemente eingeben", a:MXP(MA,'A')+'<small>Wir tippen absichtlich einen Fehler: <b>7</b> statt 4.</small>', k:RK([2,1,3,7]),
+   d:`<p>Sie tippen die Zahlen <b>zeilenweise</b> ein: erst Zeile 1 von links nach rechts, dann Zeile 2. Jede Zahl mit ${E} bestätigen. Der Cursor springt dann ins nächste Feld.</p><p>Rechts unten tippen wir mit Absicht <b>7</b> statt 4. Gleich korrigieren wir das.</p>`},
+  {t:"Zurück zur Rechenzeile", a:MXP(MAfehler,'A'), k:['ac'],
+   d:`<p>Mit <b>AC</b> verlassen Sie den Editor. Die Matrix ist jetzt unter <b>MatA</b> gespeichert – auch wenn Sie den Rechner ausschalten.</p>`},
+  {t:"Matrix bearbeiten", a:MXP(MAfehler,'A'), k:MOD.EDIT('A'), z:['inp'], d:DEFTXT.edit},
+  {t:"Fehler korrigieren", a:MXP(MA,'A'), k:['down','right','4',EX], z:['inp'],
+   d:`<p>Mit den Pfeiltasten springen Sie zum falschen Feld: <b>▼</b> (Zeile 2) und <b>▶</b> (Spalte 2). Tippen Sie <b>4</b> und bestätigen Sie mit ${E}.</p>`,
+   n:'Ein einzelnes Feld ändern Sie immer so: <b>Matrix bearbeiten</b>, mit den Pfeilen hinspringen, neue Zahl, bestätigen.'},
+  {t:"Fertig: AC", a:MXP(MA,'A'), k:['ac'], d:`<p><b>AC</b> – zurück zur Rechenzeile. MatA ist jetzt richtig gespeichert.</p>`},
+  {t:"MatB: 3 Zeilen, 2 Spalten", a:MXP(MB,'B'), k:MOD.DEF('B',3,2), z:['inp'],
+   d:DEFTXT.B+`<p>Eine Matrix muss nicht quadratisch sein. <b>B</b> hat <b>3 Zeilen</b> und <b>2 Spalten</b>: eine 3×2-Matrix.</p>`},
+  {t:"MatB eingeben", a:MXP(MB,'B'), k:RK([1,0,2,-1,3,4]).concat(['ac']),
+   d:`<p>Zeile 1: <b>1</b>, <b>0</b>. Zeile 2: <b>2</b>, <b>−1</b>. Zeile 3: <b>3</b>, <b>4</b>. Jede Zahl mit ${E}, dann <b>AC</b>.</p><p>Die −1 hat ein Vorzeichen: ${MOD.t.neg}.</p>`,
+   n:'Auch die <b>0</b> eintippen und bestätigen – oder mit <b>▶</b> überspringen, denn im Editor steht schon 0.'},
+  {t:"Gespeicherte Matrix anzeigen", a:MXP(MB,'B'), k:kB.concat([EX]), z:['res'],
+   d:`<p>So holen Sie eine Matrix in die Rechenzeile: ${mB}. Mit ${E} zeigt der Rechner die Matrix an.</p><p>Das Ergebnis-Fenster heißt <b>${MODEL==='cw'?'MatAns':'Ans'}</b> – der Rechner merkt sich das letzte Ergebnis.</p>`},
+  {t:"Arbeitsblatt vorbereiten", k:[], ab:1, d:`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: Matrizen speichern</div><ul><li>Die Matrizen <b>A</b>, <b>B</b> und <b>C</b> vom Arbeitsblatt als MatA, MatB, MatC speichern: ${MOD.t.def}</li><li>Tippfehler korrigieren: ${MOD.t.edit}</li><li>Kontrolle: Matrix aufrufen und mit ${E} anzeigen</li></ul><p>Die Aufgaben auf dem Blatt kommen nach Teil 2. Jetzt <b>Weiter</b>.</p></div>`}
+]);
+
+// ---------------- Teil 2: Addition, skalare Multiplikation, Multiplikation
+const T2=[
+  {t:"Addition: A + A", a:AB2, k:['ac'].concat(kA,['+'],kA,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatA <b>+</b> MatA und ${E}. Die Matrizen holen Sie mit ${MODEL==='cw'?'<b>CATALOG</b> ▸ Matrix':'<b>OPTN</b>'} in die Rechenzeile.</p><p>Der Rechner addiert <b>Feld für Feld</b>: 2 + 2 = 4, 1 + 1 = 2 …</p>`+MXP([[4,2],[6,8]],'A + A'),
+   n:VOR},
+  {t:"Skalare Multiplikation: 2 · A", a:AB2, k:['ac','2','*'].concat(kA,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann <b>2</b> <b>×</b> MatA, ${E}.</p><p>Eine Zahl mal Matrix: <b>jedes Feld</b> wird mit 2 multipliziert. Das Ergebnis ist dasselbe wie bei A + A.</p>`+MXP([[4,2],[6,8]],'2 · A')},
+  {t:"Addition geht nicht: A + B", a:AB2, k:['ac'].concat(kA,['+'],kB,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatA <b>+</b> MatB, ${E}.</p><p>Der Rechner meldet einen <b>${DIMF}</b>: A ist 2×2, B ist 3×2.</p>`,
+   n:'Addieren und Subtrahieren geht nur bei Matrizen <b>gleicher Größe</b>.'},
+  {t:"Multiplikation: B · A", a:AB2, k:['ac'].concat(kB,['*'],kA,[EX]), z:['res'],
+   d:`<p><b>AC</b> schließt die Meldung. Dann MatB <b>×</b> MatA, ${E}.</p><p>Gerechnet wird <b>Zeile mal Spalte</b>: oben links 1 · 2 + 0 · 3 = 2.</p><p>(3×<b>2</b>) mal (<b>2</b>×2): Die inneren Zahlen sind gleich – das geht. Das Ergebnis ist 3×2.</p>`+MXP([[2,1],[1,-2],[18,19]],'B · A')},
+  {t:"Andersherum geht nicht: A · B", a:AB2, k:['ac'].concat(kA,['*'],kB,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatA <b>×</b> MatB, ${E}.</p><p>Wieder ein <b>${DIMF}</b>: (2×<b>2</b>) mal (<b>3</b>×2) – die inneren Zahlen 2 und 3 passen nicht.</p>`,
+   n:'Multiplizieren geht nur, wenn <b>Spaltenzahl der ersten = Zeilenzahl der zweiten</b> Matrix ist. Die Reihenfolge ist wichtig: B · A geht, A · B nicht.'},
+  {t:"Meldung schließen", a:AB2, k:['ac'], d:`<p>Mit <b>AC</b> schließen Sie die Meldung.</p>`},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",[`Matrizen mit ${MODEL==='cw'?'<b>CATALOG</b> ▸ Matrix':'<b>OPTN</b>'} in die Rechenzeile holen`,`Rechenzeichen <b>+</b>, <b>−</b>, <b>×</b> wie gewohnt`,`Zahl mal Matrix: z. B. <b>2</b> × MatA`,`Fehlermeldung? Dann geht die Rechnung nicht – ankreuzen`])}
+];
+
+// ---------------- Teil 3: Potenzen
+const T3=[
+  {t:"Quadrat: A²", a:AB2, k:['ac'].concat(kA,MOD.SQ,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatA, dann ${MOD.t.sq}, dann ${E}.</p>`+MXP([[7,6],[18,19]],'A²'),
+   n:'A² bedeutet <b>A · A</b> (Zeile mal Spalte) – nicht jedes Feld einzeln quadrieren! Oben links steht 7, nicht 2² = 4.'},
+  {t:"Zurück: AC", a:AB2, k:['ac'], d:`<p><b>AC</b>.</p>`},
+  {t:"Hoch drei: A³", a:AB2, k:A3K(), z:['res'], d:A3TXT+MXP([[32,31],[93,94]],'A³')},
+  {t:"Höhere Potenzen: A⁴", a:AB2, k:['*'].concat(kA,[EX]), z:['res'],
+   d:`<p>A³ steht noch im Ergebnisfenster. Drücken Sie jetzt <b>×</b>: Der Rechner schreibt automatisch <b>MatAns×</b> in die Rechenzeile. Dann MatA und ${E}.</p><p>A³ · A = <b>A⁴</b>:</p>`+MXP([[157,156],[468,469]],'A⁴'),
+   n:'Für jede weitere Potenz: noch einmal <b>×</b> MatA '+E+'.'},
+  {t:"B² geht nicht", a:AB2, k:['ac'].concat(kB,MOD.SQ,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatB ${MOD.t.sq} ${E}.</p><p>Der Rechner meldet einen <b>${DIMF}</b>.</p>`,
+   n:'Potenzen gibt es nur bei <b>quadratischen</b> Matrizen (gleich viele Zeilen und Spalten). B ist 3×2.'},
+  {t:"Meldung schließen", a:AB2, k:['ac'], d:`<p><b>AC</b>.</p>`},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",[`A²: MatA ${MOD.t.sq} ${E}`,`A³: MatA ${MOD.t.cube} ${E}`,`Höhere Potenzen: im Ergebnisfenster <b>×</b> MatA ${E} – so oft wie nötig`,`Brüche im Ergebnis? Als Dezimalzahl notieren`])}
+];
+
+// ---------------- Teil 4: Transponieren
+const T4=[
+  {t:"Transponieren: Trn(B)", a:AB2, k:['ac'].concat(MOD.TRN,kB,[')',EX]), z:['res'],
+   d:`<p>Die <b>transponierte</b> Matrix B<sup>T</sup> entsteht, wenn man <b>Zeilen und Spalten tauscht</b>.</p><p><b>AC</b>, dann ${MOD.t.trn}. Der Rechner schreibt <b>Trn(</b>. Dann ${mB}, Klammer zu <b>)</b> und ${E}.</p>`+MXP([[1,2,3],[0,-1,4]],'B<sup>T</sup>'),
+   n:'Aus der 3×2-Matrix wird eine <b>2×3</b>-Matrix. Die 1. Spalte von B wird die 1. Zeile von B<sup>T</sup>.'},
+  {t:"Zurück: AC", a:AB2, k:['ac'], d:`<p><b>AC</b>.</p>`},
+  {t:"Trn(A)", a:AB2, k:MOD.TRN.concat(kA,[')',EX]), z:['res'],
+   d:`<p>Genauso für A: Trn( MatA ) ${E}.</p>`+MXP([[2,3],[1,4]],'A<sup>T</sup>')+`<p>Die Zahlen auf der Diagonale (2 und 4) bleiben stehen. Die anderen tauschen den Platz.</p>`},
+  {t:"Rechnen mit Bᵀ: Bᵀ · B", a:AB2, k:['ac'].concat(MOD.TRN,kB,[')','*'],kB,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann Trn( MatB ) <b>×</b> MatB ${E}.</p><p>(2×<b>3</b>) mal (<b>3</b>×2) – das geht und ergibt eine quadratische 2×2-Matrix:</p>`+MXP([[14,10],[10,17]],'B<sup>T</sup> · B')},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 3",[`Transponieren: ${MOD.t.trn}`,`Dann die Matrix, Klammer zu <b>)</b>, ${E}`,`Größe des Ergebnisses notieren: aus m×n wird n×m`])}
+];
+
+// ---------------- Teil 5: Determinante und Inverse
+const Ainv=[[FR(4,5),FR(-1,5)],[FR(-3,5),FR(2,5)]];
+const T5=[
+  {t:"Determinante: Det(A)", a:AB2, k:['ac'].concat(MOD.DET,kA,[')',EX]), z:['res'],
+   d:`<p><b>AC</b>, dann ${MOD.t.det}. Der Rechner schreibt <b>Det(</b>. Dann ${mA}, <b>)</b> und ${E}.</p><p>Ergebnis: <b>det(A) = 5</b>. Die Determinante ist eine <b>Zahl</b>, keine Matrix.</p>`,
+   n:'Zur Kontrolle (2×2): det(A) = 2 · 4 − 1 · 3 = 5. Ist det = 0, gibt es keine Inverse.'},
+  {t:"Inverse: A⁻¹", a:AB2, k:['ac'].concat(kA,MOD.INV,[EX]), z:['res'],
+   d:`<p><b>AC</b>, dann MatA und ${MOD.t.inv}, dann ${E}.</p>`+MXP(Ainv,'A<sup>−1</sup>')+`<p>Die Inverse enthält oft <b>Brüche</b>.</p>`,
+   n:MODEL==='cw'?'Die Inverse steht im Katalog unter <b>Matrizenrechnung</b> – nicht mit ÷ rechnen!':'Für die Inverse nehmen Sie <b>x<sup>−1</sup></b> – nicht ÷!'},
+  {t:"Probe: A⁻¹ · A = E", a:AB2, k:['*'].concat(kA,[EX]), z:['res'],
+   d:`<p>Die Inverse steht im Ergebnisfenster. <b>×</b> MatA ${E}.</p>`+MXP([[1,0],[0,1]],'E')+`<p>Heraus kommt die <b>Einheitsmatrix E</b>: Einsen auf der Diagonale, sonst Nullen. So prüfen Sie jede Inverse.</p>`},
+  {t:"Det(B) geht nicht", a:AB2, k:['ac'].concat(MOD.DET,kB,[')',EX]), z:['res'],
+   d:`<p><b>AC</b>, dann Det( MatB ) ${E}.</p><p>Der Rechner meldet einen <b>${DIMF}</b>.</p>`,
+   n:'Determinante und Inverse gibt es nur bei <b>quadratischen</b> Matrizen.'},
+  {t:"Meldung schließen", a:AB2, k:['ac'], d:`<p><b>AC</b>.</p>`},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 4",[`Determinante: ${MOD.t.det}, Matrix, <b>)</b>, ${E}`,`Inverse: Matrix, dann ${MOD.t.inv}, ${E}`,`Fehlermeldung bei der Inverse? Dann ist det = 0`,"Danach: Lösungscode eintragen"])}
+];
+const TRACKS={
+  d:{name:"1 · Definieren und bearbeiten", start:()=>fresh(), steps:T1},
+  r:{name:"2 · Addieren und multiplizieren", start:()=>fresh(PRE), steps:T2},
+  p:{name:"3 · Potenzen", start:()=>fresh(PRE), steps:T3},
+  t:{name:"4 · Transponieren", start:()=>fresh(PRE), steps:T4},
+  i:{name:"5 · Determinante und Inverse", start:()=>fresh(PRE), steps:T5}
+};
+
+
+// =====================================================================
+//  Steuerung
+// =====================================================================
+const ORDER=["d","r","p","t","i"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); const c=k==='shift'?'shift':k==='alpha'?'alpha':(MODEL==='dx'&&(k==='ac'||k==='del'))?'b':WHITE.test(k)?'w':''; return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?S.z:(S.z||[]).filter(z=>z!=='res'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '<span style="color:var(--mute)">Lesen – dann <b>Weiter</b>.</span>';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit').forEach(e=>e.classList.remove('hit'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1400); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    const want=S.k[pos]; let extra=NEGHINT(k,want);
+    if(k==='exe'&&want!=='exe') extra=` Erst die Zahl eintippen, dann mit ${E} bestätigen.`;
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(want,pos).replace('now','now big')}${extra}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-','*':'*','/':'/','(':'(',')':')'};
+return {
+  ORDER, TRACKS, draw, fresh:(typeof fresh!=='undefined'?fresh:null), run,
+  render, press, next, back, KMAP,
+  selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+  selectStep:function(i){ st=+i; pos=0; render(); }
+};
+ }
+};

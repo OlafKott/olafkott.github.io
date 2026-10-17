@@ -1,0 +1,240 @@
+UEB["dx_lgs"]={
+ title:"Lineare Gleichungssysteme",
+ css:String.raw`:host{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8; }
+*{ box-sizing:border-box; }
+:host{ display:block; color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.wrap{ max-width:none; margin:0; padding:0; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+.card h2{ margin:0 0 6px; font-size:18px; }
+.auftrag{ font-size:15.5px; margin:0 0 10px; }
+.gl{ font-family:Cambria,Georgia,serif; font-size:23px; margin:4px 0 10px; }
+.gl i{ font-style:italic; }
+.round{ display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px; }
+.round b{ color:var(--warn); }
+.spalten{ font-size:14px; color:var(--mute); margin-top:8px; line-height:1.8; }
+.taste{ display:inline-block; font:bold 12px Arial,sans-serif; background:#2f2f34; color:#fff; border-radius:7px; padding:1px 7px; }
+.taste.w{ background:#f1f1f3; color:#111; border:1px solid #c9cbd1; }
+.taste.rd{ background:#bdbdc3; color:#111; }
+.taste.sh{ background:#d9bf7c; color:#3a2c0a; }
+svg.graph{ display:block; max-width:100%; height:auto; margin:4px 0 2px; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; }
+@media (max-width:620px){ .grid{ grid-template-columns:1fr; } }
+.f{ display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; }
+.f label{ font-size:15px; }
+.f label .z{ color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px; }
+.f input{ font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
+.f .m{ font-weight:bold; font-size:18px; text-align:center; }
+.f.ok{ background:var(--okbg); }
+.f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); }
+.f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); }
+.f.fmt .m{ color:var(--warn); }
+.f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; }
+.f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
+.f.no .msg{ color:var(--no); }
+.f.fmt .msg{ color:var(--warn); }
+.f.show .msg{ color:var(--mute); }
+.umf{ margin-top:10px; display:none; background:#F1F8F1; border:2px solid var(--ok); border-radius:10px; padding:8px 14px; font-size:14.5px; }
+.umf.on{ display:block; }
+.umf table{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:18px; margin:4px 0; }
+.umf td{ padding:2px 0; }
+.umf td.eq{ padding:2px 6px; }
+.umf td.r{ padding:2px 14px 2px 0; }
+.umf .bar{ display:inline-block; border-left:2px solid #1d1d1f; padding-left:8px; color:var(--lf); font-weight:bold; }
+.umf .rot{ color:#C62828; font-weight:bold; }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
+.score{ font-size:16px; font-weight:bold; margin-top:12px; min-height:24px; }
+.stats{ font-size:13.5px; color:var(--mute); margin-top:4px; }
+.hinweis{ font-size:13.5px; color:var(--mute); }
+table.sys{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:22px; line-height:1.5; margin:4px 0 8px; border-left:2px solid #333; }
+table.sys td{ padding:0 8px; white-space:nowrap; }
+table.sys td.ro{ font:13px Arial,sans-serif; color:var(--mute); }
+table.sys td.eq{ padding:0 4px; }
+table.kt{ border-collapse:collapse; margin:4px 0 8px; font-size:15px; }
+table.kt th{ font:italic bold 15px 'Times New Roman',serif; padding:2px 12px; border-bottom:2px solid #1d1d1f; }
+table.kt td{ text-align:center; padding:2px 12px; background:#fff; border:1px solid #d5dbd5; }
+table.kt td.rn{ background:none; border:0; color:var(--mute); font-size:12px; }
+.f.wide{ grid-column:1 / -1; grid-template-columns:1fr 250px 26px; }
+.f select{ font:inherit; font-size:15px; padding:5px 6px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div id="daten"></div>
+    <div class="spalten" id="spalten"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>1,27</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen. Meldet der Rechner keine Zahl, lassen Sie die Zahlenfelder leer.</div>
+    <div class="grid" id="felder"></div>
+    <div class="umf" id="umf"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis">Komma oder Punkt sind beide erlaubt. Mit „Lösung anzeigen“ sehen Sie auch die Tabelle, die Sie in den Rechner eingeben.</p>
+</div>`,
+ init:function(root){
+
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const num=v=>{ const t=Number(r2(v).toFixed(2)); return String(t).replace('.',',').replace('-','−'); };
+const T=(s,c='')=>`<span class="taste ${c}">${s}</span>`;
+const VAR=['x','y','z'];
+const KEYS2=`${T('MENU','rd')} ${T('(−)')} ▸ ${T('1','w')} Gleichungssystem ▸ ${T('2','w')} ▸ Zahlen zeilenweise, jede mit ${T('=','w')} ▸ ${T('=','w')} <i>x</i> ▸ ${T('=','w')} <i>y</i><br>Vorzeichen: ${T('(−)')} &nbsp;·&nbsp; Bruch: ${T('S⇔D')} &nbsp;·&nbsp; Neues System: ${T('AC')}`;
+const KEYS3=`${T('MENU','rd')} ${T('(−)')} ▸ ${T('1','w')} Gleichungssystem ▸ ${T('3','w')} ▸ Zahlen zeilenweise, jede mit ${T('=','w')} ▸ ${T('=','w')} <i>x</i> ▸ ${T('=','w')} <i>y</i> ▸ ${T('=','w')} <i>z</i><br>Vorzeichen: ${T('(−)')} &nbsp;·&nbsp; Fehlende Unbekannte: 0 &nbsp;·&nbsp; Bruch: ${T('S⇔D')}`;
+const NEGTXT='Vorzeichen mit der Taste (−), Rechenzeichen mit −.';
+function term(co,vars){
+  let s='';
+  co.forEach((k,j)=>{ if(Math.abs(k)<1e-12) return; const ab=Math.abs(k), t=(ab===1?'':num(ab))+`<i>${vars[j]}</i>`;
+    s = !s ? (k<0?'−':'')+t : s+` ${k<0?'−':'+'} ${t}`; });
+  return s||'0';
+}
+const ROM=['I','II','III'];
+function sys(rows,vars){ vars=vars||VAR; return `<table class="sys">`+rows.map((r,i)=>`<tr><td class="ro">${ROM[i]}</td><td>${r.l||term(r.slice(0,-1),vars)}</td><td class="eq">=</td><td>${r.rr||num(r[r.length-1])}</td></tr>`).join('')+'</table>'; }
+// Gauß-Verfahren (Gleitkomma, mit Rangprüfung)
+function loese(M){
+  const n=M.length, A=M.map(r=>r.slice()); let row=0;
+  for(let c=0;c<n;c++){
+    let p=-1, best=1e-9; for(let i=row;i<n;i++) if(Math.abs(A[i][c])>best){ best=Math.abs(A[i][c]); p=i; }
+    if(p<0) continue;
+    [A[row],A[p]]=[A[p],A[row]]; const pv=A[row][c];
+    for(let j=c;j<=n;j++) A[row][j]/=pv;
+    for(let i=0;i<n;i++) if(i!==row){ const f=A[i][c]; for(let j=c;j<=n;j++) A[i][j]-=f*A[row][j]; }
+    row++;
+  }
+  for(let i=row;i<n;i++) if(Math.abs(A[i][n])>1e-9) return {typ:'keine'};
+  if(row<n) return {typ:'unendl'};
+  return {typ:'ok', x:A.map(r=>r[n])};
+}
+const KT=(rows)=>`<table class="kt"><tr><th></th>${['a','b','c','d'].slice(0,rows.length+1).map(s=>`<th>${s}</th>`).join('')}</tr>`+rows.map((r,i)=>`<tr><td class="rn">${i+1}</td>${r.map(v=>`<td>${num(v)}</td>`).join('')}</tr>`).join('')+'</table>';
+
+// ---------------- Zwei Unbekannte
+function genZwei(){
+  let M,L,ord=Math.random()<0.3;
+  do{
+    if(ord){ const m=R(-4,4)||2, t=R(-6,6); M=[[-m,1,t],[R(-5,5),R(-5,5),R(-12,12)]]; }
+    else M=[[R(-6,6),R(-6,6),R(-15,15)],[R(-6,6),R(-6,6),R(-15,15)]];
+    L=loese(M);
+  }while(L.typ!=='ok'||M.some(r=>r[0]===0&&r[1]===0)||L.x.some(v=>Math.abs(v)>30));
+  let rows=M.map(r=>r.slice()), umf='';
+  if(ord){ const m=-M[0][0], t=M[0][2];
+    rows[0]={l:'<i>y</i>', rr:term([m],['x'])+(t?` ${t<0?'−':'+'} ${Math.abs(t)}`:'')};
+    umf=`<b>Ordnen:</b> I: <i>y</i> = ${rows[0].rr} &nbsp;| ${m<0?'+':'−'} ${Math.abs(m)===1?'':Math.abs(m)}<i>x</i> &nbsp;→&nbsp; <b>${term(M[0].slice(0,2),VAR)} = ${num(t)}</b><br>`; }
+  return {typ:'z', h:"Gleichungssystem mit zwei Unbekannten", auftrag:ord?"Ordnen Sie Gleichung I zuerst (links die Unbekannten, rechts die Zahl). Lösen Sie dann das System mit dem Rechner.":"Lösen Sie das Gleichungssystem mit dem Rechner.",
+    daten:sys(rows), spalten:KEYS2,
+    felder:[["x","Lösung","<i>x</i> ="],["y","Lösung","<i>y</i> ="]], wert:{x:L.x[0],y:L.x[1]},
+    umf:umf+'<b>Eingabe in den Rechner:</b>'+KT(M)};
+}
+// ---------------- Drei Unbekannte (mit Sonderfällen)
+function genDrei(){
+  let M,L,art=Math.random()<0.7?'ok':pick(['keine','unendl']);
+  do{
+    if(art==='ok'){
+      const s=[R(-4,5),R(-4,5),R(-4,5)];
+      M=[0,1,2].map(()=>{ const c=[R(-4,4),R(-4,4),R(-4,4)]; if(Math.random()<0.25) c[R(0,2)]=0; return c.concat([c[0]*s[0]+c[1]*s[1]+c[2]*s[2]]); });
+    } else {
+      const a=[R(-3,3),R(-3,3),R(-3,3),R(-9,9)], b=[R(-3,3),R(-3,3),R(-3,3),R(-9,9)];
+      const k=pick([2,-1,3]), c=a.map((v,i)=>v+k*b[i]);
+      if(art==='keine') c[3]+=pick([-3,-2,-1,1,2,3]);
+      M=[a,b,c];
+    }
+    L=loese(M);
+  }while(L.typ!==art||M.some(r=>r[0]===0&&r[1]===0&&r[2]===0)||(art==='ok'&&L.x.some(v=>Math.abs(v)>30)));
+  const w={art:{ok:1,keine:2,unendl:3}[art]};
+  if(art==='ok'){ w.x=L.x[0]; w.y=L.x[1]; w.z=L.x[2]; }
+  return {typ:'d', h:"Gleichungssystem mit drei Unbekannten", auftrag:"Lösen Sie das System. Fehlt eine Unbekannte, geben Sie eine 0 ein. Wählen Sie zuerst aus, was der Rechner meldet.",
+    daten:sys(M), spalten:KEYS3,
+    felder:[["art","Was zeigt der Rechner?","",'sel'],["x","Lösung","<i>x</i> ="],["y","Lösung","<i>y</i> ="],["z","Lösung","<i>z</i> ="]], wert:w,
+    umf:'<b>Eingabe in den Rechner:</b>'+KT(M)};
+}
+// ---------------- Parabel durch drei Punkte
+function genPar(){
+  let a,b,c,xs;
+  do{ a=pick([-2,-1,-0.5,0.5,1,2,3]); b=R(-5,5); c=R(-6,6); const p=new Set(); while(p.size<3) p.add(R(-3,4)); xs=[...p].sort((u,v)=>u-v); }
+  while(xs.some(x=>Math.abs(a*x*x+b*x+c)>30));
+  const P=xs.map(x=>[x,a*x*x+b*x+c]), M=P.map(([x,y])=>[x*x,x,1,y]);
+  const pt=P.map(([x,y],i)=>`${'ABC'[i]}(${num(x)} | ${num(y)})`).join(', ');
+  const gl=P.map(([x,y])=>`<i>a</i> · ${x<0?'('+num(x)+')':num(x)}<sup>2</sup> + <i>b</i> · ${x<0?'('+num(x)+')':num(x)} + <i>c</i> = ${num(y)}`).join('<br>');
+  return {typ:'s', h:"Parabel durch drei Punkte", auftrag:`Die Parabel <i>f</i>(<i>x</i>) = <i>ax</i><sup>2</sup> + <i>bx</i> + <i>c</i> geht durch die Punkte`,
+    daten:`<div class="gl">${pt}</div><p class="auftrag">Stellen Sie das Gleichungssystem auf und lösen Sie es. Der Rechner nennt die Unbekannten <i>x</i>, <i>y</i>, <i>z</i> – das sind hier <i>a</i>, <i>b</i>, <i>c</i>.</p>`,
+    spalten:KEYS3,
+    felder:[["a","Koeffizient","<i>a</i> ="],["b","Koeffizient","<i>b</i> ="],["c","Koeffizient","<i>c</i> ="]], wert:{a,b,c},
+    umf:'<b>Punkte einsetzen:</b><br><span style="font-family:Cambria,Georgia,serif">'+gl+'</span><br><b>Eingabe in den Rechner:</b>'+KT(M)+`<i>f</i>(<i>x</i>) = ${term([a,b],['x<sup>2</sup>','x'])} ${c<0?'−':'+'} ${num(Math.abs(c))}`};
+}
+const MODES={z:{name:"Zwei Unbekannte",gen:genZwei}, d:{name:"Drei Unbekannte",gen:genDrei}, s:{name:"Parabel durch drei Punkte",gen:genPar}};
+const ORDER=["z","d","s"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+const $=id=>root.getElementById(id);
+const ARTEN=['– bitte wählen –','eine Lösung (Zahlen)','Keine Lösung','Unendlich viele Lösungen'];
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('h').textContent="Aufgabe: "+A.h;
+  $('auftrag').innerHTML=A.auftrag;
+  $('daten').innerHTML=A.daten;
+  $('spalten').innerHTML=A.spalten;
+  $('felder').innerHTML=A.felder.map(([k,l,z,sel])=> sel==='sel'
+    ? `<div class="f wide" id="f_${k}"><label for="i_${k}">${l}</label><select id="i_${k}">${ARTEN.map((t,i)=>`<option value="${i}">${t}</option>`).join('')}</select><span class="m"></span><div class="msg"></div></div>`
+    : `<div class="f" id="f_${k}"><label for="i_${k}">${l} <span class="z">${z}</span></label><input id="i_${k}" inputmode="decimal" autocomplete="off" placeholder="0,00"><span class="m"></span><div class="msg"></div></div>`).join('');
+  $('umf').className='umf'; $('umf').innerHTML='';
+  $('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+function pruefen(){
+  let ok=0; const tot=A.felder.length;
+  A.felder.forEach(([k,l,z,sel])=>{
+    const f=$('f_'+k), raw=$('i_'+k).value, m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.className='f'+(sel?' wide':''); m.textContent=''; msg.textContent='';
+    const soll=A.wert[k];
+    if(sel){
+      if(+raw===soll){ f.classList.add('ok'); m.textContent='✓'; ok++; return; }
+      f.classList.add('no'); m.textContent='✗';
+      msg.textContent=+raw===0?'Bitte auswählen.':'Lesen Sie die Meldung auf dem Display genau ab.'; return;
+    }
+    if(!raw.trim()){
+      if(soll===undefined){ f.classList.add('ok'); m.textContent='✓'; ok++; }
+      return;
+    }
+    const p=parse(raw);
+    if(!p){ f.classList.add('fmt'); m.textContent='?'; msg.textContent='Bitte nur eine Zahl eintragen, z. B. 1,27.'; return; }
+    if(soll===undefined){ f.classList.add('no'); m.textContent='✗'; msg.textContent='Es gibt keine eindeutige Lösung – Feld leer lassen.'; return; }
+    const sollR=r2(soll);
+    if(Math.abs(p.v-sollR)<0.0051 && p.dec<=2){ f.classList.add('ok'); m.textContent='✓'; ok++; return; }
+    if(Math.abs(p.v-soll)<0.06){ f.classList.add('fmt'); m.textContent='!'; msg.textContent='Fast – bitte genau auf 2 Nachkommastellen runden.'; return; }
+    f.classList.add('no'); m.textContent='✗';
+    let t='Das stimmt noch nicht. Prüfen Sie die Eingabe Zeile für Zeile.';
+    if(Math.abs(p.v+soll)<0.0051) t='Vorzeichen prüfen: '+NEGTXT;
+    else if(Object.keys(A.wert).some(q=>q!==k&&typeof A.wert[q]==='number'&&q!=='art'&&Math.abs(p.v-r2(A.wert[q]))<0.0051)) t='Das ist der Wert einer anderen Unbekannten. Reihenfolge prüfen.';
+    else if(A.typ==='z'&&A.umf.includes('Ordnen')) t='Haben Sie Gleichung I zuerst geordnet?';
+    msg.textContent=t;
+  });
+  stat.a++; if(ok===tot) stat.r++;
+  $('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  $('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  A.felder.forEach(([k,l,z,sel])=>{
+    const f=$('f_'+k), msg=f.querySelector('.msg');
+    if(!f.classList.contains('ok')){ f.classList.add('show'); const v=A.wert[k]; msg.textContent='Lösung: '+(sel?ARTEN[v]:v===undefined?'– (Feld leer lassen)':num(v)); }
+  });
+  if(A.umf){ $('umf').innerHTML=A.umf; $('umf').className='umf on'; }
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+neu();
+
+ }
+};

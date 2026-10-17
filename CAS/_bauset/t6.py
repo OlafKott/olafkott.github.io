@@ -1,6 +1,6 @@
 import asyncio,sys
 from playwright.async_api import async_playwright
-TOP=['grund','stat','funk','gl','wt','abl','int','lgs']
+TOP=['grund','stat','funk','gl','wt','abl','int','lgs','mat','kombi','binom']
 async def run(pg,root,t,errs,shots,tag):
     await pg.evaluate('window.scrollTo(0,0)')
     sel=f'.topic[data-t="{t}"] .act.tour'
@@ -37,7 +37,7 @@ async def main():
                 root='' if m is None else f'#w_{m}'
                 if m: await pg.click(f'#w_{m}'); await pg.wait_for_timeout(1000)
                 await pg.screenshot(path=f'out/v_{m}_toc.png')
-                res=[await run(pg,root,t,errs,t in('abl','int','lgs'),m) for t in TOP]
+                res=[await run(pg,root,t,errs,t in('lgs','mat','kombi','binom'),m) for t in TOP]
                 print(F.split('/')[-1],m,res)
                 if m: await pg.click('#toToc'); await pg.wait_for_timeout(900)
             print('ERR',errs[:5]); await pg.close()
