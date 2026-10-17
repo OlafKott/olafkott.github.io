@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taschenrechner-Führerschein · CASIO fx-991DE CW / fx-991DE X</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; --gold:#d2ad5b;
+       --gs:#1F4E99; --gs2:#2a62c2; --gsbg:#EEF2FA; }
+*{ box-sizing:border-box; }
+html{ background:var(--bg); }
+body{ margin:0; min-height:100vh; background:radial-gradient(circle at 30% 0,#ffffff,var(--bg) 60%); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; overflow-x:hidden; }
+button{ font-family:inherit; }
+{{BASECSS}}
+{{TABSCSS}}
+{{MODCSS}}
+
+/* ================= Rahmen der Moodle-Seite ================= */
+.bar{ position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line); box-shadow:0 1px 0 rgba(0,0,0,.02); }
+.bar::before{ content:""; display:block; height:4px; background:linear-gradient(90deg,var(--gs),#5b86cf); }
+.bar .in{ max-width:1040px; height:62px; padding:0 16px; display:flex; align-items:center; gap:12px; }
+.toToc{ flex:0 0 auto; max-width:0; opacity:0; overflow:hidden; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; border:1px solid #c9d3e6; background:#fff; color:var(--gs); font:600 14px system-ui,Arial,sans-serif; border-radius:999px; padding:7px 0; cursor:pointer; transition:max-width .4s cubic-bezier(.2,.7,.2,1), opacity .3s, padding .4s, margin .4s; pointer-events:none; margin-right:-12px; }
+.toToc svg{ width:16px; height:16px; flex:0 0 16px; }
+.toToc:hover,.toToc:focus-visible{ background:var(--gsbg); outline:none; }
+.shell[data-mode="toc"] .toToc, .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ max-width:170px; opacity:1; padding:7px 14px 7px 10px; pointer-events:auto; margin-right:0; }
+.ttlbox{ flex:1 1 auto; min-width:0; }
+.ttlbox h1{ margin:0; font-size:19px; line-height:1.25; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:opacity .2s; }
+.ttlbox h1 small{ font-size:13px; font-weight:normal; color:var(--mute); margin-left:8px; }
+.ttlbox h1.swap{ opacity:0; }
+.seg{ flex:0 0 auto; display:flex; gap:4px; padding:3px; border-radius:11px; background:#f1f3f5; border:1px solid var(--line); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .3s, transform .3s; }
+.shell[data-mode="g"] .seg, .shell[data-mode="u"] .seg{ opacity:1; transform:none; pointer-events:auto; }
+.seg button,.seg a{ display:inline-flex; align-items:center; gap:6px; border:0; background:none; border-radius:8px; padding:6px 11px; font:600 13.5px system-ui,Arial,sans-serif; color:var(--mute); cursor:pointer; text-decoration:none; white-space:nowrap; }
+.seg svg{ width:16px; height:16px; flex:0 0 16px; }
+.seg button:hover,.seg a:hover{ color:var(--ink); background:#e6e9ed; }
+.seg button.on{ background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.14); }
+.seg button[data-v="g"].on{ color:var(--lf); } .seg button[data-v="u"].on{ color:var(--ab); }
+.seg a{ color:#b8322d; }
+.bar img{ height:28px; flex:0 0 auto; }
+
+.stage{ max-width:1040px; padding:16px 16px 34px; display:flex; gap:22px; align-items:flex-start; }
+.cwrap{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+.cwrap .calc{ flex:0 0 auto; }
+.cwrap[hidden]{ display:none !important; }
+.pickcap{ display:none; margin-top:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:8px 18px; font:600 15px system-ui,Arial,sans-serif; color:var(--ink); cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.06); transition:transform .15s, box-shadow .15s, border-color .15s; }
+.pickcap small{ font-weight:normal; color:var(--mute); margin-left:6px; }
+.shell[data-mode="pick"] .pickcap{ display:inline-block; }
+.shell[data-mode="pick"] .stage{ gap:clamp(24px,6vw,64px); }
+.shell[data-mode="pick"] .right{ display:none; }
+.shell[data-mode="pick"] .cwrap{ cursor:pointer; transition:transform .25s cubic-bezier(.2,.7,.2,1), opacity .25s; }
+.shell[data-mode="pick"] .cwrap:hover{ transform:translateY(-4px); }
+.shell[data-mode="pick"] .cwrap:hover .pickcap, .pickcap:focus-visible{ border-color:var(--gs); box-shadow:0 6px 16px rgba(31,78,153,.18); outline:none; }
+.shell[data-mode="pick"] .calc .k{ pointer-events:none; }
+.cwrap.gone{ opacity:0; transform:scale(.94) translateY(8px) !important; }
+.cwrap.fly{ transition:transform .55s cubic-bezier(.2,.7,.2,1) !important; }
+.right{ flex:1 1 360px; max-width:680px; min-width:0; position:relative; }
+
+/* Rechner-Zustände */
+.shell:not([data-mode="g"]) .calc .k{ cursor:default; }
+.shell:not([data-mode="g"]) .calc .k:active{ transform:none; }
+.scr.flash{ animation:lcd .45s ease-out; }
+@keyframes lcd{ 0%{ filter:brightness(1); } 25%{ filter:brightness(.82) contrast(.7); } 100%{ filter:none; } }
+
+/* Ansichten + Übergänge */
+.view[hidden]{ display:none !important; }
+.view{ transition:opacity .34s ease, transform .42s cubic-bezier(.2,.7,.2,1); }
+.view.from-r{ opacity:0; transform:translateX(42px); }
+.view.from-l{ opacity:0; transform:translateX(-42px); }
+.view.to-l{ opacity:0; transform:translateX(-36px); transition-duration:.24s,.26s; }
+.view.to-r{ opacity:0; transform:translateX(36px); transition-duration:.24s,.26s; }
+
+/* Gliederung */
+.toc h2{ margin:2px 0 12px; font-size:21px; }
+.topics{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.topic{ background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; transition:box-shadow .2s, border-color .2s, transform .2s; animation:rise .5s both; }
+.topic:nth-child(2){ animation-delay:.05s } .topic:nth-child(3){ animation-delay:.1s } .topic:nth-child(4){ animation-delay:.15s } .topic:nth-child(5){ animation-delay:.2s } .topic:nth-child(6){ animation-delay:.25s }
+@keyframes rise{ from{ opacity:0; transform:translateY(10px); } }
+.topic:hover,.topic:focus-within{ border-color:#b8c8e6; box-shadow:0 6px 18px rgba(31,78,153,.12); }
+.topic{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:12px 14px; }
+.tmain{ flex:1 1 180px; min-width:0; display:flex; align-items:center; gap:12px; }
+.num{ flex:0 0 32px; height:32px; border-radius:50%; background:var(--gs); color:#fff; font:bold 15px Arial,sans-serif; display:flex; align-items:center; justify-content:center; }
+.tmain .ttl{ font-size:17px; font-weight:650; line-height:1.3; }
+.acts{ flex:0 0 auto; display:flex; gap:6px; }
+.act{ height:34px; min-width:104px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:0 10px; text-decoration:none; color:#fff; border:0; cursor:pointer; font:600 13px system-ui,Arial,sans-serif; transition:transform .15s, box-shadow .15s; }
+.act:hover,.act:focus-visible{ transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,.18); outline:none; }
+.act svg{ width:17px; height:17px; flex:0 0 17px; }
+.act.tour{ background:linear-gradient(#2a62c2,var(--lf)); }
+.act.pdf{ background:linear-gradient(#e0504a,#b8322d); }
+.act.ueb{ background:linear-gradient(#3aa356,var(--ab)); }
+.act.gap{ visibility:hidden; }
+.seg [hidden]{ display:none !important; }
+
+/* Anleitung / Übung */
+.gpanel[hidden], .uhost[hidden]{ display:none; }
+.uhost{ display:block; }
+

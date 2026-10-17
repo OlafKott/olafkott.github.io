@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-991DE X Integrale</title>
+@@DX_CSS@@
+/* Integral-Vorlage */
+.ig{ display:inline-flex; align-items:center; }
+.ig .is{ font:30px 'Times New Roman',serif; line-height:1; margin-right:1px; }
+.ig .lim{ display:inline-flex; flex-direction:column; justify-content:space-between; height:38px; font-size:11.5px; margin:0 3px 0 -2px; }
+.ig .lim > span{ display:flex; align-items:center; min-height:12px; line-height:12px; }
+.ig .arg{ display:inline-flex; align-items:center; font-size:17px; }
+.ig .dx{ font-size:15px; margin-left:3px; }
+.ig .dx i{ font-family:'Times New Roman',serif; font-size:17px; }
+.slot{ display:inline-block; width:8px; height:10px; border:1.3px solid #141a14; border-radius:1px; vertical-align:middle; }
+.arg .slot{ width:10px; height:13px; }
+.lim .caret{ height:11px; }
+.erg{ text-align:right; font-size:19px; font-weight:bold; letter-spacing:.2px; }
+.erg small{ font-size:12px; font-weight:normal; margin-right:4px; }
+.list div.it.dim{ color:#6b776b; }
+</style></head><body>
+<div class="top"><div class="in"><h1>Schritt für Schritt: Integrale berechnen<small>CASIO fx-991DE X · Am eigenen Rechner mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,@@LOGO@@" alt="RWB Essen fhr"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  @@CALC_DX_V2@@<div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="chips" id="chips"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+@@DX_MENU_JS@@// =====================================================================
+//  Exakte Rechnung
+// =====================================================================
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const R=(p,q=1)=>{ if(q<0){ p=-p; q=-q; } const g=gcd(p,q); return {p:p/g,q:q/g}; };
+const addR=(a,b)=>R(a.p*b.q+b.p*a.q,a.q*b.q), mulR=(a,b)=>R(a.p*b.p,a.q*b.q), negR=a=>R(-a.p,a.q);
+function numR(s){ const [i,f='']=s.split(','); return R(parseInt((i||'0')+f,10), 10**f.length); }
+function evalT(t,x){
+  let total=R(0), sign=1, fs=[], num='';
+  const flush=()=>{ if(num){ fs.push(numR(num)); num=''; } };
+  const endTerm=()=>{ flush(); if(fs.length){ let p=fs.reduce(mulR); total=addR(total, sign<0?negR(p):p); } fs=[]; };
+  for(const k of t){
+    if(/^[0-9,]$/.test(k)){ num+=k; continue; }
+    if(k==='x'){ flush(); fs.push(x||R(0)); continue; }
+    if(k==='sq'){ flush(); const l=fs.pop(); if(l) fs.push(mulR(l,l)); continue; }
+    if(k==='+'||k==='-'||k==='neg'){ flush(); const s=k==='+'?1:-1; if(fs.length){ endTerm(); sign=s; } else sign*=s; }
+  }
+  endTerm(); return total;
+}
+const dez=r=>{ const v=r.p/r.q; return Number(v.toPrecision(10)).toString().replace('.',',').replace('-','−'); };
+const TK={neg:'−','-':'−','+':'+',x:'<span class="vx">x</span>',sq:'<sup>2</sup>'};
+const renderT=(t,caret)=>t.map(k=>TK[k]||k).join('')+(caret?'<span class="caret"></span>':'');
+
+
+// =====================================================================
+//  Rechnerzustand: Integral in der App Berechnungen
+// =====================================================================
+const CATS=["Funktionsanalyse","Wahrscheinlichkeit","…"];
+const FA=["Ableitung(d/dx)","Integration(∫)","Summation(Σ)","Produkt(Π)"];
+const NEXT='right', PREV='left';
+function fresh(){ return {mode:'start', sel:0, shift:false, ig:null, cur:'f', res:null}; }
+function neuIg(S){ S.ig={f:[],a:[],b:[]}; S.cur='f'; S.res=null; S.mode='calc'; }
+function integ(S){
+  const g=S.ig, f=x=>evalT(g.f,x), a=evalT(g.a,null), b=evalT(g.b,null);
+  const m=mulR(addR(a,b),R(1,2)), h=mulR(addR(b,negR(a)),R(1,6));
+  return mulR(h, addR(addR(f(a),mulR(R(4),f(m))),f(b)));   // Simpson: exakt bis Grad 3
+}
+function step(S,k){
+  if(k==='shift'){ S.shift=!S.shift; return; }
+  let sh=false;
+  if(S.shift){ S.shift=false; sh=true; if(k==='-') k='neg'; else if(k!=='exe') return; }
+  if(k==='menu'){ S.mode='home'; S.sel=0; return; }
+  switch(S.mode){
+   case 'home':
+     if(k==='right') S.sel=Math.min(11,S.sel+1); else if(k==='left') S.sel=Math.max(0,S.sel-1);
+     else if(k==='1'||(k==='exe'&&S.sel===0)){ S.mode='calc'; S.ig=null; S.res=null; }
+     return;
+   case 'cat':
+     if(k==='down') S.sel=Math.min(1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='back') S.mode='calc';
+     else if((k==='ok'||k==='exe')&&S.sel===0){ S.mode='fa'; S.sel=0; }
+     return;
+   case 'fa':
+     if(k==='down') S.sel=Math.min(FA.length-1,S.sel+1); else if(k==='up') S.sel=Math.max(0,S.sel-1);
+     else if(k==='back'){ S.mode='cat'; S.sel=0; }
+     else if((k==='ok'||k==='exe')&&S.sel===1) neuIg(S);
+     return;
+   case 'calc':
+     if(k==='cat'){ S.mode='cat'; S.sel=0; return; }
+     if(k==='integ'){ neuIg(S); return; }
+     if(!S.ig) return;
+     if(k==='ac'){ S.ig=null; S.res=null; return; }
+     if(S.res!==null) return;
+     if(NEXT==='down'){
+       if(k==='down'){ S.cur=S.cur==='f'?'a':S.cur==='b'?'a':'a'; return; }
+       if(k==='up'){ S.cur='b'; return; }
+       if(k==='left'&&S.cur!=='f'){ S.cur='f'; return; }
+     } else {
+       if(k==='right'){ S.cur=S.cur==='f'?'a':'b'; return; }
+       if(k==='left'){ S.cur=S.cur==='b'?'a':'f'; return; }
+     }
+     if(k==='del'){ S.ig[S.cur].pop(); return; }
+     if(k==='exe'){ S.res=integ(S); return; }
+     if(/^[0-9,]$/.test(k)||['x','sq','+','-','neg'].includes(k)) S.ig[S.cur].push(k);
+     return;
+  }
+}
+function run(S,keys){ keys.forEach(k=>step(S,k)); return S; }
+function slot(S,w){
+  const t=S.ig[w], act=S.res===null&&S.cur===w;
+  if(!t.length) return act?'<span class="caret"></span>':'<span class="slot"></span>';
+  return renderT(t,act);
+}
+function drawIg(S){
+  return `<span class="ig"><span class="is">∫</span><span class="lim"><span>${slot(S,'b')}</span><span>${slot(S,'a')}</span></span><span class="arg">${slot(S,'f')}</span><span class="dx">d<i>x</i></span></span>`;
+}
+function draw(S,ziel){
+  if(S.mode==='start') return sbar(S)+'<div class="app"><div class="ein"></div><div></div></div>';
+  if(S.mode==='home') return drawMenu(S,ziel);
+  if(S.mode==='cat'||S.mode==='fa'){
+    const L=S.mode==='cat'?CATS:FA, T=S.mode==='cat'?'CATALOG':'Funktionsanalyse';
+    return sbar(S)+`<div class="list"><div class="ti">${T}</div>`+L.map((t,i)=>`<div class="it${i===S.sel?' sel':''}${t==='…'?' dim':''}${zl(t,ziel)}"><span>${t}</span></div>`).join('')+'</div>';
+  }
+  const ein=S.ig?drawIg(S):'<span class="caret"></span>';
+  const erg=S.res!==null?`<div class="erg">${dez(S.res)}</div>`:'<div></div>';
+  return sbar(S)+`<div class="app"><div class="ein">${ein}</div>${erg}</div>`;
+}
+
+// =====================================================================
+//  Tour-Inhalte
+// =====================================================================
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Rechner arbeiten, Ergebnisse auf dem Blatt eintragen, dann <b>Weiter</b>.</p></div>`;
+const INT=(a,b,f)=>`<span style="white-space:nowrap">∫<sub style="font-size:13px">${a}</sub><sup style="font-size:13px;margin-left:-6px">${b}</sup> (${f}) d<i>x</i></span>`;
+const B1=INT('1','3','0,5<i>x</i><sup>2</sup> + 1');
+const T1=[
+  {t:"Modus Berechnungen öffnen", a:B1, k:["menu","1"], z:["Berechnungen"],
+   d:"<p>Drücken Sie <b>MENU</b> und dann <b>1</b>. Sie sind im Modus <b>Berechnungen</b>.</p>"},
+  {t:"Integral-Taste drücken", a:B1, k:["integ"],
+   d:"<p>Der X hat eine eigene Taste <b>∫▢</b> (zweite Reihe, vorletzte Taste).</p><p>Im Display erscheint die Integral-Vorlage. Der Cursor steht im großen Feld für die Funktion.</p>"},
+  {t:"Funktion eingeben", a:B1, k:["0",",","5","x","sq","+","1"],
+   d:"<p>Tippen Sie den Term in das Funktionsfeld. Die Variable <b><i>x</i></b> hat eine eigene Taste, das Quadrat die Taste <b>▢²</b>.</p>",
+   n:"Das Komma ist die Taste <b>,</b> unten in der Zahlenreihe."},
+  {t:"Untere Grenze: 1", a:B1, k:["right","1"],
+   d:"<p>Mit <b>▶</b> springt der Cursor zur <b>unteren Grenze</b> (unten am ∫). Tippen Sie <b>1</b>.</p>"},
+  {t:"Obere Grenze: 3", a:B1, k:["right","3"],
+   d:"<p>Mit <b>▶</b> geht es zur <b>oberen Grenze</b> (oben am ∫). Tippen Sie <b>3</b>.</p>",
+   n:"Mit <b>◀ ▶</b> können Sie jederzeit zwischen den Feldern wechseln und etwas verbessern."},
+  {t:"Ergebnis als Dezimalzahl", a:B1, k:["shift","exe"],
+   d:"<p>Drücken Sie <b>SHIFT</b> und <b>=</b> (darüber steht ≈). So kommt das Ergebnis sofort als <b>Dezimalzahl</b>.</p><p>Im Display: <b>6,333333333</b>. Gerundet auf 2 Nachkommastellen: <b>6,33</b>.</p>",
+   n:"Mit <b>=</b> allein kann der Rechner das Ergebnis als Bruch zeigen (hier 19/3). Für Sachaufgaben brauchen Sie meist die Dezimalzahl."},
+  {t:"Selbst arbeiten", k:[], ab:1, d:AB("Aufgabe 1",["Integral-Vorlage öffnen: die Taste <b>∫▢</b>","Funktion eingeben ▸ <b>▶</b> untere Grenze ▸ <b>▶</b> obere Grenze","<b>SHIFT</b> <b>=</b> ▸ auf 2 Nachkommastellen runden","Negative Grenzen mit <b>(−)</b>","Danach: Lösungscode eintragen"])}
+];
+const allK=a=>a.flatMap(s=>s.k);
+const TRACKS={
+  c:{name:"Integral berechnen", start:()=>fresh(), steps:T1}
+};
+
+// =====================================================================
+//  Steuerung
+// =====================================================================
+const ORDER=["c"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const LBL={on:"ON",menu:"MENU",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
+ exe:"=",ac:"AC",del:"DEL",neg:"(−)",integ:"∫▢","-":"−","+":"+",x:'<i class="v">x</i>', sq:'<i class="v">x</i><sup>2</sup>'};
+const WHITE=/^[0-9,+\-]$|^exe$/;
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); const c=k==='shift'?'shift':(k==='ac'||k==='del')?'b':WHITE.test(k)?'w':''; return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+@@DX_RENDER@@function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1600); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    let extra='';
+    if(k==='exe'&&S.k[pos]==='shift') extra=' Für die Dezimalzahl erst <b>SHIFT</b>, dann <b>=</b> (≈).';
+    if((k==='down'||k==='up')&&S.k[pos]==='right') extra=' Zur nächsten Grenze geht es mit <b>▶</b>.';
+    if(k==='-'&&S.k[pos]==='neg') extra=' Für das Vorzeichen am Anfang nehmen Sie <b>(−)</b>.';
+    if(k==='neg'&&S.k[pos]==='-') extra=' Zwischen zwei Summanden nehmen Sie das Rechenzeichen <b>−</b>.';
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}${extra}`;
+  }
+}
+@@CW_TAIL@@

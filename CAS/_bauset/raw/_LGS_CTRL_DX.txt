@@ -1,0 +1,72 @@
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); const c=k==='shift'?'shift':k==='alpha'?'alpha':(k==='ac'||k==='del')?'b':WHITE.test(k)?'w':''; return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?S.z:(S.z||[]).filter(z=>z!=='res'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '<span style="color:var(--mute)">Lesen – dann <b>Weiter</b>.</span>';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit').forEach(e=>e.classList.remove('hit'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1400); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    const want=S.k[pos]; let extra='';
+    if(k==='-'&&want==='neg') extra=' Für ein Vorzeichen nehmen Sie <b>(−)</b>.';
+    if(k==='exe'&&want!=='exe') extra=' Erst die Zahl eintippen, dann mit <b>=</b> bestätigen.';
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(want,pos).replace('now','now big')}${extra}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x','(':'(',')':')'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();

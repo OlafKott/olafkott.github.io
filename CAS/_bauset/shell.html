@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taschenrechner-Führerschein · fx-991DE CW</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; --gold:#d2ad5b;
+       --gs:#1F4E99; --gs2:#2a62c2; --gsbg:#EEF2FA; }
+*{ box-sizing:border-box; }
+html{ background:var(--bg); }
+body{ margin:0; min-height:100vh; background:radial-gradient(circle at 30% 0,#ffffff,var(--bg) 60%); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; overflow-x:hidden; }
+button{ font-family:inherit; }
+{{BASECSS}}
+{{MODCSS}}
+
+/* ================= Rahmen der Moodle-Seite ================= */
+.bar{ position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line); box-shadow:0 1px 0 rgba(0,0,0,.02); }
+.bar::before{ content:""; display:block; height:4px; background:linear-gradient(90deg,var(--gs),#5b86cf); }
+.bar .in{ max-width:1040px; height:62px; padding:0 16px; display:flex; align-items:center; gap:12px; }
+.toToc{ flex:0 0 auto; max-width:0; opacity:0; overflow:hidden; white-space:nowrap; display:inline-flex; align-items:center; gap:6px; border:1px solid #c9d3e6; background:#fff; color:var(--gs); font:600 14px system-ui,Arial,sans-serif; border-radius:999px; padding:7px 0; cursor:pointer; transition:max-width .4s cubic-bezier(.2,.7,.2,1), opacity .3s, padding .4s, margin .4s; pointer-events:none; margin-right:-12px; }
+.toToc svg{ width:16px; height:16px; flex:0 0 16px; }
+.toToc:hover,.toToc:focus-visible{ background:var(--gsbg); outline:none; }
+.shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ max-width:170px; opacity:1; padding:7px 14px 7px 10px; pointer-events:auto; margin-right:0; }
+.ttlbox{ flex:1 1 auto; min-width:0; }
+.ttlbox h1{ margin:0; font-size:19px; line-height:1.25; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:opacity .2s; }
+.ttlbox h1 small{ font-size:13px; font-weight:normal; color:var(--mute); margin-left:8px; }
+.ttlbox h1.swap{ opacity:0; }
+.seg{ flex:0 0 auto; display:flex; gap:4px; padding:3px; border-radius:11px; background:#f1f3f5; border:1px solid var(--line); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .3s, transform .3s; }
+.shell[data-mode="g"] .seg, .shell[data-mode="u"] .seg{ opacity:1; transform:none; pointer-events:auto; }
+.seg button,.seg a{ display:inline-flex; align-items:center; gap:6px; border:0; background:none; border-radius:8px; padding:6px 11px; font:600 13.5px system-ui,Arial,sans-serif; color:var(--mute); cursor:pointer; text-decoration:none; white-space:nowrap; }
+.seg svg{ width:16px; height:16px; flex:0 0 16px; }
+.seg button:hover,.seg a:hover{ color:var(--ink); background:#e6e9ed; }
+.seg button.on{ background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.14); }
+.seg button[data-v="g"].on{ color:var(--lf); } .seg button[data-v="u"].on{ color:var(--ab); }
+.seg a{ color:#b8322d; }
+.bar img{ height:28px; flex:0 0 auto; }
+
+.stage{ max-width:1040px; padding:16px 16px 34px; display:flex; gap:22px; align-items:flex-start; }
+.right{ flex:1 1 360px; max-width:680px; min-width:0; position:relative; }
+
+/* Rechner-Zustände */
+.shell:not([data-mode="g"]) .calc .k{ cursor:default; }
+.shell:not([data-mode="g"]) .calc .k:active{ transform:none; }
+.scr.flash{ animation:lcd .45s ease-out; }
+@keyframes lcd{ 0%{ filter:brightness(1); } 25%{ filter:brightness(.82) contrast(.7); } 100%{ filter:none; } }
+
+/* Ansichten + Übergänge */
+.view[hidden]{ display:none !important; }
+.view{ transition:opacity .34s ease, transform .42s cubic-bezier(.2,.7,.2,1); }
+.view.from-r{ opacity:0; transform:translateX(42px); }
+.view.from-l{ opacity:0; transform:translateX(-42px); }
+.view.to-l{ opacity:0; transform:translateX(-36px); transition-duration:.24s,.26s; }
+.view.to-r{ opacity:0; transform:translateX(36px); transition-duration:.24s,.26s; }
+
+/* Gliederung */
+.toc h2{ margin:2px 0 12px; font-size:21px; }
+.topics{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.topic{ background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; transition:box-shadow .2s, border-color .2s, transform .2s; animation:rise .5s both; }
+.topic:nth-child(2){ animation-delay:.05s } .topic:nth-child(3){ animation-delay:.1s } .topic:nth-child(4){ animation-delay:.15s } .topic:nth-child(5){ animation-delay:.2s } .topic:nth-child(6){ animation-delay:.25s }
+@keyframes rise{ from{ opacity:0; transform:translateY(10px); } }
+.topic:hover,.topic:focus-within{ border-color:#b8c8e6; box-shadow:0 6px 18px rgba(31,78,153,.12); }
+.topic{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:12px 14px; }
+.tmain{ flex:1 1 180px; min-width:0; display:flex; align-items:center; gap:12px; }
+.num{ flex:0 0 32px; height:32px; border-radius:50%; background:var(--gs); color:#fff; font:bold 15px Arial,sans-serif; display:flex; align-items:center; justify-content:center; }
+.tmain .ttl{ font-size:17px; font-weight:650; line-height:1.3; }
+.acts{ flex:0 0 auto; display:flex; gap:6px; }
+.act{ height:34px; min-width:104px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:0 10px; text-decoration:none; color:#fff; border:0; cursor:pointer; font:600 13px system-ui,Arial,sans-serif; transition:transform .15s, box-shadow .15s; }
+.act:hover,.act:focus-visible{ transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,0,0,.18); outline:none; }
+.act svg{ width:17px; height:17px; flex:0 0 17px; }
+.act.tour{ background:linear-gradient(#2a62c2,var(--lf)); }
+.act.pdf{ background:linear-gradient(#e0504a,#b8322d); }
+.act.ueb{ background:linear-gradient(#3aa356,var(--ab)); }
+
+/* Anleitung / Übung */
+.gpanel[hidden], .uhost[hidden]{ display:none; }
+.uhost{ display:block; }
+
+@media (max-width:720px){
+  .stage{ flex-wrap:wrap; gap:16px; }
+  .right{ flex:1 1 100%; max-width:none; }
+  .acts{ flex:1 1 100%; }
+  .act{ flex:1 1 0; min-width:0; padding:0 6px; }
+}
+@media (max-width:620px){
+  .bar img{ display:none; }
+  .ttlbox h1{ font-size:17px; } .ttlbox h1 small{ display:none; }
+  .seg span{ display:none; } .seg button,.seg a{ padding:6px 9px; }
+  .toToc span{ display:none; }
+  .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ padding:7px 10px; }
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style></head><body>
+<div class="shell" id="app" data-mode="toc">
+<header class="bar"><div class="in">
+  <button class="toToc" id="toToc" title="Zurück zur Gliederung"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l-6 6 6 6"/></svg><span>Gliederung</span></button>
+  <div class="ttlbox"><h1 id="hT">Taschenrechner-Führerschein<small>CASIO fx-991DE CW</small></h1></div>
+  <nav class="seg" id="seg" aria-label="Ansicht wählen">
+    <button data-v="g"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg><span>Anleitung</span></button>
+    <button data-v="u"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l4.5 4.5L17 5"/></svg><span>Übung</span></button>
+    <a id="segPdf" href="#" target="_blank" rel="noopener" title="Arbeitsblatt (PDF) in neuem Tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 2h7l4 4v12H5z"/><path d="M12 2v4h4M8 10h5M8 13h5" stroke-linecap="round"/></svg><span>Arbeitsblatt</span></a>
+  </nav>
+  <img src="data:image/png;base64,{{LOGO}}" alt="RWB Essen">
+</div></header>
+
+<main class="stage" id="stage">
+{{CALC}}
+  <div class="right" id="right">
+    <section class="view toc" id="vToc">
+      <h2>Gliederung</h2>
+      <ol class="topics" id="topics"></ol>
+    </section>
+    <section class="view" id="vG" hidden></section>
+    <section class="view" id="vU" hidden></section>
+  </div>
+</main>
+</div>
+
+<script>
+var GUIDES={}, UEB={};
+</script>
+<script>
+{{MODULES}}
+</script>
+<script>
+(function(){
+// ---------------------------------------------------------------
+//  Themen
+// ---------------------------------------------------------------
+const BASE='https://olafkott.github.io/CAS/fx991/';
+const TOPICS={{TOPICS}};
+const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
+const ICO={
+ tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
+ pdf:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 2h7l4 4v12H5z"/><path d="M12 2v4h4M8 10h5M8 13h5" stroke-linecap="round"/></svg>',
+ ueb:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l4.5 4.5L17 5"/></svg>'
+};
+
+const $=id=>document.getElementById(id);
+const APP=$('app'), STAGE=$('stage'), CALC=$('calc'), SCR=$('scr');
+const vToc=$('vToc'), vG=$('vG'), vU=$('vU');
+const DUMMY=document.createElement('div');
+let mode='toc', active=null;   // mode: toc | g | u
+
+// ---------------------------------------------------------------
+//  Anleitungen: je ein eigenes Panel, ein gemeinsamer Rechner
+// ---------------------------------------------------------------
+const PANEL={}, G={};
+const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="chips" id="chips"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="next" class="nx">Überspringen</button></div>';
+function scope(id){
+  const on=()=>active===id&&mode==='g';
+  return {
+    getElementById:x=> x==='scr' ? (on()?SCR:DUMMY) : PANEL[id].querySelector('#'+x),
+    querySelector:s=> on()?CALC.querySelector(s):null,
+    querySelectorAll:s=> on()?CALC.querySelectorAll(s):[],
+    scrollTo:()=>{ if(on()) toTopOfContent(); }
+  };
+}
+TOPICS.forEach(t=>{
+  const p=document.createElement('div'); p.className='panel gpanel'; p.hidden=true; p.innerHTML=PANEL_HTML; vG.appendChild(p); PANEL[t.id]=p;
+  const g=G[t.id]=GUIDES[t.id].make(scope(t.id));
+  p.querySelector('#next').onclick=()=>g.next();
+  p.querySelector('#back').onclick=()=>g.back();
+  p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
+  p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };
+});
+CALC.querySelectorAll('.k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); if(mode==='g'&&active) G[active].press(b.dataset.k); }));
+document.addEventListener('keydown',e=>{
+  if(mode!=='g'||!active) return;
+  const tg=e.target; if(tg&&(tg.tagName==='INPUT'||tg.tagName==='TEXTAREA'||tg.isContentEditable)) return;
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const KM=G[active].KMAP; let k=KM[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); G[active].press(k); }
+});
+
+// ---------------------------------------------------------------
+//  Übungen: je ein Shadow-DOM (Styles und IDs bleiben getrennt)
+// ---------------------------------------------------------------
+const UHOST={};
+function uebung(id){
+  if(UHOST[id]) return UHOST[id];
+  const h=document.createElement('div'); h.className='uhost'; h.hidden=true; vU.appendChild(h);
+  const r=h.attachShadow({mode:'open'});
+  r.innerHTML='<style>'+UEB[id].css+'\n.wrap{max-width:none;margin:0;padding:0;}\n:host{container-type:inline-size;}\n@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }</style>'+UEB[id].html;
+  UEB[id].init(r);
+  return UHOST[id]=h;
+}
+
+// ---------------------------------------------------------------
+//  Rechner-Display in Gliederung / Übung: HOME-Menü
+// ---------------------------------------------------------------
+function homeScreen(sel,pulse){
+  const g=G.grund; const S=g.fresh?g.fresh('home'):{mode:'home'}; S.mode='home'; S.sel=sel; S.shift=false;
+  SCR.innerHTML=g.draw(S,pulse?[APPNAME[sel]]:null);
+}
+const APPNAME=["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung"];
+function clearKeys(){ CALC.querySelectorAll('.k.hit,.k.held,.k.good,.k.bad').forEach(e=>e.classList.remove('hit','held','good','bad')); }
+function flash(){ SCR.classList.remove('flash'); void SCR.offsetWidth; SCR.classList.add('flash'); }
+
+// ---------------------------------------------------------------
+//  Gliederung aufbauen
+// ---------------------------------------------------------------
+$('topics').innerHTML=TOPICS.map((t,i)=>`<li class="topic" data-t="${t.id}">
+    <div class="tmain"><span class="num">${i+1}</span><span class="ttl">${GUIDES[t.id].title}</span></div>
+    <div class="acts"><button class="act tour" data-go="${t.id}:g">${ICO.tour}<span>Anleitung</span></button><a class="act pdf" href="${BASE+t.pdf}" target="_blank" rel="noopener">${ICO.pdf}<span>Arbeitsblatt</span></a><button class="act ueb" data-go="${t.id}:u">${ICO.ueb}<span>Übung</span></button></div>
+  </li>`).join('');
+$('topics').addEventListener('click',e=>{ const b=e.target.closest('[data-go]'); if(!b) return; const [t,v]=b.dataset.go.split(':'); go(t,v); });
+let hoverT=null;
+$('topics').addEventListener('mouseover',e=>{ if(mode!=='toc') return; const li=e.target.closest('.topic'); const t=li&&li.dataset.t; if(t&&t!==hoverT){ hoverT=t; homeScreen(TOP[t].app,true); } });
+$('topics').addEventListener('mouseleave',()=>{ if(mode!=='toc') return; hoverT=null; homeScreen(0,false); });
+$('topics').addEventListener('focusin',e=>{ if(mode!=='toc') return; const li=e.target.closest('.topic'); if(li){ hoverT=li.dataset.t; homeScreen(TOP[hoverT].app,true); } });
+
+// ---------------------------------------------------------------
+//  Navigation mit animiertem Übergang
+// ---------------------------------------------------------------
+let busy=null;
+function setTitle(html){ const h=$('hT'); h.classList.add('swap'); setTimeout(()=>{ h.innerHTML=html; h.classList.remove('swap'); },170); }
+function toTopOfContent(){
+  const r=$('right').getBoundingClientRect(), barH=document.querySelector('.bar').offsetHeight;
+  const narrow=window.matchMedia('(max-width:720px)').matches;
+  const y = narrow ? window.scrollY + r.top - barH - 8 : 0;
+  if(Math.abs(window.scrollY-y)>4) window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+}
+function viewEl(m){ return m==='toc'?vToc:m==='g'?vG:vU; }
+function apply(t,v){
+  // Inhalte der Zielansicht vorbereiten
+  clearKeys();
+  if(v==='toc'){ active=null; STAGE.removeAttribute('data-g'); homeScreen(0,false); hoverT=null; }
+  else{
+    active=t; STAGE.dataset.g=t;
+    $('segPdf').href=BASE+TOP[t].pdf;
+    document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+    if(v==='g'){ Object.keys(PANEL).forEach(k=>PANEL[k].hidden=(k!==t)); }
+    else{ const h=uebung(t); Object.keys(UHOST).forEach(k=>UHOST[k].hidden=(k!==t)); }
+  }
+  mode=v; APP.dataset.mode=v;
+  if(v==='g') G[t].render(); else if(v==='u') homeScreen(TOP[t].app,false);
+  flash();
+}
+function title(t,v){
+  if(v==='toc') return 'Taschenrechner-Führerschein<small>CASIO fx-991DE CW</small>';
+  return (v==='g'?GUIDES[t].title:UEB[t].title)+`<small>${v==='g'?'Anleitung':'Übung'}</small>`;
+}
+function go(t,v,opt){
+  opt=opt||{};
+  if(v!=='toc'&&!TOP[t]) { t=null; v='toc'; }
+  if(v==='toc') t=null;
+  if(mode===v && active===t) return;
+  const from=viewEl(mode), to=viewEl(v);
+  const fwd = mode==='toc' || (mode==='g'&&v==='u');
+  const instant = opt.instant || window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  setTitle(title(t,v));
+  if(!opt.nohist){ try{ history.pushState({t,v},'', v==='toc'?location.pathname+location.search:'#'+t+(v==='u'?'-uebung':'')); }catch(e){} }
+  if(busy){ clearTimeout(busy); busy=null; }
+  if(instant){ from.hidden=(from!==to); from.className=from.className.replace(/\b(from|to)-[lr]\b/g,'').trim(); apply(t,v); to.hidden=false; toTopOfContent(); return; }
+  // 1) Altes ausblenden
+  from.classList.remove('from-l','from-r'); from.classList.add(fwd?'to-l':'to-r');
+  busy=setTimeout(()=>{
+    busy=null;
+    from.hidden=true; from.classList.remove('to-l','to-r');
+    apply(t,v);
+    // 2) Neues einblenden
+    to.classList.add(fwd?'from-r':'from-l'); to.hidden=false;
+    void to.offsetWidth;
+    requestAnimationFrame(()=>{ to.classList.remove('from-r','from-l'); });
+    toTopOfContent();
+  },240);
+}
+$('toToc').onclick=()=>go(null,'toc');
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>go(active,b.dataset.v));
+function route(opt){
+  const h=decodeURIComponent((location.hash||'').slice(1)); let m=h.match(/^([a-z]+)(-uebung)?$/);
+  if(m&&TOP[m[1]]) go(m[1], m[2]?'u':'g', opt); else go(null,'toc',opt);
+}
+window.addEventListener('popstate',()=>route({nohist:true}));
+
+// Start
+homeScreen(0,false);
+route({nohist:true, instant:true});
+})();
+</script>
+</body></html>

@@ -1,0 +1,286 @@
+@media (max-width:720px){
+  .stage{ flex-wrap:wrap; gap:16px; }
+  .shell[data-mode="pick"] .stage{ flex-wrap:nowrap; gap:14px; justify-content:flex-start; }
+  .pickcap{ font-size:13px; padding:6px 12px; } .pickcap small{ display:block; margin:0; }
+  .right{ flex:1 1 100%; max-width:none; }
+  .acts{ flex:1 1 100%; }
+  .act{ flex:1 1 0; min-width:0; padding:0 6px; }
+}
+@media (max-width:620px){
+  .bar img{ display:none; }
+  .ttlbox h1{ font-size:17px; } .ttlbox h1 small{ display:none; }
+  .seg span{ display:none; } .seg button,.seg a{ padding:6px 9px; }
+  .toToc span{ display:none; }
+  .shell[data-mode="toc"] .toToc, .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ padding:7px 10px; }
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style></head><body>
+<div class="shell" id="app" data-mode="pick">
+<header class="bar"><div class="in">
+  <button class="toToc" id="toToc"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l-6 6 6 6"/></svg><span id="toTocL">Gliederung</span></button>
+  <div class="ttlbox"><h1 id="hT">Taschenrechner-Führerschein<small>Welchen Rechner haben Sie?</small></h1></div>
+  <nav class="seg" id="seg" aria-label="Ansicht wählen">
+    <button data-v="g"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg><span>Anleitung</span></button>
+    <button data-v="u"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l4.5 4.5L17 5"/></svg><span>Übung</span></button>
+    <a id="segPdf" href="#" target="_blank" rel="noopener" title="Arbeitsblatt (PDF) in neuem Tab"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 2h7l4 4v12H5z"/><path d="M12 2v4h4M8 10h5M8 13h5" stroke-linecap="round"/></svg><span>Arbeitsblatt</span></a>
+  </nav>
+  <img src="data:image/png;base64,{{LOGO}}" alt="RWB Essen">
+</div></header>
+
+<main class="stage" id="stage">
+  <div class="cwrap m-cw" id="w_cw" data-m="cw">
+{{CALC_CW}}
+    <button class="pickcap" data-pick="cw">fx-991DE CW<small>schwarz</small></button>
+  </div>
+  <div class="cwrap m-dx" id="w_dx" data-m="dx">
+{{CALC_DX}}
+    <button class="pickcap" data-pick="dx">fx-991DE X<small>weiß</small></button>
+  </div>
+  <div class="right" id="right">
+    <section class="view toc" id="vToc">
+      <h2>Gliederung</h2>
+      <ol class="topics" id="topics"></ol>
+    </section>
+    <section class="view" id="vG" hidden></section>
+    <section class="view" id="vU" hidden></section>
+  </div>
+</main>
+</div>
+
+<script>
+var GUIDES={}, UEB={};
+</script>
+<script>
+{{MODULES}}
+</script>
+<script>
+(function(){
+// ---------------------------------------------------------------
+//  Modelle und Themen
+// ---------------------------------------------------------------
+const BASE='https://olafkott.github.io/CAS/fx991/';
+const THEMEN={{THEMEN}};
+const PDFNAME={{PDFNAME}};
+const HAS=(m,t)=>!!GUIDES[gid(m,t)];
+const HASU=(m,t)=>!!UEB[gid(m,t)];
+const HASPDF=(m,t)=>!(NOPDF[m]||[]).includes(t);
+const NOPDF={{NOPDF}};
+const MODEL={
+ cw:{name:'fx-991DE CW', pre:'',    pdf:'Arbeitsblatt_fx991_',    app:{{APP_CW}},
+     apps:["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung"], homeMode:'home'},
+ dx:{name:'fx-991DE X',  pre:'dx_', pdf:'Arbeitsblatt_fx991DEX_', app:{{APP_DX}},
+     apps:["Berechnungen","Komplexe Zahlen","Basis-N","Matrizen","Vektoren","Statistik","Verteilungen","Tabellenkalk.","Wertetabelle","Gleichungen"], homeMode:'menu'}
+};
+const gid=(m,t)=>MODEL[m].pre+t;
+const ICO={
+ tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
+ pdf:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 2h7l4 4v12H5z"/><path d="M12 2v4h4M8 10h5M8 13h5" stroke-linecap="round"/></svg>',
+ ueb:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l4.5 4.5L17 5"/></svg>'
+};
+
+const $=id=>document.getElementById(id);
+const APP=$('app'), STAGE=$('stage'), RIGHT=$('right');
+const vToc=$('vToc'), vG=$('vG'), vU=$('vU');
+const WRAP={cw:$('w_cw'), dx:$('w_dx')};
+const CALC={cw:WRAP.cw.querySelector('.calc'), dx:WRAP.dx.querySelector('.calc')};
+const SCR={cw:CALC.cw.querySelector('.scr'), dx:CALC.dx.querySelector('.scr')};
+const DUMMY=document.createElement('div');
+let mode='pick', model=null, active=null;   // mode: pick | toc | g | u ; active = Modul-ID (z. B. "dx_stat")
+
+// ---------------------------------------------------------------
+//  Anleitungen: je ein eigenes Panel, ein gemeinsamer Rechner pro Modell
+// ---------------------------------------------------------------
+const PANEL={}, G={};
+const PANEL_HTML='<div class="tabs" id="tabs"></div><div class="task" id="task"></div><div class="prog" id="prog"></div><div class="nr" id="nr"></div><h2 id="tt"></h2><div class="chips" id="chips"></div><div class="stat" id="stat"></div><div id="dd"></div><div class="btns"><button id="back">◀ Zurück</button><button id="next" class="nx">Überspringen</button></div>';
+function scope(id,m){
+  const on=()=>active===id&&mode==='g';
+  return {
+    getElementById:x=> x==='scr' ? (on()?SCR[m]:DUMMY) : PANEL[id].querySelector('#'+x),
+    querySelector:s=> on()?CALC[m].querySelector(s):null,
+    querySelectorAll:s=> on()?CALC[m].querySelectorAll(s):[],
+    scrollTo:()=>{ if(on()) toTopOfContent(); }
+  };
+}
+Object.keys(MODEL).forEach(m=>THEMEN.forEach(t=>{
+  const id=gid(m,t); if(!GUIDES[id]) return;
+  const p=document.createElement('div'); p.className='panel gpanel'; p.hidden=true; p.innerHTML=PANEL_HTML; vG.appendChild(p); PANEL[id]=p;
+  const g=G[id]=GUIDES[id].make(scope(id,m));
+  p.querySelector('#next').onclick=()=>g.next();
+  p.querySelector('#back').onclick=()=>g.back();
+  p.querySelector('#tabs').onclick=e=>{ const b=e.target.closest('button'); if(b&&b.dataset.t) g.selectTrack(b.dataset.t); };
+  p.querySelector('#prog').onclick=e=>{ if(e.target.dataset.i!==undefined) g.selectStep(e.target.dataset.i); };
+}));
+Object.keys(CALC).forEach(m=>CALC[m].querySelectorAll('.k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); if(mode==='g'&&active&&model===m) G[active].press(b.dataset.k); })));
+document.addEventListener('keydown',e=>{
+  if(mode!=='g'||!active) return;
+  const tg=e.target; if(tg&&(tg.tagName==='INPUT'||tg.tagName==='TEXTAREA'||tg.isContentEditable)) return;
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const KM=G[active].KMAP; let k=KM[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); G[active].press(k); }
+});
+
+// ---------------------------------------------------------------
+//  Übungen: je ein Shadow-DOM
+// ---------------------------------------------------------------
+const UHOST={};
+function uebung(id){
+  if(UHOST[id]) return UHOST[id];
+  const h=document.createElement('div'); h.className='uhost'; h.hidden=true; vU.appendChild(h);
+  const r=h.attachShadow({mode:'open'});
+  r.innerHTML='<style>'+UEB[id].css+'\n.wrap{max-width:none;margin:0;padding:0;}\n:host{container-type:inline-size;}\n@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }</style>'+UEB[id].html;
+  UEB[id].init(r);
+  return UHOST[id]=h;
+}
+
+// ---------------------------------------------------------------
+//  Display: Startbildschirm (HOME bzw. MENU) mit markierter App
+// ---------------------------------------------------------------
+function homeScreen(m,sel,pulse){
+  const g=G[gid(m,'grund')]; const S=g.fresh?g.fresh(MODEL[m].homeMode):{}; S.mode=MODEL[m].homeMode; S.sel=sel; S.shift=false;
+  SCR[m].innerHTML=g.draw(S,pulse?[MODEL[m].apps[sel]]:null);
+}
+function clearKeys(){ Object.values(CALC).forEach(c=>c.querySelectorAll('.k.hit,.k.held,.k.good,.k.bad').forEach(e=>e.classList.remove('hit','held','good','bad'))); }
+function flash(m){ const s=SCR[m]; s.classList.remove('flash'); void s.offsetWidth; s.classList.add('flash'); }
+
+// ---------------------------------------------------------------
+//  Gliederung (für das gewählte Modell)
+// ---------------------------------------------------------------
+function buildToc(m){
+  $('topics').innerHTML=THEMEN.filter(t=>HAS(m,t)).map((t,i)=>`<li class="topic" data-t="${t}">
+    <div class="tmain"><span class="num">${i+1}</span><span class="ttl">${GUIDES[gid(m,t)].title}</span></div>
+    <div class="acts"><button class="act tour" data-go="${t}:g">${ICO.tour}<span>Anleitung</span></button>${HASPDF(m,t)?`<a class="act pdf" href="${BASE+MODEL[m].pdf+PDFNAME[t]}.pdf" target="_blank" rel="noopener">${ICO.pdf}<span>Arbeitsblatt</span></a>`:'<span class="act gap"></span>'}${HASU(m,t)?`<button class="act ueb" data-go="${t}:u">${ICO.ueb}<span>Übung</span></button>`:'<span class="act gap"></span>'}</div>
+  </li>`).join('');
+}
+$('topics').addEventListener('click',e=>{ const b=e.target.closest('[data-go]'); if(!b) return; const [t,v]=b.dataset.go.split(':'); go(model,t,v); });
+let hoverT=null;
+$('topics').addEventListener('mouseover',e=>{ if(mode!=='toc') return; const li=e.target.closest('.topic'); const t=li&&li.dataset.t; if(t&&t!==hoverT){ hoverT=t; homeScreen(model,MODEL[model].app[t],true); } });
+$('topics').addEventListener('mouseleave',()=>{ if(mode!=='toc') return; hoverT=null; homeScreen(model,0,false); });
+$('topics').addEventListener('focusin',e=>{ if(mode!=='toc') return; const li=e.target.closest('.topic'); if(li){ hoverT=li.dataset.t; homeScreen(model,MODEL[model].app[hoverT],true); } });
+
+// Modellwahl
+STAGE.addEventListener('click',e=>{ if(mode!=='pick') return; const w=e.target.closest('.cwrap'); if(w) go(w.dataset.m,null,'toc'); });
+
+// ---------------------------------------------------------------
+//  Navigation mit animiertem Übergang
+// ---------------------------------------------------------------
+let busy=null;
+const reduced=()=>window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const narrow=()=>window.matchMedia('(max-width:720px)').matches;
+function setTitle(html){ const h=$('hT'); h.classList.add('swap'); setTimeout(()=>{ h.innerHTML=html; h.classList.remove('swap'); },170); }
+function toTopOfContent(){
+  const r=RIGHT.getBoundingClientRect(), barH=document.querySelector('.bar').offsetHeight;
+  const y = narrow() && mode!=='toc' ? window.scrollY + r.top - barH - 8 : 0;
+  if(Math.abs(window.scrollY-y)>4) window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+}
+function viewEl(v){ return v==='toc'?vToc:v==='g'?vG:v==='u'?vU:null; }
+function title(m,t,v){
+  if(v==='pick') return 'Taschenrechner-Führerschein<small>Welchen Rechner haben Sie?</small>';
+  if(v==='toc') return `Taschenrechner-Führerschein<small>CASIO ${MODEL[m].name}</small>`;
+  const id=gid(m,t);
+  return (v==='g'?GUIDES[id].title:UEB[id].title)+`<small>${v==='g'?'Anleitung':'Übung'}</small>`;
+}
+function apply(m,t,v){
+  clearKeys();
+  model=m; mode=v; APP.dataset.mode=v;
+  RIGHT.className='right'+(m?' m-'+m:'');
+  $('toTocL').textContent = v==='toc' ? 'Rechner' : 'Gliederung';
+  $('toToc').title = v==='toc' ? 'Anderen Rechner wählen' : 'Zurück zur Gliederung';
+  if(v==='pick'||v==='toc'){ active=null; STAGE.removeAttribute('data-g'); hoverT=null; }
+  if(v==='pick'){ homeScreen('cw',0,false); homeScreen('dx',0,false); return; }
+  if(v==='toc'){ buildToc(m); homeScreen(m,0,false); flash(m); return; }
+  const id=gid(m,t); active=id; STAGE.dataset.g=id;
+  $('segPdf').href=BASE+MODEL[m].pdf+PDFNAME[t]+'.pdf'; $('segPdf').hidden=!HASPDF(m,t);
+  document.querySelector('#seg button[data-v="u"]').hidden=!HASU(m,t);
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='g'){ Object.keys(PANEL).forEach(k=>PANEL[k].hidden=(k!==id)); G[id].render(); }
+  else{ uebung(id); Object.keys(UHOST).forEach(k=>UHOST[k].hidden=(k!==id)); homeScreen(m,MODEL[m].app[t],false); }
+  flash(m);
+}
+// Rechner-Wrapper ein-/ausblenden; der gewählte gleitet an seinen Platz (FLIP)
+// Beide Rechner bei der Auswahl gleich groß (gleiche Höhe), passend zur verfügbaren Breite
+function sizePick(on){
+  const cs=[CALC.cw,CALC.dx];
+  if(!on){ cs.forEach(c=>c.style.zoom=''); return; }
+  cs.forEach(c=>c.style.zoom='');
+  const nat=cs.map(c=>({w:c.offsetWidth,h:c.offsetHeight}));
+  const st=getComputedStyle(STAGE), gap=parseFloat(st.columnGap)||24;
+  const avail=(STAGE.clientWidth-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight)-gap)/2;
+  let H=Math.max(nat[0].h,nat[1].h);
+  nat.forEach(n=>{ H=Math.min(H, avail*n.h/n.w); });
+  cs.forEach((c,i)=>c.style.zoom=(H/nat[i].h).toFixed(4));
+}
+window.addEventListener('resize',()=>{ if(mode==='pick') sizePick(true); });
+// Rechner-Wrapper ein-/ausblenden; der gewählte fliegt mit Größenwechsel an seinen Platz (FLIP)
+function layoutCalcs(m,showBoth,change,animate){
+  const keep=WRAP[m], other=WRAP[m==='cw'?'dx':'cw'], kc=CALC[m];
+  const first=kc.getBoundingClientRect(); let flew=false;
+  change(); other.hidden=!showBoth; sizePick(showBoth);
+  if(!animate){ other.classList.remove('gone'); return false; }
+  const last=kc.getBoundingClientRect();
+  const dx=first.left-last.left, dy=first.top-last.top, s=first.width/last.width;
+  if(Math.abs(dx)>1||Math.abs(dy)>1||Math.abs(s-1)>.005){
+    // ruhig und gleichmäßig: nur Verschieben und Skalieren, eine Kurve, kein Kippen
+    keep.style.transformOrigin='0 0';
+    keep.animate([{transform:`translate(${dx}px,${dy}px) scale(${s})`},{transform:'none'}],
+                 {duration:620, easing:'cubic-bezier(.45,0,.15,1)'});
+    flew=true;
+  }
+  if(showBoth){ other.classList.add('gone'); void other.offsetWidth; setTimeout(()=>other.classList.remove('gone'),flew?420:200); }
+  else other.classList.remove('gone');
+  return flew;
+}
+function go(m,t,v,opt){
+  opt=opt||{};
+  if(v==='pick'){ t=null; }
+  else if(!MODEL[m]){ m=null; t=null; v='pick'; }
+  else if(v==='toc'){ t=null; }
+  else if(!THEMEN.includes(t)||!HAS(m,t)){ t=null; v='toc'; }
+  else if(v==='u'&&!HASU(m,t)){ v='g'; }
+  if(mode===v && model===m && (v==='pick'||v==='toc'||active===gid(m,t))) return;
+  const instant = opt.instant || reduced();
+  setTitle(title(m,t,v));
+  if(!opt.nohist){ try{ history.pushState(null,'', v==='pick'?location.pathname+location.search:'#'+m+(t?'/'+t+(v==='u'?'-uebung':''):'')); }catch(e){} }
+  if(busy){ clearTimeout(busy); busy=null; }
+  const fromV=mode, from=viewEl(fromV), to=viewEl(v);
+  const fwd = fromV==='pick' || (fromV==='toc'&&v!=='pick') || (fromV==='g'&&v==='u');
+  const keepM = m || model;
+
+  if(instant){
+    [vToc,vG,vU].forEach(x=>{ x.hidden=(x!==to); x.classList.remove('from-l','from-r','to-l','to-r'); });
+    if(v==='pick'){ WRAP.cw.hidden=false; WRAP.dx.hidden=false; } else { WRAP[m].hidden=false; WRAP[m==='cw'?'dx':'cw'].hidden=true; }
+    APP.dataset.mode=v; sizePick(v==='pick');
+    apply(m,t,v); toTopOfContent(); return;
+  }
+  // 1) Ausblenden: rechte Spalte bzw. der nicht gewählte Rechner
+  if(from){ from.classList.remove('from-l','from-r'); from.classList.add(fwd?'to-l':'to-r'); }
+  if(fromV==='pick'&&v!=='pick'){ WRAP[m==='cw'?'dx':'cw'].classList.add('gone'); }
+  busy=setTimeout(()=>{
+    busy=null;
+    if(from){ from.hidden=true; from.classList.remove('to-l','to-r'); }
+    let wait=0;
+    if(v==='pick'){ layoutCalcs(keepM,true,()=>{ APP.dataset.mode='pick'; },true); }
+    else if(fromV==='pick'){ if(layoutCalcs(m,false,()=>{ APP.dataset.mode=v; },true)) wait=380; }
+    apply(m,t,v);
+    // 2) Einblenden – nach einem Rechner-Flug erst, wenn er fast angekommen ist
+    if(to){ to.classList.add(fwd?'from-r':'from-l'); if(!wait){ to.hidden=false; void to.offsetWidth; requestAnimationFrame(()=>to.classList.remove('from-r','from-l')); }
+      else setTimeout(()=>{ to.hidden=false; void to.offsetWidth; requestAnimationFrame(()=>to.classList.remove('from-r','from-l')); },wait); }
+    toTopOfContent();
+  }, fromV==='pick'?260:240);
+}
+$('toToc').onclick=()=>{ if(mode==='toc') go(null,null,'pick'); else go(model,null,'toc'); };
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>go(model,active.replace(/^dx_/,''),b.dataset.v));
+function route(opt){
+  const h=decodeURIComponent((location.hash||'').slice(1)); const m=h.match(/^(cw|dx)(?:\/([a-z]+)(-uebung)?)?$/);
+  if(!m) return go(null,null,'pick',opt);
+  if(!m[2]) return go(m[1],null,'toc',opt);
+  go(m[1],m[2],m[3]?'u':'g',opt);
+}
+window.addEventListener('popstate',()=>route({nohist:true}));
+
+// Start
+vToc.hidden=true;
+homeScreen('cw',0,false); homeScreen('dx',0,false); sizePick(true);
+if(location.hash) route({nohist:true, instant:true});
+})();
+</script>
+</body></html>

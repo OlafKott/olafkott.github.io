@@ -1,0 +1,34 @@
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?(S.z||[]).filter(z=>z==='cell'):(S.z||[]).filter(z=>z!=='cell'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='shift'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="shift"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}

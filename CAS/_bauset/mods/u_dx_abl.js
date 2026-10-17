@@ -1,0 +1,235 @@
+UEB["dx_abl"]={
+ title:"Ableitung an einer Stelle",
+ css:String.raw`:host{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8; }
+*{ box-sizing:border-box; }
+:host{ display:block; color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.wrap{ max-width:none; margin:0; padding:0; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+.card h2{ margin:0 0 6px; font-size:18px; }
+.auftrag{ font-size:15.5px; margin:0 0 8px; }
+.term{ font-family:Cambria,Georgia,serif; font-size:24px; margin:4px 0 8px 18px; }
+.bereich{ display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 10px 18px; }
+.bereich span{ background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:3px 12px; font-size:15px; }
+.bereich b{ font-family:Cambria,Georgia,serif; font-size:17px; }
+.weg{ font-size:14px; color:var(--mute); line-height:1.9; }
+.taste{ display:inline-block; font:bold 12px Arial,sans-serif; background:#2f2f34; color:#fff; border-radius:7px; padding:1px 7px; }
+.taste.w{ background:#f4f4f6; color:#111; border:1px solid #9a9aa2; }
+.taste.b{ background:#2f6fd6; }
+.taste.sh{ background:#d9bf7c; color:#3a2c0a; }
+.round{ display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px; }
+.round b{ color:var(--warn); }
+.rows{ display:flex; flex-direction:column; gap:6px; }
+.f{ display:grid; grid-template-columns:150px 1fr 26px; align-items:center; gap:10px; padding:6px 8px; border-radius:8px; }
+.f .lab{ font-family:Cambria,Georgia,serif; font-size:18px; }
+.f .ins{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-family:Cambria,Georgia,serif; font-size:18px; }
+.f input{ font:inherit; font-family:system-ui,Arial,sans-serif; font-size:16px; width:110px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
+.f input.xs{ width:80px; }
+.f .m{ font-weight:bold; font-size:18px; text-align:center; }
+.f.ok{ background:var(--okbg); }
+.f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); }
+.f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); }
+.f.fmt .m{ color:var(--warn); }
+.f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; font-family:system-ui,Arial,sans-serif; }
+.f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
+.f.no .msg{ color:var(--no); }
+.f.fmt .msg{ color:var(--warn); }
+.f.show .msg{ color:var(--mute); }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
+.score{ font-size:16px; font-weight:bold; margin-top:12px; min-height:24px; }
+.stats{ font-size:13.5px; color:var(--mute); margin-top:4px; }
+.hinweis{ font-size:13.5px; color:var(--mute); }
+table.loes{ border-collapse:collapse; margin:10px 0 0; font-family:Cambria,Georgia,serif; font-size:15px; display:none; }
+table.loes.zeig{ display:table; }
+table.loes th, table.loes td{ border:1px solid #c3c8d0; padding:3px 10px; text-align:right; }
+table.loes th{ background:#e8edf5; font-weight:normal; }
+table.loes td.vw{ background:var(--warnbg); font-weight:bold; }
+@media (max-width:520px){ .f{ grid-template-columns:1fr 26px; } .f .lab{ grid-column:1 / -1; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+    <div class="bereich" id="bereich"></div>
+    <div class="weg" id="weg"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div class="rows" id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+    <table class="loes" id="loes"></table>
+  </div>
+  <p class="hinweis">Komma oder Punkt sind beide erlaubt. Für das Minus können Sie - oder − tippen.</p>
+</div>`,
+ init:function(root){
+
+const MODEL='dex';
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[R(0,a.length-1)];
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const de=(v,d=2)=>r2(v).toFixed(d).replace('.',',').replace('-','−');
+const fmt=v=>String(Number(v.toPrecision(10))).replace('.',',').replace('-','−');
+// Polynom c=[c0,c1,c2,c3]
+function termHTML(nm,c){
+  let s='', first=true;
+  for(let n=3;n>=0;n--){ const v=c[n]; if(!v) continue;
+    const ab=Math.abs(v), xs=n===0?'':n===1?'<i>x</i>':`<i>x</i><sup>${n}</sup>`;
+    const k=(ab===1&&n>0)?'':fmt(ab);
+    s+=(first?(v<0?'−':''):(v<0?' − ':' + '))+k+xs; first=false; }
+  return `<i>${nm}</i>(<i>x</i>) = ${s}`;
+}
+const TC=['#1565C0','#D96C00','#7B1FA2'], TH=['#E3EEFB','#FFF1DF','#F3E7F7'];
+const fv=(c,x)=>c[0]+c[1]*x+c[2]*x*x+c[3]*x*x*x;
+const dv=(c,x)=>c[1]+2*c[2]*x+3*c[3]*x*x;
+const WEG={
+ dex:'<span class="taste">MENU</span> <span class="taste w">1</span> ▸ <span class="taste sh">SHIFT</span> <span class="taste">∫▭</span> (d/dx) ▸ Term eingeben ▸ <span class="taste">▶</span> ▸ Stelle ▸ <span class="taste w">=</span> · Neue Stelle: <span class="taste">◀</span> <span class="taste b">DEL</span> ▸ Zahl ▸ <span class="taste w">=</span> · Vorzeichen mit <span class="taste">(−)</span> · Bruch? <span class="taste">S⇔D</span>',
+ cw:'<span class="taste">CATALOG</span> ▸ Funktionsanalyse ▸ Ableitung(d/dx) ▸ Term eingeben ▸ <span class="taste">▶</span> ▸ Stelle ▸ <span class="taste">EXE</span> · Neue Stelle: <span class="taste">◀</span> <span class="taste">⌫</span> ▸ Zahl ▸ <span class="taste">EXE</span> · Vorzeichen mit <span class="taste sh">SHIFT</span> <span class="taste">−</span> · Bruch? <span class="taste">FORMAT</span> Dezimal'
+}[MODEL];
+const RUND='<b>Wichtig:</b> Ergebnisse auf <b>2 Stellen nach dem Komma</b> runden, z.&nbsp;B. <b>3,25</b> oder <b>−4,00</b>.';
+const stellen=(pool,n)=>{ const s=[...pool].sort(()=>Math.random()-.5).slice(0,n); return s.sort((a,b)=>a-b); };
+
+// ---------- Modus 1: Ableitung berechnen ----------
+function genAbl(){
+  const c=[pick([-3,-2,-1,1,2,4,5,0.5]), pick([-4,-3,-2,-1.5,1,2,3,0.5]), pick([-2,-1.5,-1,-0.5,0.5,1,1.5,2,3]), pick([1,-1,0.5,-0.5,0.25,2,-0.2,0.1])];
+  const xs=stellen([-3,-2,-1.5,-1,-0.5,0.5,1,1.5,2,2.5,3,4],4);
+  return {typ:'abl', nm:'f', h:"Ableitung an einer Stelle", auftrag:"Berechnen Sie mit dem Rechner die Ableitung der Funktion <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Gesucht", xs.map(x=>`<i>f</i> ′(${fmt(x)})`).join(', ')]], round:RUND,
+    zeilen:xs.map((x,i)=>({id:'z'+i, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs};
+}
+// ---------- Modus 2: Steigt oder fällt? ----------
+function genDeut(){
+  let c,xs;
+  for(let n=0;n<300;n++){
+    c=[pick([-2,-1,1,2,3]), 0, 0, pick([1,-1,0.5,-0.5,2])];
+    const p=pick([1,2,3,-1,-2]), q=pick([-3,-2,-1,1,2,3,4].filter(v=>v!==p)); // Nullstellen von f'
+    // f'(x)=3a(x-p)(x-q) -> c2=-1.5a(p+q), c1=3a*p*q
+    c[2]=-1.5*c[3]*(p+q); c[1]=3*c[3]*p*q;
+    if(Math.abs(c[2]*100-Math.round(c[2]*100))>1e-9) continue;
+    const pool=[-3,-2,-1,0,1,2,3,4,5].filter(x=>x!==p&&x!==q);
+    xs=stellen(pool,3).concat([p]).sort((a,b)=>a-b);
+    const sg=xs.map(x=>Math.sign(r2(dv(c,x))));
+    if(sg.includes(1)&&sg.includes(-1)) break;
+  }
+  return {typ:'deut', nm:'f', h:"Steigt oder fällt der Graph?", auftrag:"Berechnen Sie die Ableitung der Funktion <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Stellen", xs.map(fmt).join(' · ')]],
+    round:'<b>Gesucht:</b> <i>f</i> ′(<i>a</i>) und ob der Graph dort <b>steigt</b>, <b>fällt</b> oder eine <b>waagerechte</b> Tangente hat.',
+    zeilen:xs.map((x,i)=>({id:'d'+i, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs};
+}
+// ---------- Modus 3: Tangentensteigung an einer Parabel ----------
+function svgPar(c,xs,X0,X1){
+  const f=x=>fv(c,x), ys=xs.map(f);
+  let Y0=Math.min(-1,...ys)-1.5, Y1=Math.max(1,...ys)+1.5;
+  const u=Math.min(46, 400/(Y1-Y0), 560/(X1-X0)), W=(X1-X0)*u, H=(Y1-Y0)*u, X=x=>(x-X0)*u, Y=y=>(Y1-y)*u;
+  let o=`<svg viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" style="width:100%;max-width:${Math.round(W)}px;display:block;margin:6px 0 4px 18px;background:#fff;border:1px solid var(--line);border-radius:8px" font-family="Cambria,Georgia,serif"><defs><clipPath id="cpu"><rect width="${W}" height="${H}"/></clipPath><marker id="aru" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#333"/></marker></defs>`;
+  const st=(Y1-Y0)>14?2:1;
+  for(let i=Math.ceil(X0);i<=X1;i++) o+=`<line x1="${X(i)}" y1="0" x2="${X(i)}" y2="${H}" stroke="#eceef2"/>`;
+  for(let j=Math.ceil(Y0/st)*st;j<=Y1;j+=st) o+=`<line x1="0" y1="${Y(j)}" x2="${W}" y2="${Y(j)}" stroke="#eceef2"/>`;
+  o+=`<line x1="2" y1="${Y(0)}" x2="${W-2}" y2="${Y(0)}" stroke="#333" stroke-width="1.3" marker-end="url(#aru)"/><line x1="${X(0)}" y1="${H-2}" x2="${X(0)}" y2="2" stroke="#333" stroke-width="1.3" marker-end="url(#aru)"/>`;
+  o+=`<text x="${W-6}" y="${Y(0)-6}" text-anchor="end" font-style="italic" font-size="14">x</text><text x="${X(0)+7}" y="13" font-style="italic" font-size="14">y</text>`;
+  for(let i=Math.ceil(X0);i<=X1-0.3;i++) if(i) o+=`<text x="${X(i)}" y="${Y(0)+14}" text-anchor="middle" font-size="10.5" fill="#555">${fmt(i)}</text>`;
+  for(let j=Math.ceil(Y0/st)*st;j<=Y1-0.5;j+=st) if(j) o+=`<text x="${X(0)-5}" y="${Y(j)+3.5}" text-anchor="end" font-size="10.5" fill="#555">${fmt(j)}</text>`;
+  let p=''; for(let k=0;k<=160;k++){ const x=X0+(X1-X0)*k/160; p+=`${X(x).toFixed(1)},${Y(f(x)).toFixed(1)} `; }
+  o+=`<polyline clip-path="url(#cpu)" fill="none" stroke="#9a9ea6" stroke-width="2.2" points="${p}"/>`;
+  xs.forEach((a,n)=>{ const m=dv(c,a), ya=f(a);
+    const [dl,dr]= n===0?[2.1,1.0]: n===2?[1.0,2.1]:[1.2,1.2];
+    o+=`<line clip-path="url(#cpu)" x1="${X(a-dl)}" y1="${Y(ya-m*dl)}" x2="${X(a+dr)}" y2="${Y(ya+m*dr)}" stroke="${TC[n]}" stroke-width="2.2"/><circle cx="${X(a)}" cy="${Y(ya)}" r="3.8" fill="${TC[n]}"/>`;
+    // Beschriftung senkrecht zur Tangente, auf der Außenseite der Parabel
+    const s=c[2]<0?1:-1, nx=-m*s, ny=s, L=Math.hypot(nx,ny), px=X(a)+nx/L*u*0.55, py=Y(ya)-ny/L*u*0.55;
+    o+=`<text x="${px}" y="${py+5}" text-anchor="middle" font-size="13" font-style="italic" fill="${TC[n]}" font-weight="bold">t<tspan font-size="9.5" dy="3">${n+1}</tspan></text>`; });
+  return o+'</svg>';
+}
+function genTan(){
+  const a=pick([0.25,-0.25]), h=pick([-1,0,1,2]), k=pick([-2,-1,1,2,3]);
+  const c=[a*h*h+k, -2*a*h, a, 0];
+  const off = [[-3,0,3],[-3,-1,2],[-2,1,3],[-3,0,2],[-2,0,3],[-3,1,3]];
+  const xs=pick(off).map(o=>h+o);
+  return {typ:'tan', nm:'f', h:"Tangentensteigung an einer Parabel", auftrag:"Im Schaubild sind Tangenten an die Parabel <i>f</i> mit",
+    term:termHTML('f',c), bereich:[["Gesucht","Steigung <i>m</i><sub>t</sub> jeder Tangente"]], round:RUND,
+    zeilen:xs.map((x,i)=>({id:'t'+i, nr:i+1, x, soll:dv(c,x), fw:fv(c,x), flip:dv(c,-x)})), c, xs,
+    bild:svgPar(c,xs,Math.min(-1.5,xs[0]-1.6),Math.max(1.5,xs[2]+1.6))};
+}
+
+const MODES={abl:{name:"Ableitung berechnen",gen:genAbl}, deut:{name:"Steigt oder fällt?",gen:genDeut}, tan:{name:"Tangentensteigung",gen:genTan}};
+const ORDER=["abl","deut","tan"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+const $=id=>root.getElementById(id);
+const VERL=[["","– wählen –"],["s","steigt"],["f","fällt"],["w","waagerecht"]];
+const verl=v=>{ const r=r2(v); return r>0?'s':r<0?'f':'w'; };
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('h').textContent="Aufgabe: "+A.h; $('auftrag').innerHTML=A.auftrag+(A.typ==='tan'?' eingezeichnet. Bestimmen Sie die Steigungen mit dem Rechner.':''); $('term').innerHTML=A.term; $('weg').innerHTML=WEG;
+  $('bereich').innerHTML=A.bereich.map(([n,v])=>`<span>${n}: <b>${v}</b></span>`).join('')+(A.bild?`<div style="flex-basis:100%">${A.bild}</div>`:'');
+  $('round').innerHTML=A.round;
+  const nm=A.nm;
+  $('felder').innerHTML=A.zeilen.map(z=>`<div class="f" id="f_${z.id}"><span class="lab">${A.typ==='tan'?`<b style="color:${TC[z.nr-1]}">Tangente t<sub>${z.nr}</sub></b>`:`<i>x</i> = ${fmt(z.x)}`}</span><span class="ins"><i>${nm}</i> ′(${fmt(z.x)}) = ${A.typ==='tan'?'<span><i>m</i><sub>t</sub> =</span> ':''}<input id="i_${z.id}" inputmode="decimal" autocomplete="off" placeholder="0,00"${A.typ==='tan'?` style="border:2px solid ${TC[z.nr-1]};background:${TH[z.nr-1]}"`:''}>`+
+    (A.typ==='deut'?` <select id="s_${z.id}" style="font:inherit;font-family:system-ui,Arial,sans-serif;font-size:15px;padding:4px 6px;border:1px solid #b8bdc6;border-radius:6px;background:#f7f8fa">${VERL.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select>`:'')+
+    `</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  $('score').textContent=''; $('loes').className='loes'; $('loes').innerHTML='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+const near=(a,b)=>Math.abs(a-b)<0.0051;
+function pruefen(){
+  let ok=0, tot=A.zeilen.length;
+  A.zeilen.forEach(z=>{
+    const f=$('f_'+z.id), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.className='f'; m.textContent=''; msg.textContent='';
+    const raw=$('i_'+z.id).value;
+    if(!raw.trim()) return;
+    const p=parse(raw);
+    if(!p){ f.classList.add('fmt'); m.textContent='?'; msg.textContent='Bitte nur eine Zahl eintragen, z. B. 3,25.'; return; }
+    const soll=r2(z.soll), richtig=near(p.v,soll);
+    if(p.dec!==2){ f.classList.add('fmt'); m.textContent='!'; msg.textContent=`Bitte genau 2 Stellen nach dem Komma eintragen${richtig||Math.abs(p.v-z.soll)<0.01?' – der Wert selbst stimmt.':'.'}`; return; }
+    if(richtig){
+      if(A.typ==='deut'){
+        const sv=$('s_'+z.id).value;
+        if(!sv){ f.classList.add('fmt'); m.textContent='!'; msg.textContent='Der Wert stimmt. Wählen Sie noch: steigt, fällt oder waagerecht.'; return; }
+        if(sv!==verl(z.soll)){ f.classList.add('no'); m.textContent='✗'; msg.textContent='Der Wert stimmt, aber die Deutung nicht: positiv = steigt, negativ = fällt, 0 = waagerecht.'; return; }
+      }
+      f.classList.add('ok'); m.textContent='✓'; ok++; return; }
+    f.classList.add('no'); m.textContent='✗';
+    let t='Das stimmt noch nicht. Prüfen Sie den Term – besonders die Exponenten (mit ▶ aus dem Exponenten heraus).';
+    if(Math.abs(p.v-z.soll)<0.011) t='Fast: Achten Sie auf das Runden (ab 5 aufrunden).';
+    else if(near(p.v,r2(z.fw))) t='Das ist der Funktionswert '+A.nm+'('+fmt(z.x)+'), nicht die Ableitung. Nutzen Sie d/dx.';
+    else if(near(p.v,r2(z.flip))) t='Das ist der Wert für −x. Geben Sie die Stelle mit dem richtigen Vorzeichen ein – negative Zahlen mit '+(MODEL==='dex'?'(−)':'SHIFT −')+'.';
+    else if(A.zeilen.some(w=>w!==z&&near(p.v,r2(w.soll)))) t='Dieser Wert gehört zu einer anderen Stelle.';
+    else if(near(p.v,-soll)) t='Das Vorzeichen stimmt nicht. Haben Sie das Minus im Term richtig eingegeben?';
+    msg.textContent=t;
+  });
+  stat.a++; if(ok===tot) stat.r++;
+  $('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  $('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  const WT={s:'steigt',f:'fällt',w:'waagerecht'};
+  A.zeilen.forEach(z=>{
+    const f=$('f_'+z.id), msg=f.querySelector('.msg');
+    f.className='f show'; f.querySelector('.m').textContent='';
+    $('i_'+z.id).value=de(z.soll);
+    if(A.typ==='deut') $('s_'+z.id).value=verl(z.soll);
+    msg.textContent = (Math.abs(z.soll-r2(z.soll))>1e-9 ? 'Rechner: '+fmt(z.soll)+' → gerundet '+de(z.soll) : 'Genau '+de(z.soll)) + (A.typ==='deut'?' → Graph '+WT[verl(z.soll)]:'');
+  });
+  $('loes').innerHTML=`<tr><th><i>x</i></th><th><i>${A.nm}</i>(<i>x</i>)</th><th><i>${A.nm}</i> ′(<i>x</i>)</th></tr>`+A.xs.map(x=>`<tr><td>${fmt(x)}</td><td>${fmt(fv(A.c,x))}</td><td>${fmt(dv(A.c,x))}</td></tr>`).join('');
+  $('loes').className='loes zeig';
+  $('score').textContent='';
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+neu();
+
+ }
+};

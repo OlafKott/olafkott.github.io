@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-991DE X Ableitung</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; --gold:#d2ad5b; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.tabs button.fertig::after{ content:" ✓"; color:var(--ab); font-weight:bold; }
+.tabs button.on.fertig::after{ color:#9fe0a5; }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner fx-991DE X ---------- */
+.calc{ width:330px; flex:0 0 330px; border-radius:30px; box-shadow:0 6px 22px rgba(0,0,0,.25); background:radial-gradient(#2a2a2e 1px, transparent 1.2px) 0 0/5px 5px, #1e1e21; border:6px solid #e6e6ea; padding:14px 13px 16px; }
+.calc > *{ position:relative; }
+.head{ display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px 8px; }
+.logo{ color:#f0f0f2; font:900 19px Arial,sans-serif; letter-spacing:.5px; line-height:1; }
+.logo small{ display:block; font:bold 10.5px Arial,sans-serif; margin-top:5px; color:#d6d6da; }
+.logo em{ display:block; font:italic 11px Georgia,serif; letter-spacing:3px; color:#d94b5a; margin-top:3px; }
+.solar{ width:108px; height:38px; border-radius:4px; background:linear-gradient(135deg,#2a1a1a,#3a2222 60%,#2a1818); box-shadow:inset 0 0 0 1px #000; }
+.bezel{ background:#111113; border-radius:8px; padding:10px 9px; box-shadow:inset 0 0 0 1px #000; }
+.scr{ width:280px; height:118px; margin:0 auto; background:#d3ded4; border-radius:3px; position:relative; overflow:hidden; color:#141a14; font-family:Arial,Helvetica,sans-serif; box-shadow:inset 0 0 6px rgba(0,0,0,.25); }
+.ctl{ display:grid; grid-template-columns:42px 42px 1fr 42px 42px; align-items:center; gap:4px; margin-top:12px; height:76px; }
+.c{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; position:relative; z-index:1; }
+.lb{ font:bold 8.5px Arial,sans-serif; color:#e3e3e7; height:12px; white-space:nowrap; letter-spacing:.2px; }
+.sl{ font:bold 9.5px 'Times New Roman',Georgia,serif; color:var(--gold); height:12px; line-height:12px; white-space:nowrap; }
+.sl .al{ color:#e2476a; font-style:normal; } .sl.sm{ font:bold 8px Arial,sans-serif; }
+.k{ font:600 12px Arial,sans-serif; color:#f1f1f3; background:linear-gradient(#4b4b52,#323237); border:0; border-radius:7px; width:40px; height:22px; padding:0; cursor:pointer; box-shadow:0 2px 0 #0b0b0d; transition:transform .15s, box-shadow .15s; display:flex; align-items:center; justify-content:center; line-height:1; }
+.k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.k.it{ font:italic 600 14px 'Times New Roman',serif; }
+.k sup{ font-size:8px; }
+.k.rd{ width:26px; height:26px; border-radius:50%; background:radial-gradient(circle at 40% 35%,#f4f4f6,#9c9ca3 75%); }
+.pad{ position:relative; height:70px; width:96px; justify-self:center; border-radius:50%; background:radial-gradient(ellipse at 50% 40%,#3c3c42,#151517 70%); box-shadow:0 0 0 3px #2b2b30, 0 2px 0 4px #0b0b0d; }
+.pad::after{ content:""; position:absolute; left:34px; right:34px; top:22px; bottom:22px; border-radius:50%; background:#0d0d0f; }
+.k.pk{ position:absolute; width:24px; height:18px; background:transparent; box-shadow:none; color:#aaa; font-size:10px; z-index:2; }
+.fk{ display:grid; grid-template-columns:repeat(6,1fr); column-gap:5px; row-gap:1px; margin-top:-4px; }
+.nums{ display:grid; grid-template-columns:repeat(5,1fr); column-gap:7px; row-gap:1px; margin-top:6px; }
+.nums .k{ width:48px; height:30px; font-size:19px; border-radius:7px; }
+.k.w{ background:linear-gradient(#ffffff,#e4e4e8); color:#111; box-shadow:0 2px 0 #8d8d94; }
+.k.b{ background:linear-gradient(#2f6fd6,#1e55b3); color:#fff; font-size:15px !important; box-shadow:0 2px 0 #0f2f66; }
+.bx{ display:inline-block; width:7px; height:8px; border:1.3px solid currentColor; border-radius:1px; vertical-align:middle; }
+.bx.f{ background:currentColor; width:5px; height:6px; }
+.mf{ display:inline-flex; flex-direction:column; align-items:center; gap:1px; }
+.mf i{ display:block; width:9px; height:5px; border:1.2px solid currentColor; border-radius:1px; }
+.mf b{ display:block; width:12px; height:1.2px; background:currentColor; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.14); z-index:3; position:relative; }
+.k.pk.hit{ position:absolute; color:#fff; background:rgba(242,183,5,.35); }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+.k.held{ box-shadow:0 0 0 3px #fff, 0 0 12px 3px rgba(255,255,255,.75); }
+@keyframes wack{ 25%{translate:-3px 0} 75%{translate:3px 0} }
+
+/* Hauptmenü */
+.xm{ position:absolute; inset:0; padding:4px 6px 0; }
+.xm .grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:3px; }
+.xm .ic{ position:relative; height:34px; border:1px solid transparent; display:flex; align-items:center; justify-content:center; }
+.xm .ic svg{ width:42px; height:20px; }
+.xm .ic .bd{ position:absolute; right:1px; bottom:1px; font:bold 9px Arial,sans-serif; background:#141a14; color:#d3ded4; padding:0 2px; line-height:11px; }
+.xm .ic.sel{ background:#141a14; color:#d3ded4; } .xm .ic.sel .bd{ background:#d3ded4; color:#141a14; }
+.xm .nm{ font:bold 17px 'Courier New',monospace; margin-top:6px; letter-spacing:-.5px; }
+.xm .arr{ position:absolute; top:0; font-size:9px; }
+
+/* Display */
+.sb{ height:13px; display:flex; align-items:center; gap:4px; padding:1px 4px 0; font:bold 9px Arial,sans-serif; }
+.sb .ind{ background:#141a14; color:#d3ded4; padding:0 2px; border-radius:1px; line-height:10px; height:10px; }
+.sb .sp{ flex:1; }
+.app{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 7px 4px; display:flex; flex-direction:column; justify-content:space-between; }
+.ein{ font-size:17px; min-height:34px; display:flex; align-items:center; flex-wrap:nowrap; white-space:nowrap; }
+.vx{ font-family:'Times New Roman',serif; font-style:italic; font-size:19px; padding:0 1px; }
+.ein sup{ font-size:11px; align-self:flex-start; margin-top:4px; }
+.caret{ display:inline-block; width:1.5px; height:18px; background:#141a14; animation:blink 1s steps(1) infinite; vertical-align:middle; margin-left:1px; } @keyframes blink{ 50%{opacity:0} }
+.defl{ font-size:15px; margin-right:2px; }
+.ziel{ outline:2.5px solid var(--hit); outline-offset:-2px; animation:pulse 1.1s ease-in-out infinite; }
+@keyframes pulse{ 50%{ outline-color:rgba(242,183,5,.25); } }
+.dlg{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:2px 8px; font-size:15px; }
+.dlg .ti{ font-size:10px; font-weight:bold; border-bottom:1px solid #141a14; margin-bottom:3px; }
+.dlg .r{ display:flex; justify-content:space-between; height:24px; align-items:center; padding:0 4px; }
+.dlg .r.sel{ background:#141a14; color:#d3ded4; }
+.dlg .r.sel .caret{ background:#d3ded4; }
+/* Tabelle */
+.tb{ position:absolute; left:0; right:0; top:13px; bottom:0; padding:1px 4px 0; }
+.tb table{ border-collapse:collapse; width:100%; table-layout:fixed; font-size:14px; }
+.tb th{ font-size:11.5px; font-weight:bold; border-bottom:1.3px solid #141a14; height:16px; text-align:center; }
+.tb th.n,.tb td.n{ width:16px; font-size:9px; text-align:left; color:#3e4a3e; }
+.tb td{ height:21px; text-align:right; padding:0 6px; border-right:1px solid #8fa08f; white-space:nowrap; overflow:hidden; }
+.tb td:last-child{ border-right:0; }
+.tb td.cur{ background:#141a14; color:#d3ded4; }
+.tb .unten{ position:absolute; left:6px; right:6px; bottom:2px; font-size:16px; text-align:right; font-weight:bold; border-top:1px solid #8fa08f; height:20px; }
+.offs{ position:absolute; inset:0; background:#c9d4ca; }
+/* ---------- Panel ---------- */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.prog i.abp{ background:#bfe3c3; } .prog i.abp.done{ background:#7cbf84; } .prog i.abp.now{ background:var(--ab); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.chips{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.shift{ background:#c9a54a; color:#2b2005; }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.chip sup{ font-size:9px; }
+.chip i.v{ font-family:'Times New Roman',serif; font-size:15px; }
+.chip .bx{ width:7px; height:8px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.ab{ border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px; }
+.ab .abt{ font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.ab .abt span{ font-size:22px; }
+.ab ul{ margin:0 0 8px; padding-left:20px; font-size:15px; }
+.ab li{ margin-bottom:3px; }
+.ab p{ font-size:14.5px; }
+.task{ border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc; }
+.task .auf{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute); }
+.task .term{ font-family:Cambria,Georgia,serif; font-size:22px; line-height:1.6; color:var(--ink); }
+.task .bereich{ font-size:14.5px; color:var(--ink); }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+.btns button:disabled{ opacity:.4; cursor:default; }
+#next{ margin-left:auto; }
+.opt{ font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px; }
+.hint{ font-size:12.5px; color:var(--mute); margin-top:10px; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+
+.chip.w{ background:#f1f1f3; color:#111; border-color:#c9cbd1; }
+.chip.b{ background:#2463c9; }
+
+/* Ableitung d/dx */
+.ein.dd{ font-size:15px; overflow:hidden; }
+.ein.dd .vx{ font-size:16px; }
+.fr.ddx{ font-size:11px; margin:0 1px 0 0; }
+.fr.ddx > span{ padding:0 1px; }
+.kl{ font-size:21px; line-height:1; transform:scaleY(1.15); display:inline-block; }
+.evb{ display:inline-block; width:1.3px; height:24px; background:#141a14; margin:0 1px 0 2px; vertical-align:middle; }
+.evx{ font-size:11px; align-self:flex-end; margin-bottom:2px; white-space:nowrap; display:inline-flex; align-items:center; }
+.evx .vx{ font-size:13px; }
+.evx .caret{ height:12px; }
+.ein.dd sup{ font-size:10px; }
+.ein.dd sup .caret{ height:9px; }
+.bx.feld{ width:9px; height:11px; border:1.2px dotted #141a14; margin:0 1px; }
+.bx.sm{ width:5px; height:6px; border:1px dotted #141a14; }
+.erg{ text-align:right; font-size:22px; font-weight:bold; min-height:28px; }
+
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 2px; font-size:13px; line-height:1.15; }
+.fr > span{ padding:0 2px; min-width:9px; }
+.fr > span:first-child{ border-bottom:1.5px solid currentColor; }
+</style></head><body>
+<div class="top"><div class="in"><h1>Schritt für Schritt: Ableitung an einer Stelle<small>CASIO fx-991DE X · Am eigenen Rechner mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,@@LOGO@@" alt="RWB Essen fhr"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  @@CALC_DX_V2@@<div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="chips" id="chips"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+// =====================================================================
+//  Hauptmenü fx-991DE X
+// =====================================================================
+const ICON={
+ Berechnung:'<svg viewBox="0 0 34 14"><text x="17" y="6.8" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">×÷</text><text x="17" y="14" text-anchor="middle" font-size="8.5" font-weight="bold" letter-spacing="1.5" fill="currentColor">+−</text></svg>',
+ Komplex:'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="13.5" y="11" text-anchor="middle" font-size="9" font-weight="bold" font-style="italic" fill="currentColor">i</text><path d="M17.5 11.5l6-8M17.5 11.5h6" stroke="currentColor" stroke-width="1.1" fill="none"/></svg>',
+ 'Basis-N':'<svg viewBox="0 0 34 14"><text x="17" y="12" text-anchor="middle" font-size="6.5" font-weight="bold" fill="currentColor">2 8 10 16</text></svg>',
+ Matrix:'<svg viewBox="0 0 34 14"><path d="M10 1.5h-2v11h2M24 1.5h2v11h-2" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="2" width="5.4" height="4.4" fill="currentColor"/><rect x="11" y="7.6" width="5.4" height="4.4" fill="currentColor"/><rect x="17.6" y="7.6" width="5.4" height="4.4" fill="currentColor"/></svg>',
+ Vektor:'<svg viewBox="0 0 34 14"><path d="M12 12L21 3M12 12h11M12 12V3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
+ Statistik:'<svg viewBox="0 0 34 14"><path d="M9 1v12h17" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="11" y="7" width="2.6" height="5" fill="currentColor"/><rect x="14.5" y="3" width="2.6" height="9" fill="currentColor"/><rect x="18" y="5" width="2.6" height="7" fill="currentColor"/><rect x="21.5" y="8" width="2.6" height="4" fill="currentColor"/></svg>',
+ Verteilung:'<svg viewBox="0 0 34 14"><path d="M5 13C11 13 12 2 17 2s6 11 12 11" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M14 13V4.5h6V13" fill="currentColor" opacity=".55"/><path d="M4 13h26" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Tabellenk.':'<svg viewBox="0 0 34 14"><rect x="9" y="1.5" width="16" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="9" y="1.5" width="16" height="3" fill="currentColor"/><path d="M9 8.5h16M14.3 4.5v8.5M19.6 4.5v8.5" stroke="currentColor" stroke-width="1"/></svg>',
+ 'Wertetab.':'<svg viewBox="0 0 34 14"><rect x="10" y="1.5" width="14" height="11.5" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="1.5" width="14" height="3" fill="currentColor"/><path d="M17 4.5v8.5M10 8.5h14" stroke="currentColor" stroke-width="1"/></svg>',
+ Gleichung:'<svg viewBox="0 0 34 14"><text x="17" y="11" text-anchor="middle" font-size="9.5" font-weight="bold" fill="currentColor">xy=0</text><path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ Ungleichung:'<svg viewBox="0 0 34 14"><text x="17" y="11" text-anchor="middle" font-size="9.5" font-weight="bold" fill="currentColor">xy&gt;0</text><path d="M5 13.3h24" stroke="currentColor" stroke-width="1.3"/></svg>',
+ 'Verhältnis':'<svg viewBox="0 0 34 14"><rect x="8" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="19" y="3" width="7" height="8" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="17" cy="5" r=".9" fill="currentColor"/><circle cx="17" cy="9" r=".9" fill="currentColor"/></svg>'
+};
+const XAPPS=[["Berechnungen","Berechnung"],["Komplexe Zahlen","Komplex"],["Basis-N","Basis-N"],["Matrizen","Matrix"],["Vektoren","Vektor"],["Statistik","Statistik"],["Verteilungen","Verteilung"],["Tabellenkalk.","Tabellenk."],["Wertetabelle","Wertetab."],["Gleichungen","Gleichung"],["Ungleichungen","Ungleichung"],["Verhältnisse","Verhältnis"]];
+const XBADGE=["1","2","3","4","5","6","7","8","9","A","B","C"];
+function zl(lbl,ziel){ return (ziel||[]).includes(lbl)?' ziel':''; }
+function drawMenu(S,ziel){
+  const page=S.sel<8?0:1, items=XAPPS.map((a,i)=>[a,i]).slice(page*8,page*8+8);
+  return `<div class="xm">${page?'<span class="arr" style="left:50%">▲</span>':'<span class="arr" style="right:62px">▼</span>'}<div class="grid">`+
+    items.map(([a,i])=>`<div class="ic${i===S.sel?' sel':''}${zl(a[0],ziel)}">${ICON[a[1]]}<span class="bd">${XBADGE[i]}</span></div>`).join('')+
+    `</div><div class="nm">${XBADGE[S.sel]}:${XAPPS[S.sel][0]}</div></div>`;
+}
+function sbar(S,extra){ return `<div class="sb">${S.shift?'<span class="ind">S</span>':''}<span class="ind">D</span><span class="sp"></span>${extra||''}</div>`; }
+
+@@ABL_CORE@@// =====================================================================
+//  Rechnerzustand: Modus 1 Berechnungen, SHIFT ∫ = d/dx
+// =====================================================================
+function fresh(){ return {mode:'calc', sel:0, shift:false, f:[], a:[], fld:0, res:null}; }
+function step(S,k){
+  if(k==='shift'){ S.shift=!S.shift; return; }
+  if(S.shift){ S.shift=false; if(k==='integ'&&S.mode==='calc') newDD(S); return; }
+  if(k==='menu'){ S.mode='menu'; S.sel=0; return; }
+  switch(S.mode){
+   case 'menu':
+     if(k==='right') S.sel=Math.min(11,S.sel+1); else if(k==='left') S.sel=Math.max(0,S.sel-1);
+     else if(k==='down') S.sel=Math.min(11,S.sel+4); else if(k==='up') S.sel=Math.max(0,S.sel-4);
+     else if(k==='1'||(k==='exe'&&S.sel===0)){ S.mode='calc'; }
+     return;
+   case 'calc':
+     return;
+   case 'dd':
+     ddKey(S,k); return;
+  }
+}
+function run(S,keys){ keys.forEach(k=>step(S,k)); return S; }
+function draw(S,ziel){
+  if(S.mode==='calc') return sbar(S)+'<div class="app"><div class="ein"><span class="caret"></span></div><div></div></div>';
+  if(S.mode==='menu') return drawMenu(S,ziel);
+  if(S.mode==='dd') return drawDD(S);
+  return '';
+}
+
+// =====================================================================
+//  Tour-Inhalte
+// =====================================================================
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Rechner arbeiten, Ergebnisse auf dem Blatt eintragen, dann <b>Weiter</b>.</p></div>`;
+const termF=`<i>f</i>(<i>x</i>) = 0,5<i>x</i><sup>3</sup> − 2<i>x</i><sup>2</sup> + 3`;
+const termG=`<i>g</i>(<i>x</i>) = −0,5<i>x</i><sup>2</sup> + 2<i>x</i> + 1`;
+const B1=termF+'<div class="bereich">Gesucht: Steigung an der Stelle <i>x</i> = 2, also <i>f</i> ′(2)</div>';
+const B2=termG+'<div class="bereich">Gesucht: Steigungen <i>g</i> ′(0), <i>g</i> ′(4) und <i>g</i> ′(2)</div>';
+const T1=[
+  {t:"Modus Berechnungen öffnen", a:B1, k:["menu","1"], z:["Berechnungen"],
+   d:"<p>Drücken Sie <b>MENU</b> und dann <b>1</b> für <b>Berechnungen</b>.</p>"},
+  {t:"Ableitung aufrufen", a:B1, k:["shift","integ"],
+   d:"<p>Über der Integral-Taste steht in Gold <b>d/dx</b>. Also: <b>SHIFT</b>, dann <b>∫▭</b>.</p><p>Im Display erscheint die Vorlage <b>d/dx( ▭ )|x=▭</b> mit zwei leeren Feldern.</p>"},
+  {t:"Funktionsterm eingeben", a:B1, k:["0",",","5","x","pow","3","right","-","2","x","sq","+","3"],
+   d:"<p>Tippen Sie den Term in das <b>erste Feld</b>.</p><p><b>x³</b>: <b>x</b>, dann <b>x<sup>■</sup></b>, dann <b>3</b>. Mit <b>▶</b> verlassen Sie den Exponenten wieder.</p>",
+   n:"Ohne ▶ würde „− 2x² + 3“ mit in den Exponenten rutschen!"},
+  {t:"Ins Feld x= wechseln", a:B1, k:["right"],
+   d:"<p>Mit <b>▶</b> springt der Cursor aus der Klammer in das Feld <b>x=</b>.</p>"},
+  {t:"Stelle eingeben und rechnen", a:B1, k:["2","exe"],
+   d:"<p>Tippen Sie <b>2</b> und drücken Sie <b>=</b>.</p><p>Ergebnis: <b><i>f</i> ′(2) = −2</b>. Die Steigung ist negativ – der Graph <b>fällt</b> an der Stelle 2.</p>",
+   n:"Positiv = Graph steigt · negativ = Graph fällt · 0 = waagerechte Tangente."},
+  {t:"Selbst arbeiten", k:[], ab:1, d:AB("Aufgabe 1",["<b>SHIFT</b> <b>∫▭</b> (d/dx)","Term eingeben ▸ <b>▶</b> ▸ Stelle eingeben ▸ <b>=</b>","Negative Stelle mit <b>(−)</b>, z. B. für <i>f</i> ′(−1)","Steigt, fällt oder waagerecht? In die Tabelle eintragen"])}
+];
+const T2=[
+  {t:"Neu anfangen", a:B2, k:["ac","shift","integ"],
+   d:"<p><b>AC</b> löscht die alte Rechnung. Dann wieder <b>SHIFT</b> <b>∫▭</b> für d/dx.</p>"},
+  {t:"Parabel eingeben", a:B2, k:["neg","0",",","5","x","sq","+","2","x","+","1"],
+   d:"<p>Das Minus <b>am Anfang</b> ist ein Vorzeichen: <b>(−)</b>.</p><p><b>x²</b> hat eine eigene Taste – hier brauchen Sie kein ▶.</p>"},
+  {t:"Steigung an der Stelle 0", a:B2, k:["right","0","exe"],
+   d:"<p><b>▶</b>, dann <b>0</b> und <b>=</b>.</p><p><b><i>g</i> ′(0) = 2</b>: positiv – die Parabel <b>steigt</b> bei <i>x</i> = 0.</p>"},
+  {t:"Andere Stelle: Eingabe ändern", a:B2, k:["left","del","4","exe"],
+   d:"<p>Sie müssen nicht alles neu tippen: <b>◀</b> holt die Eingabe zurück, der Cursor steht hinter der 0.</p><p><b>DEL</b>, dann <b>4</b> und <b>=</b>: <b><i>g</i> ′(4) = −2</b> – die Parabel <b>fällt</b>.</p>"},
+  {t:"Waagerechte Tangente", a:B2, k:["left","del","2","exe"],
+   d:"<p>Noch einmal: <b>◀</b>, <b>DEL</b>, <b>2</b>, <b>=</b>.</p><p><b><i>g</i> ′(2) = 0</b>: Die Tangente ist <b>waagerecht</b>. Hier liegt der Scheitelpunkt der Parabel.</p>",
+   n:"Erscheint ein Bruch statt einer Dezimalzahl, schalten Sie mit <b>S⇔D</b> um."},
+  {t:"Selbst arbeiten", k:[], ab:1, d:AB("Aufgabe 2",["Parabel <b>g</b> einmal eingeben","Für jede Tangente nur die Stelle ändern: <b>◀</b> ▸ <b>DEL</b> ▸ neue Zahl ▸ <b>=</b>","Steigung <i>m</i><sub>t</sub> in die Lücke an der Tangente eintragen","Danach: Lösungscode eintragen"])}
+];
+const allK=a=>a.flatMap(s=>s.k);
+const TRACKS={
+  c:{name:"1 · Ableitung an einer Stelle", start:()=>fresh(), steps:T1},
+  n:{name:"2 · Parabel: Stelle ändern", start:()=>run(fresh(),allK(T1)), steps:T2}
+};
+
+// =====================================================================
+//  Steuerung
+// =====================================================================
+const ORDER=["c","n"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const LBL={on:"ON",menu:"MENU",up:"▲",down:"▼",left:"◀",right:"▶",shift:"SHIFT",
+ exe:"=",ac:"AC",del:"DEL",neg:"(−)","-":"−","+":"+",x:'<i class="v">x</i>', sq:'<i class="v">x</i><sup>2</sup>', pow:'<i class="v">x</i><sup>■</sup>', integ:'∫▭'};
+const WHITE=/^[0-9,+\-]$|^exe$/;
+const lbl=k=>LBL[k]||k;
+function chip(k,i){ const s=i<pos?'done':(i===pos?'now':''); const c=k==='shift'?'shift':(k==='ac'||k==='del')?'b':WHITE.test(k)?'w':''; return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function stateAt(t,s,i){
+  const T=TRACKS[t], S=T.start();
+  for(let j=0;j<s;j++) run(S,T.steps[j].k);
+  return run(S,T.steps[s].k.slice(0,i));
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('chips').innerHTML=S.k.length?S.k.map(chip).join(''):'';
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  const fin=pos>=S.k.length;
+  $('scr').innerHTML=draw(stateAt(tr,st,pos), fin?(S.z||[]).filter(z=>z==='cell'):(S.z||[]).filter(z=>z!=='cell'));
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+function hint(){
+  document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='shift'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="shift"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },1600); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    let extra='';
+    if(k==='-'&&S.k[pos]==='neg') extra=' Für das Vorzeichen am Anfang nehmen Sie <b>(−)</b>.';
+    if(k==='neg'&&S.k[pos]==='-') extra=' Zwischen zwei Summanden nehmen Sie das Rechenzeichen <b>−</b>.';
+    if(k==='exe'&&S.k[pos]==='right') extra=' Erst mit <b>▶</b> ins nächste Feld wechseln.';
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}${extra}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+</script>
+</body></html>

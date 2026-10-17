@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lineare Gleichungssysteme fx-991DE CW</title>
+<style>:root{ --lf:#1F4E99; --ink:#1d1d1f; --line:#d9dce1; --feld:#f3f4f6; --rand:#b8bdc6; --ab:#2E7D32; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:#eee; line-height:1.45; text-align:left; }
+.page{ width:210mm; min-height:calc(297mm - 28mm); margin:10px auto; padding:10mm 14mm 8mm; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.18); display:flex; flex-direction:column; }
+.page-content{ flex:1 0 auto; }
+.page-header{ display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid var(--lf); padding-bottom:6px; margin-bottom:9px; }
+.page-header h1{ font-size:21px; margin:0 0 2px; color:var(--lf); line-height:1.25; }
+.page-header .sub{ font-size:12.5px; color:#444; }
+.page-header img.logo{ height:30px; width:auto; margin-top:3px; }
+.namebar{ display:flex; gap:24px; font-size:12.5px; color:#555; margin:0 0 8px; }
+.namebar span{ border-bottom:1px solid #999; flex:1; padding-bottom:2px; }
+.namebar span.d{ flex:0 0 45mm; }
+.page-footer{ border-top:1px solid var(--line); margin-top:6px; padding-top:5px; display:flex; justify-content:space-between; font-size:11px; color:#888; flex:0 0 auto; }
+.qrlink{ display:inline-block; text-decoration:none; color:inherit; }
+.anleitung{ display:flex; gap:6mm; align-items:center; border:1px solid var(--line); border-radius:8px; background:#fafafb; padding:6px 12px; margin:0 0 4px; }
+.anleitung .links{ flex:1 1 auto; }
+.qrs svg.qrframe{ display:block; width:24mm; height:32mm; }
+.an{ margin:0 0 4px; font-size:14px; line-height:1.55; }
+.an.weg{ margin:4px 0 0; line-height:1.8; font-size:13px; }
+.an.weg b.k{ display:inline-block; min-width:27mm; color:var(--lf); }
+.an.tipp{ margin:4px 0 0; padding-top:3px; border-top:1px dashed var(--rand); font-size:12.4px; }
+.an b.t{ color:#8a5a00; }
+.taste{ display:inline-block; font-family:Calibri,Arial,sans-serif; font-size:11px; line-height:1.2; background:#2f2f34; border:1px solid #1b1b1e; border-bottom-width:2px; border-radius:7px; padding:1px 6px; color:#fff; font-weight:bold; vertical-align:middle; }
+.taste.w{ background:#f4f4f6; color:#111; border-color:#9a9aa2; }
+.taste.sh{ background:#d9bf7c; color:#3a2c0a; border-color:#a88a45; }
+.taste.rd{ background:#bdbdc3; color:#111; border-color:#8a8a92; border-radius:10px; }
+.taste i{ font-family:'Times New Roman',serif; font-size:13px; }
+.sec{ font-weight:bold; font-size:16px; padding:0 0 4px; margin:8px 0 5px; border-bottom:1px solid var(--line); display:flex; align-items:center; }
+.sec .nr{ display:inline-block; background:var(--lf); color:#fff; border-radius:50%; width:22px; height:22px; text-align:center; line-height:22px; font-size:13.5px; margin-right:9px; flex:0 0 22px; }
+.sec .teil{ margin-left:auto; font-weight:normal; font-size:11px; color:var(--ab); font-family:Calibri,Arial,sans-serif; border:1px solid var(--ab); border-radius:10px; padding:0 7px; }
+.txt{ margin:0 0 3px; font-size:13.6px; }
+.txt .teil{ font-weight:normal; font-size:11px; color:var(--ab); font-family:Calibri,Arial,sans-serif; border:1px solid var(--ab); border-radius:10px; padding:0 7px; margin-left:6px; }
+.term{ margin:0 0 3px 8mm; font-family:Cambria,Georgia,serif; font-size:17px; }
+table.gl{ border-collapse:collapse; margin:1px 0 4px 6mm; font-family:Cambria,Georgia,serif; font-size:15px; }
+table.gl td{ padding:0.4mm 4mm 0.4mm 0; height:8.7mm; vertical-align:middle; white-space:nowrap; }
+table.gl td.nr{ font-family:Calibri,Arial,sans-serif; font-size:12px; color:#555; width:7mm; }
+table.gl td.eq{ width:62mm; }
+.lue{ display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--rand); border-radius:1.6mm; background:var(--feld); height:7.8mm; vertical-align:middle; font-family:Cambria,Georgia,serif; }
+.lue.s{ width:22mm; } .lue.m{ width:26mm; } .lue.l{ width:62mm; }
+.lue.big{ display:flex; width:100%; height:12mm; justify-content:flex-start; padding:0 3mm; font-size:13px; }
+.hilf{ font-family:Calibri,Arial,sans-serif; font-size:11.5px; color:#666; }
+.zwei{ display:flex; gap:7mm; margin-top:2px; }
+.zwei > div{ flex:1 1 0; }
+svg.graph{ display:block; margin:2px 0 0; }
+.code{ display:flex; align-items:center; gap:4mm; border-top:1.4px solid var(--lf); border-bottom:1.4px solid var(--lf); padding:2.2mm 1mm; margin:6px 0 0; }
+.code .ct{ flex:1 1 auto; font-size:12px; line-height:1.35; }
+.code .ct b.t{ color:var(--lf); font-size:13px; }
+.code .ziff{ display:flex; gap:2mm; flex:0 0 auto; }
+.code .z{ text-align:center; width:21mm; }
+.code .z .bx{ display:flex; align-items:center; justify-content:center; margin:0 auto; width:8.5mm; height:8.5mm; border:1.3px solid var(--lf); border-radius:1.6mm; background:var(--feld); font-family:Cambria,Georgia,serif; font-size:15px; }
+.code .z .lab{ display:block; font-size:9.4px; line-height:1.2; color:#444; margin-top:2px; font-family:Calibri,Arial,sans-serif; }
+.code .lqr{ flex:0 0 17mm; text-align:center; }
+.code .lqr img{ width:17mm; height:17mm; display:block; }
+.code .lqr span{ display:block; font-size:9px; color:var(--lf); font-weight:bold; margin-top:1px; font-family:Calibri,Arial,sans-serif; }
+.lsg .lue, .lsg .code .z .bx{ background:#FDECEC; border-color:#E57373; color:#C62828; font-weight:bold; font-size:14px; }
+.lsg .lue.big{ font-size:12.5px; font-weight:bold; }
+@media print{
+  body{ background:#fff; }
+  .page{ height:297mm; min-height:297mm; margin:0; padding:10mm 14mm 7mm; box-shadow:none; overflow:hidden; }
+  a{ color:inherit; }
+}
+@page{ size:A4 portrait; margin:0; }
+
+.sysblk{ display:flex; align-items:center; gap:4mm; margin:0 0 1.4mm; }
+.sec{ margin:6px 0 4px !important; }
+.sysblk .nr, .b3 .nr{ font-family:Calibri,Arial,sans-serif; font-size:12px; color:#555; width:7mm; flex:0 0 7mm; }
+table.sy{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:15px; border-left:1.3px solid #333; }
+table.sy td{ padding:0 1.4mm; height:6.4mm; white-space:nowrap; }
+table.sy td.ro{ font-family:Calibri,Arial,sans-serif; font-size:10.5px; color:#777; padding-right:2mm; }
+table.sy td.l{ text-align:left; } table.sy td.r{ text-align:left; }
+.erg{ font-family:Cambria,Georgia,serif; font-size:15px; margin-left:auto; display:grid; row-gap:0.6mm; }
+.erg .lue.s, .erg3 .lue.t{ height:5.8mm; }
+.lue.o{ width:52mm; height:6.6mm; justify-content:flex-start; padding:0 2mm; font-size:13px; }
+.lue.t{ width:13mm; height:7mm; } .lue.w{ width:100%; height:7.6mm; font-size:12.5px; }
+.drei{ display:flex; gap:4mm; margin-top:1mm; }
+.b3{ flex:1 1 0; border:1px solid var(--line); border-radius:6px; padding:1mm 2.5mm 2mm; position:relative; }
+.b3 .nr{ display:block; width:auto; margin-bottom:0.5mm; }
+.b3 table.sy{ font-size:14px; } .b3 table.sy td{ height:6mm; }
+.erg3{ font-family:Cambria,Georgia,serif; font-size:14px; margin-top:1.5mm; display:flex; gap:2mm; align-items:center; }
+.erg3.v{ display:grid; row-gap:0.2mm; margin:0 0 0 auto; }
+.b3i{ display:flex; align-items:center; }
+.lue.t{ width:10.5mm !important; }
+.b3 table.sy td{ padding:0 1mm; } .erg3 .lue.w{ height:6.2mm; flex:1; }
+table.kt{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:13.5px; margin:1mm 0 0; }
+table.kt th{ font-style:italic; font-weight:bold; padding:0 3mm; border-bottom:1.3px solid #333; }
+table.kt td{ width:12mm; height:5.6mm; text-align:center; border:1px solid var(--rand); background:var(--feld); }
+table.kt td.rn{ width:5mm; background:none; border:0; font-size:11px; color:#666; font-family:Calibri,Arial,sans-serif; }
+.gz{ display:flex; align-items:center; gap:2mm; margin:0 0 1mm; font-family:Cambria,Georgia,serif; font-size:14px; }
+.gz .ro{ font-family:Calibri,Arial,sans-serif; font-size:10.5px; color:#777; width:6mm; }
+.gz .lue{ width:62mm; height:6.2mm; justify-content:flex-start; padding:0 2mm; font-size:13.5px; }
+.lsg .gz .lue, .lsg .lue.o{ font-size:13px; }
+.lsg table.kt td:not(.rn){ background:#FDECEC; border-color:#E57373; color:#C62828; font-weight:bold; }
+.page-content{ display:flex; flex-direction:column; }
+.page-content > .code{ margin-top:auto; }
+.a2{ border:1px solid var(--line); border-radius:6px; padding:1.5mm 3mm 2.5mm; }
+table.og{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:16px; margin:1mm 0 1mm 2mm; border-left:1.3px solid #333; }
+table.og td{ padding:0 1.6mm; height:10mm; white-space:nowrap; }
+table.og td.ro{ font-family:Calibri,Arial,sans-serif; font-size:10.5px; color:#777; }
+table.og td.eq{ padding:0 1mm; }
+table.og td.um{ padding-left:4mm; }
+.lue.u{ width:30mm; height:7.6mm; border-left:2px solid #1d1d1f; border-radius:0 1.6mm 1.6mm 0; justify-content:flex-start; padding:0 2mm; font-size:14px; }
+.lab2{ font-family:Calibri,Arial,sans-serif; font-size:12px; color:#555; margin:1.8mm 0 0.8mm; }
+.a2 .gz{ margin:0 0 1.6mm 2mm; } .a2 .gz .lue{ width:66mm; height:8.4mm; font-size:15px; }
+.lm{ font-family:Cambria,Georgia,serif; font-size:18px; margin:0 0 0 2mm; display:flex; align-items:center; gap:1.5mm; }
+.lm.xs{ gap:7mm; } .lm.xs span{ display:flex; align-items:center; gap:1.5mm; }
+.b3x .lab2:first-child{ margin-top:0; }
+.lm .lue.t{ width:16mm !important; height:8.4mm; font-size:15px; }
+.b3x{ display:flex; gap:8mm; align-items:center; border:1px solid var(--line); border-radius:6px; padding:2.5mm 4mm; }
+.b3x table.sy{ font-size:17px; } .b3x table.sy td{ height:9mm; padding:0 2mm; }
+.b3x .lm{ font-size:19px; }
+.merke{ background:#F1F8F1; border-left:4px solid var(--ab); border-radius:4px; padding:1.5mm 4mm; margin:1mm 0 2.5mm; display:flex; align-items:center; gap:5mm; font-size:13.4px; }
+.merke b.t{ color:var(--ab); }
+.merke table{ border-collapse:collapse; font-family:Cambria,Georgia,serif; font-size:15px; margin:0; flex:0 0 auto; }
+.merke td{ padding:0.5mm 1.5mm; white-space:nowrap; } .merke .bar{ border-left:2px solid #1d1d1f; padding-left:2mm; color:var(--lf); font-weight:bold; }
+.lsg .lue.u{ border-left:2px solid #C62828; }
+</style></head><body class="">
+<div class="page"><div class="page-content">
+<div class="page-header"><div><h1>Taschenrechner-Führerschein: Lineare Gleichungssysteme</h1><div class="sub">Systeme mit zwei und drei Unbekannten · App Gleichung · CASIO fx-991DE CW</div></div>
+<img class="logo" src="data:image/png;base64,@@LOGO@@" alt="RWB Essen fhr"></div>
+<div class="namebar"><span>Name:</span><span class="d">Datum:</span></div>
+<div class="anleitung"><div class="links">
+<p class="an">QR-Code scannen und die <b>Tour</b> am <b>eigenen Rechner</b> mitmachen.</p>
+<p class="an weg" style="font-size:12.4px"><b class="k">Öffnen</b> <span class="taste ">HOME</span> ▸ Gleichung ▸ Gleichungssyst. ▸ 2 Unbekannte <span class="hilf">(bzw.</span> <span class="taste ">▼</span> <span class="hilf">3 Unbekannte)</span><br><b class="k">Eingeben</b> Zahlen zeilenweise, jede mit <span class="taste ">EXE</span> ▸ lösen: <span class="taste ">EXE</span> <i>x</i> ▸ <span class="taste ">EXE</span> <i>y</i> ▸ <span class="taste ">EXE</span> <i>z</i></p>
+<p class="an tipp" style="font-size:11.8px"><b class="t">Wichtig:</b> Erst ordnen: <i>ax</i> + <i>by</i> = <i>c</i> · Unbekannte fehlt: <b>0</b> · Vorzeichen <span class="taste sh">SHIFT</span> <span class="taste ">−</span> · Bruch: <span class="taste ">FORMAT</span> ▸ Dezimal</p>
+</div><div class="qrs"><a class="qrlink" href="https://olafkott.github.io/CAS/fx991/fx991_LGS_Schritt_fuer_Schritt.html"><svg class="qrframe" viewBox="0 0 30 40" width="24mm" height="32mm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="1.5" y="0.4" width="27" height="36" rx="3.6" fill="#1b1b1e"/>
+<text x="3.6" y="3.4" font-family="Arial,sans-serif" font-size="2.1" font-weight="bold" fill="#fff">CASIO</text>
+<rect x="18.4" y="1.2" width="7.8" height="2.6" rx="0.4" fill="#3a2222"/>
+<rect x="3.6" y="4.6" width="22.8" height="22.6" rx="0.8" fill="#d3ded4"/>
+<rect x="4.4" y="5.4" width="21.2" height="21.2" fill="#fff"/>
+<image x="5" y="6" width="20" height="20" href="data:image/png;base64,@@QR:https://olafkott.github.io/CAS/fx991/fx991_LGS_Schritt_fuer_Schritt.html@@" xlink:href="data:image/png;base64,@@QR:https://olafkott.github.io/CAS/fx991/fx991_LGS_Schritt_fuer_Schritt.html@@"/>
+<text x="26" y="28.6" text-anchor="end" font-family="Arial,sans-serif" font-size="1.2" letter-spacing="0.35" fill="#bdbdc4">CLASSWIZ</text>
+<circle cx="5.6" cy="31.0" r="1.15" fill="#d9bf7c"/><circle cx="10.3" cy="31.0" r="1.15" fill="#55555b"/><circle cx="15.0" cy="31.0" r="1.15" fill="#55555b"/><circle cx="19.7" cy="31.0" r="1.15" fill="#55555b"/><circle cx="24.4" cy="31.0" r="1.15" fill="#55555b"/><circle cx="5.6" cy="34.0" r="1.15" fill="#55555b"/><circle cx="10.3" cy="34.0" r="1.15" fill="#55555b"/><circle cx="15.0" cy="34.0" r="1.15" fill="#55555b"/><circle cx="19.7" cy="34.0" r="1.15" fill="#55555b"/><circle cx="24.4" cy="34.0" r="1.15" fill="#55555b"/>
+<text x="15" y="39.4" text-anchor="middle" font-family="Georgia,serif" font-size="3.1" font-weight="bold" fill="#333">Schritt für Schritt</text>
+</svg></a></div></div>
+
+<div class="sec"><span class="nr">1</span>Zwei Unbekannte<span class="teil">✍ nach Tour-Teil 1</span></div>
+<div class="merke"><div><b class="t">So ordnen Sie:</b> Links stehen nur die Unbekannten – erst <i>x</i>, dann <i>y</i>. Rechts steht nur eine Zahl. Die Umformung steht hinter dem Strich.</div>
+<table><tr><td><i>y</i></td><td>=</td><td>3<i>x</i> − 2</td><td><span class="bar">− 3<i>x</i></span></td><td style="padding-left:6mm">→</td><td style="padding-left:4mm">−3<i>x</i> + <i>y</i> = −2</td></tr></table></div>
+<div class="zwei">
+<div><div class="a2"><p class="txt"><b>a)</b> Das System ist schon geordnet. Lösen Sie es mit dem Taschenrechner.</p><table class="og"><tr><td class="ro">I</td><td class="l">3<i>x</i> + 2<i>y</i></td><td class="eq">=</td><td class="r">14</td></tr><tr><td class="ro">II</td><td class="l">−2<i>x</i> + <i>y</i></td><td class="eq">=</td><td class="r">−7</td></tr></table><p class="lab2">Lösung:</p><p class="lm xs"><span><i>x</i> = <span class="lue t"><span></span></span></span><span><i>y</i> = <span class="lue t"><span></span></span></span></p><p class="lab2">Lösungsmenge:</p><p class="lm">𝕃 = { ( <span class="lue t"><span></span></span> | <span class="lue t"><span></span></span> ) }</p></div></div>
+<div><div class="a2"><p class="txt"><b>b)</b> Ordnen Sie zuerst beide Gleichungen. Notieren Sie die Umformung hinter dem Strich.</p><table class="og"><tr><td class="ro">I</td><td class="l">2<i>y</i> + 4</td><td class="eq">=</td><td class="r">5<i>x</i></td><td class="um"><span class="lue u"><span></span></span></td></tr><tr><td class="ro">II</td><td class="l"><i>x</i> − 3</td><td class="eq">=</td><td class="r">−4<i>y</i></td><td class="um"><span class="lue u"><span></span></span></td></tr></table><p class="lab2">Geordnetes Gleichungssystem:</p><div class="gz"><span class="ro">I</span><span class="lue "><span></span></span></div><div class="gz"><span class="ro">II</span><span class="lue "><span></span></span></div><p class="lab2">Lösung:</p><p class="lm xs"><span><i>x</i> = <span class="lue t"><span></span></span></span><span><i>y</i> = <span class="lue t"><span></span></span></span></p><p class="lab2">Lösungsmenge:</p><p class="lm">𝕃 = { ( <span class="lue t"><span></span></span> | <span class="lue t"><span></span></span> ) }</p></div></div>
+</div>
+
+<div class="sec"><span class="nr">2</span>Drei Unbekannte<span class="teil">✍ nach Tour-Teil 2</span></div>
+<p class="txt">Lösen Sie das Gleichungssystem mit dem Taschenrechner. In Gleichung III fehlt eine Unbekannte – dort tragen Sie eine <b>0</b> ein.</p>
+<div class="b3x"><table class="sy"><tr><td class="ro">I</td><td class="l"><i>x</i> + 2<i>y</i> − <i>z</i></td><td>=</td><td class="r">1</td></tr><tr><td class="ro">II</td><td class="l">2<i>x</i> − <i>y</i> + <i>z</i></td><td>=</td><td class="r">6</td></tr><tr><td class="ro">III</td><td class="l">−<i>x</i> + 2<i>z</i></td><td>=</td><td class="r">4</td></tr></table><div><p class="lab2">Lösung:</p><p class="lm xs"><span><i>x</i> = <span class="lue t"><span></span></span></span><span><i>y</i> = <span class="lue t"><span></span></span></span><span><i>z</i> = <span class="lue t"><span></span></span></span></p><p class="lab2">Lösungsmenge:</p><p class="lm">𝕃 = { ( <span class="lue t"><span></span></span> | <span class="lue t"><span></span></span> | <span class="lue t"><span></span></span> ) }</p></div></div>
+
+<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein – das ist der Code für die Lösung.</div>
+<div class="ziff"><div class="z"><span class="bx"></span><span class="lab"><i>x</i> aus 1a)</span></div><div class="z"><span class="bx"></span><span class="lab"><i>y</i> aus 1a)</span></div><div class="z"><span class="bx"></span><span class="lab">1. Nachkommastelle<br>von <i>y</i> aus 1b)</span></div><div class="z"><span class="bx"></span><span class="lab"><i>z</i> aus 2</span></div></div>
+<div class="lqr"><a class="qrlink" href="https://olafkott.github.io/CAS/fx991/Loesung_fx991_LGS.html"><img src="data:image/png;base64,@@QR:https://olafkott.github.io/CAS/fx991/Loesung_fx991_LGS.html@@" alt="QR-Code Lösung"><span>Lösung</span></a></div><div class="lqr"><a class="qrlink" href="https://olafkott.github.io/CAS/fx991/fx991_Uebung_LGS.html"><img src="data:image/png;base64,@@QR:https://olafkott.github.io/CAS/fx991/fx991_Uebung_LGS.html@@" alt="QR-Code Übung"><span>Übung</span></a></div></div>
+</div><div class="page-footer"><span>RWB Essen &middot; Mathematik &middot; Taschenrechner-Führerschein</span><span>Lineare Gleichungssysteme</span></div></div>
+</body></html>

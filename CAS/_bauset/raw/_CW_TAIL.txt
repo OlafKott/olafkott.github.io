@@ -1,0 +1,21 @@
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+const KMAP={Enter:'exe',Escape:'ac',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Backspace:'del',Delete:'del','.':',',',':',','+':'+','-':'-',x:'x',X:'x'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && /^[0-9]$/.test(e.key)) k=e.key;
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+</script>
+</body></html>
