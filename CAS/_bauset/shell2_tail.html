@@ -275,7 +275,9 @@ if(location.hash) route({nohist:true, instant:true});
 // ---------- Kleine Bildschirme: ganze Ansicht verkleinern (Layout wie am PC), Zoomen per Fingergeste ----------
 const FIT_W=760; let SCALE=1;
 function fit(){
-  const w=document.documentElement.clientWidth, h=window.innerHeight;
+  const w=document.documentElement.clientWidth; let h=window.innerHeight;
+  // Im Moodle-iframe ist innerHeight die Rahmenhöhe, nicht die Bildschirmhöhe: auf Handys im Querformat die kurze Bildschirmseite nehmen
+  const sh=Math.min(screen.width,screen.height); if(sh<500 && w>h*0.9) h=Math.min(h,sh);
   // schmal (Handy hochkant): auf 760 px Layoutbreite verkleinern; niedrig (Handy quer): so weit, dass ~800 px Höhe passen
   SCALE=Math.min(1, w/FIT_W, h<600 ? h/800 : 1);
   if(SCALE<1){ APP.classList.add('scaled'); APP.style.width=(w/SCALE)+'px'; APP.style.transformOrigin='top left'; APP.style.transform='scale('+SCALE+')'; }
