@@ -920,6 +920,7 @@ button{ font-family:inherit; }
 .pickcap small{ font-weight:normal; color:var(--mute); margin-left:6px; }
 .shell[data-mode="pick"] .pickcap{ display:inline-block; }
 .shell[data-mode="pick"] .stage{ gap:clamp(24px,6vw,64px); }
+.shell.narrow[data-mode="pick"] .stage{ flex-direction:column; align-items:center; gap:28px; }
 .shell[data-mode="pick"] .right{ display:none; }
 .shell[data-mode="pick"] .cwrap{ cursor:pointer; transition:transform .25s cubic-bezier(.2,.7,.2,1), opacity .25s; }
 .shell[data-mode="pick"] .cwrap:hover{ transform:translateY(-4px); }
@@ -13374,14 +13375,20 @@ function apply(m,t,v){
 // Beide Rechner bei der Auswahl gleich groß (gleiche Höhe), passend zur verfügbaren Breite
 function sizePick(on){
   const cs=[CALC.cw,CALC.dx];
-  if(!on){ cs.forEach(c=>c.style.zoom=''); return; }
-  cs.forEach(c=>c.style.zoom='');
+  const clear=c=>{ c.style.transform=''; c.style.transformOrigin=''; c.style.marginRight=''; c.style.marginBottom=''; };
+  cs.forEach(clear); APP.classList.remove('narrow');
+  if(!on) return;
   const nat=cs.map(c=>({w:c.offsetWidth,h:c.offsetHeight}));
-  const st=getComputedStyle(STAGE), gap=parseFloat(st.columnGap)||24;
-  const avail=(STAGE.clientWidth-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight)-gap)/2;
+  const st=getComputedStyle(STAGE);
+  const inner=STAGE.clientWidth-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight);
+  const narrow=inner<520; APP.classList.toggle('narrow',narrow);
+  const gap=parseFloat(getComputedStyle(STAGE).columnGap)||24;
+  const avail=narrow?Math.min(inner,360):(inner-gap)/2;
   let H=Math.max(nat[0].h,nat[1].h);
   nat.forEach(n=>{ H=Math.min(H, avail*n.h/n.w); });
-  cs.forEach((c,i)=>c.style.zoom=(H/nat[i].h).toFixed(4));
+  // Skalieren per transform (zuverlässiger als zoom, v. a. in iOS Safari); Platz im Fluss anpassen
+  cs.forEach((c,i)=>{ const k=H/nat[i].h; c.style.transformOrigin='top left'; c.style.transform='scale('+k.toFixed(4)+')';
+    c.style.marginRight=(-nat[i].w*(1-k)).toFixed(1)+'px'; c.style.marginBottom=(-nat[i].h*(1-k)).toFixed(1)+'px'; });
 }
 window.addEventListener('resize',()=>{ if(mode==='pick') sizePick(true); });
 // Rechner-Wrapper ein-/ausblenden; der gewählte fliegt mit Größenwechsel an seinen Platz (FLIP)

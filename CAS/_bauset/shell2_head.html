@@ -42,6 +42,7 @@ button{ font-family:inherit; }
 .pickcap small{ font-weight:normal; color:var(--mute); margin-left:6px; }
 .shell[data-mode="pick"] .pickcap{ display:inline-block; }
 .shell[data-mode="pick"] .stage{ gap:clamp(24px,6vw,64px); }
+.shell.narrow[data-mode="pick"] .stage{ flex-direction:column; align-items:center; gap:28px; }
 .shell[data-mode="pick"] .right{ display:none; }
 .shell[data-mode="pick"] .cwrap{ cursor:pointer; transition:transform .25s cubic-bezier(.2,.7,.2,1), opacity .25s; }
 .shell[data-mode="pick"] .cwrap:hover{ transform:translateY(-4px); }
