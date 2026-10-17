@@ -6,7 +6,7 @@
        --gs:#1F4E99; --gs2:#2a62c2; --gsbg:#EEF2FA; }
 *{ box-sizing:border-box; }
 html{ background:var(--bg); }
-body{ margin:0; min-height:100vh; background:radial-gradient(circle at 30% 0,#ffffff,var(--bg) 60%); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; overflow-x:hidden; }
+body{ margin:0; min-height:100vh; overflow-x:hidden; background:radial-gradient(circle at 30% 0,#ffffff,var(--bg) 60%); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; overflow-x:hidden; }
 button{ font-family:inherit; }
 {{BASECSS}}
 {{MODCSS}}
@@ -75,40 +75,6 @@ button{ font-family:inherit; }
 .gpanel[hidden], .uhost[hidden]{ display:none; }
 .uhost{ display:block; }
 
-@media (max-width:720px){
-  .stage{ flex-wrap:wrap; gap:16px; }
-  .right{ flex:1 1 100%; max-width:none; }
-  .acts{ flex:1 1 100%; }
-  .act{ flex:1 1 0; min-width:0; padding:0 6px; }
-}
-@media (max-width:620px){
-  .bar img{ display:none; }
-  .ttlbox h1{ font-size:17px; } .ttlbox h1 small{ display:none; }
-  .seg span{ display:none; } .seg button,.seg a{ padding:6px 9px; }
-  .toToc span{ display:none; }
-  .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ padding:7px 10px; }
-}
-
-/* ---------- Handy (schmale oder niedrige Bildschirme) ---------- */
-.keytog{ display:none; margin:6px auto 0; border:1px solid var(--line); background:#fff; border-radius:999px; padding:5px 14px; font:600 13px system-ui,Arial,sans-serif; color:var(--lf); cursor:pointer; }
-.shell.phone[data-mode="g"] .keytog{ display:inline-block; }
-.shell.phone[data-mode="g"]:not(.keys-open) .calc{ padding-top:10px !important; padding-bottom:10px !important; border-radius:18px !important; }
-.shell.phone[data-mode="g"]:not(.keys-open) .calc .head,
-.shell.phone[data-mode="g"]:not(.keys-open) .calc .keys,
-.shell.phone[data-mode="g"]:not(.keys-open) .calc .nums,
-.shell.phone[data-mode="g"]:not(.keys-open) .calc .ctl,
-.shell.phone[data-mode="g"]:not(.keys-open) .calc .fk{ display:none !important; }
-.shell.phone .stat .chip.now, .shell.phone .chips .chip.now{ cursor:pointer; }
-.shell.phone .stat:has(.chip.now)::after{ content:"antippen"; font-size:12.5px; color:var(--mute); }
-@media (max-width:620px){
-  .shell.phone[data-mode="toc"] .cwrap, .shell.phone[data-mode="u"] .cwrap{ display:none !important; }
-  .shell.phone[data-mode="g"] .cwrap{ position:sticky; top:var(--barh,0px); z-index:5; flex:1 1 100%; margin:-16px -16px 0; padding:8px 16px 6px; background:var(--bg); box-shadow:0 6px 12px -8px rgba(0,0,0,.25); }
-  .shell.phone[data-mode="g"].keys-open .cwrap{ position:static; }
-}
-@media (min-width:621px) and (max-height:520px){
-  .shell.phone[data-mode="g"] .cwrap{ position:sticky; top:calc(var(--barh,0px) + 8px); z-index:5; }
-  .shell.phone[data-mode="g"].keys-open .cwrap{ position:static; }
-}
 
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style></head><body>
@@ -127,7 +93,6 @@ button{ font-family:inherit; }
 <main class="stage" id="stage">
 <div class="cwrap" id="w_cw">
 {{CALC}}
-<button class="keytog" type="button">Tasten einblenden</button>
 </div>
   <div class="right" id="right">
     <section class="view toc" id="vToc">
@@ -301,22 +266,18 @@ window.addEventListener('popstate',()=>route({nohist:true}));
 // Start
 homeScreen(0,false);
 route({nohist:true, instant:true});
-// ---------- Handy: Display oben festhalten, Tasten einblendbar, Taste im Text antippbar ----------
-(function(){
-  const mq=window.matchMedia('(max-width:620px), (max-height:520px)');
-  const upd=()=>{ APP.classList.toggle('phone',mq.matches); document.documentElement.style.setProperty('--barh',document.querySelector('.bar').offsetHeight+'px'); };
-  window.addEventListener('resize',upd);
-  mq.addEventListener ? mq.addEventListener('change',upd) : mq.addListener(upd); upd();
-  document.querySelectorAll('.keytog').forEach(b=>b.addEventListener('click',()=>{
-    const open=APP.classList.toggle('keys-open');
-    document.querySelectorAll('.keytog').forEach(x=>x.textContent=open?'Tasten ausblenden':'Tasten einblenden');
-  }));
-  $('right').addEventListener('click',e=>{
-    if(!APP.classList.contains('phone')||mode!=='g') return;
-    const c=e.target.closest('.stat .chip.now, .chips .chip.now'); if(!c) return;
-    const k=STAGE.querySelector('.cwrap:not([hidden]) .calc .k.hit'); if(k) k.click();
-  });
-})();
+// ---------- Kleine Bildschirme: ganze Ansicht verkleinern (Layout wie am PC), Zoomen per Fingergeste ----------
+const FIT_W=760; let SCALE=1;
+function fit(){
+  const w=document.documentElement.clientWidth, h=window.innerHeight;
+  // schmal (Handy hochkant): auf 760 px Layoutbreite verkleinern; niedrig (Handy quer): so weit, dass ~800 px Höhe passen
+  SCALE=Math.min(1, w/FIT_W, h<600 ? h/800 : 1);
+  if(SCALE<1){ APP.classList.add('scaled'); APP.style.width=(w/SCALE)+'px'; APP.style.transformOrigin='top left'; APP.style.transform='scale('+SCALE+')'; }
+  else { APP.classList.remove('scaled'); APP.style.width=''; APP.style.transform=''; }
+  document.body.style.height = SCALE!==1 ? (APP.offsetHeight*SCALE)+'px' : '';
+}
+new ResizeObserver(()=>{ if(SCALE!==1) document.body.style.height=(APP.offsetHeight*SCALE)+'px'; }).observe(APP);
+window.addEventListener('resize',fit); fit();
 })();
 </script>
 </body></html>

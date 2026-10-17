@@ -1,18 +1,3 @@
-@media (max-width:720px){
-  .stage{ flex-wrap:wrap; gap:16px; }
-  .shell[data-mode="pick"] .stage{ flex-wrap:nowrap; gap:14px; justify-content:flex-start; }
-  .pickcap{ font-size:13px; padding:6px 12px; } .pickcap small{ display:block; margin:0; }
-  .right{ flex:1 1 100%; max-width:none; }
-  .acts{ flex:1 1 100%; }
-  .act{ flex:1 1 0; min-width:0; padding:0 6px; }
-}
-@media (max-width:620px){
-  .bar img{ display:none; }
-  .ttlbox h1{ font-size:17px; } .ttlbox h1 small{ display:none; }
-  .seg span{ display:none; } .seg button,.seg a{ padding:6px 9px; }
-  .toToc span{ display:none; }
-  .shell[data-mode="toc"] .toToc, .shell[data-mode="g"] .toToc, .shell[data-mode="u"] .toToc{ padding:7px 10px; }
-}
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style></head><body>
 <div class="shell" id="app" data-mode="pick">
@@ -31,12 +16,10 @@
   <div class="cwrap m-cw" id="w_cw" data-m="cw">
 {{CALC_CW}}
     <button class="pickcap" data-pick="cw">fx-991DE CW<small>schwarz</small></button>
-    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="cwrap m-dx" id="w_dx" data-m="dx">
 {{CALC_DX}}
     <button class="pickcap" data-pick="dx">fx-991DE X<small>weiß</small></button>
-    <button class="keytog" type="button">Tasten einblenden</button>
   </div>
   <div class="right" id="right">
     <section class="view toc" id="vToc">
@@ -225,7 +208,7 @@ function layoutCalcs(m,showBoth,change,animate){
   change(); other.hidden=!showBoth; sizePick(showBoth);
   if(!animate){ other.classList.remove('gone'); return false; }
   const last=kc.getBoundingClientRect();
-  const dx=first.left-last.left, dy=first.top-last.top, s=first.width/last.width;
+  const dx=(first.left-last.left)/SCALE, dy=(first.top-last.top)/SCALE, s=first.width/last.width;
   if(Math.abs(dx)>1||Math.abs(dy)>1||Math.abs(s-1)>.005){
     // ruhig und gleichmäßig: nur Verschieben und Skalieren, eine Kurve, kein Kippen
     keep.style.transformOrigin='0 0';
@@ -289,22 +272,19 @@ window.addEventListener('popstate',()=>route({nohist:true}));
 vToc.hidden=true;
 homeScreen('cw',0,false); homeScreen('dx',0,false); sizePick(true);
 if(location.hash) route({nohist:true, instant:true});
-// ---------- Handy: Display oben festhalten, Tasten einblendbar, Taste im Text antippbar ----------
-(function(){
-  const mq=window.matchMedia('(max-width:620px), (max-height:520px)');
-  const upd=()=>{ APP.classList.toggle('phone',mq.matches); document.documentElement.style.setProperty('--barh',document.querySelector('.bar').offsetHeight+'px'); };
-  window.addEventListener('resize',upd);
-  mq.addEventListener ? mq.addEventListener('change',upd) : mq.addListener(upd); upd();
-  document.querySelectorAll('.keytog').forEach(b=>b.addEventListener('click',()=>{
-    const open=APP.classList.toggle('keys-open');
-    document.querySelectorAll('.keytog').forEach(x=>x.textContent=open?'Tasten ausblenden':'Tasten einblenden');
-  }));
-  $('right').addEventListener('click',e=>{
-    if(!APP.classList.contains('phone')||mode!=='g') return;
-    const c=e.target.closest('.stat .chip.now, .chips .chip.now'); if(!c) return;
-    const k=STAGE.querySelector('.cwrap:not([hidden]) .calc .k.hit'); if(k) k.click();
-  });
-})();
+// ---------- Kleine Bildschirme: ganze Ansicht verkleinern (Layout wie am PC), Zoomen per Fingergeste ----------
+const FIT_W=760; let SCALE=1;
+function fit(){
+  const w=document.documentElement.clientWidth, h=window.innerHeight;
+  // schmal (Handy hochkant): auf 760 px Layoutbreite verkleinern; niedrig (Handy quer): so weit, dass ~800 px Höhe passen
+  SCALE=Math.min(1, w/FIT_W, h<600 ? h/800 : 1);
+  if(SCALE<1){ APP.classList.add('scaled'); APP.style.width=(w/SCALE)+'px'; APP.style.transformOrigin='top left'; APP.style.transform='scale('+SCALE+')'; }
+  else { APP.classList.remove('scaled'); APP.style.width=''; APP.style.transform=''; }
+  document.body.style.height = SCALE!==1 ? (APP.offsetHeight*SCALE)+'px' : '';
+  if(mode==='pick') sizePick(true);
+}
+new ResizeObserver(()=>{ if(SCALE!==1) document.body.style.height=(APP.offsetHeight*SCALE)+'px'; }).observe(APP);
+window.addEventListener('resize',fit); fit();
 })();
 </script>
 </body></html>
