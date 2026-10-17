@@ -21,7 +21,7 @@ def blocks(css):
         i = k + 1
     return out
 
-TITLE = {'kombi':'Kombinatorik (nPr und nCr)', 'mat':'Matrizenrechnung', 'stufe':'Zeilenstufenform (Ref/Rref)'}
+TITLE = {'kombi':'Kombinatorik (nPr/nCr)', 'mat':'Matrizenrechnung', 'stufe':'Zeilenstufenform (Ref/Rref)'}
 norm = lambda s: re.sub(r'\s+', ' ', s).strip()
 
 def rules_flat(css):

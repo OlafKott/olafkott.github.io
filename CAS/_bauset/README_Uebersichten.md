@@ -26,7 +26,7 @@ Im `<script>` stehen Module, eines pro Anleitung und eines pro Übung:
 - `css` enthält nur Regeln, die gegenüber der Grundlagen-Anleitung desselben Modells neu oder anders sind. Jeder Selektor beginnt mit `[data-g="<id>"]`.
 - `UEB["<id>"]={title, css, html, init:function(root){…}}`. Die Übung läuft im Shadow-DOM. `html` ist das `<div class="wrap">` der Übung. In `init` steht das Skript wörtlich, mit `document.` → `root.` und ohne `location.hash`. Im `css` wird `:root` zu `:host`, und die Regeln für `.top` und `.home` entfallen.
 - Module entstehen per `python3 mkmod.py <id> …` aus den Einzelseiten in `CAS/fx991/` (Themenliste mit Dateinamen steht in `mkmod.py`).
-- IDs: CW = `grund, stat, funk, gl, wt, abl, int, lgs, stufe, mat, kombi, binom`. X (nur HFH-Datei) = `dx_` + ID. Titel-Überschreibungen in `TITLE` in `mkmod.py` (kombi „Kombinatorik (nPr und nCr)“, mat „Matrizenrechnung“, stufe).
+- IDs: CW = `grund, stat, funk, gl, wt, abl, int, lgs, stufe, mat, kombi, binom`. X (nur HFH-Datei) = `dx_` + ID. Titel-Überschreibungen in `TITLE` in `mkmod.py` (kombi „Kombinatorik (nPr/nCr)“, mat „Matrizenrechnung“, stufe).
 - Themenliste und Reihenfolge: `topics.py` im Bauset. `app` ist die Nummer der App, die im Display markiert wird, wenn man über das Thema fährt.
   - CW: 0 Berechnung, 1 Statistik, 2 Verteilung, 4 Wertetab., 5 Gleichung
   - X: 0 Berechnungen, 3 Matrizen, 5 Statistik, 6 Verteilungen, 8 Wertetabelle, 9 Gleichungen
@@ -43,5 +43,5 @@ Im `<script>` stehen Module, eines pro Anleitung und eines pro Übung:
 6. Alles auf GitHub committen und pushen (Einzelseiten, PDFs, beide Übersichten, Bauset).
 
 ## Stand (17.10.2026)
-- 12 Themen, bei CW und X jeweils mit Anleitung, Arbeitsblatt und Übung: Grundlagen, Lage- und Streuungsmaße, Funktionswerte, Gleichungen, Wertetabellen, Ableitung, Integrale, LGS, Zeilenstufenform (Ref/Rref, direkt hinter LGS), Matrizenrechnung, Kombinatorik (nPr und nCr), Binomialverteilung.
+- 12 Themen, bei CW und X jeweils mit Anleitung, Arbeitsblatt und Übung: Grundlagen, Lage- und Streuungsmaße, Funktionswerte, Gleichungen, Wertetabellen, Ableitung, Integrale, LGS, Zeilenstufenform (Ref/Rref, direkt hinter LGS), Matrizenrechnung, Kombinatorik (nPr/nCr), Binomialverteilung.
 - Buttonzeile Zurück / Überspringen / Weiter mit fester Höhe in beiden Übersichten (17.10.2026).

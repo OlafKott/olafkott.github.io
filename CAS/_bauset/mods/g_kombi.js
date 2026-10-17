@@ -1,5 +1,5 @@
 GUIDES["kombi"]={
- title:"Kombinatorik (nPr und nCr)",
+ title:"Kombinatorik (nPr/nCr)",
  css:String.raw`[data-g="kombi"] .panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
 [data-g="kombi"] #next{ margin-left:auto; }
 @media (max-width:380px){ [data-g="kombi"] .calc{ transform:scale(.92); transform-origin:top center; } }

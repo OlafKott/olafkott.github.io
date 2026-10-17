@@ -1,5 +1,5 @@
 GUIDES["dx_kombi"]={
- title:"Kombinatorik (nPr und nCr)",
+ title:"Kombinatorik (nPr/nCr)",
  css:String.raw`[data-g="dx_kombi"] .kop{ font-weight:bold; margin:0 1px; }
 [data-g="dx_kombi"] .x10{ font-size:16px; margin-left:2px; }
 [data-g="dx_kombi"] .x10 sup{ font-size:11px; }
