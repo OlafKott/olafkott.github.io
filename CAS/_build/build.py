@@ -18,6 +18,7 @@ TOPICS = [
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', 'Funktion zeichnen, Fenster, Wertetabelle', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
+    ('stufe', 'Stufenform', 'Stufenform', 'Stufenform', 'Zeilenstufenform (ref / rref)', 'LGS mit Matrizen lösen', 'Arbeitsblatt_CAS_Stufenform.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
@@ -195,7 +196,7 @@ BLOCKS = [
 BLOCK_OF = {
     'grund': None,
     'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
-    'gl': 'alg', 'lgs': 'alg',
+    'gl': 'alg', 'lgs': 'alg', 'stufe': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
 }
 # Zwischenüberschriften im Block: steht vor dem ersten Thema eines Abschnitts (Reihenfolge = TOPICS)
