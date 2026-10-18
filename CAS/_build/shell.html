@@ -268,7 +268,7 @@ function uebung(id){
 // ---------------------------------------------------------------
 //  Rechner-Display in Gliederung / Übung
 // ---------------------------------------------------------------
-const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], stufe:['r',3], abl:['a',3], graph:['e',3] , int:['a',4], fs:['s',10] };
+const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], stufe:['r',3], abl:['a',3], graph:['e',3] , int:['a',4], fs:['s',10], abschn:['g',6] };
 function previewOf(t){
   const g=G[t]; let p=PREV[t];
   if(!p){ const tr=g.ORDER[0], S=g.TRACKS[tr].steps; let s=0; S.forEach((x,i)=>{ if(!x.ab && x.k.length) s=i; }); p=[tr,s]; }

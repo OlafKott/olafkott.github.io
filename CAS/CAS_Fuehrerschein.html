@@ -915,6 +915,167 @@ button{ font-family:inherit; }
 [data-g="wt"] .vgl th{background:#eef0f3;}
 @media (max-width:380px){[data-g="wt"] .calc{transform:scale(.92); transform-origin:top center;}}
 [data-g="wt"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- abschn --- */
+[data-g="abschn"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="abschn"] *, [data-g="abschn"]{box-sizing:border-box;}
+[data-g="abschn"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="abschn"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="abschn"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="abschn"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="abschn"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="abschn"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="abschn"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="abschn"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="abschn"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="abschn"] .brand b{color:#fff; margin-left:6px;}
+[data-g="abschn"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="abschn"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="abschn"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="abschn"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="abschn"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="abschn"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="abschn"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="abschn"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="abschn"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="abschn"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="abschn"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="abschn"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="abschn"] .k:focus{outline:none;}
+[data-g="abschn"] .k:active{transform:scale(.95);}
+[data-g="abschn"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="abschn"] .k.ctrl{background:#D93A2B;}
+[data-g="abschn"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="abschn"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="abschn"] .pad .k.hit{position:absolute;}
+[data-g="abschn"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="abschn"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_abschn .35s;}
+[data-g="abschn"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_abschn{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="abschn"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="abschn"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="abschn"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="abschn"] .let9 .k{height:20px; font-size:10px;}
+[data-g="abschn"] .span2{grid-column:span 2;}
+[data-g="abschn"] .span3{grid-column:span 3;}
+[data-g="abschn"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="abschn"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="abschn"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="abschn"] .tb .tab.off{background:#eef1f5; color:#777;}
+[data-g="abschn"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="abschn"] .tb .sp{flex:1;}
+[data-g="abschn"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="abschn"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="abschn"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden;}
+[data-g="abschn"] .calcapp > *{flex-shrink:0;}
+[data-g="abschn"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="abschn"] .calcapp .ln b{font-weight:normal; margin-left:auto;}
+[data-g="abschn"] .calcapp .cur{border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center;}
+[data-g="abschn"] .caret{animation:blink_abschn 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_abschn{ 50%{opacity:0} }
+[data-g="abschn"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="abschn"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="abschn"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="abschn"] .dlg{position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
+[data-g="abschn"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
+[data-g="abschn"] .dlg .ff{display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center;}
+[data-g="abschn"] .dlg .lb{text-align:right;}
+[data-g="abschn"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px;}
+[data-g="abschn"] .dlg .ct.fo{outline:2px solid #3b78c2;}
+[data-g="abschn"] .dlg .bt{display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px;}
+[data-g="abschn"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px;}
+[data-g="abschn"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="abschn"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="abschn"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="abschn"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="abschn"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="abschn"] .hs .col{flex:1;}
+[data-g="abschn"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="abschn"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="abschn"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="abschn"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="abschn"] .hs .it.dim{color:#6f757d;}
+[data-g="abschn"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="abschn"] .hs .it.sel{background:#3b78c2; color:#fff;}
+[data-g="abschn"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_abschn 1.2s ease-in-out infinite;}
+[data-g="abschn"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="abschn"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_abschn 1.2s ease-in-out infinite;}
+@keyframes pulse_abschn{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="abschn"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="abschn"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="abschn"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="abschn"] .hs .icons svg{width:20px; height:20px;}
+[data-g="abschn"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="abschn"] .pwe{position:absolute; left:0; right:0; top:16px; background:#fff; border-bottom:1px solid #9aa5b3; display:flex; align-items:center; padding:2px 5px; font-size:11px; z-index:2;}
+[data-g="abschn"] .pwe .fn{margin-right:2px; white-space:nowrap;}
+[data-g="abschn"] .pwe .chk{display:inline-flex; width:11px; height:11px; background:#1f4fb5; color:#fff; font-size:9px; line-height:11px; justify-content:center; margin-right:4px; flex:0 0 11px;}
+[data-g="abschn"] .pwb{display:inline-flex; align-items:center;}
+[data-g="abschn"] .pwb .br{font-size:22px; line-height:1; transform:scaleY(1.15); margin:0 2px 0 1px; font-weight:200;}
+[data-g="abschn"] .pwb .br.b3{font-size:32px; transform:scaleY(1.2);}
+[data-g="abschn"] .pwb .rows{display:grid; grid-template-columns:auto auto; column-gap:3px; row-gap:1px;}
+[data-g="abschn"] .pwb .rows span{min-width:9px; padding:0 2px; border-radius:2px; white-space:nowrap;}
+[data-g="abschn"] .pwb .rows u{text-decoration:none; color:#999;}
+[data-g="abschn"] .pwb .rows em{font-style:normal; margin-left:1px;}
+[data-g="abschn"] .pwb .rows span.on{outline:1px solid #3b78c2; background:#eef4fc;}
+[data-g="abschn"] .pal{position:absolute; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); z-index:5; padding:3px;}
+[data-g="abschn"] .pal .g{display:grid; gap:2px;}
+[data-g="abschn"] .pal .c{background:#fff; border:1px solid #c3cad4; height:21px; display:flex; align-items:center; justify-content:center; font-size:9.5px; white-space:nowrap;}
+[data-g="abschn"] .pal .c.sel{background:#3b78c2; color:#fff; border-color:#3b78c2;}
+[data-g="abschn"] .pal .c .pi{font-size:15px; font-weight:200; margin-right:1px;}
+[data-g="abschn"] .pal .c .pr{display:flex; flex-direction:column; font-size:6.5px; line-height:1.05;}
+[data-g="abschn"] .pal .cap{font-size:9px; text-align:center; padding:2px 0 0; color:#333;}
+[data-g="abschn"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="abschn"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="abschn"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="abschn"] .prog i.done{background:#9aa3b0;}
+[data-g="abschn"] .prog i.now{background:var(--lf);}
+[data-g="abschn"] .prog i.abp{background:#bfe3c3;}
+[data-g="abschn"] .prog i.abp.done{background:#7cbf84;}
+[data-g="abschn"] .prog i.abp.now{background:var(--ab);}
+[data-g="abschn"] .nr{font-size:13px; color:var(--mute);}
+[data-g="abschn"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="abschn"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="abschn"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="abschn"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="abschn"] .chip.ctrl{background:#D93A2B;}
+[data-g="abschn"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="abschn"] .chip.done{opacity:.35;}
+[data-g="abschn"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="abschn"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="abschn"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="abschn"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="abschn"] .note b{color:#8a5a00;}
+[data-g="abschn"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="abschn"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="abschn"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="abschn"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="abschn"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="abschn"] .ab .abt span{font-size:22px;}
+[data-g="abschn"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="abschn"] .ab li{margin-bottom:3px;}
+[data-g="abschn"] .ab p{font-size:14.5px;}
+[data-g="abschn"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="abschn"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="abschn"] .task .term{font-family:Cambria,Georgia,serif; font-size:21px; line-height:1.4; color:var(--ink);}
+[data-g="abschn"] .pwt{display:inline-flex; align-items:center; vertical-align:middle;}
+[data-g="abschn"] .pwt .br{font-size:2.1em; line-height:1; font-weight:200; margin:0 3px 0 4px; transform:scaleY(1.1);}
+[data-g="abschn"] .pwt .br.b3{font-size:3em; transform:scaleY(1.15);}
+[data-g="abschn"] .pwt table{border-collapse:collapse; font-size:.86em;}
+[data-g="abschn"] .pwt td{padding:0 4px; white-space:nowrap; text-align:left;}
+[data-g="abschn"] .pwt td.f{padding-right:12px;}
+[data-g="abschn"] .pwt td.w{color:var(--mute); font-size:.85em; padding-right:3px;}
+[data-g="abschn"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="abschn"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="abschn"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="abschn"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="abschn"] #next{margin-left:auto;}
+[data-g="abschn"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="abschn"] .vgl th, [data-g="abschn"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top;}
+[data-g="abschn"] .vgl th{background:#eef0f3;}
+[data-g="abschn"] .pkt{display:inline-block; width:11px; height:11px; border-radius:50%; border:2px solid #1d1d1f; vertical-align:middle; margin:0 2px;}
+[data-g="abschn"] .pkt.v{background:#1d1d1f;}
+[data-g="abschn"] .pkt.o{background:#fff;}
+@media (max-width:380px){[data-g="abschn"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="abschn"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 /* --- gl --- */
 [data-g="gl"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
 [data-g="gl"] *, [data-g="gl"]{box-sizing:border-box;}
@@ -6199,6 +6360,646 @@ function zeigen(){
 }
 $('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
 $('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+ }
+};
+
+/* ===== Anleitung: abschn ===== */
+GUIDES["abschn"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+const DOC='stückw';
+
+// ---------- Funktionen der Tour ----------
+const FUN={
+  f1:{col:'#1f4fb5', P:[{f:x=>x*x, c:x=>x<1},{f:x=>-x+3, c:x=>x>=1}]},
+  f2:{col:'#c8102e', P:[{f:x=>x+3, c:x=>x<-1},{f:x=>2, c:x=>x>=-1&&x<2},{f:x=>-2*x+6, c:x=>x>=2}]}
+};
+const fval=(n,x)=>{ const F=FUN[n]; if(!F) return NaN; for(const p of F.P) if(p.c(x)) return p.f(x); return NaN; };
+const fmt3=v=>{ if(Math.abs(v)<5e-7) return '0'; return String(Number(v.toPrecision(3))).replace('-','−'); };
+
+// Vorlagen-Palette (⊞): 3 Zeilen à 8 Felder
+const TPL=['□/□','□<sup>□</sup>','√□','<sup>n</sup>√□','e<sup>□</sup>','log<sub>□</sub>','PW2','PWN','SYS2','SYSN','|□|','°\'"','[2×2]','[1×2]','[2×1]','[m×n]','Σ','Π','d/dx','d²/dx²','dⁿ/dxⁿ','∫<sub>a</sub><sup>b</sup>','∫','lim'];
+const TPLN=['Bruch','Exponent','Quadratwurzel','n-te Wurzel','e-Exponent','Logarithmus','Stückweise (2 Teile)','Stückweise (n Teile)','System (2 Gl.)','System (n Gl.)','Absolutwert','Grad','Matrix 2×2','Matrix 1×2','Matrix 2×1','Matrix m×n','Summe','Produkt','1. Ableitung','2. Ableitung','n-te Ableitung','Best. Integral','Unbest. Integral','Limes'];
+const REL=['=','≠','&lt;','≤','&gt;','≥'];
+const RELT=['=','≠','<','≤','>','≥'];
+
+// ---------- Zustand ----------
+const GM=["1: Aktionen","2: Ansicht","3: Graph-Eingabe/Bearbeitung","4: Fenster/Zoom","5: Spur","6: Graph analysieren","7: Tabelle","8: Geometrie","9: Einstellungen"];
+const FZ=["1: Fenstereinstellungen","2: Zoom – Box","3: Zoom – Vergrößern","4: Zoom – Verkleinern","5: Zoom – Standard","6: Zoom – Quadrant 1","7: Zoom – Benutzer","8: Zoom – Trig","9: Zoom – Daten"];
+const SUB={"4":FZ};
+const TM=["1: Aktionen","2: Wertetabelle"];
+const TW=["1: Spalte löschen","2: Wählen","3: Ausdruck bearbeiten","4: Tabelle entfernen","5: Funktionseinstellungen bearbeiten"];
+const DLGL=["XMin","XMax","XSkalierung","YMin","YMax","YSkalierung"];
+const CH={'neg':'−','-':'−','*':'·','x2':'²','.':','};
+function S0(){ return {pg:1, pages:['1.1'], win:{x0:-10,x1:10,y0:-6.67,y1:6.67}, fs:[], ent:{n:'f1',P:null,pi:0,pt:'e'}, tpl:null, rel:null, dn:null, menu:null, dlg:null, ctrl:false, app:null, lines:[], cin:'', split:false, foc:'g', ts:0, tw:1, tdlg:null}; }
+function ins(S,ch){ const E=S.ent; if(!E||!E.P) return; E.P[E.pi][E.pt]+=ch; }
+function sim(keys){
+  const S=S0();
+  for(const k of keys){
+    if(S.app!==null){ if(k==='1'){ S.app=null; S.pages.push('1.2'); S.pg=2; } else if(k==='esc') S.app=null; continue; }
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:(S.menu[0].t?(k==='2'?TW:[]):SUB[k])||[],sel:0,d:k}); continue; }
+      const a=S.menu[1].d, tm=S.menu[0].t; S.menu=null;
+      if(tm){ if(a==='2'&&k==='5') S.tdlg={v:[fmt3(S.ts),fmt3(S.tw)],fo:0,fresh:true}; continue; }
+      if(a==='4'&&k==='1'){ const w=S.win; S.dlg={v:[fmt3(w.x0),fmt3(w.x1),'Auto',fmt3(w.y0),fmt3(w.y1),'Auto'], fo:0, fresh:true}; }
+      continue;
+    }
+    if(S.dlg){
+      const D=S.dlg;
+      if(k==='tab'){ D.fo=(D.fo+1)%6; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(s.replace('−','-')); S.win={x0:p(D.v[0]),x1:p(D.v[1]),y0:p(D.v[3]),y1:p(D.v[4])}; S.dlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.fo]=''; D.fresh=false; } D.v[D.fo]+=ch; continue;
+    }
+    if(S.tdlg){
+      const D=S.tdlg;
+      if(k==='tab'){ D.fo=1-D.fo; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(s.replace('−','-').replace(',','.')); S.ts=p(D.v[0]); S.tw=p(D.v[1]); S.tdlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.fo]=''; D.fresh=false; } D.v[D.fo]+=ch; continue;
+    }
+    if(S.tpl){
+      const T=S.tpl;
+      if(k==='right') T.sel=Math.min(23,T.sel+1); else if(k==='left') T.sel=Math.max(0,T.sel-1);
+      else if(k==='down') T.sel=Math.min(23,T.sel+8); else if(k==='up') T.sel=Math.max(0,T.sel-8);
+      else if(k==='esc') S.tpl=null;
+      else if(k==='enter'||k==='click'){ S.tpl=null; if(T.sel===6) S.ent.P=[{e:'',c:''},{e:'',c:''}]; else if(T.sel===7) S.dn={v:''}; }
+      continue;
+    }
+    if(S.dn){ if(k==='enter'){ const n=Math.max(1,parseInt(S.dn.v)||3); S.ent.P=Array.from({length:n},()=>({e:'',c:''})); S.dn=null; } else if(/^[0-9]$/.test(k)) S.dn.v+=k; continue; }
+    if(S.rel){
+      if(k==='right') S.rel.sel=Math.min(5,S.rel.sel+1); else if(k==='left') S.rel.sel=Math.max(0,S.rel.sel-1);
+      else if(k==='esc') S.rel=null;
+      else if(k==='enter'||k==='click'){ ins(S,RELT[S.rel.sel]); S.rel=null; }
+      continue;
+    }
+    if(S.ctrl){ S.ctrl=false;
+      if(k==='='){ if(S.ent||S.pg===2) S.rel={sel:0}; }
+      else if(k==='doc') S.app=0;
+      else if(k==='t'){ S.split=!S.split; S.foc=S.split?'t':'g'; }
+      else if(k==='left'){ if(S.pg>1) S.pg--; }
+      else if(k==='right'){ if(S.pg<S.pages.length) S.pg++; }
+      continue; }
+    if(k==='ctrl'){ S.ctrl=true; continue; }
+    if(S.pg===2){
+      if(k==='enter'){ const m=S.cin.match(/^(f\d)\((.+)\)$/); let r='Fehler';
+        if(m){ const x=parseFloat(m[2].replace('−','-').replace(',','.')); r=fmt3(fval(m[1],x)); }
+        S.lines.push([S.cin,r]); S.cin=''; continue; }
+      if(k==='del'){ S.cin=S.cin.slice(0,-1); continue; }
+      S.cin+=CH[k]||k; continue;
+    }
+    if(S.ent){
+      if(k==='tmpl'){ S.tpl={sel:0}; continue; }
+      if(k==='enter'){ S.fs.push(S.ent.n); S.ent=null; continue; }
+      if(k==='tab'){ const E=S.ent; if(!E.P) continue; if(E.pt==='e') E.pt='c'; else if(E.pi<E.P.length-1){ E.pt='e'; E.pi++; } continue; }
+      ins(S,CH[k]||k); continue;
+    }
+    if(k==='tab'){ S.ent={n:'f'+(S.fs.length+1),P:null,pi:0,pt:'e'}; continue; }
+    if(k==='menu'){ S.menu=(S.split&&S.foc==='t')?[{items:TM,sel:0,t:1}]:[{items:GM,sel:0}]; continue; }
+  }
+  return S;
+}
+
+// ---------- Bildschirm ----------
+const esc=s=>s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function pwBlock(P,cur){
+  const rows=P.map((p,i)=>['e','c'].map(t=>{ const on=cur&&cur.pi===i&&cur.pt===t; const v=esc(p[t]);
+    return `<span class="${on?'on':''}">${v||(on?'':'<u>□</u>')}${on?'<span class="caret">|</span>':''}${t==='e'?'<em>,</em>':''}</span>`; }).join('')).join('');
+  return `<span class="pwb"><span class="br ${P.length>2?'b3':''}">{</span><span class="rows">${rows}</span></span>`;
+}
+function gScreen(S){
+  const W=S.split?139:280, H=194, w=S.win, X=x=>(x-w.x0)/(w.x1-w.x0)*W, Y=y=>(w.y1-y)/(w.y1-w.y0)*H;
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:16px;overflow:hidden" font-family="Arial,Helvetica,sans-serif">`;
+  const ax='#555';
+  if(w.y0<0&&w.y1>0){ const y=Y(0); s+=`<line x1="0" y1="${y}" x2="${W-5}" y2="${y}" stroke="${ax}" stroke-width="1"/><path d="M${W} ${y} l-6 -3 v6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.x0);t<=Math.floor(w.x1);t++) if(t) s+=`<line x1="${X(t)}" y1="${y-2}" x2="${X(t)}" y2="${y+2}" stroke="${ax}"/>`;
+    s+=`<text x="2" y="${y-3}" font-size="8" fill="#777">${fmt3(w.x0)}</text><text x="${W-2}" y="${y+10}" font-size="8" fill="#777" text-anchor="end">${fmt3(w.x1)}</text>`; }
+  if(w.x0<0&&w.x1>0){ const x=X(0); s+=`<line x1="${x}" y1="${H}" x2="${x}" y2="5" stroke="${ax}" stroke-width="1"/><path d="M${x} 0 l-3 6 h6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}"/>`;
+    s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
+  S.fs.forEach((n,j)=>{
+    const F=FUN[n]; let d='';
+    F.P.forEach(p=>{ let pen=false;
+      for(let i=0;i<=560;i++){ const x=w.x0+(w.x1-w.x0)*i/560; if(!p.c(x)){ pen=false; continue; }
+        const py=Y(p.f(x)); if(py>-40&&py<H+40){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1)+' '; pen=true; } else pen=false; } });
+    s+=`<path d="${d}" fill="none" stroke="${F.col}" stroke-width="1.7"/>`;
+    s+=`<text x="${W-4}" y="${(S.ent?44:13)+j*12}" font-size="9.5" fill="${F.col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${n}(x)</text>`;
+  });
+  (S.marks||[]).forEach(m=>{ s+=`<circle cx="${X(m[0])}" cy="${Y(m[1])}" r="3.6" fill="${m[2]?FUN.f1.col:'#fff'}" stroke="${FUN.f1.col}" stroke-width="1.6"/>`; });
+  s+='</svg>';
+  let h=topbar(S.pages,S.pages[S.pg-1],DOC)+s;
+  if(S.split) h+=tabPane(S);
+  if(S.ent){ const E=S.ent, col=(FUN[E.n]||FUN.f1).col;
+    h+=`<div class="pwe" style="min-height:${E.P?(E.P.length>2?44:32):21}px"><span class="chk">✓</span><span class="fn" style="color:${col}">${E.n}(x)=</span>`+
+      (E.P?pwBlock(E.P,E):'<span class="caret">|</span>')+'</div>'; }
+  if(S.tpl) h+=palT(S.tpl.sel);
+  if(S.rel) h+=palR(S.rel.sel);
+  if(S.dn) h+=`<div class="dlg" style="top:52px"><div class="tt">Stückweise definierte Funktion erstellen</div><div class="ff" style="grid-template-columns:auto 1fr"><span class="lb" style="white-space:nowrap">Anzahl der Funktionsstücke:</span><span class="ct fo">${S.dn.v}<span class="caret">|</span></span></div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>`;
+  if(S.dlg){ const D=S.dlg; h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+DLGL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.fo?'fo':''}">${D.v[i]}${i===D.fo&&!D.fresh?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
+  if(S.tdlg){ const D=S.tdlg, f=i=>`<span class="ct ${D.fo===i?'fo':''}">${D.v[i]}${D.fo===i&&!D.fresh?'<span class="caret">|</span>':''}</span>`;
+    h+=`<div class="dlg"><div class="tt">Funktionseinstellungen</div><div class="ff"><span class="lb">Tabellenanfang:</span>${f(0)}<span class="lb">Tabellenschritt:</span>${f(1)}<span class="lb">Unabhängig:</span><span class="ct">Auto ▾</span><span class="lb">Abhängig:</span><span class="ct">Auto ▾</span></div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>`; }
+  if(S.menu) h+=menus(S.menu);
+  return h;
+}
+function tabPane(S){
+  const td='border:1px solid #c9ced6;height:15px;padding:0 3px;font-size:10px;white-space:nowrap;overflow:hidden';
+  const hd='background:#eef1f5;font-weight:bold';
+  let h=`<div style="position:absolute;left:139px;right:0;top:16px;bottom:0;background:#fff;border-left:1px solid #aab3bf;overflow:hidden;${S.foc==='t'?'outline:2px solid #3b78c2;outline-offset:-2px;':''}"><table style="border-collapse:collapse;table-layout:fixed;width:141px">`;
+  h+=`<tr><td style="${td};${hd};width:16px"></td><td style="${td};${hd}">x</td>`+S.fs.map(n=>`<td style="${td};${hd};color:${FUN[n].col}">${n}(x):=</td>`).join('')+'</tr>';
+  h+=`<tr><td style="${td};background:#eef1f5;color:#666;font-size:8px;text-align:center">▪</td><td style="${td}"></td>`+S.fs.map(()=>`<td style="${td}">{…</td>`).join('')+'</tr>';
+  for(let r=0;r<10;r++){ const xv=Math.round((S.ts+r*S.tw)*1e9)/1e9;
+    h+=`<tr><td style="${td};background:#eef1f5;color:#666;font-size:8px;text-align:center">${r+1}</td><td style="${td}">${fmt3(xv).replace('−','-')}</td>`+S.fs.map(n=>`<td style="${td}">${fmt3(fval(n,xv)).replace('−','-')}</td>`).join('')+'</tr>'; }
+  return h+'</table></div>';
+}
+function palT(sel){
+  const cell=(t,i)=>{ let c=t;
+    if(t==='PW2') c='<span class="pi">{</span><span class="pr"><span>□, □</span><span>□, □</span></span>';
+    if(t==='PWN') c='<span class="pi">{</span><span class="pr"><span>□, □</span><span>⋮</span></span>';
+    if(t==='SYS2') c='<span class="pi">{</span><span class="pr"><span>□</span><span>□</span></span>';
+    if(t==='SYSN') c='<span class="pi">{</span><span class="pr"><span>□</span><span>⋮</span></span>';
+    return `<div class="c ${i===sel?'sel':''}">${c}</div>`; };
+  return `<div class="pal" style="left:8px;top:40px;width:264px"><div class="g" style="grid-template-columns:repeat(8,1fr)">${TPL.map(cell).join('')}</div><div class="cap">${TPLN[sel]}</div></div>`;
+}
+function palR(sel){
+  return `<div class="pal" style="left:60px;top:72px;width:160px"><div class="g" style="grid-template-columns:repeat(6,1fr)">${REL.map((t,i)=>`<div class="c ${i===sel?'sel':''}" style="font-size:13px">${t}</div>`).join('')}</div></div>`;
+}
+function cScreen(S){
+  let h=topbar(S.pages,'1.2',DOC)+'<div class="calcapp">'+S.lines.map(l=>`<div class="ln"><span>${esc(l[0])}</span><b>${l[1]}</b></div>`).join('')+`<div class="cur">${esc(S.cin)}<span class="caret">|</span></div></div>`;
+  return h;
+}
+function scr(S){
+  if(S.app!==null) return appList(S.pages,S.pages[S.pg-1],S.app,DOC);
+  if(S.pg===2) return cScreen(S);
+  return gScreen(S);
+}
+const GS=(pre,keys)=>i=>scr(sim(pre.concat(keys.slice(0,i))));
+const gAfter=keys=>()=>scr(sim(keys));
+
+// ---------- Tastenfolgen ----------
+const R=n=>Array(n).fill('right');
+const kNew=["1","2"];
+const kT=["tmpl"].concat(R(6),["enter"]);
+const kA1=["x","x2","tab","x","ctrl","="].concat(R(2),["enter","1","tab"]);
+const kA2=["neg","x","+","3","tab","x","ctrl","="].concat(R(5),["enter","1","enter"]);
+const kWin=["menu","4","1","neg","2","tab","4","tab","tab","neg","2","tab","5","enter"];
+const kTab=["ctrl","t"];
+const kTS=["menu","2","5","neg","1","tab","0",".","5","enter"];
+const kTH=["ctrl","t"];
+const kPage=["ctrl","doc","1"];
+const kV1=["f","2","(","neg","3",")","enter"];
+const kV2=["f","2","(","neg","1",")","enter"];
+const kV3=["f","2","(","5",")","enter"];
+const kN=["tab","tmpl"].concat(R(7),["enter","3","enter"]);
+const kB1=["x","+","3","tab","x","ctrl","="].concat(R(2),["enter","neg","1","tab"]);
+const kB2=["2","tab","neg","1","ctrl","="].concat(R(3),["enter","x","ctrl","="],R(2),["enter","2","tab"]);
+const kB3=["neg","2","x","+","6","tab","x","ctrl","="].concat(R(5),["enter","2","enter"]);
+const p1=kT, p2=p1.concat(kA1), p3=p2.concat(kA2), p4=p3.concat(kWin), p5=p4.concat(kTab), p6=p5.concat(kTS), p7=p6.concat(kTH);
+const r2=p7.concat(kN), r3=r2.concat(kB1), r4=r3.concat(kB2), r5=r4.concat(kB3);
+const q1=r5.concat(kPage), q2=q1.concat(kV1), q3=q2.concat(kV2), q4=q3.concat(kV3);
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const PW=(name,rows)=>`<i>${name}</i>(<i>x</i>) = <span class="pwt"><span class="br ${rows.length>2?'b3':''}">{</span><table>${rows.map(r=>`<tr><td class="f">${r[0]}</td><td class="w">für</td><td>${r[1]}</td></tr>`).join('')}</table></span>`;
+const X='<i>x</i>';
+const F1=PW('f',[[X+'²',X+' &lt; 1'],['−'+X+' + 3',X+' ≥ 1']]);
+const F2=PW('g',[[X+' + 3',X+' &lt; −1'],['2','−1 ≤ '+X+' &lt; 2'],['−2'+X+' + 6',X+' ≥ 2']]);
+const PO='<span class="pkt o"></span>', PV='<span class="pkt v"></span>';
+
+const TRACKS={
+ g:{ name:"Funktion eingeben", start:()=>home(''), steps:[
+  {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:pick([appList(['1.1'],'1.1',0,DOC),scr(sim([]))]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Vorlage „Stückweise“ einfügen", a:"Zeichnen Sie "+F1, k:kT, p:GS([],kT),
+   d:"<p>Eine abschnittsweise definierte Funktion hat für jeden Abschnitt einen <b>eigenen Term</b> und eine <b>Bedingung</b> für <i>x</i>.</p><p>Die Taste <b>⊞</b> öffnet die Vorlagen. Gehen Sie mit <b>▶</b> zum Feld mit der geschweiften Klammer <b>{</b> und zwei Zeilen – unten steht <b>Stückweise (2 Teile)</b>. Dann <b>enter</b>.</p>",
+   n:"Die Position der Vorlage kann je nach Betriebssystem etwas anders sein. Achten Sie auf den Namen <b>Stückweise (2 Teile)</b> unter der Palette."},
+  {t:"1. Abschnitt: Term und Bedingung", a:F1, k:kA1, p:GS(p1,kA1),
+   d:"<p>In jeder Zeile stehen zwei Felder: <b>links der Term</b>, <b>rechts die Bedingung</b>. Mit <b>tab</b> springen Sie ins nächste Feld.</p><p>Term: <b>x</b> <b>x²</b>. Bedingung: <b>x</b>, dann <b>ctrl</b> <b>=</b> öffnet die Vergleichszeichen. Mit <b>▶</b> zu <b>&lt;</b>, <b>enter</b>, dann <b>1</b>.</p>",
+   n:"Die Zeichen &lt; ≤ &gt; ≥ gibt es nicht als eigene Taste – immer über <b>ctrl</b> <b>=</b>."},
+  {t:"2. Abschnitt und zeichnen", a:F1, k:kA2, p:GS(p2,kA2),
+   d:"<p>Term: <b>(−)</b> <b>x</b> <b>+</b> <b>3</b>, <b>tab</b>.</p><p>Bedingung: <b>x</b>, <b>ctrl</b> <b>=</b>, mit <b>▶</b> zu <b>≥</b>, <b>enter</b>, <b>1</b>.</p><p><b>enter</b> zeichnet den Graphen.</p>",
+   n:"Die Bedingungen dürfen sich nicht überschneiden. Jede Stelle <i>x</i> gehört zu genau einem Abschnitt – hier <i>x</i> = 1 zum zweiten (≥)."},
+  {t:"Fenster einstellen", a:"Fenster: −2 ≤ <i>x</i> ≤ 4 und −2 ≤ <i>y</i> ≤ 5", k:kWin, p:GS(p3,kWin),
+   d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>Zahl eintippen, mit <b>tab</b> ins nächste Feld. Die Skalierung (Auto) überspringen Sie mit einem zweiten <b>tab</b>. Zum Schluss <b>enter</b>.</p>",
+   n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
+  {t:"Graph lesen: Sprungstelle", k:[], s:()=>{ const S=sim(p4); S.marks=[[1,1,0],[1,2,1]]; return scr(S); },
+   d:"<p>Bei <i>x</i> = 1 wechselt der Term. Der Graph macht dort einen <b>Sprung</b>: Links endet die Parabel bei <i>y</i> = 1, rechts beginnt die Gerade bei <i>y</i> = 2.</p>"+
+     "<table class='vgl'><tr><th>Zeichen</th><th>Randpunkt</th><th>auf Papier</th></tr><tr><td>≤ oder ≥</td><td>gehört dazu</td><td>"+PV+" voller Punkt</td></tr><tr><td>&lt; oder &gt;</td><td>gehört nicht dazu</td><td>"+PO+" leerer Kreis</td></tr></table>"+
+     "<p>Hier: "+PO+" bei (1 | 1) und "+PV+" bei (1 | 2). Also ist <b><i>f</i>(1) = 2</b>.</p>",
+   n:"Die Markierungen ● und ○ sind hier nur zur Erklärung eingezeichnet. Auf dem Handheld sehen Sie sie nicht sicher – beim Skizzieren setzen Sie sie selbst."},
+  {t:"Wertetabelle einblenden", a:"Blenden Sie die Wertetabelle ein", k:kTab, p:GS(p4,kTab),
+   d:"<p><b>ctrl</b> + <b>T</b> teilt den Bildschirm: links der Graph, rechts die <b>Wertetabelle</b>.</p><p>Die Tabelle beginnt bei <i>x</i> = 0 mit der Schrittweite 1.</p>",
+   n:"Der blaue Rahmen zeigt: Die Tabelle ist aktiv. Mit <b>▲</b> und <b>▼</b> blättern Sie."},
+  {t:"Tabellenanfang und Schrittweite 0,5", a:"Tabellenanfang −1, Tabellenschritt 0,5", k:kTS, p:GS(p5,kTS),
+   d:"<p><b>menu ▸ 2: Wertetabelle ▸ 5: Funktionseinstellungen bearbeiten</b></p><p>Tabellenanfang: <b>(−) 1</b>, mit <b>tab</b> weiter, Tabellenschritt: <b>0.5</b>, dann <b>enter</b>.</p>"+
+     "<table class='vgl'><tr><th><i>x</i></th><td>−1</td><td>−0,5</td><td>0</td><td>0,5</td><td><b>1</b></td><td>1,5</td><td>2</td></tr><tr><th><i>f</i>(<i>x</i>)</th><td>1</td><td>0,25</td><td>0</td><td>0,25</td><td><b>2</b></td><td>1,5</td><td>1</td></tr></table>"+
+     "<p>Von 0,5 nach 1 springt der Wert von 0,25 auf 2. Bei <i>x</i> = 1 zeigt die Tabelle den Wert des Abschnitts, zu dem die Grenze gehört (≥).</p>",
+   n:"Komma = <b>Punkt</b>. Die Tabelle zeigt nur einzelne Punkte – den Sprung erkennen Sie, wenn Sie Tabelle und Graph zusammen ansehen."},
+  {t:"Tabelle ausblenden", k:kTH, p:GS(p6,kTH),
+   d:"<p>Noch einmal <b>ctrl</b> + <b>T</b> blendet die Tabelle wieder aus.</p><p>Weiter geht es mit einer Funktion aus <b>drei Abschnitten</b>.</p>"}
+ ]},
+ d:{ name:"Drei Abschnitte", start:gAfter(p7), steps:[
+  {t:"Vorlage „Stückweise (n Teile)“", a:"Zeichnen Sie zusätzlich "+F2, k:kN, p:GS(p7,kN),
+   d:"<p><b>tab</b> öffnet die Eingabezeile <b>f2(x)=</b>.</p><p><b>⊞</b>, mit <b>▶</b> zum Feld <b>Stückweise (n Teile)</b>, <b>enter</b>. Bei der Frage nach der Anzahl der Funktionsstücke: <b>3</b>, <b>enter</b>.</p>",
+   n:"Mit dieser Vorlage gehen auch 4 oder mehr Abschnitte."},
+  {t:"1. Abschnitt", a:F2, k:kB1, p:GS(r2,kB1),
+   d:"<p>Term: <b>x</b> <b>+</b> <b>3</b>, <b>tab</b>.</p><p>Bedingung: <b>x</b>, <b>ctrl</b> <b>=</b>, <b>&lt;</b> wählen, <b>(−)</b> <b>1</b>, <b>tab</b>.</p>"},
+  {t:"2. Abschnitt: Bedingung mit zwei Grenzen", a:F2, k:kB2, p:GS(r3,kB2),
+   d:"<p>Term: <b>2</b>, <b>tab</b>.</p><p>Bedingung: <b>(−)</b> <b>1</b>, <b>ctrl</b> <b>=</b>, <b>≤</b> wählen, <b>x</b>, <b>ctrl</b> <b>=</b>, <b>&lt;</b> wählen, <b>2</b>, <b>tab</b>.</p>",
+   n:"Der mittlere Abschnitt liegt <b>zwischen</b> zwei Grenzen: −1 ≤ <i>x</i> &lt; 2. So schreiben Sie es auch auf Papier."},
+  {t:"3. Abschnitt und zeichnen", a:F2, k:kB3, p:GS(r4,kB3),
+   d:"<p>Term: <b>(−)</b> <b>2</b> <b>x</b> <b>+</b> <b>6</b>, <b>tab</b>.</p><p>Bedingung: <b>x</b>, <b>ctrl</b> <b>=</b>, <b>≥</b> wählen, <b>2</b>, <b>enter</b>.</p>",
+   n:"Kontrolle: Bei <i>x</i> = −1 und bei <i>x</i> = 2 gehen die Teile ohne Sprung ineinander über. Dort brauchen Sie kein ● und kein ○ – Sie zeichnen einfach durch."},
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(r5), d:AB("Aufgabe 1 und 2",["Funktion <i>f</i> mit drei Abschnitten eingeben","Wertetabelle mit Schrittweite 0,5 ausfüllen","Graph zeichnen, Randpunkte mit ● oder ○"])}
+ ]},
+ w:{ name:"Funktionswerte", start:gAfter(r5), steps:[
+  {t:"Calculator-Seite einfügen", a:"Berechnen Sie <i>g</i>(−3), <i>g</i>(−1) und <i>g</i>(5)", k:kPage, p:pick([gAfter(r5)(),appList(['1.1'],'1.1',0,DOC),scr(sim(q1))]),
+   d:"<p><b>ctrl</b> <b>doc</b> fügt eine neue Seite ein. <b>1</b> = Calculator.</p><p>Die Funktion <i>g</i> heißt im CAS <b>f2</b>. Das CAS kennt sie auch auf der neuen Seite.</p>"},
+  {t:"Wert im 1. Abschnitt", a:"<i>g</i>(−3)", k:kV1, p:GS(q1,kV1),
+   d:"<p>Tippen Sie <b>f2(</b>, den <i>x</i>-Wert, <b>)</b> und <b>enter</b>.</p><p>−3 &lt; −1, also 1. Abschnitt: −3 + 3 = <b>0</b>.</p>", n:"<b>f2</b> mit der Buchstabentaste <b>F</b> und der Zahl <b>2</b>."},
+  {t:"Wert genau an der Grenze", a:"<i>g</i>(−1)", k:kV2, p:GS(q2,kV2),
+   d:"<p>An der Grenze entscheidet das Zeichen. −1 ≤ <i>x</i> steht beim 2. Abschnitt, also gilt er: <b>2</b>.</p>"},
+  {t:"Wert außerhalb von Fenster und Tabelle", a:"<i>g</i>(5)", k:kV3, p:GS(q3,kV3),
+   d:"<p>5 ≥ 2, also 3. Abschnitt: −2 · 5 + 6 = <b>−4</b>.</p><p>Diesen Punkt sehen Sie im Fenster nicht. Auf der Calculator-Seite können Sie <b>jeden</b> <i>x</i>-Wert berechnen.</p>"},
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(q4), d:AB("Aufgabe 3",["Funktionswerte von <i>f</i> außerhalb der Tabelle berechnen","Danach: Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["g","d","w"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=(S.ab||!S.k.length)?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: abschn ===== */
+UEB["abschn"]={
+ title:"Abschnittsweise definierte Funktionen",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.term{font-family:Cambria,Georgia,serif; font-size:21px; margin:4px 0 8px; display:flex; justify-content:center;}
+.pwt{display:inline-flex; align-items:center;}
+.pwt .br{font-size:2.3em; line-height:1; font-weight:200; margin:0 3px 0 5px; transform:scaleY(1.05);}
+.pwt .br.b3{font-size:3.3em; transform:scaleY(1.1);}
+.pwt table{border-collapse:collapse; font-size:.88em;}
+.pwt td{padding:0 4px; white-space:nowrap; line-height:1.35;}
+.pwt td.tf{padding-right:14px;}
+.pwt td.w{color:var(--mute); font-size:.85em; padding-right:3px;}
+.fen{text-align:center; font-family:Cambria,Georgia,serif; font-size:15.5px; color:var(--mute); margin:-2px 0 6px;}
+.plot svg{width:100%; height:auto; display:block; max-width:640px; margin:0 auto;}
+.plot .gl{stroke:#e1e4e9; stroke-width:1;}
+.plot .ax{stroke:#222; stroke-width:1.4;}
+.plot .ah{fill:#222;}
+.plot .al{font:italic 15px Cambria,Georgia,serif;}
+.plot .tl{font:11px system-ui,Arial,sans-serif; fill:#555;}
+.legende{text-align:center; font-size:13.5px; color:var(--mute); margin-top:4px;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:6px 8px; border-radius:8px; border-left:5px solid #1F4E99;}
+.f > label{font-family:Cambria,Georgia,serif; font-size:17px; min-width:70px;}
+.f input.ci{font:inherit; font-size:16px; width:96px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f input.bad{border-color:var(--no); background:#fff6f5;}
+.f .m{margin-left:auto; font-weight:bold; font-size:18px; text-align:center; min-width:20px;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{flex-basis:100%; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.f.sp{grid-column:1 / -1; border-left-color:#8E3BA8;}
+.f.sp > label{min-width:150px; font-size:16px;}
+.f .kl{font-size:15px; display:inline-flex; align-items:center; gap:5px; cursor:pointer; margin-right:8px;}
+.f .kl input{width:18px; height:18px;}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; color:#222;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+    <div class="fen" id="fen"></div>
+    <div class="plot" id="plot"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>3,25</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen.</div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickR=a=>a[R(0,a.length-1)];
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const deN=v=>{ let t=(Math.round(v*1e6)/1e6).toString(); return t.replace('-','−').replace('.',','); };
+const de2=v=>{ const x=r2(v); return (Number.isInteger(x)?String(x):x.toFixed(2)).replace('-','−').replace('.',','); };
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+function polyHTML(P){
+  const n=P.length-1; let h='', first=true;
+  P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+    const s=c<0?'−':(first?'':'+'), mm=deN(Math.abs(c)), co=(mm==='1'&&e>0)?'':mm;
+    const xx=e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+    h+=(first?s:` ${s} `)+co+xx; first=false; });
+  return first?'0':h;
+}
+function casPoly(P){ const n=P.length-1; let t=''; P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+  t+=(c<0?'-':(t?'+':''))+(Math.abs(c)===1&&e>0?'':String(Math.abs(c)))+(e===0?'':e===1?'x':'x^'+e); }); return t||'0'; }
+const OPS={'<':'&lt;','<=':'≤','>':'&gt;','>=':'≥'};
+const OPC={'<':'<','<=':'≤','>':'>','>=':'≥'};
+
+// ---------- zufällige Abschnitte ----------
+function piece(kind,b){
+  if(kind==='c') return [R(-3,5)];
+  if(kind==='l') return [pickR([-2,-1,-0.5,0.5,1,2]), R(-4,5)];
+  const a=pickR([-1,-0.5,0.5,1]), h=R(b-3,b+3), k=R(-3,4);
+  return [a,-2*a*h,a*h*h+k];
+}
+function fix(P,x,y){ const Q=P.slice(); Q[Q.length-1]+=y-ev(P,x); Q[Q.length-1]=Math.round(Q[Q.length-1]*100)/100; return Q; }
+// Funktionsobjekt: B = Grenzen, P = Terme, L[i] = true, wenn die Grenze B[i] zum linken Teil gehört (≤)
+function val(F,x){ for(let i=0;i<F.B.length;i++){ const b=F.B[i]; if(x<b||(x===b&&F.L[i])) return ev(F.P[i],x); } return ev(F.P[F.P.length-1],x); }
+function lim(F,i,side){ return ev(F.P[side==='l'?i:i+1],F.B[i]); }
+function condHTML(F,i){
+  const X='<i>x</i>', n=F.P.length;
+  const lo=i>0?`${deN(F.B[i-1])} ${F.L[i-1]?OPS['<']:'≤'} ${X}`:'', hi=i<n-1?`${F.L[i]?'≤':OPS['<']} ${deN(F.B[i])}`:'';
+  if(i===0) return `${X} ${hi}`;
+  if(i===n-1) return `${X} ${F.L[i-1]?OPS['>']:'≥'} ${deN(F.B[i-1])}`;
+  return `${lo} ${hi}`;
+}
+function condCAS(F,i){
+  const n=F.P.length;
+  if(i===0) return `x${F.L[0]?'≤':'<'}${deN(F.B[0])}`;
+  if(i===n-1) return `x${F.L[i-1]?'>':'≥'}${deN(F.B[i-1])}`;
+  return `${deN(F.B[i-1])}${F.L[i-1]?'<':'≤'}x${F.L[i]?'≤':'<'}${deN(F.B[i])}`;
+}
+function termHTML(F){
+  const rows=F.P.map((P,i)=>`<tr><td class="tf">${polyHTML(P)}</td><td class="w">für</td><td>${condHTML(F,i)}</td></tr>`).join('');
+  return `<i>f</i>(<i>x</i>) = <span class="pwt"><span class="br ${F.P.length>2?'b3':''}">{</span><table>${rows}</table></span>`;
+}
+function make(n){
+  for(let tries=0;tries<500;tries++){
+    const B= n===2 ? [R(-2,3)] : (()=>{ const a=R(-3,0); return [a,a+R(2,4)]; })();
+    const L=B.map(()=>Math.random()<0.5);
+    const kinds= n===2 ? [pickR(['l','l','q','c']),pickR(['l','q','l'])] : [pickR(['l','c']),pickR(['c','l']),pickR(['l','c','l'])];
+    if(kinds.every(k=>k==='c')) continue;
+    const P=kinds.map((k,i)=>piece(k,B[Math.min(i,B.length-1)]));
+    const J=B.map(()=>Math.random()<0.5);
+    for(let i=0;i<B.length;i++){ if(!J[i]) P[i+1]=fix(P[i+1],B[i],ev(P[i],B[i])); }
+    const F={B,L,P,J};
+    let ok=true;
+    for(let i=0;i<B.length;i++){ const d=Math.abs(lim(F,i,'l')-lim(F,i,'r')); if(J[i]&&d<1) ok=false; if(!J[i]&&d>1e-9) ok=false; }
+    if(n===3&&P[1].length===1&&J.every(x=>!x)&&Math.random()<0.3) ok=false;
+    const x0=B[0]-4, x1=B[B.length-1]+4; let ys=[];
+    for(let x=x0;x<=x1;x+=0.25) ys.push(val(F,x));
+    if(ys.some(y=>Math.abs(y)>9)) ok=false;
+    if(P.some(Q=>Q.some(c=>Math.abs(c)>20))) ok=false;
+    if(!ok) continue;
+    // abgefragte Stellen: je ein Wert pro Abschnitt und alle Grenzen
+    const b0=B[0], bl=B[B.length-1];
+    const xs= n===2 ? [b0-R(2,3), b0, b0+pickR([0.5,1.5,2.5]), b0+R(3,4)] : [b0-R(1,3), b0, Math.round((b0+bl))/2, bl, bl+R(1,3)];
+    xs.sort((a,b)=>a-b);
+    const u=[...new Set(xs)];
+    const w={x0:Math.floor(x0),x1:Math.ceil(x1),y0:Math.min(-1,Math.floor(Math.min(...ys))-1),y1:Math.max(1,Math.ceil(Math.max(...ys))+1)};
+    return {F,xs:u,w};
+  }
+}
+
+// ---------- Graph (erscheint mit der Lösung) ----------
+function plot(A){
+  const F=A.F, w=A.w, Wd=640, H=Math.min(460,Math.max(300,(w.y1-w.y0)*30)), pl=30, pr=22, pt=16, pb=24;
+  const X=x=>pl+(x-w.x0)*(Wd-pl-pr)/(w.x1-w.x0), Y=y=>pt+(w.y1-y)*(H-pt-pb)/(w.y1-w.y0);
+  let o=`<svg viewBox="0 0 ${Wd} ${H}" role="img" aria-label="Graph">`;
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) o+=`<line x1="${X(x)}" y1="${Y(w.y0)}" x2="${X(x)}" y2="${Y(w.y1)}" class="gl"/>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) o+=`<line x1="${X(w.x0)}" y1="${Y(y)}" x2="${X(w.x1)}" y2="${Y(y)}" class="gl"/>`;
+  o+=`<line x1="${X(w.x0)}" y1="${Y(0)}" x2="${X(w.x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(w.x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
+  o+=`<line x1="${X(0)}" y1="${Y(w.y0)}" x2="${X(0)}" y2="${Y(w.y1)-10}" class="ax"/><path d="M${X(0)} ${Y(w.y1)-14} l-4 8 h8z" class="ah"/>`;
+  o+=`<text x="${X(w.x1)+8}" y="${Y(0)+16}" class="al">x</text><text x="${X(0)+7}" y="${Y(w.y1)-4}" class="al">y</text>`;
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) if(x) o+=`<text x="${X(x)}" y="${Y(0)+14}" class="tl" text-anchor="middle">${String(x).replace('-','−')}</text>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) if(y) o+=`<text x="${X(0)-5}" y="${Y(y)+4}" class="tl" text-anchor="end">${String(y).replace('-','−')}</text>`;
+  const cols=['#1F4E99','#2E7D32','#C25E00'];
+  F.P.forEach((P,i)=>{ const a=i===0?w.x0:F.B[i-1], b=i===F.P.length-1?w.x1:F.B[i]; let d='';
+    for(let k=0;k<=300;k++){ const x=a+(b-a)*k/300; d+=(k?'L':'M')+X(x).toFixed(1)+' '+Y(ev(P,x)).toFixed(1)+' '; }
+    o+=`<path d="${d}" fill="none" stroke="${cols[i]}" stroke-width="2.6"/>`; });
+  F.B.forEach((b,i)=>{
+    const yl=lim(F,i,'l'), yr=lim(F,i,'r');
+    if(Math.abs(yl-yr)<1e-9){ o+=`<circle cx="${X(b)}" cy="${Y(yl)}" r="5" fill="#1d1d1f"/>`; return; }
+    o+=`<circle cx="${X(b)}" cy="${Y(yl)}" r="5.5" fill="${F.L[i]?cols[i]:'#fff'}" stroke="${cols[i]}" stroke-width="2.4"/>`;
+    o+=`<circle cx="${X(b)}" cy="${Y(yr)}" r="5.5" fill="${F.L[i]?'#fff':cols[i+1]}" stroke="${cols[i+1]}" stroke-width="2.4"/>`;
+  });
+  return o+'</svg><div class="legende">● gehört zum Graphen &nbsp;·&nbsp; ○ gehört nicht dazu</div>';
+}
+
+// ---------- Aufgaben ----------
+const MODES={zwei:{name:"Zwei Abschnitte",n:2}, drei:{name:"Drei Abschnitte",n:3}};
+const ORDER=["zwei","drei"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+function inp(id){ return `<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="0,00" class="ci">`; }
+function neu(){
+  const n=MODES[mode].n; A=make(n);
+  const F=A.F;
+  A.felder=A.xs.map((x,j)=>({k:'v'+j, lab:`<i>f</i>(${deN(x)}) =`, soll:val(F,x)})).concat(F.B.map((b,i)=>({k:'s'+i, sp:true, lab:`Bei <i>x</i> = ${deN(b)}:`, soll:F.J[i]})));
+  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent="Aufgabe: "+MODES[mode].name;
+  root.getElementById('auftrag').innerHTML="Geben Sie die Funktion im CAS ein und zeichnen Sie den Graphen. Berechnen Sie die Funktionswerte. Entscheiden Sie an jeder Grenze: Macht der Graph einen Sprung?";
+  root.getElementById('term').innerHTML=termHTML(F);
+  root.getElementById('fen').innerHTML=`Fenster: ${deN(A.w.x0)} ≤ <i>x</i> ≤ ${deN(A.w.x1)} und ${deN(A.w.y0)} ≤ <i>y</i> ≤ ${deN(A.w.y1)}`;
+  root.getElementById('plot').innerHTML='';
+  root.getElementById('hinweis').innerHTML='Tipp: <b>⊞</b> ▸ '+(n===2?'<b>Stückweise (2 Teile)</b>':'<b>Stückweise (n Teile)</b>, Anzahl <b>3</b>')+' · Felder: '+F.P.map((P,i)=>`<span class="liste">${casPoly(P)}</span> , <span class="liste">${condCAS(F,i)}</span>`).join(' · ')+' · Zeichen &lt; ≤ &gt; ≥ mit <b>ctrl =</b> · Funktionswerte auf einer Calculator-Seite mit <span class="liste">f1(…)</span>.';
+  root.getElementById('felder').innerHTML=A.felder.map(f=> f.sp ?
+    `<div class="f sp" id="f_${f.k}"><label>${f.lab}</label><label class="kl"><input type="radio" name="r_${f.k}" value="1"> Sprung</label><label class="kl"><input type="radio" name="r_${f.k}" value="0"> kein Sprung</label><span class="m"></span><div class="msg"></div></div>` :
+    `<div class="f" id="f_${f.k}"><label>${f.lab}</label>${inp('i_'+f.k)}<span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input.ci').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+const near=(a,b)=>Math.abs(a-b)<0.0105;
+function pruefen(){
+  let ok=0;
+  A.felder.forEach(f=>{
+    const el=root.getElementById('f_'+f.k), m=el.querySelector('.m'), msg=el.querySelector('.msg');
+    el.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
+    let st=null, t='';
+    if(f.sp){
+      const r=el.querySelector('input[type=radio]:checked'); if(!r) return;
+      if((r.value==='1')===f.soll) st='ok'; else { st='no'; t='Vergleichen Sie die Werte links und rechts der Grenze. Sind sie gleich, gibt es keinen Sprung.'; }
+    } else {
+      const i=root.getElementById('i_'+f.k), raw=i.value; i.classList.remove('bad');
+      if(!raw.trim()) return;
+      const p=parse(raw);
+      if(!p){ st='fmt'; t='Bitte nur Zahlen eintragen, z. B. −1,5.'; }
+      else if(near(p.v,f.soll)){ if(p.dec>2){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; } else st='ok'; }
+      else { st='no'; i.classList.add('bad'); t='Das stimmt noch nicht. Welcher Abschnitt gilt für diesen x-Wert? An einer Grenze entscheidet das Zeichen (≤ oder <).'; }
+    }
+    el.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
+  });
+  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
+  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  const F=A.F;
+  A.felder.forEach(f=>{
+    const el=root.getElementById('f_'+f.k), msg=el.querySelector('.msg');
+    if(el.classList.contains('ok')) return;
+    el.classList.add('show');
+    if(f.sp){ const i=+f.k.slice(1); msg.innerHTML=`Lösung: ${f.soll?'Sprung':'kein Sprung'} – links ${de2(lim(F,i,'l'))}, rechts ${de2(lim(F,i,'r'))}`; }
+    else msg.innerHTML='Lösung: '+de2(f.soll);
+  });
+  root.getElementById('plot').innerHTML=plot(A);
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
 const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
 neu();
  }
@@ -13498,7 +14299,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": "solve", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "mat", "dir": "Matrizen", "pdf": "Arbeitsblatt_CAS_Matrizen.pdf", "ueb": true, "title": "Matrizenrechnung", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform", "sub": "ref und rref", "block": "alg", "sec": null}, {"id": "lopt", "dir": "Lineare_Optimierung", "pdf": "Arbeitsblatt_CAS_Lineare_Optimierung.pdf", "ueb": true, "title": "Lineare Optimierung", "sub": "", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "", "block": "fa", "sec": null}, {"id": "fs", "dir": "Funktionsscharen", "pdf": "Arbeitsblatt_CAS_Funktionsscharen.pdf", "ueb": true, "title": "Funktionsscharen", "sub": "", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche zwischen Graph und x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}, {"id": "kombi", "dir": "Kombinatorik", "pdf": "Arbeitsblatt_CAS_Kombinatorik.pdf", "ueb": true, "title": "Kombinatorik", "sub": "n!, nPr und nCr", "block": "sto", "sec": null}, {"id": "bin", "dir": "Binomialverteilung", "pdf": "Arbeitsblatt_CAS_Binomialverteilung.pdf", "ueb": true, "title": "Binomialverteilung", "sub": "binomPdf und binomCdf", "block": "sto", "sec": null}, {"id": "bing", "dir": "Binomial_Gesucht", "pdf": "Arbeitsblatt_CAS_Binomial_Gesucht.pdf", "ueb": true, "title": "Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht", "sub": "", "block": "sto", "sec": null}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "", "block": "fa", "sec": null}, {"id": "abschn", "dir": "Abschnittsweise", "pdf": "Arbeitsblatt_CAS_Abschnittsweise.pdf", "ueb": true, "title": "Abschnittsweise definierte Funktionen", "sub": "Vorlage „Stückweise“, Wertetabelle, ● und ○", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": "solve", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "mat", "dir": "Matrizen", "pdf": "Arbeitsblatt_CAS_Matrizen.pdf", "ueb": true, "title": "Matrizenrechnung", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform", "sub": "ref und rref", "block": "alg", "sec": null}, {"id": "lopt", "dir": "Lineare_Optimierung", "pdf": "Arbeitsblatt_CAS_Lineare_Optimierung.pdf", "ueb": true, "title": "Lineare Optimierung", "sub": "", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "", "block": "fa", "sec": null}, {"id": "fs", "dir": "Funktionsscharen", "pdf": "Arbeitsblatt_CAS_Funktionsscharen.pdf", "ueb": true, "title": "Funktionsscharen", "sub": "", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche zwischen Graph und x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}, {"id": "kombi", "dir": "Kombinatorik", "pdf": "Arbeitsblatt_CAS_Kombinatorik.pdf", "ueb": true, "title": "Kombinatorik", "sub": "n!, nPr und nCr", "block": "sto", "sec": null}, {"id": "bin", "dir": "Binomialverteilung", "pdf": "Arbeitsblatt_CAS_Binomialverteilung.pdf", "ueb": true, "title": "Binomialverteilung", "sub": "binomPdf und binomCdf", "block": "sto", "sec": null}, {"id": "bing", "dir": "Binomial_Gesucht", "pdf": "Arbeitsblatt_CAS_Binomial_Gesucht.pdf", "ueb": true, "title": "Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht", "sub": "", "block": "sto", "sec": null}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
@@ -13565,7 +14366,7 @@ function uebung(id){
 // ---------------------------------------------------------------
 //  Rechner-Display in Gliederung / Übung
 // ---------------------------------------------------------------
-const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], stufe:['r',3], abl:['a',3], graph:['e',3] , int:['a',4], fs:['s',10] };
+const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], stufe:['r',3], abl:['a',3], graph:['e',3] , int:['a',4], fs:['s',10], abschn:['g',6] };
 function previewOf(t){
   const g=G[t]; let p=PREV[t];
   if(!p){ const tr=g.ORDER[0], S=g.TRACKS[tr].steps; let s=0; S.forEach((x,i)=>{ if(!x.ab && x.k.length) s=i; }); p=[tr,s]; }
