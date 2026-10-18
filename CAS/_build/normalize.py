@@ -14,6 +14,10 @@ NR = {'Grundlagen':'0',
       'Gleichungen':'3.1','LGS':'3.2','Matrizen':'3.3','Stufenform':'3.4','Lineare_Optimierung':'3.5',
       'Kombinatorik':'4.1','Binomialverteilung':'4.2','Binomial_Gesucht':'4.3'}
 
+# Abschnitt der Gliederung für die Fußzeile
+ABSCHNITT = {'0':'Grundlagen','1':'Statistik','2':'Funktionen &amp; Analysis','3':'Gleichungen &amp; Algebra','4':'Stochastik'}
+UNTERTITEL = 'TI-Nspire CAS'
+
 # Blattspezifischer Ausgleich, damit der Inhalt über dem Lösungskasten Platz hat
 EXTRA = {'Funktionsscharen': '.sec{ margin-top:10px !important; }'}
 
@@ -38,7 +42,7 @@ CSS = '''
 .code .z .bx, .code .z .box{ display:block; margin:0 auto; width:8.5mm !important; height:8.5mm !important; border:1.3px solid var(--lf) !important; border-radius:1.6mm !important; background:var(--feld) !important; }
 .code .z .lab{ display:block !important; font-size:9.4px !important; line-height:1.2 !important; color:#444 !important; margin-top:2px !important; font-family:Calibri,Arial,sans-serif !important; }
 .code .lqr{ flex:0 0 15mm !important; text-align:center !important; border:none !important; padding:0 !important; margin:0 !important; }
-.code .lqr + .lqr{ margin-left:1mm !important; }
+.code .lqr + .lqr{ margin-left:1mm !important; border-left:1.3px dashed var(--rand) !important; padding-left:3mm !important; flex-basis:calc(15mm + 3mm + 1.3px) !important; box-sizing:content-box; }
 .code .lqr img{ width:15mm !important; height:15mm !important; display:block !important; }
 .code .lqr span{ display:block !important; font-size:9px !important; color:var(--lf) !important; font-weight:bold !important; margin-top:1px !important; font-family:Calibri,Arial,sans-serif !important; }
 .page-footer{ display:flex !important; justify-content:space-between !important; border-top:1px solid var(--line) !important; margin:2mm 0 0 !important; padding:6px 0 0 !important; font-size:11px !important; color:#888 !important; flex:0 0 auto !important; }
@@ -94,9 +98,26 @@ def transform(src, folder, flex):
         s = re.sub(r'(<div class="page-footer">.*?) &middot; Seite 1(</span></div>)', r'\1\2', s, flags=re.S)
     # einheitliches Logo (gleiche Grafik, gleiche Datei)
     s = re.sub(r'<img class="logo" src="[^"]+"', '<img class="logo" src="' + LOGO + '"', s)
-    # CSS anhängen
+    return s
+
+def finish(s, folder):
+    """Schritte, die bei jedem Lauf neu angewendet werden (idempotent)."""
+    # einheitliches Layout-CSS (alter Block wird ersetzt)
+    m = s.find('/* ===== Einheitliches Layout')
+    if m >= 0:
+        s = s[:m].rstrip() + '\n' + s[s.rfind('</style>'):]
     i = s.rfind('</style>')
-    s = s[:i] + CSS + (EXTRA.get(folder, '') + '\n' if folder in EXTRA else '') + s[i:]
+    s = s[:i] + CSS.lstrip('\n') + (EXTRA.get(folder, '') + '\n' if folder in EXTRA else '') + s[i:]
+    # grauer Untertitel unter der Überschrift
+    s = re.sub(r'(<div class="sub">).*?(</div>)', lambda m: m.group(1) + UNTERTITEL + m.group(2), s, flags=re.S)
+    # rechts in der Fußzeile: Abschnitt der Gliederung (bei mehrseitigen Blättern mit Seitenzahl)
+    ab = ABSCHNITT[NR[folder].split('.')[0]]
+    pages = s.count('<div class="page-footer">')
+    def fr(m):
+        k = fr.n = getattr(fr, 'n', 0) + 1
+        return m.group(1) + ab + (f' &middot; Seite {k}' if pages > 1 else '') + m.group(2)
+    s = re.sub(r'(<div class="page-footer"><span>[^<]*</span><span>).*?(</span></div>)', fr, s, flags=re.S)
+    assert getattr(fr, 'n', 0) == pages, folder
     return s
 
 _top = subprocess.check_output(['git','-C',ROOT,'rev-parse','--show-toplevel'],text=True).strip()
@@ -110,10 +131,9 @@ with sync_playwright() as pw:
         path = os.path.join(ROOT, folder, fn)
         rel = os.path.relpath(path, subprocess.check_output(['git','-C',ROOT,'rev-parse','--show-toplevel'],text=True).strip())
         src = subprocess.check_output(['git','-C',ROOT,'show','HEAD:'+rel], text=True)
-        if 'class="ab-inhalt' in src:
-            print('schon vereinheitlicht', folder); continue
-        open(path,'w',encoding='utf-8').write(src)
-        flex = flex_pages(pg, path)
-        open(path,'w',encoding='utf-8').write(transform(src, folder, flex))
-        print('ok', folder, NR[folder], flex)
+        if 'class="ab-inhalt' not in src:
+            open(path,'w',encoding='utf-8').write(src)
+            src = transform(src, folder, flex_pages(pg, path))
+        open(path,'w',encoding='utf-8').write(finish(src, folder))
+        print('ok', folder, NR[folder])
     b.close()
