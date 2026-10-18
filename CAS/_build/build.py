@@ -18,9 +18,9 @@ TOPICS = [
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', 'Funktion zeichnen, Fenster, Wertetabelle', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
-    ('graph', 'Graphen', 'Graphen', 'Graphen', 'Graphen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
-    ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Flächen berechnen', 'Integral, Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
+    ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
+    ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Flächen im Graph bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
 ]
 
 def read(p):
@@ -197,11 +197,17 @@ BLOCK_OF = {
     'gl': 'alg', 'lgs': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
 }
+# Zwischenüberschriften im Block: steht vor dem ersten Thema eines Abschnitts (Reihenfolge = TOPICS)
+# NEUES THEMA der Differential-/Integralrechnung hier eintragen (z. B. 'int' für Integrale)
+SECTION = {
+    'abl': 'Differentialrechnung',
+    'int': 'Integralrechnung', 'flae': 'Integralrechnung',
+}
 _bids = {b for b, _ in BLOCKS}
 for t in TOPICS:
     assert t[0] in BLOCK_OF, f'Thema {t[0]!r} ist keinem Block zugeordnet (BLOCK_OF in build.py ergänzen)'
     assert BLOCK_OF[t[0]] is None or BLOCK_OF[t[0]] in _bids, t[0]
-topics_js = json.dumps([dict(id=g, dir=f, pdf=p, ueb=bool(u), title=ti, sub=su, block=BLOCK_OF[g]) for g, f, c, u, ti, su, p in TOPICS], ensure_ascii=False)
+topics_js = json.dumps([dict(id=g, dir=f, pdf=p, ueb=bool(u), title=ti, sub=su, block=BLOCK_OF[g], sec=SECTION.get(g)) for g, f, c, u, ti, su, p in TOPICS], ensure_ascii=False)
 blocks_js = json.dumps([dict(id=b, title=ti) for b, ti in BLOCKS], ensure_ascii=False)
 
 tpl = read(os.path.join(os.path.dirname(__file__), 'shell.html'))

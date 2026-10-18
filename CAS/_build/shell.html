@@ -122,6 +122,9 @@ button{ font-family:inherit; }
 .btopics .topic{ box-shadow:none; border-color:#e6e9ee; animation:none; }
 .block.empty .bico{ background:#c3c9d2; color:#fff; }
 .block.empty .bttl small{ font-style:italic; }
+.bsec{ display:flex; align-items:center; gap:10px; margin:6px 4px 0; font:700 12.5px system-ui,Arial,sans-serif; letter-spacing:.6px; text-transform:uppercase; color:var(--gs); }
+.bsec::before,.bsec::after{ content:""; height:1.5px; background:#c9d3e6; flex:1 1 auto; }
+.bsec::before{ flex:0 0 18px; }
 .topic.solo{ padding:10px 14px 10px 62px; }
 .topic.solo .acts{ flex:1 1 auto; }
 .bnone{ margin:0; padding:0 16px 14px 62px; font-size:14px; color:var(--mute); }
@@ -277,7 +280,7 @@ const DBL=TOPICS.filter(t=>!t.block).map(t=>({id:'_'+t.id, title:t.title, nr:0, 
 $('topics').innerHTML=DBL.map(b=>{
   const ts=b.solo?[b.solo]:TOPICS.filter(t=>t.block===b.id);
   const body=b.solo ? `<ol class="btopics"><li class="topic solo" data-t="${b.solo.id}">${actsHtml(b.solo)}</li></ol>`
-    : ts.length ? `<ol class="btopics">${ts.map((t,i)=>topicLi(t,b.nr+'.'+(i+1))).join('')}</ol>`
+    : ts.length ? `<ol class="btopics">${ts.map((t,i)=>(t.sec&&(i===0||ts[i-1].sec!==t.sec)?`<li class="bsec" aria-hidden="true"><span>${t.sec}</span></li>`:'')+topicLi(t,b.nr+'.'+(i+1))).join('')}</ol>`
     : '<p class="bnone">Hier kommen bald Anleitungen, Arbeitsblätter und Übungen dazu.</p>';
   return `<li class="block${ts.length?'':' empty'}" data-b="${b.id}">
     <button class="bhead" type="button" aria-expanded="false"><span class="bico">${b.nr}</span><span class="bttl">${b.title}${ts.length?'':'<small>folgt in Kürze</small>'}</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></span></button>
