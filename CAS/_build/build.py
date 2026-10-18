@@ -20,7 +20,8 @@ TOPICS = [
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
-    ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Flächen im Graph bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
+    ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
+    ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Fläche im Graphen bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
 ]
 
 def read(p):
@@ -193,7 +194,7 @@ BLOCKS = [
 # NEUES THEMA: hier seinem Block zuordnen (Reihenfolge im Block = Reihenfolge in TOPICS)
 BLOCK_OF = {
     'grund': None,
-    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'flae': 'fa',
+    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
     'gl': 'alg', 'lgs': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
 }

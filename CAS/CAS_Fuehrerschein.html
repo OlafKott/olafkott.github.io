@@ -1594,6 +1594,152 @@ button{ font-family:inherit; }
 [data-g="abl"] .vgl th{background:#eef0f3;}
 @media (max-width:380px){[data-g="abl"] .calc{transform:scale(.92); transform-origin:top center;}}
 [data-g="abl"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- int --- */
+[data-g="int"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="int"] *, [data-g="int"]{box-sizing:border-box;}
+[data-g="int"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="int"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="int"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="int"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="int"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="int"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="int"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="int"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="int"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="int"] .brand b{color:#fff; margin-left:6px;}
+[data-g="int"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="int"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="int"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="int"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="int"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="int"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="int"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="int"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="int"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="int"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="int"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="int"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="int"] .k:focus{outline:none;}
+[data-g="int"] .k:active{transform:scale(.95);}
+[data-g="int"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="int"] .k.ctrl{background:#D93A2B;}
+[data-g="int"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="int"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="int"] .pad .k.hit{position:absolute;}
+[data-g="int"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="int"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_int .35s;}
+[data-g="int"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_int{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="int"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="int"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="int"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="int"] .let9 .k{height:20px; font-size:10px;}
+[data-g="int"] .span2{grid-column:span 2;}
+[data-g="int"] .span3{grid-column:span 3;}
+[data-g="int"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="int"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="int"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="int"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="int"] .tb .sp{flex:1;}
+[data-g="int"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="int"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="int"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden;}
+[data-g="int"] .calcapp > *{flex-shrink:0;}
+[data-g="int"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="int"] .calcapp .ln > span, [data-g="int"] .calcapp .ln > b{padding:0 2px; border-radius:2px;}
+[data-g="int"] .calcapp .ln > b{font-weight:normal; margin-left:auto;}
+[data-g="int"] .calcapp .cur{border:1px solid #888; min-height:26px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center; flex-wrap:wrap;}
+[data-g="int"] .calcapp sup{font-size:8px;}
+[data-g="int"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
+[data-g="int"] .fr > span{padding:0 2px; min-width:7px;}
+[data-g="int"] .fr > span:first-child{border-bottom:1px solid currentColor;}
+[data-g="int"] .bx:empty::after{content:"\25A1"; color:#999;}
+[data-g="int"] .ig{display:inline-flex; align-items:center; vertical-align:middle;}
+[data-g="int"] .ig .s{font-family:'Times New Roman',Georgia,serif; font-size:19px; line-height:1;}
+[data-g="int"] .ig .lm{display:inline-flex; flex-direction:column; justify-content:space-between; height:24px; font-size:8.5px; line-height:1; margin:0 1px 0 -1px;}
+[data-g="int"] .caret{animation:blink_int 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_int{ 50%{opacity:0} }
+[data-g="int"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="int"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="int"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="int"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_int 1.2s ease-in-out infinite;}
+[data-g="int"] .pal{position:absolute; left:12px; right:12px; top:24px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); z-index:4; display:grid; grid-template-columns:repeat(5,1fr); gap:3px; padding:5px; font-size:10px;}
+[data-g="int"] .pal > span{background:#fff; border:1px solid #c3cad4; border-radius:3px; height:31px; display:flex; align-items:center; justify-content:center; white-space:nowrap;}
+[data-g="int"] .pal > span.ziel{background:#F2B705; border-color:#b88a00; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_int 1.2s ease-in-out infinite;}
+[data-g="int"] .pal .fr{font-size:9px;}
+[data-g="int"] .pal sup{font-size:7px;}
+[data-g="int"] .pal .pi{font-family:'Times New Roman',Georgia,serif; font-size:16px; line-height:1;}
+[data-g="int"] .pal .pl{display:inline-flex; flex-direction:column; justify-content:space-between; height:20px; margin-right:1px;}
+[data-g="int"] .pb{display:inline-block; width:6px; height:7px; border:1px solid #888; vertical-align:middle;}
+[data-g="int"] .pal .pl .pb{width:5px; height:5px;}
+@keyframes pulse_int{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="int"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="int"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="int"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="int"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="int"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="int"] .hs .col{flex:1;}
+[data-g="int"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="int"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="int"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="int"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="int"] .hs .it.dim{color:#6f757d;}
+[data-g="int"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="int"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_int 1.2s ease-in-out infinite;}
+[data-g="int"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="int"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="int"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="int"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="int"] .hs .icons svg{width:20px; height:20px;}
+[data-g="int"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="int"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="int"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="int"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="int"] .prog i.done{background:#9aa3b0;}
+[data-g="int"] .prog i.now{background:var(--lf);}
+[data-g="int"] .prog i.abp{background:#bfe3c3;}
+[data-g="int"] .prog i.abp.done{background:#7cbf84;}
+[data-g="int"] .prog i.abp.now{background:var(--ab);}
+[data-g="int"] .nr{font-size:13px; color:var(--mute);}
+[data-g="int"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="int"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="int"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="int"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="int"] .chip.ctrl{background:#D93A2B;}
+[data-g="int"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="int"] .chip.done{opacity:.35;}
+[data-g="int"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="int"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="int"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="int"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="int"] .note b{color:#8a5a00;}
+[data-g="int"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="int"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="int"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="int"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="int"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="int"] .ab .abt span{font-size:22px;}
+[data-g="int"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="int"] .ab li{margin-bottom:3px;}
+[data-g="int"] .ab p{font-size:14.5px;}
+[data-g="int"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="int"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="int"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
+[data-g="int"] .task .term .fr{font-size:20px;}
+[data-g="int"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="int"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="int"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="int"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="int"] #next{margin-left:auto;}
+[data-g="int"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="int"] .vgl th, [data-g="int"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:middle;}
+[data-g="int"] .vgl th{background:#eef0f3;}
+[data-g="int"] .igp{display:inline-flex; align-items:center; vertical-align:middle; font-family:Cambria,Georgia,serif;}
+[data-g="int"] .igp .s{font-size:1.6em; line-height:1;}
+[data-g="int"] .igp .lm{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:.6em; line-height:1.05; margin:0 3px 0 0; align-self:stretch; padding:.1em 0;}
+[data-g="int"] .panel .fr{font-size:.9em;}
+@media (max-width:380px){[data-g="int"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="int"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 /* --- flae --- */
 [data-g="flae"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
 [data-g="flae"] *, [data-g="flae"]{box-sizing:border-box;}
@@ -7153,6 +7299,478 @@ neu();
  }
 };
 
+/* ===== Anleitung: int ===== */
+GUIDES["int"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',true),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft"><b>Calculator</b> zum Notizblock hinzufügen</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map(l=>`<div class="ln"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const SUP=n=>'<sup>'+n+'</sup>';
+
+// ---------- Eingabezeile mit Integral-Vorlagen ----------
+const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
+function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
+Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
+// Vorlage einfügen: bestimmt (4 Felder) oder unbestimmt (2 Felder)
+Entry.prototype.ins=function(def){
+  const n=def?{t:'int',d:1,lo:[],hi:[],f:[],v:[]}:{t:'int',d:0,f:[],v:[]};
+  const o=def?['lo','hi','f','v']:['f','v'];
+  this.top().a.push(n); this.path.push({a:n[o[0]],n,o,i:0});
+};
+Entry.prototype.key=function(k){
+  const T=this.top();
+  if(this.ctrl){ this.ctrl=false; if(k==='tmpl') T.a.push(':='); return; }
+  if(k==='ctrl'){ this.ctrl=true; return; }
+  if(k==='tab'){ if(T.n && T.i<T.o.length-1){ this.path.pop(); const i=T.i+1; this.path.push({a:T.n[T.o[i]],n:T.n,o:T.o,i}); } return; }
+  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
+  if(k==='right'){ if(this.path.length>1 && !T.n) this.path.pop(); return; }
+  T.a.push(SHOW[k]||k);
+};
+function rnd(arr,cur,caret){
+  let h=arr.map(t=>{
+    if(typeof t==='string') return t;
+    if(t.t==='sup') return `<sup class="bx">${rnd(t.v,cur,caret)}</sup>`;
+    const head=t.d?`<span class="ig"><span class="s">∫</span><span class="lm"><span class="bx">${rnd(t.hi,cur,caret)}</span><span class="bx">${rnd(t.lo,cur,caret)}</span></span></span>`
+                  :'<span class="ig"><span class="s">∫</span></span>';
+    return head+`<span class="bx">${rnd(t.f,cur,caret)}</span>&thinsp;d<span class="bx">${rnd(t.v,cur,caret)}</span>`;
+  }).join('');
+  if(caret && arr===cur) h+='<span class="caret">|</span>';
+  return h;
+}
+Entry.prototype.html=function(){ return rnd(this.root,this.top().a,true); };
+
+// ---------- Simulation einer Tastenfolge ----------
+// ⊞ öffnet die Vorlagen-Auswahl, ● wählt die gelbe Vorlage (pk: 'd' = mit Grenzen, 'u' = ohne Grenzen)
+function simT(hist,keys,res,pk){
+  hist=hist.slice(); res=[].concat(res); pk=(pk||[]).slice(); let e=new Entry(), ri=0, m=0;
+  for(const k of keys){
+    if(m==='P'){ m=0; if(k==='click') e.ins(pk.shift()==='d'); continue; }
+    if(k==='tmpl' && !e.ctrl){ m='P'; continue; }
+    if(k==='enter'){ e.ctrl=false; hist.push([rnd(e.root,null,false), res[ri++]||'?']); e=new Entry(); continue; }
+    e.key(k);
+  }
+  return {hist,e,m,next:pk[0]};
+}
+function palT(w){
+  const B='<span class="pb"></span>';
+  const it=[[0,F(B,B)],[0,B+SUP(B)],[0,'√'+B],[0,SUP(B)+'√'+B],[0,'e'+SUP(B)],
+            [0,'log<sub>'+B+'</sub>'+B],[0,'{'+B],[0,'|'+B+'|'],[0,'Σ'],[0,'Π'],
+            [0,F('d','d'+B)+B],[0,F('d'+SUP(B),'d'+B+SUP(B))+B],
+            ['d','<span class="pi">∫</span><span class="pl">'+B+B+'</span>'+B+'d'+B],
+            ['u','<span class="pi">∫</span>'+B+'d'+B],[0,'lim']];
+  return '<div class="pal">'+it.map(c=>`<span class="${c[0]&&c[0]===w?'ziel':''}">${c[1]}</span>`).join('')+'</div>';
+}
+const F1=['1.1'], O={doc:'int'};
+const CUR='<span class="caret">|</span>';
+const page=(hist,entry)=>calcApp(F1,'1.1',hist,entry===undefined?CUR:entry,O);
+function TS(base,keys,res,pk){ return i=>{
+  const r=simT(base,keys.slice(0,i),res,pk); let h=calcApp(F1,'1.1',r.hist,r.e.html(),O);
+  if(r.m==='P') h+=palT(r.next);
+  return h; }; }
+const after=(base,keys,res,pk)=>simT(base,keys,res,pk).hist;
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+
+// ---------- Tastenfolgen und Ergebnisse ----------
+const FX=["f","(","x",")"];
+const kF=["f","(","x",")","ctrl","tmpl","x","x2","-","2","x","+","3","enter"];
+const kI1=["tmpl","click","0","tab","3","tab"].concat(FX,["tab","x","enter"]);
+const kI2=["tmpl","click","0","tab","2","tab"].concat(FX,["tab","x","enter"]);
+const kI3=["tmpl","click","0","tab","2","tab"].concat(FX,["tab","x","ctrl","enter"]);
+const STF=F('x'+SUP(3),'3')+'−x'+SUP(2)+'+3·x';
+const kU=["tmpl","click"].concat(FX,["tab","x","enter"]);
+const kS=["s","(","x",")","ctrl","tmpl","tmpl","click"].concat(FX,["tab","x","enter"]);
+const kS2=["s","(","x",")","enter"];
+const kK=["s","(","3",")","-","s","(","0",")","enter"];
+const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kI1,'9',['d']), a3=after(a2,kI2,F('14','3'),['d']), a4=after(a3,kI3,'4.66667',['d']);
+const b1=after(a4,kU,STF,['u']), b2=after(b1,kS,'Fertig',['u']), b3=after(b2,kS2,STF), b4=after(b3,kK,'9');
+
+// ---------- Darstellung im Text ----------
+const IT=(lo,hi,body)=>`<span class="igp"><span class="s">∫</span><span class="lm"><span>${hi}</span><span>${lo}</span></span></span>${body} d<i>x</i>`;
+const IU=body=>`<span class="igp"><span class="s">∫</span></span>&thinsp;${body} d<i>x</i>`;
+const FXI='<i>f</i>(<i>x</i>)';
+const FTERM='<i>f</i>(<i>x</i>) = <i>x</i>² − 2<i>x</i> + 3';
+const STI=F('<i>x</i>³','3')+' − <i>x</i>² + 3<i>x</i>';
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+
+const TRACKS={
+ a:{ name:"Bestimmtes Integral", start:()=>home(''), steps:[
+  {t:"Neues Dokument", a:"Neues Dokument mit Calculator-Seite", k:["1","1"], p:pick([appList(F1,'1.1',0),page([])]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>1</b> = Calculator.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Funktion speichern", a:"Speichern Sie "+FTERM, k:kF, p:TS(a0,kF,'Fertig'),
+   d:"<p><b>ctrl + ⊞</b> schreibt <b>:=</b>. Das Quadrat mit der Taste <b>x²</b>.</p>",
+   n:"Das kennen Sie aus „Funktionswerte“: erst der Name <b>f(x)</b>, dann <b>:=</b>, dann der Term."},
+  {t:"Integral mit Grenzen", a:"Berechnen Sie "+IT(0,3,FXI), k:kI1, p:TS(a1,kI1,'9',['d']),
+   d:"<p>Taste <b>⊞</b> (rechts neben der 9): Es öffnet sich eine Auswahl. Gehen Sie mit den Pfeiltasten auf das <b>∫ mit Grenzen</b> (gelb) und drücken Sie <b>●</b>.</p><p>Die Vorlage hat <b>4 Felder</b>. Mit <b>tab</b> springen Sie zum nächsten Feld:</p>"+
+     "<table class='vgl'><tr><th>1. Feld</th><th>2. Feld</th><th>3. Feld</th><th>4. Feld</th></tr><tr><td>untere Grenze<br><b>0</b></td><td>obere Grenze<br><b>3</b></td><td>Funktion<br><b>f(x)</b></td><td>Variable<br><b>x</b></td></tr></table><p>Ergebnis: <b>9</b></p>",
+   n:"Statt <b>f(x)</b> können Sie auch direkt einen Term in die Vorlage schreiben, z. B. x²−2x+3."},
+  {t:"Ergebnis als Bruch", a:"Berechnen Sie "+IT(0,2,FXI), k:kI2, p:TS(a2,kI2,F('14','3'),['d']),
+   d:"<p>Gleiche Vorlage, jetzt mit den Grenzen <b>0</b> und <b>2</b>.</p><p>Ergebnis: "+F('14','3')+". Das CAS rechnet <b>genau</b> und zeigt deshalb einen Bruch.</p>"},
+  {t:"Ergebnis als Dezimalzahl", a:"Berechnen Sie "+IT(0,2,FXI)+" als Dezimalzahl", k:kI3, p:TS(a3,kI3,'4.66667',['d']),
+   d:"<p>Geben Sie das Integral noch einmal ein. Drücken Sie am Ende <b>ctrl + enter</b> statt nur enter.</p><p>Ergebnis: <b>4,66667</b> ≈ <b>4,67</b></p>",
+   n:"<b>enter</b> → genaues Ergebnis (Bruch) · <b>ctrl + enter</b> → Dezimalzahl (≈)"},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(a4), d:AB("Aufgabe 1",["Funktion <i>g</i> speichern","Die drei Integrale berechnen","Ergebnis als Dezimalzahl mit 2 Stellen nach dem Komma eintragen (ctrl + enter)"])}
+ ]},
+ s:{ name:"Stammfunktion", start:()=>page(a4), steps:[
+  {t:"Stammfunktion bestimmen", a:"Bestimmen Sie "+IU(FXI), k:kU, p:TS(a4,kU,STF,['u']),
+   d:"<p>Taste <b>⊞</b>, dann das <b>∫ ohne Grenzen</b> (gelb) wählen. Diese Vorlage hat nur <b>2 Felder</b>: <b>f(x)</b>, <b>tab</b>, <b>x</b>.</p><p>Ergebnis: "+STI+"</p>",
+   n:"Ja, das CAS kann Stammfunktionen bestimmen! Es zeigt <b>eine</b> Stammfunktion – ohne „+ <i>C</i>“."},
+  {t:"Stammfunktion speichern", a:"Speichern Sie die Stammfunktion als <i>s</i>(<i>x</i>)", k:kS, p:TS(b1,kS,'Fertig',['u']),
+   d:"<p>Erst <b>s(x) :=</b> schreiben (<b>ctrl + ⊞</b>). Dann <b>⊞</b> und das <b>∫ ohne Grenzen</b>: <b>f(x)</b>, <b>tab</b>, <b>x</b>.</p>",
+   n:"<b>Achtung:</b> Das CAS unterscheidet <b>nicht</b> zwischen Groß- und Kleinbuchstaben. <b>F(x)</b> ist für das CAS dasselbe wie <b>f(x)</b>! Nennen Sie die Stammfunktion deshalb <b>s(x)</b>."},
+  {t:"Stammfunktion anzeigen", a:"Zeigen Sie <i>s</i>(<i>x</i>) an", k:kS2, p:TS(b2,kS2,STF),
+   d:"<p>Tippen Sie <b>s(x)</b>. Ergebnis: "+STI+"</p>"},
+  {t:"Kontrolle mit s", a:"Berechnen Sie <i>s</i>(3) − <i>s</i>(0)", k:kK, p:TS(b3,kK,'9'),
+   d:"<p>Ergebnis: <b>9</b> – genauso wie "+IT(0,3,FXI)+" aus Teil 1.</p>",
+   n:"Merke: "+IT('<i>a</i>','<i>b</i>',FXI)+" = <i>s</i>(<i>b</i>) − <i>s</i>(<i>a</i>)"},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b4), d:AB("Aufgabe 2",["Stammfunktionen von <i>h</i> und <i>k</i> bestimmen","Ergebnisse abschreiben","Danach: Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["a","s"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+// „Weiter“ wirkt wie das Drücken der aufleuchtenden Taste; „Überspringen“ springt ans Ende des Schritts
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: int ===== */
+UEB["int"]={
+ title:"Integrale",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; color:#222;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; border-left:5px solid #1F4E99;}
+.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
+.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f .m{font-weight:bold; font-size:18px; text-align:center;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.f.co{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px;}
+.f.co > label{min-width:72px;}
+.f.co .cos{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:Cambria,Georgia,serif; font-size:17px;}
+.f.co input.ci{width:76px;}
+.f.co input.bad{border-color:var(--no); background:#fff6f5;}
+.f.co .pl{color:var(--mute);}
+.f.co .m{margin-left:auto;}
+.f.co .msg{flex-basis:100%;}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.igp{display:inline-flex; align-items:center; vertical-align:middle;}
+.igp .s{font-size:1.6em; line-height:1;}
+.igp .lm{display:inline-flex; flex-direction:column; justify-content:space-between; align-self:stretch; font-size:.62em; line-height:1.05; margin-right:3px;}
+.fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.85em; line-height:1.1; margin:0 2px;}
+.fr span:first-child{border-bottom:1px solid currentColor; padding:0 2px;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const deN=v=>(Math.round(v*1e6)/1e6).toString().replace('-','−').replace('.',',');
+const de2=v=>{ const x=r2(v); return (Number.isInteger(x)?String(x):x.toFixed(2)).replace('-','−').replace('.',','); };
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const FR=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+// rationale Zahl n/d als HTML (gekürzt)
+function qHTML(n,d){ const g=gcd(n,d); n/=g; d/=g; if(d<0){ n=-n; d=-d; } return d===1?String(n).replace('-','−'):(n<0?'−':'')+FR(Math.abs(n),d); }
+const IT=(lo,hi,body)=>`<span class="igp"><span class="s">∫</span><span class="lm"><span>${hi}</span><span>${lo}</span></span></span>${body}&thinsp;d<i>x</i>`;
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+function polyHTML(name,P){
+  const n=P.length-1; let h=`<i>${name}</i>(<i>x</i>) = `, first=true;
+  P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+    const s=c<0?'−':(first?'':'+'), mm=deN(Math.abs(c)), co=(mm==='1'&&e>0)?'':mm;
+    const xx=e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+    h+=(first?s:` ${s} `)+co+xx; first=false; });
+  return first?h+'0':h;
+}
+function casPoly(P){ const n=P.length-1; let t=''; P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+  t+=(c<0?'-':(t?'+':''))+(Math.abs(c)===1&&e>0?'':String(Math.abs(c)))+(e===0?'':e===1?'x':'x^'+e); }); return t; }
+const SUPX=e=>e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+
+// ---------- Aufgaben ----------
+function genBI(){
+  let P, ints, ok;
+  do{
+    const deg3=Math.random()<0.6;
+    P=deg3?[R(-4,4)/2,R(-6,6)/2,R(-8,8)/2,R(-10,10)/2]:[R(-6,6)/2,R(-8,8)/2,R(-10,10)/2];
+    if(P[0]===0) { ok=false; continue; }
+    const S=x=>{ const n=P.length; return P.reduce((s,c,i)=>s+c*Math.pow(x,n-i)/(n-i),0); };
+    ints=[]; const used=new Set();
+    while(ints.length<3){ const a=R(-3,3), b=R(a+1,Math.min(a+4,5)); const k=a+'|'+b; if(used.has(k)) continue; used.add(k); ints.push({a,b,v:S(b)-S(a)}); }
+    ok=ints.every(t=>Math.abs(t.v)<300) && ints.some(t=>!Number.isInteger(r2(t.v)));
+  }while(!ok);
+  const FXI='<i>f</i>(<i>x</i>)';
+  return {h:"Bestimmte Integrale berechnen",
+    auftrag:"Speichern Sie die Funktion im CAS und berechnen Sie die Integrale.",
+    round:'<b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>4,67</b>. Mit <b>ctrl + enter</b> zeigt das CAS die Dezimalzahl.',
+    term:polyHTML('f',P),
+    felder:ints.map((t,i)=>({k:'w'+i, lab:IT(String(t.a).replace('-','−'),t.b,FXI), soll:t.v})),
+    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann <b>⊞</b> ▸ ∫ mit Grenzen: untere Grenze, <b>tab</b>, obere Grenze, <b>tab</b>, <span class="liste">f(x)</span>, <b>tab</b>, <span class="liste">x</span>. Negative Grenzen mit <b>(−)</b>.'};
+}
+function genSF(){
+  const deg3=Math.random()<0.6;
+  let P; do{ P=deg3?[R(-4,4),R(-6,6),R(-8,8),R(-9,9)]:[R(-6,6),R(-8,8),R(-9,9)]; }while(P[0]===0||P[1]===0);
+  const n=P.length; // Stammfunktion: Koeffizient P[i]/(n-i) vor x^(n-i)
+  const parts=P.map((c,i)=>({k:'c'+i, num:c, den:n-i, soll:c/(n-i), suf:SUPX(n-i)}));
+  return {h:"Stammfunktion bestimmen",
+    auftrag:"Bestimmen Sie mit dem CAS eine Stammfunktion <i>s</i> von <i>f</i>. Tragen Sie die Zahlen vor den Potenzen ein. Ist eine Zahl 0, tragen Sie 0 ein.",
+    round:'<b>Wichtig:</b> Brüche dürfen Sie als Bruch eintragen, z.&nbsp;B. <b>2/3</b>, oder als Dezimalzahl mit 2 Stellen nach dem Komma, z.&nbsp;B. <b>0,67</b>.',
+    term:polyHTML('f',P),
+    felder:[{k:'s', co:true, lab:'<i>s</i>(<i>x</i>) =', parts}],
+    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann <b>⊞</b> ▸ ∫ ohne Grenzen: <span class="liste">f(x)</span>, <b>tab</b>, <span class="liste">x</span>, enter. Das CAS zeigt eine Stammfunktion ohne „+ <i>C</i>“.'};
+}
+const MODES={bi:{name:"Bestimmtes Integral",gen:genBI}, sf:{name:"Stammfunktion",gen:genSF}};
+const ORDER=["bi","sf"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+
+const inp=(id,ph,cl)=>`<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}"${cl?` class="${cl}"`:''}>`;
+function neu(){
+  A=MODES[mode].gen();
+  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent="Aufgabe: "+A.h;
+  root.getElementById('auftrag').innerHTML=A.auftrag;
+  root.getElementById('term').innerHTML=A.term;
+  root.getElementById('round').innerHTML=A.round;
+  root.getElementById('hinweis').innerHTML=A.hinweis;
+  root.getElementById('felder').innerHTML=A.felder.map(F=>F.co ?
+    `<div class="f co" id="f_${F.k}"><label>${F.lab}</label><span class="cos">${F.parts.map((p,j)=>(j?'<span class="pl">+</span>':'')+inp('i_'+p.k,'','ci')+`<span>${p.suf}</span>`).join('')}</span><span class="m"></span><div class="msg"></div></div>` :
+    `<div class="f" id="f_${F.k}"><label for="i_${F.k}">${F.lab} =</label>${inp('i_'+F.k,'0,00')}<span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+// Zahl lesen: Dezimalzahl (Komma oder Punkt) oder Bruch a/b
+function parse(s){
+  s=s.trim().replace(/\s/g,'').replace(/−/g,'-').replace(',','.');
+  let m=s.match(/^(-?)(\d+)\/(\d+)$/); if(m && +m[3]!==0) return {v:(m[1]?-1:1)*m[2]/m[3], dec:0, frac:true};
+  if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+  return {v:parseFloat(s), dec:(s.split('.')[1]||'').length};
+}
+const near=(a,b)=>Math.abs(a-b)<0.0051;
+function check1(raw,soll){
+  if(!raw.trim()) return 'leer';
+  const p=parse(raw); if(!p) return 'fmt';
+  if(p.frac) return Math.abs(p.v-soll)<1e-9?'ok':'no';
+  if(near(p.v,soll)) return p.dec>2?'many':'ok';
+  return 'no';
+}
+function pruefen(){
+  let ok=0;
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
+    let st, t='';
+    if(F.co){
+      const r=F.parts.map(p=>check1(root.getElementById('i_'+p.k).value,p.soll));
+      if(r.every(x=>x==='leer')) return;
+      if(r.every(x=>x==='ok')) st='ok';
+      else if(r.includes('fmt')){ st='fmt'; t='Bitte in jedes Feld nur eine Zahl eintragen, z. B. −1,5 oder 2/3.'; }
+      else if(r.includes('leer')){ st='no'; t='Füllen Sie alle Felder aus.'; }
+      else if(r.includes('many')&&!r.includes('no')){ st='fmt'; t='Der Wert stimmt – bitte höchstens 2 Nachkommastellen oder als Bruch.'; }
+      else { st='no'; t='Prüfen Sie die rot markierten Zahlen. Achten Sie auf Vorzeichen und Brüche.'; }
+      F.parts.forEach((p,j)=>root.getElementById('i_'+p.k).classList.toggle('bad', r[j]==='no'||r[j]==='fmt'));
+    } else {
+      st=check1(root.getElementById('i_'+F.k).value, F.soll);
+      if(st==='leer') return;
+      if(st==='fmt') t='Bitte nur eine Zahl eintragen, z. B. 4,67.';
+      if(st==='many'){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; }
+      if(st==='no'){ const v=parse(root.getElementById('i_'+F.k).value).v;
+        t = near(v,-F.soll) ? 'Das Vorzeichen stimmt nicht. Haben Sie die Grenzen vertauscht oder (−) vergessen?' : 'Das stimmt noch nicht. Stimmen Funktion und Grenzen? Kommazahl mit Punkt eingegeben?'; }
+    }
+    f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
+  });
+  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
+  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), msg=f.querySelector('.msg');
+    if(f.classList.contains('ok')) return;
+    f.classList.add('show');
+    if(F.co){
+      let h='', first=true;
+      F.parts.forEach(p=>{ if(p.num===0) return; const neg=p.num<0; h+=(first?(neg?'−':''):(neg?' − ':' + '))+qHTML(Math.abs(p.num),p.den)+p.suf; first=false; });
+      msg.innerHTML='Lösung: <i>s</i>(<i>x</i>) = '+h.replace(/(^|^−|[−+] )1(<i>)/g,'$1$2');
+    } else msg.innerHTML='Lösung: '+de2(F.soll);
+  });
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+ }
+};
+
 /* ===== Anleitung: flae ===== */
 GUIDES["flae"]={
  note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
@@ -7929,7 +8547,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Flächen im Graph bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
@@ -7996,7 +8614,7 @@ function uebung(id){
 // ---------------------------------------------------------------
 //  Rechner-Display in Gliederung / Übung
 // ---------------------------------------------------------------
-const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], abl:['a',3], graph:['e',3] };
+const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], abl:['a',3], graph:['e',3] , int:['a',4] };
 function previewOf(t){
   const g=G[t]; let p=PREV[t];
   if(!p){ const tr=g.ORDER[0], S=g.TRACKS[tr].steps; let s=0; S.forEach((x,i)=>{ if(!x.ab && x.k.length) s=i; }); p=[tr,s]; }
