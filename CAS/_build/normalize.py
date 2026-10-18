@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Vereinheitlicht Kopfzeile, Fußzeile und Lösungskasten aller CAS-Arbeitsblätter.
-Aufruf: python3 normalize.py <CAS-Ordner>   (arbeitet auf dem Stand aus git HEAD; bereits vereinheitlichte Blätter werden übersprungen).
+Aufruf: python3 normalize.py <CAS-Ordner>   (arbeitet auf dem aktuellen Dateistand; die Grundumstellung läuft nur einmal, der Rest bei jedem Aufruf).
 NEUES BLATT: Ordner und Gliederungsnummer in NR eintragen, dann normalize.py und mkpdf.py aufrufen."""
 import re, sys, os, subprocess
 from playwright.sync_api import sync_playwright
@@ -18,7 +18,9 @@ NR = {'Grundlagen':'0',
 ABSCHNITT = {'0':'Grundlagen','1':'Statistik','2':'Funktionen &amp; Analysis','3':'Gleichungen &amp; Algebra','4':'Stochastik'}
 
 # Blattspezifischer Ausgleich, damit der Inhalt über dem Lösungskasten Platz hat
-EXTRA = {'Funktionsscharen': '.sec{ margin-top:10px !important; }'}
+_ANL = '.anleitung{ padding:7px 12px !important; margin:0 0 9px !important; border-radius:8px !important; background:#fafafb !important; } .anleitung .links{ font-size:13.4px; } .anleitung ol{ margin:0 0 5px; padding-left:18px; } .anleitung li{ line-height:1.6; margin-bottom:2px; } .kt{ margin-bottom:4px !important; } .ablauf{ display:flex; gap:3px; flex-wrap:wrap; font-family:Calibri,Arial,sans-serif; font-size:11px; } .ablauf > span{ border:1px solid var(--rand); border-radius:3px; padding:1px 5px; background:#fff; } .ablauf .taste{ border-bottom-width:2px; } .mono{ font-family:Consolas,\'Courier New\',monospace; font-size:12.4px; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; }'
+EXTRA = {'Funktionsscharen': '.sec{ margin-top:10px !important; }',
+         'Lage_und_Streuung': _ANL, 'Regression': _ANL}
 
 CSS = '''
 /* ===== Einheitliches Layout aller CAS-Arbeitsblätter: Kopf, Fuß, Lösungskasten ===== */
@@ -131,7 +133,7 @@ with sync_playwright() as pw:
         fn = [f for f in os.listdir(os.path.join(ROOT, folder)) if f.startswith('Arbeitsblatt_CAS_') and f.endswith('.html')][0]
         path = os.path.join(ROOT, folder, fn)
         rel = os.path.relpath(path, subprocess.check_output(['git','-C',ROOT,'rev-parse','--show-toplevel'],text=True).strip())
-        src = subprocess.check_output(['git','-C',ROOT,'show','HEAD:'+rel], text=True)
+        src = open(path, encoding='utf-8').read()
         if 'class="ab-inhalt' not in src:
             open(path,'w',encoding='utf-8').write(src)
             src = transform(src, folder, flex_pages(pg, path))
