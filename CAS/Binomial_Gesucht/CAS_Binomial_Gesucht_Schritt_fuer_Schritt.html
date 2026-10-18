@@ -527,7 +527,7 @@ const TRACKS={
   {t:"Ablesen", a:"Suchen Sie das kleinste <i>n</i> mit Wert ≥ 0,95", k:[], s:gAfter(n2,{hl:[9]}),
    d:"<p>Gehen Sie die Tabelle von oben nach unten durch. Gesucht ist der <b>erste</b> Wert, der 0,95 erreicht.</p>"+tblN([["7","0,9176"],["8","0,9424"],["9","0,9596",1],["10","0,9718"]],"<i>n</i>")+"<p>Ergebnis: <b><i>n</i> = 9</b></p>",
    n:"Steht die Lösung weiter unten: mit <b>▼</b> blättern oder den Tabellenanfang ändern (siehe Teil „k gesucht“)."},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(n2), d:AB("Aufgabe 1",["CAS-Eingabe für <i>f</i>1 notieren","Werte aus der Tabelle eintragen","<i>n</i> bestimmen (a und b)"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(n2), d:AB("Aufgabe 1",["CAS-Eingabe für <i>f</i>1 notieren","Werte aus der Tabelle eintragen","<i>n</i> bestimmen"])}
  ]},
  k:{ name:"k gesucht (Tabelle)", start:()=>home(''), steps:[
   {t:"Ansatz", a:"<i>n</i> = 50, <i>p</i> = 0,3. Bestimmen Sie das kleinste <i>k</i> mit<br><i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ 0,9", k:[],
@@ -544,7 +544,7 @@ const TRACKS={
   {t:"Ablesen", a:"Suchen Sie das kleinste <i>k</i> mit Wert ≥ 0,9", k:[], s:gAfter(q3,{hl:[19]}),
    d:tblN([["17","0,7822"],["18","0,8594"],["19","0,9152",1],["20","0,9522"]],"<i>k</i>")+"<p>Bei 18 ist der Wert noch unter 0,9, bei 19 zum ersten Mal darüber.</p><p>Ergebnis: <b><i>k</i> = 19</b></p>",
    n:"Bei <i>P</i>(<i>X</i> ≥ <i>k</i>) lautet die Eingabe "+CMS("binomCdf(50,0.3,x,50)")+". Diese Werte werden nach unten <b>kleiner</b>. Gesucht ist dann meist das <b>größte</b> <i>k</i>, das die Bedingung noch erfüllt."},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(q3), d:AB("Aufgabe 2",["CAS-Eingaben notieren","Werte aus der Tabelle eintragen","<i>k</i> bestimmen (a und b)"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(q3), d:AB("Aufgabe 2",["CAS-Eingabe notieren","Werte aus der Tabelle eintragen","<i>k</i> bestimmen"])}
  ]},
  p:{ name:"p gesucht (Graph)", start:()=>home(''), steps:[
   {t:"Ansatz", a:"<i>n</i> = 20. Bestimmen Sie alle <i>p</i> mit<br><i>P</i>(<i>X</i> ≤ 5) ≥ 0,8", k:[],
@@ -565,7 +565,7 @@ const TRACKS={
   {t:"Ergebnis deuten", a:"<i>p</i> höchstens oder mindestens?", k:[], s:gAfter(r4),
    d:"<p>Der blaue Graph <b>fällt</b>. Links vom Schnittpunkt liegt er <b>über</b> der Geraden 0,8.</p><p>Dort gilt also <i>P</i>(<i>X</i> ≤ 5) ≥ 0,8.</p><p>Ergebnis: <b><i>p</i> ≤ 0,201</b></p>",
    n:"Steigt der Graph (z. B. bei <i>P</i>(<i>X</i> ≥ 1)), liegt der passende Bereich rechts vom Schnittpunkt. Dann gilt <b><i>p</i> ≥ …</b>"},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(r4), d:AB("Aufgabe 3",["CAS-Eingaben notieren","Schnittpunkt bestimmen","<i>p</i> angeben (a und b)","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(r4), d:AB("Aufgabe 3",["CAS-Eingaben notieren","Schnittpunkt bestimmen und skizzieren","<i>p</i> angeben","Danach: Lösungscode eintragen"])}
  ]}
 };
 
