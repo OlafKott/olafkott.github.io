@@ -1443,6 +1443,180 @@ button{ font-family:inherit; }
 @media (max-width:420px){[data-g="stufe"] .bmx td{font-size:17px; padding:0 6px; min-width:22px;}
 [data-g="stufe"] .auf2 .lgs{font-size:15px;}}
 [data-g="stufe"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- lopt --- */
+[data-g="lopt"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="lopt"] *, [data-g="lopt"]{box-sizing:border-box;}
+[data-g="lopt"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="lopt"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="lopt"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="lopt"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="lopt"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="lopt"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="lopt"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="lopt"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="lopt"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="lopt"] .brand b{color:#fff; margin-left:6px;}
+[data-g="lopt"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="lopt"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="lopt"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="lopt"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="lopt"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="lopt"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="lopt"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="lopt"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="lopt"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="lopt"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="lopt"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="lopt"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="lopt"] .k:focus{outline:none;}
+[data-g="lopt"] .k:active{transform:scale(.95);}
+[data-g="lopt"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="lopt"] .k.ctrl{background:#D93A2B;}
+[data-g="lopt"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="lopt"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="lopt"] .pad .k.hit{position:absolute;}
+[data-g="lopt"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="lopt"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_lopt .35s;}
+[data-g="lopt"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_lopt{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="lopt"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="lopt"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="lopt"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="lopt"] .let9 .k{height:20px; font-size:10px;}
+[data-g="lopt"] .span2{grid-column:span 2;}
+[data-g="lopt"] .span3{grid-column:span 3;}
+[data-g="lopt"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="lopt"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="lopt"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="lopt"] .tb .tab.off{background:#eef1f5; color:#777;}
+[data-g="lopt"] .tb .tab.np{background:#fff4c9; border-color:#d1b24a; font-weight:bold;}
+[data-g="lopt"] .scr.tabhl .tb .tab.pg{background:#F2B705; color:#111; font-weight:bold; border-color:#b88a00; box-shadow:0 0 6px 1px rgba(242,183,5,.8); animation:pulse_lopt 1.2s ease-in-out infinite;}
+[data-g="lopt"] .scr.tabhl .tb .tab.pg.off{background:#FFE9A8; color:#5a4500;}
+[data-g="lopt"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="lopt"] .tb .sp{flex:1;}
+[data-g="lopt"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="lopt"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="lopt"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end;}
+[data-g="lopt"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="lopt"] .calcapp .ln span, [data-g="lopt"] .calcapp .ln b{padding:0 2px; border-radius:2px;}
+[data-g="lopt"] .calcapp .ln .sel{background:#3b78c2; color:#fff;}
+[data-g="lopt"] .calcapp .ln b{font-weight:normal; margin-left:auto;}
+[data-g="lopt"] .calcapp .ln b i, [data-g="lopt"] .calcapp .ln span i{font-style:normal;}
+[data-g="lopt"] .calcapp .cur{border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center;}
+[data-g="lopt"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
+[data-g="lopt"] .fr > span{padding:0 2px; min-width:7px;}
+[data-g="lopt"] .fr > span:first-child{border-bottom:1px solid currentColor;}
+[data-g="lopt"] .fr > span:empty::after, [data-g="lopt"] .rad:empty::after, [data-g="lopt"] sup:empty::after{content:"\25A1"; color:#999;}
+[data-g="lopt"] .calcapp{overflow:hidden;}
+[data-g="lopt"] .calcapp > *{flex-shrink:0;}
+[data-g="lopt"] .dvb:empty::after{content:"\25A1"; color:#999;}
+[data-g="lopt"] .rt{white-space:nowrap;}
+[data-g="lopt"] .rad{border-top:1px solid currentColor; padding:0 1px;}
+[data-g="lopt"] .calcapp sup{font-size:8px;}
+[data-g="lopt"] .caret{animation:blink_lopt 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_lopt{ 50%{opacity:0} }
+[data-g="lopt"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="lopt"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="lopt"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="lopt"] .dlg{position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
+[data-g="lopt"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
+[data-g="lopt"] .dlg .ff{display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center;}
+[data-g="lopt"] .dlg .lb{text-align:right;}
+[data-g="lopt"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px;}
+[data-g="lopt"] .dlg .ct.fo{outline:2px solid #3b78c2;}
+[data-g="lopt"] .dlg .ct.mark{background:#FFF3C4;}
+[data-g="lopt"] .dlg .bt{display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px;}
+[data-g="lopt"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px;}
+[data-g="lopt"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="lopt"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="lopt"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="lopt"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="lopt"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="lopt"] .hs .col{flex:1;}
+[data-g="lopt"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="lopt"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="lopt"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="lopt"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="lopt"] .hs .it.dim{color:#6f757d;}
+[data-g="lopt"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="lopt"] .hs .it.sel{background:#3b78c2; color:#fff;}
+[data-g="lopt"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_lopt 1.2s ease-in-out infinite;}
+[data-g="lopt"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="lopt"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_lopt 1.2s ease-in-out infinite;}
+@keyframes pulse_lopt{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="lopt"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="lopt"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="lopt"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="lopt"] .hs .icons svg{width:20px; height:20px;}
+[data-g="lopt"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="lopt"] table.sh{border-collapse:collapse; table-layout:fixed; width:280px;}
+[data-g="lopt"] table.sh td{border:1px solid #c9ced6; height:15px; padding:0 3px; font-size:10.5px;}
+[data-g="lopt"] table.sh td.rn{width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px;}
+[data-g="lopt"] table.sh tr.hd td{height:18px; background:#eef1f5; font-weight:bold;}
+[data-g="lopt"] table.sh td.cur{outline:2px solid #000; outline-offset:-2px;}
+[data-g="lopt"] .files{padding:4px 8px; font-size:11px;}
+[data-g="lopt"] .files .hd{font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between;}
+[data-g="lopt"] .files .it{padding:2px 4px; display:flex; justify-content:space-between;}
+[data-g="lopt"] .files .it.sel{background:#3b78c2; color:#fff;}
+[data-g="lopt"] .pwroff{position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px;}
+[data-g="lopt"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="lopt"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="lopt"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="lopt"] .prog i.done{background:#9aa3b0;}
+[data-g="lopt"] .prog i.now{background:var(--lf);}
+[data-g="lopt"] .prog i.abp{background:#bfe3c3;}
+[data-g="lopt"] .prog i.abp.done{background:#7cbf84;}
+[data-g="lopt"] .prog i.abp.now{background:var(--ab);}
+[data-g="lopt"] .nr{font-size:13px; color:var(--mute);}
+[data-g="lopt"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="lopt"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="lopt"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="lopt"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="lopt"] .chip.ctrl{background:#D93A2B;}
+[data-g="lopt"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="lopt"] .chip.done{opacity:.35;}
+[data-g="lopt"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="lopt"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="lopt"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="lopt"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="lopt"] .note b{color:#8a5a00;}
+[data-g="lopt"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="lopt"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="lopt"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="lopt"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="lopt"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="lopt"] .ab .abt span{font-size:22px;}
+[data-g="lopt"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="lopt"] .ab li{margin-bottom:3px;}
+[data-g="lopt"] .ab p{font-size:14.5px;}
+[data-g="lopt"] .ab .tx{font-family:Consolas,'Courier New',monospace; background:#e2eee3; border-radius:3px; padding:0 4px;}
+[data-g="lopt"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="lopt"] .task b{color:var(--lf);}
+[data-g="lopt"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="lopt"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
+[data-g="lopt"] .task .term .fr{font-size:20px;}
+[data-g="lopt"] .task .term .rad{padding:0 3px;}
+[data-g="lopt"] .cmd{font-family:Consolas,'Courier New',monospace; font-size:21px; background:#eceef1; border-radius:4px; padding:0 6px;}
+[data-g="lopt"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="lopt"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="lopt"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="lopt"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="lopt"] #next{margin-left:auto;}
+[data-g="lopt"] .opt{font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px;}
+[data-g="lopt"] .hint{font-size:12.5px; color:var(--mute); margin-top:10px;}
+[data-g="lopt"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="lopt"] .vgl th, [data-g="lopt"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top;}
+[data-g="lopt"] .vgl th{background:#eef0f3;}
+@media (max-width:380px){[data-g="lopt"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="lopt"] .play{font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15);}
+[data-g="lopt"] .chip.playc{background:#F2B705; color:#111; cursor:pointer;}
+[data-g="lopt"] .play:hover{background:#ffc928;}
+[data-g="lopt"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
+[data-g="lopt"] .int{display:inline-flex; align-items:center; vertical-align:middle; margin:0 1px;}
+[data-g="lopt"] .int .is{font-family:Cambria,Georgia,serif; font-size:1.45em; line-height:1; font-style:italic;}
+[data-g="lopt"] .int .lim{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:.62em; line-height:1.05; margin-left:-1px; align-self:stretch;}
+[data-g="lopt"] .task .term .int .lim{font-size:.55em;}
+[data-g="lopt"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 /* --- graph --- */
 [data-g="graph"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
 [data-g="graph"] *, [data-g="graph"]{box-sizing:border-box;}
@@ -7000,6 +7174,650 @@ neu();
  }
 };
 
+/* ===== Anleitung: lopt ===== */
+GUIDES["lopt"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  if(tabs==='np') return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+function sheet(tabs,cur,doc){
+  let h=topbar(tabs,cur,doc)+'<table class="sh"><tr class="hd"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr>';
+  for(let r=1;r<=10;r++) h+=`<tr><td class="rn">${r}</td><td class="${r===1?'cur':''}"></td><td></td><td></td><td></td></tr>`;
+  return h+'</table>';
+}
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map((l,j)=>`<div class="ln"><span class="${o.sel===2*j?'sel':''}">${l[0]}</span><b class="${o.sel===2*j+1?'sel':''}">${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
+
+// ---------- Eingabezeile (Vorlagen: Bruch, Hochzahl, Wurzel) ----------
+const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
+function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
+Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
+Entry.prototype.der=function(){ const d={t:'der',v:[],e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
+Entry.prototype.key=function(k){
+  const T=this.top();
+  if(k==='tab'){ if(T.der&&T.a===T.der.v){ this.path.pop(); this.path.push({a:T.der.e,der:T.der}); } return; }
+  if(this.ctrl){ this.ctrl=false;
+    if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
+    if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+    if(k==='neg'){ T.a.push('ans'); return; }
+    if(k==='var'){ T.a.push('→'); return; }
+    if(k==='tmpl'){ T.a.push(':='); return; }
+    return;
+  }
+  if(k==='ctrl'){ this.ctrl=true; return; }
+  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
+  if(k==='down'){ if(T.f&&T.a===T.f.n){ this.path.pop(); this.path.push({a:T.f.d,f:T.f}); } return; }
+  if(k==='right'){ if(this.path.length>1) this.path.pop(); return; }
+  if(k==='del'){ T.a.pop(); return; }
+  if(k==='-'&&this.root.length===0){ T.a.push('ans','−'); return; }
+  T.a.push(SHOW[k]||k);
+};
+function rnd(arr,curA,caret){
+  let h=arr.map(t=>typeof t==='string'?t:
+    t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
+    t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
+    t.t==='der'?`<span class="fr"><span>d</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span></span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
+    `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
+  if(caret&&arr===curA) h+='<span class="caret">|</span>';
+  return h;
+}
+function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?`d/d${ser(t.v)}(${ser(t.e)})`:`√(${ser(t.v)})`).join(''); }
+Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
+
+// ---------- Graphs-App: Menüs ----------
+const F1=['1.1'], F2=['1.1','1.2'], O={doc:'graph'};
+const GM=["1: Aktionen","2: Ansicht","3: Graph-Eingabe/Bearbeitung","4: Fenster/Zoom","5: Spur","6: Graph analysieren","7: Tabelle","8: Geometrie","9: Einstellungen"];
+const FZ=["1: Fenstereinstellungen","2: Zoom – Box","3: Zoom – Vergrößern","4: Zoom – Verkleinern","5: Zoom – Standard","6: Zoom – Quadrant 1","7: Zoom – Benutzer","8: Zoom – Trig","9: Zoom – Daten"];
+const SUB={"4":FZ};
+// Randgeraden der Tour (Koeffizienten, höchste Potenz zuerst)
+const FUN={ f1:{P:[-1,8], col:'#1f4fb5'}, f2:{P:[-0.5,6], col:'#c8102e'}, f3:{P:[-2,14], col:'#2E7D32'} };
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+const fmt3=v=>{ if(Math.abs(v)<5e-7) return '0'; return String(Number(v.toPrecision(3))).replace('-','−'); };
+// Eckpunkte des Planungsvielecks
+const ECK=[[0,0],[0,6],[4,4],[6,2],[7,0]];
+
+// ---------- Graphs-App: Zustand ----------
+const DLGL=["XMin","XMax","XSkalierung","YMin","YMax","YSkalierung"];
+function G0(){ return {win:{x0:-10,x1:10,y0:-6.67,y1:6.67}, fs:[], ent:{n:'f1',e:new Entry()}, menu:null, dlg:null, ctrl:false, poly:false, pts:[]}; }
+function simG(keys){
+  const S=G0();
+  for(const k of keys){
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:SUB[k]||[],sel:0,d:k}); continue; }
+      const a=S.menu[1].d; S.menu=null;
+      if(a==='4'&&k==='1'){ const w=S.win; S.dlg={v:[fmt3(w.x0),fmt3(w.x1),'Auto',fmt3(w.y0),fmt3(w.y1),'Auto'], fo:0, fresh:true}; }
+      continue;
+    }
+    if(S.dlg){
+      const D=S.dlg;
+      if(k==='tab'){ D.fo=(D.fo+1)%6; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(s.replace('−','-')); S.win={x0:p(D.v[0]),x1:p(D.v[1]),y0:p(D.v[3]),y1:p(D.v[4])}; S.dlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.fo]=''; D.fresh=false; } D.v[D.fo]+=ch; continue;
+    }
+    if(S.ent){
+      if(k==='enter'){ S.fs.push({n:S.ent.n, root:S.ent.e.root}); S.ent=null; continue; }
+      S.ent.e.key(k); continue;
+    }
+    if(S.ctrl){ S.ctrl=false; continue; }
+    if(k==='ctrl'){ S.ctrl=true; continue; }
+    if(k==='tab'){ S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
+    if(k==='menu'){ S.menu=[{items:GM,sel:0}]; continue; }
+  }
+  return S;
+}
+
+// ---------- Graphs-App: Bildschirm ----------
+function gScreen(S){
+  const W=280, H=194, w=S.win, X=x=>(x-w.x0)/(w.x1-w.x0)*W, Y=y=>(w.y1-y)/(w.y1-w.y0)*H;
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:16px;overflow:hidden" font-family="Arial,Helvetica,sans-serif">`;
+  // Planungsvieleck (nur zur Verdeutlichung – das CAS färbt es nicht)
+  if(S.poly) s+=`<path d="${ECK.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')} Z" fill="#9aa3b0" fill-opacity=".45" stroke="#555" stroke-width=".8" stroke-dasharray="3 2"/>`;
+  const ax='#555';
+  if(w.y0<0&&w.y1>0){ const y=Y(0); s+=`<line x1="0" y1="${y}" x2="${W-5}" y2="${y}" stroke="${ax}" stroke-width="1"/><path d="M${W} ${y} l-6 -3 v6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.x0);t<=Math.floor(w.x1);t++) if(t) s+=`<line x1="${X(t)}" y1="${y-2}" x2="${X(t)}" y2="${y+2}" stroke="${ax}"/>`;
+    s+=`<text x="2" y="${y-3}" font-size="8" fill="#777">${fmt3(w.x0)}</text><text x="${W-2}" y="${y+10}" font-size="8" fill="#777" text-anchor="end">${fmt3(w.x1)}</text>`; }
+  if(w.x0<0&&w.x1>0){ const x=X(0); s+=`<line x1="${x}" y1="${H}" x2="${x}" y2="5" stroke="${ax}" stroke-width="1"/><path d="M${x} 0 l-3 6 h6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}"/>`;
+    s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
+  S.fs.forEach((F,j)=>{
+    const P=FUN[F.n].P, col=FUN[F.n].col; let d='', pen=false;
+    for(let i=0;i<=280;i++){ const x=w.x0+(w.x1-w.x0)*i/280, py=Y(ev(P,x));
+      if(py>-40&&py<H+40){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1)+' '; pen=true; } else pen=false; }
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
+    s+=`<text x="${W-4}" y="${(S.ent?33:13)+j*12}" font-size="9.5" fill="${col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${F.n}(x)=${ser2(F.root)}</text>`;
+  });
+  S.pts.forEach(p=>{
+    const px=X(p[0]), py=Y(p[1]), lx=p[0]===0?px+5:px+4, ly=p[1]===0?py-5:py-5;
+    s+=`<circle cx="${px}" cy="${py}" r="2.6" fill="#000"/>`;
+    if(!(p[0]===0&&p[1]===0)) s+=`<text x="${lx}" y="${ly}" font-size="9" fill="#000" stroke="#fff" stroke-width="3" paint-order="stroke">(${p[0]}|${p[1]})</text>`;
+  });
+  s+='</svg>';
+  let h=topbar(S.tabs||F1,'1.1',O.doc)+s;
+  if(S.ent) h+=`<div style="position:absolute;left:0;right:0;top:16px;height:21px;background:#fff;border-bottom:1px solid #9aa5b3;display:flex;align-items:center;padding:0 5px;font-size:11.5px;z-index:2"><span style="display:inline-flex;width:11px;height:11px;border:1px solid #1f4fb5;background:#1f4fb5;color:#fff;font-size:9px;line-height:11px;justify-content:center;margin-right:4px">✓</span><span style="color:${FUN[S.ent.n].col};margin-right:2px">${S.ent.n}(x)=</span><span style="flex:1;padding:0 3px;min-height:15px">${S.ent.e.html()}</span></div>`;
+  if(S.dlg){ const D=S.dlg; h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+DLGL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.fo?'fo':''}">${D.v[i]}${i===D.fo&&!D.fresh?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
+  if(S.menu) h+=menus(S.menu);
+  return h;
+}
+// Eingabe als Text für das Graph-Etikett
+function ser2(arr){ return arr.map(t=>typeof t==='string'?t:ser2(t.v||[])).join('').replace(/(\d)x/g,'$1·x'); }
+const GS=(pre,keys)=>i=>gScreen(simG(pre.concat(keys.slice(0,i))));
+const gAfter=keys=>()=>gScreen(simG(keys));
+function gPoly(keys,pts){ const S=simG(keys); S.poly=true; S.pts=pts||[]; return gScreen(S); }
+function playTool(){}
+
+// ---------- Calculator-Seite (Seite 1.2) ----------
+// Ergebnisse, die das CAS zu den Eingaben der Tour anzeigt
+const RES={'Define z(x,y)=30x+40y':'Fertig','f2(0)':'6','solve(f1(x)=f2(x),x)':'x=4','f1(4)':'4','solve(f1(x)=f3(x),x)':'x=6','f1(6)':'2','solve(f3(x)=0,x)':'x=7',
+  'z(0,0)':'0','z(0,6)':'240','z(4,4)':'280','z(6,2)':'260','z(7,0)':'210'};
+function simC(keys){
+  const S={lines:[], e:new Entry(), menu:null};
+  for(const k of keys){
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:k==='1'?AK:[],sel:0}); continue; }
+      S.menu=null; if(k==='1') S.e.root.push('Define '); continue;
+    }
+    if(k==='menu'){ S.menu=[{items:CM,sel:0}]; continue; }
+    if(k==='enter'){ const t=ser(S.e.root); S.lines.push([S.e.html(false), RES[t]!==undefined?RES[t]:'?']); S.e=new Entry(); continue; }
+    S.e.key(k);
+  }
+  return S;
+}
+function cScreen(S){ return calcApp(F2,'1.2',S.lines.slice(-7),S.e.html(),O)+(S.menu?menus(S.menu):''); }
+const CS=(pre,keys)=>i=>cScreen(simC(pre.concat(keys.slice(0,i))));
+const cAfter=keys=>()=>cScreen(simC(keys));
+
+// ---------- Tastenfolgen ----------
+const K=s=>[...s].map(c=>c===' '?'space':c).concat(['enter']);
+const kNew=["1","2"];
+const kF1=["8","-","x","enter"];
+const kF2=["tab","6","-","0",".","5","x","enter"];
+const kF3=["tab","1","4","-","2","x","enter"];
+const kWin=["menu","4","1","neg","1","tab","1","3","tab","tab","neg","1","tab","1","5","enter"];
+const g1=kF1, g2=g1.concat(kF2), g3=g2.concat(kF3), g4=g3.concat(kWin);
+const kPage=["ctrl","doc","1"];
+const kY=K('f2(0)'), kS12=K('solve(f1(x)=f2(x),x)'), kY12=K('f1(4)'), kS13=K('solve(f1(x)=f3(x),x)').concat(K('f1(6)')), kN3=K('solve(f3(x)=0,x)');
+const c1=kY, c2=c1.concat(kS12), c3=c2.concat(kY12), c4=c3.concat(kS13), c5=c4.concat(kN3);
+const kDef=["menu","1","1"].concat(K('z(x,y)=30x+40y'));
+const kZ=K('z(4,4)');
+const c6=c5.concat(kDef), c7=c6.concat(kZ), c8=c6.concat(K('z(0,0)'),K('z(0,6)'),K('z(4,4)'),K('z(6,2)'),K('z(7,0)'));
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+// Seite einfügen: Graph → (ctrl gehalten) → App-Liste → Calculator
+const pageScr=i=>i<2?gScreen(simG(g4)):i===2?appList(F1,'1.1',0,O.doc):cScreen(simC([]));
+
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const Z='<i>Z</i> = 30<i>x</i> + 40<i>y</i>';
+const UM='<table class="vgl"><tr><th>Restriktion</th><th>nach <i>y</i> umgestellt</th><th>im CAS</th></tr>'+
+ '<tr><td>(I) <i>x</i> + <i>y</i> ≤ 8</td><td><i>y</i> ≤ 8 − <i>x</i></td><td>f1(x)=8−x</td></tr>'+
+ '<tr><td>(II) <i>x</i> + 2<i>y</i> ≤ 12</td><td><i>y</i> ≤ 6 − 0,5<i>x</i></td><td>f2(x)=6−0.5x</td></tr>'+
+ '<tr><td>(III) 2<i>x</i> + <i>y</i> ≤ 14</td><td><i>y</i> ≤ 14 − 2<i>x</i></td><td>f3(x)=14−2x</td></tr></table>';
+const ECKT='<table class="vgl"><tr><th>Eckpunkt</th><th>so berechnet</th><th><i>Z</i> = 30<i>x</i> + 40<i>y</i></th></tr>'+
+ '<tr><td>(0 | 0)</td><td>Ursprung</td><td>0</td></tr>'+
+ '<tr><td>(0 | 6)</td><td>f2(0)</td><td>240</td></tr>'+
+ '<tr><td><b>(4 | 4)</b></td><td>f1 und f2 schneiden</td><td><b>280</b></td></tr>'+
+ '<tr><td>(6 | 2)</td><td>f1 und f3 schneiden</td><td>260</td></tr>'+
+ '<tr><td>(7 | 0)</td><td>Nullstelle von f3</td><td>210</td></tr></table>';
+
+const TRACKS={
+ g:{ name:"Restriktionen zeichnen", start:()=>home(''), steps:[
+  {t:"Die Aufgabe", a:"Maximieren Sie "+Z+"<br><span style=\"font-size:17px\">unter (I) <i>x</i> + <i>y</i> ≤ 8, (II) <i>x</i> + 2<i>y</i> ≤ 12, (III) 2<i>x</i> + <i>y</i> ≤ 14, <i>x</i>, <i>y</i> ≥ 0</span>", k:[], s:()=>home(''),
+   d:"<p>Ein Betrieb stellt zwei Produkte her: <i>x</i> Stück von A und <i>y</i> Stück von B.</p><p>Jedes A bringt 30 €, jedes B bringt 40 € Gewinn.</p><p>Die Maschinen haben nur begrenzt Zeit. Das sind die <b>Restriktionen</b> (I) bis (III).</p><p>Gesucht: Wie viele Stück von A und B bringen den <b>größten Gewinn</b>?</p>"},
+  {t:"Nach y umstellen", a:"Stellen Sie die Restriktionen nach <i>y</i> um", k:[], s:()=>home(''),
+   d:"<p>Das CAS zeichnet Funktionen <i>y</i> = …</p><p>Darum stellen Sie jede Restriktion nach <i>y</i> um.</p>"+UM,
+   n:"Teilen durch eine positive Zahl ändert das Zeichen ≤ nicht."},
+  {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:pick([appList(F1,'1.1',0,O.doc),gScreen(simG([]))]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Erste Randgerade", a:"Zeichnen Sie <i>f</i>1(<i>x</i>) = 8 − <i>x</i>", k:kF1, p:GS([],kF1),
+   d:"<p><b>f1(x)=</b> steht schon da.</p><p>Nur den Term eintippen, dann <b>enter</b>.</p>"},
+  {t:"Zweite Randgerade", a:"Zeichnen Sie <i>f</i>2(<i>x</i>) = 6 − 0,5<i>x</i>", k:kF2, p:GS(g1,kF2),
+   d:"<p><b>tab</b> blendet die Eingabezeile wieder ein.</p><p>Dort steht jetzt <b>f2(x)=</b>.</p><p>Das Komma tippen Sie als Punkt: <b>0.5</b>.</p>"},
+  {t:"Dritte Randgerade", a:"Zeichnen Sie <i>f</i>3(<i>x</i>) = 14 − 2<i>x</i>", k:kF3, p:GS(g2,kF3),
+   d:"<p>Wieder <b>tab</b>, Term eintippen, <b>enter</b>.</p>",
+   n:"Im Standardfenster sieht man den wichtigen Bereich schlecht. Darum stellen wir als Nächstes das Fenster ein."},
+  {t:"Fenster einstellen", a:"Fenster: −1 ≤ <i>x</i> ≤ 13 und −1 ≤ <i>y</i> ≤ 15", k:kWin, p:GS(g3,kWin),
+   d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>Zahl eintippen, mit <b>tab</b> ins nächste Feld.</p><p>Die Skalierung (Auto) überspringen Sie mit einem zweiten <b>tab</b>.</p><p>Zum Schluss <b>enter</b>.</p>",
+   n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
+  {t:"Das Planungsvieleck", a:"Welche Punkte erfüllen alle Restriktionen?", k:[], s:()=>gPoly(g4),
+   d:"<p>Alle Restriktionen heißen „≤“: Erlaubt ist alles <b>unter</b> den drei Geraden.</p><p>Wegen <i>x</i>, <i>y</i> ≥ 0 nur rechts von der <i>y</i>-Achse und über der <i>x</i>-Achse.</p><p>Diese Fläche heißt <b>Planungsvieleck</b> (hier grau).</p>",
+   n:"Das CAS färbt die Fläche <b>nicht</b>. Das Grau dient hier nur zur Verdeutlichung. Auf dem Arbeitsblatt schraffieren Sie die Fläche selbst."},
+  {t:"Selbst zeichnen", k:[], ab:1, s:()=>gPoly(g4), d:AB("Aufgaben 1 und 2",["Restriktionen nach <i>y</i> umstellen","Randgeraden im CAS zeichnen, Fenster einstellen","Geraden ins Koordinatensystem übertragen, Planungsvieleck schraffieren"])}
+ ]},
+ e:{ name:"Eckpunkte berechnen", start:gAfter(g4), steps:[
+  {t:"Wo liegen die Ecken?", a:"Lesen Sie ab, welche Geraden das Planungsvieleck begrenzen", k:[], s:()=>gPoly(g4,ECK),
+   d:"<p>Das Planungsvieleck hat <b>5 Ecken</b>.</p><p>Von links nach rechts begrenzen es <b style=\"color:#c8102e\">f2</b>, dann <b style=\"color:#1f4fb5\">f1</b>, dann <b style=\"color:#2E7D32\">f3</b>.</p><p>Jede Ecke ist ein <b>Schnittpunkt</b>: zweier Geraden oder einer Geraden mit einer Achse.</p><p>Diese Ecken berechnen wir jetzt genau.</p>",
+   n:"Die Gerade f2 ist im oberen Teil nicht beteiligt: Dort liegt sie über f1 und f3."},
+  {t:"Rechner-Seite einfügen", a:"Fügen Sie eine Calculator-Seite ein", k:kPage, p:pageScr,
+   d:"<p><b>ctrl</b> + <b>doc</b> fügt eine neue Seite ein.</p><p><b>1</b> = Calculator.</p><p>Oben steht jetzt <b>1.2</b>. Die Funktionen f1, f2, f3 kennt das CAS auch hier.</p>",
+   n:"Zurück zum Graphen kommen Sie mit <b>ctrl</b> + <b>◀</b>."},
+  {t:"Ecke auf der y-Achse", a:"Berechnen Sie <i>f</i>2(0)", k:kY, p:CS([],kY),
+   d:"<p>Auf der <i>y</i>-Achse ist <i>x</i> = 0.</p><p><b>f2(0)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 6. Die Ecke ist <b>(0 | 6)</b>.</p>"},
+  {t:"Schnittpunkt f1 und f2", a:"Lösen Sie <i>f</i>1(<i>x</i>) = <i>f</i>2(<i>x</i>)", k:kS12, p:CS(c1,kS12),
+   d:"<p>Im Schnittpunkt sind beide <i>y</i>-Werte gleich.</p><p>Darum lösen Sie die Gleichung mit <b>solve</b>:</p><p><span class=\"cmd\">solve(f1(x)=f2(x),x)</span></p><p>Ergebnis: <b><i>x</i> = 4</b>.</p>",
+   n:"Das Komma vor dem letzten x: Taste <b>,</b> in der Buchstabenreihe."},
+  {t:"y-Wert dazu", a:"Berechnen Sie <i>f</i>1(4)", k:kY12, p:CS(c2,kY12),
+   d:"<p>Den <i>y</i>-Wert liefert eine der beiden Funktionen.</p><p><b>f1(4)</b> = 4. Die Ecke ist <b>(4 | 4)</b>.</p>"},
+  {t:"Schnittpunkt f1 und f3", a:"Berechnen Sie den Schnittpunkt von <i>f</i>1 und <i>f</i>3", k:kS13, p:CS(c3,kS13),
+   d:"<p>Genauso: erst <span class=\"cmd\">solve(f1(x)=f3(x),x)</span>, dann den <i>y</i>-Wert.</p><p><i>x</i> = 6 und f1(6) = 2. Die Ecke ist <b>(6 | 2)</b>.</p>"},
+  {t:"Ecke auf der x-Achse", a:"Lösen Sie <i>f</i>3(<i>x</i>) = 0", k:kN3, p:CS(c4,kN3),
+   d:"<p>Auf der <i>x</i>-Achse ist <i>y</i> = 0.</p><p>Gesucht ist also die <b>Nullstelle</b> von f3.</p><p><i>x</i> = 7. Die Ecke ist <b>(7 | 0)</b>.</p>"},
+  {t:"Alle Ecken", a:"Notieren Sie alle Eckpunkte", k:[], s:()=>gPoly(g4,ECK),
+   d:"<p>Die fünf Ecken des Planungsvielecks:</p><p><b>(0 | 0)</b>, <b>(0 | 6)</b>, <b>(4 | 4)</b>, <b>(6 | 2)</b>, <b>(7 | 0)</b></p><p>Vergleichen Sie mit dem Graphen: Die Punkte liegen genau auf den Knicken.</p>"},
+  {t:"Selbst berechnen", k:[], ab:1, s:cAfter(c5), d:AB("Aufgabe 3",["Ecken auf den Achsen berechnen","Schnittpunkte mit <b>solve</b> und dem <i>y</i>-Wert berechnen","alle Eckpunkte in die Tabelle eintragen"])}
+ ]},
+ z:{ name:"Optimum finden", start:cAfter(c5), steps:[
+  {t:"Zielfunktion definieren", a:"Definieren Sie "+Z, k:kDef, p:CS(c5,kDef),
+   d:"<p><b>menu ▸ 1: Aktionen ▸ 1: Definieren</b></p><p>Dann <b>z(x,y)=30x+40y</b> eintippen, <b>enter</b>.</p><p>Das CAS antwortet mit <b>Fertig</b>.</p>",
+   n:"Zwischen 30 und x brauchen Sie kein Malzeichen."},
+  {t:"Gewinn in einer Ecke", a:"Berechnen Sie <i>Z</i> in der Ecke (4 | 4)", k:kZ, p:CS(c6,kZ),
+   d:"<p><b>z(4,4)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 280. In der Ecke (4 | 4) beträgt der Gewinn <b>280 €</b>.</p>"},
+  {t:"Alle Ecken vergleichen", a:"In welcher Ecke ist <i>Z</i> am größten?", k:[], s:cAfter(c8),
+   d:"<p>Berechnen Sie <i>Z</i> in <b>jeder</b> Ecke:</p>"+ECKT+"<p>Der größte Wert ist <b>280</b> – nur in der Ecke <b>(4 | 4)</b>.</p>",
+   n:"Das Maximum liegt immer in einer <b>Ecke</b> des Planungsvielecks. Darum reicht es, die Ecken zu prüfen."},
+  {t:"Antwort", a:"Formulieren Sie das Ergebnis", k:[], s:()=>gPoly(g4,[[4,4]]),
+   d:"<p>Das Optimum ist <b><i>x</i> = 4</b>, <b><i>y</i> = 4</b>.</p><p>Der maximale Gewinn ist <b><i>Z</i><sub>max</sub> = 280 €</b>.</p><table class=\"vgl\"><tr><th>Antwortsatz</th></tr><tr><td>Der Betrieb sollte 4 Stück von A und 4 Stück von B herstellen. Dann ist der Gewinn mit 280 € am größten.</td></tr></table><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Restriktionen nach <i>y</i> umstellen und zeichnen.<br>2. Eckpunkte des Planungsvielecks berechnen.<br>3. <i>Z</i> in jeder Ecke berechnen.<br>4. Größter Wert = Maximum.</td></tr></table>"},
+  {t:"Selbst lösen", k:[], ab:1, s:cAfter(c8), d:AB("Aufgabe 4",["Zielfunktion definieren","<i>Z</i> in jeder Ecke berechnen und in die Tabelle eintragen","Optimum und Antwortsatz notieren, danach Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["g","e","z"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={play:"▶ Abspielen",tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='play'?'playc':k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  if(k==='play'||S.k[pos]==='play'){ if(k==='play') playTool(); else { const sx=$('stat'); if(sx) sx.innerHTML='<span class="err">Jetzt keine Taste:</span> Klicken Sie auf '+chip('play',pos).replace('now','now big'); } return; }
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: lopt ===== */
+UEB["lopt"]={
+ title:"Lineare Optimierung",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.dt{overflow-x:auto;}
+table.d{border-collapse:collapse; font-size:16px; margin:2px 0 4px;}
+table.d th, table.d td{border:1px solid #c3c8d0; padding:4px 10px; text-align:center; min-width:40px;}
+table.d th{background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic;}
+.spalten{font-size:13.5px; color:var(--mute); margin-top:6px;}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222;}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){.grid{grid-template-columns:1fr;}}
+.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px;}
+.f label{font-size:15px;}
+.f label .z{color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px;}
+.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f .m{font-weight:bold; font-size:18px; text-align:center;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
+.plot svg{width:100%; height:auto; display:block; max-width:640px; margin:0 auto;}
+.plot .gl{stroke:#e1e4e9; stroke-width:1;}
+.plot .ax{stroke:#222; stroke-width:1.4;}
+.plot .ah{fill:#222;}
+.plot .al{font:italic 15px Cambria,Georgia,serif;}
+.plot .tl{font:11px system-ui,Arial,sans-serif; fill:#555;}
+.plot .cv{fill:none; stroke:#1d1d1f; stroke-width:2.2;}
+.plot .ar{stroke-width:2; stroke-dasharray:6 4; fill:none;}
+.plot .ml{font:bold 13px system-ui,Arial,sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{border-left:5px solid #ccc;}
+.f .dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle;}
+.f.gl{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;}
+.f.gl > label:first-child{min-width:150px; font-family:Cambria,Georgia,serif; font-size:16px;}
+.f.gl .xin{display:inline-flex; align-items:center; gap:6px;}
+.f.gl .xin .z{font-family:Cambria,Georgia,serif; font-size:15px;}
+.f.gl .kl{font-size:14.5px; display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+.f.gl .kl input{width:18px; height:18px;}
+.f.gl .m{margin-left:auto;}
+.f.gl .msg{flex-basis:100%;}
+.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
+.liste{font-weight:normal;}
+.f.co{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; border-left-color:#1F4E99;}
+.f.co > label{min-width:72px;}
+.f.co .cos{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:Cambria,Georgia,serif; font-size:17px;}
+.f.co input.ci{width:76px;}
+.f.co input.bad{border-color:var(--no); background:#fff6f5;}
+.f.co .pl{color:var(--mute);}
+.f.co .m{margin-left:auto;}
+.f.co .msg{flex-basis:100%;}
+.fen{text-align:center; font-family:Cambria,Georgia,serif; font-size:15.5px; color:var(--mute); margin:-2px 0 6px;}
+.f.co > label{min-width:58px;}
+.f.co input.ci{width:86px;}
+.int{display:inline-flex; align-items:center; vertical-align:middle;}
+.int .is{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1; font-style:italic;}
+.int .lim{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:11px; line-height:1.1; height:28px;}
+.f.co > label{white-space:nowrap;}
+.restr{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 26px; font-family:Cambria,Georgia,serif; font-size:18px; margin:4px 0 8px;}
+.restr b{font-family:system-ui,Arial,sans-serif; font-size:14px; color:var(--mute); font-weight:600;}
+.term{font-weight:bold; color:var(--lf);}
+table.d td.best{background:#FDECEA; color:#C62828; font-weight:bold;}
+#eck{margin-top:8px; overflow-x:auto;}
+.plot .ml{font:bold 12px system-ui,Arial,sans-serif;}
+#felder{grid-template-columns:1fr 1fr 1fr;}
+@media (max-width:760px){#felder{grid-template-columns:1fr;}}
+.f.co input.ci{width:96px;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="restr" id="restr"></div>
+    <div class="term" id="term"></div>
+    <div class="fen" id="fen"></div>
+    <div class="plot" id="plot"></div>
+    <div id="eck"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Tipp:</b> Alle Eckpunkte haben hier <b>ganzzahlige</b> Koordinaten. Das Maximum ist <b>eindeutig</b>.</div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickR=a=>a[R(0,a.length-1)];
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ const t=a%b; a=b; b=t; } return a; };
+const deN=v=>String(v).replace('-','−').replace('.',',');
+const ROM=['I','II','III'];
+function lin(a,b,c){ // a x + b y ≤ c  als HTML
+  const t=(k,v)=>(k===1?'':k)+v;
+  return `${t(a,'<i>x</i>')} + ${t(b,'<i>y</i>')} ≤ ${c}`;
+}
+function casLine(a,b,c){ const ax=(a===1?'':a)+'x'; return b===1?`${c}-${ax}`:`(${c}-${ax})/${b}`; }
+
+// ---------- Zufallsaufgabe: Planungsvieleck mit 5 ganzzahligen Ecken, eindeutiges Maximum ----------
+function genLP(){
+  for(let tries=0;tries<20000;tries++){
+    const A=[0,R(4,10)], B=[R(1,5),0], C=[0,0], D=[R(5,12),0];
+    B[1]=R(2,A[1]-1); C[0]=R(B[0]+1,Math.min(D[0]-1,B[0]+6)); C[1]=R(1,B[1]-1);
+    if(!(C[0]>B[0]&&C[0]<D[0])) continue;
+    const s1=(B[1]-A[1])/B[0], s2=(C[1]-B[1])/(C[0]-B[0]), s3=(0-C[1])/(D[0]-C[0]);
+    if(!(s1>s2+0.15&&s2>s3+0.15)) continue;          // konvex, deutliche Knicke
+    const P=[A,B,C,D], L=[];
+    let ok=true;
+    for(let i=0;i<3;i++){ const p=P[i], q=P[i+1];
+      let a=p[1]-q[1], b=q[0]-p[0]; const g=gcd(a,b); a/=g; b/=g; const c=a*p[0]+b*p[1];
+      if(a<1||b<1||a>9||b>9||c>60) { ok=false; break; }
+      L.push({a,b,c}); }
+    if(!ok) continue;
+    const ECK=[[0,0],A,B,C,D];
+    // jede Ecke erfüllt alle Restriktionen
+    if(!ECK.every(e=>L.every(l=>l.a*e[0]+l.b*e[1]<=l.c))) continue;
+    // Zielfunktion Z = p x + q y mit eindeutigem Maximum (Abstand zum Zweitbesten)
+    const p=5*R(2,18), q=5*R(2,18);
+    const Z=ECK.map(e=>p*e[0]+q*e[1]); const srt=[...Z].sort((u,v)=>v-u);
+    if(srt[0]-srt[1]<Math.max(10,srt[0]*0.03)) continue;
+    const opt=Z.indexOf(srt[0]);
+    if(opt<2&&Math.random()<0.7) continue;               // meist eine innere Ecke
+    return {L,ECK,p,q,Z,opt};
+  }
+  return null;
+}
+
+const KONTEXT=[
+  {wer:'Eine Schreinerei',a:'Tische',b:'Regale',ea:'Tisch',eb:'Regal',res:['Zuschnitt','Montage','Lackierung']},
+  {wer:'Eine Fahrradmanufaktur',a:'Stadträder',b:'Trekkingräder',ea:'Stadtrad',eb:'Trekkingrad',res:['Rahmenbau','Montage','Endkontrolle']},
+  {wer:'Eine Bäckerei',a:'Bleche Kuchen',b:'Bleche Brötchen',ea:'Blech Kuchen',eb:'Blech Brötchen',res:['Teigmaschine','Ofen','Verpackung']},
+  {wer:'Ein Textilbetrieb',a:'Jacken',b:'Hosen',ea:'Jacke',eb:'Hose',res:['Zuschnitt','Nähen','Bügeln']},
+  {wer:'Ein Möbelhersteller',a:'Stühle',b:'Hocker',ea:'Stuhl',eb:'Hocker',res:['Sägen','Schleifen','Lackieren']}
+];
+
+// ---------- Zeichnung (erscheint mit der Lösung) ----------
+const COL=['#1F4E99','#C8102E','#2E7D32'];
+function plot(A){
+  const xm=Math.max(...A.L.map(l=>l.c/l.a)), ym=Math.max(...A.L.map(l=>l.c/l.b));
+  const w={x0:-1,x1:Math.min(Math.ceil(xm)+1,A.ECK[4][0]+5),y0:-1,y1:Math.min(Math.ceil(ym)+1,A.ECK[1][1]+5)};
+  const W=640, H=Math.round(Math.min(460,Math.max(300,W*(w.y1-w.y0)/(w.x1-w.x0)))), pl=30, pr=26, pt=18, pb=26;
+  const X=x=>pl+(x-w.x0)*(W-pl-pr)/(w.x1-w.x0), Y=y=>pt+(w.y1-y)*(H-pt-pb)/(w.y1-w.y0);
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Planungsvieleck">`;
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) o+=`<line x1="${X(x)}" y1="${Y(w.y0)}" x2="${X(x)}" y2="${Y(w.y1)}" class="gl"/>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) o+=`<line x1="${X(w.x0)}" y1="${Y(y)}" x2="${X(w.x1)}" y2="${Y(y)}" class="gl"/>`;
+  o+=`<polygon points="${A.ECK.map(e=>X(e[0])+','+Y(e[1])).join(' ')}" fill="#9aa3b0" fill-opacity=".35"/>`;
+  o+=`<line x1="${X(w.x0)}" y1="${Y(0)}" x2="${X(w.x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(w.x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
+  o+=`<line x1="${X(0)}" y1="${Y(w.y0)}" x2="${X(0)}" y2="${Y(w.y1)-10}" class="ax"/><path d="M${X(0)} ${Y(w.y1)-14} l-4 8 h8z" class="ah"/>`;
+  o+=`<text x="${X(w.x1)+8}" y="${Y(0)+18}" class="al">x</text><text x="${X(0)+8}" y="${Y(w.y1)-4}" class="al">y</text>`;
+  for(let x=1;x<=w.x1;x++) if(x%2===0||w.x1<=10) o+=`<text x="${X(x)}" y="${Y(0)+15}" class="tl" text-anchor="middle">${x}</text>`;
+  for(let y=1;y<=w.y1;y++) if(y%2===0||w.y1<=10) o+=`<text x="${X(0)-6}" y="${Y(y)+4}" class="tl" text-anchor="end">${y}</text>`;
+  o+=`<defs><clipPath id="cp"><rect x="${X(w.x0)}" y="${Y(w.y1)}" width="${X(w.x1)-X(w.x0)}" height="${Y(w.y0)-Y(w.y1)}"/></clipPath></defs><g clip-path="url(#cp)">`;
+  A.L.forEach((l,i)=>{ const f=x=>(l.c-l.a*x)/l.b; o+=`<line x1="${X(w.x0)}" y1="${Y(f(w.x0))}" x2="${X(w.x1)}" y2="${Y(f(w.x1))}" stroke="${COL[i]}" stroke-width="2.2"/>`; });
+  o+='</g>';
+  A.L.forEach((l,i)=>{ // Beschriftung der Geraden am oberen bzw. rechten Rand
+    const f=x=>(l.c-l.a*x)/l.b; let x=w.x1-0.4, y=f(x); if(y<w.y0+0.6){ y=w.y0+0.8+i*0.9; x=(l.c-l.b*y)/l.a; } if(y>w.y1-0.3){ y=w.y1-0.6; x=(l.c-l.b*y)/l.a; }
+    o+=`<text x="${X(x)+6}" y="${Y(y)-6}" fill="${COL[i]}" class="ml">${ROM[l.k]}</text>`; });
+  A.ECK.forEach((e,i)=>{ const best=i===A.opt;
+    o+=`<circle cx="${X(e[0])}" cy="${Y(e[1])}" r="${best?7:5}" fill="${best?'#C62828':'#1d1d1f'}"/>`;
+    o+=`<text x="${X(e[0])+8}" y="${Y(e[1])-8}" fill="${best?'#C62828':'#1d1d1f'}" class="ml">(${e[0]}|${e[1]}) Z=${A.Z[i]}</text>`; });
+  return o+'</svg>';
+}
+
+// ---------- Aufgaben ----------
+const MODES={ohne:{name:"Ohne Sachzusammenhang"}, mit:{name:"Mit Sachzusammenhang"}};
+const ORDER=["ohne","mit"];
+let mode=ORDER[0], A=null, stat={a:0,r:0}, shown=false;
+
+function neu(){
+  A=genLP(); shown=false;
+  // Restriktionen in zufälliger Reihenfolge nummerieren
+  const ord=[0,1,2].sort(()=>Math.random()-.5); ord.forEach((j,k)=>{ A.L[j].k=k; });
+  const Ls=[...A.L].sort((u,v)=>u.k-v.k);
+  const K=pickR(KONTEXT);
+  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent='Aufgabe: Maximum bestimmen';
+  if(mode==='mit'){
+    root.getElementById('auftrag').innerHTML=`${K.wer} stellt pro Woche <i>x</i> ${K.a} und <i>y</i> ${K.b} her. Ein ${K.ea} bringt ${A.p}&nbsp;€, ein ${K.eb} ${A.q}&nbsp;€ Deckungsbeitrag. Die Arbeitszeit in drei Abteilungen ist begrenzt. Bei welchen Mengen ist der Deckungsbeitrag am größten?`;
+    root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${K.res[l.k]}: ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i> ≥ 0, <i>y</i> ≥ 0</span>';
+  } else {
+    root.getElementById('auftrag').innerHTML='Bestimmen Sie mit dem CAS das Maximum der Zielfunktion unter den Restriktionen.';
+    root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i> ≥ 0, <i>y</i> ≥ 0</span>';
+  }
+  root.getElementById('term').innerHTML=`Zielfunktion: <i>Z</i> = ${A.p}<i>x</i> + ${A.q}<i>y</i> → max`;
+  const xm=Math.ceil(Math.max(...A.L.map(l=>l.c/l.a))), ym=Math.ceil(Math.max(...A.L.map(l=>l.c/l.b)));
+  root.getElementById('fen').innerHTML=`Fenster-Vorschlag: −1 ≤ <i>x</i> ≤ ${Math.min(xm,A.ECK[4][0]+5)} und −1 ≤ <i>y</i> ≤ ${Math.min(ym,A.ECK[1][1]+5)}`;
+  root.getElementById('plot').innerHTML=''; root.getElementById('eck').innerHTML='';
+  root.getElementById('hinweis').innerHTML='Tipp: Restriktionen nach <i>y</i> umstellen, z.&nbsp;B. '+Ls.map(l=>`<span class="liste">f${l.k+1}(x)=${casLine(l.a,l.b,l.c)}</span>`).join(' ')+
+    ' · Ecken: <b>solve(f1(x)=f2(x),x)</b>, Nullstellen und Achsenabschnitte · Zielfunktion: <b>menu ▸ 1 ▸ 1: Definieren</b> <span class="liste">z(x,y)='+A.p+'x+'+A.q+'y</span>, dann <span class="liste">z(…,…)</span> in jeder Ecke.';
+  const F=[['x','<i>x</i> =',A.ECK[A.opt][0],'#1F4E99'],['y','<i>y</i> =',A.ECK[A.opt][1],'#C25E00'],['z','<i>Z</i><sub>max</sub> =',A.Z[A.opt],'#C62828']];
+  A.felder=F;
+  root.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci">${f[0]==='z'&&mode==='mit'?'<span class="pl">€</span>':''}</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace('€','').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return parseFloat(s); }
+function zeigeLoesung(){
+  root.getElementById('plot').innerHTML=plot(A);
+  root.getElementById('eck').innerHTML='<table class="d"><tr><th>Ecke</th>'+A.ECK.map(e=>`<td>(${e[0]} | ${e[1]})</td>`).join('')+'</tr><tr><th>Z</th>'+A.Z.map((z,i)=>`<td class="${i===A.opt?'best':''}">${z}</td>`).join('')+'</tr></table>';
+}
+function pruefen(){
+  let r=0;
+  A.felder.forEach(f=>{ const el=root.getElementById('f_'+f[0]), v=parse(root.getElementById('i_'+f[0]).value), m=el.querySelector('.m'), msg=el.querySelector('.msg');
+    el.classList.remove('ok','no','fmt','show');
+    if(v===null){ el.classList.add('fmt'); m.textContent='?'; msg.textContent='Bitte eine Zahl eintragen.'; return; }
+    if(Math.abs(v-f[2])<1e-9){ el.classList.add('ok'); m.textContent='✓'; msg.textContent=''; r++; }
+    else { el.classList.add('no'); m.textContent='✗';
+      const isEck=A.ECK.some(e=>(f[0]==='x'&&e[0]===v)||(f[0]==='y'&&e[1]===v));
+      msg.textContent=f[0]==='z'?(A.Z.includes(v)?'Das ist Z in einer anderen Ecke. Vergleichen Sie alle Ecken.':'Prüfen Sie die Zielfunktion und die Ecke.'):
+        (isEck?'Das ist eine Ecke – aber nicht die mit dem größten Z.':'Prüfen Sie die Schnittpunkte der Randgeraden.'); }
+  });
+  if(!A.gezaehlt){ stat.a++; A.gezaehlt=true; } if(r===A.felder.length&&!A.geloest&&!shown){ stat.r++; A.geloest=true; }
+  root.getElementById('score').innerHTML=r===A.felder.length?'<span style="color:var(--ok)">✓ Alles richtig!</span>':`${r} von ${A.felder.length} richtig.`;
+  root.getElementById('stats').textContent=`Bisher: ${stat.r} von ${stat.a} Aufgaben vollständig richtig.`;
+  if(r===A.felder.length) zeigeLoesung();
+}
+function zeigen(){
+  A.felder.forEach(f=>{ const el=root.getElementById('f_'+f[0]); root.getElementById('i_'+f[0]).value=String(f[2]); el.classList.remove('ok','no','fmt'); el.classList.add('show'); el.querySelector('.m').textContent=''; el.querySelector('.msg').textContent=''; });
+  zeigeLoesung(); shown=true;
+  root.getElementById('score').textContent='Lösung angezeigt.';
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset&&e.target.dataset.m; if(m){ mode=m; neu(); } };
+neu();
+ }
+};
+
 /* ===== Anleitung: graph ===== */
 GUIDES["graph"]={
  note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
@@ -10718,7 +11536,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform (ref / rref)", "sub": "LGS mit Matrizen lösen", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}, {"id": "bin", "dir": "Binomialverteilung", "pdf": "Arbeitsblatt_CAS_Binomialverteilung.pdf", "ueb": true, "title": "Binomialverteilung", "sub": "genau, höchstens, Intervalle", "block": "sto", "sec": null}, {"id": "bing", "dir": "Binomial_Gesucht", "pdf": "Arbeitsblatt_CAS_Binomial_Gesucht.pdf", "ueb": true, "title": "Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht", "sub": "mit Wertetabelle und Graph", "block": "sto", "sec": null}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform (ref / rref)", "sub": "LGS mit Matrizen lösen", "block": "alg", "sec": null}, {"id": "lopt", "dir": "Lineare_Optimierung", "pdf": "Arbeitsblatt_CAS_Lineare_Optimierung.pdf", "ueb": true, "title": "Lineare Optimierung", "sub": "Planungsvieleck, Eckpunkte, Maximum", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}, {"id": "bin", "dir": "Binomialverteilung", "pdf": "Arbeitsblatt_CAS_Binomialverteilung.pdf", "ueb": true, "title": "Binomialverteilung", "sub": "genau, höchstens, Intervalle", "block": "sto", "sec": null}, {"id": "bing", "dir": "Binomial_Gesucht", "pdf": "Arbeitsblatt_CAS_Binomial_Gesucht.pdf", "ueb": true, "title": "Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht", "sub": "mit Wertetabelle und Graph", "block": "sto", "sec": null}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',

@@ -19,6 +19,7 @@ TOPICS = [
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
     ('stufe', 'Stufenform', 'Stufenform', 'Stufenform', 'Zeilenstufenform (ref / rref)', 'LGS mit Matrizen lösen', 'Arbeitsblatt_CAS_Stufenform.pdf'),
+    ('lopt', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare Optimierung', 'Planungsvieleck, Eckpunkte, Maximum', 'Arbeitsblatt_CAS_Lineare_Optimierung.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
@@ -198,7 +199,7 @@ BLOCKS = [
 BLOCK_OF = {
     'grund': None,
     'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
-    'gl': 'alg', 'lgs': 'alg', 'stufe': 'alg',
+    'gl': 'alg', 'lgs': 'alg', 'stufe': 'alg', 'lopt': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
     'bin': 'sto', 'bing': 'sto',
 }

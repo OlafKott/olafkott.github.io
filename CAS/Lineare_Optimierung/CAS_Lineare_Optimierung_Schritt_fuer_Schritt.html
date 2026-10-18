@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAS Schritt für Schritt: Lineare Optimierung</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.tabs button.fertig::after{ content:" ✓"; color:var(--ab); font-weight:bold; }
+.tabs button.on.fertig::after{ color:#9fe0a5; }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner ---------- */
+.calc{ width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18); }
+.body{ background:#2b2b2f; border-radius:22px; padding:12px 12px 16px; }
+.face{ background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px; }
+.brand{ text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px; }
+.brand b{ color:#fff; margin-left:6px; }
+.scrwrap{ background:#000; border-radius:4px; padding:4px; }
+.scr{ width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto; }
+.nav{ display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center; }
+.nav .col{ display:flex; flex-direction:column; gap:7px; }
+.pad{ width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative; }
+.pad .k{ position:absolute; background:transparent; color:#aaa; font-size:10px; border:0; }
+.pad .k[data-k=up]{ left:38px; top:2px; width:36px; height:20px; }
+.pad .k[data-k=down]{ left:38px; bottom:2px; width:36px; height:20px; }
+.pad .k[data-k=left]{ left:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=right]{ right:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=click]{ left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd; }
+.k{ font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+.k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.k.lt{ background:#8e8e95; color:#111; font-size:14px; }
+.k.ctrl{ background:#D93A2B; }
+.k.bk{ background:#26262a; border:1px solid #555; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative; }
+.pad .k.hit{ position:absolute; }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+.k.held{ box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7); }
+@keyframes wack{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+.row4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0; }
+.main7{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px; }
+.let9{ display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px; }
+.let9 .k{ height:20px; font-size:10px; }
+.span2{ grid-column:span 2; } .span3{ grid-column:span 3; }
+.k sub{ font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px; }
+
+/* ---------- Bildschirm-Inhalte ---------- */
+.tb{ height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf; }
+.tb .tab{ background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap; }
+.tb .tab.off{ background:#eef1f5; color:#777; }
+.tb .tab.np{ background:#fff4c9; border-color:#d1b24a; font-weight:bold; }
+.scr.tabhl .tb .tab.pg{ background:#F2B705; color:#111; font-weight:bold; border-color:#b88a00; box-shadow:0 0 6px 1px rgba(242,183,5,.8); animation:pulse 1.2s ease-in-out infinite; }
+.scr.tabhl .tb .tab.pg.off{ background:#FFE9A8; color:#5a4500; }
+.tb .docn{ font-weight:bold; margin-right:3px; }
+.tb .sp{ flex:1; } .tb .bat{ width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative; }
+.tb .bat:after{ content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3; }
+.calcapp{ padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end; }
+.calcapp .ln{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px; }
+.calcapp .ln span, .calcapp .ln b{ padding:0 2px; border-radius:2px; }
+.calcapp .ln .sel{ background:#3b78c2; color:#fff; }
+.calcapp .ln b{ font-weight:normal; margin-left:auto; }
+.calcapp .ln b i, .calcapp .ln span i{ font-style:normal; }
+.calcapp .cur{ border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1; }
+.fr > span{ padding:0 2px; min-width:7px; }
+.fr > span:first-child{ border-bottom:1px solid currentColor; }
+.fr > span:empty::after, .rad:empty::after, sup:empty::after{ content:"\25A1"; color:#999; }
+.calcapp{ overflow:hidden; }
+.calcapp > *{ flex-shrink:0; }
+.dvb:empty::after{ content:"\25A1"; color:#999; }
+.rt{ white-space:nowrap; } .rad{ border-top:1px solid currentColor; padding:0 1px; }
+.calcapp sup{ font-size:8px; }
+.caret{ animation:blink 1s steps(1) infinite; font-weight:normal; } @keyframes blink{ 50%{opacity:0} }
+.menu{ position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3; }
+.menu div{ padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.menu div.sel{ background:#3b78c2; color:#fff; }
+.dlg{ position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4; }
+.dlg .tt{ background:#c9d3df; font-weight:bold; padding:2px 6px; }
+.dlg .ff{ display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center; }
+.dlg .lb{ text-align:right; }
+.dlg .ct{ background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
+.dlg .ct.fo{ outline:2px solid #3b78c2; }
+.dlg .ct.mark{ background:#FFF3C4; }
+.dlg .bt{ display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px; }
+.dlg .bt span{ border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px; }
+.hs{ position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif; }
+.hs .hb{ height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555; }
+.hs .hb .bt2{ width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative; }
+.hs .hb .bt2:after{ content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a; }
+.hs .cols{ display:flex; gap:10px; padding:7px 10px 0; }
+.hs .col{ flex:1; }
+.hs h5{ margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px; }
+.hs h5 i{ display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg); }
+.hs .it{ display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap; }
+.hs .it b{ display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px; }
+.hs .it.dim{ color:#6f757d; } .hs .it.dim b{ background:#555a61; color:#2a2d31; }
+.hs .it.sel{ background:#3b78c2; color:#fff; }
+.hs .it.ziel{ background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse 1.2s ease-in-out infinite; }
+.hs .it.ziel b{ background:#111; color:#F2B705; }
+.menu div.ziel{ background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+.hs .icons{ position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between; }
+.hs .icons span{ width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5); }
+.hs .icons span.on{ outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6); }
+.hs .icons svg{ width:20px; height:20px; }
+.hs .ft{ position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden; }
+table.sh{ border-collapse:collapse; table-layout:fixed; width:280px; }
+table.sh td{ border:1px solid #c9ced6; height:15px; padding:0 3px; font-size:10.5px; }
+table.sh td.rn{ width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px; }
+table.sh tr.hd td{ height:18px; background:#eef1f5; font-weight:bold; }
+table.sh td.cur{ outline:2px solid #000; outline-offset:-2px; }
+.files{ padding:4px 8px; font-size:11px; }
+.files .hd{ font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between; }
+.files .it{ padding:2px 4px; display:flex; justify-content:space-between; } .files .it.sel{ background:#3b78c2; color:#fff; }
+.pwroff{ position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px; }
+
+/* ---------- Panel ---------- */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.prog i.abp{ background:#bfe3c3; } .prog i.abp.done{ background:#7cbf84; } .prog i.abp.now{ background:var(--ab); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.keys{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.ctrl{ background:#D93A2B; } .chip.lt{ background:#8e8e95; color:#111; }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.chip.plus{ background:none; color:var(--mute); padding:3px 2px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.ab{ border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px; }
+.ab .abt{ font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.ab .abt span{ font-size:22px; }
+.ab ul{ margin:0 0 8px; padding-left:20px; font-size:15px; }
+.ab li{ margin-bottom:3px; }
+.ab p{ font-size:14.5px; }
+.ab .tx{ font-family:Consolas,'Courier New',monospace; background:#e2eee3; border-radius:3px; padding:0 4px; }
+.task{ border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc; }
+.task b{ color:var(--lf); }
+.task .auf{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute); }
+.task .term{ font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink); }
+.task .term .fr{ font-size:20px; } .task .term .rad{ padding:0 3px; }
+.cmd{ font-family:Consolas,'Courier New',monospace; font-size:21px; background:#eceef1; border-radius:4px; padding:0 6px; }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+.btns button:disabled{ opacity:.4; cursor:default; }
+#next{ margin-left:auto; }
+.opt{ font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px; }
+.hint{ font-size:12.5px; color:var(--mute); margin-top:10px; }
+.vgl{ border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%; }
+.vgl th,.vgl td{ border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top; }
+.vgl th{ background:#eef0f3; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+
+.play{ font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+.chip.playc{ background:#F2B705; color:#111; cursor:pointer; }
+.play:hover{ background:#ffc928; } .playh{ font-size:13px; color:var(--mute); margin-left:6px; }
+
+.int{ display:inline-flex; align-items:center; vertical-align:middle; margin:0 1px; }
+.int .is{ font-family:Cambria,Georgia,serif; font-size:1.45em; line-height:1; font-style:italic; }
+.int .lim{ display:inline-flex; flex-direction:column; justify-content:space-between; font-size:.62em; line-height:1.05; margin-left:-1px; align-self:stretch; }
+.task .term .int .lim{ font-size:.55em; }
+/* linksbündig (Moodle-Frame) */
+.top .in, body > main, body > .tabs, .tabs#tabs, body > .wrap{ margin-left:0 !important; margin-right:auto !important; }
+</style></head><body>
+<div class="top"><div class="in"><a href="https://olafkott.github.io/CAS/" title="Zurück zur Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap;flex:0 0 auto">&#8592; Übersicht</a><h1>CAS Schritt für Schritt: Lineare Optimierung<small>TI-Nspire CX CAS · Am eigenen Handheld mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,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" alt="RWB Essen AHR"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="calc"><div class="body">
+    <div class="face">
+      <div class="brand">TI-Nspire CX<b>CAS</b></div>
+      <div class="scrwrap"><div class="scr" id="scr"></div></div>
+      <div class="nav">
+        <div class="col"><button class="k bk" data-k="esc">esc</button><button class="k bk" data-k="pad2">✎</button><button class="k bk" data-k="tab">tab</button></div>
+        <div class="pad"><button class="k" data-k="up">▲</button><button class="k" data-k="left">◀</button><button class="k" data-k="click">●</button><button class="k" data-k="right">▶</button><button class="k" data-k="down">▼</button></div>
+        <div class="col"><button class="k bk" data-k="on">⌂ on</button><button class="k bk" data-k="doc">doc ▸</button><button class="k bk" data-k="menu">menu</button></div>
+      </div>
+    </div>
+    <div class="row4"><button class="k ctrl" data-k="ctrl">ctrl</button><button class="k" data-k="shift">⇧ shift</button><button class="k" data-k="var">var<sub>sto→</sub></button><button class="k" data-k="del">del</button></div>
+    <div class="main7">
+      <button class="k" data-k="=">=</button><button class="k" data-k="trig">trig</button><button class="k lt" data-k="7">7</button><button class="k lt" data-k="8">8</button><button class="k lt" data-k="9">9</button><button class="k" data-k="tmpl">⊞</button><button class="k" data-k="cat">📖</button>
+      <button class="k" data-k="^">^</button><button class="k" data-k="x2">x²<sub>√</sub></button><button class="k lt" data-k="4">4</button><button class="k lt" data-k="5">5</button><button class="k lt" data-k="6">6</button><button class="k" data-k="*">×</button><button class="k" data-k="/">÷<sub>Bruch</sub></button>
+      <button class="k" data-k="ex">eˣ</button><button class="k" data-k="10x">10ˣ</button><button class="k lt" data-k="1">1</button><button class="k lt" data-k="2">2</button><button class="k lt" data-k="3">3</button><button class="k" data-k="+">+</button><button class="k" data-k="-">−</button>
+      <button class="k" data-k="(">(</button><button class="k" data-k=")">)</button><button class="k lt" data-k="0">0</button><button class="k lt" data-k=".">.</button><button class="k lt" data-k="neg">(−)<sub>ans</sub></button><button class="k span2" data-k="enter">enter<sub>≈</sub></button>
+    </div>
+    <div class="let9" id="let9"></div>
+  </div></div>
+
+  <div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="keys" id="keys"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+// ---------- Buchstabentasten ----------
+(function(){
+  const rows=[["EE","a","b","c","d","e","f","g","?!"],["π","h","i","j","k","l","m","n","⚑"],[",","o","p","q","r","s","t","u","↵"],["","v","w","x","y","z","␣"]];
+  let h='';
+  rows.forEach(r=>r.forEach(c=>{
+    if(c==="") h+='<span></span>';
+    else if(c==="␣") h+='<button class="k span3" data-k="space">␣</button>';
+    else h+=`<button class="k" data-k="${c}">${/^[a-z]$/.test(c)?c.toUpperCase():c}</button>`;
+  }));
+  document.getElementById('let9').innerHTML=h;
+})();
+
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  if(tabs==='np') return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+function sheet(tabs,cur,doc){
+  let h=topbar(tabs,cur,doc)+'<table class="sh"><tr class="hd"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr>';
+  for(let r=1;r<=10;r++) h+=`<tr><td class="rn">${r}</td><td class="${r===1?'cur':''}"></td><td></td><td></td><td></td></tr>`;
+  return h+'</table>';
+}
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map((l,j)=>`<div class="ln"><span class="${o.sel===2*j?'sel':''}">${l[0]}</span><b class="${o.sel===2*j+1?'sel':''}">${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
+
+// ---------- Eingabezeile (Vorlagen: Bruch, Hochzahl, Wurzel) ----------
+const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
+function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
+Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
+Entry.prototype.der=function(){ const d={t:'der',v:[],e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
+Entry.prototype.key=function(k){
+  const T=this.top();
+  if(k==='tab'){ if(T.der&&T.a===T.der.v){ this.path.pop(); this.path.push({a:T.der.e,der:T.der}); } return; }
+  if(this.ctrl){ this.ctrl=false;
+    if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
+    if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+    if(k==='neg'){ T.a.push('ans'); return; }
+    if(k==='var'){ T.a.push('→'); return; }
+    if(k==='tmpl'){ T.a.push(':='); return; }
+    return;
+  }
+  if(k==='ctrl'){ this.ctrl=true; return; }
+  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
+  if(k==='down'){ if(T.f&&T.a===T.f.n){ this.path.pop(); this.path.push({a:T.f.d,f:T.f}); } return; }
+  if(k==='right'){ if(this.path.length>1) this.path.pop(); return; }
+  if(k==='del'){ T.a.pop(); return; }
+  if(k==='-'&&this.root.length===0){ T.a.push('ans','−'); return; }
+  T.a.push(SHOW[k]||k);
+};
+function rnd(arr,curA,caret){
+  let h=arr.map(t=>typeof t==='string'?t:
+    t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
+    t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
+    t.t==='der'?`<span class="fr"><span>d</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span></span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
+    `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
+  if(caret&&arr===curA) h+='<span class="caret">|</span>';
+  return h;
+}
+function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?`d/d${ser(t.v)}(${ser(t.e)})`:`√(${ser(t.v)})`).join(''); }
+Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
+
+// ---------- Graphs-App: Menüs ----------
+const F1=['1.1'], F2=['1.1','1.2'], O={doc:'graph'};
+const GM=["1: Aktionen","2: Ansicht","3: Graph-Eingabe/Bearbeitung","4: Fenster/Zoom","5: Spur","6: Graph analysieren","7: Tabelle","8: Geometrie","9: Einstellungen"];
+const FZ=["1: Fenstereinstellungen","2: Zoom – Box","3: Zoom – Vergrößern","4: Zoom – Verkleinern","5: Zoom – Standard","6: Zoom – Quadrant 1","7: Zoom – Benutzer","8: Zoom – Trig","9: Zoom – Daten"];
+const SUB={"4":FZ};
+// Randgeraden der Tour (Koeffizienten, höchste Potenz zuerst)
+const FUN={ f1:{P:[-1,8], col:'#1f4fb5'}, f2:{P:[-0.5,6], col:'#c8102e'}, f3:{P:[-2,14], col:'#2E7D32'} };
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+const fmt3=v=>{ if(Math.abs(v)<5e-7) return '0'; return String(Number(v.toPrecision(3))).replace('-','−'); };
+// Eckpunkte des Planungsvielecks
+const ECK=[[0,0],[0,6],[4,4],[6,2],[7,0]];
+
+// ---------- Graphs-App: Zustand ----------
+const DLGL=["XMin","XMax","XSkalierung","YMin","YMax","YSkalierung"];
+function G0(){ return {win:{x0:-10,x1:10,y0:-6.67,y1:6.67}, fs:[], ent:{n:'f1',e:new Entry()}, menu:null, dlg:null, ctrl:false, poly:false, pts:[]}; }
+function simG(keys){
+  const S=G0();
+  for(const k of keys){
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:SUB[k]||[],sel:0,d:k}); continue; }
+      const a=S.menu[1].d; S.menu=null;
+      if(a==='4'&&k==='1'){ const w=S.win; S.dlg={v:[fmt3(w.x0),fmt3(w.x1),'Auto',fmt3(w.y0),fmt3(w.y1),'Auto'], fo:0, fresh:true}; }
+      continue;
+    }
+    if(S.dlg){
+      const D=S.dlg;
+      if(k==='tab'){ D.fo=(D.fo+1)%6; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(s.replace('−','-')); S.win={x0:p(D.v[0]),x1:p(D.v[1]),y0:p(D.v[3]),y1:p(D.v[4])}; S.dlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.fo]=''; D.fresh=false; } D.v[D.fo]+=ch; continue;
+    }
+    if(S.ent){
+      if(k==='enter'){ S.fs.push({n:S.ent.n, root:S.ent.e.root}); S.ent=null; continue; }
+      S.ent.e.key(k); continue;
+    }
+    if(S.ctrl){ S.ctrl=false; continue; }
+    if(k==='ctrl'){ S.ctrl=true; continue; }
+    if(k==='tab'){ S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
+    if(k==='menu'){ S.menu=[{items:GM,sel:0}]; continue; }
+  }
+  return S;
+}
+
+// ---------- Graphs-App: Bildschirm ----------
+function gScreen(S){
+  const W=280, H=194, w=S.win, X=x=>(x-w.x0)/(w.x1-w.x0)*W, Y=y=>(w.y1-y)/(w.y1-w.y0)*H;
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:16px;overflow:hidden" font-family="Arial,Helvetica,sans-serif">`;
+  // Planungsvieleck (nur zur Verdeutlichung – das CAS färbt es nicht)
+  if(S.poly) s+=`<path d="${ECK.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')} Z" fill="#9aa3b0" fill-opacity=".45" stroke="#555" stroke-width=".8" stroke-dasharray="3 2"/>`;
+  const ax='#555';
+  if(w.y0<0&&w.y1>0){ const y=Y(0); s+=`<line x1="0" y1="${y}" x2="${W-5}" y2="${y}" stroke="${ax}" stroke-width="1"/><path d="M${W} ${y} l-6 -3 v6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.x0);t<=Math.floor(w.x1);t++) if(t) s+=`<line x1="${X(t)}" y1="${y-2}" x2="${X(t)}" y2="${y+2}" stroke="${ax}"/>`;
+    s+=`<text x="2" y="${y-3}" font-size="8" fill="#777">${fmt3(w.x0)}</text><text x="${W-2}" y="${y+10}" font-size="8" fill="#777" text-anchor="end">${fmt3(w.x1)}</text>`; }
+  if(w.x0<0&&w.x1>0){ const x=X(0); s+=`<line x1="${x}" y1="${H}" x2="${x}" y2="5" stroke="${ax}" stroke-width="1"/><path d="M${x} 0 l-3 6 h6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}"/>`;
+    s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
+  S.fs.forEach((F,j)=>{
+    const P=FUN[F.n].P, col=FUN[F.n].col; let d='', pen=false;
+    for(let i=0;i<=280;i++){ const x=w.x0+(w.x1-w.x0)*i/280, py=Y(ev(P,x));
+      if(py>-40&&py<H+40){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1)+' '; pen=true; } else pen=false; }
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
+    s+=`<text x="${W-4}" y="${(S.ent?33:13)+j*12}" font-size="9.5" fill="${col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${F.n}(x)=${ser2(F.root)}</text>`;
+  });
+  S.pts.forEach(p=>{
+    const px=X(p[0]), py=Y(p[1]), lx=p[0]===0?px+5:px+4, ly=p[1]===0?py-5:py-5;
+    s+=`<circle cx="${px}" cy="${py}" r="2.6" fill="#000"/>`;
+    if(!(p[0]===0&&p[1]===0)) s+=`<text x="${lx}" y="${ly}" font-size="9" fill="#000" stroke="#fff" stroke-width="3" paint-order="stroke">(${p[0]}|${p[1]})</text>`;
+  });
+  s+='</svg>';
+  let h=topbar(S.tabs||F1,'1.1',O.doc)+s;
+  if(S.ent) h+=`<div style="position:absolute;left:0;right:0;top:16px;height:21px;background:#fff;border-bottom:1px solid #9aa5b3;display:flex;align-items:center;padding:0 5px;font-size:11.5px;z-index:2"><span style="display:inline-flex;width:11px;height:11px;border:1px solid #1f4fb5;background:#1f4fb5;color:#fff;font-size:9px;line-height:11px;justify-content:center;margin-right:4px">✓</span><span style="color:${FUN[S.ent.n].col};margin-right:2px">${S.ent.n}(x)=</span><span style="flex:1;padding:0 3px;min-height:15px">${S.ent.e.html()}</span></div>`;
+  if(S.dlg){ const D=S.dlg; h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+DLGL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.fo?'fo':''}">${D.v[i]}${i===D.fo&&!D.fresh?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
+  if(S.menu) h+=menus(S.menu);
+  return h;
+}
+// Eingabe als Text für das Graph-Etikett
+function ser2(arr){ return arr.map(t=>typeof t==='string'?t:ser2(t.v||[])).join('').replace(/(\d)x/g,'$1·x'); }
+const GS=(pre,keys)=>i=>gScreen(simG(pre.concat(keys.slice(0,i))));
+const gAfter=keys=>()=>gScreen(simG(keys));
+function gPoly(keys,pts){ const S=simG(keys); S.poly=true; S.pts=pts||[]; return gScreen(S); }
+function playTool(){}
+
+// ---------- Calculator-Seite (Seite 1.2) ----------
+// Ergebnisse, die das CAS zu den Eingaben der Tour anzeigt
+const RES={'Define z(x,y)=30x+40y':'Fertig','f2(0)':'6','solve(f1(x)=f2(x),x)':'x=4','f1(4)':'4','solve(f1(x)=f3(x),x)':'x=6','f1(6)':'2','solve(f3(x)=0,x)':'x=7',
+  'z(0,0)':'0','z(0,6)':'240','z(4,4)':'280','z(6,2)':'260','z(7,0)':'210'};
+function simC(keys){
+  const S={lines:[], e:new Entry(), menu:null};
+  for(const k of keys){
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:k==='1'?AK:[],sel:0}); continue; }
+      S.menu=null; if(k==='1') S.e.root.push('Define '); continue;
+    }
+    if(k==='menu'){ S.menu=[{items:CM,sel:0}]; continue; }
+    if(k==='enter'){ const t=ser(S.e.root); S.lines.push([S.e.html(false), RES[t]!==undefined?RES[t]:'?']); S.e=new Entry(); continue; }
+    S.e.key(k);
+  }
+  return S;
+}
+function cScreen(S){ return calcApp(F2,'1.2',S.lines.slice(-7),S.e.html(),O)+(S.menu?menus(S.menu):''); }
+const CS=(pre,keys)=>i=>cScreen(simC(pre.concat(keys.slice(0,i))));
+const cAfter=keys=>()=>cScreen(simC(keys));
+
+// ---------- Tastenfolgen ----------
+const K=s=>[...s].map(c=>c===' '?'space':c).concat(['enter']);
+const kNew=["1","2"];
+const kF1=["8","-","x","enter"];
+const kF2=["tab","6","-","0",".","5","x","enter"];
+const kF3=["tab","1","4","-","2","x","enter"];
+const kWin=["menu","4","1","neg","1","tab","1","3","tab","tab","neg","1","tab","1","5","enter"];
+const g1=kF1, g2=g1.concat(kF2), g3=g2.concat(kF3), g4=g3.concat(kWin);
+const kPage=["ctrl","doc","1"];
+const kY=K('f2(0)'), kS12=K('solve(f1(x)=f2(x),x)'), kY12=K('f1(4)'), kS13=K('solve(f1(x)=f3(x),x)').concat(K('f1(6)')), kN3=K('solve(f3(x)=0,x)');
+const c1=kY, c2=c1.concat(kS12), c3=c2.concat(kY12), c4=c3.concat(kS13), c5=c4.concat(kN3);
+const kDef=["menu","1","1"].concat(K('z(x,y)=30x+40y'));
+const kZ=K('z(4,4)');
+const c6=c5.concat(kDef), c7=c6.concat(kZ), c8=c6.concat(K('z(0,0)'),K('z(0,6)'),K('z(4,4)'),K('z(6,2)'),K('z(7,0)'));
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+// Seite einfügen: Graph → (ctrl gehalten) → App-Liste → Calculator
+const pageScr=i=>i<2?gScreen(simG(g4)):i===2?appList(F1,'1.1',0,O.doc):cScreen(simC([]));
+
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const Z='<i>Z</i> = 30<i>x</i> + 40<i>y</i>';
+const UM='<table class="vgl"><tr><th>Restriktion</th><th>nach <i>y</i> umgestellt</th><th>im CAS</th></tr>'+
+ '<tr><td>(I) <i>x</i> + <i>y</i> ≤ 8</td><td><i>y</i> ≤ 8 − <i>x</i></td><td>f1(x)=8−x</td></tr>'+
+ '<tr><td>(II) <i>x</i> + 2<i>y</i> ≤ 12</td><td><i>y</i> ≤ 6 − 0,5<i>x</i></td><td>f2(x)=6−0.5x</td></tr>'+
+ '<tr><td>(III) 2<i>x</i> + <i>y</i> ≤ 14</td><td><i>y</i> ≤ 14 − 2<i>x</i></td><td>f3(x)=14−2x</td></tr></table>';
+const ECKT='<table class="vgl"><tr><th>Eckpunkt</th><th>so berechnet</th><th><i>Z</i> = 30<i>x</i> + 40<i>y</i></th></tr>'+
+ '<tr><td>(0 | 0)</td><td>Ursprung</td><td>0</td></tr>'+
+ '<tr><td>(0 | 6)</td><td>f2(0)</td><td>240</td></tr>'+
+ '<tr><td><b>(4 | 4)</b></td><td>f1 und f2 schneiden</td><td><b>280</b></td></tr>'+
+ '<tr><td>(6 | 2)</td><td>f1 und f3 schneiden</td><td>260</td></tr>'+
+ '<tr><td>(7 | 0)</td><td>Nullstelle von f3</td><td>210</td></tr></table>';
+
+const TRACKS={
+ g:{ name:"Restriktionen zeichnen", start:()=>home(''), steps:[
+  {t:"Die Aufgabe", a:"Maximieren Sie "+Z+"<br><span style=\"font-size:17px\">unter (I) <i>x</i> + <i>y</i> ≤ 8, (II) <i>x</i> + 2<i>y</i> ≤ 12, (III) 2<i>x</i> + <i>y</i> ≤ 14, <i>x</i>, <i>y</i> ≥ 0</span>", k:[], s:()=>home(''),
+   d:"<p>Ein Betrieb stellt zwei Produkte her: <i>x</i> Stück von A und <i>y</i> Stück von B.</p><p>Jedes A bringt 30 €, jedes B bringt 40 € Gewinn.</p><p>Die Maschinen haben nur begrenzt Zeit. Das sind die <b>Restriktionen</b> (I) bis (III).</p><p>Gesucht: Wie viele Stück von A und B bringen den <b>größten Gewinn</b>?</p>"},
+  {t:"Nach y umstellen", a:"Stellen Sie die Restriktionen nach <i>y</i> um", k:[], s:()=>home(''),
+   d:"<p>Das CAS zeichnet Funktionen <i>y</i> = …</p><p>Darum stellen Sie jede Restriktion nach <i>y</i> um.</p>"+UM,
+   n:"Teilen durch eine positive Zahl ändert das Zeichen ≤ nicht."},
+  {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:pick([appList(F1,'1.1',0,O.doc),gScreen(simG([]))]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Erste Randgerade", a:"Zeichnen Sie <i>f</i>1(<i>x</i>) = 8 − <i>x</i>", k:kF1, p:GS([],kF1),
+   d:"<p><b>f1(x)=</b> steht schon da.</p><p>Nur den Term eintippen, dann <b>enter</b>.</p>"},
+  {t:"Zweite Randgerade", a:"Zeichnen Sie <i>f</i>2(<i>x</i>) = 6 − 0,5<i>x</i>", k:kF2, p:GS(g1,kF2),
+   d:"<p><b>tab</b> blendet die Eingabezeile wieder ein.</p><p>Dort steht jetzt <b>f2(x)=</b>.</p><p>Das Komma tippen Sie als Punkt: <b>0.5</b>.</p>"},
+  {t:"Dritte Randgerade", a:"Zeichnen Sie <i>f</i>3(<i>x</i>) = 14 − 2<i>x</i>", k:kF3, p:GS(g2,kF3),
+   d:"<p>Wieder <b>tab</b>, Term eintippen, <b>enter</b>.</p>",
+   n:"Im Standardfenster sieht man den wichtigen Bereich schlecht. Darum stellen wir als Nächstes das Fenster ein."},
+  {t:"Fenster einstellen", a:"Fenster: −1 ≤ <i>x</i> ≤ 13 und −1 ≤ <i>y</i> ≤ 15", k:kWin, p:GS(g3,kWin),
+   d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>Zahl eintippen, mit <b>tab</b> ins nächste Feld.</p><p>Die Skalierung (Auto) überspringen Sie mit einem zweiten <b>tab</b>.</p><p>Zum Schluss <b>enter</b>.</p>",
+   n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
+  {t:"Das Planungsvieleck", a:"Welche Punkte erfüllen alle Restriktionen?", k:[], s:()=>gPoly(g4),
+   d:"<p>Alle Restriktionen heißen „≤“: Erlaubt ist alles <b>unter</b> den drei Geraden.</p><p>Wegen <i>x</i>, <i>y</i> ≥ 0 nur rechts von der <i>y</i>-Achse und über der <i>x</i>-Achse.</p><p>Diese Fläche heißt <b>Planungsvieleck</b> (hier grau).</p>",
+   n:"Das CAS färbt die Fläche <b>nicht</b>. Das Grau dient hier nur zur Verdeutlichung. Auf dem Arbeitsblatt schraffieren Sie die Fläche selbst."},
+  {t:"Selbst zeichnen", k:[], ab:1, s:()=>gPoly(g4), d:AB("Aufgaben 1 und 2",["Restriktionen nach <i>y</i> umstellen","Randgeraden im CAS zeichnen, Fenster einstellen","Geraden ins Koordinatensystem übertragen, Planungsvieleck schraffieren"])}
+ ]},
+ e:{ name:"Eckpunkte berechnen", start:gAfter(g4), steps:[
+  {t:"Wo liegen die Ecken?", a:"Lesen Sie ab, welche Geraden das Planungsvieleck begrenzen", k:[], s:()=>gPoly(g4,ECK),
+   d:"<p>Das Planungsvieleck hat <b>5 Ecken</b>.</p><p>Von links nach rechts begrenzen es <b style=\"color:#c8102e\">f2</b>, dann <b style=\"color:#1f4fb5\">f1</b>, dann <b style=\"color:#2E7D32\">f3</b>.</p><p>Jede Ecke ist ein <b>Schnittpunkt</b>: zweier Geraden oder einer Geraden mit einer Achse.</p><p>Diese Ecken berechnen wir jetzt genau.</p>",
+   n:"Die Gerade f2 ist im oberen Teil nicht beteiligt: Dort liegt sie über f1 und f3."},
+  {t:"Rechner-Seite einfügen", a:"Fügen Sie eine Calculator-Seite ein", k:kPage, p:pageScr,
+   d:"<p><b>ctrl</b> + <b>doc</b> fügt eine neue Seite ein.</p><p><b>1</b> = Calculator.</p><p>Oben steht jetzt <b>1.2</b>. Die Funktionen f1, f2, f3 kennt das CAS auch hier.</p>",
+   n:"Zurück zum Graphen kommen Sie mit <b>ctrl</b> + <b>◀</b>."},
+  {t:"Ecke auf der y-Achse", a:"Berechnen Sie <i>f</i>2(0)", k:kY, p:CS([],kY),
+   d:"<p>Auf der <i>y</i>-Achse ist <i>x</i> = 0.</p><p><b>f2(0)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 6. Die Ecke ist <b>(0 | 6)</b>.</p>"},
+  {t:"Schnittpunkt f1 und f2", a:"Lösen Sie <i>f</i>1(<i>x</i>) = <i>f</i>2(<i>x</i>)", k:kS12, p:CS(c1,kS12),
+   d:"<p>Im Schnittpunkt sind beide <i>y</i>-Werte gleich.</p><p>Darum lösen Sie die Gleichung mit <b>solve</b>:</p><p><span class=\"cmd\">solve(f1(x)=f2(x),x)</span></p><p>Ergebnis: <b><i>x</i> = 4</b>.</p>",
+   n:"Das Komma vor dem letzten x: Taste <b>,</b> in der Buchstabenreihe."},
+  {t:"y-Wert dazu", a:"Berechnen Sie <i>f</i>1(4)", k:kY12, p:CS(c2,kY12),
+   d:"<p>Den <i>y</i>-Wert liefert eine der beiden Funktionen.</p><p><b>f1(4)</b> = 4. Die Ecke ist <b>(4 | 4)</b>.</p>"},
+  {t:"Schnittpunkt f1 und f3", a:"Berechnen Sie den Schnittpunkt von <i>f</i>1 und <i>f</i>3", k:kS13, p:CS(c3,kS13),
+   d:"<p>Genauso: erst <span class=\"cmd\">solve(f1(x)=f3(x),x)</span>, dann den <i>y</i>-Wert.</p><p><i>x</i> = 6 und f1(6) = 2. Die Ecke ist <b>(6 | 2)</b>.</p>"},
+  {t:"Ecke auf der x-Achse", a:"Lösen Sie <i>f</i>3(<i>x</i>) = 0", k:kN3, p:CS(c4,kN3),
+   d:"<p>Auf der <i>x</i>-Achse ist <i>y</i> = 0.</p><p>Gesucht ist also die <b>Nullstelle</b> von f3.</p><p><i>x</i> = 7. Die Ecke ist <b>(7 | 0)</b>.</p>"},
+  {t:"Alle Ecken", a:"Notieren Sie alle Eckpunkte", k:[], s:()=>gPoly(g4,ECK),
+   d:"<p>Die fünf Ecken des Planungsvielecks:</p><p><b>(0 | 0)</b>, <b>(0 | 6)</b>, <b>(4 | 4)</b>, <b>(6 | 2)</b>, <b>(7 | 0)</b></p><p>Vergleichen Sie mit dem Graphen: Die Punkte liegen genau auf den Knicken.</p>"},
+  {t:"Selbst berechnen", k:[], ab:1, s:cAfter(c5), d:AB("Aufgabe 3",["Ecken auf den Achsen berechnen","Schnittpunkte mit <b>solve</b> und dem <i>y</i>-Wert berechnen","alle Eckpunkte in die Tabelle eintragen"])}
+ ]},
+ z:{ name:"Optimum finden", start:cAfter(c5), steps:[
+  {t:"Zielfunktion definieren", a:"Definieren Sie "+Z, k:kDef, p:CS(c5,kDef),
+   d:"<p><b>menu ▸ 1: Aktionen ▸ 1: Definieren</b></p><p>Dann <b>z(x,y)=30x+40y</b> eintippen, <b>enter</b>.</p><p>Das CAS antwortet mit <b>Fertig</b>.</p>",
+   n:"Zwischen 30 und x brauchen Sie kein Malzeichen."},
+  {t:"Gewinn in einer Ecke", a:"Berechnen Sie <i>Z</i> in der Ecke (4 | 4)", k:kZ, p:CS(c6,kZ),
+   d:"<p><b>z(4,4)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 280. In der Ecke (4 | 4) beträgt der Gewinn <b>280 €</b>.</p>"},
+  {t:"Alle Ecken vergleichen", a:"In welcher Ecke ist <i>Z</i> am größten?", k:[], s:cAfter(c8),
+   d:"<p>Berechnen Sie <i>Z</i> in <b>jeder</b> Ecke:</p>"+ECKT+"<p>Der größte Wert ist <b>280</b> – nur in der Ecke <b>(4 | 4)</b>.</p>",
+   n:"Das Maximum liegt immer in einer <b>Ecke</b> des Planungsvielecks. Darum reicht es, die Ecken zu prüfen."},
+  {t:"Antwort", a:"Formulieren Sie das Ergebnis", k:[], s:()=>gPoly(g4,[[4,4]]),
+   d:"<p>Das Optimum ist <b><i>x</i> = 4</b>, <b><i>y</i> = 4</b>.</p><p>Der maximale Gewinn ist <b><i>Z</i><sub>max</sub> = 280 €</b>.</p><table class=\"vgl\"><tr><th>Antwortsatz</th></tr><tr><td>Der Betrieb sollte 4 Stück von A und 4 Stück von B herstellen. Dann ist der Gewinn mit 280 € am größten.</td></tr></table><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Restriktionen nach <i>y</i> umstellen und zeichnen.<br>2. Eckpunkte des Planungsvielecks berechnen.<br>3. <i>Z</i> in jeder Ecke berechnen.<br>4. Größter Wert = Maximum.</td></tr></table>"},
+  {t:"Selbst lösen", k:[], ab:1, s:cAfter(c8), d:AB("Aufgabe 4",["Zielfunktion definieren","<i>Z</i> in jeder Ecke berechnen und in die Tabelle eintragen","Optimum und Antwortsatz notieren, danach Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["g","e","z"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const LBL={play:"▶ Abspielen",tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='play'?'playc':k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=document.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=document.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  if(k==='play'||S.k[pos]==='play'){ if(k==='play') playTool(); else { const sx=$('stat'); if(sx) sx.innerHTML='<span class="err">Jetzt keine Taste:</span> Klicken Sie auf '+chip('play',pos).replace('now','now big'); } return; }
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && e.key.length===1 && /[0-9a-zA-Z.()+\-*\/^,=]/.test(e.key)) k=e.key.toLowerCase();
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+</script>
+</body></html>
