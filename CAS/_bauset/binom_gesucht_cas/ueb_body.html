@@ -1,0 +1,144 @@
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="frage" id="frage"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="loes" id="loes"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>
+<script>
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[R(0,a.length-1)];
+const deZ=v=>String(v).replace('.',',');
+const pct=a=>deZ(Math.round(a*100))+'&nbsp;%';
+const cas=t=>'<span class="liste">'+t+'</span>';
+function bcdf(n,p,a,b){
+  a=Math.max(a,0); b=Math.min(b,n); if(a>b) return 0;
+  const q=1-p; let s=0, pm=Math.pow(q,n);
+  for(let i=0;i<=b;i++){ if(i>=a) s+=pm; pm=pm*(n-i)/(i+1)*p/q; }
+  return Math.min(1,s);
+}
+function bis(g,a,b){ let ga=g(a); for(let i=0;i<80;i++){ const m=(a+b)/2, gm=g(m); if((ga>0)===(gm>0)){ a=m; ga=gm; } else b=m; } return (a+b)/2; }
+const PS=[0.05,0.08,0.1,0.12,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.6];
+const AL=[0.9,0.95,0.99];
+
+// ---------- Aufgaben ----------
+function genN(){
+  let p,m,a,n;
+  do{ p=pick(PS.slice(0,10)); m=pick([1,1,1,2,2,3]); a=pick(AL);
+      n=m; while(n<=300 && bcdf(n,p,m,n)<a) n++; }while(n>200);
+  return {typ:'n', h:'n gesucht – mit der Tabelle', soll:n,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie das <b>kleinste</b> <i>n</i> mit<div class="fo"><i>P</i>(<i>X</i> ≥ ${m}) ≥ ${deZ(a)}</div>`,
+    lab:'<i>n</i> =', casIn:`f1(x)=binomCdf(x,${p},${m},x)`,
+    tab:[n-1,n].map(x=>[x,bcdf(x,p,m,x)]), grenze:a, rel:'≥',
+    hinweis:'Tipp: Die gesuchte Anzahl <i>n</i> wird zu <b>x</b>. Obere Grenze ist dann auch <b>x</b>. Liegt die Lösung weit unten in der Tabelle: Tabellenanfang ändern mit <b>menu ▸ 2 ▸ 5</b>.'};
+}
+function genK(){
+  let n,p,t,a,k,ok;
+  do{
+    n=R(4,30)*5; p=pick(PS); t=pick(['le','ge','lo']); ok=true;
+    if(t==='le'){ a=pick(AL); k=0; while(bcdf(n,p,0,k)<a) k++; }
+    else if(t==='ge'){ a=pick(AL); k=n; while(k>=0 && bcdf(n,p,k,n)<a) k--; ok=k>=1; }
+    else { a=pick([0.05,0.1]); k=-1; while(bcdf(n,p,0,k+1)<=a) k++; ok=k>=1; }
+  }while(!ok || n*p<3 || n*(1-p)<3);
+  const F={le:`das <b>kleinste</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ ${deZ(a)}</div>`,
+           ge:`das <b>größte</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≥ <i>k</i>) ≥ ${deZ(a)}</div>`,
+           lo:`das <b>größte</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≤ <i>k</i>) ≤ ${deZ(a)}</div>`}[t];
+  const ci=t==='ge'?`f1(x)=binomCdf(${n},${p},x,${n})`:`f1(x)=binomCdf(${n},${p},0,x)`;
+  const fx=x=>t==='ge'?bcdf(n,p,x,n):bcdf(n,p,0,x);
+  const nb=t==='le'?[k-1,k]:[k,k+1];
+  return {typ:'k', h:'k gesucht – mit der Tabelle', soll:k,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b> und <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie ${F}`,
+    lab:'<i>k</i> =', casIn:ci, tab:nb.map(x=>[x,fx(x)]), grenze:a, rel:t==='lo'?'≤':'≥',
+    hinweis:'Tipp: Die gesuchte Grenze <i>k</i> wird zu <b>x</b>. Bei <i>P</i>(<i>X</i> ≤ …): untere Grenze 0. Bei <i>P</i>(<i>X</i> ≥ …): obere Grenze <i>n</i>. Tabellenanfang etwas unter <i>n</i>·<i>p</i> wählen (<b>menu ▸ 2 ▸ 5</b>).'};
+}
+function genP(){
+  let n,k,t,a,p;
+  do{
+    n=R(2,12)*5; t=pick(['le','ge']); a=pick(AL);
+    if(t==='le') k=R(Math.round(n*0.15),Math.round(n*0.5)); else k=R(1,Math.max(1,Math.round(n*0.3)));
+    const g=t==='le'?(x=>bcdf(n,x,0,k)-a):(x=>bcdf(n,x,k,n)-a);
+    p=bis(g,1e-6,1-1e-6);
+  }while(!(p>0.03&&p<0.95));
+  const pr=Math.round(p*1000)/1000;
+  return {typ:'p', h:'p gesucht – mit dem Graphen', soll:pr, exact:p, rel:t==='le'?'≤':'≥',
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b>.<br>Bestimmen Sie alle <i>p</i> mit<div class="fo"><i>P</i>(<i>X</i> ${t==='le'?'≤':'≥'} ${k}) ≥ ${deZ(a)}</div>`,
+    casIn:(t==='le'?`f1(x)=binomCdf(${n},x,0,${k})`:`f1(x)=binomCdf(${n},x,${k},${n})`)+`, f2(x)=${a}`, grenze:a,
+    hinweis:'Tipp: <i>p</i> wird zu <b>x</b>. Grenze als 2. Funktion, Fenster 0 bis 1, dann <b>menu ▸ 6 ▸ 4: Schnittpunkt</b>. Fällt der Graph, gilt <i>p</i> ≤ …, steigt er, gilt <i>p</i> ≥ … .'};
+}
+const MODES={n:{name:"n gesucht",gen:genN},k:{name:"k gesucht",gen:genK},p:{name:"p gesucht",gen:genP}};
+const ORDER=["n","k","p"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+const $=id=>document.getElementById(id);
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('h').innerHTML="Aufgabe: "+A.h.replace(/^(\w) /,'<i>$1</i> ');
+  $('auftrag').innerHTML=A.typ==='p'?'Lösen Sie mit dem Graphen in Graphs.':'Lösen Sie mit der Wertetabelle in Graphs.';
+  $('frage').innerHTML=A.frage;
+  $('hinweis').innerHTML=A.hinweis;
+  if(A.typ==='p'){
+    $('round').innerHTML='<b>Wichtig:</b> Runden Sie <i>p</i> auf <b>3 Stellen nach dem Komma</b>, z.&nbsp;B. <b>0,248</b>.';
+    $('felder').innerHTML='<div class="zr" id="z0"><span><i>p</i></span><select id="rel"><option value="">?</option><option>≤</option><option>≥</option></select><input id="i0" inputmode="decimal" autocomplete="off"><span class="m" id="m0"></span><span class="msg" id="g0"></span></div>';
+  } else {
+    $('round').innerHTML='<b>Wichtig:</b> Die Antwort ist eine <b>ganze Zahl</b>.';
+    $('felder').innerHTML=`<div class="zr" id="z0"><span>${A.lab}</span><input id="i0" inputmode="numeric" autocomplete="off"><span class="m" id="m0"></span><span class="msg" id="g0"></span></div>`;
+  }
+  $('score').textContent=''; $('loes').innerHTML='';
+  const i0=$('i0'); i0.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); });
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+function pruefen(){
+  const z=$('z0'), raw=$('i0').value; z.classList.remove('ok','no','fmt'); let st, msg='';
+  const p=parse(raw);
+  if(!raw.trim()){ $('g0').textContent='Bitte ein Ergebnis eintragen.'; z.classList.add('fmt'); $('m0').textContent='!'; return; }
+  if(!p){ st='fmt'; msg='Bitte nur eine Zahl eintragen.'; }
+  else if(A.typ==='p'){
+    const rel=$('rel').value;
+    if(Math.abs(p.v-A.soll)>0.00101){ st='no'; msg='Der Wert stimmt nicht. Prüfen Sie die Eingabe in Graphs und den Schnittpunkt.'; }
+    else if(p.dec!==3){ st='fmt'; msg='Der Wert passt. Bitte genau 3 Nachkommastellen angeben.'; }
+    else if(!rel){ st='fmt'; msg='Der Wert stimmt. Wählen Sie noch ≤ oder ≥.'; }
+    else if(rel!==A.rel){ st='no'; msg='Der Wert stimmt, aber das Zeichen nicht. Steigt oder fällt Ihr Graph?'; }
+    else st='ok';
+  } else {
+    if(!Number.isInteger(p.v)){ st='fmt'; msg='Die Antwort ist eine ganze Zahl.'; }
+    else if(p.v===A.soll) st='ok';
+    else if(Math.abs(p.v-A.soll)===1){ st='no'; msg='Knapp daneben. Prüfen Sie genau, ab welcher Zeile die Bedingung erfüllt ist.'; }
+    else { st='no'; msg='Das stimmt nicht. Prüfen Sie die Eingabe in Graphs.'; }
+  }
+  z.classList.add(st); $('m0').textContent=st==='ok'?'✓':st==='no'?'✗':'!'; $('g0').textContent=msg;
+  stat.a++; if(st==='ok') stat.r++;
+  $('score').innerHTML = st==='ok' ? '<span style="color:var(--ok)">Richtig! Klicken Sie auf „Neue Aufgabe“.</span>' : '';
+  $('stats').textContent=`Geprüft: ${stat.a} · richtig: ${stat.r}`;
+}
+function zeigen(){
+  let h='<b>CAS-Eingabe:</b> '+cas(A.casIn)+'<br>';
+  if(A.typ==='p'){
+    h+=`Schnittpunkt bei <i>x</i> ≈ ${deZ(A.exact.toFixed(4))}<br><b>Lösung:</b> <i>p</i> ${A.rel} ${deZ(A.soll.toFixed(3))}`;
+  } else {
+    h+='<table class="mini"><tr><th>x</th>'+A.tab.map(r=>`<td>${r[0]}</td>`).join('')+'</tr><tr><th>Wert</th>'+A.tab.map(r=>`<td class="${r[0]===A.soll?'hl':''}">${deZ(r[1].toFixed(4))}</td>`).join('')+'</tr></table>';
+    h+=`<b>Lösung:</b> ${A.lab} ${A.soll}`;
+  }
+  $('loes').innerHTML=h;
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(location.hash||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+</script>
+
+</body></html>
