@@ -182,13 +182,33 @@ assert _b in PANEL_HTML, 'btns'
 PANEL_HTML = PANEL_HTML.replace(_b, '<button id="back">◀ Zurück</button><button id="skip" title="Direkt zum nächsten Schritt">Überspringen ⏭</button><button id="next">Weiter ▶</button>')
 
 
-topics_js = json.dumps([dict(id=g, dir=f, pdf=p, ueb=bool(u), title=ti, sub=su) for g, f, c, u, ti, su, p in TOPICS], ensure_ascii=False)
+# Themenblöcke der Gliederung (Reihenfolge = Anzeige). Grundlagen (None) steht einzeln ganz oben.
+BLOCKS = [
+    ('fa',  'Funktionen &amp; Analysis'),
+    ('alg', 'Gleichungen &amp; Algebra'),
+    ('stat','Statistik'),
+    ('sto', 'Stochastik'),
+]
+# NEUES THEMA: hier seinem Block zuordnen (Reihenfolge im Block = Reihenfolge in TOPICS)
+BLOCK_OF = {
+    'grund': None,
+    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa',
+    'gl': 'alg', 'lgs': 'alg',
+    'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
+}
+_bids = {b for b, _ in BLOCKS}
+for t in TOPICS:
+    assert t[0] in BLOCK_OF, f'Thema {t[0]!r} ist keinem Block zugeordnet (BLOCK_OF in build.py ergänzen)'
+    assert BLOCK_OF[t[0]] is None or BLOCK_OF[t[0]] in _bids, t[0]
+topics_js = json.dumps([dict(id=g, dir=f, pdf=p, ueb=bool(u), title=ti, sub=su, block=BLOCK_OF[g]) for g, f, c, u, ti, su, p in TOPICS], ensure_ascii=False)
+blocks_js = json.dumps([dict(id=b, title=ti) for b, ti in BLOCKS], ensure_ascii=False)
 
 tpl = read(os.path.join(os.path.dirname(__file__), 'shell.html'))
 out = (tpl.replace('/*%GUIDECSS%*/', '\n'.join(f'/* --- {g} --- */\n' + G[g]['css'] for g in G))
           .replace('%CALC%', calc)
           .replace('/*%MODULES%*/', '\n'.join(G[g]['js'] + (U.get(g) or '') for g in G))
           .replace('%PANEL_HTML%', PANEL_HTML.replace("'", "\\'"))
-          .replace('/*%TOPICS%*/', topics_js))
+          .replace('/*%TOPICS%*/', topics_js)
+          .replace('/*%BLOCKS%*/', blocks_js))
 open(OUT, 'w', encoding='utf-8').write(out)
 print('ok', OUT, len(out), 'panels identical:', panels_same)

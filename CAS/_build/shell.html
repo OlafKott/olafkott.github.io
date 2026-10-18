@@ -100,6 +100,28 @@ button{ font-family:inherit; }
 .topic:nth-child(7){ animation-delay:.3s }
 .tmain .ttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); }
 .act.phold{ visibility:hidden; pointer-events:none; }
+/* Gliederung: Themenblöcke zum Aufklappen */
+.block{ background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; animation:rise .5s both; transition:box-shadow .2s, border-color .2s; }
+.block:nth-child(2){ animation-delay:.05s } .block:nth-child(3){ animation-delay:.1s } .block:nth-child(4){ animation-delay:.15s } .block:nth-child(5){ animation-delay:.2s } .block:nth-child(6){ animation-delay:.25s }
+.block:hover, .block.open{ border-color:#b8c8e6; box-shadow:0 6px 18px rgba(31,78,153,.12); }
+.bhead{ width:100%; display:flex; align-items:center; gap:12px; padding:12px 14px; border:0; background:none; cursor:pointer; text-align:left; font:inherit; color:var(--ink); }
+.bhead:focus-visible{ outline:2px solid var(--gs2); outline-offset:-2px; border-radius:14px; }
+.bico{ flex:0 0 36px; height:36px; border-radius:10px; background:var(--gsbg); color:var(--gs); display:flex; align-items:center; justify-content:center; }
+.bico svg{ width:21px; height:21px; }
+.bttl{ flex:1 1 auto; font-size:18px; font-weight:700; line-height:1.25; }
+.bttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); margin-top:1px; }
+.chev{ flex:0 0 28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gs); transition:transform .3s cubic-bezier(.2,.7,.2,1), background .2s; }
+.chev svg{ width:18px; height:18px; }
+.bhead:hover .chev{ background:var(--gsbg); }
+.block.open .chev{ transform:rotate(180deg); }
+.bbody{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
+.block.open .bbody{ grid-template-rows:1fr; }
+.binner{ overflow:hidden; min-height:0; }
+.btopics{ list-style:none; margin:0; padding:0 10px 10px; display:flex; flex-direction:column; gap:8px; }
+.btopics .topic{ box-shadow:none; border-color:#e6e9ee; animation:none; }
+.block.empty .bico{ background:#f1f3f5; color:#9aa3b0; }
+.block.empty .bttl small{ font-style:italic; }
+.bnone{ margin:0; padding:0 16px 14px 62px; font-size:14px; color:var(--mute); }
 /* Gliederung: Buttons rechts neben der Überschrift */
 .topic{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; padding:10px 12px 10px 14px; }
 .topic .tmain{ flex:1 1 200px; min-width:0; padding:0; }
@@ -233,10 +255,31 @@ function flash(){ SCR.classList.remove('flash'); void SCR.offsetWidth; SCR.class
 // ---------------------------------------------------------------
 //  Gliederung aufbauen
 // ---------------------------------------------------------------
-$('topics').innerHTML=TOPICS.map((t,i)=>`<li class="topic" data-t="${t.id}">
+const BLOCKS=/*%BLOCKS%*/;
+const BICO={
+ fa:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17.5h15M2.5 17.5v-15"/><path d="M4.5 14c3-9 6-9 8-4s3 3 4.5-3"/></svg>',
+ alg:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 6l5 8M8 6l-5 8"/><path d="M11 8.5h6M11 11.5h6"/></svg>',
+ stat:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17.5h15"/><rect x="4" y="10" width="3" height="7.5"/><rect x="8.5" y="5" width="3" height="12.5"/><rect x="13" y="8" width="3" height="9.5"/></svg>',
+ sto:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="3"/><circle cx="7" cy="7" r="1.1" fill="currentColor"/><circle cx="13" cy="13" r="1.1" fill="currentColor"/><circle cx="10" cy="10" r="1.1" fill="currentColor"/><circle cx="13" cy="7" r="1.1" fill="currentColor"/><circle cx="7" cy="13" r="1.1" fill="currentColor"/></svg>'
+};
+const topicLi=(t,i)=>`<li class="topic" data-t="${t.id}">
     <div class="tmain"><span class="tnum">${i+1}</span><span class="ttl">${t.title}${t.sub?`<small>${t.sub}</small>`:''}</span></div>
     <div class="acts"><button class="act tour" data-go="${t.id}:g">${ICO.tour}<span>Anleitung</span></button><a class="act pdf" href="${pdfUrl(t.id)}" target="_blank" rel="noopener">${ICO.pdf}<span>Arbeitsblatt</span></a>${t.ueb?`<button class="act ueb" data-go="${t.id}:u">${ICO.ueb}<span>Übung</span></button>`:'<span class="act phold" aria-hidden="true"></span>'}</div>
-  </li>`).join('');
+  </li>`;
+const loose=TOPICS.filter(t=>!t.block);
+$('topics').innerHTML=loose.map((t,i)=>topicLi(t,-1)).join('')+BLOCKS.map(b=>{
+  const ts=TOPICS.filter(t=>t.block===b.id);
+  const cnt=ts.length?`${ts.length} ${ts.length===1?'Thema':'Themen'}`:'folgt in Kürze';
+  return `<li class="block${ts.length?'':' empty'}" data-b="${b.id}">
+    <button class="bhead" type="button" aria-expanded="false"><span class="bico">${BICO[b.id]||''}</span><span class="bttl">${b.title}<small>${cnt}</small></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></span></button>
+    <div class="bbody"><div class="binner">${ts.length?`<ol class="btopics">${ts.map((t,i)=>topicLi(t,i)).join('')}</ol>`:'<p class="bnone">Hier kommen bald Anleitungen, Arbeitsblätter und Übungen dazu.</p>'}</div></div>
+  </li>`;}).join('');
+let openB=null;
+function setOpen(b){
+  openB=b;
+  document.querySelectorAll('#topics .block').forEach(el=>{ const on=el.dataset.b===b; el.classList.toggle('open',on); el.querySelector('.bhead').setAttribute('aria-expanded',on); });
+}
+$('topics').addEventListener('click',e=>{ const h=e.target.closest('.bhead'); if(!h) return; const b=h.parentNode.dataset.b; setOpen(openB===b?null:b); });
 $('topics').addEventListener('click',e=>{ const b=e.target.closest('[data-go]'); if(!b) return; const [t,v]=b.dataset.go.split(':'); go(t,v); });
 let hoverT=null;
 function hov(t){ if(mode!=='toc'||t===hoverT) return; hoverT=t; if(t){ showPreview(t,'Vorschau: '+plain(TOP[t].title)); } else showHome(); flash(); }
@@ -296,6 +339,7 @@ function go(t,v,opt){
   if(v!=='toc'&&!TOP[t]) { t=null; v='toc'; }
   if(v==='u'&&!TOP[t].ueb) v='g';
   if(v==='toc') t=null;
+  if(t&&TOP[t].block) setOpen(TOP[t].block);
   if(mode===v && active===t) return;
   const from=viewEl(mode), to=viewEl(v);
   const fwd = mode==='toc' || (mode==='g'&&v==='u');
