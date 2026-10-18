@@ -183,7 +183,7 @@ function genAX(){
     felder:[PKT('sy','S<sub>y</sub>',0,d,C.ax)].concat(z.map((x,i)=>NUM('n'+i,`<i>x</i><sub>${i+1}</sub> =`,x,C.n))),
     pts:[{x:0,y:d,col:C.ax,lab:'Sy'}].concat(z.map((x,i)=>({x,y:0,col:C.n,lab:'x'+(i+1),below:i%2===1}))),
     fs:[{P,col:'#1d1d1f'}],
-    hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(P)+'</span> · <i>y</i>-Achse: <b>menu ▸ 5 ▸ 1: Grafikspur</b>, <b>0</b>, <b>enter</b> · Nullstelle: <b>menu ▸ 6 ▸ 1</b>, Schranken links und rechts.'};
+    hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(P)+'</span> · <i>y</i>-Achse: Zahl ohne <i>x</i> im Term (<i>x</i> = 0) · Nullstelle: <b>menu ▸ 6 ▸ 1</b>, mit dem Cursor Start- und Endpunkt um die Nullstelle markieren.'};
 }
 function genEX(){
   const P=genP(), e=roots(der(P),-8,10), D2=der(der(P)), wx=roots(D2,-8,10)[0];
@@ -195,7 +195,7 @@ function genEX(){
     felder:[PKT('h','H',hx,ev(P,hx),C.h),PKT('t','T',tx,ev(P,tx),C.t),PKT('w','W',wx,ev(P,wx),C.w)],
     pts:[{x:hx,y:ev(P,hx),col:C.h,lab:'H'},{x:tx,y:ev(P,tx),col:C.t,lab:'T',below:true},{x:wx,y:ev(P,wx),col:C.w,lab:'W'}],
     fs:[{P,col:'#1d1d1f'}],
-    hinweis:'Tipp: <b>menu ▸ 6: Graph analysieren</b> ▸ <b>3: Maximum</b>, <b>2: Minimum</b>, <b>Wendepunkt</b> – jeweils untere und obere Schranke setzen.'};
+    hinweis:'Tipp: <b>menu ▸ 6: Graph analysieren</b> ▸ <b>3: Maximum</b>, <b>2: Minimum</b>, <b>Wendepunkt</b> – jeweils mit dem Cursor Start- und Endpunkt markieren.'};
 }
 function genSP(){
   for(;;){
@@ -258,7 +258,7 @@ function pruefen(){
     else if(r.includes('many')&&!r.includes('no')){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; }
     else { st='no';
       const vs=F.parts.map(p=>parse(document.getElementById('i_'+p.k).value)), sw=F.pt&&vs.every(Boolean)&&near(vs[0].v,F.parts[1].soll)&&near(vs[1].v,F.parts[0].soll);
-      t= sw ? 'x und y vertauscht? Zuerst die x-Koordinate.' : F.pt ? 'Das stimmt noch nicht. Liegt genau ein Punkt zwischen Ihren Schranken? Richtiger Befehl (Maximum/Minimum)?' : 'Das stimmt noch nicht. Reihenfolge von links nach rechts? Liegt nur eine Nullstelle zwischen den Schranken?'; }
+      t= sw ? 'x und y vertauscht? Zuerst die x-Koordinate.' : F.pt ? 'Das stimmt noch nicht. Liegt genau ein Punkt im markierten Bereich? Richtiger Befehl (Maximum/Minimum)?' : 'Das stimmt noch nicht. Reihenfolge von links nach rechts? Liegt nur eine Nullstelle im markierten Bereich?'; }
     f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
   });
   const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
