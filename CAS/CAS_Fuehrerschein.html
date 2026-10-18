@@ -7379,12 +7379,12 @@ const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
 const pageScr=i=>i<2?gScreen(simG(g4)):i===2?appList(F1,'1.1',0,O.doc):cScreen(simC([]));
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
-const Z='<i>Z</i> = 30<i>x</i> + 40<i>y</i>';
+const Z='<i>Z</i>(<i>x</i>,<i>y</i>) = 30<i>x</i> + 40<i>y</i>';
 const UM='<table class="vgl"><tr><th>Restriktion</th><th>nach <i>y</i> umgestellt</th><th>im CAS</th></tr>'+
- '<tr><td>(I) <i>x</i> + <i>y</i> ≤ 8</td><td><i>y</i> ≤ 8 − <i>x</i></td><td>f1(x)=8−x</td></tr>'+
- '<tr><td>(II) <i>x</i> + 2<i>y</i> ≤ 12</td><td><i>y</i> ≤ 6 − 0,5<i>x</i></td><td>f2(x)=6−0.5x</td></tr>'+
- '<tr><td>(III) 2<i>x</i> + <i>y</i> ≤ 14</td><td><i>y</i> ≤ 14 − 2<i>x</i></td><td>f3(x)=14−2x</td></tr></table>';
-const ECKT='<table class="vgl"><tr><th>Eckpunkt</th><th>so berechnet</th><th><i>Z</i> = 30<i>x</i> + 40<i>y</i></th></tr>'+
+ '<tr><td>(I) Fertigung: <i>x</i> + <i>y</i> ≤ 8</td><td><i>y</i> ≤ 8 − <i>x</i></td><td>f1(x)=8−x</td></tr>'+
+ '<tr><td>(II) Montage: <i>x</i> + 2<i>y</i> ≤ 12</td><td><i>y</i> ≤ 6 − 0,5<i>x</i></td><td>f2(x)=6−0.5x</td></tr>'+
+ '<tr><td>(III) Verpackung: 2<i>x</i> + <i>y</i> ≤ 14</td><td><i>y</i> ≤ 14 − 2<i>x</i></td><td>f3(x)=14−2x</td></tr></table>';
+const ECKT='<table class="vgl"><tr><th>Eckpunkt</th><th>so berechnet</th><th>Deckungsbeitrag <i>Z</i></th></tr>'+
  '<tr><td>(0 | 0)</td><td>Ursprung</td><td>0</td></tr>'+
  '<tr><td>(0 | 6)</td><td>f2(0)</td><td>240</td></tr>'+
  '<tr><td><b>(4 | 4)</b></td><td>f1 und f2 schneiden</td><td><b>280</b></td></tr>'+
@@ -7393,8 +7393,8 @@ const ECKT='<table class="vgl"><tr><th>Eckpunkt</th><th>so berechnet</th><th><i>
 
 const TRACKS={
  g:{ name:"Restriktionen zeichnen", start:()=>home(''), steps:[
-  {t:"Die Aufgabe", a:"Maximieren Sie "+Z+"<br><span style=\"font-size:17px\">unter (I) <i>x</i> + <i>y</i> ≤ 8, (II) <i>x</i> + 2<i>y</i> ≤ 12, (III) 2<i>x</i> + <i>y</i> ≤ 14, <i>x</i>, <i>y</i> ≥ 0</span>", k:[], s:()=>home(''),
-   d:"<p>Ein Betrieb stellt zwei Produkte her: <i>x</i> Stück von A und <i>y</i> Stück von B.</p><p>Jedes A bringt 30 €, jedes B bringt 40 € Gewinn.</p><p>Die Maschinen haben nur begrenzt Zeit. Das sind die <b>Restriktionen</b> (I) bis (III).</p><p>Gesucht: Wie viele Stück von A und B bringen den <b>größten Gewinn</b>?</p>"},
+  {t:"Die Aufgabe", a:"Maximieren Sie den Deckungsbeitrag", k:[], s:()=>home(''),
+   d:"<p>Ein Leuchtenhersteller fertigt pro Tag <i>x</i> Schreibtischlampen und <i>y</i> Stehlampen.</p><table class=\"vgl\"><tr><th colspan=\"2\">Restriktionen (Stunden pro Tag)</th></tr><tr><td>(I) Fertigung</td><td><i>x</i> + <i>y</i> ≤ 8</td></tr><tr><td>(II) Montage</td><td><i>x</i> + 2<i>y</i> ≤ 12</td></tr><tr><td>(III) Verpackung</td><td>2<i>x</i> + <i>y</i> ≤ 14</td></tr><tr><td>Nichtnegativität</td><td><i>x</i> ≥ 0, <i>y</i> ≥ 0</td></tr><tr><th>Zielfunktion</th><th>"+Z+" → max</th></tr></table><p><i>Z</i> ist der <b>Deckungsbeitrag</b> pro Tag in €.</p><p>Gesucht: die Mengen <i>x</i> und <i>y</i> mit dem <b>größten Deckungsbeitrag</b>.</p>"},
   {t:"Nach y umstellen", a:"Stellen Sie die Restriktionen nach <i>y</i> um", k:[], s:()=>home(''),
    d:"<p>Das CAS zeichnet Funktionen <i>y</i> = …</p><p>Darum stellen Sie jede Restriktion nach <i>y</i> um.</p>"+UM,
    n:"Teilen durch eine positive Zahl ändert das Zeichen ≤ nicht."},
@@ -7441,13 +7441,13 @@ const TRACKS={
   {t:"Zielfunktion definieren", a:"Definieren Sie "+Z, k:kDef, p:CS(c5,kDef),
    d:"<p><b>menu ▸ 1: Aktionen ▸ 1: Definieren</b></p><p>Dann <b>z(x,y)=30x+40y</b> eintippen, <b>enter</b>.</p><p>Das CAS antwortet mit <b>Fertig</b>.</p>",
    n:"Zwischen 30 und x brauchen Sie kein Malzeichen."},
-  {t:"Gewinn in einer Ecke", a:"Berechnen Sie <i>Z</i> in der Ecke (4 | 4)", k:kZ, p:CS(c6,kZ),
-   d:"<p><b>z(4,4)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 280. In der Ecke (4 | 4) beträgt der Gewinn <b>280 €</b>.</p>"},
+  {t:"Deckungsbeitrag in einer Ecke", a:"Berechnen Sie <i>Z</i> in der Ecke (4 | 4)", k:kZ, p:CS(c6,kZ),
+   d:"<p><b>z(4,4)</b> eintippen, <b>enter</b>.</p><p>Ergebnis: 280. In der Ecke (4 | 4) beträgt der Deckungsbeitrag <b>280 €</b>.</p>"},
   {t:"Alle Ecken vergleichen", a:"In welcher Ecke ist <i>Z</i> am größten?", k:[], s:cAfter(c8),
    d:"<p>Berechnen Sie <i>Z</i> in <b>jeder</b> Ecke:</p>"+ECKT+"<p>Der größte Wert ist <b>280</b> – nur in der Ecke <b>(4 | 4)</b>.</p>",
    n:"Das Maximum liegt immer in einer <b>Ecke</b> des Planungsvielecks. Darum reicht es, die Ecken zu prüfen."},
   {t:"Antwort", a:"Formulieren Sie das Ergebnis", k:[], s:()=>gPoly(g4,[[4,4]]),
-   d:"<p>Das Optimum ist <b><i>x</i> = 4</b>, <b><i>y</i> = 4</b>.</p><p>Der maximale Gewinn ist <b><i>Z</i><sub>max</sub> = 280 €</b>.</p><table class=\"vgl\"><tr><th>Antwortsatz</th></tr><tr><td>Der Betrieb sollte 4 Stück von A und 4 Stück von B herstellen. Dann ist der Gewinn mit 280 € am größten.</td></tr></table><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Restriktionen nach <i>y</i> umstellen und zeichnen.<br>2. Eckpunkte des Planungsvielecks berechnen.<br>3. <i>Z</i> in jeder Ecke berechnen.<br>4. Größter Wert = Maximum.</td></tr></table>"},
+   d:"<p>Das Optimum ist <b><i>x</i> = 4</b>, <b><i>y</i> = 4</b>.</p><p>Der maximale Deckungsbeitrag ist <b><i>Z</i><sub>max</sub> = 280 €</b>.</p><table class=\"vgl\"><tr><th>Antwortsatz</th></tr><tr><td>Der Hersteller sollte pro Tag 4 Schreibtischlampen und 4 Stehlampen fertigen. Dann ist der Deckungsbeitrag mit 280 € am größten.</td></tr></table><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Restriktionen nach <i>y</i> umstellen und zeichnen.<br>2. Eckpunkte des Planungsvielecks berechnen.<br>3. <i>Z</i> in jeder Ecke berechnen.<br>4. Größter Wert = Maximum.</td></tr></table>"},
   {t:"Selbst lösen", k:[], ab:1, s:cAfter(c8), d:AB("Aufgabe 4",["Zielfunktion definieren","<i>Z</i> in jeder Ecke berechnen und in die Tabelle eintragen","Optimum und Antwortsatz notieren, danach Lösungscode eintragen"])}
  ]}
 };
@@ -7639,6 +7639,7 @@ table.d th{background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:ita
 .f.co > label{white-space:nowrap;}
 .restr{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 26px; font-family:Cambria,Georgia,serif; font-size:18px; margin:4px 0 8px;}
 .restr b{font-family:system-ui,Arial,sans-serif; font-size:14px; color:var(--mute); font-weight:600;}
+.var{display:flex; flex-wrap:wrap; gap:4px 24px; margin:0 0 6px; padding:6px 12px; background:#f3f5f9; border-radius:8px; font-size:15px;}
 .term{font-weight:bold; color:var(--lf);}
 table.d td.best{background:#FDECEA; color:#C62828; font-weight:bold;}
 #eck{margin-top:8px; overflow-x:auto;}
@@ -7651,7 +7652,6 @@ table.d td.best{background:#FDECEA; color:#C62828; font-weight:bold;}
 :host{display:block;container-type:inline-size;}
 @container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
  html:String.raw`<div class="wrap">
-  <div class="tabs" id="tabs"></div>
   <div class="card">
     <h2 id="h"></h2>
     <p class="auftrag" id="auftrag"></p>
@@ -7717,11 +7717,12 @@ function genLP(){
 }
 
 const KONTEXT=[
-  {wer:'Eine Schreinerei',a:'Tische',b:'Regale',ea:'Tisch',eb:'Regal',res:['Zuschnitt','Montage','Lackierung']},
-  {wer:'Eine Fahrradmanufaktur',a:'Stadträder',b:'Trekkingräder',ea:'Stadtrad',eb:'Trekkingrad',res:['Rahmenbau','Montage','Endkontrolle']},
-  {wer:'Eine Bäckerei',a:'Bleche Kuchen',b:'Bleche Brötchen',ea:'Blech Kuchen',eb:'Blech Brötchen',res:['Teigmaschine','Ofen','Verpackung']},
-  {wer:'Ein Textilbetrieb',a:'Jacken',b:'Hosen',ea:'Jacke',eb:'Hose',res:['Zuschnitt','Nähen','Bügeln']},
-  {wer:'Ein Möbelhersteller',a:'Stühle',b:'Hocker',ea:'Stuhl',eb:'Hocker',res:['Sägen','Schleifen','Lackieren']}
+  {wer:'Schreinerei',a:'Tische',b:'Regale',t:'Woche',res:['Zuschnitt','Montage','Lackierung']},
+  {wer:'Fahrradmanufaktur',a:'Stadträder',b:'Trekkingräder',t:'Woche',res:['Rahmenbau','Montage','Endkontrolle']},
+  {wer:'Bäckerei',a:'Bleche Kuchen',b:'Bleche Brötchen',t:'Tag',res:['Teigmaschine','Ofen','Verpackung']},
+  {wer:'Textilbetrieb',a:'Jacken',b:'Hosen',t:'Tag',res:['Zuschnitt','Nähen','Bügeln']},
+  {wer:'Möbelhersteller',a:'Stühle',b:'Hocker',t:'Tag',res:['Sägen','Schleifen','Lackieren']},
+  {wer:'Leuchtenhersteller',a:'Schreibtischlampen',b:'Stehlampen',t:'Tag',res:['Fertigung','Montage','Verpackung']}
 ];
 
 // ---------- Zeichnung (erscheint mit der Lösung) ----------
@@ -7753,9 +7754,7 @@ function plot(A){
 }
 
 // ---------- Aufgaben ----------
-const MODES={ohne:{name:"Ohne Sachzusammenhang"}, mit:{name:"Mit Sachzusammenhang"}};
-const ORDER=["ohne","mit"];
-let mode=ORDER[0], A=null, stat={a:0,r:0}, shown=false;
+let A=null, stat={a:0,r:0}, shown=false;
 
 function neu(){
   A=genLP(); shown=false;
@@ -7763,16 +7762,11 @@ function neu(){
   const ord=[0,1,2].sort(()=>Math.random()-.5); ord.forEach((j,k)=>{ A.L[j].k=k; });
   const Ls=[...A.L].sort((u,v)=>u.k-v.k);
   const K=pickR(KONTEXT);
-  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
-  root.getElementById('h').textContent='Aufgabe: Maximum bestimmen';
-  if(mode==='mit'){
-    root.getElementById('auftrag').innerHTML=`${K.wer} stellt pro Woche <i>x</i> ${K.a} und <i>y</i> ${K.b} her. Ein ${K.ea} bringt ${A.p}&nbsp;€, ein ${K.eb} ${A.q}&nbsp;€ Deckungsbeitrag. Die Arbeitszeit in drei Abteilungen ist begrenzt. Bei welchen Mengen ist der Deckungsbeitrag am größten?`;
-    root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${K.res[l.k]}: ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i> ≥ 0, <i>y</i> ≥ 0</span>';
-  } else {
-    root.getElementById('auftrag').innerHTML='Bestimmen Sie mit dem CAS das Maximum der Zielfunktion unter den Restriktionen.';
-    root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i> ≥ 0, <i>y</i> ≥ 0</span>';
-  }
-  root.getElementById('term').innerHTML=`Zielfunktion: <i>Z</i> = ${A.p}<i>x</i> + ${A.q}<i>y</i> → max`;
+  
+  root.getElementById('h').textContent='Aufgabe: '+K.wer;
+  root.getElementById('auftrag').innerHTML=`<span class="var"><span><i>x</i>: ${K.a} pro ${K.t}</span><span><i>y</i>: ${K.b} pro ${K.t}</span><span><i>Z</i>: Deckungsbeitrag pro ${K.t} in €</span></span>Bestimmen Sie mit dem CAS die Mengen mit dem größten Deckungsbeitrag.`;
+  root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${K.res[l.k]}: ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i>, <i>y</i> ≥ 0</span>';
+  root.getElementById('term').innerHTML=`Zielfunktion: <i>Z</i>(<i>x</i>,<i>y</i>) = ${A.p}<i>x</i> + ${A.q}<i>y</i> → max`;
   const xm=Math.ceil(Math.max(...A.L.map(l=>l.c/l.a))), ym=Math.ceil(Math.max(...A.L.map(l=>l.c/l.b)));
   root.getElementById('fen').innerHTML=`Fenster-Vorschlag: −1 ≤ <i>x</i> ≤ ${Math.min(xm,A.ECK[4][0]+5)} und −1 ≤ <i>y</i> ≤ ${Math.min(ym,A.ECK[1][1]+5)}`;
   root.getElementById('plot').innerHTML=''; root.getElementById('eck').innerHTML='';
@@ -7780,7 +7774,7 @@ function neu(){
     ' · Ecken: <b>solve(f1(x)=f2(x),x)</b>, Nullstellen und Achsenabschnitte · Zielfunktion: <b>menu ▸ 1 ▸ 1: Definieren</b> <span class="liste">z(x,y)='+A.p+'x+'+A.q+'y</span>, dann <span class="liste">z(…,…)</span> in jeder Ecke.';
   const F=[['x','<i>x</i> =',A.ECK[A.opt][0],'#1F4E99'],['y','<i>y</i> =',A.ECK[A.opt][1],'#C25E00'],['z','<i>Z</i><sub>max</sub> =',A.Z[A.opt],'#C62828']];
   A.felder=F;
-  root.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci">${f[0]==='z'&&mode==='mit'?'<span class="pl">€</span>':''}</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci">${f[0]==='z'?'<span class="pl">€</span>':''}</span><span class="m"></span><div class="msg"></div></div>`).join('');
   root.getElementById('score').textContent='';
   root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
 }
@@ -7813,7 +7807,6 @@ function zeigen(){
 root.getElementById('pruefen').onclick=pruefen;
 root.getElementById('zeigen').onclick=zeigen;
 root.getElementById('neu').onclick=neu;
-root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset&&e.target.dataset.m; if(m){ mode=m; neu(); } };
 neu();
  }
 };
