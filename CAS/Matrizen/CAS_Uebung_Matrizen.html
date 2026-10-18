@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAS-Übung: Matrizen</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:860px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.wrap{ max-width:860px; margin:16px auto 40px; padding:0 16px; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+.card h2{ margin:0 0 6px; font-size:18px; }
+.auftrag{ font-size:15.5px; margin:0 0 12px; }
+.geg{ display:flex; flex-wrap:wrap; gap:10px 34px; align-items:center; font-family:Cambria,Georgia,serif; font-size:22px; }
+.ziel{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; font-family:Cambria,Georgia,serif; font-size:22px; }
+.liste{ font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222; font-size:13px; }
+.vorlage{ font-size:14px; color:var(--mute); margin-top:12px; }
+/* Matrix mit eckigen Klammern */
+.mx{ display:inline-flex; align-items:stretch; vertical-align:middle; margin:2px 4px; }
+.mx::before,.mx::after{ content:""; width:6px; border:2px solid currentColor; }
+.mx::before{ border-right:0; } .mx::after{ border-left:0; }
+.mx table{ border-collapse:collapse; }
+.mx td{ padding:1px 9px; text-align:center; font-size:20px; line-height:1.55; min-width:30px; }
+.mx.in td{ padding:4px 5px; }
+.mx.in input{ font:inherit; font-size:17px; width:62px; padding:4px 6px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:center; }
+.mx.in input.ok{ background:var(--okbg); border-color:var(--ok); color:var(--ok); font-weight:bold; }
+.mx.in input.no{ background:var(--nobg); border-color:var(--no); color:var(--no); }
+.mx.in input.fmt{ background:var(--warnbg); border-color:#F2B705; }
+.mx.in input.show{ background:#eef3fb; border-color:var(--lf); color:var(--lf); }
+.ein{ font:inherit; font-size:18px; width:110px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:center; }
+.ein.ok{ background:var(--okbg); border-color:var(--ok); color:var(--ok); font-weight:bold; } .ein.no{ background:var(--nobg); border-color:var(--no); color:var(--no); } .ein.show{ background:#eef3fb; border-color:var(--lf); color:var(--lf); } .ein.fmt{ background:var(--warnbg); border-color:#F2B705; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:16px; line-height:1.1; }
+.fr span:first-child{ border-bottom:1px solid currentColor; padding:0 2px; }
+.msg{ font-size:14.5px; margin-top:10px; min-height:22px; }
+.msg.no{ color:var(--no); } .msg.warn{ color:var(--warn); } .msg.ok{ color:var(--ok); font-weight:bold; }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
+.stats{ font-size:13.5px; color:var(--mute); margin-top:8px; }
+.hinweis{ font-size:13.5px; color:var(--mute); }
+@media (max-width:520px){ .geg,.ziel{ font-size:18px; } .mx td{ font-size:17px; padding:1px 6px; min-width:22px; } .mx.in input{ width:48px; font-size:15px; } }
+
+/* linksbündig (Moodle-Frame) */
+.top .in, body > main, body > .tabs, .tabs#tabs, body > .wrap{ margin-left:0 !important; margin-right:auto !important; }
+</style></head><body>
+<div class="top"><div class="in"><a href="https://olafkott.github.io/CAS/" title="Zurück zur Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap;flex:0 0 auto">&#8592; Übersicht</a><h1>CAS-Übung: Matrizen<small>Neue Aufgaben auf Knopfdruck · mit dem CAS rechnen · Ergebnis eintragen</small></h1><img src="data:image/png;base64,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" alt="RWB Essen"></div></div>
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="geg" id="geg"></div>
+    <div class="vorlage" id="vorlage"></div>
+  </div>
+  <div class="card">
+    <div class="ziel" id="ziel"></div>
+    <div class="msg" id="msg"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis">Negative Zahlen mit Minuszeichen eintragen, z.&nbsp;B. −3 oder -3. Brüche mit Schrägstrich, z.&nbsp;B. 3/5.</p>
+</div>
+<script>
+// ---------- Rechnen mit ganzen Zahlen und Brüchen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const RZ=(a,b)=>{ let v; do v=R(a,b); while(v===0); return v; };
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
+const Q=(p,q=1)=>{ if(q<0){p=-p;q=-q;} const g=gcd(p,q); return {p:p/g,q:q/g}; };
+const mat=(r,c,f)=>Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>f(i,j)));
+const rnd=(r,c,a=-5,b=6)=>mat(r,c,()=>R(a,b));
+const add=(A,B,s=1)=>mat(A.length,A[0].length,(i,j)=>A[i][j]+s*B[i][j]);
+const smul=(k,A)=>mat(A.length,A[0].length,(i,j)=>k*A[i][j]);
+const mul=(A,B)=>mat(A.length,B[0].length,(i,j)=>A[i].reduce((s,v,t)=>s+v*B[t][j],0));
+const tr=A=>mat(A[0].length,A.length,(i,j)=>A[j][i]);
+function det(A){ const n=A.length; if(n===1) return A[0][0]; if(n===2) return A[0][0]*A[1][1]-A[0][1]*A[1][0];
+  return A[0].reduce((s,v,j)=>s+(j%2?-1:1)*v*det(A.slice(1).map(r=>r.filter((_,k)=>k!==j))),0); }
+function inv(A){ const n=A.length, d=det(A);
+  return mat(n,n,(i,j)=>{ const m=A.filter((_,r)=>r!==j).map(r=>r.filter((_,k)=>k!==i)); return Q(((i+j)%2?-1:1)*(n===1?1:det(m)),d); }); }
+const mi=v=>v<0?'−'+(-v):''+v;
+const show=x=>typeof x==='object'?(x.q===1?mi(x.p):(x.p<0?'−':'')+`<span class="fr"><span>${Math.abs(x.p)}</span><span>${x.q}</span></span>`):mi(x);
+const txt=x=>typeof x==='object'?(x.q===1?mi(x.p):mi(x.p)+'/'+x.q):mi(x);
+const val=x=>typeof x==='object'?x.p/x.q:x;
+const M=A=>'<span class="mx"><table>'+A.map(r=>'<tr>'+r.map(v=>`<td>${show(v)}</td>`).join('')+'</tr>').join('')+'</table></span>';
+const N=(n,A)=>`<span><i>${n}</i> = ${M(A)}</span>`;
+
+// ---------- Aufgaben ----------
+function unimod(n){ // ganzzahlige Matrix mit det = ±1, damit die Inverse ganzzahlig ist
+  for(;;){
+    const L=mat(n,n,(i,j)=>i===j?1:(i>j?R(-2,2):0)), U=mat(n,n,(i,j)=>i===j?pick([1,-1]):(i<j?R(-2,2):0));
+    const A=mul(L,U); const I=inv(A);
+    if(A.flat().every(v=>Math.abs(v)<=6) && I.flat().every(x=>Math.abs(val(x))<=15) && A.flat().filter(v=>v===0).length<=n) return A;
+  }
+}
+function invNice(){ // 2×2 mit kleiner Determinante: Brüche möglich
+  for(;;){ const A=rnd(2,2,-5,6); const d=det(A); if([1,-1,2,-2,4,-4,5,-5].includes(d)) return A; }
+}
+function hoch(){ // höhere Potenz A^k mit kleinen Einträgen
+  const n=pick([2,2,3]), k=n===2?pick([3,4,5]):pick([3,4]);
+  let A,P; do{ A=rnd(n,n,-2,3); P=A; for(let i=1;i<k;i++) P=mul(P,A); } while(P.flat().some(v=>Math.abs(v)>999) || A.flat().filter(v=>v===0).length>n);
+  return {t:`A<sup>${k}</sup>`, geg:[['A',A]], erg:P, store:'a', fehl:[[mat(n,n,(i,j)=>A[i][j]**k),`Nicht jeden Eintrag einzeln potenzieren! Im CAS: a^${k}.`]]};
+}
+const MODES={
+ add:{name:'Addition & Skalar', gen(){
+   const n=pick([2,3]), r=n, c=pick([n,n,3]);
+   const A=rnd(r,c), B=rnd(r,c), k=pick([2,3,4,-2,-3,5]);
+   return pick([
+    {t:'A + B', geg:[['A',A],['B',B]], erg:add(A,B), store:'a, b'},
+    {t:'A − B', geg:[['A',A],['B',B]], erg:add(A,B,-1), store:'a, b', fehl:[[add(B,A,-1),'Reihenfolge beachten: gesucht ist <i>A</i> − <i>B</i>, nicht <i>B</i> − <i>A</i>.']]},
+    {t:`${mi(k)} · A`, geg:[['A',A]], erg:smul(k,A), store:'a'}
+   ]); }},
+ mul:{name:'Multiplikation & Potenz', gen(){
+   const n=pick([2,3]); const A=rnd(n,n,-4,5), B=rnd(n,n,-4,5);
+   return pick([
+    {t:'A · B', geg:[['A',A],['B',B]], erg:mul(A,B), store:'a, b', fehl:[[mul(B,A),'Das ist <i>B</i> · <i>A</i>. Reihenfolge beachten: <i>A</i> · <i>B</i> ≠ <i>B</i> · <i>A</i>.'],[mat(n,n,(i,j)=>A[i][j]*B[i][j]),'Nicht Eintrag mal Eintrag! Matrixprodukt: Zeile mal Spalte – im CAS a × b.']]},
+    {t:'B · A', geg:[['A',A],['B',B]], erg:mul(B,A), store:'a, b', fehl:[[mul(A,B),'Das ist <i>A</i> · <i>B</i>. Reihenfolge beachten: <i>B</i> · <i>A</i> ≠ <i>A</i> · <i>B</i>.']]},
+    {t:'A²', geg:[['A',A]], erg:mul(A,A), store:'a', fehl:[[mat(n,n,(i,j)=>A[i][j]**2),'Nicht jeden Eintrag einzeln quadrieren! <i>A</i>² = <i>A</i> · <i>A</i>, im CAS a^2.']]},
+    hoch()
+   ]); }},
+ inv:{name:'Inverse & Determinante', gen(){
+   const typ=pick(['det','inv','inv']);
+   if(typ==='det'){ const n=pick([2,3,3]); const A=rnd(n,n,-5,6); return {t:'det(A)', geg:[['A',A]], zahl:det(A), store:'a'}; }
+   const A=Math.random()<.5?unimod(3):(Math.random()<.5?unimod(2):invNice());
+   return {t:'A<sup>−1</sup>', geg:[['A',A]], erg:inv(A), store:'a'};
+ }},
+ tr:{name:'Transponieren', gen(){
+   const r=R(2,3), c=pick([2,3,4].filter(x=>x!==r)); const A=rnd(r,c,-6,9);
+   return {t:'A<sup>T</sup>', geg:[['A',A]], erg:tr(A), store:'a', dims:true};
+ }}
+};
+const ORDER=['add','mul','inv','tr'];
+const TIPS={
+ add:'Matrix eingeben: menu ▸ 7 ▸ 1 ▸ 1 · speichern: ▶, dann ctrl var → <span class="liste">a</span> · rechnen: <span class="liste">a+b</span>, <span class="liste">3×a</span>',
+ mul:'Malzeichen nicht vergessen: <span class="liste">a×b</span> · Potenzen: <span class="liste">a^2</span>, <span class="liste">a^5</span>',
+ inv:'Determinante: <span class="liste">det(a)</span> · Inverse: <span class="liste">a^(−)1</span> – Hochzahl −1 mit der Taste (−)',
+ tr:'Transponieren: <span class="liste">a</span>, dann menu ▸ 7 ▸ 2'
+};
+let mode=(location.hash||'').slice(1); if(!MODES[mode]) mode='add';
+let A=null, stat={a:0,r:0};
+const $=id=>document.getElementById(id);
+
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(m=>`<button class="${m===mode?'on':''}" data-m="${m}">${MODES[m].name}</button>`).join('');
+  $('h').textContent='Aufgabe: '+MODES[mode].name;
+  $('auftrag').innerHTML=`Speichern Sie ${A.geg.length>1?'die Matrizen':'die Matrix'} im CAS und berechnen Sie <b><i>${A.t}</i></b>.`;
+  $('geg').innerHTML=A.geg.map(g=>N(g[0],g[1])).join('');
+  $('vorlage').innerHTML=TIPS[mode];
+  if(A.zahl!==undefined){
+    $('ziel').innerHTML=`<span><i>${A.t}</i> =</span><input class="ein" id="z" autocomplete="off">`;
+  } else {
+    const r=A.erg.length, c=A.erg[0].length;
+    $('ziel').innerHTML=`<span><i>${A.t}</i> =</span><span class="mx in"><table>`+A.erg.map((row,i)=>'<tr>'+row.map((_,j)=>`<td><input id="c_${i}_${j}" autocomplete="off" aria-label="Zeile ${i+1}, Spalte ${j+1}"></td>`).join('')+'</tr>').join('')+'</table></span>';
+  }
+  $('msg').className='msg'; $('msg').innerHTML='';
+  document.querySelectorAll('#ziel input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){
+  s=s.trim().replace(/\s/g,'').replace(/[−–]/g,'-').replace(',','.');
+  if(/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
+  const m=s.match(/^(-?\d+)\/(-?\d+)$/); if(m && +m[2]!==0) return +m[1]/+m[2];
+  return null;
+}
+const eq=(a,b)=>Math.abs(a-b)<1e-9;
+function pruefen(){
+  const msg=$('msg'); msg.className='msg'; msg.innerHTML='';
+  if(A.zahl!==undefined){
+    const el=$('z'), v=parse(el.value); el.className='ein';
+    if(!el.value.trim()) return;
+    stat.a++;
+    if(v===null){ el.classList.add('fmt'); msg.className='msg warn'; msg.textContent='Bitte nur eine Zahl eintragen.'; }
+    else if(eq(v,A.zahl)){ el.classList.add('ok'); msg.className='msg ok'; msg.textContent='Richtig! Klicken Sie auf „Neue Aufgabe“.'; stat.r++; }
+    else { el.classList.add('no'); msg.className='msg no'; msg.innerHTML= eq(v,-A.zahl)?'Vorzeichen prüfen: negative Zahlen mit der Taste (−) eintippen.':'Das stimmt noch nicht. Prüfen Sie die Eingabe der Matrix.'; }
+    show_stats(); return;
+  }
+  const r=A.erg.length, c=A.erg[0].length; let ok=0, leer=0, fmt=0; const ein=[];
+  for(let i=0;i<r;i++){ ein.push([]); for(let j=0;j<c;j++){
+    const el=$(`c_${i}_${j}`); el.className=''; const raw=el.value.trim(); const v=parse(raw); ein[i].push(v);
+    if(!raw){ leer++; continue; }
+    if(v===null){ el.classList.add('fmt'); fmt++; continue; }
+    if(eq(v,val(A.erg[i][j]))){ el.classList.add('ok'); ok++; } else el.classList.add('no');
+  } }
+  if(leer===r*c) return;
+  stat.a++;
+  const n=r*c;
+  if(ok===n){ msg.className='msg ok'; msg.textContent=`Alles richtig! ${ok} von ${n}. Klicken Sie auf „Neue Aufgabe“.`; stat.r++; show_stats(); return; }
+  let hinweis='';
+  for(const [W,t] of (A.fehl||[])){ if(W.every((row,i)=>row.every((x,j)=>ein[i][j]!==null&&eq(ein[i][j],val(x))))){ hinweis=t; break; } }
+  if(!hinweis && A.dims){ const T=tr(A.erg); if(T.length===r && T.every((row,i)=>row.every((x,j)=>ein[i][j]!==null&&eq(ein[i][j],x)))) hinweis='Das ist wieder <i>A</i>. Beim Transponieren werden die Zeilen zu Spalten.'; }
+  if(!hinweis && fmt) hinweis='Bitte nur Zahlen oder Brüche wie 3/5 eintragen.';
+  if(!hinweis && leer) hinweis='Es fehlen noch Einträge.';
+  msg.className='msg no'; msg.innerHTML=`${ok} von ${n} Einträgen richtig.`+(hinweis?' '+hinweis:'');
+  show_stats();
+}
+function show_stats(){ $('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`; }
+function zeigen(){
+  if(A.zahl!==undefined){ const el=$('z'); if(!el.classList.contains('ok')){ el.value=txt(A.zahl); el.className='ein show'; } return; }
+  A.erg.forEach((row,i)=>row.forEach((x,j)=>{ const el=$(`c_${i}_${j}`); if(!el.classList.contains('ok')){ el.value=txt(x).replace(/-/g,'−'); el.className='show'; } }));
+  $('msg').className='msg'; $('msg').textContent='Lösung eingeblendet (blau).';
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+neu();
+</script>
+</body></html>

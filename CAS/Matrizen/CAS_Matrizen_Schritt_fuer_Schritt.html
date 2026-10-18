@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAS Schritt für Schritt: Matrizen</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:1000px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1 1 auto; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.tabs{ max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.tabs button.fertig::after{ content:" ✓"; color:var(--ab); font-weight:bold; }
+.tabs button.on.fertig::after{ color:#9fe0a5; }
+main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap:22px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+
+/* ---------- Rechner ---------- */
+.calc{ width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18); }
+.body{ background:#2b2b2f; border-radius:22px; padding:12px 12px 16px; }
+.face{ background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px; }
+.brand{ text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px; }
+.brand b{ color:#fff; margin-left:6px; }
+.scrwrap{ background:#000; border-radius:4px; padding:4px; }
+.scr{ width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto; }
+.nav{ display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center; }
+.nav .col{ display:flex; flex-direction:column; gap:7px; }
+.pad{ width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative; }
+.pad .k{ position:absolute; background:transparent; color:#aaa; font-size:10px; border:0; }
+.pad .k[data-k=up]{ left:38px; top:2px; width:36px; height:20px; }
+.pad .k[data-k=down]{ left:38px; bottom:2px; width:36px; height:20px; }
+.pad .k[data-k=left]{ left:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=right]{ right:2px; top:28px; width:22px; height:28px; }
+.pad .k[data-k=click]{ left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd; }
+.k{ font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+.k:focus{ outline:none; } .k:active{ transform:scale(.95); }
+.k.lt{ background:#8e8e95; color:#111; font-size:14px; }
+.k.ctrl{ background:#D93A2B; }
+.k.bk{ background:#26262a; border:1px solid #555; }
+.k.hit{ box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative; }
+.pad .k.hit{ position:absolute; }
+.k.good{ box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8); }
+.k.bad{ box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack .35s; }
+.k.held{ box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7); }
+@keyframes wack{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+.row4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0; }
+.main7{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px; }
+.let9{ display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px; }
+.let9 .k{ height:20px; font-size:10px; }
+.span2{ grid-column:span 2; } .span3{ grid-column:span 3; }
+.k sub{ font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px; }
+
+/* ---------- Bildschirm-Inhalte ---------- */
+.tb{ height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf; }
+.tb .tab{ background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap; }
+.tb .tab.np{ background:#fff4c9; border-color:#d1b24a; font-weight:bold; }
+.tb .sp{ flex:1; } .tb .bat{ width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative; }
+.tb .bat:after{ content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3; }
+.calcapp{ padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:17px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+.calcapp .ln{ display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px; flex:0 0 auto; }
+.calcapp .ln span, .calcapp .ln b{ padding:0 2px; border-radius:2px; white-space:nowrap; }
+.calcapp .ln b{ font-weight:normal; }
+.calcapp .cur{ border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center; white-space:nowrap; flex:0 0 auto; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:9.5px; line-height:1.05; }
+.fr > span{ padding:0 1px; min-width:6px; }
+.fr > span:first-child{ border-bottom:1px solid currentColor; }
+.calcapp sup{ font-size:8px; }
+sup:empty::after{ content:"\25A1"; color:#999; }
+.caret{ animation:blink 1s steps(1) infinite; font-weight:normal; } @keyframes blink{ 50%{opacity:0} }
+/* Matrix mit eckigen Klammern */
+.mx{ display:inline-flex; align-items:stretch; vertical-align:middle; margin:1px 2px; }
+.mx::before,.mx::after{ content:""; width:3px; border:1.2px solid currentColor; }
+.mx::before{ border-right:0; } .mx::after{ border-left:0; }
+.mx table{ border-collapse:collapse; }
+.mx td{ padding:0 3px; text-align:center; font-size:10.5px; line-height:13px; min-width:9px; }
+.mx i.leer{ color:#999; font-style:normal; }
+.menu{ position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3; }
+.menu div{ padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.menu div.sel{ background:#3b78c2; color:#fff; }
+.dlg{ position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4; }
+.dlg .tt{ background:#c9d3df; font-weight:bold; padding:2px 6px; }
+.dlg .ff{ display:grid; grid-template-columns:128px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center; }
+.dlg .lb{ text-align:right; }
+.dlg .ct{ background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px; }
+.dlg .ct.fo{ outline:2px solid #3b78c2; }
+.dlg .ct.mark{ background:#FFF3C4; }
+.dlg .bt{ display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px; }
+.dlg .bt span{ border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px; }
+.hs{ position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif; }
+.hs .hb{ height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555; }
+.hs .hb .bt2{ width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative; }
+.hs .hb .bt2:after{ content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a; }
+.hs .cols{ display:flex; gap:10px; padding:7px 10px 0; }
+.hs .col{ flex:1; }
+.hs h5{ margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px; }
+.hs h5 i{ display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg); }
+.hs .it{ display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap; }
+.hs .it b{ display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px; }
+.hs .it.dim{ color:#6f757d; } .hs .it.dim b{ background:#555a61; color:#2a2d31; }
+.hs .it.sel{ background:#3b78c2; color:#fff; }
+.hs .it.ziel{ background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse 1.2s ease-in-out infinite; }
+.hs .it.ziel b{ background:#111; color:#F2B705; }
+.menu div.ziel{ background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+.hs .icons{ position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between; }
+.hs .icons span{ width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5); }
+.hs .icons span.on{ outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6); }
+.hs .icons svg{ width:20px; height:20px; }
+.hs .ft{ position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden; }
+.pwroff{ position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px; }
+
+/* ---------- Panel ---------- */
+.panel{ flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; }
+.prog{ display:flex; gap:4px; margin-bottom:12px; }
+.prog i{ flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer; }
+.prog i.done{ background:#9aa3b0; } .prog i.now{ background:var(--lf); }
+.prog i.abp{ background:#bfe3c3; } .prog i.abp.done{ background:#7cbf84; } .prog i.abp.now{ background:var(--ab); }
+.nr{ font-size:13px; color:var(--mute); }
+.panel h2{ margin:2px 0 8px; font-size:20px; line-height:1.3; }
+.panel p{ margin:0 0 10px; font-size:15.5px; }
+.keys{ display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px; }
+.chip{ font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent; }
+.chip.ctrl{ background:#D93A2B; } .chip.lt{ background:#8e8e95; color:#111; }
+.chip.done{ opacity:.35; }
+.chip.now{ border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35); }
+.chip.big{ font-size:16px; padding:4px 12px; vertical-align:middle; }
+.chip.plus{ background:none; color:var(--mute); padding:3px 2px; }
+.note{ background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px; }
+.note b{ color:#8a5a00; }
+.stat{ min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px; }
+.stat .ok{ color:#2E7D32; font-weight:bold; } .stat .err{ color:#C62828; font-weight:bold; }
+.ab{ border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px; }
+.ab .abt{ font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.ab .abt span{ font-size:22px; }
+.ab ul{ margin:0 0 8px; padding-left:20px; font-size:15px; }
+.ab li{ margin-bottom:3px; }
+.ab p{ font-size:14.5px; }
+.task{ border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc; }
+.task .auf{ font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute); }
+.task .term{ font-family:Cambria,Georgia,serif; font-size:22px; line-height:1.5; color:var(--ink); display:flex; flex-wrap:wrap; gap:6px 26px; align-items:center; }
+.task .term .mx{ margin:2px 4px; }
+.task .term .mx::before,.task .term .mx::after{ width:5px; border-width:2px; }
+.task .term .mx td{ font-size:19px; line-height:25px; padding:0 7px; min-width:22px; }
+.btns{ display:flex; gap:10px; margin-top:14px; }
+.btns button{ font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); color:#fff; border-color:var(--lf); }
+.btns button:disabled{ opacity:.4; cursor:default; }
+#next{ margin-left:auto; }
+@media (max-width:380px){ .calc{ transform:scale(.92); transform-origin:top center; } }
+
+/* linksbündig (Moodle-Frame) */
+.top .in, body > main, body > .tabs, .tabs#tabs, body > .wrap{ margin-left:0 !important; margin-right:auto !important; }
+</style></head><body>
+<div class="top"><div class="in"><a href="https://olafkott.github.io/CAS/" title="Zurück zur Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap;flex:0 0 auto">&#8592; Übersicht</a><h1>CAS Schritt für Schritt: Matrizen<small>TI-Nspire CX CAS · Am eigenen Handheld mitmachen · <b style="color:#2E7D32">✍</b> = Arbeitsblatt</small></h1><img src="data:image/png;base64,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" alt="RWB Essen"></div></div>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="calc"><div class="body">
+    <div class="face">
+      <div class="brand">TI-Nspire CX<b>CAS</b></div>
+      <div class="scrwrap"><div class="scr" id="scr"></div></div>
+      <div class="nav">
+        <div class="col"><button class="k bk" data-k="esc">esc</button><button class="k bk" data-k="pad2">✎</button><button class="k bk" data-k="tab">tab</button></div>
+        <div class="pad"><button class="k" data-k="up">▲</button><button class="k" data-k="left">◀</button><button class="k" data-k="click">●</button><button class="k" data-k="right">▶</button><button class="k" data-k="down">▼</button></div>
+        <div class="col"><button class="k bk" data-k="on">⌂ on</button><button class="k bk" data-k="doc">doc ▸</button><button class="k bk" data-k="menu">menu</button></div>
+      </div>
+    </div>
+    <div class="row4"><button class="k ctrl" data-k="ctrl">ctrl</button><button class="k" data-k="shift">⇧ shift</button><button class="k" data-k="var">var<sub>sto→</sub></button><button class="k" data-k="del">del</button></div>
+    <div class="main7">
+      <button class="k" data-k="=">=</button><button class="k" data-k="trig">trig</button><button class="k lt" data-k="7">7</button><button class="k lt" data-k="8">8</button><button class="k lt" data-k="9">9</button><button class="k" data-k="tmpl">⊞</button><button class="k" data-k="cat">📖</button>
+      <button class="k" data-k="^">^</button><button class="k" data-k="x2">x²<sub>√</sub></button><button class="k lt" data-k="4">4</button><button class="k lt" data-k="5">5</button><button class="k lt" data-k="6">6</button><button class="k" data-k="*">×</button><button class="k" data-k="/">÷<sub>Bruch</sub></button>
+      <button class="k" data-k="ex">eˣ</button><button class="k" data-k="10x">10ˣ</button><button class="k lt" data-k="1">1</button><button class="k lt" data-k="2">2</button><button class="k lt" data-k="3">3</button><button class="k" data-k="+">+</button><button class="k" data-k="-">−</button>
+      <button class="k" data-k="(">(</button><button class="k" data-k=")">)</button><button class="k lt" data-k="0">0</button><button class="k lt" data-k=".">.</button><button class="k lt" data-k="neg">(−)<sub>ans</sub></button><button class="k span2" data-k="enter">enter<sub>≈</sub></button>
+    </div>
+    <div class="let9" id="let9"></div>
+  </div></div>
+
+  <div class="panel">
+    <div class="task" id="task"></div>
+    <div class="prog" id="prog"></div>
+    <div class="nr" id="nr"></div>
+    <h2 id="tt"></h2>
+    <div class="keys" id="keys"></div>
+    <div class="stat" id="stat"></div>
+    <div id="dd"></div>
+    <div class="btns"><button id="back">◀ Zurück</button><button id="next">Überspringen</button></div>
+  </div>
+</main>
+<script>
+// ---------- Buchstabentasten ----------
+(function(){
+  const rows=[["EE","a","b","c","d","e","f","g","?!"],["π","h","i","j","k","l","m","n","⚑"],[",","o","p","q","r","s","t","u","↵"],["","v","w","x","y","z","␣"]];
+  let h='';
+  rows.forEach(r=>r.forEach(c=>{
+    if(c==="") h+='<span></span>';
+    else if(c==="␣") h+='<button class="k span3" data-k="space">␣</button>';
+    else h+=`<button class="k" data-k="${c}">${/^[a-z]$/.test(c)?c.toUpperCase():c}</button>`;
+  }));
+  document.getElementById('let9').innerHTML=h;
+})();
+
+// ---------- Bildschirm-Bausteine ----------
+function topbar(){ return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>'; }
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft"><b>Calculator</b> zum Notizblock hinzufügen</div></div>`;
+}
+function calcApp(lines,entry){
+  return topbar()+'<div class="calcapp">'+lines.map(l=>`<div class="ln"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const M=rows=>'<span class="mx"><table>'+rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</table></span>';
+const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
+const MV=["1: Erstellen ▸","2: Transponieren","3: Determinante","4: Zeilenstufenform","5: Red. Zeilenstufenform","6: Simultan","7: Eigenwert","8: Eigenvektor","9: Zerlegungen ▸"];
+const ER=["1: Matrix…","2: Nullmatrix","3: Einheitsmatrix","4: Diagonal","5: Zufallsmatrix"];
+const CHR={'-':'−','neg':'−','*':'·'};
+
+// ---------- Ergebnisse, die das CAS anzeigt ----------
+const mA=M([['2','1'],['3','4']]), mB=M([['1','−2'],['0','3']]);
+const RES={
+ "[2,1;3,4]→a":mA, "[1,−2;0,3]→b":mB, "a":mA, "b":mB,
+ "a+b":M([['3','−1'],['3','7']]),
+ "a·b":M([['2','−1'],['3','6']]),
+ "b·a":M([['−4','−7'],['9','12']]),
+ "3·a":M([['6','3'],['9','12']]),
+ "a^(2)":M([['7','6'],['18','19']]),
+ "a^(3)":M([['32','31'],['93','94']]),
+ "det(a)":"5",
+ "a^(−1)":M([[F(4,5),'−'+F(1,5)],['−'+F(3,5),F(2,5)]]),
+ "a·a^(−1)":M([['1','0'],['0','1']]),
+ "aᵀ":M([['2','3'],['1','4']])
+};
+
+// ---------- Eingabezeile mit Vorlagen (Matrix, Exponent) ----------
+const rowsOf=g=>{ const r=[]; for(let i=0;i<g.r;i++) r.push(g.cells.slice(i*g.c,(i+1)*g.c)); return r; };
+const openSeg=S=>{ const l=S.ent[S.ent.length-1]; return l&&l.open?l:null; };
+function put(S,ch){
+  const o=openSeg(S);
+  if(o&&o.t==='mat'){ o.cells[o.cur]+=ch; return; }
+  if(o&&o.t==='sup'){ o.s+=ch; return; }
+  const l=S.ent[S.ent.length-1];
+  if(l&&l.t==='txt') l.s+=ch; else S.ent.push({t:'txt',s:ch});
+}
+function ser(ent){ return ent.map(g=>g.t==='txt'?g.s:g.t==='sup'?'^('+g.s+')':'['+rowsOf(g).map(r=>r.join(',')).join(';')+']').join(''); }
+function entHtml(ent,caret){
+  let h=ent.map(g=>{
+    if(g.t==='txt') return g.s;
+    if(g.t==='sup') return `<sup>${g.s}${caret&&g.open?'<span class="caret">|</span>':''}</sup>`;
+    return M(rowsOf(g).map((r,i)=>r.map((c,j)=>{ const cr=caret&&g.open&&i*g.c+j===g.cur; return (c||(cr?'':'<i class="leer">□</i>'))+(cr?'<span class="caret">|</span>':''); })));
+  }).join('');
+  const l=ent[ent.length-1];
+  if(caret && !(l&&l.open)) h+='<span class="caret">|</span>';
+  return h;
+}
+function mxDlg(D){
+  const f=(lab,val,k)=>`<div class="lb">${lab}</div><div class="ct ${D.focus===k?'fo':''} ${D.focus===k&&D.sel?'mark':''}"><span>${val}${D.focus===k&&!D.sel?'<span class="caret">|</span>':''}</span></div>`;
+  return `<div class="dlg" style="top:40px"><div class="tt">Eine Matrix erstellen</div><div class="ff">`+
+    f('Anzahl der Zeilen:',D.r,0)+f('Anzahl der Spalten:',D.c,1)+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>';
+}
+const azDlg=()=>'<div class="dlg" style="top:46px"><div class="tt">a–z löschen</div><div style="padding:6px 8px 2px">Alle Variablen aus einem Buchstaben löschen?</div><div class="bt"><span style="outline:2px solid #3b78c2">OK</span><span>Abbrechen</span></div></div>';
+
+// Zustandsmaschine: eine Tastenfolge -> Bildschirm
+function newState(){ return {ph:'off',hist:[],menu:[],dlg:null,ent:[],ctrl:false}; }
+function step(S,k){
+  if(S.ph==='off'){ if(k==='on') S.ph='home'; return; }
+  if(S.ph==='home'){ if(k==='a') S.ph='idle'; return; }
+  if(S.ph==='menu'){
+    const top=S.menu[S.menu.length-1].items;
+    if(top===CM&&k==='1'){ S.menu[0].sel=0; S.menu.push({items:AK,sel:3}); return; }
+    if(top===CM&&k==='7'){ S.menu[0].sel=6; S.menu.push({items:MV,sel:0}); return; }
+    if(top===AK&&k==='4'){ S.ph='az'; S.menu=[]; return; }
+    if(top===MV&&k==='1'){ S.menu[1].sel=0; S.menu.push({items:ER,sel:0}); return; }
+    if(top===MV&&k==='2'){ S.menu=[]; S.ph='idle'; put(S,'ᵀ'); return; }
+    if(top===MV&&k==='3'){ S.menu=[]; S.ph='idle'; put(S,'det('); return; }
+    if(top===ER&&k==='1'){ S.menu=[]; S.ph='dlg'; S.dlg={r:'3',c:'3',focus:0,sel:true}; return; }
+    return;
+  }
+  if(S.ph==='az'){ if(k==='enter') S.ph='idle'; return; }
+  if(S.ph==='dlg'){
+    const D=S.dlg, key=D.focus===0?'r':'c';
+    if(k==='tab'){ D.focus=1-D.focus; D.sel=true; return; }
+    if(k==='enter'){ const r=+D.r, c=+D.c; S.ent.push({t:'mat',r,c,cells:Array(r*c).fill(''),cur:0,open:true}); S.ph='idle'; S.dlg=null; return; }
+    if(/^[0-9]$/.test(k)){ if(D.sel){ D[key]=k; D.sel=false; } else D[key]+=k; }
+    return;
+  }
+  // Eingabe im Notizblock
+  if(S.ctrl){ S.ctrl=false; if(k==='var') put(S,'→'); return; }
+  if(k==='ctrl'){ S.ctrl=true; return; }
+  if(k==='menu'){ S.ph='menu'; S.menu=[{items:CM,sel:0}]; return; }
+  const o=openSeg(S);
+  if(k==='tab'){ if(o&&o.t==='mat') o.cur=(o.cur+1)%o.cells.length; return; }
+  if(k==='right'){ if(o) o.open=false; return; }
+  if(k==='^'){ S.ent.push({t:'sup',s:'',open:true}); return; }
+  if(k==='enter'){
+    if(!S.ent.length) return;
+    const key=ser(S.ent);
+    S.hist.push([entHtml(S.ent,false), RES[key]!==undefined?RES[key]:'<i>Fehler</i>']);
+    S.ent=[]; return;
+  }
+  if(k==='del'){ if(o&&o.t==='mat') o.cells[o.cur]=o.cells[o.cur].slice(0,-1); else if(o) o.s=o.s.slice(0,-1); else { const l=S.ent[S.ent.length-1]; if(l){ l.s=l.s.slice(0,-1); if(!l.s) S.ent.pop(); } } return; }
+  put(S,CHR[k]||k);
+}
+function run(keys){ const S=newState(); keys.forEach(k=>step(S,k)); return S; }
+function draw(S){
+  if(S.ph==='off') return off();
+  if(S.ph==='home') return home('');
+  let h=calcApp(S.hist.slice(-6), (S.ph==='idle'||S.ph==='menu')?entHtml(S.ent,S.ph==='idle'):'');
+  if(S.ph==='menu'){ const P=[[6,22,178],[54,48,170],[108,74,166]]; h+=S.menu.map((m,i)=>`<div class="menu" style="left:${P[i][0]}px;top:${P[i][1]}px;width:${P[i][2]}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+  if(S.ph==='az') h+=azDlg();
+  if(S.ph==='dlg') h+=mxDlg(S.dlg);
+  return h;
+}
+// Spur aus Schritten bauen: Tasten werden über alle Spuren fortgeschrieben
+let ALLK=[];
+function track(name,a,steps){
+  const base=ALLK.slice();
+  let acc=base.slice();
+  const out=steps.map(s=>{
+    const pre=acc.slice(); const k=s.k||[];
+    acc=acc.concat(k);
+    return Object.assign({a:s.ab?'':a},s,{k, p:i=>draw(run(pre.concat(k.slice(0,i))))});
+  });
+  ALLK=acc;
+  return {name, start:()=>draw(run(base)), steps:out};
+}
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld lösen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const K=s=>s.split(' ');
+const NA=(n,m)=>`<span><i>${n}</i> = ${m}</span>`;
+const AUF_AB=NA('A',mA)+NA('B',mB);
+
+const TRACKS={
+ e:track("Eingeben & speichern",AUF_AB,[
+  {t:"Einschalten", k:["on"], d:"<p>Wir rechnen im <b>Notizblock</b>.</p>"},
+  {t:"Notizblock öffnen", k:["a"], d:"<p><b>A</b> = Berechnen.</p>"},
+  {t:"Variablen löschen", k:K("menu 1 4 enter"),
+   d:"<p>menu ▸ Aktionen ▸ a–z löschen, mit <b>enter</b> bestätigen.</p>", n:"Sonst rechnet das CAS mit alten Werten, die noch in <b>a</b>, <b>b</b> … gespeichert sind."},
+  {t:"Matrix-Vorlage öffnen", k:K("menu 7 1 1"),
+   d:"<p>menu ▸ Matrix &amp; Vektor ▸ Erstellen ▸ <b>Matrix…</b></p>"},
+  {t:"Größe festlegen: 2 × 2", k:K("2 tab 2 enter"),
+   d:"<p>Zeilen <b>2</b> eintippen, mit <b>tab</b> zu den Spalten, <b>2</b> eintippen, <b>enter</b> (OK).</p>", n:"Zuerst die Zeilen, dann die Spalten: <i>A</i> ist eine 2 × 2-Matrix."},
+  {t:"Einträge eintippen", k:K("2 tab 1 tab 3 tab 4"),
+   d:"<p><b>tab</b> springt in das nächste Feld – Zeile für Zeile, von links nach rechts.</p>"},
+  {t:"Matrix als a speichern", k:K("right ctrl var a enter"),
+   d:"<p><b>▶</b> verlässt die Matrix. <b>ctrl</b> + <b>var</b> erzeugt den Speicherpfeil <b>→</b>. Dann den Namen <b>a</b> und <b>enter</b>.</p>", n:"Das CAS unterscheidet nicht zwischen <i>A</i> und <i>a</i>. Auf dem Papier schreiben wir <i>A</i>, im CAS tippen wir <b>a</b>."},
+  {t:"Matrix B: Vorlage öffnen", k:K("menu 7 1 1 2 tab 2 enter"),
+   d:"<p>Wie eben: Vorlage öffnen, Größe 2 × 2.</p>"},
+  {t:"B eintippen und speichern", k:K("1 tab neg 2 tab 0 tab 3 right ctrl var b enter"),
+   d:"<p>Einträge mit <b>tab</b> eintippen, mit <b>▶</b> raus, <b>ctrl</b> <b>var</b>, <b>b</b>, <b>enter</b>.</p>", n:"Negative Zahlen mit der Taste <b>(−)</b> eintippen – nicht mit der Minus-Taste."},
+  {t:"Gespeicherte Matrix abrufen", k:K("a enter"),
+   d:"<p>Den Namen eintippen und <b>enter</b> – das CAS zeigt die gespeicherte Matrix.</p>"},
+  {t:"Selbst eingeben", k:[], ab:1, d:AB("Gegebene Matrizen",["Die Matrizen <i>A</i>, <i>B</i> und <i>C</i> vom Arbeitsblatt eingeben","Als <b>a</b>, <b>b</b> und <b>c</b> speichern – die Beispiel-Matrizen werden dabei überschrieben"])}
+ ]),
+ r:track("Rechnen",AUF_AB,[
+  {t:"Addition A + B", k:K("a + b enter"),
+   d:"<p>Das CAS addiert die Einträge, die an der gleichen Stelle stehen.</p>", n:"Addieren geht nur bei Matrizen mit gleich vielen Zeilen und Spalten."},
+  {t:"Multiplikation A · B", k:K("a * b enter"),
+   d:"<p>Das Malzeichen <b>×</b> nicht vergessen!</p>", n:"Ohne Malzeichen liest das CAS <b>ab</b> als neue Variable mit dem Namen „ab“."},
+  {t:"Und B · A?", k:K("b * a enter"),
+   d:"<p>Vergleichen Sie das Ergebnis mit <i>A</i> · <i>B</i>.</p>", n:"<i>A</i> · <i>B</i> ≠ <i>B</i> · <i>A</i>. Bei Matrizen kommt es auf die Reihenfolge an!"},
+  {t:"Skalare Multiplikation 3 · A", k:K("3 * a enter"),
+   d:"<p>Jeder Eintrag von <i>A</i> wird mit 3 multipliziert.</p>"},
+  {t:"Potenz A²", k:K("a ^ 2 enter"),
+   d:"<p><b>^</b> öffnet die Hochzahl, dann <b>2</b> und <b>enter</b>.</p>", n:"<i>A</i>² = <i>A</i> · <i>A</i> (Matrixprodukt). Die Einträge werden <b>nicht</b> einzeln quadriert!"},
+  {t:"Höhere Potenz A³", k:K("a ^ 3 enter"),
+   d:"<p>Genauso mit größerer Hochzahl: <b>^</b>, <b>3</b>, <b>enter</b>.</p>", n:"<i>A</i>³ = <i>A</i> · <i>A</i> · <i>A</i>. Mit der Hochzahl spart man sich die lange Kette."},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgaben 1 und 2",["<i>A</i> + <i>B</i>, 2 · <i>A</i>, <i>A</i> · <i>B</i> und <i>B</i> · <i>A</i> berechnen und vergleichen","Potenzen <i>A</i>², <i>A</i>³, <i>A</i><sup>4</sup> und <i>B</i>³ berechnen"])}
+ ]),
+ i:track("Inverse & Determinante",AUF_AB,[
+  {t:"Determinante det(A)", k:K("d e t ( a ) enter"),
+   d:"<p><b>det(a)</b> mit den Buchstabentasten eintippen, <b>enter</b>.</p>", n:"Alternativ: menu ▸ Matrix &amp; Vektor ▸ <b>3: Determinante</b> fügt <b>det(</b> ein."},
+  {t:"Inverse A⁻¹", k:K("a ^ neg 1 enter"),
+   d:"<p>Hochzahl −1: <b>^</b>, dann <b>(−)</b> und <b>1</b>, dann <b>enter</b>.</p>", n:"Ist det(<i>A</i>) = 0, gibt es keine Inverse. Das CAS meldet dann einen Fehler."},
+  {t:"Probe: A · A⁻¹", k:K("a * a ^ neg 1 enter"),
+   d:"<p>Heraus kommt die <b>Einheitsmatrix</b> <i>E</i>: Einsen auf der Diagonalen, sonst Nullen.</p>"},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 3",["det(<i>A</i>) und det(<i>B</i>) berechnen","<i>B</i><sup>−1</sup> berechnen"])}
+ ]),
+ t:track("Transponieren",AUF_AB,[
+  {t:"Aᵀ berechnen", k:K("a menu 7 2 enter"),
+   d:"<p><b>a</b> eintippen, dann menu ▸ Matrix &amp; Vektor ▸ <b>2: Transponieren</b>, <b>enter</b>.</p>", n:"Aus Zeilen werden Spalten: Die 1. Zeile von <i>A</i> ist die 1. Spalte von <i>A</i><sup>T</sup>."},
+  {t:"Selbst transponieren", k:[], ab:1, d:AB("Aufgabe 4",["<i>C</i><sup>T</sup> berechnen – <i>C</i> ist eine 2 × 3-Matrix","Danach: Lösungscode eintragen"])}
+ ])
+};
+
+// ---------- Steuerung ----------
+const ORDER=["e","r","i","t"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>document.getElementById(id);
+const LBL={on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Beispiel</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className=fin?'go':'';
+  $('next').textContent=fin ? (last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶') : 'Überspringen';
+  $('next').disabled=fin&&last&&!nextT;
+  $('stat').style.display=(S.ab||!S.k.length)?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=document.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=document.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  document.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=document.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=document.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+document.querySelectorAll('.calc .k').forEach(b=>b.addEventListener('click',()=>{ b.blur(); press(b.dataset.k); }));
+$('next').onclick=next; $('back').onclick=back;
+$('tabs').onclick=e=>{ const t=e.target.dataset.t; if(t){ tr=t; st=0; pos=0; render(); } };
+$('prog').onclick=e=>{ if(e.target.dataset.i){ st=+e.target.dataset.i; pos=0; render(); } };
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+document.addEventListener('keydown',e=>{
+  let k=KMAP[e.key]; if(!k && e.key.length===1 && /[0-9a-zA-Z.()+\-*\/^,=]/.test(e.key)) k=e.key.toLowerCase();
+  if(k){ e.preventDefault(); press(k); }
+});
+const h=(location.hash||'').slice(1); if(TRACKS[h]) tr=h;
+render();
+</script>
+</body></html>
