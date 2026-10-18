@@ -1249,6 +1249,176 @@ button{ font-family:inherit; }
 [data-g="lgs"] .task .term .lgs{font-family:Cambria,Georgia,serif;}
 @media (max-width:420px){[data-g="lgs"] .lgs{font-size:17px;}}
 [data-g="lgs"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- graph --- */
+[data-g="graph"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="graph"] *, [data-g="graph"]{box-sizing:border-box;}
+[data-g="graph"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="graph"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="graph"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="graph"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="graph"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="graph"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="graph"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="graph"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="graph"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="graph"] .brand b{color:#fff; margin-left:6px;}
+[data-g="graph"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="graph"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="graph"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="graph"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="graph"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="graph"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="graph"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="graph"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="graph"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="graph"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="graph"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="graph"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="graph"] .k:focus{outline:none;}
+[data-g="graph"] .k:active{transform:scale(.95);}
+[data-g="graph"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="graph"] .k.ctrl{background:#D93A2B;}
+[data-g="graph"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="graph"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="graph"] .pad .k.hit{position:absolute;}
+[data-g="graph"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="graph"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_graph .35s;}
+[data-g="graph"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_graph{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="graph"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="graph"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="graph"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="graph"] .let9 .k{height:20px; font-size:10px;}
+[data-g="graph"] .span2{grid-column:span 2;}
+[data-g="graph"] .span3{grid-column:span 3;}
+[data-g="graph"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="graph"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="graph"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="graph"] .tb .tab.off{background:#eef1f5; color:#777;}
+[data-g="graph"] .tb .tab.np{background:#fff4c9; border-color:#d1b24a; font-weight:bold;}
+[data-g="graph"] .scr.tabhl .tb .tab.pg{background:#F2B705; color:#111; font-weight:bold; border-color:#b88a00; box-shadow:0 0 6px 1px rgba(242,183,5,.8); animation:pulse_graph 1.2s ease-in-out infinite;}
+[data-g="graph"] .scr.tabhl .tb .tab.pg.off{background:#FFE9A8; color:#5a4500;}
+[data-g="graph"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="graph"] .tb .sp{flex:1;}
+[data-g="graph"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="graph"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="graph"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end;}
+[data-g="graph"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="graph"] .calcapp .ln span, [data-g="graph"] .calcapp .ln b{padding:0 2px; border-radius:2px;}
+[data-g="graph"] .calcapp .ln .sel{background:#3b78c2; color:#fff;}
+[data-g="graph"] .calcapp .ln b{font-weight:normal; margin-left:auto;}
+[data-g="graph"] .calcapp .ln b i, [data-g="graph"] .calcapp .ln span i{font-style:normal;}
+[data-g="graph"] .calcapp .cur{border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center;}
+[data-g="graph"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
+[data-g="graph"] .fr > span{padding:0 2px; min-width:7px;}
+[data-g="graph"] .fr > span:first-child{border-bottom:1px solid currentColor;}
+[data-g="graph"] .fr > span:empty::after, [data-g="graph"] .rad:empty::after, [data-g="graph"] sup:empty::after{content:"\25A1"; color:#999;}
+[data-g="graph"] .calcapp{overflow:hidden;}
+[data-g="graph"] .calcapp > *{flex-shrink:0;}
+[data-g="graph"] .dvb:empty::after{content:"\25A1"; color:#999;}
+[data-g="graph"] .rt{white-space:nowrap;}
+[data-g="graph"] .rad{border-top:1px solid currentColor; padding:0 1px;}
+[data-g="graph"] .calcapp sup{font-size:8px;}
+[data-g="graph"] .caret{animation:blink_graph 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_graph{ 50%{opacity:0} }
+[data-g="graph"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="graph"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="graph"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="graph"] .dlg{position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
+[data-g="graph"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
+[data-g="graph"] .dlg .ff{display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center;}
+[data-g="graph"] .dlg .lb{text-align:right;}
+[data-g="graph"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px;}
+[data-g="graph"] .dlg .ct.fo{outline:2px solid #3b78c2;}
+[data-g="graph"] .dlg .ct.mark{background:#FFF3C4;}
+[data-g="graph"] .dlg .bt{display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px;}
+[data-g="graph"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px;}
+[data-g="graph"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="graph"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="graph"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="graph"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="graph"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="graph"] .hs .col{flex:1;}
+[data-g="graph"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="graph"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="graph"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="graph"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="graph"] .hs .it.dim{color:#6f757d;}
+[data-g="graph"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="graph"] .hs .it.sel{background:#3b78c2; color:#fff;}
+[data-g="graph"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_graph 1.2s ease-in-out infinite;}
+[data-g="graph"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="graph"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_graph 1.2s ease-in-out infinite;}
+@keyframes pulse_graph{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="graph"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="graph"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="graph"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="graph"] .hs .icons svg{width:20px; height:20px;}
+[data-g="graph"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="graph"] table.sh{border-collapse:collapse; table-layout:fixed; width:280px;}
+[data-g="graph"] table.sh td{border:1px solid #c9ced6; height:15px; padding:0 3px; font-size:10.5px;}
+[data-g="graph"] table.sh td.rn{width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px;}
+[data-g="graph"] table.sh tr.hd td{height:18px; background:#eef1f5; font-weight:bold;}
+[data-g="graph"] table.sh td.cur{outline:2px solid #000; outline-offset:-2px;}
+[data-g="graph"] .files{padding:4px 8px; font-size:11px;}
+[data-g="graph"] .files .hd{font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between;}
+[data-g="graph"] .files .it{padding:2px 4px; display:flex; justify-content:space-between;}
+[data-g="graph"] .files .it.sel{background:#3b78c2; color:#fff;}
+[data-g="graph"] .pwroff{position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px;}
+[data-g="graph"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="graph"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="graph"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="graph"] .prog i.done{background:#9aa3b0;}
+[data-g="graph"] .prog i.now{background:var(--lf);}
+[data-g="graph"] .prog i.abp{background:#bfe3c3;}
+[data-g="graph"] .prog i.abp.done{background:#7cbf84;}
+[data-g="graph"] .prog i.abp.now{background:var(--ab);}
+[data-g="graph"] .nr{font-size:13px; color:var(--mute);}
+[data-g="graph"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="graph"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="graph"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="graph"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="graph"] .chip.ctrl{background:#D93A2B;}
+[data-g="graph"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="graph"] .chip.done{opacity:.35;}
+[data-g="graph"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="graph"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="graph"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="graph"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="graph"] .note b{color:#8a5a00;}
+[data-g="graph"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="graph"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="graph"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="graph"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="graph"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="graph"] .ab .abt span{font-size:22px;}
+[data-g="graph"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="graph"] .ab li{margin-bottom:3px;}
+[data-g="graph"] .ab p{font-size:14.5px;}
+[data-g="graph"] .ab .tx{font-family:Consolas,'Courier New',monospace; background:#e2eee3; border-radius:3px; padding:0 4px;}
+[data-g="graph"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="graph"] .task b{color:var(--lf);}
+[data-g="graph"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="graph"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
+[data-g="graph"] .task .term .fr{font-size:20px;}
+[data-g="graph"] .task .term .rad{padding:0 3px;}
+[data-g="graph"] .cmd{font-family:Consolas,'Courier New',monospace; font-size:21px; background:#eceef1; border-radius:4px; padding:0 6px;}
+[data-g="graph"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="graph"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="graph"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="graph"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="graph"] #next{margin-left:auto;}
+[data-g="graph"] .opt{font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px;}
+[data-g="graph"] .hint{font-size:12.5px; color:var(--mute); margin-top:10px;}
+[data-g="graph"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="graph"] .vgl th, [data-g="graph"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top;}
+[data-g="graph"] .vgl th{background:#eef0f3;}
+@media (max-width:380px){[data-g="graph"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="graph"] .play{font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15);}
+[data-g="graph"] .chip.playc{background:#F2B705; color:#111; cursor:pointer;}
+[data-g="graph"] .play:hover{background:#ffc928;}
+[data-g="graph"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
+[data-g="graph"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 /* --- abl --- */
 [data-g="abl"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
 [data-g="abl"] *, [data-g="abl"]{box-sizing:border-box;}
@@ -1424,176 +1594,6 @@ button{ font-family:inherit; }
 [data-g="abl"] .vgl th{background:#eef0f3;}
 @media (max-width:380px){[data-g="abl"] .calc{transform:scale(.92); transform-origin:top center;}}
 [data-g="abl"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
-/* --- graph --- */
-[data-g="graph"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
-[data-g="graph"] *, [data-g="graph"]{box-sizing:border-box;}
-[data-g="graph"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
-[data-g="graph"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
-[data-g="graph"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
-[data-g="graph"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
-[data-g="graph"] .tabs button.on.fertig::after{color:#9fe0a5;}
-[data-g="graph"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
-[data-g="graph"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
-[data-g="graph"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
-[data-g="graph"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
-[data-g="graph"] .brand b{color:#fff; margin-left:6px;}
-[data-g="graph"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
-[data-g="graph"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
-[data-g="graph"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
-[data-g="graph"] .nav .col{display:flex; flex-direction:column; gap:7px;}
-[data-g="graph"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
-[data-g="graph"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
-[data-g="graph"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
-[data-g="graph"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
-[data-g="graph"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
-[data-g="graph"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
-[data-g="graph"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
-[data-g="graph"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
-[data-g="graph"] .k:focus{outline:none;}
-[data-g="graph"] .k:active{transform:scale(.95);}
-[data-g="graph"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
-[data-g="graph"] .k.ctrl{background:#D93A2B;}
-[data-g="graph"] .k.bk{background:#26262a; border:1px solid #555;}
-[data-g="graph"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
-[data-g="graph"] .pad .k.hit{position:absolute;}
-[data-g="graph"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
-[data-g="graph"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_graph .35s;}
-[data-g="graph"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
-@keyframes wack_graph{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
-[data-g="graph"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
-[data-g="graph"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
-[data-g="graph"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
-[data-g="graph"] .let9 .k{height:20px; font-size:10px;}
-[data-g="graph"] .span2{grid-column:span 2;}
-[data-g="graph"] .span3{grid-column:span 3;}
-[data-g="graph"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
-[data-g="graph"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
-[data-g="graph"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
-[data-g="graph"] .tb .tab.off{background:#eef1f5; color:#777;}
-[data-g="graph"] .tb .tab.np{background:#fff4c9; border-color:#d1b24a; font-weight:bold;}
-[data-g="graph"] .scr.tabhl .tb .tab.pg{background:#F2B705; color:#111; font-weight:bold; border-color:#b88a00; box-shadow:0 0 6px 1px rgba(242,183,5,.8); animation:pulse_graph 1.2s ease-in-out infinite;}
-[data-g="graph"] .scr.tabhl .tb .tab.pg.off{background:#FFE9A8; color:#5a4500;}
-[data-g="graph"] .tb .docn{font-weight:bold; margin-right:3px;}
-[data-g="graph"] .tb .sp{flex:1;}
-[data-g="graph"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
-[data-g="graph"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
-[data-g="graph"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end;}
-[data-g="graph"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
-[data-g="graph"] .calcapp .ln span, [data-g="graph"] .calcapp .ln b{padding:0 2px; border-radius:2px;}
-[data-g="graph"] .calcapp .ln .sel{background:#3b78c2; color:#fff;}
-[data-g="graph"] .calcapp .ln b{font-weight:normal; margin-left:auto;}
-[data-g="graph"] .calcapp .ln b i, [data-g="graph"] .calcapp .ln span i{font-style:normal;}
-[data-g="graph"] .calcapp .cur{border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center;}
-[data-g="graph"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
-[data-g="graph"] .fr > span{padding:0 2px; min-width:7px;}
-[data-g="graph"] .fr > span:first-child{border-bottom:1px solid currentColor;}
-[data-g="graph"] .fr > span:empty::after, [data-g="graph"] .rad:empty::after, [data-g="graph"] sup:empty::after{content:"\25A1"; color:#999;}
-[data-g="graph"] .calcapp{overflow:hidden;}
-[data-g="graph"] .calcapp > *{flex-shrink:0;}
-[data-g="graph"] .dvb:empty::after{content:"\25A1"; color:#999;}
-[data-g="graph"] .rt{white-space:nowrap;}
-[data-g="graph"] .rad{border-top:1px solid currentColor; padding:0 1px;}
-[data-g="graph"] .calcapp sup{font-size:8px;}
-[data-g="graph"] .caret{animation:blink_graph 1s steps(1) infinite; font-weight:normal;}
-@keyframes blink_graph{ 50%{opacity:0} }
-[data-g="graph"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
-[data-g="graph"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-[data-g="graph"] .menu div.sel{background:#3b78c2; color:#fff;}
-[data-g="graph"] .dlg{position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
-[data-g="graph"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
-[data-g="graph"] .dlg .ff{display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center;}
-[data-g="graph"] .dlg .lb{text-align:right;}
-[data-g="graph"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px;}
-[data-g="graph"] .dlg .ct.fo{outline:2px solid #3b78c2;}
-[data-g="graph"] .dlg .ct.mark{background:#FFF3C4;}
-[data-g="graph"] .dlg .bt{display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px;}
-[data-g="graph"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px;}
-[data-g="graph"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
-[data-g="graph"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
-[data-g="graph"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
-[data-g="graph"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
-[data-g="graph"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
-[data-g="graph"] .hs .col{flex:1;}
-[data-g="graph"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
-[data-g="graph"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
-[data-g="graph"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
-[data-g="graph"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
-[data-g="graph"] .hs .it.dim{color:#6f757d;}
-[data-g="graph"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
-[data-g="graph"] .hs .it.sel{background:#3b78c2; color:#fff;}
-[data-g="graph"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_graph 1.2s ease-in-out infinite;}
-[data-g="graph"] .hs .it.ziel b{background:#111; color:#F2B705;}
-[data-g="graph"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_graph 1.2s ease-in-out infinite;}
-@keyframes pulse_graph{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
-[data-g="graph"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
-[data-g="graph"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
-[data-g="graph"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
-[data-g="graph"] .hs .icons svg{width:20px; height:20px;}
-[data-g="graph"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
-[data-g="graph"] table.sh{border-collapse:collapse; table-layout:fixed; width:280px;}
-[data-g="graph"] table.sh td{border:1px solid #c9ced6; height:15px; padding:0 3px; font-size:10.5px;}
-[data-g="graph"] table.sh td.rn{width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px;}
-[data-g="graph"] table.sh tr.hd td{height:18px; background:#eef1f5; font-weight:bold;}
-[data-g="graph"] table.sh td.cur{outline:2px solid #000; outline-offset:-2px;}
-[data-g="graph"] .files{padding:4px 8px; font-size:11px;}
-[data-g="graph"] .files .hd{font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between;}
-[data-g="graph"] .files .it{padding:2px 4px; display:flex; justify-content:space-between;}
-[data-g="graph"] .files .it.sel{background:#3b78c2; color:#fff;}
-[data-g="graph"] .pwroff{position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px;}
-[data-g="graph"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
-[data-g="graph"] .prog{display:flex; gap:4px; margin-bottom:12px;}
-[data-g="graph"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
-[data-g="graph"] .prog i.done{background:#9aa3b0;}
-[data-g="graph"] .prog i.now{background:var(--lf);}
-[data-g="graph"] .prog i.abp{background:#bfe3c3;}
-[data-g="graph"] .prog i.abp.done{background:#7cbf84;}
-[data-g="graph"] .prog i.abp.now{background:var(--ab);}
-[data-g="graph"] .nr{font-size:13px; color:var(--mute);}
-[data-g="graph"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
-[data-g="graph"] .panel p{margin:0 0 10px; font-size:15.5px;}
-[data-g="graph"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
-[data-g="graph"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
-[data-g="graph"] .chip.ctrl{background:#D93A2B;}
-[data-g="graph"] .chip.lt{background:#8e8e95; color:#111;}
-[data-g="graph"] .chip.done{opacity:.35;}
-[data-g="graph"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
-[data-g="graph"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
-[data-g="graph"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
-[data-g="graph"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
-[data-g="graph"] .note b{color:#8a5a00;}
-[data-g="graph"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
-[data-g="graph"] .stat .ok{color:#2E7D32; font-weight:bold;}
-[data-g="graph"] .stat .err{color:#C62828; font-weight:bold;}
-[data-g="graph"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
-[data-g="graph"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
-[data-g="graph"] .ab .abt span{font-size:22px;}
-[data-g="graph"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
-[data-g="graph"] .ab li{margin-bottom:3px;}
-[data-g="graph"] .ab p{font-size:14.5px;}
-[data-g="graph"] .ab .tx{font-family:Consolas,'Courier New',monospace; background:#e2eee3; border-radius:3px; padding:0 4px;}
-[data-g="graph"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
-[data-g="graph"] .task b{color:var(--lf);}
-[data-g="graph"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
-[data-g="graph"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
-[data-g="graph"] .task .term .fr{font-size:20px;}
-[data-g="graph"] .task .term .rad{padding:0 3px;}
-[data-g="graph"] .cmd{font-family:Consolas,'Courier New',monospace; font-size:21px; background:#eceef1; border-radius:4px; padding:0 6px;}
-[data-g="graph"] .btns{display:flex; gap:10px; margin-top:14px;}
-[data-g="graph"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
-[data-g="graph"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
-[data-g="graph"] .btns button:disabled{opacity:.4; cursor:default;}
-[data-g="graph"] #next{margin-left:auto;}
-[data-g="graph"] .opt{font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px;}
-[data-g="graph"] .hint{font-size:12.5px; color:var(--mute); margin-top:10px;}
-[data-g="graph"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
-[data-g="graph"] .vgl th, [data-g="graph"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top;}
-[data-g="graph"] .vgl th{background:#eef0f3;}
-@media (max-width:380px){[data-g="graph"] .calc{transform:scale(.92); transform-origin:top center;}}
-[data-g="graph"] .play{font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15);}
-[data-g="graph"] .chip.playc{background:#F2B705; color:#111; cursor:pointer;}
-[data-g="graph"] .play:hover{background:#ffc928;}
-[data-g="graph"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
-[data-g="graph"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 
 /* ================= Rahmen der Moodle-Seite ================= */
 .bar{ position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line); box-shadow:0 1px 0 rgba(0,0,0,.02); }
@@ -5687,590 +5687,6 @@ neu();
  }
 };
 
-/* ===== Anleitung: abl ===== */
-GUIDES["abl"]={
- note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
- make:function(__D){
-// ---------- Bildschirm-Bausteine ----------
-function topbar(tabs,cur,doc){
-  if(tabs==='np') return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
-  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
-}
-function home(mark){
-  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
-  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
-  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
-  const icons=[
-   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
-   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
-   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
-   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
-   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
-   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
-   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
-  ].join('');
-  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
-  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
-   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
-   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
-   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
-}
-const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
-function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
-function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
-function sheet(tabs,cur,doc){
-  let h=topbar(tabs,cur,doc)+'<table class="sh"><tr class="hd"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr>';
-  for(let r=1;r<=10;r++) h+=`<tr><td class="rn">${r}</td><td class="${r===1?'cur':''}"></td><td></td><td></td><td></td></tr>`;
-  return h+'</table>';
-}
-function calcApp(tabs,cur,lines,entry,o){
-  o=o||{};
-  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map((l,j)=>`<div class="ln"><span class="${o.sel===2*j?'sel':''}">${l[0]}</span><b class="${o.sel===2*j+1?'sel':''}">${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
-}
-const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
-const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
-const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
-const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
-
-// ---------- Eingabezeile (Vorlagen: Bruch, Hochzahl, Wurzel) ----------
-const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
-function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
-Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
-Entry.prototype.der=function(nth){ const d={t:'der',v:[],n:nth?[]:null,e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
-Entry.prototype.key=function(k){
-  const T=this.top();
-  if(k==='tab'){ if(T.der&&T.a!==T.der.e){ const nx=(T.a===T.der.v&&T.der.n)?T.der.n:T.der.e; this.path.pop(); this.path.push({a:nx,der:T.der}); } return; }
-  if(this.ctrl){ this.ctrl=false;
-    if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
-    if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
-    if(k==='neg'){ T.a.push('ans'); return; }
-    if(k==='var'){ T.a.push('→'); return; }
-    if(k==='tmpl'){ T.a.push(':='); return; }
-    return;
-  }
-  if(k==='ctrl'){ this.ctrl=true; return; }
-  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
-  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
-  if(k==='down'){ if(T.f&&T.a===T.f.n){ this.path.pop(); this.path.push({a:T.f.d,f:T.f}); } return; }
-  if(k==='right'){ if(this.path.length>1) this.path.pop(); return; }
-  if(k==='del'){ T.a.pop(); return; }
-  if(k==='-'&&this.root.length===0){ T.a.push('ans','−'); return; }
-  T.a.push(SHOW[k]||k);
-};
-function rnd(arr,curA,caret){
-  let h=arr.map(t=>typeof t==='string'?t:
-    t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
-    t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
-    t.t==='der'?`<span class="fr"><span>d${t.n?`<sup class="dvb">${rnd(t.n,curA,false)}</sup>`:''}</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span>${t.n?`<sup class="dvb">${rnd(t.n,curA,caret)}</sup>`:''}</span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
-    `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
-  if(caret&&arr===curA) h+='<span class="caret">|</span>';
-  return h;
-}
-function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?(t.n?`d^${ser(t.n)}/d${ser(t.v)}^${ser(t.n)}(${ser(t.e)})`:`d/d${ser(t.v)}(${ser(t.e)})`):`√(${ser(t.v)})`).join(''); }
-Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
-
-// ---------- Simulation: Ergebnisse je Schritt ----------
-// offene Klammern beim enter automatisch schließen (wie am Handheld)
-function closeP(arr,html){ const s=ser(arr); const n=(s.match(/\(/g)||[]).length-(s.match(/\)/g)||[]).length; return html+')'.repeat(Math.max(0,n)); }
-const ANA=["1: Ableitung","2: Ableitung in einem Punkt","3: Integral","4: Limes","5: Summe","6: Produkt","7: Funktionsminimum","8: Funktionsmaximum","9: Tangente"];
-// simuliert Tastenfolge inkl. menu ▸ 4: Analysis ▸ 1: Ableitung (fügt die Vorlage d/d□(□) ein)
-function simT(hist,keys,res,pk){
-  hist=hist.slice(); res=[].concat(res); pk=(pk||[]).slice(); let e=new Entry(), ri=0, m=0;
-  for(const k of keys){
-    if(m==='T'||m==='R'){ const w=m; m=0; if(k==='click'){ const p=pk.shift(); if(w==='R') e.top().a.push('|'); else e.der(p==='n'); } continue; }
-    if(k==='tmpl'&&!e.ctrl){ m='T'; continue; }
-    if(k==='='&&e.ctrl){ e.ctrl=false; m='R'; continue; }
-    if(m===1){ m=(k==='4')?2:0; continue; }
-    if(m===2){ m=0; if(k==='1') e.der(); continue; }
-    if(k==='menu'){ m=1; continue; }
-    if(k==='enter'){ hist.push([closeP(e.root,rnd(e.root,null,false)), res[ri++]||'?']); e=new Entry(); }
-    else e.key(k);
-  }
-  return {hist,e,m};
-}
-const CUR='<span class="caret">|</span>';
-const F1=['1.1'], O={doc:'abl'};
-const page=(hist,entry)=>calcApp(F1,'1.1',hist,entry===undefined?CUR:entry,O);
-function TS(base,keys,res,pk){ return i=>{
-  const r=simT(base,keys.slice(0,i),res,pk); let h=calcApp(F1,'1.1',r.hist,r.e.html(),O);
-  if(r.m===1) h+=menus([{items:CM,sel:0}]);
-  if(r.m===2) h+=menus([{items:CM,sel:3},{items:ANA,sel:0}]);
-  if(r.m==='T') h+=palT((pk||[])[keys.slice(0,i).filter((k,j,a)=>k==='click'&&j>0&&(a[j-1]==='tmpl'||a[j-1]==='=')).length]);
-  if(r.m==='R') h+=palR();
-  return h; }; }
-const after=(base,keys,res,pk)=>simT(base,keys,res,pk).hist;
-// Auswahlfenster der Vorlagen-Taste ⊞ und von ctrl + =
-const PF=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`, BX='<span class="pb"></span>';
-function palT(w){
-  const it=[PF(BX,BX),BX+'<sup>'+BX+'</sup>','√'+BX,'<sup>'+BX+'</sup>√'+BX,'e<sup>'+BX+'</sup>','log<sub>'+BX+'</sub>',
-            '{'+BX,'|'+BX+'|','Σ','Π',['d',PF('d','d'+BX)+'('+BX+')'],['n',PF('d<sup>'+BX+'</sup>','d'+BX+'<sup>'+BX+'</sup>')+'('+BX+')'],'∫'+BX,'lim'];
-  return '<div class="pal">'+it.map(c=>Array.isArray(c)?`<span class="${c[0]===w?'ziel':''}">${c[1]}</span>`:`<span>${c}</span>`).join('')+'</div>';
-}
-function palR(){ return '<div class="pal pr">'+['=','≠','&lt;','≤','&gt;','≥','|','⇒','⇔'].map(c=>`<span class="${c==='|'?'ziel':''}">${c}</span>`).join('')+'</div>'; }
-const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
-
-// ---------- Spur 1: Ableitungen bestimmen (Taste ⊞ ▸ d/dx) ----------
-const SUP=n=>'<sup>'+n+'</sup>';
-const D1R='3·x'+SUP(2)+'−6·x', D2R='6·x−6', D3R='6';
-const FX=["f","(","x",")"];
-const kF=["f","(","x",")","ctrl","tmpl","x","^","3","right","-","3","x","x2","+","2","enter"];
-const kF1=["f","1","(","x",")","ctrl","tmpl","tmpl","click","x","tab"].concat(FX,["enter"]);
-const kF1s=["f","1","(","x",")","enter"];
-const kF2=["f","2","(","x",")","ctrl","tmpl","tmpl","click","x","tab","2","tab"].concat(FX,["enter"]);
-const kF2s=["f","2","(","x",")","enter"];
-const kF3=["f","3","(","x",")","ctrl","tmpl","tmpl","click","x","tab","3","tab"].concat(FX,["enter"]);
-const kF3s=["f","3","(","x",")","enter"];
-const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kF1,'Fertig',['d']), a3=after(a2,kF1s,D1R),
-      a4=after(a3,kF2,'Fertig',['n']), a5=after(a4,kF2s,D2R), a6=after(a5,kF3,'Fertig',['n']), a7=after(a6,kF3s,D3R);
-
-// ---------- Spur 2: Ableitung an einer Stelle ----------
-const BAR=["right","ctrl","=","click","x","="];
-const kA1=["f","1","(","2",")","enter"], kA2=["f","1","(","neg","1",")","enter"];
-const kP1=["tmpl","click","x","tab"].concat(FX,BAR,["0",".","5","enter"]);
-const kA4=["f","2","(","3",")","enter"];
-const kP2=["tmpl","click","x","tab","2","tab"].concat(FX,BAR,["3","enter"]);
-const b1=after(a7,kA1,'0'), b2=after(b1,kA2,'9'), b3=after(b2,kP1,'−2.25',['d','|']), b4=after(b3,kA4,'12'), b5=after(b4,kP2,'12',['n','|']);
-
-const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
-const fx=(t)=>`<i>${t}</i>`;
-const FTERM='<i>f</i>(<i>x</i>) = <i>x</i>³ − 3<i>x</i>² + 2';
-const D='<span class="fr"><span>d</span><span>d<i>x</i></span></span>';
-const DN=n=>'<span class="fr"><span>d<sup>'+n+'</sup></span><span>d<i>x</i><sup>'+n+'</sup></span></span>';
-
-const TRACKS={
- a:{ name:"Ableitungen bestimmen", start:()=>home(''), steps:[
-  {t:"Neues Dokument", a:"Neues Dokument mit Calculator-Seite", k:["1","1"], p:pick([appList(F1,'1.1',0),page([])]),
-   d:"<p><b>1</b> = Neues Dokument, dann <b>1</b> = Calculator.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
-  {t:"Funktion speichern", a:"Speichern Sie "+FTERM, k:kF, p:TS(a0,kF,'Fertig'),
-   d:"<p><b>ctrl + ⊞</b> schreibt <b>:=</b>. Die Hochzahl 3: Taste <b>^</b>, dann <b>3</b>, dann <b>▶</b> (aus der Hochzahl heraus).</p>",
-   n:"Das kennen Sie aus „Funktionswerte“: erst der Name <b>f(x)</b>, dann <b>:=</b>, dann der Term."},
-  {t:"1. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ′ als <i>f</i>1(<i>x</i>)", k:kF1, p:TS(a1,kF1,'Fertig',['d']),
-   d:"<p>Erst <b>f1(x) :=</b> schreiben. Dann die Taste <b>⊞</b> (rechts neben der 9): Es öffnet sich eine Auswahl. Gehen Sie mit den Pfeiltasten auf "+D+" (gelb) und drücken Sie <b>●</b>.</p><p>Ins kleine Feld <b>x</b>, mit <b>tab</b> in die Klammer, dort <b>f(x)</b>.</p>",
-   n:"f1 steht für <i>f</i> ′, f2 für <i>f</i> ″ und f3 für <i>f</i> ‴."},
-  {t:"1. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ′(<i>x</i>) an", k:kF1s, p:TS(a2,kF1s,D1R),
-   d:"<p>Tippen Sie <b>f1(x)</b>. Ergebnis: <b>3x² − 6x</b></p>"},
-  {t:"2. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ″ als <i>f</i>2(<i>x</i>)", k:kF2, p:TS(a3,kF2,'Fertig',['n']),
-   d:"<p>In der Auswahl von <b>⊞</b> gibt es auch "+DN('□')+": die Vorlage mit <b>Hochzahl</b>.</p><p>Ins erste Feld <b>x</b>, mit <b>tab</b> zur Hochzahl <b>2</b>, mit <b>tab</b> in die Klammer: <b>f(x)</b>.</p>",
-   n:"Die Hochzahl sagt, die wievielte Ableitung berechnet wird."},
-  {t:"2. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ″(<i>x</i>) an", k:kF2s, p:TS(a4,kF2s,D2R),
-   d:"<p>Tippen Sie <b>f2(x)</b>. Ergebnis: <b>6x − 6</b></p>"},
-  {t:"3. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ‴ als <i>f</i>3(<i>x</i>)", k:kF3, p:TS(a5,kF3,'Fertig',['n']),
-   d:"<p>Gleiche Vorlage, jetzt mit Hochzahl <b>3</b>: <b>f3(x) := "+DN(3)+"(f(x))</b></p>"},
-  {t:"3. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ‴(<i>x</i>) an", k:kF3s, p:TS(a6,kF3s,D3R),
-   d:"<p>Ergebnis: <b>6</b></p><table class='vgl'><tr><th>Ableitung</th><th>speichern</th><th>Ergebnis</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x):="+D+"(f(x))</td><td>3x² − 6x</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x):="+DN(2)+"(f(x))</td><td>6x − 6</td></tr><tr><td><i>f</i> ‴(<i>x</i>)</td><td>f3(x):="+DN(3)+"(f(x))</td><td>6</td></tr></table>"},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(a7), d:AB("Aufgabe 1",["Funktion <i>g</i> speichern","g1, g2 und g3 speichern","<i>g</i> ′(<i>x</i>), <i>g</i> ″(<i>x</i>) und <i>g</i> ‴(<i>x</i>) eintragen"])}
- ]},
- s:{ name:"Ableitung an einer Stelle", start:()=>page(a7), steps:[
-  {t:"Stelle in f1 einsetzen", a:"Berechnen Sie "+fx('f')+" ′(2)", k:kA1, p:TS(a7,kA1,'0'),
-   d:"<p><b>Weg 1:</b> Die Ableitung ist als <b>f1</b> gespeichert. Setzen Sie die Stelle ein wie bei Funktionswerten: <b>f1(2)</b>.</p><p>Ergebnis: <b>0</b>. Der Graph hat bei <i>x</i> = 2 eine <b>waagerechte Tangente</b>.</p>"},
-  {t:"Negative Stelle", a:"Berechnen Sie "+fx('f')+" ′(−1)", k:kA2, p:TS(b1,kA2,'9'),
-   d:"<p>Vorzeichen mit <b>(−)</b>. Ergebnis: <b>9</b> &gt; 0, also <b>steigt</b> der Graph bei <i>x</i> = −1.</p>"},
-  {t:"Direkt mit dem Strich |", a:"Berechnen Sie "+fx('f')+" ′(0,5) direkt", k:kP1, p:TS(b2,kP1,'−2.25',['d','|']),
-   d:"<p><b>Weg 2:</b> <b>⊞</b> ▸ "+D+", dann <b>x</b>, <b>tab</b>, <b>f(x)</b>. Mit <b>▶</b> aus der Vorlage heraus.</p><p><b>ctrl + =</b> öffnet eine Auswahl: dort <b>|</b> wählen. Dann <b>x=0.5</b>.</p><p>Ergebnis: <b>−2,25</b> &lt; 0, also <b>fällt</b> der Graph.</p>",
-   n:"Der Strich <b>|</b> heißt „mit“: Rechne die Ableitung <b>mit x = 0,5</b>."},
-  {t:"2. Ableitung: Weg 1", a:"Berechnen Sie "+fx('f')+" ″(3)", k:kA4, p:TS(b3,kA4,'12'),
-   d:"<p>Mit der gespeicherten 2. Ableitung: <b>f2(3)</b> = <b>12</b></p>"},
-  {t:"2. Ableitung: Weg 2", a:"Berechnen Sie "+fx('f')+" ″(3) direkt", k:kP2, p:TS(b4,kP2,'12',['n','|']),
-   d:"<p>Vorlage "+DN(2)+" mit Hochzahl <b>2</b>, dann <b>|x=3</b>. Ergebnis: <b>12</b> – beide Wege liefern dasselbe.</p>",
-   n:"Merke: <i>f</i> ′(<i>a</i>) &gt; 0 → Graph steigt · <i>f</i> ′(<i>a</i>) &lt; 0 → Graph fällt · <i>f</i> ′(<i>a</i>) = 0 → waagerechte Tangente"},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b5), d:AB("Aufgabe 2 und 3",["Funktion <i>h</i> speichern, h1 und h2 speichern","Steigungen an den Stellen berechnen (Weg 1 oder Weg 2)","steigt, fällt oder waagerecht?","<i>h</i> ″ an zwei Stellen berechnen","Danach: Lösungscode eintragen"])}
- ]}
-};
-
-// ---------- Steuerung ----------
-const ORDER=["a","s"];
-let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
-const $=id=>__D.getElementById(id);
-const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
-const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
-function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
-function screenOf(t,s,i){
-  const S=TRACKS[t].steps[s];
-  if(S.p && (i>0 || !S.k.length)) return S.p(i);
-  if(i>=S.k.length && S.s) return S.s();
-  if(i>=S.k.length && S.p) return S.p(S.k.length);
-  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
-}
-function render(){
-  const T=TRACKS[tr], S=T.steps[st];
-  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
-  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
-  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
-  $('tt').textContent=S.t;
-  $('task').style.display=S.a?'block':'none';
-  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
-  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
-  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
-  $('scr').innerHTML=screenOf(tr,st,pos);
-  
-  zielMarke(S.k[pos]);
-  $('back').disabled=st===0&&pos===0;
-  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
-  const fin=pos>=S.k.length;
-  if(last&&fin) done[tr]=true;
-  $('next').className='go';
-  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
-  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
-  $('stat').style.display=S.ab?'none':'flex';
-  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
-  hint();
-}
-// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
-function zielMarke(k){
-  if(!k || !/^[a-e0-9]$/.test(k)) return;
-  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
-  if(it){ it.classList.add('ziel'); return; }
-  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
-  const m=ms[ms.length-1];
-  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
-}
-function hint(){
-  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
-  const S=TRACKS[tr].steps[st];
-  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
-  if(pos>=S.k.length) return;
-  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
-}
-function press(k){
-  if(lock) return;
-  const S=TRACKS[tr].steps[st];
-  if(pos>=S.k.length) return;
-  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
-  if(k===S.k[pos]){
-    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
-    render();
-    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
-  } else {
-    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
-    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
-  }
-}
-function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
-function next(){
-  const T=TRACKS[tr], S=T.steps[st];
-  if(pos<S.k.length){ pos=S.k.length; render(); return; }
-  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
-  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
-}
-function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
-
-
-
-
-
-const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
-
-  return {
-    ORDER, TRACKS, KMAP, render, press, next, back,
-    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
-    home:(typeof home==='function'?home:null),
-    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
-    selectStep:function(i){ st=+i; pos=0; render(); },
-    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
-      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
-      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
-      if(pos<S.k.length){ pos=S.k.length; render(); } },
-    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
-    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
-    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
-    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
-    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
-  };
- }
-};
-/* ===== Übung: abl ===== */
-UEB["abl"]={
- title:"Ableitungen",
- css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
-:host{box-sizing:border-box;}
-.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
-.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
-.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
-.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
-.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
-.card h2{margin:0 0 6px; font-size:18px;}
-.auftrag{font-size:15.5px; margin:0 0 10px;}
-.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
-.round b{color:var(--warn);}
-.dt{overflow-x:auto;}
-table.d{border-collapse:collapse; font-size:16px; margin:2px 0 4px;}
-table.d th, table.d td{border:1px solid #c3c8d0; padding:4px 10px; text-align:center; min-width:40px;}
-table.d th{background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic;}
-.spalten{font-size:13.5px; color:var(--mute); margin-top:6px;}
-.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222;}
-.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
-@media (max-width:620px){.grid{grid-template-columns:1fr;}}
-.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px;}
-.f label{font-size:15px;}
-.f label .z{color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px;}
-.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
-.f .m{font-weight:bold; font-size:18px; text-align:center;}
-.f.ok{background:var(--okbg);}
-.f.ok .m{color:var(--ok);}
-.f.no{background:var(--nobg);}
-.f.no .m{color:var(--no);}
-.f.fmt{background:var(--warnbg);}
-.f.fmt .m{color:var(--warn);}
-.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
-.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
-.f.no .msg{color:var(--no);}
-.f.fmt .msg{color:var(--warn);}
-.f.show .msg{color:var(--mute);}
-.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
-.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
-.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
-.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
-.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
-.hinweis{font-size:13.5px; color:var(--mute);}
-.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
-.plot svg{width:100%; height:auto; display:block; max-width:640px; margin:0 auto;}
-.plot .gl{stroke:#e1e4e9; stroke-width:1;}
-.plot .ax{stroke:#222; stroke-width:1.4;}
-.plot .ah{fill:#222;}
-.plot .al{font:italic 15px Cambria,Georgia,serif;}
-.plot .tl{font:11px system-ui,Arial,sans-serif; fill:#555;}
-.plot .cv{fill:none; stroke:#1d1d1f; stroke-width:2.2;}
-.plot .ar{stroke-width:2; stroke-dasharray:6 4; fill:none;}
-.plot .ml{font:bold 13px system-ui,Arial,sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px;}
-#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
-@media (max-width:620px){#felder{grid-template-columns:1fr;}}
-.f{border-left:5px solid #ccc;}
-.f .dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle;}
-.f.gl{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;}
-.f.gl > label:first-child{min-width:150px; font-family:Cambria,Georgia,serif; font-size:16px;}
-.f.gl .xin{display:inline-flex; align-items:center; gap:6px;}
-.f.gl .xin .z{font-family:Cambria,Georgia,serif; font-size:15px;}
-.f.gl .kl{font-size:14.5px; display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
-.f.gl .kl input{width:18px; height:18px;}
-.f.gl .m{margin-left:auto;}
-.f.gl .msg{flex-basis:100%;}
-.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
-.liste{font-weight:normal;}
-.f.co{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; border-left-color:#1F4E99;}
-.f.co > label{min-width:72px;}
-.f.co .cos{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:Cambria,Georgia,serif; font-size:17px;}
-.f.co input.ci{width:76px;}
-.f.co input.bad{border-color:var(--no); background:#fff6f5;}
-.f.co .pl{color:var(--mute);}
-.f.co .m{margin-left:auto;}
-.f.co .msg{flex-basis:100%;}
-.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
-.wrap{max-width:none;margin:0;padding:0;}
-:host{display:block;container-type:inline-size;}
-@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
- html:String.raw`<div class="wrap">
-  <div class="tabs" id="tabs"></div>
-  <div class="card">
-    <h2 id="h"></h2>
-    <p class="auftrag" id="auftrag"></p>
-    <div class="term" id="term"></div>
-    <div class="plot" id="plot"></div>
-  </div>
-  <div class="card">
-    <div class="round"><b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>3,68</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen.</div>
-    <div id="felder"></div>
-    <div class="btns">
-      <button class="go" id="pruefen">Prüfen</button>
-      <button id="zeigen">Lösung anzeigen</button>
-      <button id="neu">Neue Aufgabe ▶</button>
-    </div>
-    <div class="score" id="score"></div>
-    <div class="stats" id="stats"></div>
-  </div>
-  <p class="hinweis" id="hinweis"></p>
-</div>`,
- init:function(root){
-// ---------- Hilfen ----------
-const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
-const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
-const deN=v=>{ let t=(Math.round(v*1e6)/1e6).toString(); return t.replace('-','−').replace('.',','); };
-const de2=v=>{ const x=r2(v); return (Number.isInteger(x)?String(x):x.toFixed(2)).replace('-','−').replace('.',','); };
-const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=R(0,i); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-function termHTML(n,a,b,c){
-  const co=(v,first)=>{ const s=v<0?'−':(first?'':'+'); const m=Math.abs(v); return {s, m:deN(m)}; };
-  let h=`<i>${n}</i>(<i>x</i>) = `;
-  const A=co(a,true); h+=(A.s?A.s:'')+(A.m==='1'?'':A.m)+'<i>x</i>²';
-  if(b!==0){ const B=co(b); h+=` ${B.s} ${B.m==='1'?'':B.m}<i>x</i>`; }
-  if(c!==0){ const Cc=co(c); h+=` ${Cc.s} ${Cc.m}`; }
-  return h;
-}
-const casTerm=(a,b,c)=>{ let t=(a<0?'−':'')+Math.abs(a)+'x^2'; if(b) t+=(b<0?'−':'+')+Math.abs(b)+'x'; if(c) t+=(c<0?'−':'+')+Math.abs(c); return t; };
-
-// ---------- Graph ----------
-const COL=["#1F4E99","#2E7D32","#C25E00","#8E3BA8"];
-function plot(f,name,marks,vx){
-  // marks: [{x,y,col,typ:'fw'|'gl', xs:[...]}]
-  let xs=[],ys=[];
-  marks.forEach(m=>{ if(m.typ!=='gl'){ xs.push(m.x); ys.push(m.y); } else { ys.push(m.y); (m.xs||[]).forEach(v=>xs.push(v)); } });
-  xs.push(0); ys.push(0); if(vx!==undefined && Math.abs(vx)<9){ xs.push(vx); ys.push(f(vx)); }
-  let x0=Math.floor(Math.min(...xs))-1, x1=Math.ceil(Math.max(...xs))+1;
-  let y0=Math.floor(Math.min(...ys))-1, y1=Math.ceil(Math.max(...ys))+1;
-  const W=640, H=Math.min(460,Math.max(280,(y1-y0)*30)), pl=marks.some(m=>m.typ==='gl')?96:34, pr=22, pt=16, pb=26;
-  const sx=(W-pl-pr)/(x1-x0), sy=(H-pt-pb)/(y1-y0);
-  const X=x=>pl+(x-x0)*sx, Y=y=>pt+(y1-y)*sy;
-  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Graph von ${name}">`;
-  const st=Math.max(1,Math.ceil((x1-x0)/14)), sty=Math.max(1,Math.ceil((y1-y0)/12));
-  for(let x=x0;x<=x1;x++) o+=`<line x1="${X(x)}" y1="${Y(y0)}" x2="${X(x)}" y2="${Y(y1)}" class="gl"/>`;
-  for(let y=y0;y<=y1;y++) o+=`<line x1="${X(x0)}" y1="${Y(y)}" x2="${X(x1)}" y2="${Y(y)}" class="gl"/>`;
-  o+=`<line x1="${X(x0)}" y1="${Y(0)}" x2="${X(x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
-  o+=`<line x1="${X(0)}" y1="${Y(y0)}" x2="${X(0)}" y2="${Y(y1)-10}" class="ax"/><path d="M${X(0)} ${Y(y1)-14} l-4 8 h8z" class="ah"/>`;
-  o+=`<text x="${X(x1)+8}" y="${Y(0)+16}" class="al">x</text><text x="${X(0)+7}" y="${Y(y1)-4}" class="al">y</text>`;
-  for(let x=x0;x<=x1;x++) if(x!==0&&x%st===0) o+=`<text x="${X(x)}" y="${Y(0)+14}" class="tl" text-anchor="middle">${String(x).replace('-','−')}</text>`;
-  for(let y=y0;y<=y1;y++) if(y!==0&&y%sty===0) o+=`<text x="${X(0)-5}" y="${Y(y)+4}" class="tl" text-anchor="end">${String(y).replace('-','−')}</text>`;
-  let d=''; const n=300; let pen=false;
-  for(let i=0;i<=n;i++){ const x=x0+(x1-x0)*i/n, y=f(x); if(y>=y0-.2&&y<=y1+.2){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1)+' '; pen=true; } else pen=false; }
-  o+=`<path d="${d}" class="cv"/>`;
-  marks.forEach(m=>{
-    if(m.typ==='tg'){
-      const dx=sx, dy=-m.m*sy, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L, r=48;
-      o+=`<line x1="${X(m.x)-ux*r}" y1="${Y(m.y)-uy*r}" x2="${X(m.x)+ux*r}" y2="${Y(m.y)+uy*r}" stroke="${m.col}" stroke-width="3" stroke-linecap="round"/>`;
-      o+=`<line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(m.x)}" y2="${Y(0)}" stroke="${m.col}" class="ar" stroke-width="1.2"/><circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" fill="${m.col}"/>`;
-      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
-      return;
-    }
-    if(m.typ==='pt'){
-      o+=`<line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(m.x)}" y2="${Y(0)}" stroke="${m.col}" class="ar" stroke-width="1.2"/><circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" fill="${m.col}"/>`;
-      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
-      return;
-    }
-    if(m.typ==='fw'){
-      o+=`<line x1="${X(m.x)}" y1="${Y(0)}" x2="${X(m.x)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/><line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(0)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
-      o+=`<circle cx="${X(m.x)}" cy="${Y(0)}" r="4" fill="${m.col}"/><circle cx="${X(0)}" cy="${Y(m.y)}" r="4" fill="${m.col}"/>`;
-      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
-    } else {
-      const xe=(m.xs&&m.xs.length)?m.xs[m.xs.length-1]:x1;
-      o+=`<line x1="${X(0)}" y1="${Y(m.y)}" x2="${X(m.xs&&m.xs.length?xe:x1)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
-      if(m.xs&&m.xs.length&&m.xs[0]<0) o+=`<line x1="${X(0)}" y1="${Y(m.y)}" x2="${X(m.xs[0])}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
-      (m.xs||[]).forEach(v=>{ o+=`<line x1="${X(v)}" y1="${Y(m.y)}" x2="${X(v)}" y2="${Y(0)}" stroke="${m.col}" class="ar"/><circle cx="${X(v)}" cy="${Y(0)}" r="4" fill="${m.col}"/>`; });
-      o+=`<circle cx="${X(0)}" cy="${Y(m.y)}" r="4" fill="${m.col}"/><line x1="${pl-6}" y1="${Y(m.y)}" x2="${X(0)}" y2="${Y(m.y)}" stroke="${m.col}" stroke-width="1" stroke-dasharray="2 3"/><text x="${pl-8}" y="${Y(m.y)+4}" fill="${m.col}" class="ml" text-anchor="end">${m.lab}</text>`;
-    }
-  });
-  return o+'</svg>';
-}
-
-// ---------- Aufgaben ----------
-// Polynom als Koeffizientenliste [a_n,...,a_0]
-const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
-const der=P=>P.slice(0,-1).map((c,i)=>c*(P.length-1-i));
-function polyHTML(name,P,strich){
-  const n=P.length-1; let h=`<i>${name}</i>${strich||''}(<i>x</i>) = `, first=true;
-  P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
-    const s=c<0?'−':(first?'':'+'), m=Math.abs(c), mm=deN(m);
-    const co=(mm==='1'&&e>0)?'':mm;
-    const xx=e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
-    h+=(first?s:` ${s} `)+co+xx; first=false; });
-  if(first) h+='0';
-  return h;
-}
-function casPoly(P){ const n=P.length-1; let t=''; P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
-  t+=(c<0?'-':(t?'+':''))+(Math.abs(c)===1&&e>0?'':Math.abs(c))+(e===0?'':e===1?'x':'x^'+e); }); return t; }
-function genP(){
-  let a; do{ a=R(-12,12)/10; }while(Math.abs(a)<0.2);
-  const b=R(-8,8)/2, c=R(-10,10)/2, d=R(-8,8)/2;
-  return [a,b,c,d];
-}
-const SUPX=e=>e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
-function genAF(){
-  let P; do{ P=genP(); }while(P[1]===0||P[2]===0);
-  const P1=der(P), P2=der(P1), P3=der(P2);
-  const row=(lab,Q,pre)=>({k:pre, co:true, lab, parts:Q.map((c,i)=>({k:pre+i, soll:c, suf:SUPX(Q.length-1-i)})), col:'#1F4E99'});
-  return {typ:'af', h:"Ableitungsfunktionen bestimmen", P,
-    auftrag:"Speichern Sie die Funktion im CAS. Bestimmen Sie die 1., 2. und 3. Ableitung und tragen Sie die Zahlen ein.",
-    term:polyHTML('f',P), plot:'',
-    felder:[row("<i>f</i> ′(<i>x</i>) =",P1,'d1'), row("<i>f</i> ″(<i>x</i>) =",P2,'d2'), row("<i>f</i> ‴(<i>x</i>) =",P3,'d3')],
-    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann z.&nbsp;B. <span class="liste">f1(x):=</span> <b>⊞</b> ▸ d/dx(f(x)) und <span class="liste">f2(x):=</span> d²/dx²(f(x)) (Vorlage mit Hochzahl). Ist eine Zahl 0, tragen Sie 0 ein.'};
-}
-function genST(){
-  let P,xs,ok=false;
-  do{
-    P=genP(); const f=x=>ev(P,x);
-    xs=shuffle(Array.from({length:21},(_,i)=>(i-8)/2)).slice(0,4).sort((p,q)=>p-q);
-    ok = xs.some(x=>!Number.isInteger(x)) && xs.some(x=>x<0) && !xs.includes(0) && !xs.some((x,i)=>i>0&&x-xs[i-1]<1) && !xs.some(x=>Math.abs(f(x))>12);
-  }while(!ok);
-  const P1=der(P), P2=der(P1), f=x=>ev(P,x);
-  const tg=xs.slice(0,3), x2=xs[3];
-  const marks=tg.map((x,i)=>({typ:'tg',i,x,y:f(x),m:ev(P1,x),col:COL[i],lab:'x = '+deN(x)}));
-  marks.push({typ:'pt',x:x2,y:f(x2),col:COL[3],lab:'x = '+deN(x2),i:3});
-  return {typ:'st', h:"Ableitung an einer Stelle", P,
-    auftrag:"Speichern Sie die Funktion und ihre Ableitungen im CAS. Berechnen Sie die Steigung an den Stellen mit Tangente und die 2. Ableitung an der violetten Stelle.",
-    term:polyHTML('f',P), plot:plot(f,'f',marks),
-    felder:tg.map((x,i)=>({k:'w'+i, lab:`<i>f</i> ′(${deN(x)})`, col:COL[i], soll:ev(P1,x)})).concat([{k:'w3', lab:`<i>f</i> ″(${deN(x2)})`, col:COL[3], soll:ev(P2,x2)}]),
-    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d²/dx²(f(x))</span> (Taste <b>⊞</b>), dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Oder direkt: <span class="liste">d/dx(f(x))|x=2.5</span> (| mit <b>ctrl + =</b>). Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
-}
-const MODES={af:{name:"Ableitungsfunktion",gen:genAF}, st:{name:"Ableitung an einer Stelle",gen:genST}};
-const ORDER=["af","st"];
-let mode=ORDER[0], A=null, stat={a:0,r:0};
-
-function inp(id,ph,cl){ return `<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}"${cl?` class="${cl}"`:''}>`; }
-function neu(){
-  A=MODES[mode].gen();
-  root.getElementById('tabs').innerHTML=ORDER.length<2?'':ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
-  root.getElementById('h').textContent="Aufgabe: "+A.h;
-  root.getElementById('auftrag').innerHTML=A.auftrag;
-  root.getElementById('term').innerHTML=A.term;
-  root.getElementById('plot').innerHTML=A.plot;
-  root.getElementById('hinweis').innerHTML=A.hinweis;
-  root.getElementById('felder').innerHTML=A.felder.map(F=> F.co ?
-    `<div class="f co" id="f_${F.k}"><label>${F.lab}</label><span class="cos">${F.parts.map((p,j)=>(j?'<span class="pl">+</span>':'')+inp('i_'+p.k,'','ci')+(p.suf?`<span class="sf">${p.suf}</span>`:'')).join('')}</span><span class="m"></span><div class="msg"></div></div>` :
-    `<div class="f" id="f_${F.k}" style="border-left-color:${F.col}"><label for="i_${F.k}"><span class="dot" style="background:${F.col}"></span>${F.lab} =</label>${inp('i_'+F.k,'0,00')}<span class="m"></span><div class="msg"></div></div>`).join('');
-  root.getElementById('score').textContent='';
-  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
-}
-function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
-const near=(a,b)=>Math.abs(a-b)<0.0051;
-function check1(raw,soll){ // -> 'ok' | 'no' | 'fmt' | 'leer' | 'many'
-  if(!raw.trim()) return 'leer';
-  const p=parse(raw); if(!p) return 'fmt';
-  if(near(p.v,soll)) return p.dec>2?'many':'ok';
-  return 'no';
-}
-function pruefen(){
-  let ok=0;
-  A.felder.forEach(F=>{
-    const f=root.getElementById('f_'+F.k), m=f.querySelector('.m'), msg=f.querySelector('.msg');
-    f.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
-    let st, t='';
-    if(F.co){
-      const r=F.parts.map(p=>check1(root.getElementById('i_'+p.k).value,p.soll));
-      if(r.every(x=>x==='leer')) return;
-      if(r.every(x=>x==='ok')) st='ok';
-      else if(r.includes('fmt')){ st='fmt'; t='Bitte in jedes Feld nur eine Zahl eintragen, z. B. −1,5.'; }
-      else if(r.includes('leer')){ st='no'; t='Füllen Sie alle Felder aus. Fehlt ein Teil, tragen Sie 0 ein.'; }
-      else if(r.includes('many')&&!r.includes('no')){ st='fmt'; t='Der Wert stimmt – bitte höchstens 2 Nachkommastellen.'; }
-      else { st='no'; const bad=F.parts.filter((p,j)=>r[j]==='no').map(p=>p.suf?'vor '+p.suf.replace(/<[^>]+>/g,'').replace('x2','x²').replace('x3','x³'):'ohne x');
-        t='Prüfen Sie die Zahl '+bad.join(' und ')+'. Achten Sie auf das Vorzeichen.'; }
-      F.parts.forEach((p,j)=>{ const el=root.getElementById('i_'+p.k); el.classList.toggle('bad', r[j]==='no'||r[j]==='fmt'); });
-    } else {
-      st=check1(root.getElementById('i_'+F.k).value, F.soll);
-      if(st==='leer') return;
-      if(st==='fmt') t='Bitte nur eine Zahl eintragen, z. B. 3,68.';
-      if(st==='many'){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; }
-      if(st==='no'){ const v=parse(root.getElementById('i_'+F.k).value).v;
-        t = near(v,-F.soll) ? 'Das Vorzeichen stimmt nicht. Negative Stelle mit (−) eingeben?' : 'Das stimmt noch nicht. Haben Sie die richtige Ableitung (f1 oder f2) benutzt? Kommazahl mit Punkt?'; }
-    }
-    f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
-  });
-  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
-  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
-  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
-}
-function zeigen(){
-  A.felder.forEach(F=>{
-    const f=root.getElementById('f_'+F.k), msg=f.querySelector('.msg');
-    if(f.classList.contains('ok')) return;
-    f.classList.add('show');
-    msg.innerHTML='Lösung: '+(F.co ? polyHTML('f',F.parts.map(p=>p.soll),F.lab.match(/[′″‴]/)[0]) : de2(F.soll));
-  });
-}
-root.getElementById('pruefen').onclick=pruefen;
-root.getElementById('zeigen').onclick=zeigen;
-root.getElementById('neu').onclick=neu;
-root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
-const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
-neu();
- }
-};
-
 /* ===== Anleitung: graph ===== */
 GUIDES["graph"]={
  note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
@@ -6974,6 +6390,590 @@ neu();
  }
 };
 
+/* ===== Anleitung: abl ===== */
+GUIDES["abl"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  if(tabs==='np') return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+function sheet(tabs,cur,doc){
+  let h=topbar(tabs,cur,doc)+'<table class="sh"><tr class="hd"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr>';
+  for(let r=1;r<=10;r++) h+=`<tr><td class="rn">${r}</td><td class="${r===1?'cur':''}"></td><td></td><td></td><td></td></tr>`;
+  return h+'</table>';
+}
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map((l,j)=>`<div class="ln"><span class="${o.sel===2*j?'sel':''}">${l[0]}</span><b class="${o.sel===2*j+1?'sel':''}">${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
+
+// ---------- Eingabezeile (Vorlagen: Bruch, Hochzahl, Wurzel) ----------
+const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
+function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
+Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
+Entry.prototype.der=function(nth){ const d={t:'der',v:[],n:nth?[]:null,e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
+Entry.prototype.key=function(k){
+  const T=this.top();
+  if(k==='tab'){ if(T.der&&T.a!==T.der.e){ const nx=(T.a===T.der.v&&T.der.n)?T.der.n:T.der.e; this.path.pop(); this.path.push({a:nx,der:T.der}); } return; }
+  if(this.ctrl){ this.ctrl=false;
+    if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
+    if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+    if(k==='neg'){ T.a.push('ans'); return; }
+    if(k==='var'){ T.a.push('→'); return; }
+    if(k==='tmpl'){ T.a.push(':='); return; }
+    return;
+  }
+  if(k==='ctrl'){ this.ctrl=true; return; }
+  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
+  if(k==='down'){ if(T.f&&T.a===T.f.n){ this.path.pop(); this.path.push({a:T.f.d,f:T.f}); } return; }
+  if(k==='right'){ if(this.path.length>1) this.path.pop(); return; }
+  if(k==='del'){ T.a.pop(); return; }
+  if(k==='-'&&this.root.length===0){ T.a.push('ans','−'); return; }
+  T.a.push(SHOW[k]||k);
+};
+function rnd(arr,curA,caret){
+  let h=arr.map(t=>typeof t==='string'?t:
+    t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
+    t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
+    t.t==='der'?`<span class="fr"><span>d${t.n?`<sup class="dvb">${rnd(t.n,curA,false)}</sup>`:''}</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span>${t.n?`<sup class="dvb">${rnd(t.n,curA,caret)}</sup>`:''}</span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
+    `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
+  if(caret&&arr===curA) h+='<span class="caret">|</span>';
+  return h;
+}
+function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?(t.n?`d^${ser(t.n)}/d${ser(t.v)}^${ser(t.n)}(${ser(t.e)})`:`d/d${ser(t.v)}(${ser(t.e)})`):`√(${ser(t.v)})`).join(''); }
+Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
+
+// ---------- Simulation: Ergebnisse je Schritt ----------
+// offene Klammern beim enter automatisch schließen (wie am Handheld)
+function closeP(arr,html){ const s=ser(arr); const n=(s.match(/\(/g)||[]).length-(s.match(/\)/g)||[]).length; return html+')'.repeat(Math.max(0,n)); }
+const ANA=["1: Ableitung","2: Ableitung in einem Punkt","3: Integral","4: Limes","5: Summe","6: Produkt","7: Funktionsminimum","8: Funktionsmaximum","9: Tangente"];
+// simuliert Tastenfolge inkl. menu ▸ 4: Analysis ▸ 1: Ableitung (fügt die Vorlage d/d□(□) ein)
+function simT(hist,keys,res,pk){
+  hist=hist.slice(); res=[].concat(res); pk=(pk||[]).slice(); let e=new Entry(), ri=0, m=0;
+  for(const k of keys){
+    if(m==='T'||m==='R'){ const w=m; m=0; if(k==='click'){ const p=pk.shift(); if(w==='R') e.top().a.push('|'); else e.der(p==='n'); } continue; }
+    if(k==='tmpl'&&!e.ctrl){ m='T'; continue; }
+    if(k==='='&&e.ctrl){ e.ctrl=false; m='R'; continue; }
+    if(m===1){ m=(k==='4')?2:0; continue; }
+    if(m===2){ m=0; if(k==='1') e.der(); continue; }
+    if(k==='menu'){ m=1; continue; }
+    if(k==='enter'){ hist.push([closeP(e.root,rnd(e.root,null,false)), res[ri++]||'?']); e=new Entry(); }
+    else e.key(k);
+  }
+  return {hist,e,m};
+}
+const CUR='<span class="caret">|</span>';
+const F1=['1.1'], O={doc:'abl'};
+const page=(hist,entry)=>calcApp(F1,'1.1',hist,entry===undefined?CUR:entry,O);
+function TS(base,keys,res,pk){ return i=>{
+  const r=simT(base,keys.slice(0,i),res,pk); let h=calcApp(F1,'1.1',r.hist,r.e.html(),O);
+  if(r.m===1) h+=menus([{items:CM,sel:0}]);
+  if(r.m===2) h+=menus([{items:CM,sel:3},{items:ANA,sel:0}]);
+  if(r.m==='T') h+=palT((pk||[])[keys.slice(0,i).filter((k,j,a)=>k==='click'&&j>0&&(a[j-1]==='tmpl'||a[j-1]==='=')).length]);
+  if(r.m==='R') h+=palR();
+  return h; }; }
+const after=(base,keys,res,pk)=>simT(base,keys,res,pk).hist;
+// Auswahlfenster der Vorlagen-Taste ⊞ und von ctrl + =
+const PF=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`, BX='<span class="pb"></span>';
+function palT(w){
+  const it=[PF(BX,BX),BX+'<sup>'+BX+'</sup>','√'+BX,'<sup>'+BX+'</sup>√'+BX,'e<sup>'+BX+'</sup>','log<sub>'+BX+'</sub>',
+            '{'+BX,'|'+BX+'|','Σ','Π',['d',PF('d','d'+BX)+'('+BX+')'],['n',PF('d<sup>'+BX+'</sup>','d'+BX+'<sup>'+BX+'</sup>')+'('+BX+')'],'∫'+BX,'lim'];
+  return '<div class="pal">'+it.map(c=>Array.isArray(c)?`<span class="${c[0]===w?'ziel':''}">${c[1]}</span>`:`<span>${c}</span>`).join('')+'</div>';
+}
+function palR(){ return '<div class="pal pr">'+['=','≠','&lt;','≤','&gt;','≥','|','⇒','⇔'].map(c=>`<span class="${c==='|'?'ziel':''}">${c}</span>`).join('')+'</div>'; }
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+
+// ---------- Spur 1: Ableitungen bestimmen (Taste ⊞ ▸ d/dx) ----------
+const SUP=n=>'<sup>'+n+'</sup>';
+const D1R='3·x'+SUP(2)+'−6·x', D2R='6·x−6', D3R='6';
+const FX=["f","(","x",")"];
+const kF=["f","(","x",")","ctrl","tmpl","x","^","3","right","-","3","x","x2","+","2","enter"];
+const kF1=["f","1","(","x",")","ctrl","tmpl","tmpl","click","x","tab"].concat(FX,["enter"]);
+const kF1s=["f","1","(","x",")","enter"];
+const kF2=["f","2","(","x",")","ctrl","tmpl","tmpl","click","x","tab","2","tab"].concat(FX,["enter"]);
+const kF2s=["f","2","(","x",")","enter"];
+const kF3=["f","3","(","x",")","ctrl","tmpl","tmpl","click","x","tab","3","tab"].concat(FX,["enter"]);
+const kF3s=["f","3","(","x",")","enter"];
+const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kF1,'Fertig',['d']), a3=after(a2,kF1s,D1R),
+      a4=after(a3,kF2,'Fertig',['n']), a5=after(a4,kF2s,D2R), a6=after(a5,kF3,'Fertig',['n']), a7=after(a6,kF3s,D3R);
+
+// ---------- Spur 2: Ableitung an einer Stelle ----------
+const BAR=["right","ctrl","=","click","x","="];
+const kA1=["f","1","(","2",")","enter"], kA2=["f","1","(","neg","1",")","enter"];
+const kP1=["tmpl","click","x","tab"].concat(FX,BAR,["0",".","5","enter"]);
+const kA4=["f","2","(","3",")","enter"];
+const kP2=["tmpl","click","x","tab","2","tab"].concat(FX,BAR,["3","enter"]);
+const b1=after(a7,kA1,'0'), b2=after(b1,kA2,'9'), b3=after(b2,kP1,'−2.25',['d','|']), b4=after(b3,kA4,'12'), b5=after(b4,kP2,'12',['n','|']);
+
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const fx=(t)=>`<i>${t}</i>`;
+const FTERM='<i>f</i>(<i>x</i>) = <i>x</i>³ − 3<i>x</i>² + 2';
+const D='<span class="fr"><span>d</span><span>d<i>x</i></span></span>';
+const DN=n=>'<span class="fr"><span>d<sup>'+n+'</sup></span><span>d<i>x</i><sup>'+n+'</sup></span></span>';
+
+const TRACKS={
+ a:{ name:"Ableitungen bestimmen", start:()=>home(''), steps:[
+  {t:"Neues Dokument", a:"Neues Dokument mit Calculator-Seite", k:["1","1"], p:pick([appList(F1,'1.1',0),page([])]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>1</b> = Calculator.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Funktion speichern", a:"Speichern Sie "+FTERM, k:kF, p:TS(a0,kF,'Fertig'),
+   d:"<p><b>ctrl + ⊞</b> schreibt <b>:=</b>. Die Hochzahl 3: Taste <b>^</b>, dann <b>3</b>, dann <b>▶</b> (aus der Hochzahl heraus).</p>",
+   n:"Das kennen Sie aus „Funktionswerte“: erst der Name <b>f(x)</b>, dann <b>:=</b>, dann der Term."},
+  {t:"1. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ′ als <i>f</i>1(<i>x</i>)", k:kF1, p:TS(a1,kF1,'Fertig',['d']),
+   d:"<p>Erst <b>f1(x) :=</b> schreiben. Dann die Taste <b>⊞</b> (rechts neben der 9): Es öffnet sich eine Auswahl. Gehen Sie mit den Pfeiltasten auf "+D+" (gelb) und drücken Sie <b>●</b>.</p><p>Ins kleine Feld <b>x</b>, mit <b>tab</b> in die Klammer, dort <b>f(x)</b>.</p>",
+   n:"f1 steht für <i>f</i> ′, f2 für <i>f</i> ″ und f3 für <i>f</i> ‴."},
+  {t:"1. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ′(<i>x</i>) an", k:kF1s, p:TS(a2,kF1s,D1R),
+   d:"<p>Tippen Sie <b>f1(x)</b>. Ergebnis: <b>3x² − 6x</b></p>"},
+  {t:"2. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ″ als <i>f</i>2(<i>x</i>)", k:kF2, p:TS(a3,kF2,'Fertig',['n']),
+   d:"<p>In der Auswahl von <b>⊞</b> gibt es auch "+DN('□')+": die Vorlage mit <b>Hochzahl</b>.</p><p>Ins erste Feld <b>x</b>, mit <b>tab</b> zur Hochzahl <b>2</b>, mit <b>tab</b> in die Klammer: <b>f(x)</b>.</p>",
+   n:"Die Hochzahl sagt, die wievielte Ableitung berechnet wird."},
+  {t:"2. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ″(<i>x</i>) an", k:kF2s, p:TS(a4,kF2s,D2R),
+   d:"<p>Tippen Sie <b>f2(x)</b>. Ergebnis: <b>6x − 6</b></p>"},
+  {t:"3. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ‴ als <i>f</i>3(<i>x</i>)", k:kF3, p:TS(a5,kF3,'Fertig',['n']),
+   d:"<p>Gleiche Vorlage, jetzt mit Hochzahl <b>3</b>: <b>f3(x) := "+DN(3)+"(f(x))</b></p>"},
+  {t:"3. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ‴(<i>x</i>) an", k:kF3s, p:TS(a6,kF3s,D3R),
+   d:"<p>Ergebnis: <b>6</b></p><table class='vgl'><tr><th>Ableitung</th><th>speichern</th><th>Ergebnis</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x):="+D+"(f(x))</td><td>3x² − 6x</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x):="+DN(2)+"(f(x))</td><td>6x − 6</td></tr><tr><td><i>f</i> ‴(<i>x</i>)</td><td>f3(x):="+DN(3)+"(f(x))</td><td>6</td></tr></table>"},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(a7), d:AB("Aufgabe 1",["Funktion <i>g</i> speichern","g1, g2 und g3 speichern","<i>g</i> ′(<i>x</i>), <i>g</i> ″(<i>x</i>) und <i>g</i> ‴(<i>x</i>) eintragen"])}
+ ]},
+ s:{ name:"Ableitung an einer Stelle", start:()=>page(a7), steps:[
+  {t:"Stelle in f1 einsetzen", a:"Berechnen Sie "+fx('f')+" ′(2)", k:kA1, p:TS(a7,kA1,'0'),
+   d:"<p><b>Weg 1:</b> Die Ableitung ist als <b>f1</b> gespeichert. Setzen Sie die Stelle ein wie bei Funktionswerten: <b>f1(2)</b>.</p><p>Ergebnis: <b>0</b>. Der Graph hat bei <i>x</i> = 2 eine <b>waagerechte Tangente</b>.</p>"},
+  {t:"Negative Stelle", a:"Berechnen Sie "+fx('f')+" ′(−1)", k:kA2, p:TS(b1,kA2,'9'),
+   d:"<p>Vorzeichen mit <b>(−)</b>. Ergebnis: <b>9</b> &gt; 0, also <b>steigt</b> der Graph bei <i>x</i> = −1.</p>"},
+  {t:"Direkt mit dem Strich |", a:"Berechnen Sie "+fx('f')+" ′(0,5) direkt", k:kP1, p:TS(b2,kP1,'−2.25',['d','|']),
+   d:"<p><b>Weg 2:</b> <b>⊞</b> ▸ "+D+", dann <b>x</b>, <b>tab</b>, <b>f(x)</b>. Mit <b>▶</b> aus der Vorlage heraus.</p><p><b>ctrl + =</b> öffnet eine Auswahl: dort <b>|</b> wählen. Dann <b>x=0.5</b>.</p><p>Ergebnis: <b>−2,25</b> &lt; 0, also <b>fällt</b> der Graph.</p>",
+   n:"Der Strich <b>|</b> heißt „mit“: Rechne die Ableitung <b>mit x = 0,5</b>."},
+  {t:"2. Ableitung: Weg 1", a:"Berechnen Sie "+fx('f')+" ″(3)", k:kA4, p:TS(b3,kA4,'12'),
+   d:"<p>Mit der gespeicherten 2. Ableitung: <b>f2(3)</b> = <b>12</b></p>"},
+  {t:"2. Ableitung: Weg 2", a:"Berechnen Sie "+fx('f')+" ″(3) direkt", k:kP2, p:TS(b4,kP2,'12',['n','|']),
+   d:"<p>Vorlage "+DN(2)+" mit Hochzahl <b>2</b>, dann <b>|x=3</b>. Ergebnis: <b>12</b> – beide Wege liefern dasselbe.</p>",
+   n:"Merke: <i>f</i> ′(<i>a</i>) &gt; 0 → Graph steigt · <i>f</i> ′(<i>a</i>) &lt; 0 → Graph fällt · <i>f</i> ′(<i>a</i>) = 0 → waagerechte Tangente"},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b5), d:AB("Aufgabe 2 und 3",["Funktion <i>h</i> speichern, h1 und h2 speichern","Steigungen an den Stellen berechnen (Weg 1 oder Weg 2)","steigt, fällt oder waagerecht?","<i>h</i> ″ an zwei Stellen berechnen","Danach: Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["a","s"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: abl ===== */
+UEB["abl"]={
+ title:"Ableitungen",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.dt{overflow-x:auto;}
+table.d{border-collapse:collapse; font-size:16px; margin:2px 0 4px;}
+table.d th, table.d td{border:1px solid #c3c8d0; padding:4px 10px; text-align:center; min-width:40px;}
+table.d th{background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic;}
+.spalten{font-size:13.5px; color:var(--mute); margin-top:6px;}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222;}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){.grid{grid-template-columns:1fr;}}
+.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px;}
+.f label{font-size:15px;}
+.f label .z{color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px;}
+.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f .m{font-weight:bold; font-size:18px; text-align:center;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
+.plot svg{width:100%; height:auto; display:block; max-width:640px; margin:0 auto;}
+.plot .gl{stroke:#e1e4e9; stroke-width:1;}
+.plot .ax{stroke:#222; stroke-width:1.4;}
+.plot .ah{fill:#222;}
+.plot .al{font:italic 15px Cambria,Georgia,serif;}
+.plot .tl{font:11px system-ui,Arial,sans-serif; fill:#555;}
+.plot .cv{fill:none; stroke:#1d1d1f; stroke-width:2.2;}
+.plot .ar{stroke-width:2; stroke-dasharray:6 4; fill:none;}
+.plot .ml{font:bold 13px system-ui,Arial,sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{border-left:5px solid #ccc;}
+.f .dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle;}
+.f.gl{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;}
+.f.gl > label:first-child{min-width:150px; font-family:Cambria,Georgia,serif; font-size:16px;}
+.f.gl .xin{display:inline-flex; align-items:center; gap:6px;}
+.f.gl .xin .z{font-family:Cambria,Georgia,serif; font-size:15px;}
+.f.gl .kl{font-size:14.5px; display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+.f.gl .kl input{width:18px; height:18px;}
+.f.gl .m{margin-left:auto;}
+.f.gl .msg{flex-basis:100%;}
+.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
+.liste{font-weight:normal;}
+.f.co{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; border-left-color:#1F4E99;}
+.f.co > label{min-width:72px;}
+.f.co .cos{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:Cambria,Georgia,serif; font-size:17px;}
+.f.co input.ci{width:76px;}
+.f.co input.bad{border-color:var(--no); background:#fff6f5;}
+.f.co .pl{color:var(--mute);}
+.f.co .m{margin-left:auto;}
+.f.co .msg{flex-basis:100%;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+    <div class="plot" id="plot"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>3,68</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen.</div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const deN=v=>{ let t=(Math.round(v*1e6)/1e6).toString(); return t.replace('-','−').replace('.',','); };
+const de2=v=>{ const x=r2(v); return (Number.isInteger(x)?String(x):x.toFixed(2)).replace('-','−').replace('.',','); };
+const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=R(0,i); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+function termHTML(n,a,b,c){
+  const co=(v,first)=>{ const s=v<0?'−':(first?'':'+'); const m=Math.abs(v); return {s, m:deN(m)}; };
+  let h=`<i>${n}</i>(<i>x</i>) = `;
+  const A=co(a,true); h+=(A.s?A.s:'')+(A.m==='1'?'':A.m)+'<i>x</i>²';
+  if(b!==0){ const B=co(b); h+=` ${B.s} ${B.m==='1'?'':B.m}<i>x</i>`; }
+  if(c!==0){ const Cc=co(c); h+=` ${Cc.s} ${Cc.m}`; }
+  return h;
+}
+const casTerm=(a,b,c)=>{ let t=(a<0?'−':'')+Math.abs(a)+'x^2'; if(b) t+=(b<0?'−':'+')+Math.abs(b)+'x'; if(c) t+=(c<0?'−':'+')+Math.abs(c); return t; };
+
+// ---------- Graph ----------
+const COL=["#1F4E99","#2E7D32","#C25E00","#8E3BA8"];
+function plot(f,name,marks,vx){
+  // marks: [{x,y,col,typ:'fw'|'gl', xs:[...]}]
+  let xs=[],ys=[];
+  marks.forEach(m=>{ if(m.typ!=='gl'){ xs.push(m.x); ys.push(m.y); } else { ys.push(m.y); (m.xs||[]).forEach(v=>xs.push(v)); } });
+  xs.push(0); ys.push(0); if(vx!==undefined && Math.abs(vx)<9){ xs.push(vx); ys.push(f(vx)); }
+  let x0=Math.floor(Math.min(...xs))-1, x1=Math.ceil(Math.max(...xs))+1;
+  let y0=Math.floor(Math.min(...ys))-1, y1=Math.ceil(Math.max(...ys))+1;
+  const W=640, H=Math.min(460,Math.max(280,(y1-y0)*30)), pl=marks.some(m=>m.typ==='gl')?96:34, pr=22, pt=16, pb=26;
+  const sx=(W-pl-pr)/(x1-x0), sy=(H-pt-pb)/(y1-y0);
+  const X=x=>pl+(x-x0)*sx, Y=y=>pt+(y1-y)*sy;
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Graph von ${name}">`;
+  const st=Math.max(1,Math.ceil((x1-x0)/14)), sty=Math.max(1,Math.ceil((y1-y0)/12));
+  for(let x=x0;x<=x1;x++) o+=`<line x1="${X(x)}" y1="${Y(y0)}" x2="${X(x)}" y2="${Y(y1)}" class="gl"/>`;
+  for(let y=y0;y<=y1;y++) o+=`<line x1="${X(x0)}" y1="${Y(y)}" x2="${X(x1)}" y2="${Y(y)}" class="gl"/>`;
+  o+=`<line x1="${X(x0)}" y1="${Y(0)}" x2="${X(x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
+  o+=`<line x1="${X(0)}" y1="${Y(y0)}" x2="${X(0)}" y2="${Y(y1)-10}" class="ax"/><path d="M${X(0)} ${Y(y1)-14} l-4 8 h8z" class="ah"/>`;
+  o+=`<text x="${X(x1)+8}" y="${Y(0)+16}" class="al">x</text><text x="${X(0)+7}" y="${Y(y1)-4}" class="al">y</text>`;
+  for(let x=x0;x<=x1;x++) if(x!==0&&x%st===0) o+=`<text x="${X(x)}" y="${Y(0)+14}" class="tl" text-anchor="middle">${String(x).replace('-','−')}</text>`;
+  for(let y=y0;y<=y1;y++) if(y!==0&&y%sty===0) o+=`<text x="${X(0)-5}" y="${Y(y)+4}" class="tl" text-anchor="end">${String(y).replace('-','−')}</text>`;
+  let d=''; const n=300; let pen=false;
+  for(let i=0;i<=n;i++){ const x=x0+(x1-x0)*i/n, y=f(x); if(y>=y0-.2&&y<=y1+.2){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1)+' '; pen=true; } else pen=false; }
+  o+=`<path d="${d}" class="cv"/>`;
+  marks.forEach(m=>{
+    if(m.typ==='tg'){
+      const dx=sx, dy=-m.m*sy, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L, r=48;
+      o+=`<line x1="${X(m.x)-ux*r}" y1="${Y(m.y)-uy*r}" x2="${X(m.x)+ux*r}" y2="${Y(m.y)+uy*r}" stroke="${m.col}" stroke-width="3" stroke-linecap="round"/>`;
+      o+=`<line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(m.x)}" y2="${Y(0)}" stroke="${m.col}" class="ar" stroke-width="1.2"/><circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" fill="${m.col}"/>`;
+      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
+      return;
+    }
+    if(m.typ==='pt'){
+      o+=`<line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(m.x)}" y2="${Y(0)}" stroke="${m.col}" class="ar" stroke-width="1.2"/><circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" fill="${m.col}"/>`;
+      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
+      return;
+    }
+    if(m.typ==='fw'){
+      o+=`<line x1="${X(m.x)}" y1="${Y(0)}" x2="${X(m.x)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/><line x1="${X(m.x)}" y1="${Y(m.y)}" x2="${X(0)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
+      o+=`<circle cx="${X(m.x)}" cy="${Y(0)}" r="4" fill="${m.col}"/><circle cx="${X(0)}" cy="${Y(m.y)}" r="4" fill="${m.col}"/>`;
+      o+=`<text x="${X(m.x)}" y="${m.y>0?Y(0)+28+(m.i%2)*14:Y(0)-8-(m.i%2)*14}" fill="${m.col}" class="ml" text-anchor="middle">${m.lab}</text>`;
+    } else {
+      const xe=(m.xs&&m.xs.length)?m.xs[m.xs.length-1]:x1;
+      o+=`<line x1="${X(0)}" y1="${Y(m.y)}" x2="${X(m.xs&&m.xs.length?xe:x1)}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
+      if(m.xs&&m.xs.length&&m.xs[0]<0) o+=`<line x1="${X(0)}" y1="${Y(m.y)}" x2="${X(m.xs[0])}" y2="${Y(m.y)}" stroke="${m.col}" class="ar"/>`;
+      (m.xs||[]).forEach(v=>{ o+=`<line x1="${X(v)}" y1="${Y(m.y)}" x2="${X(v)}" y2="${Y(0)}" stroke="${m.col}" class="ar"/><circle cx="${X(v)}" cy="${Y(0)}" r="4" fill="${m.col}"/>`; });
+      o+=`<circle cx="${X(0)}" cy="${Y(m.y)}" r="4" fill="${m.col}"/><line x1="${pl-6}" y1="${Y(m.y)}" x2="${X(0)}" y2="${Y(m.y)}" stroke="${m.col}" stroke-width="1" stroke-dasharray="2 3"/><text x="${pl-8}" y="${Y(m.y)+4}" fill="${m.col}" class="ml" text-anchor="end">${m.lab}</text>`;
+    }
+  });
+  return o+'</svg>';
+}
+
+// ---------- Aufgaben ----------
+// Polynom als Koeffizientenliste [a_n,...,a_0]
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+const der=P=>P.slice(0,-1).map((c,i)=>c*(P.length-1-i));
+function polyHTML(name,P,strich){
+  const n=P.length-1; let h=`<i>${name}</i>${strich||''}(<i>x</i>) = `, first=true;
+  P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+    const s=c<0?'−':(first?'':'+'), m=Math.abs(c), mm=deN(m);
+    const co=(mm==='1'&&e>0)?'':mm;
+    const xx=e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+    h+=(first?s:` ${s} `)+co+xx; first=false; });
+  if(first) h+='0';
+  return h;
+}
+function casPoly(P){ const n=P.length-1; let t=''; P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+  t+=(c<0?'-':(t?'+':''))+(Math.abs(c)===1&&e>0?'':Math.abs(c))+(e===0?'':e===1?'x':'x^'+e); }); return t; }
+function genP(){
+  let a; do{ a=R(-12,12)/10; }while(Math.abs(a)<0.2);
+  const b=R(-8,8)/2, c=R(-10,10)/2, d=R(-8,8)/2;
+  return [a,b,c,d];
+}
+const SUPX=e=>e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+function genAF(){
+  let P; do{ P=genP(); }while(P[1]===0||P[2]===0);
+  const P1=der(P), P2=der(P1), P3=der(P2);
+  const row=(lab,Q,pre)=>({k:pre, co:true, lab, parts:Q.map((c,i)=>({k:pre+i, soll:c, suf:SUPX(Q.length-1-i)})), col:'#1F4E99'});
+  return {typ:'af', h:"Ableitungsfunktionen bestimmen", P,
+    auftrag:"Speichern Sie die Funktion im CAS. Bestimmen Sie die 1., 2. und 3. Ableitung und tragen Sie die Zahlen ein.",
+    term:polyHTML('f',P), plot:'',
+    felder:[row("<i>f</i> ′(<i>x</i>) =",P1,'d1'), row("<i>f</i> ″(<i>x</i>) =",P2,'d2'), row("<i>f</i> ‴(<i>x</i>) =",P3,'d3')],
+    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann z.&nbsp;B. <span class="liste">f1(x):=</span> <b>⊞</b> ▸ d/dx(f(x)) und <span class="liste">f2(x):=</span> d²/dx²(f(x)) (Vorlage mit Hochzahl). Ist eine Zahl 0, tragen Sie 0 ein.'};
+}
+function genST(){
+  let P,xs,ok=false;
+  do{
+    P=genP(); const f=x=>ev(P,x);
+    xs=shuffle(Array.from({length:21},(_,i)=>(i-8)/2)).slice(0,4).sort((p,q)=>p-q);
+    ok = xs.some(x=>!Number.isInteger(x)) && xs.some(x=>x<0) && !xs.includes(0) && !xs.some((x,i)=>i>0&&x-xs[i-1]<1) && !xs.some(x=>Math.abs(f(x))>12);
+  }while(!ok);
+  const P1=der(P), P2=der(P1), f=x=>ev(P,x);
+  const tg=xs.slice(0,3), x2=xs[3];
+  const marks=tg.map((x,i)=>({typ:'tg',i,x,y:f(x),m:ev(P1,x),col:COL[i],lab:'x = '+deN(x)}));
+  marks.push({typ:'pt',x:x2,y:f(x2),col:COL[3],lab:'x = '+deN(x2),i:3});
+  return {typ:'st', h:"Ableitung an einer Stelle", P,
+    auftrag:"Speichern Sie die Funktion und ihre Ableitungen im CAS. Berechnen Sie die Steigung an den Stellen mit Tangente und die 2. Ableitung an der violetten Stelle.",
+    term:polyHTML('f',P), plot:plot(f,'f',marks),
+    felder:tg.map((x,i)=>({k:'w'+i, lab:`<i>f</i> ′(${deN(x)})`, col:COL[i], soll:ev(P1,x)})).concat([{k:'w3', lab:`<i>f</i> ″(${deN(x2)})`, col:COL[3], soll:ev(P2,x2)}]),
+    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d²/dx²(f(x))</span> (Taste <b>⊞</b>), dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Oder direkt: <span class="liste">d/dx(f(x))|x=2.5</span> (| mit <b>ctrl + =</b>). Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
+}
+const MODES={af:{name:"Ableitungsfunktion",gen:genAF}, st:{name:"Ableitung an einer Stelle",gen:genST}};
+const ORDER=["af","st"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+
+function inp(id,ph,cl){ return `<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="${ph}"${cl?` class="${cl}"`:''}>`; }
+function neu(){
+  A=MODES[mode].gen();
+  root.getElementById('tabs').innerHTML=ORDER.length<2?'':ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent="Aufgabe: "+A.h;
+  root.getElementById('auftrag').innerHTML=A.auftrag;
+  root.getElementById('term').innerHTML=A.term;
+  root.getElementById('plot').innerHTML=A.plot;
+  root.getElementById('hinweis').innerHTML=A.hinweis;
+  root.getElementById('felder').innerHTML=A.felder.map(F=> F.co ?
+    `<div class="f co" id="f_${F.k}"><label>${F.lab}</label><span class="cos">${F.parts.map((p,j)=>(j?'<span class="pl">+</span>':'')+inp('i_'+p.k,'','ci')+(p.suf?`<span class="sf">${p.suf}</span>`:'')).join('')}</span><span class="m"></span><div class="msg"></div></div>` :
+    `<div class="f" id="f_${F.k}" style="border-left-color:${F.col}"><label for="i_${F.k}"><span class="dot" style="background:${F.col}"></span>${F.lab} =</label>${inp('i_'+F.k,'0,00')}<span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+const near=(a,b)=>Math.abs(a-b)<0.0051;
+function check1(raw,soll){ // -> 'ok' | 'no' | 'fmt' | 'leer' | 'many'
+  if(!raw.trim()) return 'leer';
+  const p=parse(raw); if(!p) return 'fmt';
+  if(near(p.v,soll)) return p.dec>2?'many':'ok';
+  return 'no';
+}
+function pruefen(){
+  let ok=0;
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
+    let st, t='';
+    if(F.co){
+      const r=F.parts.map(p=>check1(root.getElementById('i_'+p.k).value,p.soll));
+      if(r.every(x=>x==='leer')) return;
+      if(r.every(x=>x==='ok')) st='ok';
+      else if(r.includes('fmt')){ st='fmt'; t='Bitte in jedes Feld nur eine Zahl eintragen, z. B. −1,5.'; }
+      else if(r.includes('leer')){ st='no'; t='Füllen Sie alle Felder aus. Fehlt ein Teil, tragen Sie 0 ein.'; }
+      else if(r.includes('many')&&!r.includes('no')){ st='fmt'; t='Der Wert stimmt – bitte höchstens 2 Nachkommastellen.'; }
+      else { st='no'; const bad=F.parts.filter((p,j)=>r[j]==='no').map(p=>p.suf?'vor '+p.suf.replace(/<[^>]+>/g,'').replace('x2','x²').replace('x3','x³'):'ohne x');
+        t='Prüfen Sie die Zahl '+bad.join(' und ')+'. Achten Sie auf das Vorzeichen.'; }
+      F.parts.forEach((p,j)=>{ const el=root.getElementById('i_'+p.k); el.classList.toggle('bad', r[j]==='no'||r[j]==='fmt'); });
+    } else {
+      st=check1(root.getElementById('i_'+F.k).value, F.soll);
+      if(st==='leer') return;
+      if(st==='fmt') t='Bitte nur eine Zahl eintragen, z. B. 3,68.';
+      if(st==='many'){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; }
+      if(st==='no'){ const v=parse(root.getElementById('i_'+F.k).value).v;
+        t = near(v,-F.soll) ? 'Das Vorzeichen stimmt nicht. Negative Stelle mit (−) eingeben?' : 'Das stimmt noch nicht. Haben Sie die richtige Ableitung (f1 oder f2) benutzt? Kommazahl mit Punkt?'; }
+    }
+    f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
+  });
+  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
+  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), msg=f.querySelector('.msg');
+    if(f.classList.contains('ok')) return;
+    f.classList.add('show');
+    msg.innerHTML='Lösung: '+(F.co ? polyHTML('f',F.parts.map(p=>p.soll),F.lab.match(/[′″‴]/)[0]) : de2(F.soll));
+  });
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+ }
+};
+
 </script>
 <script>
 (function(){
@@ -6981,7 +6981,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat"}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat"}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa"}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa"}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg"}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg"}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa"}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat"}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat"}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa"}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa"}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg"}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa"}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa"}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',

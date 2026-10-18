@@ -18,8 +18,8 @@ TOPICS = [
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', 'Funktion zeichnen, Fenster, Wertetabelle', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
-    ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Graphen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
+    ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
 ]
 
 def read(p):
