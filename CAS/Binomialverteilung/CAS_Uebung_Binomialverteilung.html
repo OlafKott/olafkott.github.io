@@ -40,7 +40,14 @@ body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-a
 .stats{ font-size:13.5px; color:var(--mute); margin-top:4px; }
 .hinweis{ font-size:13.5px; color:var(--mute); }
 .f label{ line-height:1.35; }
-#felder.eins{ grid-template-columns:1fr; max-width:520px; }
+#felder.eins{ grid-template-columns:1fr; max-width:none; }
+.f.iv{ grid-template-columns:auto 120px 26px; row-gap:6px; }
+.f.iv .ivl{ grid-column:1 / -1; font-size:15.5px; }
+.f.iv .za{ grid-column:1 / 2; display:flex; flex-wrap:wrap; gap:3px; }
+.f.iv .za button{ font:inherit; font-size:14px; width:31px; height:31px; border:1.5px solid #9aa3b0; border-radius:6px; background:#fff; cursor:pointer; padding:0; }
+.f.iv .za button.on{ background:#F2B705; border-color:#b88a00; font-weight:bold; }
+.f.iv .za button.bad{ box-shadow:0 0 0 2px var(--no); }
+.f.iv label{ display:none; }
 .f.np input{ width:120px; }
 .f .msg .liste{ margin-left:4px; }
 /* linksbündig (Moodle-Frame) */
@@ -101,33 +108,41 @@ function genTyp(op){
       hinweis:'Tipp: '+WEG[op]+'. Kommazahlen mit <b>Punkt</b> eintippen, z.&nbsp;B. 0.3'};
   };
 }
-const KONTEXT=[
-  {t:n=>`Ein Basketballspieler trifft beim Freiwurf mit 70&nbsp;% Wahrscheinlichkeit. Er wirft ${n}-mal.`, x:'Treffer', p:0.7, N:[8,10,12,15,20]},
-  {t:n=>`Ein Test hat ${n} Fragen. Jede Frage hat 4 Antworten. Genau eine ist richtig. Sie raten bei jeder Frage.`, x:'richtigen Antworten', p:0.25, N:[10,12,15,20,25]},
-  {t:n=>`Ein Samenkorn keimt mit 85&nbsp;% Wahrscheinlichkeit. Sie säen ${n} Samenkörner.`, x:'gekeimten Samenkörner', p:0.85, N:[10,12,15,20,25,30]},
-  {t:n=>`Ein Bauteil ist mit 4&nbsp;% Wahrscheinlichkeit defekt. Sie prüfen ${n} Bauteile.`, x:'defekten Bauteile', p:0.04, N:[25,30,40,50,60,80]},
-  {t:n=>`Eine Münze wird ${n}-mal geworfen.`, x:'Würfe mit „Kopf“', p:0.5, N:[8,10,12,15,20]},
-  {t:n=>`Bei einem Glücksrad gewinnt man mit 30&nbsp;% Wahrscheinlichkeit. Es wird ${n}-mal gedreht.`, x:'Gewinne', p:0.3, N:[10,12,15,20,25]},
-  {t:n=>`Ein Medikament wirkt bei 90&nbsp;% der Menschen. ${n} Menschen nehmen es.`, x:'Menschen, bei denen es wirkt', p:0.9, N:[10,15,20,25,30]}
+// ---------- Intervalle ----------
+const IV=[
+  {t:k=>`weniger als ${k}`, g:(k,n)=>[0,k-1]},
+  {t:k=>`höchstens ${k}`, g:(k,n)=>[0,k]},
+  {t:k=>`mehr als ${k}`, g:(k,n)=>[k+1,n]},
+  {t:k=>`mindestens ${k}`, g:(k,n)=>[k,n]},
+  {t:(a,b)=>`zwischen ${a} und ${b}`, g:(a,b)=>[a,b], z:1},
+  {t:(a,b)=>`mehr als ${a}, aber höchstens ${b}`, g:(a,b)=>[a+1,b], z:1},
+  {t:(a,b)=>`mindestens ${a}, aber weniger als ${b}`, g:(a,b)=>[a,b-1], z:1},
+  {t:(a,b)=>`mehr als ${a} und weniger als ${b}`, g:(a,b)=>[a+1,b-1], z:1}
 ];
-function genMix(){
-  let C,n,ops,K;
+const ivP=(n,p,a,e)=>{ let s=0; for(let i=a;i<=e;i++) s+=pdf(n,p,i); return s; };
+function genIv(){
+  let n,p,items;
   do{
-    C=pickA(KONTEXT); n=pickA(C.N);
-    ops=[pickA(['=','≤']),pickA(['=','≤'])]; ops.push(ops[0]===ops[1]?(ops[0]==='='?'≤':'='):pickA(['=','≤']));
-    const k1=ks(n,C.p,'=',3), k2=ks(n,C.p,'≤',3);
-    K=ops.map((op,i)=>(op==='='?k1:k2)[i]);
-  }while(K.some(k=>k===undefined));
-  const wort={'=':'Genau','≤':'Höchstens'};
-  const fel=K.map((k,i)=>Object.assign(feld(n,C.p,ops[i],k,i),{lab:`${wort[ops[i]]} ${k} ${C.x}`}));
-  return {h:'Sachaufgabe: genau oder höchstens?',
-    auftrag:C.t(n).replace(/\. /g,'.<br>')+`<br><i>X</i> ist die Anzahl der ${C.x}.<br>Bestimmen Sie <i>n</i> und <i>p</i>.<br>Entscheiden Sie dann: genau oder höchstens?`,
-    term:'',
-    felder:[{k:'n',lab:'<i>n</i>',soll:n,ganz:true},{k:'p',lab:'<i>p</i>',soll:C.p,pw:true}].concat(fel),
-    hinweis:'Tipp: <b>genau</b> → '+WEG['=']+'<br><b>höchstens</b> → '+WEG['≤']};
+    n=R(8,15); p=pickA(PS); items=[]; const used=new Set();
+    let tries=0;
+    while(items.length<3 && tries++<200){
+      const ti=R(0,IV.length-1); if(used.has(ti)) continue;
+      const T=IV[ti]; let a,b,g;
+      if(T.z){ a=R(0,n-3); b=R(a+2,Math.min(n,a+7)); g=T.g(a,b); }
+      else { a=R(1,n-1); g=T.g(a,n); }
+      if(g[0]>g[1]) continue;
+      const v=ivP(n,p,g[0],g[1]); if(v<0.03||v>0.97) continue;
+      used.add(ti); items.push({txt:T.z?T.t(a,b):T.t(a), lo:g[0], hi:g[1], v});
+    }
+  }while(items.length<3);
+  return {h:'Intervalle: mehr als, weniger als, zwischen …',
+    auftrag:'<i>X</i> ist binomialverteilt.<br>Klicken Sie auf dem Zahlenstrahl alle Werte an, die zählen.<br>Berechnen Sie dann die Wahrscheinlichkeit mit Binomial Cdf.<br><b>Zwischen</b> heißt hier: Beide Zahlen zählen mit.',
+    term:`<i>n</i> = ${n} &nbsp;&nbsp; <i>p</i> = ${dp(p)}`,
+    felder:items.map((it,i)=>({k:'v'+i, iv:true, lab:'Anzahl der Treffer: <b>'+it.txt+'</b>', soll:it.v, lo:it.lo, hi:it.hi, n, p})),
+    hinweis:'Tipp: '+WEG['≤'].replace('<b>0</b>','<b>untere Grenze</b>').replace('<i>k</i>, enter','<b>obere Grenze</b>, enter')+'. Bei „mehr als“ und „mindestens“ ist die obere Grenze <i>n</i>.'};
 }
-const MODES={g:{name:"Genau",gen:genTyp('=')}, h:{name:"Höchstens",gen:genTyp('≤')}, m:{name:"Gemischt",gen:genMix}};
-const ORDER=["g","h","m"];
+const MODES={g:{name:"Genau",gen:genTyp('=')}, h:{name:"Höchstens",gen:genTyp('≤')}, i:{name:"Intervalle",gen:genIv}};
+const ORDER=["g","h","i"];
 let mode=ORDER[0], A=null, stat={a:0,r:0};
 
 function neu(){
@@ -138,10 +153,12 @@ function neu(){
   document.getElementById('term').innerHTML=A.term; document.getElementById('term').style.display=A.term?'block':'none';
   document.getElementById('round').innerHTML='<b>Wichtig:</b> Runden Sie auf <b>4 Stellen nach dem Komma</b>, z.&nbsp;B. <b>0,2335</b>.';
   document.getElementById('hinweis').innerHTML=A.hinweis;
-  document.getElementById('felder').classList.toggle('eins',mode==='m');
-  document.getElementById('felder').innerHTML=A.felder.map(F=>
+  document.getElementById('felder').classList.toggle('eins',mode==='i');
+  document.getElementById('felder').innerHTML=A.felder.map(F=>F.iv?
+    `<div class="f iv" id="f_${F.k}"><div class="ivl">${F.lab}</div><div class="za" id="z_${F.k}">${Array.from({length:F.n+1},(_,j)=>`<button type="button" data-j="${j}">${j}</button>`).join('')}</div><label for="i_${F.k}">${PX('','…').replace(' … ','')}</label><input id="i_${F.k}" inputmode="decimal" autocomplete="off" placeholder="0,0000"><span class="m"></span><div class="msg"></div></div>`:
     `<div class="f${F.ganz||F.pw?' np':''}" id="f_${F.k}"><label for="i_${F.k}">${F.lab} ${F.ganz||F.pw?'=':'≈'}</label><input id="i_${F.k}" inputmode="decimal" autocomplete="off" placeholder="${F.ganz||F.pw?'':'0,0000'}"><span class="m"></span><div class="msg"></div></div>`).join('');
   document.getElementById('score').textContent='';
+  document.querySelectorAll('.za button').forEach(b=>b.onclick=()=>{ b.classList.toggle('on'); });
   document.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
 }
 function parse(s){
@@ -150,7 +167,23 @@ function parse(s){
   if(!/^-?\d*(\.\d+)?$/.test(s)||s===''||s==='-') return null;
   return {v:parseFloat(s), dec:(s.split('.')[1]||'').length, pc};
 }
+function chkIv(F,raw){
+  const on=[...document.querySelectorAll('#z_'+F.k+' button')].map(b=>b.classList.contains('on'));
+  const zOk=on.every((x,j)=>x===(j>=F.lo&&j<=F.hi)), zLeer=!on.some(x=>x);
+  document.querySelectorAll('#z_'+F.k+' button').forEach((b,j)=>b.classList.toggle('bad', !zLeer && on[j]!==(j>=F.lo&&j<=F.hi)));
+  if(!raw.trim() && zLeer) return ['leer',''];
+  let pr=raw.trim()?check(Object.assign({},F,{iv:false,op:'iv'}),raw):['no','Tragen Sie noch die Wahrscheinlichkeit ein.'];
+  if(pr[0]==='no' && raw.trim()){ const v=parse(raw); if(v){ const near=w=>Math.abs(v.v-w)<6e-5;
+    if(near(ivP(F.n,F.p,F.lo-1,F.hi))||near(ivP(F.n,F.p,F.lo+1,F.hi))) pr=['no','Die untere Grenze stimmt nicht. Zählt die Zahl mit oder nicht?'];
+    else if(near(ivP(F.n,F.p,F.lo,F.hi-1))||near(ivP(F.n,F.p,F.lo,F.hi+1))) pr=['no','Die obere Grenze stimmt nicht. Zählt die Zahl mit oder nicht?'];
+    else if(near(ivP(F.n,F.p,0,F.hi))&&F.lo>0) pr=['no','Die untere Grenze ist nicht 0. Welcher Wert ist der kleinste, der zählt?'];
+    else if(near(ivP(F.n,F.p,0,F.lo-1))||near(ivP(F.n,F.p,F.hi+1,F.n))) pr=['no','Das ist genau die Gegenseite. Welche Werte zählen?']; } }
+  if(zLeer) return pr[0]==='ok'?['fmt','Der Wert stimmt. Klicken Sie auch die passenden Zahlen an.']:pr;
+  if(!zOk) return ['no','Auf dem Zahlenstrahl stimmt etwas nicht (rot markiert).'+(pr[0]==='ok'?'':' '+pr[1])];
+  return pr;
+}
 function check(F,raw){
+  if(F.iv) return chkIv(F,raw);
   if(!raw.trim()) return ['leer',''];
   const p=parse(raw); if(!p) return ['fmt','Bitte nur eine Zahl eintragen, z. B. 0,2335.'];
   if(F.ganz) return p.v===F.soll?['ok','']:['no','Wie oft wird das Experiment wiederholt? Das ist n.'];
@@ -164,6 +197,7 @@ function check(F,raw){
   if(p.dec<4 && Math.abs(p.v-soll)<0.006) return ['fmt','Fast – bitte genau 4 Stellen nach dem Komma angeben.'];
   const near=w=>Math.abs(p.v-w)<6e-5;
   const {n,p:pp,kk,op}=F;
+  if(op==='iv') return ['no','Das stimmt noch nicht. Prüfen Sie die Grenzen. Kommazahl mit Punkt eingegeben?'];
   if(op==='=' && near(cdf(n,pp,kk))) return ['no','Das ist P(X ≤ '+kk+'). Gesucht ist genau '+kk+' → Binomial Pdf (Taste D).'];
   if(op==='≤' && near(pdf(n,pp,kk))) return ['no','Das ist P(X = '+kk+'). Gesucht ist höchstens '+kk+' → Binomial Cdf (Taste E).'];
   if(op==='≤' && near(cdf(n,pp,kk-1))) return ['no','Höchstens '+kk+' schließt '+kk+' mit ein. Obere Grenze = '+kk+'.'];
@@ -189,7 +223,9 @@ function zeigen(){
     const f=document.getElementById('f_'+F.k), msg=f.querySelector('.msg');
     if(f.classList.contains('ok')) return;
     f.classList.add('show');
-    if(F.ganz) msg.innerHTML='Lösung: '+F.soll;
+    if(F.iv){ document.querySelectorAll('#z_'+F.k+' button').forEach((b,j)=>{ b.classList.remove('bad'); b.classList.toggle('on',j>=F.lo&&j<=F.hi); });
+      msg.innerHTML='Lösung: untere Grenze '+F.lo+', obere Grenze '+F.hi+' → ≈ '+de4(F.soll)+' &nbsp;<span class="liste">binomCdf('+F.n+','+F.p+','+F.lo+','+F.hi+')</span>'; }
+    else if(F.ganz) msg.innerHTML='Lösung: '+F.soll;
     else if(F.pw) msg.innerHTML='Lösung: '+dp(F.soll);
     else msg.innerHTML='Lösung: '+PX(F.op,F.kk)+' ≈ '+de4(F.soll)+' &nbsp;<span class="liste">'+(F.op==='='?`binomPdf(${F.n},${F.p},${F.kk})`:`binomCdf(${F.n},${F.p},0,${F.kk})`)+'</span>';
   });

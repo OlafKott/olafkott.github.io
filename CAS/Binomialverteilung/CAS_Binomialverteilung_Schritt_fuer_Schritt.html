@@ -74,6 +74,10 @@ main{ max-width:1000px; margin:14px auto 30px; padding:0 16px; display:flex; gap
 .menu div{ padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .menu div.sel{ background:#3b78c2; color:#fff; }
 .menu div.ziel{ background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse 1.2s ease-in-out infinite; }
+/* Zahlenstrahl */
+.strip{ display:flex; gap:3px; margin:4px 0 10px; flex-wrap:wrap; }
+.strip span{ width:30px; height:30px; border:1.5px solid #9aa3b0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:15px; background:#fff; }
+.strip span.on{ background:#F2B705; border-color:#b88a00; font-weight:bold; }
 /* Assistent (Binomial Pdf / Cdf) */
 .dlg{ position:absolute; left:8px; right:8px; top:40px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4; }
 .dlg .tt{ background:#c9d3df; font-weight:bold; padding:2px 6px; }
@@ -272,13 +276,20 @@ const fillSeq=(hist,kind,keys,res)=>i=>{
   return page(hist)+dialog(kind,w.v,w.f);
 };
 
+const openFill=(hist,keys,res)=>i=>i<=4?openSeq(hist,'cdf')(i):fillSeq(hist,'cdf',keys.slice(4),res)(i-4);
+// Zahlenstrahl 0 … n, Werte a … e markiert
+const STRIP=(n,a,e)=>'<div class="strip">'+Array.from({length:n+1},(_,i)=>`<span class="${i>=a&&i<=e?'on':''}">${i}</span>`).join('')+'</div>';
+
 // ---------- Tastenfolgen und Ergebnisse ----------
 const kOA=["menu","5","5","d"], kOB=["menu","5","5","e"];
 const kA=["1","0","tab","0",".","3","tab","2","enter"];
 const kB=["1","0","tab","0",".","3","tab","0","tab","2","enter"];
+const kC1=kOB.concat(["1","0","tab","0",".","3","tab","3","tab","5","enter"]), kC2=kOB.concat(["1","0","tab","0",".","3","tab","4","tab","1","0","enter"]);
 const h0=[], h1=[[cmd('pdf',['10','0.3','2']),'0.233474']], h2=h1.concat([[cmd('cdf',['10','0.3','0','2']),'0.382783']]);
+const h3=h2.concat([[cmd('cdf',['10','0.3','3','5']),'0.569868']]), h4=h3.concat([[cmd('cdf',['10','0.3','4','10']),'0.350389']]);
 
 // ---------- Darstellung im Text ----------
+const PI=(a,op1,op2,b)=>`<i>P</i>(${a} ${op1} <i>X</i> ${op2} ${b})`;
 const PX=(op,k)=>`<i>P</i>(<i>X</i> ${op} ${k})`;
 const NP='<i>n</i> = 10 und <i>p</i> = 0,3';
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
@@ -310,12 +321,30 @@ const TRACKS={
    d:"<p>Auf 4 Stellen nach dem Komma gerundet:</p><p style='font-size:18px'>"+PX('≤',2)+" ≈ <b>0,3828</b></p>"+
      "<table class='vgl'><tr><th></th><th>Befehl im CAS</th><th>Ergebnis</th></tr><tr><td>genau 2</td><td>Binomial Pdf (D)</td><td>0,2335</td></tr><tr><td>höchstens 2</td><td>Binomial Cdf (E), 0 bis 2</td><td>0,3828</td></tr></table>",
    n:PX('≤',2)+" = "+PX('=',0)+" + "+PX('=',1)+" + "+PX('=',2)+". Darum ist „höchstens“ nie kleiner als „genau“."},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(h2), d:AB("Aufgabe 1 und 2",["Aufgabe 1: Spalte „höchstens“ mit Binomial Cdf (untere Grenze 0)","Aufgabe 2: Erst <i>n</i> und <i>p</i> bestimmen, dann entscheiden: genau oder höchstens?","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(h2), d:AB("Aufgabe 1, Spalte „höchstens“",["Für jede Zeile Binomial Cdf öffnen: <b>menu</b> ▸ 5 ▸ 5 ▸ E","Untere Grenze <b>0</b>, obere Grenze <i>k</i>","Ergebnis auf 4 Stellen nach dem Komma runden"])}
+ ]},
+ c:{ name:"Intervalle", start:()=>page(h2), steps:[
+  {t:"Grenzen finden", a:"Mehr als 2, aber höchstens 5 Treffer", k:[], s:()=>page(h2),
+   d:"<p>Diese Trefferzahlen zählen (gelb):</p>"+STRIP(10,3,5)+
+     "<p><b>mehr als 2</b> → die 2 zählt <b>nicht</b> mit → untere Grenze <b>3</b><br><b>höchstens 5</b> → die 5 zählt mit → obere Grenze <b>5</b></p>",
+   n:"Binomial Cdf rechnet von der unteren bis zur oberen Grenze. Beide Grenzen zählen mit."},
+  {t:"Intervall berechnen", a:"Berechnen Sie "+PI(2,'&lt;','≤',5)+" für "+NP, k:kC1, p:openFill(h2,kC1,'0.569868'),
+   d:"<p>Binomial Cdf öffnen (<b>menu</b> ▸ 5 ▸ 5 ▸ <b>E</b>). Dann:</p>"+FT([["<i>n</i>","10"],["<i>p</i>","0.3"],["Untere Grenze","3"],["Obere Grenze","5"]])+"<p>Ergebnis: 0.569868 ≈ <b>0,5699</b></p>"},
+  {t:"Mehr als", a:"Berechnen Sie "+PX('&gt;',3)+" für "+NP, k:kC2, p:openFill(h3,kC2,'0.350389'),
+   d:"<p><b>mehr als 3</b> heißt: 4, 5, … bis 10.</p>"+STRIP(10,4,10)+"<p>Untere Grenze <b>4</b>, obere Grenze <b>10</b> (= <i>n</i>).</p><p>Ergebnis: 0.350389 ≈ <b>0,3504</b></p>",
+   n:"Bei „mehr als“ und „mindestens“ ist die obere Grenze immer <i>n</i>."},
+  {t:"Merke: Grenzen", k:[], s:()=>page(h4),
+   d:"<table class='vgl'><tr><th>Formulierung</th><th>Untere Grenze</th><th>Obere Grenze</th></tr>"+
+     "<tr><td>höchstens <i>k</i></td><td>0</td><td><i>k</i></td></tr><tr><td>weniger als <i>k</i></td><td>0</td><td><i>k</i> − 1</td></tr>"+
+     "<tr><td>mindestens <i>k</i></td><td><i>k</i></td><td><i>n</i></td></tr><tr><td>mehr als <i>k</i></td><td><i>k</i> + 1</td><td><i>n</i></td></tr>"+
+     "<tr><td>zwischen <i>a</i> und <i>b</i> (einschließlich)</td><td><i>a</i></td><td><i>b</i></td></tr></table>",
+   n:"„mehr als“ und „weniger als“: Die genannte Zahl zählt <b>nicht</b> mit."},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(h4), d:AB("Aufgabe 2",["Zahlenstrahl ausmalen: Welche Werte zählen?","Untere und obere Grenze eintragen","Mit Binomial Cdf rechnen, auf 4 Stellen runden","Danach: Lösungscode eintragen"])}
  ]}
 };
 
 // ---------- Steuerung ----------
-const ORDER=["a","b"];
+const ORDER=["a","b","c"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};

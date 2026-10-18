@@ -23,7 +23,7 @@ TOPICS = [
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
     ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Fläche im Graphen bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
-    ('bin', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'genau und höchstens', 'Arbeitsblatt_CAS_Binomialverteilung.pdf'),
+    ('bin', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'genau, höchstens, Intervalle', 'Arbeitsblatt_CAS_Binomialverteilung.pdf'),
     ('bing', 'Binomial_Gesucht', 'Binomial_Gesucht', 'Binomial_Gesucht', 'Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht', 'mit Wertetabelle und Graph', 'Arbeitsblatt_CAS_Binomial_Gesucht.pdf'),
 ]
 
