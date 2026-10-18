@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAS-Übung: Binomialverteilung – n, k oder p gesucht</title>
+<style>
+:root{ --lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif; line-height:1.5; }
+.top{ background:#fff; border-bottom:1px solid var(--line); }
+.top .in{ max-width:860px; margin:0 auto; padding:12px 16px; display:flex; align-items:center; gap:16px; }
+.top h1{ font-size:20px; margin:0; color:var(--lf); flex:1; }
+.top h1 small{ display:block; font-size:13px; color:var(--mute); font-weight:normal; }
+.top img{ height:28px; }
+.wrap{ max-width:860px; margin:16px auto 40px; padding:0 16px; }
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.tabs button{ font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer; }
+.tabs button.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+.card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px; }
+.card h2{ margin:0 0 6px; font-size:18px; }
+.auftrag{ font-size:15.5px; margin:0 0 10px; }
+.round{ display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px; }
+.round b{ color:var(--warn); }
+.dt{ overflow-x:auto; }
+table.d{ border-collapse:collapse; font-size:16px; margin:2px 0 4px; }
+table.d th, table.d td{ border:1px solid #c3c8d0; padding:4px 10px; text-align:center; min-width:40px; }
+table.d th{ background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic; }
+.spalten{ font-size:13.5px; color:var(--mute); margin-top:6px; }
+.liste{ font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; }
+@media (max-width:620px){ .grid{ grid-template-columns:1fr; } }
+.f{ display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; }
+.f label{ font-size:15px; }
+.f label .z{ color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px; }
+.f input{ font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right; }
+.f .m{ font-weight:bold; font-size:18px; text-align:center; }
+.f.ok{ background:var(--okbg); } .f.ok .m{ color:var(--ok); }
+.f.no{ background:var(--nobg); } .f.no .m{ color:var(--no); }
+.f.fmt{ background:var(--warnbg); } .f.fmt .m{ color:var(--warn); }
+.f .msg{ grid-column:1 / -1; font-size:13.5px; display:none; }
+.f.no .msg, .f.fmt .msg, .f.show .msg{ display:block; }
+.f.no .msg{ color:var(--no); } .f.fmt .msg{ color:var(--warn); } .f.show .msg{ color:var(--mute); }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+.btns button{ font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff; }
+.btns button.go{ background:var(--lf); border-color:var(--lf); color:#fff; }
+.score{ font-size:16px; font-weight:bold; margin-top:12px; min-height:24px; }
+.stats{ font-size:13.5px; color:var(--mute); margin-top:4px; }
+.hinweis{ font-size:13.5px; color:var(--mute); }
+
+.term{ font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px; }
+.plot svg{ width:100%; height:auto; display:block; max-width:640px; margin:0 auto; }
+.plot .gl{ stroke:#e1e4e9; stroke-width:1; } .plot .ax{ stroke:#222; stroke-width:1.4; } .plot .ah{ fill:#222; }
+.plot .al{ font:italic 15px Cambria,Georgia,serif; } .plot .tl{ font:11px system-ui,Arial,sans-serif; fill:#555; }
+.plot .cv{ fill:none; stroke:#1d1d1f; stroke-width:2.2; } .plot .ar{ stroke-width:2; stroke-dasharray:6 4; fill:none; }
+.plot .ml{ font:bold 13px system-ui,Arial,sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px; }
+#felder{ display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; }
+@media (max-width:620px){ #felder{ grid-template-columns:1fr; } }
+.f{ border-left:5px solid #ccc; }
+.f .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+.f.gl{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; }
+.f.gl > label:first-child{ min-width:150px; font-family:Cambria,Georgia,serif; font-size:16px; }
+.f.gl .xin{ display:inline-flex; align-items:center; gap:6px; }
+.f.gl .xin .z{ font-family:Cambria,Georgia,serif; font-size:15px; }
+.f.gl .kl{ font-size:14.5px; display:inline-flex; align-items:center; gap:5px; cursor:pointer; }
+.f.gl .kl input{ width:18px; height:18px; }
+.f.gl .m{ margin-left:auto; }
+.f.gl .msg{ flex-basis:100%; }
+.f label{ font-family:Cambria,Georgia,serif; font-size:16px; }
+.liste{ font-weight:normal; }
+
+.einst{ display:flex; gap:10px; flex-wrap:wrap; margin:2px 0 10px; }
+.einst span{ background:#eef3fb; border:1px solid #c9d3e6; border-radius:999px; padding:3px 12px; font-size:14.5px; }
+.einst b{ color:var(--lf); }
+table.e{ border-collapse:collapse; font-size:16px; }
+table.e th, table.e td{ border:1px solid #c3c8d0; padding:4px 6px; text-align:center; }
+table.e th{ background:#eef0f3; font-family:Cambria,Georgia,serif; min-width:56px; }
+table.e td.xv{ background:#eef0f3; font-weight:bold; font-family:Cambria,Georgia,serif; }
+table.e td input{ font:inherit; font-size:15px; width:68px; padding:4px 5px; border:1px solid #b8bdc6; border-radius:5px; background:#f7f8fa; text-align:right; }
+table.e td.ok input{ background:var(--okbg); border-color:var(--ok); } table.e td.no input{ background:var(--nobg); border-color:var(--no); } table.e td.fmt input{ background:var(--warnbg); border-color:#F2B705; }
+table.e td .sl{ display:block; font-size:12.5px; color:var(--mute); }
+.zr{ font-family:Cambria,Georgia,serif; font-size:16px; margin:12px 0 4px; display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.zr input{ font:inherit; width:80px; padding:4px 6px; border:1px solid #b8bdc6; border-radius:5px; background:#f7f8fa; text-align:right; }
+.zr.ok input{ background:var(--okbg); border-color:var(--ok); } .zr.no input{ background:var(--nobg); border-color:var(--no); } .zr.fmt input{ background:var(--warnbg); border-color:#F2B705; }
+.zr .m{ font-weight:bold; font-size:18px; margin-left:6px; } .zr.ok .m{ color:var(--ok); } .zr.no .m{ color:var(--no); } .zr.fmt .m{ color:var(--warn); }
+.zr .msg{ flex-basis:100%; font-size:13.5px; color:var(--mute); } .zr.no .msg{ color:var(--no); } .zr.fmt .msg{ color:var(--warn); }
+#felder{ display:block !important; }
+.tmsg{ font-size:13.5px; min-height:20px; margin-top:6px; color:var(--mute); }
+
+.frage{ font-family:Cambria,Georgia,serif; font-size:18px; line-height:1.6; background:#f7f9fc; border-left:5px solid var(--lf); border-radius:6px; padding:10px 14px; }
+.zr span:first-child{ min-width:34px; }
+.zr select{ font:inherit; font-size:16px; padding:3px 6px; border:1px solid #b8bdc6; border-radius:5px; background:#f7f8fa; }
+.zr input{ width:110px !important; font-size:16px; }
+.loes{ font-size:15px; margin-top:10px; line-height:1.7; }
+table.mini{ border-collapse:collapse; margin:4px 0; font-size:15px; }
+table.mini th, table.mini td{ border:1px solid #c3c8d0; padding:2px 10px; text-align:center; }
+table.mini th{ background:#eef0f3; font-family:Cambria,Georgia,serif; font-weight:normal; }
+table.mini td.hl{ background:#FFE9A8; font-weight:bold; }
+
+/* linksbündig (Moodle-Frame) */
+.top .in, body > main, body > .tabs, .tabs#tabs, body > .wrap{ margin-left:0 !important; margin-right:auto !important; }
+</style></head><body>
+<div class="top"><div class="in"><a href="https://olafkott.github.io/CAS/" title="Zurück zur Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap;flex:0 0 auto">&#8592; Übersicht</a><h1>CAS-Übung: Binomialverteilung – n, k oder p gesucht<small>Neue Aufgaben auf Knopfdruck · mit dem TI-Nspire CX CAS rechnen · Ergebnis eintragen</small></h1><img src="data:image/png;base64,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" alt="RWB Essen AHR"></div></div>
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="frage" id="frage"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="loes" id="loes"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>
+<script>
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[R(0,a.length-1)];
+const deZ=v=>String(v).replace('.',',');
+const pct=a=>deZ(Math.round(a*100))+'&nbsp;%';
+const cas=t=>'<span class="liste">'+t+'</span>';
+function bcdf(n,p,a,b){
+  a=Math.max(a,0); b=Math.min(b,n); if(a>b) return 0;
+  const q=1-p; let s=0, pm=Math.pow(q,n);
+  for(let i=0;i<=b;i++){ if(i>=a) s+=pm; pm=pm*(n-i)/(i+1)*p/q; }
+  return Math.min(1,s);
+}
+function bis(g,a,b){ let ga=g(a); for(let i=0;i<80;i++){ const m=(a+b)/2, gm=g(m); if((ga>0)===(gm>0)){ a=m; ga=gm; } else b=m; } return (a+b)/2; }
+const PS=[0.05,0.08,0.1,0.12,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.6];
+const AL=[0.9,0.95,0.99];
+
+// ---------- Aufgaben ----------
+function genN(){
+  let p,m,a,n;
+  do{ p=pick(PS.slice(0,10)); m=pick([1,1,1,2,2,3]); a=pick(AL);
+      n=m; while(n<=300 && bcdf(n,p,m,n)<a) n++; }while(n>200);
+  const tr=m===1?'mindestens einen Treffer':'mindestens '+m+' Treffer';
+  return {typ:'n', h:'n gesucht – mit der Tabelle', soll:n,
+    frage:`Die Trefferwahrscheinlichkeit ist <b><i>p</i> = ${deZ(p)}</b>.<br>Wie viele Versuche braucht man <b>mindestens</b>, damit man mit mindestens ${pct(a)} Wahrscheinlichkeit ${tr} erhält?`,
+    lab:'<i>n</i> =', casIn:`f1(x)=binomCdf(x,${p},${m},x)`,
+    tab:[n-1,n].map(x=>[x,bcdf(x,p,m,x)]), grenze:a, rel:'≥',
+    hinweis:'Tipp: Die gesuchte Anzahl <i>n</i> wird zu <b>x</b>. Obere Grenze ist dann auch <b>x</b>. Liegt die Lösung weit unten in der Tabelle: Tabellenanfang ändern mit <b>menu ▸ 2 ▸ 5</b>.'};
+}
+function genK(){
+  let n,p,t,a,k,ok;
+  do{
+    n=R(4,30)*5; p=pick(PS); t=pick(['le','ge','lo']); ok=true;
+    if(t==='le'){ a=pick(AL); k=0; while(bcdf(n,p,0,k)<a) k++; }
+    else if(t==='ge'){ a=pick(AL); k=n; while(k>=0 && bcdf(n,p,k,n)<a) k--; ok=k>=1; }
+    else { a=pick([0.05,0.1]); k=-1; while(bcdf(n,p,0,k+1)<=a) k++; ok=k>=1; }
+  }while(!ok || n*p<3 || n*(1-p)<3);
+  const F={le:`die <b>kleinste</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ ${deZ(a)}`,
+           ge:`die <b>größte</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≥ <i>k</i>) ≥ ${deZ(a)}`,
+           lo:`die <b>größte</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≤ <i>k</i>) ≤ ${deZ(a)}`}[t];
+  const ci=t==='ge'?`f1(x)=binomCdf(${n},${p},x,${n})`:`f1(x)=binomCdf(${n},${p},0,x)`;
+  const fx=x=>t==='ge'?bcdf(n,p,x,n):bcdf(n,p,0,x);
+  const nb=t==='le'?[k-1,k]:[k,k+1];
+  return {typ:'k', h:'k gesucht – mit der Tabelle', soll:k,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b> und <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie ${F}.`,
+    lab:'<i>k</i> =', casIn:ci, tab:nb.map(x=>[x,fx(x)]), grenze:a, rel:t==='lo'?'≤':'≥',
+    hinweis:'Tipp: Die gesuchte Grenze <i>k</i> wird zu <b>x</b>. Bei <i>P</i>(<i>X</i> ≤ …): untere Grenze 0. Bei <i>P</i>(<i>X</i> ≥ …): obere Grenze <i>n</i>. Tabellenanfang etwas unter <i>n</i>·<i>p</i> wählen (<b>menu ▸ 2 ▸ 5</b>).'};
+}
+function genP(){
+  let n,k,t,a,p;
+  do{
+    n=R(2,12)*5; t=pick(['le','ge']); a=pick(AL);
+    if(t==='le') k=R(Math.round(n*0.15),Math.round(n*0.5)); else k=R(1,Math.max(1,Math.round(n*0.3)));
+    const g=t==='le'?(x=>bcdf(n,x,0,k)-a):(x=>bcdf(n,x,k,n)-a);
+    p=bis(g,1e-6,1-1e-6);
+  }while(!(p>0.03&&p<0.95));
+  const pr=Math.round(p*1000)/1000;
+  const txt=t==='le'?`höchstens ${k}-mal einen Treffer`:(k===1?'mindestens einen Treffer':`mindestens ${k} Treffer`);
+  return {typ:'p', h:'p gesucht – mit dem Graphen', soll:pr, exact:p, rel:t==='le'?'≤':'≥',
+    frage:`Ein Versuch wird <b><i>n</i> = ${n}</b>-mal durchgeführt.<br>Mit mindestens ${pct(a)} Wahrscheinlichkeit soll man ${txt} erhalten.<br>Welche Trefferwahrscheinlichkeiten <i>p</i> sind möglich?`,
+    casIn:(t==='le'?`f1(x)=binomCdf(${n},x,0,${k})`:`f1(x)=binomCdf(${n},x,${k},${n})`)+`, f2(x)=${a}`, grenze:a,
+    hinweis:'Tipp: <i>p</i> wird zu <b>x</b>. Grenze als 2. Funktion, Fenster 0 bis 1, dann <b>menu ▸ 6 ▸ 4: Schnittpunkt</b>. Fällt der Graph, gilt <i>p</i> ≤ …, steigt er, gilt <i>p</i> ≥ … .'};
+}
+const MODES={n:{name:"n gesucht",gen:genN},k:{name:"k gesucht",gen:genK},p:{name:"p gesucht",gen:genP}};
+const ORDER=["n","k","p"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+const $=id=>document.getElementById(id);
+function neu(){
+  A=MODES[mode].gen();
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  $('h').innerHTML="Aufgabe: "+A.h.replace(/^(\w) /,'<i>$1</i> ');
+  $('auftrag').innerHTML=A.typ==='p'?'Lösen Sie mit dem Graphen in Graphs.':'Lösen Sie mit der Wertetabelle in Graphs.';
+  $('frage').innerHTML=A.frage;
+  $('hinweis').innerHTML=A.hinweis;
+  if(A.typ==='p'){
+    $('round').innerHTML='<b>Wichtig:</b> Runden Sie <i>p</i> auf <b>3 Stellen nach dem Komma</b>, z.&nbsp;B. <b>0,248</b>.';
+    $('felder').innerHTML='<div class="zr" id="z0"><span><i>p</i></span><select id="rel"><option value="">?</option><option>≤</option><option>≥</option></select><input id="i0" inputmode="decimal" autocomplete="off"><span class="m" id="m0"></span><span class="msg" id="g0"></span></div>';
+  } else {
+    $('round').innerHTML='<b>Wichtig:</b> Die Antwort ist eine <b>ganze Zahl</b>.';
+    $('felder').innerHTML=`<div class="zr" id="z0"><span>${A.lab}</span><input id="i0" inputmode="numeric" autocomplete="off"><span class="m" id="m0"></span><span class="msg" id="g0"></span></div>`;
+  }
+  $('score').textContent=''; $('loes').innerHTML='';
+  const i0=$('i0'); i0.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); });
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+function pruefen(){
+  const z=$('z0'), raw=$('i0').value; z.classList.remove('ok','no','fmt'); let st, msg='';
+  const p=parse(raw);
+  if(!raw.trim()){ $('g0').textContent='Bitte ein Ergebnis eintragen.'; z.classList.add('fmt'); $('m0').textContent='!'; return; }
+  if(!p){ st='fmt'; msg='Bitte nur eine Zahl eintragen.'; }
+  else if(A.typ==='p'){
+    const rel=$('rel').value;
+    if(Math.abs(p.v-A.soll)>0.00101){ st='no'; msg='Der Wert stimmt nicht. Prüfen Sie die Eingabe in Graphs und den Schnittpunkt.'; }
+    else if(p.dec!==3){ st='fmt'; msg='Der Wert passt. Bitte genau 3 Nachkommastellen angeben.'; }
+    else if(!rel){ st='fmt'; msg='Der Wert stimmt. Wählen Sie noch ≤ oder ≥.'; }
+    else if(rel!==A.rel){ st='no'; msg='Der Wert stimmt, aber das Zeichen nicht. Steigt oder fällt Ihr Graph?'; }
+    else st='ok';
+  } else {
+    if(!Number.isInteger(p.v)){ st='fmt'; msg='Die Antwort ist eine ganze Zahl.'; }
+    else if(p.v===A.soll) st='ok';
+    else if(Math.abs(p.v-A.soll)===1){ st='no'; msg='Knapp daneben. Prüfen Sie genau, ab welcher Zeile die Bedingung erfüllt ist.'; }
+    else { st='no'; msg='Das stimmt nicht. Prüfen Sie die Eingabe in Graphs.'; }
+  }
+  z.classList.add(st); $('m0').textContent=st==='ok'?'✓':st==='no'?'✗':'!'; $('g0').textContent=msg;
+  stat.a++; if(st==='ok') stat.r++;
+  $('score').innerHTML = st==='ok' ? '<span style="color:var(--ok)">Richtig! Klicken Sie auf „Neue Aufgabe“.</span>' : '';
+  $('stats').textContent=`Geprüft: ${stat.a} · richtig: ${stat.r}`;
+}
+function zeigen(){
+  let h='<b>CAS-Eingabe:</b> '+cas(A.casIn)+'<br>';
+  if(A.typ==='p'){
+    h+=`Schnittpunkt bei <i>x</i> ≈ ${deZ(A.exact.toFixed(4))}<br><b>Lösung:</b> <i>p</i> ${A.rel} ${deZ(A.soll.toFixed(3))}`;
+  } else {
+    h+='<table class="mini"><tr><th>x</th>'+A.tab.map(r=>`<td>${r[0]}</td>`).join('')+'</tr><tr><th>Wert</th>'+A.tab.map(r=>`<td class="${r[0]===A.soll?'hl':''}">${deZ(r[1].toFixed(4))}</td>`).join('')+'</tr></table>';
+    h+=`<b>Lösung:</b> ${A.lab} ${A.soll}`;
+  }
+  $('loes').innerHTML=h;
+}
+$('pruefen').onclick=pruefen; $('zeigen').onclick=zeigen; $('neu').onclick=neu;
+$('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(location.hash||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+</script>
+
+</body></html>
