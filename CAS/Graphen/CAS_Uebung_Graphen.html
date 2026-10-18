@@ -210,7 +210,7 @@ function genSP(){
       felder:xs.map((x,i)=>PKT('s'+i,`S<sub>${i+1}</sub>`,x,ys[i],['#1F4E99','#2E7D32','#C25E00'][i])),
       pts:xs.map((x,i)=>({x,y:ys[i],col:['#1F4E99','#2E7D32','#C25E00'][i],lab:'S'+(i+1),below:i%2===1})),
       fs:[{P,col:'#1d1d1f'},{P:L,col:'#C62828'}],
-      hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(P)+'</span>, mit <b>ctrl + G</b> <span class="liste">f2(x)='+casPoly(L)+'</span>, dann <b>menu ▸ 6 ▸ 4: Schnittpunkt</b> für jeden Schnittpunkt.'};
+      hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(P)+'</span>, mit <b>tab</b> <span class="liste">f2(x)='+casPoly(L)+'</span>, dann <b>menu ▸ 6 ▸ 4: Schnittpunkt</b> für jeden Schnittpunkt.'};
   }
 }
 const MODES={ax:{name:"Achsenschnittpunkte",gen:genAX}, ex:{name:"Extrem- und Wendepunkte",gen:genEX}, sp:{name:"Schnittpunkte",gen:genSP}};

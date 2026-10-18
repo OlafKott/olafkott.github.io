@@ -327,6 +327,15 @@ function solveTool(S,t,lo,hi){
   else { const D2=der(der(P)); x=bis(z=>ev(D2,z),lo,hi); }
   return {x, y:f(x), t};
 }
+function preview(t,a,b){
+  if(b-a<0.05) return null;
+  const P=FUN.f1.P, f=x=>ev(P,x), Q=FUN.f2.P, D2=der(der(P));
+  const g= t==='1'?f : t==='4'?(z=>f(z)-ev(Q,z)) : t==='5'?(z=>ev(D2,z)) : null;
+  if(g && g(a)*g(b)>=0) return null;
+  const r=solveTool(null,t,a,b);
+  if(!g && !(r.x>a+0.03&&r.x<b-0.03)) return null;
+  return r;
+}
 function simG(keys){
   const S=G0();
   for(const k of keys){
@@ -365,6 +374,7 @@ function simG(keys){
     }
     if(S.ctrl){ S.ctrl=false; if(k==='g') S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
     if(k==='ctrl'){ S.ctrl=true; continue; }
+    if(k==='tab'){ S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
     if(k==='menu'){ S.menu=[{items:GM,sel:0}]; continue; }
   }
   return S;
@@ -382,13 +392,13 @@ function gScreen(S){
     for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}"/>`;
     s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
   if(S.tool&&S.tool.lo!==null){ const a=Math.min(X(S.tool.lo),X(S.tool.cx)), b=Math.max(X(S.tool.lo),X(S.tool.cx));
-    s+=`<defs><pattern id="gHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#5b6b80" stroke-width="1.3"/></pattern></defs><rect x="${a}" y="0" width="${b-a}" height="${H}" fill="#e3e8ef"/><rect x="${a}" y="0" width="${b-a}" height="${H}" fill="url(#gHatch)" opacity=".6"/>`; }
+    s+=`<rect x="${a}" y="0" width="${b-a}" height="${H}" fill="#cfd4db" opacity=".75"/>`; }
   S.fs.forEach((F,j)=>{
     const P=FUN[F.n].P, col=FUN[F.n].col; let d='', pen=false, last=null;
     for(let i=0;i<=280;i++){ const x=w.x0+(w.x1-w.x0)*i/280, y=ev(P,x), py=Y(y);
       if(py>-40&&py<H+40){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1)+' '; pen=true; if(py>=0&&py<=H) last=[X(x),py]; } else pen=false; }
     s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
-    if(last) s+=`<text x="${W-4}" y="${13+j*12}" font-size="9.5" fill="${col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${F.n}(x)=${ser2(F.root)}</text>`;
+    if(last) s+=`<text x="${W-4}" y="${(S.ent?33:13)+j*12}" font-size="9.5" fill="${col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${F.n}(x)=${ser2(F.root)}</text>`;
   });
   S.pts.forEach((p,j)=>{
     const px=X(p.x), py=Y(p.y), lab=j>=S.pts.length-2;
@@ -396,12 +406,16 @@ function gScreen(S){
     if(lab){ const right=px<W-70, below=p.t==='2'||py<30; s+=`<text x="${right?px+5:px-5}" y="${below?py+13:py-6}" font-size="9.5" fill="#000" text-anchor="${right?'start':'end'}" stroke="#fff" stroke-width="3" paint-order="stroke">(${fmt3(p.x)},${fmt3(p.y)})</text>`; }
   });
   if(S.tool){
-    const T=S.tool, f=x=>ev(FUN.f1.P,x);
-    if(T.lo!==null) s+=`<line x1="${X(T.lo)}" y1="0" x2="${X(T.lo)}" y2="${H}" stroke="#333" stroke-dasharray="3 3"/><text x="${X(T.lo)+3}" y="${H-4}" font-size="9" fill="#8a5a00" font-weight="bold">Start</text>`;
-    const cy=Y(f(T.cx)), cyy=Math.max(4,Math.min(H-4,cy));
-    s+=`<line x1="${X(T.cx)}" y1="0" x2="${X(T.cx)}" y2="${H}" stroke="#888" stroke-dasharray="1 3"/>`;
-    s+=`<circle cx="${X(T.cx)}" cy="${cyy}" r="4" fill="none" stroke="#000" stroke-width="1.4"/>`;
-    if(S.pulse) s+=`<circle cx="${X(T.cx)}" cy="${cyy}" r="${S.pulse}" fill="none" stroke="#F2B705" stroke-width="3"/><text x="${X(T.cx)}" y="${cyy-S.pulse-3}" font-size="10" font-weight="bold" fill="#8a5a00" text-anchor="middle" stroke="#fff" stroke-width="3" paint-order="stroke">Klick</text>`;
+    const T=S.tool, f=x=>ev(FUN.f1.P,x), dot='stroke="#222" stroke-width="1.3" stroke-dasharray="1.5 2.2"';
+    if(T.lo!==null) s+=`<line x1="${X(T.lo)}" y1="0" x2="${X(T.lo)}" y2="${H}" ${dot}/>`;
+    s+=`<line x1="${X(T.cx)}" y1="0" x2="${X(T.cx)}" y2="${H}" ${dot}/>`;
+    const cy=Y(f(T.cx)), cyy=Math.max(4,Math.min(H-24,cy)), hx=X(T.cx);
+    if(T.lo!==null){ const a=Math.min(T.lo,T.cx), b=Math.max(T.lo,T.cx), r=preview(T.t,a,b);
+      if(r){ const px=X(r.x), py=Y(r.y), lab=TOOLN[T.t], wl=lab.length*5.6+8, lx=Math.min(W-wl-2,Math.max(2,px-wl/2)), ly=Math.max(2,py-30);
+        s+=`<circle cx="${px}" cy="${py}" r="3" fill="none" stroke="#000" stroke-width="1.2"/><rect x="${lx}" y="${ly}" width="${wl}" height="13" fill="#FFF4A8" stroke="#b8a200" stroke-width=".6"/><text x="${lx+wl/2}" y="${ly+9.8}" font-size="9.5" font-weight="bold" text-anchor="middle">${lab}</text><text x="${lx+wl/2}" y="${ly+23}" font-size="9" fill="#777" text-anchor="middle" stroke="#fff" stroke-width="2.5" paint-order="stroke">(${fmt3(r.x)},${fmt3(r.y)})</text>`; } }
+    if(S.pulse) s+=`<circle cx="${hx}" cy="${cyy}" r="${S.pulse}" fill="none" stroke="#F2B705" stroke-width="3"/>`;
+    s+=`<g transform="translate(${hx-2.2} ${cyy}) scale(1.05)"><path d="M1 0c1.2 0 2 .8 2 2v5.3l1-.3c.8-.2 1.6.2 1.8 1l.2.8 1-.2c.8-.1 1.5.4 1.6 1.2l.1.6.8-.1c.8-.1 1.5.5 1.5 1.3v3c0 3-2 5-5 5h-2c-2 0-3.2-.8-4.2-2.4l-3-4.6c-.5-.8-.2-1.8.6-2.2.7-.4 1.6-.1 2 .6L-1 12V2c0-1.2.8-2 2-2z" fill="#fff" stroke="#000" stroke-width=".9" stroke-linejoin="round"/></g>`;
+    if(S.pulse) s+=`<text x="${hx+14}" y="${cyy+8}" font-size="10" font-weight="bold" fill="#8a5a00" stroke="#fff" stroke-width="3" paint-order="stroke">Klick</text>`;
   }
   if(S.tr){
     const f=x=>ev(FUN.f1.P,x), x=S.tr.x, y=f(x), px=X(x), py=Y(y);
@@ -410,9 +424,9 @@ function gScreen(S){
   }
   s+='</svg>';
   let h=topbar(F1,'1.1',O.doc)+s;
-  if(S.tool) h+=`<div style="position:absolute;left:4px;top:19px;background:#fff;border:1px solid #9aa5b3;padding:0 5px;font-size:10px;z-index:2">${TOOLN[S.tool.t]}: <b>${S.tool.ph==='lo'?'untere':'obere'} Schranke?</b> <span style="color:#8a5a00">(${S.tool.ph==='lo'?'Start':'Ende'})</span></div>`;
+  if(S.tool) h+=`<div style="position:absolute;left:3px;bottom:3px;background:#fff;border:1px solid #555;padding:0 5px;font-size:10px;z-index:2"><b>${S.tool.ph==='lo'?'Untere':'Obere'} Schranke?</b> <span style="color:#8a5a00">(${S.tool.ph==='lo'?'Start':'Ende'})</span></div><div style="position:absolute;left:3px;top:19px;font-size:9px;color:#555;z-index:2">${TOOLN[S.tool.t]}</div>`;
   if(S.tr) h+=`<div style="position:absolute;left:4px;top:19px;background:#fff;border:1px solid #9aa5b3;padding:0 5px;font-size:10px;z-index:2">Grafikspur${S.tr.typed?` &nbsp;x: <span style="border:1px solid #3b78c2;padding:0 3px">${S.tr.typed}<span class="caret">|</span></span>`:''}</div>`;
-  if(S.ent) h+=`<div style="position:absolute;left:0;right:0;bottom:0;height:21px;background:#fff;border-top:1px solid #9aa5b3;display:flex;align-items:center;padding:0 5px;font-size:11.5px;z-index:2"><span style="color:${FUN[S.ent.n].col};margin-right:2px">${S.ent.n}(x)=</span><span style="border:1px solid #888;flex:1;padding:0 3px;min-height:15px">${S.ent.e.html()}</span></div>`;
+  if(S.ent) h+=`<div style="position:absolute;left:0;right:0;top:16px;height:21px;background:#fff;border-bottom:1px solid #9aa5b3;display:flex;align-items:center;padding:0 5px;font-size:11.5px;z-index:2"><span style="display:inline-flex;width:11px;height:11px;border:1px solid #1f4fb5;background:#1f4fb5;color:#fff;font-size:9px;line-height:11px;justify-content:center;margin-right:4px">✓</span><span style="color:${FUN[S.ent.n].col};margin-right:2px">${S.ent.n}(x)=</span><span style="flex:1;padding:0 3px;min-height:15px">${S.ent.e.html()}</span></div>`;
   if(S.dlg){ const D=S.dlg; h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+DLGL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.fo?'fo':''}">${D.v[i]}${i===D.fo&&!D.fresh?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
   if(S.menu) h+=menus(S.menu);
   return h;
@@ -469,7 +483,7 @@ const kN=["menu","6","1","right","right","right","click","right","right","click"
 const kH=["menu","6","3","left","left","left","click","right","right","click"];
 const kT=["menu","6","2","right","click","right","right","right","click"];
 const kW=["menu","6","5","left","click","right","right","click"];
-const kG2=["ctrl","g","x","+","1","enter"];
+const kG2=["tab","x","+","1","enter"];
 const kS=["menu","6","4","left","left","click","right","right","click"];
 const p1=kF, p2=p1.concat(kWin), p3=p2, p4=p3.concat(kN), p5=p4.concat(kH), p6=p5.concat(kT), p7=p6.concat(kW), p8=p7.concat(kG2), p9=p8.concat(kS);
 const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
@@ -481,7 +495,7 @@ const PT=(n,x,y)=>`<b>${n}(${x} | ${y})</b>`;
 const TRACKS={
  g:{ name:"Graph zeichnen", start:()=>home(''), steps:[
   {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:pick([appList(F1,'1.1',0,O.doc),gScreen(simG([]))]),
-   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Unten steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
   {t:"Funktion eingeben", a:"Zeichnen Sie "+FT, k:kF, p:GS([],kF),
    d:"<p><b>f1(x)=</b> steht schon da – nur den Term eintippen. Hochzahl 3: <b>^</b>, <b>3</b>, dann <b>▶</b>.</p><p><b>enter</b> zeichnet den Graphen.</p>",
    n:"Das Standardfenster geht von −10 bis 10. Der Graph ist klein und ragt oben und unten hinaus."},
@@ -495,8 +509,8 @@ const TRACKS={
    d:"<p>Dafür brauchen Sie kein Menü. Der Schnittpunkt mit der <i>y</i>-Achse hat immer <i>x</i> = 0.</p><p>Setzen Sie 0 ein: Übrig bleibt die Zahl <b>ohne x</b> im Term, hier <b>+3</b>.</p><p>Ergebnis: "+PT('S<sub>y</sub>','0','3')+"</p>",
    n:"Kontrolle am Graphen: Er schneidet die <i>y</i>-Achse bei 3."},
   {t:"Nullstelle", a:"Bestimmen Sie die Nullstelle zwischen 2 und 4", k:kN, pre:p3, p:GS(p3,kN),
-   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 1: Nullstelle</b></p><p>Das Touchpad in der Mitte funktioniert wie ein <b>Mauspad</b>:</p><p><b>Startpunkt</b>: Cursor links neben die Nullstelle bewegen, klicken.<br><b>Endpunkt</b>: Cursor nach rechts ziehen – der Bereich wird <b>schraffiert</b> –, klicken.</p><p>Im schraffierten Bereich sucht das CAS die Nullstelle: "+PT('N','3','0')+"</p>"+PLAYB,
-   n:"In der Tour bewegen Sie den Cursor mit ◀ ▶ und klicken mit ●. Das CAS fragt „untere Schranke?“ (Start) und „obere Schranke?“ (Ende). Für die Nullstellen −1 und 1 markieren Sie jeweils einen neuen Bereich."},
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 1: Nullstelle</b></p><p>Das Touchpad in der Mitte funktioniert wie ein <b>Mauspad</b>:</p><p><b>Startpunkt</b>: Cursor links neben die Nullstelle bewegen, klicken.<br><b>Endpunkt</b>: Cursor nach rechts ziehen – der Bereich wird <b>grau markiert</b> –, klicken.</p><p>Im markierten Bereich sucht das CAS die Nullstelle: "+PT('N','3','0')+"</p>"+PLAYB,
+   n:"In der Tour bewegen Sie die Hand mit ◀ ▶ und klicken mit ● (am Handheld geht auch <b>enter</b>). Liegt der gesuchte Punkt im grauen Bereich, zeigt ihn ein gelbes Schild. Das CAS fragt „untere Schranke?“ (Start) und „obere Schranke?“ (Ende). Für die Nullstellen −1 und 1 markieren Sie jeweils einen neuen Bereich."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(p4), d:AB("Aufgabe 2",["Schnittpunkt mit der <i>y</i>-Achse","alle drei Nullstellen von <i>g</i>"])}
  ]},
  e:{ name:"Extrem- und Wendepunkte", start:gAfter(p4), steps:[
@@ -512,10 +526,10 @@ const TRACKS={
  ]},
  s:{ name:"Schnittpunkt zweier Graphen", start:gAfter(p7), steps:[
   {t:"Zweite Funktion", a:"Zeichnen Sie zusätzlich <i>f</i>2(<i>x</i>) = <i>x</i> + 1", k:kG2, p:GS(p7,kG2),
-   d:"<p><b>ctrl + G</b> öffnet die Eingabezeile wieder. Dort steht jetzt <b>f2(x)=</b>.</p><p>Term eintippen, <b>enter</b>.</p>"},
+   d:"<p><b>tab</b> blendet die Eingabezeile oben wieder ein. Dort steht jetzt <b>f2(x)=</b>.</p><p>Term eintippen, <b>enter</b>.</p>"},
   {t:"Schnittpunkt", a:"Bestimmen Sie den Schnittpunkt zwischen 0 und 1", k:kS, pre:p8, p:GS(p8,kS),
    d:"<p><b>menu ▸ 6: Graph analysieren ▸ 4: Schnittpunkt</b></p><p>Mit dem Cursor Startpunkt links und Endpunkt rechts vom Schnittpunkt markieren.</p><p>Ergebnis: "+PT('S','0,586','1,59')+"</p>"+PLAYB,
-   n:"Das CAS findet nur den Schnittpunkt im markierten Bereich. Die anderen beiden, (−1 | 0) und (3,41 | 4,41), finden Sie genauso. Fragt das CAS „Graph?“, klicken Sie beide Graphen an."},
+   n:"Das CAS findet nur den Schnittpunkt im markierten Bereich. Die anderen beiden, (−1 | 0) und (3,41 | 4,41), finden Sie genauso. Im markierten Bereich darf nur <b>ein</b> Schnittpunkt liegen. Fragt das CAS „Graph?“, klicken Sie beide Graphen an."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(p9), d:AB("Aufgabe 4",["alle Schnittpunkte von <i>g</i> und <i>h</i>","Danach: Lösungscode eintragen"])}
  ]}
 };
