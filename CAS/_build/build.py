@@ -16,9 +16,9 @@ TOPICS = [
     ('wreg', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere Regressionen', 'quadratisch, kubisch, exponentiell', 'Arbeitsblatt_CAS_Weitere_Regressionen.pdf'),
     ('funk', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte (y&#8209;Werte) berechnen', '', 'Arbeitsblatt_CAS_Funktionswerte.pdf'),
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', 'Funktion zeichnen, Fenster, Wertetabelle', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
-    ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
+    ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
-    ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '1., 2. und 3. Ableitung', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
+    ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Graphen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
 ]
 
