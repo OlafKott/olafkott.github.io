@@ -1590,6 +1590,7 @@ button{ font-family:inherit; }
 [data-g="graph"] .vgl th{background:#eef0f3;}
 @media (max-width:380px){[data-g="graph"] .calc{transform:scale(.92); transform-origin:top center;}}
 [data-g="graph"] .play{font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15);}
+[data-g="graph"] .chip.playc{background:#F2B705; color:#111; cursor:pointer;}
 [data-g="graph"] .play:hover{background:#ffc928;}
 [data-g="graph"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
 [data-g="graph"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
@@ -6441,9 +6442,6 @@ function gScreen(S){
     if(T.lo!==null) s+=`<line x1="${X(T.lo)}" y1="0" x2="${X(T.lo)}" y2="${H}" ${dot}/>`;
     s+=`<line x1="${X(T.cx)}" y1="0" x2="${X(T.cx)}" y2="${H}" ${dot}/>`;
     const cy=Y(f(T.cx)), cyy=Math.max(4,Math.min(H-24,cy)), hx=X(T.cx);
-    if(T.lo!==null){ const a=Math.min(T.lo,T.cx), b=Math.max(T.lo,T.cx), r=preview(T.t,a,b);
-      if(r){ const px=X(r.x), py=Y(r.y), lab=TOOLN[T.t], wl=lab.length*5.6+8, lx=Math.min(W-wl-2,Math.max(2,px-wl/2)), ly=Math.max(2,py-30);
-        s+=`<circle cx="${px}" cy="${py}" r="3" fill="none" stroke="#000" stroke-width="1.2"/><rect x="${lx}" y="${ly}" width="${wl}" height="13" fill="#FFF4A8" stroke="#b8a200" stroke-width=".6"/><text x="${lx+wl/2}" y="${ly+9.8}" font-size="9.5" font-weight="bold" text-anchor="middle">${lab}</text><text x="${lx+wl/2}" y="${ly+23}" font-size="9" fill="#777" text-anchor="middle" stroke="#fff" stroke-width="2.5" paint-order="stroke">(${fmt3(r.x)},${fmt3(r.y)})</text>`; } }
     if(S.pulse) s+=`<circle cx="${hx}" cy="${cyy}" r="${S.pulse}" fill="none" stroke="#F2B705" stroke-width="3"/>`;
     s+=`<g transform="translate(${hx-2.2} ${cyy}) scale(1.05)"><path d="M1 0c1.2 0 2 .8 2 2v5.3l1-.3c.8-.2 1.6.2 1.8 1l.2.8 1-.2c.8-.1 1.5.4 1.6 1.2l.1.6.8-.1c.8-.1 1.5.5 1.5 1.3v3c0 3-2 5-5 5h-2c-2 0-3.2-.8-4.2-2.4l-3-4.6c-.5-.8-.2-1.8.6-2.2.7-.4 1.6-.1 2 .6L-1 12V2c0-1.2.8-2 2-2z" fill="#fff" stroke="#000" stroke-width=".9" stroke-linejoin="round"/></g>`;
     if(S.pulse) s+=`<text x="${hx+14}" y="${cyy+8}" font-size="10" font-weight="bold" fill="#8a5a00" stroke="#fff" stroke-width="3" paint-order="stroke">Klick</text>`;
@@ -6469,42 +6467,45 @@ function ser2(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='sup'?(({'2':'
 const GS=(pre,keys)=>i=>gScreen(simG(pre.concat(keys.slice(0,i))));
 const gAfter=keys=>()=>gScreen(simG(keys));
 
-// ---------- Vorführung: Bereich mit dem Cursor markieren ----------
+// ---------- Bereich mit dem Cursor markieren: Menü selbst wählen, Cursor-Bewegung abspielen ----------
+const KP=K=>K.slice(0,3).concat(['play']);
+const GP=(pre,K)=>i=>gScreen(simG(pre.concat(i<4?K.slice(0,i):K)));
 let ANI=0;
-const PLAYB='<p><button class="play" data-play="1" type="button">▶ Am CAS zeigen</button> <span class="playh">Sehen Sie zuerst zu – dann machen Sie es selbst.</span></p>';
+const PLAYB='<p><button class="play" data-play="1" type="button">▶ Abspielen</button> <span class="playh">zeigt, wie Sie mit dem Cursor den Bereich markieren</span></p>';
 function toolMarks(pre,K){ let cx=null, lo=null, hi=null; const S=simG(pre.concat(K.slice(0,3))); cx=S.tool.cx; const c0=cx;
   for(const k of K.slice(3)){ if(k==='left') cx-=0.5; else if(k==='right') cx+=0.5; else if(k==='click'){ if(lo===null) lo=cx; else hi=cx; } }
   return {c0,lo,hi}; }
 function playTool(){
-  const T0=TRACKS[tr], S0=T0.steps[st]; if(!S0.pre||lock) return;
-  const id=++ANI, t0=tr, s0=st, pre=S0.pre, K=S0.k, M=toolMarks(pre,K), scr=__D.getElementById('scr');
+  const T0=TRACKS[tr], S0=T0.steps[st]; if(!S0.full||lock) return;
+  const stx=__D.getElementById('stat');
+  if(S0.k[pos]!=='play'){ if(stx&&pos<S0.k.length) stx.innerHTML='<span class="err">Wählen Sie zuerst im Menü das Werkzeug.</span> Drücken Sie jetzt: '+chip(S0.k[pos],pos).replace('now','now big'); return; }
+  const id=++ANI, t0=tr, s0=st, pre=S0.pre, K=S0.full, M=toolMarks(pre,K), scr=__D.getElementById('scr');
   const base=()=>simG(pre.concat(K.slice(0,3)));
-  const menuF=(n,sel)=>{ const S=simG(pre.concat(K.slice(0,n))); S.menu[S.menu.length-1].sel=sel; return gScreen(S); };
   const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
   const glide=(a,b,lo)=>u=>{ const S=base(); S.tool.cx=a+(b-a)*ease(u); if(lo!==null){ S.tool.lo=lo; S.tool.ph='hi'; } return gScreen(S); };
-  const pulse=(x,lo)=>u=>{ const S=base(); S.tool.cx=x; if(lo!==null){ S.tool.lo=lo; S.tool.ph='hi'; } S.pulse=4+u*12; return gScreen(S); };
+  const hold=(x,lo,pl)=>u=>{ const S=base(); S.tool.cx=x; if(lo!==null){ S.tool.lo=lo; S.tool.ph='hi'; } if(pl) S.pulse=4+u*12; return gScreen(S); };
   const seg=[
-    {d:700, f:()=>menuF(1,5)},
-    {d:800, f:()=>menuF(2,+K[2]-1)},
-    {d:500, f:()=>gScreen(base())},
-    {d:900, f:glide(M.c0,M.lo,null)},
-    {d:450, f:pulse(M.lo,null)},
-    {d:1400, f:glide(M.lo,M.hi,M.lo)},
-    {d:450, f:pulse(M.hi,M.lo)},
-    {d:300, f:()=>gScreen(simG(pre.concat(K)))}
+    {d:900, f:hold(M.c0,null,false)},
+    {d:2200, f:glide(M.c0,M.lo,null)},
+    {d:900, f:hold(M.lo,null,true)},
+    {d:600, f:hold(M.lo,M.lo,false)},
+    {d:3000, f:glide(M.lo,M.hi,M.lo)},
+    {d:900, f:hold(M.hi,M.lo,true)},
+    {d:400, f:hold(M.hi,M.lo,false)}
   ];
-  lock=true; const st0=__D.getElementById('stat'); if(st0) st0.innerHTML='<span>▶ Vorführung läuft …</span>';
+  lock=true; if(stx) stx.innerHTML='<span>▶ Cursor-Bewegung läuft …</span>';
   let i=0, t1=null;
   function tick(ts){
     if(id!==ANI||tr!==t0||st!==s0){ lock=false; return; }
     if(t1===null) t1=ts;
     let u=(ts-t1)/seg[i].d; if(u>=1){ i++; t1=ts; u=0; }
-    if(i>=seg.length){ lock=false; pos=0; render(); const sx=__D.getElementById('stat'); if(sx) sx.insertAdjacentHTML('afterbegin','<b style="color:#8a5a00">Jetzt Sie!</b> '); return; }
+    if(i>=seg.length){ lock=false; pos=S0.k.length; render(); return; }
     scr.innerHTML=seg[i].f(Math.min(u,1)); requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
 }
 __D.getElementById('dd').addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-play]'); if(b) playTool(); });
+__D.getElementById('stat').addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.playc'); if(b) playTool(); });
 
 // ---------- Tastenfolgen ----------
 const kNew=["1","2"];
@@ -6539,27 +6540,27 @@ const TRACKS={
   {t:"Schnittpunkt mit der y-Achse", a:"Bestimmen Sie den Schnittpunkt mit der <i>y</i>-Achse", k:[], s:gAfter(p2),
    d:"<p>Dafür brauchen Sie kein Menü. Der Schnittpunkt mit der <i>y</i>-Achse hat immer <i>x</i> = 0.</p><p>Setzen Sie 0 ein: Übrig bleibt die Zahl <b>ohne x</b> im Term, hier <b>+3</b>.</p><p>Ergebnis: "+PT('S<sub>y</sub>','0','3')+"</p>",
    n:"Kontrolle am Graphen: Er schneidet die <i>y</i>-Achse bei 3."},
-  {t:"Nullstelle", a:"Bestimmen Sie die Nullstelle zwischen 2 und 4", k:kN, pre:p3, p:GS(p3,kN),
-   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 1: Nullstelle</b></p><p>Das Touchpad in der Mitte funktioniert wie ein <b>Mauspad</b>:</p><p><b>Startpunkt</b>: Cursor links neben die Nullstelle bewegen, klicken.<br><b>Endpunkt</b>: Cursor nach rechts ziehen – der Bereich wird <b>grau markiert</b> –, klicken.</p><p>Im markierten Bereich sucht das CAS die Nullstelle: "+PT('N','3','0')+"</p>"+PLAYB,
-   n:"In der Tour bewegen Sie die Hand mit ◀ ▶ und klicken mit ● (am Handheld geht auch <b>enter</b>). Liegt der gesuchte Punkt im grauen Bereich, zeigt ihn ein gelbes Schild. Das CAS fragt „untere Schranke?“ (Start) und „obere Schranke?“ (Ende). Für die Nullstellen −1 und 1 markieren Sie jeweils einen neuen Bereich."},
+  {t:"Nullstelle", a:"Bestimmen Sie die Nullstelle zwischen 2 und 4", k:KP(kN), full:kN, pre:p3, p:GP(p3,kN),
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 1: Nullstelle</b></p><p>Danach markieren Sie mit dem Cursor einen Bereich. Das Touchpad funktioniert wie ein <b>Mauspad</b>:</p><p><b>Untere Schranke</b>: Cursor links neben die Nullstelle, klicken.<br><b>Obere Schranke</b>: Cursor nach rechts ziehen – der Bereich wird grau –, klicken.</p>"+PLAYB+"<p>Im markierten Bereich sucht das CAS die Nullstelle: "+PT('N','3','0')+"</p>",
+   n:"Am Handheld klicken Sie mit dem Touchpad oder mit <b>enter</b>. Für die Nullstellen −1 und 1 markieren Sie jeweils einen neuen Bereich."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(p4), d:AB("Aufgabe 2",["Schnittpunkt mit der <i>y</i>-Achse","alle drei Nullstellen von <i>g</i>"])}
  ]},
  e:{ name:"Extrem- und Wendepunkte", start:gAfter(p4), steps:[
-  {t:"Hochpunkt", a:"Bestimmen Sie den Hochpunkt", k:kH, pre:p4, p:GS(p4,kH),
-   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 3: Maximum</b></p><p>Mit dem Cursor einen Bereich um den Hochpunkt markieren: Startpunkt links, klicken – Endpunkt rechts, klicken.</p><p>Ergebnis: "+PT('H','−0,155','3,08')+"</p>"+PLAYB,
+  {t:"Hochpunkt", a:"Bestimmen Sie den Hochpunkt", k:KP(kH), full:kH, pre:p4, p:GP(p4,kH),
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 3: Maximum</b></p><p>Mit dem Cursor einen Bereich um den Hochpunkt markieren: untere Schranke links, obere Schranke rechts.</p>"+PLAYB+"<p>Ergebnis: "+PT('H','−0,155','3,08')+"</p>",
    n:"Hochpunkt = <b>Maximum</b>, Tiefpunkt = <b>Minimum</b>."},
-  {t:"Tiefpunkt", a:"Bestimmen Sie den Tiefpunkt", k:kT, pre:p5, p:GS(p5,kT),
-   d:"<p><b>menu ▸ 6 ▸ 2: Minimum</b>, dann wieder Start- und Endpunkt mit dem Cursor markieren.</p><p>Ergebnis: "+PT('T','2,15','−3,08')+"</p>"+PLAYB},
-  {t:"Wendepunkt", a:"Bestimmen Sie den Wendepunkt", k:kW, pre:p6, p:GS(p6,kW),
-   d:"<p><b>menu ▸ 6 ▸ 5: Wendepunkt</b>, Start- und Endpunkt links und rechts davon markieren.</p><p>Ergebnis: "+PT('W','1','0')+"</p>"+PLAYB,
+  {t:"Tiefpunkt", a:"Bestimmen Sie den Tiefpunkt", k:KP(kT), full:kT, pre:p5, p:GP(p5,kT),
+   d:"<p><b>menu ▸ 6 ▸ 2: Minimum</b>, dann wieder den Bereich mit dem Cursor markieren.</p>"+PLAYB+"<p>Ergebnis: "+PT('T','2,15','−3,08')+"</p>"},
+  {t:"Wendepunkt", a:"Bestimmen Sie den Wendepunkt", k:KP(kW), full:kW, pre:p6, p:GP(p6,kW),
+   d:"<p><b>menu ▸ 6 ▸ 5: Wendepunkt</b>, Bereich links und rechts davon markieren.</p>"+PLAYB+"<p>Ergebnis: "+PT('W','1','0')+"</p>",
    n:"Bei manchen Betriebssystemen hat „Wendepunkt“ eine andere Nummer (z.&nbsp;B. 6). Achten Sie auf den Namen im Menü."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(p7), d:AB("Aufgabe 3",["Hochpunkt, Tiefpunkt und Wendepunkt von <i>g</i>"])}
  ]},
  s:{ name:"Schnittpunkt zweier Graphen", start:gAfter(p7), steps:[
   {t:"Zweite Funktion", a:"Zeichnen Sie zusätzlich <i>f</i>2(<i>x</i>) = <i>x</i> + 1", k:kG2, p:GS(p7,kG2),
    d:"<p><b>tab</b> blendet die Eingabezeile oben wieder ein. Dort steht jetzt <b>f2(x)=</b>.</p><p>Term eintippen, <b>enter</b>.</p>"},
-  {t:"Schnittpunkt", a:"Bestimmen Sie den Schnittpunkt zwischen 0 und 1", k:kS, pre:p8, p:GS(p8,kS),
-   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 4: Schnittpunkt</b></p><p>Mit dem Cursor Startpunkt links und Endpunkt rechts vom Schnittpunkt markieren.</p><p>Ergebnis: "+PT('S','0,586','1,59')+"</p>"+PLAYB,
+  {t:"Schnittpunkt", a:"Bestimmen Sie den Schnittpunkt zwischen 0 und 1", k:KP(kS), full:kS, pre:p8, p:GP(p8,kS),
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 4: Schnittpunkt</b></p><p>Mit dem Cursor den Bereich um den Schnittpunkt markieren.</p>"+PLAYB+"<p>Ergebnis: "+PT('S','0,586','1,59')+"</p>",
    n:"Das CAS findet nur den Schnittpunkt im markierten Bereich. Die anderen beiden, (−1 | 0) und (3,41 | 4,41), finden Sie genauso. Im markierten Bereich darf nur <b>ein</b> Schnittpunkt liegen. Fragt das CAS „Graph?“, klicken Sie beide Graphen an."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(p9), d:AB("Aufgabe 4",["alle Schnittpunkte von <i>g</i> und <i>h</i>","Danach: Lösungscode eintragen"])}
  ]}
@@ -6569,9 +6570,9 @@ const TRACKS={
 const ORDER=["g","a","e","s"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>__D.getElementById(id);
-const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const LBL={play:"▶ Abspielen",tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
 const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
-function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function chip(k,i){ const c=k==='play'?'playc':k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
 function screenOf(t,s,i){
   const S=TRACKS[t].steps[s];
   if(S.p && (i>0 || !S.k.length)) return S.p(i);
@@ -6623,6 +6624,7 @@ function press(k){
   if(lock) return;
   const S=TRACKS[tr].steps[st];
   if(pos>=S.k.length) return;
+  if(k==='play'||S.k[pos]==='play'){ if(k==='play') playTool(); else { const sx=$('stat'); if(sx) sx.innerHTML='<span class="err">Jetzt keine Taste:</span> Klicken Sie auf '+chip('play',pos).replace('now','now big'); } return; }
   const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
   if(k===S.k[pos]){
     pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
