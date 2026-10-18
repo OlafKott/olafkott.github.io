@@ -22,6 +22,7 @@ TOPICS = [
     ('stufe', 'Stufenform', 'Stufenform', 'Stufenform', 'Zeilenstufenform', 'ref und rref', 'Arbeitsblatt_CAS_Stufenform.pdf'),
     ('lopt', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare Optimierung', '', 'Arbeitsblatt_CAS_Lineare_Optimierung.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', '', 'Arbeitsblatt_CAS_Graphen.pdf'),
+    ('fs', 'Funktionsscharen', 'Funktionsscharen', 'Funktionsscharen', 'Funktionsscharen', '', 'Arbeitsblatt_CAS_Funktionsscharen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
     ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Fläche im Graphen bestimmen', 'Fläche zwischen Graph und x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
@@ -200,7 +201,7 @@ BLOCKS = [
 # NEUES THEMA: hier seinem Block zuordnen (Reihenfolge im Block = Reihenfolge in TOPICS)
 BLOCK_OF = {
     'grund': None,
-    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
+    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'fs': 'fa', 'int': 'fa', 'flae': 'fa',
     'gl': 'alg', 'lgs': 'alg', 'mat': 'alg', 'stufe': 'alg', 'lopt': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
     'kombi': 'sto', 'bin': 'sto', 'bing': 'sto',
