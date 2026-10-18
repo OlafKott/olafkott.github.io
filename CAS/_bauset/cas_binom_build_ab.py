@@ -34,14 +34,13 @@ A2 = [('weniger als 4', 0, 3),
       ('mindestens 6', 6, 12),
       ('zwischen 3 und 6', 3, 6),
       ('mehr als 2, aber höchstens 5', 3, 5),
-      ('mindestens 4, aber weniger als 8', 4, 7),
       ('mehr als 3 und weniger als 9', 4, 8)]
 iv_ = lambda a, e: sum(pdf(N2, P2, i) for i in range(a, e+1))
 v2 = [iv_(a, e) for _, a, e in A2]
 
 # Lösungscode
 r = lambda v: f'{v:.4f}'
-code = r(pdf(*A1[0]))[3] + r(cdf(*A1[2]))[5] + r(v2[4])[4] + r(v2[6])[5]
+code = r(pdf(*A1[0]))[3] + r(cdf(*A1[2]))[5] + r(v2[4])[4] + r(v2[5])[5]
 assert code == CODE, code
 
 src = open(f'{REPO}/Integrale/Arbeitsblatt_CAS_Integrale.html').read()
@@ -64,15 +63,15 @@ table.ft th, table.ft td{ border:1px solid #a9afb9; height:9mm; padding:0 1.6mm;
 table.ft th{ background:#e9ebef; font-weight:normal; height:6.5mm; font-size:12px; font-family:Calibri,Arial,sans-serif; text-align:center; }
 table.ft td.b{ font-weight:bold; width:8mm; text-align:center; }
 table.ft td.tx{ line-height:1.2; font-size:13.5px; white-space:nowrap; }
-table.ft td.st{ width:66mm; text-align:center; }
+table.ft td.st{ width:62mm; text-align:center; }
 table.ft td.gr{ width:25mm; text-align:center; white-space:nowrap; font-family:Cambria,Georgia,serif; }
 table.ft td.gr .lue{ width:8.5mm; height:7mm; }
-table.ft td.l{ width:27mm; text-align:center; white-space:nowrap; }
+table.ft td.l{ width:26mm; text-align:center; white-space:nowrap; }
 table.ft .l .lue{ width:23mm; height:7.5mm; }
 table.ft tr.bsp td{ background:#f6f7f9; color:#555; font-style:italic; }
 table.ft tr.bsp .lue{ background:#f6f7f9; border-style:dashed; color:#555; }
 .za{ display:inline-flex; gap:0.55mm; vertical-align:middle; }
-.za span{ width:4.4mm; height:5.8mm; border:1px solid #9aa3b0; border-radius:1mm; font-family:Calibri,Arial,sans-serif; font-size:10.5px; font-style:normal; display:flex; align-items:center; justify-content:center; background:#fff; color:#333; }
+.za span{ width:4.15mm; height:5.8mm; border:1px solid #9aa3b0; border-radius:1mm; font-family:Calibri,Arial,sans-serif; font-size:10.5px; font-style:normal; display:flex; align-items:center; justify-content:center; background:#fff; color:#333; }
 .za span.on{ background:#F9D976; border-color:#b88a00; font-weight:bold; }
 .legend{ font-size:12.4px; margin:0 0 3px 6mm; color:#333; }
 .lsg .lue{ background:#FDECEC; border-color:#E57373; color:#C62828; font-weight:bold; }
@@ -98,7 +97,7 @@ def rows2(fill=False):
     h = ''
     for i, (tx, a, e) in enumerate(A2):
         bsp = i == 0 or fill
-        lab = 'Bsp.' if i == 0 else 'abcdef'[i-1] + ')'
+        lab = 'Bsp.' if i == 0 else 'abcde'[i-1] + ')'
         h += (f'<tr class="{"bsp" if i == 0 else ""}"><td class="b">{lab}</td><td class="tx">{tx}</td><td class="st">{za(a, e) if bsp else za()}</td>'
               f'<td class="gr"><span class="lue">{a if bsp else ""}</span> bis <span class="lue">{e if bsp else ""}</span></td>'
               f'<td class="l">≈ <span class="lue">{de(v2[i]) if bsp else ""}</span></td></tr>')
@@ -124,7 +123,7 @@ body = f'''<div class="page"><div class="page-content">
 <p class="auftrag"><i>X</i> ist binomialverteilt mit <i>n</i> = 12 und <i>p</i> = 0,4.<br>Malen Sie auf dem Zahlenstrahl alle Werte von <i>X</i> aus, die zählen.<br>Tragen Sie die Grenzen ein und berechnen Sie die Wahrscheinlichkeit mit Binomial Cdf.<br><b>Zwischen</b> heißt hier: Beide Zahlen zählen mit.</p>
 <table class="ft"><tr><th></th><th>Anzahl der Treffer</th><th>Welche Werte zählen?</th><th>Grenzen</th><th>Ergebnis</th></tr>%ROWS2%</table>
 
-<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein.<br>Das ist der Code für die Lösung.</div><div class="ziff"><div class="z"><span class="bx"></span><span class="lab">2. Nachkommastelle<br>bei 1 a) genau</span></div><div class="z"><span class="bx"></span><span class="lab">4. Nachkommastelle<br>bei 1 c) höchstens</span></div><div class="z"><span class="bx"></span><span class="lab">3. Nachkommastelle<br>bei 2 d)</span></div><div class="z"><span class="bx"></span><span class="lab">4. Nachkommastelle<br>bei 2 f)</span></div></div>
+<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein.<br>Das ist der Code für die Lösung.</div><div class="ziff"><div class="z"><span class="bx"></span><span class="lab">2. Nachkommastelle<br>bei 1 a) genau</span></div><div class="z"><span class="bx"></span><span class="lab">4. Nachkommastelle<br>bei 1 c) höchstens</span></div><div class="z"><span class="bx"></span><span class="lab">3. Nachkommastelle<br>bei 2 d)</span></div><div class="z"><span class="bx"></span><span class="lab">4. Nachkommastelle<br>bei 2 e)</span></div></div>
 <div class="lqr"><a class="qrlink" href="{URL}Loesung_CAS_Binomialverteilung.html"><img src="data:image/png;base64,{qr(URL+'Loesung_CAS_Binomialverteilung.html')}" alt="QR-Code Lösung"><span>Lösung</span></a></div>
 <div class="lqr"><a class="qrlink" href="{URL}CAS_Uebung_Binomialverteilung.html"><img src="data:image/png;base64,{qr(URL+'CAS_Uebung_Binomialverteilung.html')}" alt="QR-Code Übung"><span>Übung</span></a></div></div>
 </div><div class="page-footer"><span>RWB Essen &middot; Mathematik &middot; CAS-Führerschein</span><span>Binomialverteilung</span></div></div>'''
@@ -146,7 +145,7 @@ MONO = 'font-family:Consolas,monospace;background:#eceef1;border-radius:3px;padd
 def cas(v): return f'{v:.6g}' if v >= 0.1 else f'{v:.6g}'
 t1 = ''.join(f'<tr><td style="{TD};font-weight:bold">{"abcd"[i]})</td><td style="{TD}">{n}</td><td style="{TD}">{dp(p)}</td><td style="{TD}">{k}</td><td style="{TD}"><span style="{RED}">{de(pdf(n,p,k))}</span></td><td style="{TD}"><span style="{RED}">{de(cdf(n,p,k))}</span></td></tr>' for i, (n, p, k) in enumerate(A1))
 ZA = lambda a, e: '<span style="display:inline-flex;gap:2px">' + ''.join(f'<span style="width:17px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;border:1px solid {"#b88a00" if a <= i <= e else "#cfd4dc"};border-radius:3px;background:{"#F2B705" if a <= i <= e else "#fff"};font-weight:{"bold" if a <= i <= e else "normal"}">{i}</span>' for i in range(N2+1)) + '</span>'
-t2 = ''.join(f'<tr><td style="{TD};font-weight:bold">{"Bsp." if i == 0 else "abcdef"[i-1] + ")"}</td><td style="{TD};text-align:left;min-width:170px">{tx}</td><td style="{TD}">{ZA(a, e)}</td><td style="{TD};white-space:nowrap"><span style="{RED}">{a} bis {e}</span></td><td style="{TD}"><span style="{RED}">{de(v2[i])}</span></td></tr>' for i, (tx, a, e) in enumerate(A2))
+t2 = ''.join(f'<tr><td style="{TD};font-weight:bold">{"Bsp." if i == 0 else "abcde"[i-1] + ")"}</td><td style="{TD};text-align:left;min-width:170px">{tx}</td><td style="{TD}">{ZA(a, e)}</td><td style="{TD};white-space:nowrap"><span style="{RED}">{a} bis {e}</span></td><td style="{TD}"><span style="{RED}">{de(v2[i])}</span></td></tr>' for i, (tx, a, e) in enumerate(A2))
 lsg = f'''<div style="max-width:760px;margin:0 auto;padding:20px 16px 40px;font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:#1d1d1f;line-height:1.6;font-size:16px">
 <h1 style="font-size:22px;color:#1F4E99;margin:0 0 4px">Lösung: CAS-Führerschein Binomialverteilung</h1>
 <p style="margin:0 0 10px;color:#5b6270">Code {CODE} ✓ &middot; Vergleichen Sie Ihre Ergebnisse.</p>
