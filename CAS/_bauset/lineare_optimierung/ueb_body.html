@@ -1,0 +1,150 @@
+<div class="top"><div class="in"><a href="https://olafkott.github.io/CAS/" title="Zurück zur Übersicht" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 14px system-ui,Arial,sans-serif;color:#1F4E99;border:1px solid #c9d3e6;border-radius:999px;padding:6px 14px;background:#fff;white-space:nowrap;flex:0 0 auto">&#8592; Übersicht</a><h1>CAS-Übung: Lineare Optimierung<small>Neue Aufgaben auf Knopfdruck · Maximum im TI-Nspire CX CAS bestimmen · Ergebnis eintragen</small></h1><img src="@@LOGO@@" alt="RWB Essen AHR"></div></div>
+<div class="wrap">
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="restr" id="restr"></div>
+    <div class="term" id="term"></div>
+    <div class="fen" id="fen"></div>
+    <div class="plot" id="plot"></div>
+    <div id="eck"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Tipp:</b> Alle Eckpunkte haben hier <b>ganzzahlige</b> Koordinaten. Das Maximum ist <b>eindeutig</b>.</div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>
+<script>
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickR=a=>a[R(0,a.length-1)];
+const gcd=(a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ const t=a%b; a=b; b=t; } return a; };
+const deN=v=>String(v).replace('-','−').replace('.',',');
+const ROM=['I','II','III'];
+function lin(a,b,c){ // a x + b y ≤ c  als HTML
+  const t=(k,v)=>(k===1?'':k)+v;
+  return `${t(a,'<i>x</i>')} + ${t(b,'<i>y</i>')} ≤ ${c}`;
+}
+function casLine(a,b,c){ const ax=(a===1?'':a)+'x'; return b===1?`${c}-${ax}`:`(${c}-${ax})/${b}`; }
+
+// ---------- Zufallsaufgabe: Planungsvieleck mit 5 ganzzahligen Ecken, eindeutiges Maximum ----------
+function genLP(){
+  for(let tries=0;tries<20000;tries++){
+    const A=[0,R(4,10)], B=[R(1,5),0], C=[0,0], D=[R(5,12),0];
+    B[1]=R(2,A[1]-1); C[0]=R(B[0]+1,Math.min(D[0]-1,B[0]+6)); C[1]=R(1,B[1]-1);
+    if(!(C[0]>B[0]&&C[0]<D[0])) continue;
+    const s1=(B[1]-A[1])/B[0], s2=(C[1]-B[1])/(C[0]-B[0]), s3=(0-C[1])/(D[0]-C[0]);
+    if(!(s1>s2+0.15&&s2>s3+0.15)) continue;          // konvex, deutliche Knicke
+    const P=[A,B,C,D], L=[];
+    let ok=true;
+    for(let i=0;i<3;i++){ const p=P[i], q=P[i+1];
+      let a=p[1]-q[1], b=q[0]-p[0]; const g=gcd(a,b); a/=g; b/=g; const c=a*p[0]+b*p[1];
+      if(a<1||b<1||a>9||b>9||c>60) { ok=false; break; }
+      L.push({a,b,c}); }
+    if(!ok) continue;
+    const ECK=[[0,0],A,B,C,D];
+    // jede Ecke erfüllt alle Restriktionen
+    if(!ECK.every(e=>L.every(l=>l.a*e[0]+l.b*e[1]<=l.c))) continue;
+    // Zielfunktion Z = p x + q y mit eindeutigem Maximum (Abstand zum Zweitbesten)
+    const p=5*R(2,18), q=5*R(2,18);
+    const Z=ECK.map(e=>p*e[0]+q*e[1]); const srt=[...Z].sort((u,v)=>v-u);
+    if(srt[0]-srt[1]<Math.max(10,srt[0]*0.03)) continue;
+    const opt=Z.indexOf(srt[0]);
+    if(opt<2&&Math.random()<0.7) continue;               // meist eine innere Ecke
+    return {L,ECK,p,q,Z,opt};
+  }
+  return null;
+}
+
+
+// ---------- Zeichnung (erscheint mit der Lösung) ----------
+const COL=['#1F4E99','#C8102E','#2E7D32'];
+function plot(A){
+  const xm=Math.max(...A.L.map(l=>l.c/l.a)), ym=Math.max(...A.L.map(l=>l.c/l.b));
+  const w={x0:-1,x1:Math.min(Math.ceil(xm)+1,A.ECK[4][0]+5),y0:-1,y1:Math.min(Math.ceil(ym)+1,A.ECK[1][1]+5)};
+  const W=640, H=Math.round(Math.min(460,Math.max(300,W*(w.y1-w.y0)/(w.x1-w.x0)))), pl=30, pr=26, pt=18, pb=26;
+  const X=x=>pl+(x-w.x0)*(W-pl-pr)/(w.x1-w.x0), Y=y=>pt+(w.y1-y)*(H-pt-pb)/(w.y1-w.y0);
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Planungsvieleck">`;
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) o+=`<line x1="${X(x)}" y1="${Y(w.y0)}" x2="${X(x)}" y2="${Y(w.y1)}" class="gl"/>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) o+=`<line x1="${X(w.x0)}" y1="${Y(y)}" x2="${X(w.x1)}" y2="${Y(y)}" class="gl"/>`;
+  o+=`<polygon points="${A.ECK.map(e=>X(e[0])+','+Y(e[1])).join(' ')}" fill="#9aa3b0" fill-opacity=".35"/>`;
+  o+=`<line x1="${X(w.x0)}" y1="${Y(0)}" x2="${X(w.x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(w.x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
+  o+=`<line x1="${X(0)}" y1="${Y(w.y0)}" x2="${X(0)}" y2="${Y(w.y1)-10}" class="ax"/><path d="M${X(0)} ${Y(w.y1)-14} l-4 8 h8z" class="ah"/>`;
+  o+=`<text x="${X(w.x1)+8}" y="${Y(0)+18}" class="al">x</text><text x="${X(0)+8}" y="${Y(w.y1)-4}" class="al">y</text>`;
+  for(let x=1;x<=w.x1;x++) if(x%2===0||w.x1<=10) o+=`<text x="${X(x)}" y="${Y(0)+15}" class="tl" text-anchor="middle">${x}</text>`;
+  for(let y=1;y<=w.y1;y++) if(y%2===0||w.y1<=10) o+=`<text x="${X(0)-6}" y="${Y(y)+4}" class="tl" text-anchor="end">${y}</text>`;
+  o+=`<defs><clipPath id="cp"><rect x="${X(w.x0)}" y="${Y(w.y1)}" width="${X(w.x1)-X(w.x0)}" height="${Y(w.y0)-Y(w.y1)}"/></clipPath></defs><g clip-path="url(#cp)">`;
+  A.L.forEach((l,i)=>{ const f=x=>(l.c-l.a*x)/l.b; o+=`<line x1="${X(w.x0)}" y1="${Y(f(w.x0))}" x2="${X(w.x1)}" y2="${Y(f(w.x1))}" stroke="${COL[i]}" stroke-width="2.2"/>`; });
+  o+='</g>';
+  A.L.forEach((l,i)=>{ // Beschriftung der Geraden am oberen bzw. rechten Rand
+    const f=x=>(l.c-l.a*x)/l.b; let x=w.x1-0.4, y=f(x); if(y<w.y0+0.6){ y=w.y0+0.8+i*0.9; x=(l.c-l.b*y)/l.a; } if(y>w.y1-0.3){ y=w.y1-0.6; x=(l.c-l.b*y)/l.a; }
+    o+=`<text x="${X(x)+6}" y="${Y(y)-6}" fill="${COL[i]}" class="ml">${ROM[l.k]}</text>`; });
+  A.ECK.forEach((e,i)=>{ const best=i===A.opt;
+    o+=`<circle cx="${X(e[0])}" cy="${Y(e[1])}" r="${best?7:5}" fill="${best?'#C62828':'#1d1d1f'}"/>`;
+    o+=`<text x="${X(e[0])+8}" y="${Y(e[1])-8}" fill="${best?'#C62828':'#1d1d1f'}" class="ml">(${e[0]}|${e[1]}) Z=${A.Z[i]}</text>`; });
+  return o+'</svg>';
+}
+
+// ---------- Aufgaben ----------
+let A=null, stat={a:0,r:0}, shown=false;
+
+function neu(){
+  A=genLP(); shown=false;
+  // Restriktionen in zufälliger Reihenfolge nummerieren
+  const ord=[0,1,2].sort(()=>Math.random()-.5); ord.forEach((j,k)=>{ A.L[j].k=k; });
+  const Ls=[...A.L].sort((u,v)=>u.k-v.k);
+  
+  root.getElementById('h').textContent='Aufgabe: Maximum bestimmen';
+  root.getElementById('auftrag').innerHTML='Bestimmen Sie mit dem CAS das Maximum der Zielfunktion unter den Restriktionen.';
+  root.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i>, <i>y</i> ≥ 0</span>';
+  root.getElementById('term').innerHTML=`Zielfunktion: <i>Z</i>(<i>x</i>,<i>y</i>) = ${A.p}<i>x</i> + ${A.q}<i>y</i> → max`;
+  const xm=Math.ceil(Math.max(...A.L.map(l=>l.c/l.a))), ym=Math.ceil(Math.max(...A.L.map(l=>l.c/l.b)));
+  root.getElementById('fen').innerHTML=`Fenster-Vorschlag: −1 ≤ <i>x</i> ≤ ${Math.min(xm,A.ECK[4][0]+5)} und −1 ≤ <i>y</i> ≤ ${Math.min(ym,A.ECK[1][1]+5)}`;
+  root.getElementById('plot').innerHTML=''; root.getElementById('eck').innerHTML='';
+  root.getElementById('hinweis').innerHTML='Tipp: Restriktionen nach <i>y</i> umstellen, z.&nbsp;B. '+Ls.map(l=>`<span class="liste">f${l.k+1}(x)=${casLine(l.a,l.b,l.c)}</span>`).join(' ')+
+    ' · Ecken: <b>solve(f1(x)=f2(x),x)</b>, Nullstellen und Achsenabschnitte · Zielfunktion: <b>menu ▸ 1 ▸ 1: Definieren</b> <span class="liste">z(x,y)='+A.p+'x+'+A.q+'y</span>, dann <span class="liste">z(…,…)</span> in jeder Ecke.';
+  const F=[['x','<i>x</i> =',A.ECK[A.opt][0],'#1F4E99'],['y','<i>y</i> =',A.ECK[A.opt][1],'#C25E00'],['z','<i>Z</i><sub>max</sub> =',A.Z[A.opt],'#C62828']];
+  A.felder=F;
+  root.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci"></span><span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace('€','').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return parseFloat(s); }
+function zeigeLoesung(){
+  root.getElementById('plot').innerHTML=plot(A);
+  root.getElementById('eck').innerHTML='<table class="d"><tr><th>Ecke</th>'+A.ECK.map(e=>`<td>(${e[0]} | ${e[1]})</td>`).join('')+'</tr><tr><th>Z</th>'+A.Z.map((z,i)=>`<td class="${i===A.opt?'best':''}">${z}</td>`).join('')+'</tr></table>';
+}
+function pruefen(){
+  let r=0;
+  A.felder.forEach(f=>{ const el=root.getElementById('f_'+f[0]), v=parse(root.getElementById('i_'+f[0]).value), m=el.querySelector('.m'), msg=el.querySelector('.msg');
+    el.classList.remove('ok','no','fmt','show');
+    if(v===null){ el.classList.add('fmt'); m.textContent='?'; msg.textContent='Bitte eine Zahl eintragen.'; return; }
+    if(Math.abs(v-f[2])<1e-9){ el.classList.add('ok'); m.textContent='✓'; msg.textContent=''; r++; }
+    else { el.classList.add('no'); m.textContent='✗';
+      const isEck=A.ECK.some(e=>(f[0]==='x'&&e[0]===v)||(f[0]==='y'&&e[1]===v));
+      msg.textContent=f[0]==='z'?(A.Z.includes(v)?'Das ist Z in einer anderen Ecke. Vergleichen Sie alle Ecken.':'Prüfen Sie die Zielfunktion und die Ecke.'):
+        (isEck?'Das ist eine Ecke – aber nicht die mit dem größten Z.':'Prüfen Sie die Schnittpunkte der Randgeraden.'); }
+  });
+  stat.a++; if(r===A.felder.length) stat.r++;
+  root.getElementById('score').innerHTML=r===A.felder.length?'<span style="color:var(--ok)">✓ Alles richtig!</span>':`${r} von ${A.felder.length} richtig.`;
+  root.getElementById('stats').textContent=`Bisher: ${stat.r} von ${stat.a} Aufgaben vollständig richtig.`;
+  if(r===A.felder.length) zeigeLoesung();
+}
+function zeigen(){
+  A.felder.forEach(f=>{ const el=root.getElementById('f_'+f[0]); root.getElementById('i_'+f[0]).value=String(f[2]); el.classList.remove('ok','no','fmt'); el.classList.add('show'); el.querySelector('.m').textContent=''; el.querySelector('.msg').textContent=''; });
+  zeigeLoesung();
+  root.getElementById('score').textContent='Lösung angezeigt.';
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+neu();
+</script>
