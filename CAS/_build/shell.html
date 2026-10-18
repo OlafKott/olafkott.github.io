@@ -134,6 +134,9 @@ button{ font-family:inherit; }
 .tgo{ flex:0 0 32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gs); transition:transform .2s cubic-bezier(.2,.7,.2,1), background .2s; }
 .tgo svg{ width:18px; height:18px; }
 .topic.link:hover .tgo, .topic.link:focus-visible .tgo{ background:#fff; transform:translateX(3px); box-shadow:0 1px 4px rgba(31,78,153,.18); }
+.block.solo .chev.go{ transition:transform .2s cubic-bezier(.2,.7,.2,1), background .2s; }
+.block.solo .bhead:hover .chev.go, .block.solo .bhead:focus-visible .chev.go{ transform:translateX(3px); background:var(--gsbg); }
+.block.solo .chev.go svg{ width:18px; height:18px; }
 .bnone{ margin:0; padding:0 16px 14px 62px; font-size:14px; color:var(--mute); }
 /* Gliederung: Buttons rechts neben der Überschrift */
 .topic{ display:flex; align-items:center; flex-wrap:wrap; gap:8px 14px; padding:10px 12px 10px 14px; }
@@ -302,6 +305,9 @@ $('topics').innerHTML=DBL.map(b=>{
   const body=b.solo ? `<ol class="btopics">${topicLi(b.solo,'0.1')}</ol>`
     : ts.length ? `<ol class="btopics">${ts.map((t,i)=>(t.sec&&(i===0||ts[i-1].sec!==t.sec)?`<li class="bsec" aria-hidden="true"><span>${t.sec}</span></li>`:'')+topicLi(t,b.nr+'.'+(i+1))).join('')}</ol>`
     : '<p class="bnone">Hier kommen bald Anleitungen, Arbeitsblätter und Übungen dazu.</p>';
+  if(b.solo) return `<li class="block solo" data-b="${b.id}" data-t="${b.solo.id}">
+    <button class="bhead" type="button" data-go="${b.solo.id}:g" aria-label="${b.title} – Anleitung öffnen"><span class="bico">${b.nr}</span><span class="bttl">${b.title}${b.solo.sub?`<small>${b.solo.sub}</small>`:''}</span><span class="chev go" aria-hidden="true">${ARR}</span></button>
+  </li>`;
   return `<li class="block${ts.length?'':' empty'}" data-b="${b.id}">
     <button class="bhead" type="button" aria-expanded="false"><span class="bico">${b.nr}</span><span class="bttl">${b.title}${ts.length?'':'<small>folgt in Kürze</small>'}</span><span class="chev" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></span></button>
     <div class="bbody"><div class="binner">${body}</div></div>
@@ -311,14 +317,14 @@ function setOpen(b){
   openB=b;
   document.querySelectorAll('#topics .block').forEach(el=>{ const on=el.dataset.b===b; el.classList.toggle('open',on); el.querySelector('.bhead').setAttribute('aria-expanded',on); });
 }
-$('topics').addEventListener('click',e=>{ const h=e.target.closest('.bhead'); if(!h) return; const b=h.parentNode.dataset.b; setOpen(openB===b?null:b); });
+$('topics').addEventListener('click',e=>{ const h=e.target.closest('.bhead'); if(!h||h.dataset.go) return; const b=h.parentNode.dataset.b; setOpen(openB===b?null:b); });
 $('topics').addEventListener('click',e=>{ const b=e.target.closest('[data-go]'); if(!b) return; const [t,v]=b.dataset.go.split(':'); go(t,v); });
 $('topics').addEventListener('keydown',e=>{ if(e.key!=='Enter'&&e.key!==' ') return; const b=e.target.closest('.topic.link'); if(!b) return; e.preventDefault(); b.click(); });
 let hoverT=null;
 function hov(t){ if(mode!=='toc'||t===hoverT) return; hoverT=t; if(t){ showPreview(t,'Vorschau: '+plain(TOP[t].title)); } else showHome(); flash(); }
-$('topics').addEventListener('mouseover',e=>{ const li=e.target.closest('.topic'); if(li) hov(li.dataset.t); });
+$('topics').addEventListener('mouseover',e=>{ const li=e.target.closest('[data-t]'); if(li) hov(li.dataset.t); });
 $('topics').addEventListener('mouseleave',()=>hov(null));
-$('topics').addEventListener('focusin',e=>{ const li=e.target.closest('.topic'); if(li) hov(li.dataset.t); });
+$('topics').addEventListener('focusin',e=>{ const li=e.target.closest('[data-t]'); if(li) hov(li.dataset.t); });
 
 // ---------------------------------------------------------------
 //  Navigation mit animiertem Übergang
@@ -372,7 +378,7 @@ function go(t,v,opt){
   if(v!=='toc'&&!TOP[t]) { t=null; v='toc'; }
   if(v==='u'&&!TOP[t].ueb) v='g';
   if(v==='toc') t=null;
-  if(t) setOpen(blockOf(TOP[t]));
+  if(t&&TOP[t].block) setOpen(TOP[t].block);
   if(mode===v && active===t) return;
   const from=viewEl(mode), to=viewEl(v);
   const fwd = mode==='toc' || (mode==='g'&&v==='u');
