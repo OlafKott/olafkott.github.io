@@ -16,7 +16,7 @@ TOPICS = [
     ('wreg', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere_Regressionen', 'Weitere Regressionen', 'quadratisch, kubisch, exponentiell', 'Arbeitsblatt_CAS_Weitere_Regressionen.pdf'),
     ('funk', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte', 'Funktionswerte (y&#8209;Werte) berechnen', '', 'Arbeitsblatt_CAS_Funktionswerte.pdf'),
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', '', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
-    ('abschn', 'Abschnittsweise', 'Abschnittsweise', 'Abschnittsweise', 'Abschnittsweise definierte Funktionen', 'Vorlage „Stückweise“, Wertetabelle, ● und ○', 'Arbeitsblatt_CAS_Abschnittsweise.pdf'),
+    ('abschn', 'Abschnittsweise', 'Abschnittsweise', 'Abschnittsweise', 'Abschnittsweise definierte Funktionen', '', 'Arbeitsblatt_CAS_Abschnittsweise.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen', 'solve', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
     ('mat', 'Matrizen', 'Matrizen', 'Matrizen', 'Matrizenrechnung', '', 'Arbeitsblatt_CAS_Matrizen.pdf'),
