@@ -4208,10 +4208,10 @@ function rnd(arr,curA,caret){
 }
 Entry.prototype.html=function(caret){ return rnd(this.root,this.top().a,caret!==false); };
 
-// ---------- Graphs-Seite mit Wertetabelle ----------
+// ---------- Graphs-Seite: Graph, Fenster, Wertetabelle ----------
 const num=v=>{ let s=(Math.round(v*1e6)/1e6).toString(); return s.replace('-','−'); };
+const fmt3=v=>{ if(Math.abs(v)<5e-7) return '0'; return String(Number(v.toPrecision(3))).replace('-','−'); };
 const COLS=['#1565c0','#c62828'];
-// Eingabe -> JS-Funktion und Textform
 function toJS(arr){ let o='', prev='';
   arr.forEach(t=>{ if(typeof t!=='string'){ o+='**('+toJS(t.v)+')'; prev=')'; return; }
     const c=t==='−'?'-':t==='·'?'*':t;
@@ -4221,61 +4221,87 @@ function toJS(arr){ let o='', prev='';
 const toTxt=arr=>arr.map(t=>typeof t==='string'?t:'^'+toTxt(t.v)).join('');
 function fnOf(E){ try{ return new Function('x','return '+toJS(E.root)); }catch(e){ return ()=>NaN; } }
 function copyE(E){ const n=new Entry(); n.root=JSON.parse(JSON.stringify(E.root)); n.path=[{a:n.root}]; return n; }
+const GM=["1: Aktionen","2: Ansicht","3: Graph-Eingabe/Bearbeitung","4: Fenster/Zoom","5: Spur","6: Graph analysieren","7: Tabelle","8: Geometrie","9: Einstellungen"];
+const FZ=["1: Fenstereinstellungen","2: Zoom – Box","3: Zoom – Vergrößern","4: Zoom – Verkleinern","5: Zoom – Standard","6: Zoom – Quadrant 1","7: Zoom – Benutzer","8: Zoom – Trig","9: Zoom – Daten"];
+const TBM=["1: Tabelle mit geteiltem Bildschirm","2: Tabelle entfernen","3: Funktionseinstellungen bearbeiten"];
 const TM=["1: Aktionen","2: Wertetabelle"];
 const TW=["1: Spalte löschen","2: Wählen","3: Ausdruck bearbeiten","4: Tabelle entfernen","5: Funktionseinstellungen bearbeiten"];
-function plotSVG(w,h,fs){
-  const X=x=>(x+10)/20*w, Y=y=>h/2-y*(h/2)/6.67;
-  let o=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="position:absolute;left:0;top:0">`;
-  o+=`<line x1="0" y1="${Y(0)}" x2="${w}" y2="${Y(0)}" stroke="#555" stroke-width=".8"/><line x1="${X(0)}" y1="0" x2="${X(0)}" y2="${h}" stroke="#555" stroke-width=".8"/>`;
-  for(let x=-10;x<=10;x+=2) if(x) o+=`<line x1="${X(x)}" y1="${Y(0)-1.5}" x2="${X(x)}" y2="${Y(0)+1.5}" stroke="#555" stroke-width=".7"/>`;
-  for(let y=-6;y<=6;y+=2) if(y) o+=`<line x1="${X(0)-1.5}" y1="${Y(y)}" x2="${X(0)+1.5}" y2="${Y(y)}" stroke="#555" stroke-width=".7"/>`;
-  o+=`<text x="${w-3}" y="${Y(0)-3}" font-size="8" text-anchor="end" fill="#555">10</text><text x="${X(0)+3}" y="9" font-size="8" fill="#555">6.67</text>`;
+const WL=["XMin","XMax","XSkalierung","YMin","YMax","YSkalierung"];
+const STD={x0:-10,x1:10,y0:-6.67,y1:6.67};
+function plotSVG(W,H,w,fs,lab){
+  const X=x=>(x-w.x0)/(w.x1-w.x0)*W, Y=y=>(w.y1-y)/(w.y1-w.y0)*H, ax='#555';
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:0" font-family="Arial,Helvetica,sans-serif">`;
+  if(w.y0<0&&w.y1>0){ const y=Y(0); s+=`<line x1="0" y1="${y}" x2="${W-5}" y2="${y}" stroke="${ax}" stroke-width=".9"/><path d="M${W} ${y} l-6 -3 v6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.x0);t<=Math.floor(w.x1);t++) if(t) s+=`<line x1="${X(t)}" y1="${y-2}" x2="${X(t)}" y2="${y+2}" stroke="${ax}" stroke-width=".7"/>`;
+    s+=`<text x="2" y="${y-3}" font-size="8" fill="#777">${fmt3(w.x0)}</text><text x="${W-2}" y="${y+10}" font-size="8" fill="#777" text-anchor="end">${fmt3(w.x1)}</text>`; }
+  if(w.x0<0&&w.x1>0){ const x=X(0); s+=`<line x1="${x}" y1="${H}" x2="${x}" y2="5" stroke="${ax}" stroke-width=".9"/><path d="M${x} 0 l-3 6 h6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}" stroke-width=".7"/>`;
+    s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
   fs.forEach((E,j)=>{ const f=fnOf(E); let d='', pen=false;
-    for(let i=0;i<=200;i++){ const x=-10+20*i/200, y=f(x); if(!(y<7.5&&y>-7.5)){ pen=false; continue; } d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1); pen=true; }
-    o+=`<path d="${d}" fill="none" stroke="${COLS[j]}" stroke-width="1.6"/>`; });
-  return o+'</svg>';
+    for(let i=0;i<=240;i++){ const x=w.x0+(w.x1-w.x0)*i/240, py=Y(f(x)); if(!(py>-40&&py<H+40)){ pen=false; continue; } d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1); pen=true; }
+    s+=`<path d="${d}" fill="none" stroke="${COLS[j]}" stroke-width="1.6"/>`;
+    if(lab) s+=`<text x="${W-4}" y="${13+j*12}" font-size="9.5" fill="${COLS[j]}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">f${j+1}(x)=${toTxt(E.root).replace(/\^2/g,'²')}</text>`; });
+  return s+'</svg>';
 }
 function entryBar(S){
-  const j=S.eIdx, nm='f'+(j+1)+'(x)=';
-  return `<div style="position:absolute;left:3px;right:3px;bottom:3px;background:#fff;border:1px solid #888;font-size:10.5px;padding:1px 3px;display:flex;gap:2px;white-space:nowrap;overflow:hidden"><span style="color:${COLS[j]}">${nm}</span><span>${S.entry.html()}</span></div>`;
+  const j=S.eIdx;
+  return `<div style="position:absolute;left:2px;right:2px;bottom:2px;height:19px;background:#fff;border:1px solid #9aa5b3;display:flex;align-items:center;padding:0 4px;font-size:11px;white-space:nowrap;overflow:hidden;z-index:2"><span style="color:${COLS[j]};margin-right:2px">f${j+1}(x)=</span><span style="border:1px solid #888;flex:1;padding:0 3px;min-height:14px">${S.entry.html()}</span></div>`;
 }
 function graphPage(S){
   let h=topbar(['1.1'],'1.1');
-  if(!S.split){
-    h+='<div style="position:absolute;left:0;right:0;top:16px;bottom:0">'+plotSVG(280,194,S.fs);
-    S.fs.forEach((E,j)=>{ h+=`<div style="position:absolute;right:6px;top:${118+j*14}px;color:${COLS[j]};font-size:10.5px">f${j+1}(x)=${rnd(E.root,null,false)}</div>`; });
-    if(S.entry) h+=entryBar(S);
-    return h+'</div>';
-  }
   const act='outline:2px solid #3b78c2;outline-offset:-2px;';
-  h+=`<div style="position:absolute;left:0;width:139px;top:16px;bottom:0;overflow:hidden;border-right:1px solid #aab3bf;${S.foc==='g'?act:''}">`+plotSVG(139,194,S.fs)+(S.entry?entryBar(S):'')+'</div>';
-  h+=`<div style="position:absolute;left:140px;right:0;top:16px;bottom:0;overflow:hidden;${S.foc==='t'?act:''}">`;
-  const F=S.fs.map(fnOf), two=S.fs.length>1;
-  h+=`<table class="sh wt ${two?'two':''}"><tr class="hd"><td class="rn"></td><td>x</td>`+S.fs.map((E,j)=>`<td>f${j+1}(x):=</td>`).join('')+'</tr>';
-  h+='<tr class="ex"><td class="rn">▪</td><td></td>'+S.fs.map(E=>`<td>${toTxt(E.root).replace(/·/g,'·')}</td>`).join('')+'</tr>';
-  for(let r=0;r<10;r++){
-    const xv=Math.round((S.start+(S.top+r)*S.step)*1e9)/1e9;
-    const hl=(S.hl||[]).some(v=>Math.abs(v-xv)<1e-9);
-    h+=`<tr class="${hl?'hl':''}"><td class="rn">${r+1}</td><td class="${r===S.cur&&S.foc==='t'?'cur':''}">${num(xv)}</td>`+F.map(f=>`<td>${num(f(xv))}</td>`).join('')+'</tr>';
+  if(!S.split){
+    h+='<div style="position:absolute;left:0;right:0;top:16px;bottom:0">'+plotSVG(280,194,S.win,S.fs,true)+(S.entry?entryBar(S):'')+'</div>';
+  } else {
+    h+=`<div style="position:absolute;left:0;width:139px;top:16px;bottom:0;overflow:hidden;border-right:1px solid #aab3bf;${S.foc==='g'?act:''}">`+plotSVG(139,194,S.win,S.fs,false)+(S.entry?entryBar(S):'')+'</div>';
+    h+=`<div style="position:absolute;left:140px;right:0;top:16px;bottom:0;overflow:hidden;${S.foc==='t'?act:''}">`;
+    const F=S.fs.map(fnOf), two=S.fs.length>1;
+    h+=`<table class="sh wt ${two?'two':''}"><tr class="hd"><td class="rn"></td><td>x</td>`+S.fs.map((E,j)=>`<td>f${j+1}(x):=</td>`).join('')+'</tr>';
+    h+='<tr class="ex"><td class="rn">▪</td><td></td>'+S.fs.map(E=>`<td>${toTxt(E.root)}</td>`).join('')+'</tr>';
+    for(let r=0;r<10;r++){
+      const xv=Math.round((S.start+(S.top+r)*S.step)*1e9)/1e9;
+      h+=`<tr><td class="rn">${r+1}</td><td class="${r===S.cur&&S.foc==='t'?'cur':''}">${num(xv)}</td>`+F.map(f=>`<td>${num(f(xv))}</td>`).join('')+'</tr>';
+    }
+    h+='</table></div>';
   }
-  h+='</table></div>';
-  if(S.menu===1) h+=menus([{items:TM,sel:0}]);
-  if(S.menu===2) h+=menus([{items:TM,sel:1},{items:TW,sel:0}]);
-  if(S.dlg){
+  if(S.menu) h+=menus(S.menu);
+  if(S.dlg&&S.dlg.typ==='tab'){
     const D=S.dlg, f=(i,v)=>`<span class="ct ${D.field===i?'fo':''}">${v}${D.field===i?'<span class="caret">|</span>':''}</span>`;
     h+=`<div class="dlg"><div class="tt">Funktionseinstellungen</div><div class="ff">`+
       `<span class="lb">Tabellenanfang:</span>${f(0,D.v[0])}<span class="lb">Tabellenschritt:</span>${f(1,D.v[1])}`+
       `<span class="lb">Unabhängig:</span><span class="ct">Auto ▾</span><span class="lb">Abhängig:</span><span class="ct">Auto ▾</span>`+
       `</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>`;
   }
+  if(S.dlg&&S.dlg.typ==='win'){ const D=S.dlg;
+    h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+WL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.field?'fo':''}">${D.v[i]}${i===D.field?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
   return h;
 }
 // ---------- Simulation: komplette Tastenfolge ab Startbildschirm ----------
-function SIM(keys,opt){
-  const S={scr:'home',entry:null,eIdx:0,fs:[],split:false,foc:'g',menu:0,dlg:null,start:0,step:1,top:0,cur:0,ctrl:false};
+function SIM(keys){
+  const S={scr:'home',entry:null,eIdx:0,fs:[],win:Object.assign({},STD),split:false,foc:'g',menu:null,dlg:null,start:0,step:1,top:0,cur:0,ctrl:false};
   for(const k of keys){
     if(S.scr==='home'){ if(k==='1') S.scr='apps'; continue; }
     if(S.scr==='apps'){ if(k==='2'){ S.scr='graph'; S.entry=new Entry(); S.eIdx=0; } continue; }
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      const top=S.menu[0];
+      if(S.menu.length===1){
+        if(top.ctx==='g'){ if(k==='4'||k==='7'){ top.sel=+k-1; S.menu.push({items:k==='4'?FZ:TBM,sel:0,d:k}); } else S.menu=null; }
+        else { if(k==='2'){ top.sel=1; S.menu.push({items:TW,sel:0,d:'2'}); } else S.menu=null; }
+        continue; }
+      const d=S.menu[1].d, ctx=top.ctx; S.menu=null;
+      if(ctx==='g'&&d==='4'&&k==='1'){ const w=S.win; S.dlg={typ:'win',v:[fmt3(w.x0),fmt3(w.x1),'Auto',fmt3(w.y0),fmt3(w.y1),'Auto'],field:0,fresh:true}; }
+      if(ctx==='g'&&d==='4'&&k==='5'){ S.win=Object.assign({},STD); }
+      if(ctx==='g'&&d==='7'&&k==='1'){ S.split=true; S.foc='t'; S.top=0; S.cur=0; S.entry=null; }
+      if(ctx==='t'&&k==='5'){ S.dlg={typ:'tab',v:[num(S.start),num(S.step)],field:0,fresh:true}; }
+      continue; }
+    if(S.dlg){ const D=S.dlg, n=D.typ==='win'?6:2;
+      if(k==='tab'){ D.field=(D.field+1)%n; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(String(s).replace('−','-'));
+        if(D.typ==='win') S.win={x0:p(D.v[0]),x1:p(D.v[1]),y0:p(D.v[3]),y1:p(D.v[4])};
+        else { S.start=p(D.v[0]); S.step=p(D.v[1]); S.top=0; S.cur=0; }
+        S.dlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.field]=''; D.fresh=false; } D.v[D.field]+=ch; continue; }
     if(S.ctrl){ S.ctrl=false;
       if(k==='t'){ S.split=!S.split; S.top=0; S.cur=0; S.foc=S.split?'t':'g'; S.entry=null; }
       if(k==='tab'&&S.split){ S.foc=S.foc==='t'?'g':'t'; S.entry=null; }
@@ -4287,18 +4313,11 @@ function SIM(keys,opt){
       if(k==='up'){ if(S.eIdx>0){ S.eIdx--; S.entry=copyE(S.fs[S.eIdx]); } continue; }
       if(k==='down'){ if(S.eIdx<S.fs.length){ S.eIdx++; S.entry=S.eIdx<S.fs.length?copyE(S.fs[S.eIdx]):new Entry(); } continue; }
       S.entry.key(k); continue; }
-    if(S.dlg){ const D=S.dlg;
-      if(k==='tab'){ D.field=1-D.field; D.fresh=true; continue; }
-      if(k==='enter'){ S.start=parseFloat(D.v[0].replace('−','-')); S.step=parseFloat(D.v[1].replace('−','-')); S.dlg=null; S.top=0; S.cur=0; continue; }
-      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.field]=''; D.fresh=false; } D.v[D.field]+=ch; continue; }
-    if(S.menu===1){ S.menu=(k==='2')?2:0; continue; }
-    if(S.menu===2){ S.menu=0; if(k==='5') S.dlg={v:[num(S.start),num(S.step)],field:0,fresh:true}; continue; }
-    if(S.foc!=='t') continue;
-    if(k==='menu'){ S.menu=1; continue; }
+    if(k==='menu'){ S.menu=[{items:S.foc==='t'&&S.split?TM:GM,sel:0,ctx:S.foc==='t'&&S.split?'t':'g'}]; continue; }
+    if(S.foc!=='t'||!S.split) continue;
     if(k==='up'){ if(S.cur>0) S.cur--; else S.top--; continue; }
     if(k==='down'){ if(S.cur<9) S.cur++; else S.top++; continue; }
   }
-  if(opt&&opt.hl) S.hl=opt.hl;
   if(S.scr==='home') return home('');
   if(S.scr==='apps') return appList(['1.1'],'1.1',0);
   return graphPage(S);
@@ -4308,6 +4327,8 @@ const CUR='<span class="caret">|</span>';
 // ---------- Tastenfolgen ----------
 const kNeu=["1","2"];
 const kTerm=["0",".","5","x","x2","-","x","-","3","enter"];
+const kWm=["menu","4","1"];
+const kWv=["neg","4","tab","6","tab","tab","neg","4","tab","6","enter"];
 const kTab=["ctrl","t"];
 const kUp=["up","up","up"];
 const kSet=["menu","2","5"];
@@ -4321,26 +4342,38 @@ const kZT=["ctrl","tab"];
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const FTERM='<i>f</i>(<i>x</i>) = 0,5<i>x</i>² − <i>x</i> − 3';
 const tbl=(rows,hd)=>{ hd=hd||['<i>f</i>(<i>x</i>)']; return `<table class="vgl"><tr><th><i>x</i></th>${rows.map(r=>`<td>${r[0]}</td>`).join('')}</tr>`+hd.map((h,j)=>`<tr><th>${h}</th>${rows.map(r=>`<td>${r[j+1]}</td>`).join('')}</tr>`).join('')+'</table>'; };
+const ENDE=(txt)=>({t:"Geschafft", k:[], d:"<p>"+txt+"</p>"});
 
 const TRACKS={
- t:{ name:"Wertetabelle erstellen", start:()=>home(''), steps:[
+ z:{ name:"Funktion zeichnen", start:()=>home(''), steps:[
   {t:"Neues Dokument mit Graphs", a:"Neues Dokument mit einer Graphs-Seite", k:kNeu,
-   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs hinzufügen.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
-  {t:"Funktion eingeben", a:"Geben Sie "+FTERM+" ein", k:kTerm,
-   d:"<p>Unten steht schon <b>f1(x)=</b>. Sie tippen nur den Term und drücken <b>enter</b>. Der Graph erscheint.</p>",
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs hinzufügen.</p><p>Unten erscheint die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Funktion eingeben", a:"Zeichnen Sie "+FTERM, k:kTerm,
+   d:"<p><b>f1(x)=</b> steht schon da. Sie tippen nur den Term und drücken <b>enter</b>.</p><p>Der Graph wird gezeichnet, oben rechts steht sein Term.</p>",
    n:"Komma = <b>Punkt</b>. Für <i>x</i>² gibt es die Taste <b>x²</b>."},
+  ENDE("Der Graph ist da. Im Standardfenster geht <i>x</i> von −10 bis 10. Der Graph ist klein und ragt oben hinaus. Das ändern Sie im nächsten Teil: <b>Fenster einstellen</b>.")
+ ]},
+ f:{ name:"Fenster einstellen", start:null, steps:[
+  {t:"Fenstereinstellungen öffnen", a:"Öffnen Sie die Fenstereinstellungen", k:kWm,
+   d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>XMin und XMax: kleinster und größter <i>x</i>-Wert. YMin und YMax: kleinster und größter <i>y</i>-Wert.</p>"},
+  {t:"Fenster eintragen", a:"Fenster: −4 ≤ <i>x</i> ≤ 6 und −4 ≤ <i>y</i> ≤ 6", k:kWv,
+   d:"<p>Zahl eintippen, mit <b>tab</b> ins nächste Feld. Die <b>Skalierung</b> (Auto) überspringen Sie mit einem zweiten <b>tab</b>. Zum Schluss <b>enter</b>.</p>",
+   n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
+  ENDE("Jetzt füllt der Graph den Bildschirm gut aus. Den Tiefpunkt bei <i>x</i> = 1 sieht man deutlich.<br><br><b>Zurück zum Standardfenster:</b> menu ▸ 4: Fenster/Zoom ▸ 5: Zoom – Standard")
+ ]},
+ w:{ name:"Wertetabelle", start:null, steps:[
   {t:"Tabelle einblenden", a:"Blenden Sie die Wertetabelle ein", k:kTab,
    d:"<p><b>ctrl + T</b> teilt den Bildschirm: links der Graph, rechts die <b>Wertetabelle</b>.</p><p>Die Tabelle beginnt bei <i>x</i> = 0 mit der Schrittweite 1.</p>",
-   n:"Noch einmal <b>ctrl + T</b> blendet die Tabelle wieder aus."},
+   n:"Noch einmal <b>ctrl + T</b> blendet die Tabelle wieder aus. Gleicher Weg über das Menü: menu ▸ 7: Tabelle ▸ 1."},
   {t:"Blättern", a:"Blättern Sie zu den negativen <i>x</i>-Werten", k:kUp,
    d:"<p>Mit <b>▲</b> und <b>▼</b> blättern Sie in der Tabelle. Oben kommen kleinere <i>x</i>-Werte dazu.</p><p>Ablesen: <b><i>f</i>(−3) = 4.5</b> und <b><i>f</i>(4) = 1</b></p>"},
   {t:"Einstellungen öffnen", a:"Öffnen Sie die Tabellen-Einstellungen", k:kSet,
    d:"<p><b>menu ▸ 2: Wertetabelle ▸ 5: Funktionseinstellungen bearbeiten</b></p><p>Hier legen Sie fest, wo die Tabelle <b>anfängt</b> und wie groß die <b>Schritte</b> sind.</p>",
-   n:"Die Tabelle muss aktiv sein (blauer Rahmen). Sonst erst in die Tabelle klicken."},
+   n:"Die Tabelle muss aktiv sein (blauer Rahmen)."},
   {t:"Anfang und Schrittweite", a:"Tabellenanfang −2, Tabellenschritt 0,5", k:kEin,
    d:"<p>Tippen Sie <b>(−) 2</b>. Mit <b>tab</b> zum nächsten Feld, dort <b>0.5</b>. Mit <b>enter</b> bestätigen.</p>"+tbl([["−2","1"],["−1,5","−0,375"],["−1","−1,5"],["−0,5","−2,375"],["0","−3"]]),
    n:"Ein Ende gibt es nicht: Mit <b>▼</b> geht die Tabelle immer weiter."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",["Funktion <i>f</i> in Graphs zeichnen","Fenster wie angegeben einstellen","Wertetabelle mit Schritt 0,5 erstellen und eintragen","Graph mit Hilfe der Tabelle ins Koordinatensystem zeichnen"])}
  ]},
  b:{ name:"Bearbeiten und 2. Funktion", start:null, steps:[
   {t:"Zum Graphen wechseln", a:"Wechseln Sie von der Tabelle zum Graphen", k:kZG,
@@ -4358,25 +4391,25 @@ const TRACKS={
   {t:"Zurück zur Tabelle", a:"Wechseln Sie zur Tabelle", k:kZT,
    d:"<p><b>ctrl + tab</b>. Die Tabelle hat jetzt eine <b>zweite Spalte</b> für f2.</p>"+tbl([["−2","3","4"],["−1,5","1,625","3,5"],["−1","0,5","3"],["−0,5","−0,375","2,5"],["0","−1","2"]],['<i>f</i>1(<i>x</i>)','<i>f</i>2(<i>x</i>)']),
    n:"Anfang und Schritt aus den Einstellungen gelten für beide Funktionen."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",["Funktion <i>g</i> eingeben: <b>f1 bearbeiten</b> oder als <b>f2</b> dazunehmen","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",["Funktion <i>g</i> als <b>f2</b> dazunehmen","Wertetabelle eintragen","Graph von <i>g</i> ins selbe Koordinatensystem zeichnen","Danach: Lösungscode eintragen"])}
  ]}
 };
 // Tastenfolgen aneinanderhängen: jeder Schritt beginnt mit dem Zustand am Ende des vorigen
 (function(){
   let pre=[];
-  ["t","b"].forEach(t=>{
+  ["z","f","w","b"].forEach(t=>{
     const T=TRACKS[t], p0=pre.slice();
     if(!T.start) T.start=()=>SIM(p0);
     T.steps.forEach(S=>{
-      const base=pre.slice(), o=S.hl?{hl:S.hl}:null;
-      S.p=i=>SIM(base.concat(S.k.slice(0,i)),o);
+      const base=pre.slice();
+      S.p=i=>SIM(base.concat(S.k.slice(0,i)));
       pre=pre.concat(S.k);
     });
   });
 })();
 
 // ---------- Steuerung ----------
-const ORDER=["t","b"];
+const ORDER=["z","f","w","b"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>__D.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
@@ -4478,7 +4511,7 @@ const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',A
 };
 /* ===== Übung: wt ===== */
 UEB["wt"]={
- title:"Wertetabellen",
+ title:"Wertetabelle und Graph",
  css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
 :host{box-sizing:border-box;}
 .wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
@@ -6866,7 +6899,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": ""}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": ""}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": ""}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": ""}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabellen erstellen", "sub": ""}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": ""}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": ""}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "1., 2. und 3. Ableitung"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte"}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": ""}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": ""}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": ""}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": ""}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle"}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen", "sub": ""}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": ""}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "1., 2. und 3. Ableitung"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte"}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
@@ -6933,7 +6966,7 @@ function uebung(id){
 // ---------------------------------------------------------------
 //  Rechner-Display in Gliederung / Übung
 // ---------------------------------------------------------------
-const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['t',5], gl:['s',6], lgs:['d',9], abl:['a',3], graph:['e',3] };
+const PREV={ grund:['n',7], stat:['a',11], reg:['r',10], wreg:['k',6], funk:['f',6], wt:['w',3], gl:['s',6], lgs:['d',9], abl:['a',3], graph:['e',3] };
 function previewOf(t){
   const g=G[t]; let p=PREV[t];
   if(!p){ const tr=g.ORDER[0], S=g.TRACKS[tr].steps; let s=0; S.forEach((x,i)=>{ if(!x.ab && x.k.length) s=i; }); p=[tr,s]; }
