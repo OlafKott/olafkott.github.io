@@ -18,12 +18,14 @@ TOPICS = [
     ('wt', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle', 'Wertetabelle und Graph', 'Funktion zeichnen, Fenster, Wertetabelle', 'Arbeitsblatt_CAS_Wertetabelle.pdf'),
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
+    ('mat', 'Matrizen', 'Matrizen', 'Matrizen', 'Matrizen', 'Rechnen, Potenzen, Inverse, Determinante', 'Arbeitsblatt_CAS_Matrizen.pdf'),
     ('stufe', 'Stufenform', 'Stufenform', 'Stufenform', 'Zeilenstufenform (ref / rref)', 'LGS mit Matrizen lösen', 'Arbeitsblatt_CAS_Stufenform.pdf'),
     ('lopt', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare_Optimierung', 'Lineare Optimierung', 'Planungsvieleck, Eckpunkte, Maximum', 'Arbeitsblatt_CAS_Lineare_Optimierung.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Funktionen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
     ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Fläche im Graphen bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
+    ('kombi', 'Kombinatorik', 'Kombinatorik', 'Kombinatorik', 'Kombinatorik', 'n!, nPr und nCr', 'Arbeitsblatt_CAS_Kombinatorik.pdf'),
     ('bin', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'genau, höchstens, Intervalle', 'Arbeitsblatt_CAS_Binomialverteilung.pdf'),
     ('bing', 'Binomial_Gesucht', 'Binomial_Gesucht', 'Binomial_Gesucht', 'Binomialverteilung: <i>n</i>, <i>k</i> oder <i>p</i> gesucht', 'mit Wertetabelle und Graph', 'Arbeitsblatt_CAS_Binomial_Gesucht.pdf'),
 ]
@@ -199,9 +201,9 @@ BLOCKS = [
 BLOCK_OF = {
     'grund': None,
     'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
-    'gl': 'alg', 'lgs': 'alg', 'stufe': 'alg', 'lopt': 'alg',
+    'gl': 'alg', 'lgs': 'alg', 'mat': 'alg', 'stufe': 'alg', 'lopt': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
-    'bin': 'sto', 'bing': 'sto',
+    'kombi': 'sto', 'bin': 'sto', 'bing': 'sto',
 }
 # Zwischenüberschriften im Block: steht vor dem ersten Thema eines Abschnitts (Reihenfolge = TOPICS)
 # NEUES THEMA der Differential-/Integralrechnung hier eintragen (z. B. 'int' für Integrale)
