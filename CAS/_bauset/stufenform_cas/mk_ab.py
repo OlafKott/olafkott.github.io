@@ -56,7 +56,7 @@ CSS = '''
 .zeile .lab2{ font-size:14px; font-family:Georgia,serif; color:var(--ink); white-space:nowrap; line-height:1.35; }
 .pf{ font-size:22px; color:#666; }
 .zwei{ display:flex; gap:4mm; justify-content:flex-start; }
-.p1 .sec{ margin-top:12px; } .p1 .ergbox{ padding:1.5mm 5mm; } .p1 .rz{ line-height:2.45; } .p1 .code{ margin-top:12px; }
+.p1 .sec{ margin-top:18px; } .p1 .ergbox{ padding:1.5mm 5mm; } .p1 .rz{ line-height:2.6; } .p1 .code{ margin:6mm 0 2mm; }
 .p1 .lgsb{ font-size:17px; line-height:1.9; margin:0; }
 '''
 
@@ -68,6 +68,8 @@ def page(fill):
     head = head.replace('<h1>CAS-Führerschein: Lineare Gleichungssysteme</h1>',
                         '<h1>CAS-Führerschein: Zeilenstufenform' + ('<span class="badge">Lösung</span>' if fill else '') + '</h1>')
     head = head.replace('<div class="sub">Lösen mit linSolve &middot; TI-Nspire CX CAS</div>', '<div class="sub">Gauß auf Knopfdruck: ref und rref &middot; TI-Nspire CX CAS</div>')
+    head = head.replace('bearbeiten Sie hier die Aufgaben 1 und 2.', 'bearbeiten Sie hier die Aufgabe 1.')
+    assert 'die Aufgabe 1.' in head
     gurl = BASE + 'CAS_Stufenform_Schritt_fuer_Schritt.html'
     head = head.replace('https://olafkott.github.io/CAS/LGS/CAS_LGS_Schritt_fuer_Schritt.html', gurl)
     g = qr(gurl)
@@ -78,25 +80,18 @@ def page(fill):
              'Alte Werte löschen: <span class="taste">menu</span>&nbsp;<span class="taste">1</span>&nbsp;<span class="taste">4</span>.</div>\n')
     o.append('<div class="sec"><span class="nr">1</span>LGS mit ref und rref lösen<span class="teil">✍ nach der Tour</span></div>\n<div class="ergbox">\n')
     o.append(f'<div class="zeile"><span class="bz">a)</span><span class="lab2">Matrix aufstellen<br>und als <i>a</i> speichern:</span>{lgs(W)}<span class="pf">→</span><span class="lab2"><i>a</i> =</span>{mat(W, fill, True)}</div>\n')
-    o.append(f'<div class="zwei"><div class="zeile"><span class="bz">b)</span><span class="lab2">ref(<i>a</i>) =</span>{mat(RW, fill)}</div>'
-             f'<div class="zeile"><span class="bz">c)</span><span class="lab2">rref(<i>a</i>) =</span>{mat(RRW, fill)}</div></div>\n')
+    o.append(f'<div class="zeile"><span class="bz">b)</span><span class="lab2">ref(<i>a</i>) =</span>{mat(RW, fill)}</div>\n')
+    o.append(f'<div class="zeile" style="margin-top:4mm"><span class="bz">c)</span><span class="lab2">rref(<i>a</i>) =</span>{mat(RRW, fill)}</div>\n')
     o.append(f'<p class="rz"><span class="bz">d)</span>Lösung: <span class="fx"><i>x</i></span> = {lue(m(SOL[0]), fill)}<span class="trenn"></span>'
              f'<span class="fx"><i>y</i></span> = {lue(m(SOL[1]), fill)}<span class="trenn"></span><span class="fx"><i>z</i></span> = {lue(m(SOL[2]), fill)}</p>\n')
-    o.append(f'<p class="rz" style="margin-left:6mm">Lösungsmenge: <span class="fx">𝕃</span> = {lue("{(2 | 1 | 3)}", fill, "l")}</p>\n</div>\n')
-    o.append('<div class="sec"><span class="nr">2</span>Das Wichtigste kurz notiert</div>\n<div class="ergbox">\n')
-    o.append(f'<p class="rz"><span class="bz">a)</span>Matrix erstellen: <span class="taste">menu</span> {lue("7", fill, "xs")} {lue("1", fill, "xs")} {lue("1", fill, "xs")}'
-             f'<span class="trenn"></span>Speichern mit →: <span class="taste c">ctrl</span> + {lue("var", fill, "xs")}</p>\n')
-    o.append(f'<p class="rz"><span class="bz">b)</span>ref: <span class="taste">menu</span> <span class="taste">7</span> {lue("4", fill, "xs")}'
-             f'<span class="trenn"></span>rref: <span class="taste">menu</span> <span class="taste">7</span> {lue("5", fill, "xs")}</p>\n')
-    o.append(f'<p class="rz"><span class="bz">c)</span>Welche Form ist bei jedem Rechner gleich?<span class="box{" on" if False else ""}"></span>ref'
-             f'<span class="box{" on" if fill else ""}"></span>rref</p>\n</div>\n')
+    o.append(f'<p class="rz" style="margin:3mm 0 0 6mm">Lösungsmenge: <span class="fx">𝕃</span> = {lue("{(2 | 1 | 3)}", fill, "l")}</p>\n</div>\n')
     lurl, uurl = BASE + 'Loesung_CAS_Stufenform.html', BASE + 'CAS_Uebung_Stufenform.html'
     labs = ['ref(<i>a</i>): Zeile 1,<br>Spalte 4', '<i>x</i> aus 1d', '<i>y</i> aus 1d', '<i>z</i> aus 1d']
-    o.append('<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein – das ist der Code für die Lösung.</div>\n<div class="ziff">'
+    o.append('</div>\n<div class="code"><div class="ct"><b class="t">Lösung überprüfen</b><br>Tragen Sie die vier Ziffern ein – das ist der Code für die Lösung.</div>\n<div class="ziff">'
              + ''.join(f'<div class="z"><span class="bx{" fill" if fill else ""}">{c if fill else ""}</span><span class="lab">{l}</span></div>' for c, l in zip(CODE, labs))
              + f'</div>\n<div class="lqr"><a class="qrlink" href="{lurl}"><img src="{qr(lurl)}" alt="QR-Code Lösung"><span>Lösung</span></a></div>'
              f'<div class="lqr"><a class="qrlink" href="{uurl}"><img src="{qr(uurl)}" alt="QR-Code Übung"><span>Übung</span></a></div></div>\n')
-    o.append('</div><div class="page-footer"><span>RWB Essen &middot; Mathematik &middot; CAS-Führerschein</span><span>Zeilenstufenform (ref / rref) &middot; Seite 1</span></div></div>\n\n</body></html>')
+    o.append('<div class="page-footer"><span>RWB Essen &middot; Mathematik &middot; CAS-Führerschein</span><span>Zeilenstufenform (ref / rref) &middot; Seite 1</span></div></div>\n\n</body></html>')
     h = ''.join(o)
     if fill: h = h.replace('<body>', '<body class="lsg">', 1)
     return h
