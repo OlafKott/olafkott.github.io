@@ -514,9 +514,9 @@ const tblN=(rows,c)=>`<table class="vgl"><tr><th>${c}</th>${rows.map(r=>`<td${r[
 
 const TRACKS={
  n:{ name:"n gesucht (Tabelle)", start:()=>home(''), steps:[
-  {t:"Ansatz", a:"Treffer­wahrscheinlichkeit <i>p</i> = 0,3.<br>Wie oft muss man mindestens spielen, damit <i>P</i>(<i>X</i> ≥ 1) ≥ 0,95 gilt?", k:[],
-   d:"<p>Gesucht ist die Anzahl <i>n</i>. Im CAS wird <i>n</i> zur Variablen <b>x</b>.</p>"+SYN+"<p>Mindestens 1 Treffer bei <i>x</i> Versuchen:</p><p>"+CMD("binomCdf(x,0.3,1,x)")+"</p>",
-   n:"Untere Grenze 1, obere Grenze <i>x</i>: Mehr als <i>x</i> Treffer gibt es nicht."},
+  {t:"Ansatz", a:"<i>p</i> = 0,3. Bestimmen Sie das kleinste <i>n</i> mit<br><i>P</i>(<i>X</i> ≥ 1) ≥ 0,95", k:[],
+   d:"<p>Gesucht ist die Anzahl <i>n</i>. Im CAS wird <i>n</i> zur Variablen <b>x</b>.</p>"+SYN+"<p><i>P</i>(<i>X</i> ≥ 1): untere Grenze 1, obere Grenze <i>x</i>.</p><p>"+CMD("binomCdf(x,0.3,1,x)")+"</p>",
+   n:"Obere Grenze ist <i>x</i>, weil <i>X</i> höchstens <i>n</i> sein kann."},
   {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:NEU,
    d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
   {t:"Funktion eingeben", a:"f1(x) = "+CMD("binomCdf(x,0.3,1,x)"), k:kFn, p:GS([],kFn),
@@ -525,13 +525,13 @@ const TRACKS={
   {t:"Tabelle einblenden", a:"Blenden Sie die Wertetabelle ein", k:kTn, p:GS(n1,kTn),
    d:"<p><b>ctrl + T</b> zeigt rechts die Wertetabelle.</p><p>Links stehen die Anzahlen <i>x</i> = <i>n</i>, rechts die Wahrscheinlichkeiten.</p>"},
   {t:"Ablesen", a:"Suchen Sie das kleinste <i>n</i> mit Wert ≥ 0,95", k:[], s:gAfter(n2,{hl:[9]}),
-   d:"<p>Gehen Sie die Tabelle von oben nach unten durch. Gesucht ist der <b>erste</b> Wert, der 0,95 erreicht.</p>"+tblN([["7","0,9176"],["8","0,9424"],["9","0,9596",1],["10","0,9718"]],"<i>n</i>")+"<p>Ergebnis: <b>Man muss mindestens 9-mal spielen.</b></p>",
+   d:"<p>Gehen Sie die Tabelle von oben nach unten durch. Gesucht ist der <b>erste</b> Wert, der 0,95 erreicht.</p>"+tblN([["7","0,9176"],["8","0,9424"],["9","0,9596",1],["10","0,9718"]],"<i>n</i>")+"<p>Ergebnis: <b><i>n</i> = 9</b></p>",
    n:"Steht die Lösung weiter unten: mit <b>▼</b> blättern oder den Tabellenanfang ändern (siehe Teil „k gesucht“)."},
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(n2), d:AB("Aufgabe 1",["CAS-Eingabe für <i>f</i>1 notieren","Werte aus der Tabelle eintragen","<i>n</i> bestimmen (a und b)"])}
  ]},
  k:{ name:"k gesucht (Tabelle)", start:()=>home(''), steps:[
-  {t:"Ansatz", a:"<i>n</i> = 50, <i>p</i> = 0,3.<br>Bestimmen Sie die kleinste Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ 0,9.", k:[],
-   d:"<p>Gesucht ist die Grenze <i>k</i>. Im CAS wird <i>k</i> zur Variablen <b>x</b>.</p>"+SYN+"<p>Höchstens <i>x</i> Treffer: untere Grenze 0, obere Grenze <i>x</i>.</p><p>"+CMD("binomCdf(50,0.3,0,x)")+"</p>"},
+  {t:"Ansatz", a:"<i>n</i> = 50, <i>p</i> = 0,3. Bestimmen Sie das kleinste <i>k</i> mit<br><i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ 0,9", k:[],
+   d:"<p>Gesucht ist die Grenze <i>k</i>. Im CAS wird <i>k</i> zur Variablen <b>x</b>.</p>"+SYN+"<p><i>P</i>(<i>X</i> ≤ <i>x</i>): untere Grenze 0, obere Grenze <i>x</i>.</p><p>"+CMD("binomCdf(50,0.3,0,x)")+"</p>"},
   {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:NEU,
    d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p>", n:"Fragt das CAS, ob es das alte Dokument speichern soll: <b>Nein</b>."},
   {t:"Funktion eingeben", a:"f1(x) = "+CMD("binomCdf(50,0.3,0,x)"), k:kFk, p:GS([],kFk),
@@ -547,7 +547,7 @@ const TRACKS={
   {t:"Selbst rechnen", k:[], ab:1, s:gAfter(q3), d:AB("Aufgabe 2",["CAS-Eingaben notieren","Werte aus der Tabelle eintragen","<i>k</i> bestimmen (a und b)"])}
  ]},
  p:{ name:"p gesucht (Graph)", start:()=>home(''), steps:[
-  {t:"Ansatz", a:"<i>n</i> = 20.<br>Wie groß darf <i>p</i> höchstens sein, damit <i>P</i>(<i>X</i> ≤ 5) ≥ 0,8 gilt?", k:[],
+  {t:"Ansatz", a:"<i>n</i> = 20. Bestimmen Sie alle <i>p</i> mit<br><i>P</i>(<i>X</i> ≤ 5) ≥ 0,8", k:[],
    d:"<p>Jetzt ist <i>p</i> gesucht. Im CAS wird <i>p</i> zur Variablen <b>x</b>.</p>"+SYN+"<p>"+CMD("binomCdf(20,x,0,5)")+"</p><p>Die Grenze 0,8 wird die zweite Funktion. Gesucht ist der <b>Schnittpunkt</b> der beiden Graphen.</p>",
    n:"Eine Tabelle hilft hier wenig: <i>p</i> ist keine ganze Zahl."},
   {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:NEU,

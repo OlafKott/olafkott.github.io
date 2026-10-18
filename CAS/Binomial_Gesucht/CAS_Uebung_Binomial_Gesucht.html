@@ -85,6 +85,7 @@ table.e td .sl{ display:block; font-size:12.5px; color:var(--mute); }
 .tmsg{ font-size:13.5px; min-height:20px; margin-top:6px; color:var(--mute); }
 
 .frage{ font-family:Cambria,Georgia,serif; font-size:18px; line-height:1.6; background:#f7f9fc; border-left:5px solid var(--lf); border-radius:6px; padding:10px 14px; }
+.frage .fo{ font-size:22px; text-align:center; margin:6px 0 2px; }
 .zr span:first-child{ min-width:34px; }
 .zr select{ font:inherit; font-size:16px; padding:3px 6px; border:1px solid #b8bdc6; border-radius:5px; background:#f7f8fa; }
 .zr input{ width:110px !important; font-size:16px; }
@@ -141,9 +142,8 @@ function genN(){
   let p,m,a,n;
   do{ p=pick(PS.slice(0,10)); m=pick([1,1,1,2,2,3]); a=pick(AL);
       n=m; while(n<=300 && bcdf(n,p,m,n)<a) n++; }while(n>200);
-  const tr=m===1?'mindestens einen Treffer':'mindestens '+m+' Treffer';
   return {typ:'n', h:'n gesucht – mit der Tabelle', soll:n,
-    frage:`Die Trefferwahrscheinlichkeit ist <b><i>p</i> = ${deZ(p)}</b>.<br>Wie viele Versuche braucht man <b>mindestens</b>, damit man mit mindestens ${pct(a)} Wahrscheinlichkeit ${tr} erhält?`,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie das <b>kleinste</b> <i>n</i> mit<div class="fo"><i>P</i>(<i>X</i> ≥ ${m}) ≥ ${deZ(a)}</div>`,
     lab:'<i>n</i> =', casIn:`f1(x)=binomCdf(x,${p},${m},x)`,
     tab:[n-1,n].map(x=>[x,bcdf(x,p,m,x)]), grenze:a, rel:'≥',
     hinweis:'Tipp: Die gesuchte Anzahl <i>n</i> wird zu <b>x</b>. Obere Grenze ist dann auch <b>x</b>. Liegt die Lösung weit unten in der Tabelle: Tabellenanfang ändern mit <b>menu ▸ 2 ▸ 5</b>.'};
@@ -156,14 +156,14 @@ function genK(){
     else if(t==='ge'){ a=pick(AL); k=n; while(k>=0 && bcdf(n,p,k,n)<a) k--; ok=k>=1; }
     else { a=pick([0.05,0.1]); k=-1; while(bcdf(n,p,0,k+1)<=a) k++; ok=k>=1; }
   }while(!ok || n*p<3 || n*(1-p)<3);
-  const F={le:`die <b>kleinste</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ ${deZ(a)}`,
-           ge:`die <b>größte</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≥ <i>k</i>) ≥ ${deZ(a)}`,
-           lo:`die <b>größte</b> Zahl <i>k</i> mit <i>P</i>(<i>X</i> ≤ <i>k</i>) ≤ ${deZ(a)}`}[t];
+  const F={le:`das <b>kleinste</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≤ <i>k</i>) ≥ ${deZ(a)}</div>`,
+           ge:`das <b>größte</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≥ <i>k</i>) ≥ ${deZ(a)}</div>`,
+           lo:`das <b>größte</b> <i>k</i> mit<div class="fo"><i>P</i>(<i>X</i> ≤ <i>k</i>) ≤ ${deZ(a)}</div>`}[t];
   const ci=t==='ge'?`f1(x)=binomCdf(${n},${p},x,${n})`:`f1(x)=binomCdf(${n},${p},0,x)`;
   const fx=x=>t==='ge'?bcdf(n,p,x,n):bcdf(n,p,0,x);
   const nb=t==='le'?[k-1,k]:[k,k+1];
   return {typ:'k', h:'k gesucht – mit der Tabelle', soll:k,
-    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b> und <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie ${F}.`,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b> und <b><i>p</i> = ${deZ(p)}</b>.<br>Bestimmen Sie ${F}`,
     lab:'<i>k</i> =', casIn:ci, tab:nb.map(x=>[x,fx(x)]), grenze:a, rel:t==='lo'?'≤':'≥',
     hinweis:'Tipp: Die gesuchte Grenze <i>k</i> wird zu <b>x</b>. Bei <i>P</i>(<i>X</i> ≤ …): untere Grenze 0. Bei <i>P</i>(<i>X</i> ≥ …): obere Grenze <i>n</i>. Tabellenanfang etwas unter <i>n</i>·<i>p</i> wählen (<b>menu ▸ 2 ▸ 5</b>).'};
 }
@@ -176,9 +176,8 @@ function genP(){
     p=bis(g,1e-6,1-1e-6);
   }while(!(p>0.03&&p<0.95));
   const pr=Math.round(p*1000)/1000;
-  const txt=t==='le'?`höchstens ${k}-mal einen Treffer`:(k===1?'mindestens einen Treffer':`mindestens ${k} Treffer`);
   return {typ:'p', h:'p gesucht – mit dem Graphen', soll:pr, exact:p, rel:t==='le'?'≤':'≥',
-    frage:`Ein Versuch wird <b><i>n</i> = ${n}</b>-mal durchgeführt.<br>Mit mindestens ${pct(a)} Wahrscheinlichkeit soll man ${txt} erhalten.<br>Welche Trefferwahrscheinlichkeiten <i>p</i> sind möglich?`,
+    frage:`<i>X</i> ist binomialverteilt mit <b><i>n</i> = ${n}</b>.<br>Bestimmen Sie alle <i>p</i> mit<div class="fo"><i>P</i>(<i>X</i> ${t==='le'?'≤':'≥'} ${k}) ≥ ${deZ(a)}</div>`,
     casIn:(t==='le'?`f1(x)=binomCdf(${n},x,0,${k})`:`f1(x)=binomCdf(${n},x,${k},${n})`)+`, f2(x)=${a}`, grenze:a,
     hinweis:'Tipp: <i>p</i> wird zu <b>x</b>. Grenze als 2. Funktion, Fenster 0 bis 1, dann <b>menu ▸ 6 ▸ 4: Schnittpunkt</b>. Fällt der Graph, gilt <i>p</i> ≤ …, steigt er, gilt <i>p</i> ≥ … .'};
 }
