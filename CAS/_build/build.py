@@ -184,9 +184,9 @@ PANEL_HTML = PANEL_HTML.replace(_b, '<button id="back">◀ Zurück</button><butt
 
 # Themenblöcke der Gliederung (Reihenfolge = Anzeige). Grundlagen (None) steht einzeln ganz oben.
 BLOCKS = [
+    ('stat','Statistik'),
     ('fa',  'Funktionen &amp; Analysis'),
     ('alg', 'Gleichungen &amp; Algebra'),
-    ('stat','Statistik'),
     ('sto', 'Stochastik'),
 ]
 # NEUES THEMA: hier seinem Block zuordnen (Reihenfolge im Block = Reihenfolge in TOPICS)
