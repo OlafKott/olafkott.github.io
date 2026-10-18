@@ -19,6 +19,7 @@ TOPICS = [
     ('gl', 'Gleichungen', 'Gleichungen', 'Gleichungen', 'Gleichungen lösen (solve)', '', 'Arbeitsblatt_CAS_Gleichungen.pdf'),
     ('lgs', 'LGS', 'LGS', 'LGS', 'Lineare Gleichungs&shy;systeme lösen', '', 'Arbeitsblatt_CAS_LGS.pdf'),
     ('graph', 'Graphen', 'Graphen', 'Graphen', 'Graphen analysieren', 'Nullstellen, Extrem-, Wende- und Schnittpunkte', 'Arbeitsblatt_CAS_Graphen.pdf'),
+    ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Flächen berechnen', 'Integral, Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
 ]
 
@@ -192,7 +193,7 @@ BLOCKS = [
 # NEUES THEMA: hier seinem Block zuordnen (Reihenfolge im Block = Reihenfolge in TOPICS)
 BLOCK_OF = {
     'grund': None,
-    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa',
+    'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'flae': 'fa',
     'gl': 'alg', 'lgs': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
 }

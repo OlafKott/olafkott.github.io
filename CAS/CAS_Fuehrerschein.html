@@ -1419,6 +1419,180 @@ button{ font-family:inherit; }
 [data-g="graph"] .play:hover{background:#ffc928;}
 [data-g="graph"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
 [data-g="graph"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- flae --- */
+[data-g="flae"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="flae"] *, [data-g="flae"]{box-sizing:border-box;}
+[data-g="flae"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="flae"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="flae"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="flae"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="flae"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="flae"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="flae"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="flae"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="flae"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="flae"] .brand b{color:#fff; margin-left:6px;}
+[data-g="flae"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="flae"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="flae"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="flae"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="flae"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="flae"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="flae"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="flae"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="flae"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="flae"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="flae"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="flae"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="flae"] .k:focus{outline:none;}
+[data-g="flae"] .k:active{transform:scale(.95);}
+[data-g="flae"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="flae"] .k.ctrl{background:#D93A2B;}
+[data-g="flae"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="flae"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="flae"] .pad .k.hit{position:absolute;}
+[data-g="flae"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="flae"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_flae .35s;}
+[data-g="flae"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_flae{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="flae"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="flae"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="flae"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="flae"] .let9 .k{height:20px; font-size:10px;}
+[data-g="flae"] .span2{grid-column:span 2;}
+[data-g="flae"] .span3{grid-column:span 3;}
+[data-g="flae"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="flae"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="flae"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="flae"] .tb .tab.off{background:#eef1f5; color:#777;}
+[data-g="flae"] .tb .tab.np{background:#fff4c9; border-color:#d1b24a; font-weight:bold;}
+[data-g="flae"] .scr.tabhl .tb .tab.pg{background:#F2B705; color:#111; font-weight:bold; border-color:#b88a00; box-shadow:0 0 6px 1px rgba(242,183,5,.8); animation:pulse_flae 1.2s ease-in-out infinite;}
+[data-g="flae"] .scr.tabhl .tb .tab.pg.off{background:#FFE9A8; color:#5a4500;}
+[data-g="flae"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="flae"] .tb .sp{flex:1;}
+[data-g="flae"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="flae"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="flae"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end;}
+[data-g="flae"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="flae"] .calcapp .ln span, [data-g="flae"] .calcapp .ln b{padding:0 2px; border-radius:2px;}
+[data-g="flae"] .calcapp .ln .sel{background:#3b78c2; color:#fff;}
+[data-g="flae"] .calcapp .ln b{font-weight:normal; margin-left:auto;}
+[data-g="flae"] .calcapp .ln b i, [data-g="flae"] .calcapp .ln span i{font-style:normal;}
+[data-g="flae"] .calcapp .cur{border:1px solid #888; min-height:20px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center;}
+[data-g="flae"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
+[data-g="flae"] .fr > span{padding:0 2px; min-width:7px;}
+[data-g="flae"] .fr > span:first-child{border-bottom:1px solid currentColor;}
+[data-g="flae"] .fr > span:empty::after, [data-g="flae"] .rad:empty::after, [data-g="flae"] sup:empty::after{content:"\25A1"; color:#999;}
+[data-g="flae"] .calcapp{overflow:hidden;}
+[data-g="flae"] .calcapp > *{flex-shrink:0;}
+[data-g="flae"] .dvb:empty::after{content:"\25A1"; color:#999;}
+[data-g="flae"] .rt{white-space:nowrap;}
+[data-g="flae"] .rad{border-top:1px solid currentColor; padding:0 1px;}
+[data-g="flae"] .calcapp sup{font-size:8px;}
+[data-g="flae"] .caret{animation:blink_flae 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_flae{ 50%{opacity:0} }
+[data-g="flae"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="flae"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="flae"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="flae"] .dlg{position:absolute; left:8px; right:8px; top:22px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
+[data-g="flae"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
+[data-g="flae"] .dlg .ff{display:grid; grid-template-columns:112px 1fr; gap:3px 5px; padding:5px 7px 3px; align-items:center;}
+[data-g="flae"] .dlg .lb{text-align:right;}
+[data-g="flae"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:14px; padding:0 4px; display:flex; justify-content:space-between; align-items:center; font-size:10px;}
+[data-g="flae"] .dlg .ct.fo{outline:2px solid #3b78c2;}
+[data-g="flae"] .dlg .ct.mark{background:#FFF3C4;}
+[data-g="flae"] .dlg .bt{display:flex; justify-content:flex-end; gap:5px; padding:3px 7px 6px; font-size:10px;}
+[data-g="flae"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 7px; border-radius:3px;}
+[data-g="flae"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="flae"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="flae"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="flae"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="flae"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="flae"] .hs .col{flex:1;}
+[data-g="flae"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="flae"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="flae"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="flae"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="flae"] .hs .it.dim{color:#6f757d;}
+[data-g="flae"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="flae"] .hs .it.sel{background:#3b78c2; color:#fff;}
+[data-g="flae"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_flae 1.2s ease-in-out infinite;}
+[data-g="flae"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="flae"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_flae 1.2s ease-in-out infinite;}
+@keyframes pulse_flae{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="flae"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="flae"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="flae"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="flae"] .hs .icons svg{width:20px; height:20px;}
+[data-g="flae"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="flae"] table.sh{border-collapse:collapse; table-layout:fixed; width:280px;}
+[data-g="flae"] table.sh td{border:1px solid #c9ced6; height:15px; padding:0 3px; font-size:10.5px;}
+[data-g="flae"] table.sh td.rn{width:16px; background:#eef1f5; color:#666; text-align:center; padding:0; font-size:9px;}
+[data-g="flae"] table.sh tr.hd td{height:18px; background:#eef1f5; font-weight:bold;}
+[data-g="flae"] table.sh td.cur{outline:2px solid #000; outline-offset:-2px;}
+[data-g="flae"] .files{padding:4px 8px; font-size:11px;}
+[data-g="flae"] .files .hd{font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between;}
+[data-g="flae"] .files .it{padding:2px 4px; display:flex; justify-content:space-between;}
+[data-g="flae"] .files .it.sel{background:#3b78c2; color:#fff;}
+[data-g="flae"] .pwroff{position:absolute; inset:0; background:#20242a; color:#9aa3ad; display:flex; align-items:center; justify-content:center; font-size:12px;}
+[data-g="flae"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="flae"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="flae"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="flae"] .prog i.done{background:#9aa3b0;}
+[data-g="flae"] .prog i.now{background:var(--lf);}
+[data-g="flae"] .prog i.abp{background:#bfe3c3;}
+[data-g="flae"] .prog i.abp.done{background:#7cbf84;}
+[data-g="flae"] .prog i.abp.now{background:var(--ab);}
+[data-g="flae"] .nr{font-size:13px; color:var(--mute);}
+[data-g="flae"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="flae"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="flae"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="flae"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="flae"] .chip.ctrl{background:#D93A2B;}
+[data-g="flae"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="flae"] .chip.done{opacity:.35;}
+[data-g="flae"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="flae"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="flae"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="flae"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="flae"] .note b{color:#8a5a00;}
+[data-g="flae"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="flae"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="flae"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="flae"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="flae"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="flae"] .ab .abt span{font-size:22px;}
+[data-g="flae"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="flae"] .ab li{margin-bottom:3px;}
+[data-g="flae"] .ab p{font-size:14.5px;}
+[data-g="flae"] .ab .tx{font-family:Consolas,'Courier New',monospace; background:#e2eee3; border-radius:3px; padding:0 4px;}
+[data-g="flae"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="flae"] .task b{color:var(--lf);}
+[data-g="flae"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="flae"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
+[data-g="flae"] .task .term .fr{font-size:20px;}
+[data-g="flae"] .task .term .rad{padding:0 3px;}
+[data-g="flae"] .cmd{font-family:Consolas,'Courier New',monospace; font-size:21px; background:#eceef1; border-radius:4px; padding:0 6px;}
+[data-g="flae"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="flae"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="flae"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="flae"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="flae"] #next{margin-left:auto;}
+[data-g="flae"] .opt{font-size:13.5px; color:var(--mute); display:flex; align-items:center; gap:6px; margin-top:10px;}
+[data-g="flae"] .hint{font-size:12.5px; color:var(--mute); margin-top:10px;}
+[data-g="flae"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="flae"] .vgl th, [data-g="flae"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:top;}
+[data-g="flae"] .vgl th{background:#eef0f3;}
+@media (max-width:380px){[data-g="flae"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="flae"] .play{font:600 15px system-ui,Arial,sans-serif; background:#F2B705; color:#111; border:0; border-radius:999px; padding:7px 16px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.15);}
+[data-g="flae"] .chip.playc{background:#F2B705; color:#111; cursor:pointer;}
+[data-g="flae"] .play:hover{background:#ffc928;}
+[data-g="flae"] .playh{font-size:13px; color:var(--mute); margin-left:6px;}
+[data-g="flae"] .int{display:inline-flex; align-items:center; vertical-align:middle; margin:0 1px;}
+[data-g="flae"] .int .is{font-family:Cambria,Georgia,serif; font-size:1.45em; line-height:1; font-style:italic;}
+[data-g="flae"] .int .lim{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:.62em; line-height:1.05; margin-left:-1px; align-self:stretch;}
+[data-g="flae"] .task .term .int .lim{font-size:.55em;}
+[data-g="flae"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 /* --- abl --- */
 [data-g="abl"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
 [data-g="abl"] *, [data-g="abl"]{box-sizing:border-box;}
@@ -6390,6 +6564,775 @@ neu();
  }
 };
 
+/* ===== Anleitung: flae ===== */
+GUIDES["flae"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  if(tabs==='np') return '<div class="tb"><span class="tab np">Notizblock</span><span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab pg ${t===cur?'':'off'}">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${k===mark?'sel':''} ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',!mark),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  const FT={A:'Notizblock: Berechnen',B:'Notizblock: Graph','1':'Neues Dokument','2':'Meine Dokumente','3':'Zuletzt verwendet','4':'Aktuelles Dokument','5':'Einstellungen'};
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft">${FT[mark]||'<b>Calculator</b> zum Notizblock hinzufügen'}</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${6+i*48}px;top:${22+i*26}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+function sheet(tabs,cur,doc){
+  let h=topbar(tabs,cur,doc)+'<table class="sh"><tr class="hd"><td class="rn"></td><td>A</td><td>B</td><td>C</td><td>D</td></tr>';
+  for(let r=1;r<=10;r++) h+=`<tr><td class="rn">${r}</td><td class="${r===1?'cur':''}"></td><td></td><td></td><td></td></tr>`;
+  return h+'</table>';
+}
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map((l,j)=>`<div class="ln"><span class="${o.sel===2*j?'sel':''}">${l[0]}</span><b class="${o.sel===2*j+1?'sel':''}">${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const off=()=>'<div class="pwroff">Der Rechner ist aus.</div>';
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const AK=["1: Definieren","2: Definition abrufen","3: Variable löschen","4: a–z löschen…","5: Verlauf löschen","6: Kommentar einfügen","7: Bibliothek","8: Sperren"];
+
+// ---------- Eingabezeile (Vorlagen: Bruch, Hochzahl, Wurzel) ----------
+const SHOW={'*':'·','-':'−','neg':'−','/':'/'};
+function Entry(){ this.root=[]; this.path=[{a:this.root}]; this.ctrl=false; }
+Entry.prototype.top=function(){ return this.path[this.path.length-1]; };
+Entry.prototype.der=function(){ const d={t:'der',v:[],e:[]}; this.top().a.push(d); this.path.push({a:d.v,der:d}); };
+Entry.prototype.key=function(k){
+  const T=this.top();
+  if(k==='tab'){ if(T.der&&T.a===T.der.v){ this.path.pop(); this.path.push({a:T.der.e,der:T.der}); } return; }
+  if(this.ctrl){ this.ctrl=false;
+    if(k==='/'){ const f={t:'frac',n:[],d:[]}; T.a.push(f); this.path.push({a:f.n,f}); return; }
+    if(k==='x2'){ const s={t:'sqrt',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+    if(k==='neg'){ T.a.push('ans'); return; }
+    if(k==='var'){ T.a.push('→'); return; }
+    if(k==='tmpl'){ T.a.push(':='); return; }
+    return;
+  }
+  if(k==='ctrl'){ this.ctrl=true; return; }
+  if(k==='^'){ const s={t:'sup',v:[]}; T.a.push(s); this.path.push({a:s.v}); return; }
+  if(k==='x2'){ T.a.push({t:'sup',v:['2']}); return; }
+  if(k==='down'){ if(T.f&&T.a===T.f.n){ this.path.pop(); this.path.push({a:T.f.d,f:T.f}); } return; }
+  if(k==='right'){ if(this.path.length>1) this.path.pop(); return; }
+  if(k==='del'){ T.a.pop(); return; }
+  if(k==='-'&&this.root.length===0){ T.a.push('ans','−'); return; }
+  T.a.push(SHOW[k]||k);
+};
+function rnd(arr,curA,caret){
+  let h=arr.map(t=>typeof t==='string'?t:
+    t.t==='frac'?`<span class="fr"><span>${rnd(t.n,curA,caret)}</span><span>${rnd(t.d,curA,caret)}</span></span>`:
+    t.t==='sup'?`<sup>${rnd(t.v,curA,caret)}</sup>`:
+    t.t==='der'?`<span class="fr"><span>d</span><span>d<span class="dvb">${rnd(t.v,curA,caret)}</span></span></span>(<span class="dvb">${rnd(t.e,curA,caret)}</span>)`:
+    `<span class="rt">√<span class="rad">${rnd(t.v,curA,caret)}</span></span>`).join('');
+  if(caret&&arr===curA) h+='<span class="caret">|</span>';
+  return h;
+}
+function ser(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='frac'?`(${ser(t.n)})/(${ser(t.d)})`:t.t==='sup'?`^(${ser(t.v)})`:t.t==='der'?`d/d${ser(t.v)}(${ser(t.e)})`:`√(${ser(t.v)})`).join(''); }
+Entry.prototype.html=function(caret){ const h=rnd(this.root,this.top().a,caret!==false); return h; };
+
+// ---------- Graphs-App: Menüs ----------
+const F1=['1.1'], O={doc:'graph'};
+const GM=["1: Aktionen","2: Ansicht","3: Graph-Eingabe/Bearbeitung","4: Fenster/Zoom","5: Spur","6: Graph analysieren","7: Tabelle","8: Geometrie","9: Einstellungen"];
+const FZ=["1: Fenstereinstellungen","2: Zoom – Box","3: Zoom – Vergrößern","4: Zoom – Verkleinern","5: Zoom – Standard","6: Zoom – Quadrant 1","7: Zoom – Benutzer","8: Zoom – Trig","9: Zoom – Daten"];
+const SP=["1: Grafikspur","2: Allgemeine Spur","3: Spurschritt"];
+const GA=["1: Nullstelle","2: Minimum","3: Maximum","4: Schnittpunkt","5: Wendepunkt","6: dy/dx","7: Integral","8: Begrenzter Bereich","9: Kegelschnitte analysieren"];
+const SUB={"4":FZ,"5":SP,"6":GA};
+const TOOLN={"4":"Schnittpunkt","7":"Integral","8":"Begrenzter Bereich"};
+// Funktionen der Tour (Polynom-Koeffizienten, höchste Potenz zuerst)
+const FUN={ f1:{P:[1,-3,-1,3], col:'#1f4fb5'}, f2:{P:[-1,0,1], col:'#c8102e'} };
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+const der=P=>P.slice(0,-1).map((c,i)=>c*(P.length-1-i));
+const anti=P=>P.map((c,i)=>c/(P.length-i)).concat([0]);
+const integ=(P,a,b)=>{ const A=anti(P); return ev(A,b)-ev(A,a); };
+const psub=(P,Q)=>{ const n=Math.max(P.length,Q.length), A=Array(n-P.length).fill(0).concat(P), B=Array(n-Q.length).fill(0).concat(Q); return A.map((c,i)=>c-B[i]); };
+// Fläche = Summe der Beträge der Teilintegrale (Aufteilen an den Vorzeichenwechseln)
+function absInt(P,a,b){ if(a>b){ const t=a; a=b; b=t; } let s=0, x0=a; const N=400;
+  for(let i=1;i<=N;i++){ const x=a+(b-a)*i/N; if(ev(P,x0)*ev(P,x)<0){ let l=x0,r=x; for(let k=0;k<70;k++){ const m=(l+r)/2; if(ev(P,l)*ev(P,m)<=0) r=m; else l=m; } const z=(l+r)/2; s+=Math.abs(integ(P,a,z)); a=z; } x0=x; }
+  return s+Math.abs(integ(P,a,b)); }
+const fmt3=v=>{ if(Math.abs(v)<5e-7) return '0'; return String(Number(v.toPrecision(3))).replace('-','−'); };
+
+// ---------- Graphs-App: Zustand ----------
+const DLGL=["XMin","XMax","XSkalierung","YMin","YMax","YSkalierung"];
+function G0(){ return {win:{x0:-10,x1:10,y0:-6.67,y1:6.67}, fs:[], ent:{n:'f1',e:new Entry()}, menu:null, dlg:null, tool:null, pts:[], areas:[], ctrl:false}; }
+function bis(g,a,b){ let fa=g(a); for(let i=0;i<80;i++){ const m=(a+b)/2, fm=g(m); if((fa<=0)===(fm<=0)){ a=m; fa=fm; } else b=m; } return (a+b)/2; }
+function finishTool(S,T,lo,hi){
+  const f=FUN.f1.P;
+  if(T.t==='4'){ const x=bis(z=>ev(f,z)-ev(FUN.f2.P,z),lo,hi); S.pts.push({x,y:ev(f,x),t:'4'}); }
+  else if(T.t==='7') S.areas.push({t:'7',lo,hi,v:integ(f,lo,hi)});
+  else if(T.t==='8') S.areas.push({t:'8',lo,hi,v:absInt(psub(f,FUN.f2.P),lo,hi)});
+}
+function simG(keys){
+  const S=G0();
+  for(const k of keys){
+    if(S.menu){
+      if(k==='esc'){ S.menu=null; continue; }
+      if(S.menu.length===1){ S.menu[0].sel=+k-1; S.menu.push({items:SUB[k]||[],sel:0,d:k}); continue; }
+      const a=S.menu[1].d; S.menu=null;
+      if(a==='4'&&k==='1'){ const w=S.win; S.dlg={v:[fmt3(w.x0),fmt3(w.x1),'Auto',fmt3(w.y0),fmt3(w.y1),'Auto'], fo:0, fresh:true}; }
+      if(a==='6'){ S.tool={t:k, ph:'lo', cx:Math.round((S.win.x0+S.win.x1)/2), lo:null, typed:''}; }
+      continue;
+    }
+    if(S.dlg){
+      const D=S.dlg;
+      if(k==='tab'){ D.fo=(D.fo+1)%6; D.fresh=true; continue; }
+      if(k==='enter'){ const p=s=>parseFloat(s.replace('−','-')); S.win={x0:p(D.v[0]),x1:p(D.v[1]),y0:p(D.v[3]),y1:p(D.v[4])}; S.dlg=null; continue; }
+      const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.fo]=''; D.fresh=false; } D.v[D.fo]+=ch; continue;
+    }
+    if(S.ent){
+      if(k==='enter'){ S.fs.push({n:S.ent.n, root:S.ent.e.root}); S.ent=null; continue; }
+      S.ent.e.key(k); continue;
+    }
+    if(S.tool){
+      const T=S.tool;
+      // Schranke als Zahl eintippen: der Cursor springt an diese Stelle
+      if(/^[0-9.]$/.test(k)||k==='neg'){ T.typed+=k==='neg'?'−':k; const v=parseFloat(T.typed.replace('−','-')); if(!isNaN(v)) T.cx=v; continue; }
+      if(k==='left'){ T.cx-=0.5; T.typed=''; continue; } if(k==='right'){ T.cx+=0.5; T.typed=''; continue; }
+      if(k==='esc'){ S.tool=null; continue; }
+      if(k==='click'||k==='enter'){ T.typed=''; if(T.ph==='lo'){ T.lo=T.cx; T.ph='hi'; } else { finishTool(S,T,T.lo,T.cx); S.tool=null; } }
+      continue;
+    }
+    if(S.ctrl){ S.ctrl=false; if(k==='g') S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
+    if(k==='ctrl'){ S.ctrl=true; continue; }
+    if(k==='tab'){ S.ent={n:'f'+(S.fs.length+1), e:new Entry()}; continue; }
+    if(k==='menu'){ S.menu=[{items:GM,sel:0}]; continue; }
+  }
+  return S;
+}
+
+// ---------- Graphs-App: Bildschirm ----------
+const ACOL={'7':'#6f9be0','8':'#ee9a45'};
+function gScreen(S){
+  const W=280, H=194, w=S.win, X=x=>(x-w.x0)/(w.x1-w.x0)*W, Y=y=>(w.y1-y)/(w.y1-w.y0)*H;
+  const Yc=y=>Math.max(-30,Math.min(H+30,Y(y)));
+  const top=x=>ev(FUN.f1.P,x), hasF2=S.fs.length>1;
+  // eingefärbte Fläche zwischen Graph und x-Achse (Integral) bzw. zwischen beiden Graphen (Begrenzter Bereich)
+  const shade=(t,a,b,op)=>{ const lo=Math.min(a,b), hi=Math.max(a,b); if(hi-lo<1e-9) return '';
+    const bot=t==='8'&&hasF2?(x=>ev(FUN.f2.P,x)):(()=>0); let d=''; const N=70;
+    for(let i=0;i<=N;i++){ const x=lo+(hi-lo)*i/N; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Yc(top(x)).toFixed(1)+' '; }
+    for(let i=N;i>=0;i--){ const x=lo+(hi-lo)*i/N; d+='L'+X(x).toFixed(1)+' '+Yc(bot(x)).toFixed(1)+' '; }
+    return `<path d="${d}Z" fill="${ACOL[t]}" fill-opacity="${op}" stroke="${ACOL[t]}" stroke-width=".6"/>`; };
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="position:absolute;left:0;top:16px;overflow:hidden" font-family="Arial,Helvetica,sans-serif">`;
+  S.areas.forEach(A=>{ s+=shade(A.t,A.lo,A.hi,.5); });
+  if(S.tool&&S.tool.lo!==null){
+    if(S.tool.t==='7'||S.tool.t==='8') s+=shade(S.tool.t,S.tool.lo,S.tool.cx,.38);
+    else { const a=Math.min(X(S.tool.lo),X(S.tool.cx)), b=Math.max(X(S.tool.lo),X(S.tool.cx)); s+=`<rect x="${a}" y="0" width="${b-a}" height="${H}" fill="#cfd4db" opacity=".75"/>`; }
+  }
+  const ax='#555';
+  if(w.y0<0&&w.y1>0){ const y=Y(0); s+=`<line x1="0" y1="${y}" x2="${W-5}" y2="${y}" stroke="${ax}" stroke-width="1"/><path d="M${W} ${y} l-6 -3 v6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.x0);t<=Math.floor(w.x1);t++) if(t) s+=`<line x1="${X(t)}" y1="${y-2}" x2="${X(t)}" y2="${y+2}" stroke="${ax}"/>`;
+    s+=`<text x="2" y="${y-3}" font-size="8" fill="#777">${fmt3(w.x0)}</text><text x="${W-2}" y="${y+10}" font-size="8" fill="#777" text-anchor="end">${fmt3(w.x1)}</text>`; }
+  if(w.x0<0&&w.x1>0){ const x=X(0); s+=`<line x1="${x}" y1="${H}" x2="${x}" y2="5" stroke="${ax}" stroke-width="1"/><path d="M${x} 0 l-3 6 h6z" fill="${ax}"/>`;
+    for(let t=Math.ceil(w.y0);t<=Math.floor(w.y1);t++) if(t) s+=`<line x1="${x-2}" y1="${Y(t)}" x2="${x+2}" y2="${Y(t)}" stroke="${ax}"/>`;
+    s+=`<text x="${x+4}" y="9" font-size="8" fill="#777">${fmt3(w.y1)}</text><text x="${x+4}" y="${H-3}" font-size="8" fill="#777">${fmt3(w.y0)}</text>`; }
+  S.fs.forEach((F,j)=>{
+    const P=FUN[F.n].P, col=FUN[F.n].col; let d='', pen=false, last=null;
+    for(let i=0;i<=280;i++){ const x=w.x0+(w.x1-w.x0)*i/280, y=ev(P,x), py=Y(y);
+      if(py>-40&&py<H+40){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+py.toFixed(1)+' '; pen=true; if(py>=0&&py<=H) last=[X(x),py]; } else pen=false; }
+    s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
+    if(last) s+=`<text x="${W-4}" y="${(S.ent?33:13)+j*12}" font-size="9.5" fill="${col}" text-anchor="end" stroke="#fff" stroke-width="3" paint-order="stroke">${F.n}(x)=${ser2(F.root)}</text>`;
+  });
+  S.pts.forEach(p=>{
+    const px=X(p.x), py=Y(p.y), right=px<W-70, below=py<30||p.x>1.5;
+    s+=`<circle cx="${px}" cy="${py}" r="2.6" fill="#000"/>`;
+    s+=`<text x="${right?px+5:px-5}" y="${below?py+13:py-6}" font-size="9" fill="#000" text-anchor="${right?'start':'end'}" stroke="#fff" stroke-width="3" paint-order="stroke">(${fmt3(p.x)},${fmt3(p.y)})</text>`;
+  });
+  // Wert der Fläche (wie am CAS: im Graphen angezeigt)
+  S.areas.forEach(A=>{
+    const xm=(A.lo+A.hi)/2, yt=Y(top(xm)), yb=A.t==='8'&&hasF2?Y(ev(FUN.f2.P,xm)):Y(0);
+    let ty=(yt+yb)/2+3; if(Math.abs(yt-yb)<16) ty=Math.max(yt,yb)+12;
+    const txt=A.t==='7'?`∫=${fmt3(A.v)}`:`A=${fmt3(A.v)}`;
+    s+=`<text x="${X(xm)}" y="${Math.max(10,Math.min(H-4,ty))}" font-size="10" font-weight="bold" fill="#111" text-anchor="middle" stroke="#fff" stroke-width="3" paint-order="stroke">${txt}</text>`;
+  });
+  if(S.tool){
+    const T=S.tool, dot='stroke="#222" stroke-width="1.3" stroke-dasharray="1.5 2.2"';
+    if(T.lo!==null) s+=`<line x1="${X(T.lo)}" y1="0" x2="${X(T.lo)}" y2="${H}" ${dot}/>`;
+    s+=`<line x1="${X(T.cx)}" y1="0" x2="${X(T.cx)}" y2="${H}" ${dot}/>`;
+    const cy=Y(top(T.cx)), cyy=Math.max(4,Math.min(H-24,cy)), hx=X(T.cx);
+    if(S.pulse) s+=`<circle cx="${hx}" cy="${cyy}" r="${S.pulse}" fill="none" stroke="#F2B705" stroke-width="3"/>`;
+    s+=`<g transform="translate(${hx-2.2} ${cyy}) scale(1.05)"><path d="M1 0c1.2 0 2 .8 2 2v5.3l1-.3c.8-.2 1.6.2 1.8 1l.2.8 1-.2c.8-.1 1.5.4 1.6 1.2l.1.6.8-.1c.8-.1 1.5.5 1.5 1.3v3c0 3-2 5-5 5h-2c-2 0-3.2-.8-4.2-2.4l-3-4.6c-.5-.8-.2-1.8.6-2.2.7-.4 1.6-.1 2 .6L-1 12V2c0-1.2.8-2 2-2z" fill="#fff" stroke="#000" stroke-width=".9" stroke-linejoin="round"/></g>`;
+    if(S.pulse) s+=`<text x="${hx+14}" y="${cyy+8}" font-size="10" font-weight="bold" fill="#8a5a00" stroke="#fff" stroke-width="3" paint-order="stroke">Klick</text>`;
+  }
+  s+='</svg>';
+  let h=topbar(F1,'1.1',O.doc)+s;
+  if(S.tool){ const T=S.tool;
+    h+=`<div style="position:absolute;left:3px;bottom:3px;background:#fff;border:1px solid #555;padding:0 5px;font-size:10px;z-index:2"><b>${T.ph==='lo'?'Untere':'Obere'} Schranke?</b>${T.typed?` &nbsp;x: <span style="border:1px solid #3b78c2;padding:0 3px">${T.typed}<span class="caret">|</span></span>`:` <span style="color:#8a5a00">(x = ${fmt3(T.cx)})</span>`}</div><div style="position:absolute;left:3px;top:19px;font-size:9px;color:#555;z-index:2">${TOOLN[T.t]||''}</div>`; }
+  if(S.ent) h+=`<div style="position:absolute;left:0;right:0;top:16px;height:21px;background:#fff;border-bottom:1px solid #9aa5b3;display:flex;align-items:center;padding:0 5px;font-size:11.5px;z-index:2"><span style="display:inline-flex;width:11px;height:11px;border:1px solid #1f4fb5;background:#1f4fb5;color:#fff;font-size:9px;line-height:11px;justify-content:center;margin-right:4px">✓</span><span style="color:${FUN[S.ent.n].col};margin-right:2px">${S.ent.n}(x)=</span><span style="flex:1;padding:0 3px;min-height:15px">${S.ent.e.html()}</span></div>`;
+  if(S.dlg){ const D=S.dlg; h+='<div class="dlg"><div class="tt">Fenstereinstellungen</div><div class="ff">'+DLGL.map((l,i)=>`<span class="lb">${l}:</span><span class="ct ${i===D.fo?'fo':''}">${D.v[i]}${i===D.fo&&!D.fresh?'<span class="caret">|</span>':''}</span>`).join('')+'</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>'; }
+  if(S.menu) h+=menus(S.menu);
+  return h;
+}
+// Eingabe als Text für das Graph-Etikett (³, ², ·)
+function ser2(arr){ return arr.map(t=>typeof t==='string'?t:t.t==='sup'?(({'2':'²','3':'³'})[ser2(t.v)]||'^'+ser2(t.v)):ser2(t.v||[])).join('').replace(/(\d)x/g,'$1·x'); }
+
+// Bildschirm nach einer Tastenfolge (ab Tourbeginn nach dem Neuen Dokument)
+const GS=(pre,keys)=>i=>gScreen(simG(pre.concat(keys.slice(0,i))));
+const gAfter=keys=>()=>gScreen(simG(keys));
+
+// ---------- Grenzen mit dem Cursor setzen: Menü selbst wählen, Cursor-Bewegung abspielen ----------
+const KP=K=>K.slice(0,3).concat(['play']);
+const GP=(pre,K)=>i=>gScreen(simG(pre.concat(i<4?K.slice(0,i):K)));
+let ANI=0;
+const PLAYB='<p><button class="play" data-play="1" type="button">▶ Abspielen</button> <span class="playh">zeigt, wie Sie mit dem Cursor die Grenzen setzen</span></p>';
+function toolMarks(pre,K){ let cx=null, lo=null, hi=null; const S=simG(pre.concat(K.slice(0,3))); cx=S.tool.cx; const c0=cx;
+  for(const k of K.slice(3)){ if(k==='left') cx-=0.5; else if(k==='right') cx+=0.5; else if(k==='click'){ if(lo===null) lo=cx; else hi=cx; } }
+  return {c0,lo,hi}; }
+function playTool(){
+  const T0=TRACKS[tr], S0=T0.steps[st]; if(!S0.full||lock) return;
+  const stx=__D.getElementById('stat');
+  if(S0.k[pos]!=='play'){ if(stx&&pos<S0.k.length) stx.innerHTML='<span class="err">Wählen Sie zuerst im Menü das Werkzeug.</span> Drücken Sie jetzt: '+chip(S0.k[pos],pos).replace('now','now big'); return; }
+  const id=++ANI, t0=tr, s0=st, pre=S0.pre, K=S0.full, M=toolMarks(pre,K), scr=__D.getElementById('scr');
+  const base=()=>simG(pre.concat(K.slice(0,3)));
+  const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+  const glide=(a,b,lo)=>u=>{ const S=base(); S.tool.cx=a+(b-a)*ease(u); if(lo!==null){ S.tool.lo=lo; S.tool.ph='hi'; } return gScreen(S); };
+  const hold=(x,lo,pl)=>u=>{ const S=base(); S.tool.cx=x; if(lo!==null){ S.tool.lo=lo; S.tool.ph='hi'; } if(pl) S.pulse=4+u*12; return gScreen(S); };
+  const seg=[
+    {d:900, f:hold(M.c0,null,false)},
+    {d:2200, f:glide(M.c0,M.lo,null)},
+    {d:900, f:hold(M.lo,null,true)},
+    {d:600, f:hold(M.lo,M.lo,false)},
+    {d:3000, f:glide(M.lo,M.hi,M.lo)},
+    {d:900, f:hold(M.hi,M.lo,true)},
+    {d:400, f:hold(M.hi,M.lo,false)}
+  ];
+  lock=true; if(stx) stx.innerHTML='<span>▶ Cursor-Bewegung läuft …</span>';
+  let i=0, t1=null;
+  function tick(ts){
+    if(id!==ANI||tr!==t0||st!==s0){ lock=false; return; }
+    if(t1===null) t1=ts;
+    let u=(ts-t1)/seg[i].d; if(u>=1){ i++; t1=ts; u=0; }
+    if(i>=seg.length){ lock=false; pos=S0.k.length; render(); return; }
+    scr.innerHTML=seg[i].f(Math.min(u,1)); requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+__D.getElementById('dd').addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-play]'); if(b) playTool(); });
+__D.getElementById('stat').addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.playc'); if(b) playTool(); });
+
+// ---------- Tastenfolgen ----------
+const kNew=["1","2"];
+const kF=["x","^","3","right","-","3","x","x2","-","x","+","3","enter"];
+const kWin=["menu","4","1","neg","2","tab","4","tab","tab","neg","5","tab","5","enter"];
+// Fläche mit der x-Achse: Grenzen mit dem Cursor (Start bei x = 1, Schritte 0,5)
+const kI1=["menu","6","7","left","left","left","left","click","right","right","right","right","click"];
+const kI2=["menu","6","7","click","right","right","right","right","click"];
+// Vorgegebenes Intervall: Grenzen eintippen
+const kT1=["menu","6","7","0","enter","2","enter"];
+const kT2=["menu","6","7","0","enter","1","enter"];
+const kT3=["menu","6","7","1","enter","2","enter"];
+// Zwischen zwei Graphen
+const kG2=["tab","1","-","x","x2","enter"];
+const kS1=["menu","6","4","left","left","left","left","left","click","right","right","click"];
+const kS2=["menu","6","4","left","click","right","right","click"];
+const kS3=["menu","6","4","right","click","right","right","click"];
+const kB1=["menu","6","8","left","left","left","left","click","right","right","right","right","click"];
+const kB2=["menu","6","8","click","right","right","click"];
+const p1=kF, p2=p1.concat(kWin);
+const px1=p2.concat(kI1), px2=px1.concat(kI2);
+const pi1=p2.concat(kT1), pi2=p2.concat(kT2), pi3=pi2.concat(kT3);
+const pz1=p2.concat(kG2), pz2=pz1.concat(kS1,kS2,kS3), pz3=pz2.concat(kB1), pz4=pz3.concat(kB2);
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const FT='<i>f</i>(<i>x</i>) = <i>x</i>³ − 3<i>x</i>² − <i>x</i> + 3';
+const INT=(a,b,t)=>`<span class="int"><span class="is">∫</span><span class="lim"><span>${b}</span><span>${a}</span></span></span>${t||''}`;
+const FX=' <i>f</i>(<i>x</i>)&thinsp;d<i>x</i>';
+const FE=v=>`<b>A = ${v} FE</b>`;
+
+const TRACKS={
+ g:{ name:"Graph zeichnen", start:()=>home(''), steps:[
+  {t:"Neues Dokument", a:"Neues Dokument mit Graphs-Seite", k:kNew, p:pick([appList(F1,'1.1',0,O.doc),gScreen(simG([]))]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>2</b> = Graphs.</p><p>Oben steht die Eingabezeile <b>f1(x)=</b>.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Funktion eingeben", a:"Zeichnen Sie "+FT, k:kF, p:GS([],kF),
+   d:"<p><b>f1(x)=</b> steht schon da – nur den Term eintippen. Hochzahl 3: <b>^</b>, <b>3</b>, dann <b>▶</b>.</p><p><b>enter</b> zeichnet den Graphen.</p>",
+   n:"Das Standardfenster geht von −10 bis 10. Für die Flächen brauchen wir einen genaueren Blick."},
+  {t:"Fenster einstellen", a:"Fenster: −2 ≤ <i>x</i> ≤ 4 und −5 ≤ <i>y</i> ≤ 5", k:kWin, p:GS(p1,kWin),
+   d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>Zahl eintippen, mit <b>tab</b> ins nächste Feld. Die Skalierung (Auto) überspringen Sie mit einem zweiten <b>tab</b>. Zum Schluss <b>enter</b>.</p>",
+   n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
+  {t:"Selbst zeichnen", k:[], ab:1, s:gAfter(p2), d:AB("Aufgabe 1",["Funktion <i>g</i> zeichnen","Fenster einstellen","Graph in das Koordinatensystem skizzieren"])}
+ ]},
+ x:{ name:"Fläche mit der x-Achse", start:gAfter(p2), steps:[
+  {t:"Fläche oberhalb der x-Achse", a:"Berechnen Sie die Fläche zwischen dem Graphen und der <i>x</i>-Achse von −1 bis 1", k:KP(kI1), full:kI1, pre:p2, p:GP(p2,kI1),
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 7: Integral</b></p><p>Das CAS fragt nach zwei Grenzen. Das Touchpad funktioniert wie ein <b>Mauspad</b>:</p><p><b>Untere Schranke</b>: Cursor auf die linke Nullstelle (<i>x</i> = −1), klicken.<br><b>Obere Schranke</b>: Cursor nach rechts ziehen – die Fläche wird <b>blau</b> –, bei <i>x</i> = 1 klicken.</p>"+PLAYB+"<p>Das CAS zeigt "+INT('−1','1',FX)+" = 4. Die Fläche liegt <b>über</b> der <i>x</i>-Achse: "+FE('4')+"</p>",
+   n:"FE = Flächeneinheiten. Am Handheld klicken Sie mit dem Touchpad oder mit <b>enter</b>."},
+  {t:"Fläche unterhalb der x-Achse", a:"Berechnen Sie die Fläche zwischen dem Graphen und der <i>x</i>-Achse von 1 bis 3", k:KP(kI2), full:kI2, pre:px1, p:GP(px1,kI2),
+   d:"<p><b>menu ▸ 6 ▸ 7: Integral</b>, untere Schranke bei <i>x</i> = 1, obere Schranke bei <i>x</i> = 3.</p>"+PLAYB+"<p>Das CAS zeigt "+INT('1','3',FX)+" = <b>−4</b>.</p><p>Liegt die Fläche <b>unter</b> der <i>x</i>-Achse, ist das Integral <b>negativ</b>. Eine Fläche ist aber nie negativ – Sie nehmen den <b>Betrag</b>: "+FE('|−4| = 4')+"</p>"},
+  {t:"Gesamtfläche", a:"Wie groß ist die gesamte Fläche zwischen Graph und <i>x</i>-Achse?", k:[], s:gAfter(px2),
+   d:"<p>Die beiden Teilflächen werden <b>addiert</b> – jeweils mit Betrag:</p><p>"+FE('4 + 4 = 8')+"</p><p>Achtung: Das Integral von −1 bis 3 in einem Schritt ergibt 4 + (−4) = <b>0</b>. Die Teilflächen heben sich auf – das ist <b>nicht</b> die Fläche.</p><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Nullstellen bestimmen (das sind die Grenzen).<br>2. Für jede Teilfläche das Integral berechnen.<br>3. Beträge addieren.</td></tr></table>",
+   n:"Die Nullstellen −1, 1 und 3 finden Sie mit <b>menu ▸ 6 ▸ 1: Nullstelle</b> (siehe „Graphen analysieren“)."},
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(px2), d:AB("Aufgabe 2",["Nullstellen von <i>g</i>","beide Teilflächen mit dem Integral","Gesamtfläche"])}
+ ]},
+ i:{ name:"Vorgegebenes Intervall", start:gAfter(p2), steps:[
+  {t:"Grenzen eintippen", a:"Berechnen Sie "+INT('0','2',FX), k:kT1, p:GS(p2,kT1),
+   d:"<p><b>menu ▸ 6 ▸ 7: Integral</b></p><p>Sind die Grenzen vorgegeben, <b>tippen</b> Sie sie einfach ein: Bei „Untere Schranke?“ <b>0</b> und <b>enter</b>, bei „Obere Schranke?“ <b>2</b> und <b>enter</b>. Der Cursor springt genau an diese Stelle.</p><p>Das CAS zeigt "+INT('0','2',FX)+" = <b>0</b>.</p>",
+   n:"Eintippen ist genauer als Ziehen mit dem Cursor. Negative Grenzen mit <b>(−)</b>."},
+  {t:"Nullstelle im Intervall?", a:"Wie groß ist die Fläche zwischen Graph und <i>x</i>-Achse von 0 bis 2?", k:[], s:gAfter(pi1),
+   d:"<p>Das Integral ist 0 – aber man sieht deutlich eine Fläche!</p><p>Zwischen 0 und 2 liegt die <b>Nullstelle <i>x</i> = 1</b>. Links davon liegt die Fläche über, rechts unter der <i>x</i>-Achse. Die Teile heben sich auf.</p><p>Darum: Erst prüfen, ob im Intervall eine Nullstelle liegt. Wenn ja, an der Nullstelle <b>aufteilen</b>.</p>"},
+  {t:"Erste Teilfläche", a:"Berechnen Sie "+INT('0','1',FX), k:kT2, p:GS(p2,kT2),
+   d:"<p><b>menu ▸ 6 ▸ 7</b>, untere Schranke <b>0</b>, obere Schranke <b>1</b> (die Nullstelle).</p><p>Ergebnis: "+INT('0','1',FX)+" = <b>1,75</b></p>"},
+  {t:"Zweite Teilfläche", a:"Berechnen Sie "+INT('1','2',FX), k:kT3, p:GS(pi2,kT3),
+   d:"<p><b>menu ▸ 6 ▸ 7</b>, untere Schranke <b>1</b>, obere Schranke <b>2</b>.</p><p>Ergebnis: "+INT('1','2',FX)+" = <b>−1,75</b></p><p>Fläche im Intervall [0; 2]: "+FE('1,75 + |−1,75| = 3,5')+"</p>",
+   n:"Liegt keine Nullstelle im Intervall, reicht <b>ein</b> Integral – bei negativem Ergebnis den Betrag nehmen."},
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pi3), d:AB("Aufgabe 3",["Integral im vorgegebenen Intervall","Nullstelle im Intervall?","Teilflächen und Fläche"])}
+ ]},
+ z:{ name:"Zwischen zwei Graphen", start:gAfter(p2), steps:[
+  {t:"Zweite Funktion", a:"Zeichnen Sie zusätzlich <i>f</i>2(<i>x</i>) = 1 − <i>x</i>²", k:kG2, p:GS(p2,kG2),
+   d:"<p><b>tab</b> blendet die Eingabezeile oben wieder ein. Dort steht jetzt <b>f2(x)=</b>.</p><p>Term eintippen (<b>x²</b>-Taste), <b>enter</b>.</p>"},
+  {t:"Schnittpunkte = Grenzen", a:"Bestimmen Sie die Schnittpunkte der beiden Graphen", k:[], s:gAfter(pz2),
+   d:"<p>Die Fläche zwischen zwei Graphen wird von ihren <b>Schnittpunkten</b> begrenzt.</p><p>Bestimmen Sie sie wie gewohnt mit <b>menu ▸ 6 ▸ 4: Schnittpunkt</b>:</p><p><b>(−1 | 0)</b>, <b>(1 | 0)</b> und <b>(2 | −3)</b>.</p><p>Die Grenzen sind also <i>x</i> = −1, <i>x</i> = 1 und <i>x</i> = 2: Es gibt <b>zwei</b> Teilflächen.</p>"},
+  {t:"Begrenzter Bereich", a:"Berechnen Sie die Fläche zwischen den Graphen von −1 bis 1", k:KP(kB1), full:kB1, pre:pz2, p:GP(pz2,kB1),
+   d:"<p><b>menu ▸ 6: Graph analysieren ▸ 8: Begrenzter Bereich</b></p><p>Bei zwei Graphen wählt das CAS beide automatisch. Sie setzen nur die Grenzen:</p><p><b>Untere Schranke</b>: Cursor auf den Schnittpunkt bei <i>x</i> = −1, klicken.<br><b>Obere Schranke</b>: Cursor nach rechts ziehen – die Fläche zwischen den Graphen wird <b>orange</b> –, bei <i>x</i> = 1 klicken.</p>"+PLAYB+"<p>Ergebnis: "+FE('2,67')+"</p>",
+   n:"„Begrenzter Bereich“ gibt die Fläche immer <b>positiv</b> an. Steht bei Ihnen ein anderer Menüpunkt an Nummer 8, achten Sie auf den Namen im Menü."},
+  {t:"Zweite Teilfläche", a:"Berechnen Sie die Fläche zwischen den Graphen von 1 bis 2", k:KP(kB2), full:kB2, pre:pz3, p:GP(pz3,kB2),
+   d:"<p><b>menu ▸ 6 ▸ 8: Begrenzter Bereich</b>, Grenzen bei <i>x</i> = 1 und <i>x</i> = 2.</p>"+PLAYB+"<p>Ergebnis: "+FE('0,417')+"</p><p>Hier liegt jetzt <i>f</i>2 <b>oben</b> – die Graphen haben bei <i>x</i> = 1 die Seiten getauscht.</p>"},
+  {t:"Gesamtfläche", a:"Wie groß ist die gesamte Fläche zwischen den beiden Graphen?", k:[], s:gAfter(pz4),
+   d:"<p>Die Teilflächen addieren:</p><p>"+FE('2,667 + 0,417 ≈ 3,08')+"</p><p>Erst mit allen Stellen addieren, dann auf 2 Stellen runden.</p><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Schnittpunkte bestimmen (das sind die Grenzen).<br>2. Jede Teilfläche mit <b>Begrenzter Bereich</b> berechnen.<br>3. Teilflächen addieren.</td></tr></table>"},
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pz4), d:AB("Aufgabe 4",["Schnittpunkte von <i>g</i> und <i>h</i>","beide Teilflächen und Gesamtfläche","Danach: Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["g","x","i","z"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={play:"▶ Abspielen",tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='play'?'playc':k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=S.ab?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  if(k==='play'||S.k[pos]==='play'){ if(k==='play') playTool(); else { const sx=$('stat'); if(sx) sx.innerHTML='<span class="err">Jetzt keine Taste:</span> Klicken Sie auf '+chip('play',pos).replace('now','now big'); } return; }
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: flae ===== */
+UEB["flae"]={
+ title:"Flächen berechnen",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.dt{overflow-x:auto;}
+table.d{border-collapse:collapse; font-size:16px; margin:2px 0 4px;}
+table.d th, table.d td{border:1px solid #c3c8d0; padding:4px 10px; text-align:center; min-width:40px;}
+table.d th{background:#eef0f3; font-family:Cambria,Georgia,serif; font-style:italic;}
+.spalten{font-size:13.5px; color:var(--mute); margin-top:6px;}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; font-weight:bold; color:#222;}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){.grid{grid-template-columns:1fr;}}
+.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px;}
+.f label{font-size:15px;}
+.f label .z{color:var(--mute); font-family:Cambria,Georgia,serif; font-size:14px;}
+.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f .m{font-weight:bold; font-size:18px; text-align:center;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
+.plot svg{width:100%; height:auto; display:block; max-width:640px; margin:0 auto;}
+.plot .gl{stroke:#e1e4e9; stroke-width:1;}
+.plot .ax{stroke:#222; stroke-width:1.4;}
+.plot .ah{fill:#222;}
+.plot .al{font:italic 15px Cambria,Georgia,serif;}
+.plot .tl{font:11px system-ui,Arial,sans-serif; fill:#555;}
+.plot .cv{fill:none; stroke:#1d1d1f; stroke-width:2.2;}
+.plot .ar{stroke-width:2; stroke-dasharray:6 4; fill:none;}
+.plot .ml{font:bold 13px system-ui,Arial,sans-serif; paint-order:stroke; stroke:#fff; stroke-width:4px;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{border-left:5px solid #ccc;}
+.f .dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:7px; vertical-align:middle;}
+.f.gl{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px;}
+.f.gl > label:first-child{min-width:150px; font-family:Cambria,Georgia,serif; font-size:16px;}
+.f.gl .xin{display:inline-flex; align-items:center; gap:6px;}
+.f.gl .xin .z{font-family:Cambria,Georgia,serif; font-size:15px;}
+.f.gl .kl{font-size:14.5px; display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+.f.gl .kl input{width:18px; height:18px;}
+.f.gl .m{margin-left:auto;}
+.f.gl .msg{flex-basis:100%;}
+.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
+.liste{font-weight:normal;}
+.f.co{grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; border-left-color:#1F4E99;}
+.f.co > label{min-width:72px;}
+.f.co .cos{display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; font-family:Cambria,Georgia,serif; font-size:17px;}
+.f.co input.ci{width:76px;}
+.f.co input.bad{border-color:var(--no); background:#fff6f5;}
+.f.co .pl{color:var(--mute);}
+.f.co .m{margin-left:auto;}
+.f.co .msg{flex-basis:100%;}
+.fen{text-align:center; font-family:Cambria,Georgia,serif; font-size:15.5px; color:var(--mute); margin:-2px 0 6px;}
+.f.co > label{min-width:58px;}
+.f.co input.ci{width:86px;}
+.int{display:inline-flex; align-items:center; vertical-align:middle;}
+.int .is{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1; font-style:italic;}
+.int .lim{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:11px; line-height:1.1; height:28px;}
+.f.co > label{white-space:nowrap;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+    <div class="fen" id="fen"></div>
+    <div class="plot" id="plot"></div>
+  </div>
+  <div class="card">
+    <div class="round"><b>Wichtig:</b> Runden Sie auf <b>2 Stellen nach dem Komma</b>, z.&nbsp;B. <b>3,68</b>. Ganze Zahlen dürfen Sie ohne Komma eintragen.</div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickR=a=>a[R(0,a.length-1)];
+const r2=v=>{ const s=v<0?-1:1; return s*Math.round(Math.abs(v)*100+1e-7)/100; };
+const deN=v=>{ let t=(Math.round(v*1e6)/1e6).toString(); return t.replace('-','−').replace('.',','); };
+const de2=v=>{ const x=r2(v); return (Number.isInteger(x)?String(x):x.toFixed(2)).replace('-','−').replace('.',','); };
+const ev=(P,x)=>P.reduce((s,c)=>s*x+c,0);
+const der=P=>P.slice(0,-1).map((c,i)=>c*(P.length-1-i));
+function polyHTML(name,P){
+  const n=P.length-1; let h=`<i>${name}</i>(<i>x</i>) = `, first=true;
+  P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+    const s=c<0?'−':(first?'':'+'), mm=deN(Math.abs(c)), co=(mm==='1'&&e>0)?'':mm;
+    const xx=e===0?'':e===1?'<i>x</i>':`<i>x</i><sup>${e}</sup>`;
+    h+=(first?s:` ${s} `)+co+xx; first=false; });
+  return first?h+'0':h;
+}
+function casPoly(P){ const n=P.length-1; let t=''; P.forEach((c,i)=>{ const e=n-i; if(c===0) return;
+  t+=(c<0?'-':(t?'+':''))+(Math.abs(c)===1&&e>0?'':String(Math.abs(c)))+(e===0?'':e===1?'x':'x^'+e); }); return t; }
+// alle Nullstellen eines Polynoms in [a,b] (Vorzeichenwechsel + Bisektion)
+function roots(P,a,b){ const out=[], N=2000; let xp=a, yp=ev(P,a);
+  for(let i=1;i<=N;i++){ const x=a+(b-a)*i/N, y=ev(P,x);
+    if(yp===0) out.push(xp); else if(yp*y<0){ let l=xp,r=x; for(let k=0;k<70;k++){ const m=(l+r)/2; if(ev(P,l)*ev(P,m)<=0) r=m; else l=m; } out.push((l+r)/2); }
+    xp=x; yp=y; }
+  return out; }
+const sub=(P,Q)=>{ const n=Math.max(P.length,Q.length), A=Array(n-P.length).fill(0).concat(P), B=Array(n-Q.length).fill(0).concat(Q); return A.map((c,i)=>c-B[i]); };
+const gap=xs=>xs.every((x,i)=>i===0||x-xs[i-1]>=1);
+
+// zufällige kubische Funktion mit drei Nullstellen
+function genP(){
+  for(;;){
+    const a=pickR([0.25,0.5,1,-0.25,-0.5,-1]), b=R(-6,6)/2, c=R(-10,10)/2, d=R(-6,6);
+    const P=[a,b,c,d], z=roots(P,-8,10);
+    if(z.length!==3||!gap(z)) continue;
+    const D=der(P), e=roots(D,-8,10); if(e.length!==2) continue;
+    const ys=e.map(x=>ev(P,x)); if(ys.some(y=>Math.abs(y)>12||Math.abs(y)<0.8)) continue;
+    if(Math.abs(d)>12) continue;
+    return P;
+  }
+}
+function fenster(xs,ys){
+  const x0=Math.floor(Math.min(...xs))-1, x1=Math.ceil(Math.max(...xs))+1, y0=Math.floor(Math.min(...ys,0))-1, y1=Math.ceil(Math.max(...ys,0))+1;
+  return {x0,x1,y0,y1};
+}
+const FTXT=w=>`Fenster: ${deN(w.x0)} ≤ <i>x</i> ≤ ${deN(w.x1)} und ${deN(w.y0)} ≤ <i>y</i> ≤ ${deN(w.y1)}`;
+
+// ---------- Graph (erscheint mit der Lösung) ----------
+const anti=P=>P.map((c,i)=>c/(P.length-i)).concat([0]);
+const integ=(P,a,b)=>{ const A=anti(P); return ev(A,b)-ev(A,a); };
+function plot(fs,w,pts,areas){
+  const W=640, H=Math.min(460,Math.max(300,(w.y1-w.y0)*26)), pl=30, pr=22, pt=16, pb=24;
+  const X=x=>pl+(x-w.x0)*(W-pl-pr)/(w.x1-w.x0), Y=y=>pt+(w.y1-y)*(H-pt-pb)/(w.y1-w.y0);
+  const Yc=y=>Math.max(pt-20,Math.min(H+20,Y(y)));
+  let o=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Graph">`;
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) o+=`<line x1="${X(x)}" y1="${Y(w.y0)}" x2="${X(x)}" y2="${Y(w.y1)}" class="gl"/>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) o+=`<line x1="${X(w.x0)}" y1="${Y(y)}" x2="${X(w.x1)}" y2="${Y(y)}" class="gl"/>`;
+  (areas||[]).forEach(A=>{ let d=''; const N=80;
+    for(let i=0;i<=N;i++){ const x=A.a+(A.b-A.a)*i/N; d+=(i?'L':'M')+X(x).toFixed(1)+' '+Yc(ev(A.P,x)).toFixed(1)+' '; }
+    for(let i=N;i>=0;i--){ const x=A.a+(A.b-A.a)*i/N; d+='L'+X(x).toFixed(1)+' '+Yc(ev(A.Q,x)).toFixed(1)+' '; }
+    o+=`<path d="${d}Z" fill="${A.col}" fill-opacity=".28" stroke="none"/>`;
+    const xm=(A.a+A.b)/2, ym=(ev(A.P,xm)+ev(A.Q,xm))/2;
+    o+=`<text x="${X(xm)}" y="${Y(ym)+5}" text-anchor="middle" fill="${A.col}" class="ml">${A.lab}</text>`; });
+  o+=`<line x1="${X(w.x0)}" y1="${Y(0)}" x2="${X(w.x1)+12}" y2="${Y(0)}" class="ax"/><path d="M${X(w.x1)+16} ${Y(0)} l-8 -4 v8z" class="ah"/>`;
+  o+=`<line x1="${X(0)}" y1="${Y(w.y0)}" x2="${X(0)}" y2="${Y(w.y1)-10}" class="ax"/><path d="M${X(0)} ${Y(w.y1)-14} l-4 8 h8z" class="ah"/>`;
+  o+=`<text x="${X(w.x1)+8}" y="${Y(0)+16}" class="al">x</text><text x="${X(0)+7}" y="${Y(w.y1)-4}" class="al">y</text>`;
+  const sy=Math.max(1,Math.ceil((w.y1-w.y0)/12));
+  for(let x=Math.ceil(w.x0);x<=w.x1;x++) if(x) o+=`<text x="${X(x)}" y="${Y(0)+14}" class="tl" text-anchor="middle">${String(x).replace('-','−')}</text>`;
+  for(let y=Math.ceil(w.y0);y<=w.y1;y++) if(y&&y%sy===0) o+=`<text x="${X(0)-5}" y="${Y(y)+4}" class="tl" text-anchor="end">${String(y).replace('-','−')}</text>`;
+  fs.forEach(F=>{ let d='',pen=false; for(let i=0;i<=400;i++){ const x=w.x0+(w.x1-w.x0)*i/400, y=ev(F.P,x);
+      if(y>=w.y0-.3&&y<=w.y1+.3){ d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1)+' '; pen=true; } else pen=false; }
+    o+=`<path d="${d}" fill="none" stroke="${F.col}" stroke-width="2.2"/>`; });
+  pts.forEach(p=>{ o+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="5" fill="${p.col}"/><text x="${X(p.x)+8}" y="${Y(p.y)+(p.below?18:-8)}" fill="${p.col}" class="ml">${p.lab}</text>`; });
+  return o+'</svg>';
+}
+
+// ---------- Aufgaben ----------
+const C={n:'#2E7D32',a1:'#1F4E99',a2:'#C25E00',a:'#C62828',i:'#8E3BA8'};
+const NUM=(k,lab,soll,col)=>({k,lab,col,parts:[{k:k,soll}]});
+const INTH=(a,b,t)=>`<span class="int"><span class="is">∫</span><span class="lim"><span>${deN(b)}</span><span>${deN(a)}</span></span></span>${t||' <i>f</i>(<i>x</i>)&thinsp;d<i>x</i>'}`;
+const mul=(P,Q)=>{ const r=Array(P.length+Q.length-1).fill(0); P.forEach((a,i)=>Q.forEach((b,j)=>{ r[i+j]+=a*b; })); return r; };
+const fromRoots=(a,rs)=>rs.reduce((P,r)=>mul(P,[1,-r]),[a]);
+// kubische Funktion mit drei ganzzahligen Nullstellen (Abstand ≥ 1), gut sichtbaren Extrema
+function genR(as){
+  for(;;){
+    const r=[R(-5,5),R(-5,5),R(-5,6)].sort((x,y)=>x-y); if(r[1]-r[0]<1||r[2]-r[1]<1||r[2]-r[0]>8) continue;
+    const a=pickR(as), P=fromRoots(a,r), e=roots(der(P),-8,10); if(e.length!==2) continue;
+    const ys=e.map(x=>ev(P,x)); if(ys.some(y=>Math.abs(y)>12||Math.abs(y)<0.8)) continue;
+    if(Math.abs(P[3])>14) continue;
+    return {P,r,e};
+  }
+}
+const fill=(F)=>F;
+function genAX(){
+  const {P,r,e}=genR([0.25,0.5,1,-0.25,-0.5,-1]);
+  const I1=integ(P,r[0],r[1]), I2=integ(P,r[1],r[2]), w=fenster(r.concat(e),e.map(x=>ev(P,x)).concat([P[3]]));
+  return {h:"Fläche mit der x-Achse", P, w,
+    auftrag:"Zeichnen Sie den Graphen im CAS. Bestimmen Sie die Nullstellen, die beiden Teilflächen <i>A</i><sub>1</sub>, <i>A</i><sub>2</sub> und die gesamte Fläche <i>A</i> zwischen dem Graphen und der <i>x</i>-Achse.",
+    term:polyHTML('f',P),
+    felder:r.map((x,i)=>NUM('n'+i,`<i>x</i><sub>${i+1}</sub> =`,x,C.n)).concat([NUM('a1','<i>A</i><sub>1</sub> =',Math.abs(I1),C.a1),NUM('a2','<i>A</i><sub>2</sub> =',Math.abs(I2),C.a2),NUM('a','<i>A</i> =',Math.abs(I1)+Math.abs(I2),C.a)]),
+    pts:r.map((x,i)=>({x,y:0,col:C.n,lab:'x'+(i+1),below:i%2===1})),
+    areas:[{P,Q:[0],a:r[0],b:r[1],col:C.a1,lab:'A1'},{P,Q:[0],a:r[1],b:r[2],col:C.a2,lab:'A2'}],
+    fs:[{P,col:'#1d1d1f'}],
+    hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(P)+'</span> · Nullstellen: <b>menu ▸ 6 ▸ 1</b> · Teilflächen: <b>menu ▸ 6 ▸ 7: Integral</b>, Grenzen = benachbarte Nullstellen (eintippen + <b>enter</b>). Negatives Integral → Betrag nehmen.'};
+}
+function genIV(){
+  for(;;){
+    const {P,r,e}=genR([0.25,0.5,1,-0.25,-0.5,-1]);
+    const z=pickR(r), a=z-R(1,3), b=z+R(1,3);
+    if(r.some(x=>x!==z&&x>=a&&x<=b)) continue;
+    const I=integ(P,a,b), I1=integ(P,a,z), I2=integ(P,z,b);
+    const xs=r.concat(e,[a,b]), w=fenster(xs,e.map(x=>ev(P,x)).concat([P[3],ev(P,a),ev(P,b)]));
+    if(w.y1-w.y0>26) continue;
+    return {h:"Vorgegebenes Intervall", P, w,
+      auftrag:`Zeichnen Sie den Graphen im CAS. Berechnen Sie das Integral von ${deN(a)} bis ${deN(b)}. Bestimmen Sie die Nullstelle im Intervall [${deN(a)};&nbsp;${deN(b)}] und die Fläche zwischen dem Graphen und der <i>x</i>-Achse in diesem Intervall.`,
+      term:polyHTML('f',P),
+      felder:[NUM('i',INTH(a,b)+' =',I,C.i),NUM('z','Nullstelle <i>x</i> =',z,C.n),NUM('a','<i>A</i> =',Math.abs(I1)+Math.abs(I2),C.a)],
+      pts:[{x:z,y:0,col:C.n,lab:'x0'}],
+      areas:[{P,Q:[0],a,b:z,col:C.a1,lab:'A1'},{P,Q:[0],a:z,b,col:C.a2,lab:'A2'}],
+      fs:[{P,col:'#1d1d1f'}],
+      hinweis:`Tipp: <b>menu ▸ 6 ▸ 7: Integral</b>, Grenzen eintippen (<b>(−)</b> für negative Zahlen). Liegt eine Nullstelle im Intervall, dort aufteilen: Integral von ${deN(a)} bis zur Nullstelle und von der Nullstelle bis ${deN(b)}, dann die Beträge addieren.`};
+  }
+}
+function genZW(){
+  for(;;){
+    const a=pickR([0.5,1,-0.5,-1]);
+    const f=genR([a]), s=[R(-4,4),R(-4,4),R(-4,5)].sort((x,y)=>x-y);
+    if(s[1]-s[0]<1||s[2]-s[1]<1||s[2]-s[0]>7) continue;
+    const D=fromRoots(a,s), G=sub(f.P,D).slice(1);           // g = f − D (höchstens 2. Grades)
+    if(G.some(c=>Math.abs(c)>12)) continue;
+    const ys=s.map(x=>ev(G,x)); if(ys.some(y=>Math.abs(y)>12)) continue;
+    const A1=Math.abs(integ(D,s[0],s[1])), A2=Math.abs(integ(D,s[1],s[2]));
+    if(A1<0.4||A2<0.4) continue;
+    const yy=[]; for(let x=s[0];x<=s[2];x+=0.25){ yy.push(ev(f.P,x),ev(G,x)); }
+    const w=fenster(s.concat(f.e.filter(x=>x>s[0]-2&&x<s[2]+2)),yy.concat(ys));
+    if(w.y1-w.y0>26) continue;
+    const gname=G.length===2||G[0]===0?'Gerade':'Parabel';
+    return {h:"Zwischen zwei Graphen", P:f.P, w,
+      auftrag:`Zeichnen Sie beide Graphen im CAS. Bestimmen Sie die <i>x</i>-Werte der drei Schnittpunkte (von links nach rechts), die Teilflächen <i>A</i><sub>1</sub>, <i>A</i><sub>2</sub> und die gesamte Fläche <i>A</i> zwischen den Graphen.`,
+      term:polyHTML('f',f.P)+'<br>'+polyHTML('g',G[0]===0?G.slice(1):G),
+      felder:s.map((x,i)=>NUM('s'+i,`<i>x</i><sub>S${i+1}</sub> =`,x,C.n)).concat([NUM('a1','<i>A</i><sub>1</sub> =',A1,C.a1),NUM('a2','<i>A</i><sub>2</sub> =',A2,C.a2),NUM('a','<i>A</i> =',A1+A2,C.a)]),
+      pts:s.map((x,i)=>({x,y:ev(G,x),col:C.n,lab:'S'+(i+1),below:i%2===1})),
+      areas:[{P:f.P,Q:G,a:s[0],b:s[1],col:C.a1,lab:'A1'},{P:f.P,Q:G,a:s[1],b:s[2],col:C.a2,lab:'A2'}],
+      fs:[{P:f.P,col:'#1d1d1f'},{P:G,col:'#C62828'}],
+      hinweis:'Tipp: <span class="liste">f1(x)='+casPoly(f.P)+'</span>, mit <b>tab</b> <span class="liste">f2(x)='+casPoly(G[0]===0?G.slice(1):G)+'</span> · Schnittpunkte: <b>menu ▸ 6 ▸ 4</b> · Teilflächen: <b>menu ▸ 6 ▸ 8: Begrenzter Bereich</b>, Grenzen = benachbarte Schnittstellen.'};
+  }
+}
+const MODES={ax:{name:"Fläche mit der x-Achse",gen:genAX}, iv:{name:"Vorgegebenes Intervall",gen:genIV}, zw:{name:"Zwischen zwei Graphen",gen:genZW}};
+const ORDER=["ax","iv","zw"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+
+function inp(id){ return `<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="0,00" class="ci">`; }
+function neu(){
+  A=MODES[mode].gen();
+  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent="Aufgabe: "+A.h;
+  root.getElementById('auftrag').innerHTML=A.auftrag;
+  root.getElementById('term').innerHTML=A.term;
+  root.getElementById('fen').innerHTML=FTXT(A.w);
+  root.getElementById('plot').innerHTML='';
+  root.getElementById('hinweis').innerHTML=A.hinweis;
+  root.getElementById('felder').innerHTML=A.felder.map(F=>
+    `<div class="f co" id="f_${F.k}" style="border-left-color:${F.col}"><label><span class="dot" style="background:${F.col}"></span>${F.pt?F.lab+'(':F.lab}</label><span class="cos">`+
+    (F.pt?inp('i_'+F.parts[0].k)+'<span class="pl">|</span>'+inp('i_'+F.parts[1].k)+'<span>)</span>':inp('i_'+F.parts[0].k))+
+    `</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){ s=s.trim().replace(/\s/g,'').replace(',','.').replace('−','-'); if(!/^-?\d+(\.\d+)?$/.test(s)) return null; return {v:parseFloat(s), dec:(s.split('.')[1]||'').length}; }
+// Toleranz 0,01: das CAS zeigt 3 gültige Ziffern, beim Weiterrunden kann die letzte Stelle um 1 abweichen
+const near=(a,b)=>Math.abs(a-b)<0.0105;
+function check1(raw,soll){
+  if(!raw.trim()) return 'leer';
+  const p=parse(raw); if(!p) return 'fmt';
+  if(near(p.v,soll)) return p.dec>2?'many':'ok';
+  return 'no';
+}
+function pruefen(){
+  let ok=0;
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
+    const r=F.parts.map(p=>check1(root.getElementById('i_'+p.k).value,p.soll));
+    F.parts.forEach((p,j)=>root.getElementById('i_'+p.k).classList.toggle('bad',r[j]==='no'||r[j]==='fmt'));
+    if(r.every(x=>x==='leer')) return;
+    let st,t='';
+    if(r.every(x=>x==='ok')) st='ok';
+    else if(r.includes('fmt')){ st='fmt'; t='Bitte nur Zahlen eintragen, z. B. −1,59.'; }
+    else if(r.includes('leer')){ st='no'; t='Füllen Sie beide Koordinaten aus.'; }
+    else if(r.includes('many')&&!r.includes('no')){ st='fmt'; t='Der Wert stimmt – bitte auf 2 Nachkommastellen runden.'; }
+    else { st='no';
+      const vs=F.parts.map(p=>parse(root.getElementById('i_'+p.k).value)), sw=F.pt&&vs.every(Boolean)&&near(vs[0].v,F.parts[1].soll)&&near(vs[1].v,F.parts[0].soll);
+      t= sw ? 'x und y vertauscht? Zuerst die x-Koordinate.' : F.pt ? 'Das stimmt noch nicht. Liegt genau ein Punkt im markierten Bereich? Richtiger Befehl (Maximum/Minimum)?' : 'Das stimmt noch nicht. Reihenfolge von links nach rechts? Grenzen richtig gesetzt? Bei Flächen: an Nullstellen bzw. Schnittstellen aufteilen und die Beträge addieren.'; }
+    f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
+  });
+  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
+  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! ${ok} von ${tot}. Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), msg=f.querySelector('.msg');
+    if(f.classList.contains('ok')) return;
+    f.classList.add('show');
+    msg.innerHTML='Lösung: '+(F.pt?`${F.lab}(${de2(F.parts[0].soll)} | ${de2(F.parts[1].soll)})`:de2(F.parts[0].soll));
+  });
+  root.getElementById('plot').innerHTML=plot(A.fs,A.w,A.pts,A.areas);
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+ }
+};
+
 /* ===== Anleitung: abl ===== */
 GUIDES["abl"]={
  note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
@@ -6981,7 +7924,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat"}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat"}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa"}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa"}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg"}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa"}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa"}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat"}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat"}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat"}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa"}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa"}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg"}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg"}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Graphen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Flächen berechnen", "sub": "Integral, Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa"}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa"}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
