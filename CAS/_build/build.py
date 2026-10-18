@@ -23,6 +23,7 @@ TOPICS = [
     ('abl', 'Ableitungen', 'Ableitungen', 'Ableitungen', 'Ableitungen', '', 'Arbeitsblatt_CAS_Ableitungen.pdf'),
     ('int', 'Integrale', 'Integrale', 'Integrale', 'Bestimmtes und unbestimmtes Integral', '', 'Arbeitsblatt_CAS_Integrale.pdf'),
     ('flae', 'Flaechen', 'Flaechen', 'Flaechen', 'Fläche im Graphen bestimmen', 'Fläche mit der x-Achse und zwischen zwei Graphen', 'Arbeitsblatt_CAS_Flaechen.pdf'),
+    ('bin', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'Binomialverteilung', 'genau und höchstens', 'Arbeitsblatt_CAS_Binomialverteilung.pdf'),
 ]
 
 def read(p):
@@ -198,6 +199,7 @@ BLOCK_OF = {
     'funk': 'fa', 'wt': 'fa', 'abl': 'fa', 'graph': 'fa', 'int': 'fa', 'flae': 'fa',
     'gl': 'alg', 'lgs': 'alg', 'stufe': 'alg',
     'stat': 'stat', 'reg': 'stat', 'wreg': 'stat',
+    'bin': 'sto',
 }
 # Zwischenüberschriften im Block: steht vor dem ersten Thema eines Abschnitts (Reihenfolge = TOPICS)
 # NEUES THEMA der Differential-/Integralrechnung hier eintragen (z. B. 'int' für Integrale)

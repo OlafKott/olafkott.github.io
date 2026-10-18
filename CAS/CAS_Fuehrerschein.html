@@ -2108,6 +2108,145 @@ button{ font-family:inherit; }
 [data-g="flae"] .int .lim{display:inline-flex; flex-direction:column; justify-content:space-between; font-size:.62em; line-height:1.05; margin-left:-1px; align-self:stretch;}
 [data-g="flae"] .task .term .int .lim{font-size:.55em;}
 [data-g="flae"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+/* --- bin --- */
+[data-g="bin"]{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --hit:#F2B705; --ab:#2E7D32;}
+[data-g="bin"] *, [data-g="bin"]{box-sizing:border-box;}
+[data-g="bin"] .tabs{max-width:1000px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; flex-wrap:wrap;}
+[data-g="bin"] .tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:6px 14px; cursor:pointer;}
+[data-g="bin"] .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+[data-g="bin"] .tabs button.fertig::after{content:" ✓"; color:var(--ab); font-weight:bold;}
+[data-g="bin"] .tabs button.on.fertig::after{color:#9fe0a5;}
+[data-g="bin"] .calc{width:330px; flex:0 0 330px; background:#E8562A; border-radius:30px; padding:0 13px; box-shadow:0 6px 22px rgba(0,0,0,.18);}
+[data-g="bin"] .body{background:#2b2b2f; border-radius:22px; padding:12px 12px 16px;}
+[data-g="bin"] .face{background:#151518; border-radius:14px; padding:8px 10px 10px; margin:-4px -4px 10px;}
+[data-g="bin"] .brand{text-align:center; font:bold 12px Arial,sans-serif; color:#E8562A; letter-spacing:.5px; margin-bottom:6px;}
+[data-g="bin"] .brand b{color:#fff; margin-left:6px;}
+[data-g="bin"] .scrwrap{background:#000; border-radius:4px; padding:4px;}
+[data-g="bin"] .scr{width:280px; height:210px; background:#fff; position:relative; overflow:hidden; font-family:Arial,Helvetica,sans-serif; font-size:11px; color:#000; margin:0 auto;}
+[data-g="bin"] .nav{display:grid; grid-template-columns:52px 1fr 52px; gap:6px; margin-top:10px; align-items:center;}
+[data-g="bin"] .nav .col{display:flex; flex-direction:column; gap:7px;}
+[data-g="bin"] .pad{width:112px; height:84px; margin:0 auto; background:#3a3a3f; border-radius:20px; position:relative;}
+[data-g="bin"] .pad .k{position:absolute; background:transparent; color:#aaa; font-size:10px; border:0;}
+[data-g="bin"] .pad .k[data-k=up]{left:38px; top:2px; width:36px; height:20px;}
+[data-g="bin"] .pad .k[data-k=down]{left:38px; bottom:2px; width:36px; height:20px;}
+[data-g="bin"] .pad .k[data-k=left]{left:2px; top:28px; width:22px; height:28px;}
+[data-g="bin"] .pad .k[data-k=right]{right:2px; top:28px; width:22px; height:28px;}
+[data-g="bin"] .pad .k[data-k=click]{left:38px; top:24px; width:36px; height:36px; background:#4b4b52; border-radius:9px; color:#ddd;}
+[data-g="bin"] .k{font:600 11px Arial,sans-serif; color:#fff; background:#4a4a50; border:0; border-radius:6px; height:24px; padding:0; cursor:pointer; transition:transform .15s, box-shadow .15s;}
+[data-g="bin"] .k:focus{outline:none;}
+[data-g="bin"] .k:active{transform:scale(.95);}
+[data-g="bin"] .k.lt{background:#8e8e95; color:#111; font-size:14px;}
+[data-g="bin"] .k.ctrl{background:#D93A2B;}
+[data-g="bin"] .k.bk{background:#26262a; border:1px solid #555;}
+[data-g="bin"] .k.hit{box-shadow:0 0 0 3px var(--hit), 0 0 14px 3px rgba(242,183,5,.9); transform:scale(1.12); z-index:2; position:relative;}
+[data-g="bin"] .pad .k.hit{position:absolute;}
+[data-g="bin"] .k.good{box-shadow:0 0 0 3px #2E9E4F, 0 0 12px 2px rgba(46,158,79,.8);}
+[data-g="bin"] .k.bad{box-shadow:0 0 0 3px #C62828, 0 0 12px 2px rgba(198,40,40,.8); animation:wack_bin .35s;}
+[data-g="bin"] .k.held{box-shadow:0 0 0 3px #fff, 0 0 10px 2px rgba(255,255,255,.7);}
+@keyframes wack_bin{ 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+[data-g="bin"] .row4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0;}
+[data-g="bin"] .main7{display:grid; grid-template-columns:repeat(7,1fr); gap:6px 5px;}
+[data-g="bin"] .let9{display:grid; grid-template-columns:repeat(9,1fr); gap:5px 4px; margin-top:10px;}
+[data-g="bin"] .let9 .k{height:20px; font-size:10px;}
+[data-g="bin"] .span2{grid-column:span 2;}
+[data-g="bin"] .span3{grid-column:span 3;}
+[data-g="bin"] .k sub{font-size:7px; color:#ff9c8f; display:block; line-height:1; margin-top:-1px;}
+[data-g="bin"] .tb{height:16px; background:#d9dee5; display:flex; align-items:center; gap:3px; padding:0 4px; font-size:9.5px; color:#333; border-bottom:1px solid #aab3bf;}
+[data-g="bin"] .tb .tab{background:#fff; border:1px solid #aab3bf; border-bottom:0; padding:0 5px; border-radius:3px 3px 0 0; height:13px; line-height:12px; margin-top:3px; white-space:nowrap;}
+[data-g="bin"] .tb .docn{font-weight:bold; margin-right:3px;}
+[data-g="bin"] .tb .sp{flex:1;}
+[data-g="bin"] .tb .bat{width:16px; height:7px; border:1px solid #555; border-radius:1px; position:relative;}
+[data-g="bin"] .tb .bat:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:10px; background:#3a3;}
+[data-g="bin"] .calcapp{padding:2px 6px; font-size:11.5px; position:absolute; left:0; right:0; top:16px; bottom:0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden;}
+[data-g="bin"] .calcapp > *{flex-shrink:0;}
+[data-g="bin"] .calcapp .ln{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:2px 0; min-height:19px;}
+[data-g="bin"] .calcapp .ln > span, [data-g="bin"] .calcapp .ln > b{padding:0 2px; border-radius:2px;}
+[data-g="bin"] .calcapp .ln > b{font-weight:normal; margin-left:auto;}
+[data-g="bin"] .calcapp .cur{border:1px solid #888; min-height:26px; margin:3px 0 2px; padding:1px 3px; display:flex; align-items:center; flex-wrap:wrap;}
+[data-g="bin"] .calcapp sup{font-size:8px;}
+[data-g="bin"] .fr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 1px; font-size:10px; line-height:1.1;}
+[data-g="bin"] .fr > span{padding:0 2px; min-width:7px;}
+[data-g="bin"] .fr > span:first-child{border-bottom:1px solid currentColor;}
+[data-g="bin"] .bx:empty::after{content:"\25A1"; color:#999;}
+[data-g="bin"] .caret{animation:blink_bin 1s steps(1) infinite; font-weight:normal;}
+@keyframes blink_bin{ 50%{opacity:0} }
+[data-g="bin"] .menu{position:absolute; background:#fff; border:1px solid #6b7a8c; box-shadow:2px 2px 6px rgba(0,0,0,.3); width:178px; font-size:10.5px; z-index:3;}
+[data-g="bin"] .menu div{padding:1px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+[data-g="bin"] .menu div.sel{background:#3b78c2; color:#fff;}
+[data-g="bin"] .menu div.ziel{background:#F2B705 !important; color:#111 !important; font-weight:bold; animation:pulse_bin 1.2s ease-in-out infinite;}
+[data-g="bin"] .dlg{position:absolute; left:8px; right:8px; top:40px; background:#f4f6f9; border:1px solid #6b7a8c; box-shadow:2px 2px 8px rgba(0,0,0,.35); font-size:10.5px; z-index:4;}
+[data-g="bin"] .dlg .tt{background:#c9d3df; font-weight:bold; padding:2px 6px;}
+[data-g="bin"] .dlg .ff{display:grid; grid-template-columns:108px 1fr; gap:5px 5px; padding:7px 7px 5px; align-items:center;}
+[data-g="bin"] .dlg .lb{text-align:right;}
+[data-g="bin"] .dlg .ct{background:#fff; border:1px solid #9aa5b3; height:16px; padding:0 4px; display:flex; align-items:center;}
+[data-g="bin"] .dlg .ct.fo{outline:2px solid #3b78c2;}
+[data-g="bin"] .dlg .bt{display:flex; justify-content:flex-end; gap:6px; padding:3px 7px 7px;}
+[data-g="bin"] .dlg .bt span{border:1px solid #8a95a3; background:#fff; padding:0 10px; border-radius:3px;}
+@keyframes pulse_bin{ 50%{ box-shadow:0 0 2px 0 rgba(242,183,5,.3); } }
+[data-g="bin"] .hs{position:absolute; inset:0; background:linear-gradient(#2a2f36,#14171b 70%); color:#f2f4f7; font-family:Arial,Helvetica,sans-serif;}
+[data-g="bin"] .hs .hb{height:15px; display:flex; align-items:center; justify-content:space-between; padding:0 6px; background:linear-gradient(#4a4f57,#2c3036); border-bottom:1px solid #555;}
+[data-g="bin"] .hs .hb .bt2{width:15px; height:7px; border:1px solid #cfd3d8; border-radius:1px; position:relative;}
+[data-g="bin"] .hs .hb .bt2:after{content:""; position:absolute; left:1px; top:1px; bottom:1px; width:9px; background:#6ccf5a;}
+[data-g="bin"] .hs .cols{display:flex; gap:10px; padding:7px 10px 0;}
+[data-g="bin"] .hs .col{flex:1;}
+[data-g="bin"] .hs h5{margin:0 0 3px; font-size:11.5px; font-weight:bold; color:#8fc3ff; display:flex; align-items:center; gap:5px;}
+[data-g="bin"] .hs h5 i{display:inline-block; width:10px; height:11px; background:#8fc3ff; border-radius:1px; transform:skewX(-8deg);}
+[data-g="bin"] .hs .it{display:flex; align-items:center; gap:5px; font-size:11px; padding:1px 3px; border-radius:2px; height:16px; white-space:nowrap;}
+[data-g="bin"] .hs .it b{display:inline-block; min-width:11px; height:11px; line-height:11px; text-align:center; font-size:8.5px; background:#c9ced6; color:#1b1e22; border-radius:2px;}
+[data-g="bin"] .hs .it.dim{color:#6f757d;}
+[data-g="bin"] .hs .it.dim b{background:#555a61; color:#2a2d31;}
+[data-g="bin"] .hs .it.ziel{background:#F2B705; color:#111; font-weight:bold; box-shadow:0 0 7px 2px rgba(242,183,5,.75); animation:pulse_bin 1.2s ease-in-out infinite;}
+[data-g="bin"] .hs .it.ziel b{background:#111; color:#F2B705;}
+[data-g="bin"] .hs .icons{position:absolute; left:6px; right:6px; bottom:21px; display:flex; justify-content:space-between;}
+[data-g="bin"] .hs .icons span{width:30px; height:30px; border-radius:6px; display:flex; align-items:center; justify-content:center; box-shadow:inset 0 1px 0 rgba(255,255,255,.5);}
+[data-g="bin"] .hs .icons span.on{outline:2px solid #fff; outline-offset:1px; box-shadow:0 0 8px 2px rgba(255,255,255,.6);}
+[data-g="bin"] .hs .icons svg{width:20px; height:20px;}
+[data-g="bin"] .hs .ft{position:absolute; left:0; right:0; bottom:3px; font-size:9.5px; text-align:center; font-weight:bold; white-space:nowrap; overflow:hidden;}
+[data-g="bin"] .panel{flex:1 1 360px; max-width:560px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+[data-g="bin"] .prog{display:flex; gap:4px; margin-bottom:12px;}
+[data-g="bin"] .prog i{flex:1; height:5px; border-radius:3px; background:#e3e6eb; cursor:pointer;}
+[data-g="bin"] .prog i.done{background:#9aa3b0;}
+[data-g="bin"] .prog i.now{background:var(--lf);}
+[data-g="bin"] .prog i.abp{background:#bfe3c3;}
+[data-g="bin"] .prog i.abp.done{background:#7cbf84;}
+[data-g="bin"] .prog i.abp.now{background:var(--ab);}
+[data-g="bin"] .nr{font-size:13px; color:var(--mute);}
+[data-g="bin"] .panel h2{margin:2px 0 8px; font-size:20px; line-height:1.3;}
+[data-g="bin"] .panel p{margin:0 0 10px; font-size:15.5px;}
+[data-g="bin"] .keys{display:flex; flex-wrap:wrap; gap:5px; margin:4px 0 12px;}
+[data-g="bin"] .chip{font:600 13px Arial,sans-serif; background:#2b2b2f; color:#fff; border-radius:5px; padding:3px 9px; border:2px solid transparent;}
+[data-g="bin"] .chip.ctrl{background:#D93A2B;}
+[data-g="bin"] .chip.lt{background:#8e8e95; color:#111;}
+[data-g="bin"] .chip.done{opacity:.35;}
+[data-g="bin"] .chip.now{border-color:var(--hit); box-shadow:0 0 0 2px rgba(242,183,5,.35);}
+[data-g="bin"] .chip.big{font-size:16px; padding:4px 12px; vertical-align:middle;}
+[data-g="bin"] .chip.plus{background:none; color:var(--mute); padding:3px 2px;}
+[data-g="bin"] .note{background:#FFF8E8; border-left:4px solid var(--hit); border-radius:4px; padding:7px 12px; font-size:14.5px; margin:0 0 10px;}
+[data-g="bin"] .note b{color:#8a5a00;}
+[data-g="bin"] .stat{min-height:38px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:15.5px; background:var(--bg); border-radius:8px; padding:6px 12px; margin:6px 0 12px;}
+[data-g="bin"] .stat .ok{color:#2E7D32; font-weight:bold;}
+[data-g="bin"] .stat .err{color:#C62828; font-weight:bold;}
+[data-g="bin"] .ab{border:2px solid var(--ab); background:#F1F8F1; border-radius:10px; padding:10px 14px 6px; margin:0 0 12px;}
+[data-g="bin"] .ab .abt{font-weight:bold; color:var(--ab); font-size:16px; margin-bottom:6px; display:flex; align-items:center; gap:8px;}
+[data-g="bin"] .ab .abt span{font-size:22px;}
+[data-g="bin"] .ab ul{margin:0 0 8px; padding-left:20px; font-size:15px;}
+[data-g="bin"] .ab li{margin-bottom:3px;}
+[data-g="bin"] .ab p{font-size:14.5px;}
+[data-g="bin"] .task{border:1px solid var(--line); border-left:5px solid var(--lf); border-radius:8px; padding:6px 14px 8px; margin:0 0 12px; font-size:14.5px; background:#fafbfc;}
+[data-g="bin"] .task .auf{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--mute);}
+[data-g="bin"] .task .term{font-family:Cambria,Georgia,serif; font-size:24px; line-height:1.5; color:var(--ink);}
+[data-g="bin"] .task .term .fr{font-size:20px;}
+[data-g="bin"] .btns{display:flex; gap:10px; margin-top:14px;}
+[data-g="bin"] .btns button{font:inherit; font-size:16px; padding:9px 22px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+[data-g="bin"] .btns button.go{background:var(--lf); color:#fff; border-color:var(--lf);}
+[data-g="bin"] .btns button:disabled{opacity:.4; cursor:default;}
+[data-g="bin"] #next{margin-left:auto;}
+[data-g="bin"] .vgl{border-collapse:collapse; font-size:14px; margin:4px 0 10px; width:100%;}
+[data-g="bin"] .vgl th, [data-g="bin"] .vgl td{border:1px solid #cfd4dc; padding:4px 8px; text-align:left; vertical-align:middle;}
+[data-g="bin"] .vgl th{background:#eef0f3;}
+[data-g="bin"] .panel .fr{font-size:.9em;}
+@media (max-width:380px){[data-g="bin"] .calc{transform:scale(.92); transform-origin:top center;}}
+[data-g="bin"] .tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
 
 /* ================= Rahmen der Moodle-Seite ================= */
 .bar{ position:sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid var(--line); box-shadow:0 1px 0 rgba(0,0,0,.02); }
@@ -9201,6 +9340,433 @@ neu();
  }
 };
 
+/* ===== Anleitung: bin ===== */
+GUIDES["bin"]={
+ note:"Am eigenen Handheld mitmachen · <b style=\"color:#2E7D32\">✍</b> = Arbeitsblatt",
+ make:function(__D){
+// ---------- Bildschirm-Bausteine ----------
+function topbar(tabs,cur,doc){
+  return '<div class="tb">'+(doc?`<span class="docn">${doc}</span>`:'')+tabs.map(t=>`<span class="tab">${t}</span>`).join('')+'<span class="sp"></span><span>RAD</span><span class="bat"></span></div>';
+}
+function home(mark){
+  const it=(k,t,dim)=>`<div class="it ${dim?'dim':''}" data-z="${k.toLowerCase()}"><b>${k}</b>${t}</div>`;
+  const ic=(bg,svg,on)=>`<span class="${on?'on':''}" style="background:${bg}"><svg viewBox="0 0 20 20">${svg}</svg></span>`;
+  const W='stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"';
+  const icons=[
+   ic('linear-gradient(#e8e9eb,#9ea3a9)','<rect x="2" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="2" width="7" height="7" rx="1" fill="#5b6470"/><rect x="2" y="11" width="7" height="7" rx="1" fill="#5b6470"/><rect x="11" y="11" width="7" height="7" rx="1" fill="#5b6470"/><path d="M3.5 5.5h4M5.5 3.5v4M12.5 5.5h4M3.5 14.5h4M12.5 13.5h4M12.5 15.5h4" stroke="#fff" stroke-width="1"/>',true),
+   ic('linear-gradient(#bfe0ff,#3d8fe0)','<path d="M3 4c3 13 11 13 14 0" '+W+'/><path d="M2 16h16M10 2v16" stroke="#fff" stroke-width=".8"/>'),
+   ic('linear-gradient(#b5d4ff,#2f6fd0)','<path d="M3 17L10 3l7 14z" '+W+'/>'),
+   ic('linear-gradient(#d6f2df,#5fbf7c)','<rect x="2.5" y="3" width="15" height="14" fill="#fff"/><path d="M2.5 7.5h15M2.5 12h15M7.5 3v14M12.5 3v14" stroke="#4a9a62" stroke-width="1"/>'),
+   ic('linear-gradient(#ffc8ec,#d53fa7)','<rect x="3" y="10" width="3" height="7" fill="#fff"/><rect x="8.5" y="4" width="3" height="13" fill="#fff"/><rect x="14" y="7" width="3" height="10" fill="#fff"/>'),
+   ic('linear-gradient(#fff3b0,#e6c13b)','<rect x="4" y="2" width="12" height="16" rx="1" fill="#fffbe6"/><path d="M6.5 7h7M6.5 10h7M6.5 13h5" stroke="#b08a10" stroke-width="1"/>'),
+   ic('linear-gradient(#d4f5c9,#4fb043)','<path d="M8 2.5h4M9 2.5v5L4.5 16.5h11L11 7.5v-5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M6 14h8" stroke="#fff" stroke-width="1.5"/>')
+  ].join('');
+  return '<div class="hs"><div class="hb"><svg width="11" height="10" viewBox="0 0 11 10"><path d="M1 5L5.5 1 10 5M2.5 4v5h6V4" stroke="#e6e9ed" stroke-width="1.3" fill="none"/></svg><span class="bt2"></span></div>'+
+   '<div class="cols"><div class="col"><h5><i></i>Notizblock</h5>'+it('A','Berechnen')+it('B','Graph')+it('C','QuickPoll',1)+'</div>'+
+   '<div class="col"><h5><i></i>Dokumente</h5>'+it('1','Neues Dokument')+it('2','Meine Dokumente')+it('3','Zuletzt verw. ▸')+it('4','Aktuell')+it('5','Einstellungen')+'</div></div>'+
+   `<div class="icons">${icons}</div><div class="ft"><b>Calculator</b> zum Notizblock hinzufügen</div></div>`;
+}
+const APPS=["1: Calculator hinzufügen","2: Graphs hinzufügen","3: Geometry hinzufügen","4: Lists &amp; Spreadsheet hinzufügen","5: Data &amp; Statistics hinzufügen","6: Notes hinzufügen","7: Vernier DataQuest™ hinzufügen","8: Widget hinzufügen"];
+function appList(tabs,cur,sel,doc){ return topbar(tabs,cur,doc)+`<div class="menu" style="left:30px;top:30px;width:220px">`+APPS.map((t,j)=>`<div class="${j===sel?'sel':''}">${t}</div>`).join('')+'</div>'; }
+function calcApp(tabs,cur,lines,entry,o){
+  o=o||{};
+  return topbar(tabs,cur,o.doc)+'<div class="calcapp">'+lines.map(l=>`<div class="ln"><span>${l[0]}</span><b>${l[1]}</b></div>`).join('')+`<div class="cur">${entry}</div></div>`;
+}
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+const SUP=n=>'<sup>'+n+'</sup>';
+
+// ---------- Menüs und Assistent ----------
+const MPOS=[[6,22],[54,48],[100,30]];
+function menus(levels){ return levels.map((m,i)=>`<div class="menu" style="left:${MPOS[i][0]}px;top:${MPOS[i][1]}px">`+m.items.map((t,j)=>`<div class="${j===m.sel?'sel':''}">${t}</div>`).join('')+'</div>').join(''); }
+const CM=["1: Aktionen","2: Zahl","3: Algebra","4: Analysis","5: Wahrscheinlichkeit","6: Statistik","7: Matrix &amp; Vektor","8: Finanzmathematik","9: Funktionen &amp; Programme"];
+const WM=["1: Fakultät (!)","2: Permutationen","3: Kombinationen","4: Zufall","5: Verteilungen"];
+// Verteilungen: lange Liste – hier der untere Teil mit D und E
+const VM=["7: χ² Pdf…","8: χ² Cdf…","9: Invers χ²…","A: F Pdf…","B: F Cdf…","C: Invers F…","D: Binomial Pdf…","E: Binomial Cdf…","F: Invers Binomial…"];
+const DLG={
+  pdf:{t:"Binomial Pdf", f:["Anzahl Versuche, n:","Erfolgswahrsch., p:","X-Wert:"], fn:"binomPdf"},
+  cdf:{t:"Binomial Cdf", f:["Anzahl Versuche, n:","Erfolgswahrsch., p:","Untere Grenze:","Obere Grenze:"], fn:"binomCdf"}
+};
+function dialog(kind,vals,foc){
+  const D=DLG[kind];
+  return `<div class="dlg"><div class="tt">${D.t}</div><div class="ff">`+D.f.map((l,j)=>`<div class="lb">${l}</div><div class="ct ${j===foc?'fo':''}"><span>${vals[j]||''}${j===foc?'<span class="caret">|</span>':''}</span></div>`).join('')+
+   `</div><div class="bt"><span>OK</span><span>Abbrechen</span></div></div>`;
+}
+// Tasten im Assistenten: Ziffern/Punkt schreiben, tab = nächstes Feld, enter = OK
+function wiz(kind,keys){
+  const n=DLG[kind].f.length, v=Array(n).fill(''); let f=0;
+  for(const k of keys){
+    if(k==='tab'){ f=Math.min(f+1,n-1); continue; }
+    if(k==='enter') return {v,f,ok:true};
+    v[f]+=k;
+  }
+  return {v,f,ok:false};
+}
+const cmd=(kind,v)=>`${DLG[kind].fn}(${v.join(',')})`;
+
+const F1=['1.1'], O={doc:'bin'};
+const CUR='<span class="caret">|</span>';
+const page=hist=>calcApp(F1,'1.1',hist,CUR,O);
+const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
+// Menüweg menu ▸ 5 ▸ 5 ▸ (D|E)
+const openSeq=(hist,kind)=>pick([
+  page(hist)+menus([{items:CM,sel:0}]),
+  page(hist)+menus([{items:CM,sel:4},{items:WM,sel:0}]),
+  page(hist)+menus([{items:CM,sel:4},{items:WM,sel:4},{items:VM,sel:-1}]),
+  page(hist)+dialog(kind,DLG[kind].f.map(()=>''),0)
+]);
+// Werte eintippen; enter schließt den Assistenten und zeigt das Ergebnis
+const fillSeq=(hist,kind,keys,res)=>i=>{
+  const w=wiz(kind,keys.slice(0,i));
+  if(w.ok) return page(hist.concat([[cmd(kind,w.v),res]]));
+  return page(hist)+dialog(kind,w.v,w.f);
+};
+
+// ---------- Tastenfolgen und Ergebnisse ----------
+const kOA=["menu","5","5","d"], kOB=["menu","5","5","e"];
+const kA=["1","0","tab","0",".","3","tab","2","enter"];
+const kB=["1","0","tab","0",".","3","tab","0","tab","2","enter"];
+const h0=[], h1=[[cmd('pdf',['10','0.3','2']),'0.233474']], h2=h1.concat([[cmd('cdf',['10','0.3','0','2']),'0.382783']]);
+
+// ---------- Darstellung im Text ----------
+const PX=(op,k)=>`<i>P</i>(<i>X</i> ${op} ${k})`;
+const NP='<i>n</i> = 10 und <i>p</i> = 0,3';
+const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
+const FT=(rows)=>"<table class='vgl'><tr>"+rows.map(r=>`<th>${r[0]}</th>`).join('')+"</tr><tr>"+rows.map(r=>`<td><b>${r[1]}</b></td>`).join('')+"</tr></table>";
+
+const TRACKS={
+ a:{ name:"Genau: P(X = k)", start:()=>home(''), steps:[
+  {t:"Neues Dokument", a:"Neues Dokument mit Calculator-Seite", k:["1","1"], p:pick([appList(F1,'1.1',0),page([])]),
+   d:"<p><b>1</b> = Neues Dokument, dann <b>1</b> = Calculator.</p>", n:"Ist schon ein Dokument offen, fragt das CAS, ob es speichern soll."},
+  {t:"Binomial Pdf öffnen", a:"Berechnen Sie "+PX('=',2)+" für "+NP, k:kOA, p:openSeq(h0,'pdf'),
+   d:"<p><b>menu</b> ▸ <b>5</b> Wahrscheinlichkeit ▸ <b>5</b> Verteilungen ▸ <b>D</b> Binomial Pdf</p><p><b>Pdf</b> brauchen Sie für <b>genau</b> <i>k</i> Treffer.</p>",
+   n:"Die Liste der Verteilungen ist lang. Sie müssen nicht scrollen. Drücken Sie einfach die Taste <b>D</b>."},
+  {t:"Werte eintragen", a:"Berechnen Sie "+PX('=',2)+" für "+NP, k:kA, p:fillSeq(h0,'pdf',kA,'0.233474'),
+   d:"<p>Ein Fenster mit drei Feldern öffnet sich. Mit <b>tab</b> springen Sie ins nächste Feld.</p>"+FT([["Anzahl Versuche <i>n</i>","10"],["Erfolgswahrsch. <i>p</i>","0.3"],["X-Wert <i>k</i>","2"]])+"<p><b>enter</b> = OK. Ergebnis: <b>0.233474</b></p>",
+   n:"Kommazahlen tippen Sie mit <b>Punkt</b>: 0.3"},
+  {t:"Ergebnis runden", k:[], s:()=>page(h1),
+   d:"<p>Das CAS zeigt <b>0.233474</b>.</p><p>Auf 4 Stellen nach dem Komma gerundet:</p><p style='font-size:18px'>"+PX('=',2)+" ≈ <b>0,2335</b> &nbsp;(etwa 23,35 %)</p>",
+   n:"Das CAS schreibt einen Punkt. Auf dem Arbeitsblatt schreiben Sie ein Komma."},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(h1), d:AB("Aufgabe 1, Spalte „genau“",["Für jede Zeile Binomial Pdf öffnen: <b>menu</b> ▸ 5 ▸ 5 ▸ D","<i>n</i>, <i>p</i> und <i>k</i> eintragen","Ergebnis auf 4 Stellen nach dem Komma runden"])}
+ ]},
+ b:{ name:"Höchstens: P(X ≤ k)", start:()=>page(h1), steps:[
+  {t:"Binomial Cdf öffnen", a:"Berechnen Sie "+PX('≤',2)+" für "+NP, k:kOB, p:openSeq(h1,'cdf'),
+   d:"<p><b>menu</b> ▸ <b>5</b> Wahrscheinlichkeit ▸ <b>5</b> Verteilungen ▸ <b>E</b> Binomial Cdf</p><p><b>Cdf</b> brauchen Sie für <b>höchstens</b> <i>k</i> Treffer.</p>",
+   n:"Pdf = <b>genau</b> (Taste D) · Cdf = <b>höchstens</b> (Taste E)"},
+  {t:"Werte eintragen", a:"Berechnen Sie "+PX('≤',2)+" für "+NP, k:kB, p:fillSeq(h1,'cdf',kB,'0.382783'),
+   d:"<p>Jetzt hat das Fenster vier Felder:</p>"+FT([["<i>n</i>","10"],["<i>p</i>","0.3"],["Untere Grenze","0"],["Obere Grenze","2"]])+"<p><b>enter</b> = OK. Ergebnis: <b>0.382783</b></p>",
+   n:"„Höchstens 2“ heißt: 0, 1 oder 2 Treffer. Die <b>untere Grenze</b> ist darum immer <b>0</b>. Die obere Grenze ist <i>k</i>."},
+  {t:"Ergebnis runden und vergleichen", k:[], s:()=>page(h2),
+   d:"<p>Auf 4 Stellen nach dem Komma gerundet:</p><p style='font-size:18px'>"+PX('≤',2)+" ≈ <b>0,3828</b></p>"+
+     "<table class='vgl'><tr><th></th><th>Befehl im CAS</th><th>Ergebnis</th></tr><tr><td>genau 2</td><td>Binomial Pdf (D)</td><td>0,2335</td></tr><tr><td>höchstens 2</td><td>Binomial Cdf (E), 0 bis 2</td><td>0,3828</td></tr></table>",
+   n:PX('≤',2)+" = "+PX('=',0)+" + "+PX('=',1)+" + "+PX('=',2)+". Darum ist „höchstens“ nie kleiner als „genau“."},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(h2), d:AB("Aufgabe 1 und 2",["Aufgabe 1: Spalte „höchstens“ mit Binomial Cdf (untere Grenze 0)","Aufgabe 2: Erst <i>n</i> und <i>p</i> bestimmen, dann entscheiden: genau oder höchstens?","Danach: Lösungscode eintragen"])}
+ ]}
+};
+
+// ---------- Steuerung ----------
+const ORDER=["a","b"];
+let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
+const $=id=>__D.getElementById(id);
+const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
+const lbl=k=>LBL[k]||(/^[a-z]$/.test(k)?k.toUpperCase():k);
+function chip(k,i){ const c=k==='ctrl'?'ctrl':(/^[0-9.]$/.test(k)||k==='neg'?'lt':''); const s=i<pos?'done':(i===pos?'now':''); return `<span class="chip ${c} ${s}">${lbl(k)}</span>`; }
+function screenOf(t,s,i){
+  const S=TRACKS[t].steps[s];
+  if(S.p && (i>0 || !S.k.length)) return S.p(i);
+  if(i>=S.k.length && S.s) return S.s();
+  if(i>=S.k.length && S.p) return S.p(S.k.length);
+  return s===0 ? TRACKS[t].start() : screenOf(t,s-1,TRACKS[t].steps[s-1].k.length);
+}
+function render(){
+  const T=TRACKS[tr], S=T.steps[st];
+  $('tabs').innerHTML=ORDER.map(k=>`<button class="${k===tr?'on':''} ${done[k]?'fertig':''}" data-t="${k}">${TRACKS[k].name}</button>`).join('');
+  $('prog').innerHTML=T.steps.map((x,i)=>`<i class="${x.ab?'abp ':''}${i<st?'done':i===st?'now':''}" data-i="${i}"></i>`).join('');
+  $('nr').textContent=`${T.name} · Schritt ${st+1} von ${T.steps.length}`;
+  $('tt').textContent=S.t;
+  $('task').style.display=S.a?'block':'none';
+  $('task').innerHTML=S.a?`<div class="auf">Aufgabe</div><div class="term">${S.a}</div>`:'';
+  $('keys').innerHTML=S.k.length?S.k.map(chip).join(''):(S.ab?'':'<span class="chip plus">Nur ablesen – keine Taste drücken</span>');
+  $('dd').innerHTML=(S.d||'')+(S.n?`<div class="note"><b>Hinweis:</b> ${S.n}</div>`:'');
+  $('scr').innerHTML=screenOf(tr,st,pos);
+  zielMarke(S.k[pos]);
+  $('back').disabled=st===0&&pos===0;
+  const last=st===T.steps.length-1, nextT=ORDER[ORDER.indexOf(tr)+1];
+  const fin=pos>=S.k.length;
+  if(last&&fin) done[tr]=true;
+  $('next').className='go';
+  $('next').textContent=(last ? (nextT?`Weiter mit ${TRACKS[nextT].name} ▶`:'Fertig ✓') : 'Weiter ▶');
+  $('next').disabled=fin&&last&&!nextT; { const sk=$('skip'); if(sk) sk.disabled=last&&!nextT&&st===TRACKS[tr].steps.length-1; }
+  $('stat').style.display=(S.ab||!S.k.length)?'none':'flex';
+  $('stat').innerHTML=S.k.length? (fin?'<span class="ok">✓ Richtig!</span>':`Drücken Sie jetzt: ${chip(S.k[pos],pos).replace('now','now big')}`) : '';
+  hint();
+}
+// Bildschirm-Eintrag markieren, den die nächste Taste auswählt
+function zielMarke(k){
+  if(!k || !/^[a-e0-9]$/.test(k)) return;
+  const it=__D.querySelector(`#scr .hs .it[data-z="${k}"]`);
+  if(it){ it.classList.add('ziel'); return; }
+  const ms=__D.querySelectorAll('#scr .menu'); if(!ms.length) return;
+  const m=ms[ms.length-1];
+  [...m.children].forEach(d=>{ if(d.textContent.trim().startsWith(k.toUpperCase()+':')) d.classList.add('ziel'); });
+}
+function hint(){
+  __D.querySelectorAll('.k.hit,.k.held').forEach(e=>e.classList.remove('hit','held'));
+  const S=TRACKS[tr].steps[st];
+  if(pos>0&&S.k[pos-1]==='ctrl'&&pos<S.k.length){ const c=__D.querySelector('.k[data-k="ctrl"]'); if(c) c.classList.add('held'); }
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(S.k[pos])}"]`); if(el) el.classList.add('hit');
+}
+function press(k){
+  if(lock) return;
+  const S=TRACKS[tr].steps[st];
+  if(pos>=S.k.length) return;
+  const el=__D.querySelector(`.k[data-k="${CSS.escape(k)}"]`);
+  if(k===S.k[pos]){
+    pos++; if(el){ el.classList.add('good'); setTimeout(()=>el.classList.remove('good'),220); }
+    render();
+    if(pos>=S.k.length){ lock=true; setTimeout(()=>{ lock=false; advance(); },900); }
+  } else {
+    if(el){ el.classList.add('bad'); setTimeout(()=>el.classList.remove('bad'),450); }
+    $('stat').innerHTML=`<span class="err">Das war nicht die richtige Taste.</span> Gesucht: ${chip(S.k[pos],pos).replace('now','now big')}`;
+  }
+}
+function advance(){ const T=TRACKS[tr]; if(st<T.steps.length-1){ st++; pos=0; } render(); }
+// „Weiter“ wirkt wie das Drücken der aufleuchtenden Taste; „Überspringen“ springt ans Ende des Schritts
+function next(){
+  const T=TRACKS[tr], S=T.steps[st];
+  if(pos<S.k.length){ pos=S.k.length; render(); return; }
+  if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+  const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo({top:0,behavior:'smooth'}); }
+}
+function back(){ if(pos>0){ pos=0; } else if(st>0){ st--; pos=0; } render(); }
+
+
+
+
+
+const KMAP={Enter:'enter',Tab:'tab',Escape:'esc',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Control:'ctrl',Home:'on',Backspace:'del',Delete:'del',' ':'click'};
+
+  return {
+    ORDER, TRACKS, KMAP, render, press, next, back,
+    screen:function(t,s,i){ if(i===undefined) i=TRACKS[t].steps[s].k.length; return screenOf(t,s,i); },
+    home:(typeof home==='function'?home:null),
+    selectTrack:function(t){ if(TRACKS[t]){ tr=t; st=0; pos=0; render(); } },
+    selectStep:function(i){ st=+i; pos=0; render(); },
+    fwd:function(){ if(lock) return; const T=TRACKS[tr], S=T.steps[st];
+      if(st<T.steps.length-1){ st++; pos=0; render(); return; }
+      const n=ORDER[ORDER.indexOf(tr)+1]; if(n){ tr=n; st=0; pos=0; render(); __D.scrollTo(); return; }
+      if(pos<S.k.length){ pos=S.k.length; render(); } },
+    goto:function(t,s,i){ tr=t; st=s; pos=i; render(); },
+    snap:function(){ const D=(typeof done==='object'&&done)?Object.assign({},done):null; return {tr,st,pos,D}; },
+    restore:function(o){ tr=o.tr; st=o.st; pos=o.pos; if(o.D&&typeof done==='object'&&done){ Object.keys(done).forEach(k=>delete done[k]); Object.assign(done,o.D); } render(); },
+    weiter:function(){ if(lock) return; const S=TRACKS[tr].steps[st]; if(pos<S.k.length) press(S.k[pos]); else this.fwd(); },
+    bwd:function(){ if(lock) return; if(st>0){ st--; pos=0; } else pos=0; render(); }
+  };
+ }
+};
+/* ===== Übung: bin ===== */
+UEB["bin"]={
+ title:"Binomialverteilung",
+ css:String.raw`:host{--lf:#1F4E99; --ink:#1d1d1f; --mute:#5b6270; --line:#dde1e7; --bg:#f3f4f6; --ok:#2E7D32; --okbg:#E8F5E9; --no:#C62828; --nobg:#FDECEA; --warn:#8a5a00; --warnbg:#FFF8E8;}
+:host{box-sizing:border-box;}
+.wrap{max-width:860px; margin:16px auto 40px; padding:0 16px;}
+.tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+.tabs button{font:inherit; font-size:14px; border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 14px; cursor:pointer;}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+.card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.card h2{margin:0 0 6px; font-size:18px;}
+.auftrag{font-size:15.5px; margin:0 0 10px;}
+.term{font-family:Cambria,Georgia,serif; font-size:22px; text-align:center; margin:4px 0 8px;}
+.round{display:inline-block; background:var(--warnbg); border-left:4px solid #F2B705; padding:4px 10px; border-radius:4px; font-size:14.5px; margin:2px 0 12px;}
+.round b{color:var(--warn);}
+.liste{font-family:Consolas,'Courier New',monospace; background:#eceef1; border-radius:3px; padding:0 4px; color:#222;}
+#felder{display:grid; grid-template-columns:1fr 1fr; gap:10px 22px;}
+@media (max-width:620px){#felder{grid-template-columns:1fr;}}
+.f{display:grid; grid-template-columns:1fr 120px 26px; align-items:center; gap:8px; padding:6px 8px; border-radius:8px; border-left:5px solid #1F4E99;}
+.f label{font-family:Cambria,Georgia,serif; font-size:16px;}
+.f input{font:inherit; font-size:16px; width:120px; padding:5px 8px; border:1px solid #b8bdc6; border-radius:6px; background:#f7f8fa; text-align:right;}
+.f .m{font-weight:bold; font-size:18px; text-align:center;}
+.f.ok{background:var(--okbg);}
+.f.ok .m{color:var(--ok);}
+.f.no{background:var(--nobg);}
+.f.no .m{color:var(--no);}
+.f.fmt{background:var(--warnbg);}
+.f.fmt .m{color:var(--warn);}
+.f .msg{grid-column:1 / -1; font-size:13.5px; display:none;}
+.f.no .msg, .f.fmt .msg, .f.show .msg{display:block;}
+.f.no .msg{color:var(--no);}
+.f.fmt .msg{color:var(--warn);}
+.f.show .msg{color:var(--mute);}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.btns button{font:inherit; font-size:15.5px; padding:9px 18px; border-radius:8px; cursor:pointer; border:1px solid var(--line); background:#fff;}
+.btns button.go{background:var(--lf); border-color:var(--lf); color:#fff;}
+.score{font-size:16px; font-weight:bold; margin-top:12px; min-height:24px;}
+.stats{font-size:13.5px; color:var(--mute); margin-top:4px;}
+.hinweis{font-size:13.5px; color:var(--mute);}
+.f label{line-height:1.35;}
+#felder.eins{grid-template-columns:1fr; max-width:520px;}
+.f.np input{width:120px;}
+.f .msg .liste{margin-left:4px;}
+.tabs#tabs{margin-left:0 !important; margin-right:auto !important;}
+.wrap{max-width:none;margin:0;padding:0;}
+:host{display:block;container-type:inline-size;}
+@container (max-width:660px){ .grid{ grid-template-columns:1fr !important; } }`,
+ html:String.raw`<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <h2 id="h"></h2>
+    <p class="auftrag" id="auftrag"></p>
+    <div class="term" id="term"></div>
+  </div>
+  <div class="card">
+    <div class="round" id="round"></div>
+    <div id="felder"></div>
+    <div class="btns">
+      <button class="go" id="pruefen">Prüfen</button>
+      <button id="zeigen">Lösung anzeigen</button>
+      <button id="neu">Neue Aufgabe ▶</button>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <p class="hinweis" id="hinweis"></p>
+</div>`,
+ init:function(root){
+// ---------- Hilfen ----------
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pickA=a=>a[Math.floor(Math.random()*a.length)];
+const r4=v=>Math.round(v*1e4+1e-9)/1e4;
+const de4=v=>r4(v).toFixed(4).replace('.',',');
+const dp=p=>String(p).replace('.',',');
+function binom(n,k){ let c=1; for(let i=1;i<=k;i++) c=c*(n-k+i)/i; return c; }
+const pdf=(n,p,k)=>(k<0||k>n)?0:binom(n,k)*Math.pow(p,k)*Math.pow(1-p,n-k);
+const cdf=(n,p,k)=>{ let s=0; for(let i=0;i<=k;i++) s+=pdf(n,p,i); return s; };
+const PX=(op,k)=>`<i>P</i>(<i>X</i> ${op} ${k})`;
+const PS=[0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9];
+// k-Werte, die sinnvolle Wahrscheinlichkeiten liefern
+function ks(n,p,typ,anz){
+  const ok=[]; for(let k=0;k<=n;k++){ const v=typ==='='?pdf(n,p,k):cdf(n,p,k); if(v>0.02&&v<0.98) ok.push(k); }
+  const out=[]; while(out.length<anz && ok.length){ out.push(ok.splice(Math.floor(Math.random()*ok.length),1)[0]); }
+  return out.sort((a,b)=>a-b);
+}
+const WEG={'=':'<b>menu</b> ▸ 5 ▸ 5 ▸ <b>D</b> Binomial Pdf: <i>n</i>, tab, <i>p</i>, tab, <i>k</i>, enter',
+           '≤':'<b>menu</b> ▸ 5 ▸ 5 ▸ <b>E</b> Binomial Cdf: <i>n</i>, tab, <i>p</i>, tab, <b>0</b>, tab, <i>k</i>, enter'};
+const feld=(n,p,op,k,i)=>({k:'w'+i, lab:PX(op,k), soll:op==='='?pdf(n,p,k):cdf(n,p,k), n,p,op,kk:k});
+
+// ---------- Aufgaben ----------
+function genTyp(op){
+  return ()=>{
+    let n,p,K;
+    do{ n=pickA([8,10,12,15,20,25,30,40,50]); p=pickA(PS); K=ks(n,p,op,3); }while(K.length<3);
+    return {h:op==='='?'Genau k Treffer':'Höchstens k Treffer',
+      auftrag:'<i>X</i> ist binomialverteilt.<br>Berechnen Sie die Wahrscheinlichkeiten mit dem CAS.',
+      term:`<i>n</i> = ${n} &nbsp;&nbsp; <i>p</i> = ${dp(p)}`,
+      felder:K.map((k,i)=>feld(n,p,op,k,i)),
+      hinweis:'Tipp: '+WEG[op]+'. Kommazahlen mit <b>Punkt</b> eintippen, z.&nbsp;B. 0.3'};
+  };
+}
+const KONTEXT=[
+  {t:n=>`Ein Basketballspieler trifft beim Freiwurf mit 70&nbsp;% Wahrscheinlichkeit. Er wirft ${n}-mal.`, x:'Treffer', p:0.7, N:[8,10,12,15,20]},
+  {t:n=>`Ein Test hat ${n} Fragen. Jede Frage hat 4 Antworten. Genau eine ist richtig. Sie raten bei jeder Frage.`, x:'richtigen Antworten', p:0.25, N:[10,12,15,20,25]},
+  {t:n=>`Ein Samenkorn keimt mit 85&nbsp;% Wahrscheinlichkeit. Sie säen ${n} Samenkörner.`, x:'gekeimten Samenkörner', p:0.85, N:[10,12,15,20,25,30]},
+  {t:n=>`Ein Bauteil ist mit 4&nbsp;% Wahrscheinlichkeit defekt. Sie prüfen ${n} Bauteile.`, x:'defekten Bauteile', p:0.04, N:[25,30,40,50,60,80]},
+  {t:n=>`Eine Münze wird ${n}-mal geworfen.`, x:'Würfe mit „Kopf“', p:0.5, N:[8,10,12,15,20]},
+  {t:n=>`Bei einem Glücksrad gewinnt man mit 30&nbsp;% Wahrscheinlichkeit. Es wird ${n}-mal gedreht.`, x:'Gewinne', p:0.3, N:[10,12,15,20,25]},
+  {t:n=>`Ein Medikament wirkt bei 90&nbsp;% der Menschen. ${n} Menschen nehmen es.`, x:'Menschen, bei denen es wirkt', p:0.9, N:[10,15,20,25,30]}
+];
+function genMix(){
+  let C,n,ops,K;
+  do{
+    C=pickA(KONTEXT); n=pickA(C.N);
+    ops=[pickA(['=','≤']),pickA(['=','≤'])]; ops.push(ops[0]===ops[1]?(ops[0]==='='?'≤':'='):pickA(['=','≤']));
+    const k1=ks(n,C.p,'=',3), k2=ks(n,C.p,'≤',3);
+    K=ops.map((op,i)=>(op==='='?k1:k2)[i]);
+  }while(K.some(k=>k===undefined));
+  const wort={'=':'Genau','≤':'Höchstens'};
+  const fel=K.map((k,i)=>Object.assign(feld(n,C.p,ops[i],k,i),{lab:`${wort[ops[i]]} ${k} ${C.x}`}));
+  return {h:'Sachaufgabe: genau oder höchstens?',
+    auftrag:C.t(n).replace(/\. /g,'.<br>')+`<br><i>X</i> ist die Anzahl der ${C.x}.<br>Bestimmen Sie <i>n</i> und <i>p</i>.<br>Entscheiden Sie dann: genau oder höchstens?`,
+    term:'',
+    felder:[{k:'n',lab:'<i>n</i>',soll:n,ganz:true},{k:'p',lab:'<i>p</i>',soll:C.p,pw:true}].concat(fel),
+    hinweis:'Tipp: <b>genau</b> → '+WEG['=']+'<br><b>höchstens</b> → '+WEG['≤']};
+}
+const MODES={g:{name:"Genau",gen:genTyp('=')}, h:{name:"Höchstens",gen:genTyp('≤')}, m:{name:"Gemischt",gen:genMix}};
+const ORDER=["g","h","m"];
+let mode=ORDER[0], A=null, stat={a:0,r:0};
+
+function neu(){
+  A=MODES[mode].gen();
+  root.getElementById('tabs').innerHTML=ORDER.map(k=>`<button class="${k===mode?'on':''}" data-m="${k}">${MODES[k].name}</button>`).join('');
+  root.getElementById('h').textContent="Aufgabe: "+A.h;
+  root.getElementById('auftrag').innerHTML=A.auftrag;
+  root.getElementById('term').innerHTML=A.term; root.getElementById('term').style.display=A.term?'block':'none';
+  root.getElementById('round').innerHTML='<b>Wichtig:</b> Runden Sie auf <b>4 Stellen nach dem Komma</b>, z.&nbsp;B. <b>0,2335</b>.';
+  root.getElementById('hinweis').innerHTML=A.hinweis;
+  root.getElementById('felder').classList.toggle('eins',mode==='m');
+  root.getElementById('felder').innerHTML=A.felder.map(F=>
+    `<div class="f${F.ganz||F.pw?' np':''}" id="f_${F.k}"><label for="i_${F.k}">${F.lab} ${F.ganz||F.pw?'=':'≈'}</label><input id="i_${F.k}" inputmode="decimal" autocomplete="off" placeholder="${F.ganz||F.pw?'':'0,0000'}"><span class="m"></span><div class="msg"></div></div>`).join('');
+  root.getElementById('score').textContent='';
+  root.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
+}
+function parse(s){
+  s=s.trim().replace(/\s/g,'').replace(/−/g,'-').replace(',','.');
+  let pc=false; if(s.endsWith('%')){ pc=true; s=s.slice(0,-1); }
+  if(!/^-?\d*(\.\d+)?$/.test(s)||s===''||s==='-') return null;
+  return {v:parseFloat(s), dec:(s.split('.')[1]||'').length, pc};
+}
+function check(F,raw){
+  if(!raw.trim()) return ['leer',''];
+  const p=parse(raw); if(!p) return ['fmt','Bitte nur eine Zahl eintragen, z. B. 0,2335.'];
+  if(F.ganz) return p.v===F.soll?['ok','']:['no','Wie oft wird das Experiment wiederholt? Das ist n.'];
+  if(F.pw){ const v=p.pc?p.v/100:p.v; if(Math.abs(v-F.soll)<1e-9) return ['ok',''];
+    if(Math.abs(v-(1-F.soll))<1e-9) return ['no','Das ist die Gegen-Wahrscheinlichkeit. p gehört zu dem, was X zählt.'];
+    return ['no','p ist die Wahrscheinlichkeit für einen Treffer, als Dezimalzahl, z. B. 0,25.']; }
+  if(p.pc||p.v>1){ return ['fmt','Bitte als Dezimalzahl zwischen 0 und 1 eintragen, nicht in %.']; }
+  const soll=F.soll, s4=r4(soll);
+  if(Math.abs(p.v-s4)<1e-9 && p.dec<=4) return ['ok',''];
+  if(Math.abs(p.v-soll)<5e-5) return ['fmt','Der Wert stimmt – bitte auf 4 Stellen nach dem Komma runden.'];
+  if(p.dec<4 && Math.abs(p.v-soll)<0.006) return ['fmt','Fast – bitte genau 4 Stellen nach dem Komma angeben.'];
+  const near=w=>Math.abs(p.v-w)<6e-5;
+  const {n,p:pp,kk,op}=F;
+  if(op==='=' && near(cdf(n,pp,kk))) return ['no','Das ist P(X ≤ '+kk+'). Gesucht ist genau '+kk+' → Binomial Pdf (Taste D).'];
+  if(op==='≤' && near(pdf(n,pp,kk))) return ['no','Das ist P(X = '+kk+'). Gesucht ist höchstens '+kk+' → Binomial Cdf (Taste E).'];
+  if(op==='≤' && near(cdf(n,pp,kk-1))) return ['no','Höchstens '+kk+' schließt '+kk+' mit ein. Obere Grenze = '+kk+'.'];
+  if(op==='≤' && near(1-cdf(n,pp,kk))) return ['no','Untere Grenze 0, obere Grenze '+kk+'. Haben Sie die Grenzen vertauscht?'];
+  if(near(op==='='?pdf(n,1-pp,kk):cdf(n,1-pp,kk))) return ['no','Stimmt p? Sie haben mit '+dp(Math.round((1-pp)*100)/100)+' gerechnet.'];
+  return ['no','Das stimmt noch nicht. Prüfen Sie n, p und k. Kommazahl mit Punkt eingegeben?'];
+}
+function pruefen(){
+  let ok=0;
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), m=f.querySelector('.m'), msg=f.querySelector('.msg');
+    f.classList.remove('ok','no','fmt','show'); m.textContent=''; msg.textContent='';
+    const [st,t]=check(F,root.getElementById('i_'+F.k).value);
+    if(st==='leer') return;
+    f.classList.add(st); m.textContent= st==='ok'?'✓':st==='fmt'?'!':'✗'; msg.textContent=t; if(st==='ok') ok++;
+  });
+  const tot=A.felder.length; stat.a++; if(ok===tot) stat.r++;
+  root.getElementById('score').innerHTML = ok===tot ? `<span style="color:var(--ok)">Alles richtig! Klicken Sie auf „Neue Aufgabe“.</span>` : `${ok} von ${tot} richtig.`;
+  root.getElementById('stats').textContent=`Geprüft: ${stat.a} · komplett richtig: ${stat.r}`;
+}
+function zeigen(){
+  A.felder.forEach(F=>{
+    const f=root.getElementById('f_'+F.k), msg=f.querySelector('.msg');
+    if(f.classList.contains('ok')) return;
+    f.classList.add('show');
+    if(F.ganz) msg.innerHTML='Lösung: '+F.soll;
+    else if(F.pw) msg.innerHTML='Lösung: '+dp(F.soll);
+    else msg.innerHTML='Lösung: '+PX(F.op,F.kk)+' ≈ '+de4(F.soll)+' &nbsp;<span class="liste">'+(F.op==='='?`binomPdf(${F.n},${F.p},${F.kk})`:`binomCdf(${F.n},${F.p},0,${F.kk})`)+'</span>';
+  });
+}
+root.getElementById('pruefen').onclick=pruefen;
+root.getElementById('zeigen').onclick=zeigen;
+root.getElementById('neu').onclick=neu;
+root.getElementById('tabs').onclick=e=>{ const m=e.target.dataset.m; if(m){ mode=m; neu(); } };
+const hh=(''||'').slice(1); if(MODES[hh]) mode=hh;
+neu();
+ }
+};
+
 </script>
 <script>
 (function(){
@@ -9208,7 +9774,7 @@ neu();
 //  Themen
 // ---------------------------------------------------------------
 const BASE='https://olafkott.github.io/CAS/';
-const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform (ref / rref)", "sub": "LGS mit Matrizen lösen", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}];
+const TOPICS=[{"id": "grund", "dir": "Grundlagen", "pdf": "Arbeitsblatt_CAS_Grundlagen.pdf", "ueb": false, "title": "Grundlagen", "sub": "", "block": null, "sec": null}, {"id": "stat", "dir": "Lage_und_Streuung", "pdf": "Arbeitsblatt_CAS_Lage_Streuung.pdf", "ueb": true, "title": "Lage- und Streuungs&shy;maße", "sub": "", "block": "stat", "sec": null}, {"id": "reg", "dir": "Regression", "pdf": "Arbeitsblatt_CAS_Regression.pdf", "ueb": true, "title": "Lineare Regression und Korrelation", "sub": "", "block": "stat", "sec": null}, {"id": "wreg", "dir": "Weitere_Regressionen", "pdf": "Arbeitsblatt_CAS_Weitere_Regressionen.pdf", "ueb": true, "title": "Weitere Regressionen", "sub": "quadratisch, kubisch, exponentiell", "block": "stat", "sec": null}, {"id": "funk", "dir": "Funktionswerte", "pdf": "Arbeitsblatt_CAS_Funktionswerte.pdf", "ueb": true, "title": "Funktionswerte (y&#8209;Werte) berechnen", "sub": "", "block": "fa", "sec": null}, {"id": "wt", "dir": "Wertetabelle", "pdf": "Arbeitsblatt_CAS_Wertetabelle.pdf", "ueb": true, "title": "Wertetabelle und Graph", "sub": "Funktion zeichnen, Fenster, Wertetabelle", "block": "fa", "sec": null}, {"id": "gl", "dir": "Gleichungen", "pdf": "Arbeitsblatt_CAS_Gleichungen.pdf", "ueb": true, "title": "Gleichungen lösen (solve)", "sub": "", "block": "alg", "sec": null}, {"id": "lgs", "dir": "LGS", "pdf": "Arbeitsblatt_CAS_LGS.pdf", "ueb": true, "title": "Lineare Gleichungs&shy;systeme lösen", "sub": "", "block": "alg", "sec": null}, {"id": "stufe", "dir": "Stufenform", "pdf": "Arbeitsblatt_CAS_Stufenform.pdf", "ueb": true, "title": "Zeilenstufenform (ref / rref)", "sub": "LGS mit Matrizen lösen", "block": "alg", "sec": null}, {"id": "graph", "dir": "Graphen", "pdf": "Arbeitsblatt_CAS_Graphen.pdf", "ueb": true, "title": "Funktionen analysieren", "sub": "Nullstellen, Extrem-, Wende- und Schnittpunkte", "block": "fa", "sec": null}, {"id": "abl", "dir": "Ableitungen", "pdf": "Arbeitsblatt_CAS_Ableitungen.pdf", "ueb": true, "title": "Ableitungen", "sub": "", "block": "fa", "sec": "Differentialrechnung"}, {"id": "int", "dir": "Integrale", "pdf": "Arbeitsblatt_CAS_Integrale.pdf", "ueb": true, "title": "Bestimmtes und unbestimmtes Integral", "sub": "", "block": "fa", "sec": "Integralrechnung"}, {"id": "flae", "dir": "Flaechen", "pdf": "Arbeitsblatt_CAS_Flaechen.pdf", "ueb": true, "title": "Fläche im Graphen bestimmen", "sub": "Fläche mit der x-Achse und zwischen zwei Graphen", "block": "fa", "sec": "Integralrechnung"}, {"id": "bin", "dir": "Binomialverteilung", "pdf": "Arbeitsblatt_CAS_Binomialverteilung.pdf", "ueb": true, "title": "Binomialverteilung", "sub": "genau und höchstens", "block": "sto", "sec": null}];
 const TOP={}; TOPICS.forEach(t=>TOP[t.id]=t);
 const ICO={
  tour:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="16" rx="2"/><path d="M7 6h4M7 10h.01M10 10h.01M7 13h.01M10 13h.01"/><path d="M15 9l3 3-3 3" stroke="#F2B705"/></svg>',
