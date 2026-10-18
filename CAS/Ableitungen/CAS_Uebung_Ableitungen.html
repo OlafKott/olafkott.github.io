@@ -199,7 +199,7 @@ function genAF(){
     auftrag:"Speichern Sie die Funktion im CAS. Bestimmen Sie die 1., 2. und 3. Ableitung und tragen Sie die Zahlen ein.",
     term:polyHTML('f',P), plot:'',
     felder:[row("<i>f</i> ′(<i>x</i>) =",P1,'d1'), row("<i>f</i> ″(<i>x</i>) =",P2,'d2'), row("<i>f</i> ‴(<i>x</i>) =",P3,'d3')],
-    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann <b>menu ▸ 4: Analysis ▸ 1: Ableitung</b> und z.&nbsp;B. <span class="liste">f1(x):=d/dx(f(x))</span>. Oder direkt: <b>⊞</b> ▸ d/dx bzw. d²/dx² mit Hochzahl. Ist eine Zahl 0, tragen Sie 0 ein.'};
+    hinweis:'Tipp: <span class="liste">f(x):='+casPoly(P)+'</span>, dann z.&nbsp;B. <span class="liste">f1(x):=</span> <b>⊞</b> ▸ d/dx(f(x)) und <span class="liste">f2(x):=</span> d²/dx²(f(x)) (Vorlage mit Hochzahl). Ist eine Zahl 0, tragen Sie 0 ein.'};
 }
 function genST(){
   let P,xs,ok=false;
@@ -216,7 +216,7 @@ function genST(){
     auftrag:"Speichern Sie die Funktion und ihre Ableitungen im CAS. Berechnen Sie die Steigung an den Stellen mit Tangente und die 2. Ableitung an der violetten Stelle.",
     term:polyHTML('f',P), plot:plot(f,'f',marks),
     felder:tg.map((x,i)=>({k:'w'+i, lab:`<i>f</i> ′(${deN(x)})`, col:COL[i], soll:ev(P1,x)})).concat([{k:'w3', lab:`<i>f</i> ″(${deN(x2)})`, col:COL[3], soll:ev(P2,x2)}]),
-    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d/dx(f1(x))</span>, dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Oder direkt: <span class="liste">d/dx(f(x))|x=2.5</span> (| mit <b>ctrl + =</b>). Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
+    hinweis:'Tipp: <span class="liste">f1(x):=d/dx(f(x))</span> und <span class="liste">f2(x):=d²/dx²(f(x))</span> (Taste <b>⊞</b>), dann z.&nbsp;B. <span class="liste">f1(2.5)</span>. Oder direkt: <span class="liste">d/dx(f(x))|x=2.5</span> (| mit <b>ctrl + =</b>). Prüfen Sie: Passt das Vorzeichen zur Tangente?'};
 }
 const MODES={af:{name:"Ableitungsfunktion",gen:genAF}, st:{name:"Ableitung an einer Stelle",gen:genST}};
 const ORDER=["af","st"];

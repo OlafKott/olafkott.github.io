@@ -343,37 +343,33 @@ function palT(w){
 function palR(){ return '<div class="pal pr">'+['=','≠','&lt;','≤','&gt;','≥','|','⇒','⇔'].map(c=>`<span class="${c==='|'?'ziel':''}">${c}</span>`).join('')+'</div>'; }
 const pick=arr=>i=>arr[Math.max(0,Math.min(i,arr.length)-1)];
 
-// ---------- Spur 1: Ableitungen bestimmen ----------
+// ---------- Spur 1: Ableitungen bestimmen (Taste ⊞ ▸ d/dx) ----------
 const SUP=n=>'<sup>'+n+'</sup>';
 const D1R='3·x'+SUP(2)+'−6·x', D2R='6·x−6', D3R='6';
-const DER=["menu","4","1","x","tab"];
+const FX=["f","(","x",")"];
 const kF=["f","(","x",")","ctrl","tmpl","x","^","3","right","-","3","x","x2","+","2","enter"];
-const kD1=DER.concat(["f","(","x",")","enter"]);
-const kF1=["f","1","(","x",")","ctrl","tmpl"].concat(DER,["f","(","x",")","enter"]);
-const kF2=["f","2","(","x",")","ctrl","tmpl"].concat(DER,["f","1","(","x",")","enter"]);
+const kF1=["f","1","(","x",")","ctrl","tmpl","tmpl","click","x","tab"].concat(FX,["enter"]);
+const kF1s=["f","1","(","x",")","enter"];
+const kF2=["f","2","(","x",")","ctrl","tmpl","tmpl","click","x","tab","2","tab"].concat(FX,["enter"]);
 const kF2s=["f","2","(","x",")","enter"];
-const kF3=["f","3","(","x",")","ctrl","tmpl"].concat(DER,["f","2","(","x",")","enter"]);
+const kF3=["f","3","(","x",")","ctrl","tmpl","tmpl","click","x","tab","3","tab"].concat(FX,["enter"]);
 const kF3s=["f","3","(","x",")","enter"];
-const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kD1,D1R), a3=after(a2,kF1,'Fertig'),
-      a4=after(a3,kF2,'Fertig'), a5=after(a4,kF2s,D2R), a6=after(a5,kF3,'Fertig'), a7=after(a6,kF3s,D3R);
+const a0=[], a1=after(a0,kF,'Fertig'), a2=after(a1,kF1,'Fertig',['d']), a3=after(a2,kF1s,D1R),
+      a4=after(a3,kF2,'Fertig',['n']), a5=after(a4,kF2s,D2R), a6=after(a5,kF3,'Fertig',['n']), a7=after(a6,kF3s,D3R);
 
 // ---------- Spur 2: Ableitung an einer Stelle ----------
-const kA1=["f","1","(","2",")","enter"], kA2=["f","1","(","neg","1",")","enter"], kA3=["f","1","(","0",".","5",")","enter"], kA4=["f","2","(","3",")","enter"];
-const b1=after(a7,kA1,'0'), b2=after(b1,kA2,'9'), b3=after(b2,kA3,'−2.25'), b4=after(b3,kA4,'12');
-
-// ---------- Spur 3: direkt mit der Vorlagen-Taste ⊞ ----------
-const FX=["f","(","x",")"], BAR=["right","ctrl","=","click","x","="];
-const kT1=["tmpl","click","x","tab"].concat(FX,["enter"]);
-const kT2=["tmpl","click","x","tab","2","tab"].concat(FX,["enter"]);
-const kT3=["tmpl","click","x","tab","3","tab"].concat(FX,["enter"]);
-const kP1=["tmpl","click","x","tab"].concat(FX,BAR,["2","enter"]);
+const BAR=["right","ctrl","=","click","x","="];
+const kA1=["f","1","(","2",")","enter"], kA2=["f","1","(","neg","1",")","enter"];
+const kP1=["tmpl","click","x","tab"].concat(FX,BAR,["0",".","5","enter"]);
+const kA4=["f","2","(","3",")","enter"];
 const kP2=["tmpl","click","x","tab","2","tab"].concat(FX,BAR,["3","enter"]);
-const c0=b4, c1=after(c0,kT1,D1R,['d']), c2=after(c1,kT2,D2R,['n']), c3=after(c2,kT3,D3R,['n']), c4=after(c3,kP1,'0',['d','|']), c5=after(c4,kP2,'12',['n','|']);
+const b1=after(a7,kA1,'0'), b2=after(b1,kA2,'9'), b3=after(b2,kP1,'−2.25',['d','|']), b4=after(b3,kA4,'12'), b5=after(b4,kP2,'12',['n','|']);
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const fx=(t)=>`<i>${t}</i>`;
 const FTERM='<i>f</i>(<i>x</i>) = <i>x</i>³ − 3<i>x</i>² + 2';
 const D='<span class="fr"><span>d</span><span>d<i>x</i></span></span>';
+const DN=n=>'<span class="fr"><span>d<sup>'+n+'</sup></span><span>d<i>x</i><sup>'+n+'</sup></span></span>';
 
 const TRACKS={
  a:{ name:"Ableitungen bestimmen", start:()=>home(''), steps:[
@@ -382,57 +378,41 @@ const TRACKS={
   {t:"Funktion speichern", a:"Speichern Sie "+FTERM, k:kF, p:TS(a0,kF,'Fertig'),
    d:"<p><b>ctrl + ⊞</b> schreibt <b>:=</b>. Die Hochzahl 3: Taste <b>^</b>, dann <b>3</b>, dann <b>▶</b> (aus der Hochzahl heraus).</p>",
    n:"Das kennen Sie aus „Funktionswerte“: erst der Name <b>f(x)</b>, dann <b>:=</b>, dann der Term."},
-  {t:"Ableitung bestimmen", a:"Bestimmen Sie "+fx('f')+" ′(<i>x</i>)", k:kD1, p:TS(a1,kD1,D1R),
-   d:"<p><b>menu ▸ 4: Analysis ▸ 1: Ableitung</b> setzt die Vorlage "+D+"(□) ein.</p><p>Oben <b>x</b> eintippen, mit <b>tab</b> in die Klammer, dort <b>f(x)</b>. Ergebnis: <b>3x² − 6x</b></p>",
-   n:"Ins kleine Feld kommt immer die Variable: <b>x</b>."},
-  {t:"Ableitung speichern", a:"Speichern Sie die Ableitung als <i>f</i>1(<i>x</i>)", k:kF1, p:TS(a2,kF1,'Fertig'),
-   d:"<p><b>f1(x) := "+D+"(f(x))</b></p><p>Jetzt heißt die 1. Ableitung im CAS <b>f1</b>. So können Sie später leicht damit rechnen.</p>",
+  {t:"1. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ′ als <i>f</i>1(<i>x</i>)", k:kF1, p:TS(a1,kF1,'Fertig',['d']),
+   d:"<p>Erst <b>f1(x) :=</b> schreiben. Dann die Taste <b>⊞</b> (rechts neben der 9): Es öffnet sich eine Auswahl. Gehen Sie mit den Pfeiltasten auf "+D+" (gelb) und drücken Sie <b>●</b>.</p><p>Ins kleine Feld <b>x</b>, mit <b>tab</b> in die Klammer, dort <b>f(x)</b>.</p>",
    n:"f1 steht für <i>f</i> ′, f2 für <i>f</i> ″ und f3 für <i>f</i> ‴."},
-  {t:"2. Ableitung", a:"Speichern Sie <i>f</i> ″ als <i>f</i>2(<i>x</i>)", k:kF2, p:TS(a3,kF2,'Fertig'),
-   d:"<p>Die 2. Ableitung ist die Ableitung von <b>f1</b>:</p><p><b>f2(x) := "+D+"(f1(x))</b></p>"},
+  {t:"1. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ′(<i>x</i>) an", k:kF1s, p:TS(a2,kF1s,D1R),
+   d:"<p>Tippen Sie <b>f1(x)</b>. Ergebnis: <b>3x² − 6x</b></p>"},
+  {t:"2. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ″ als <i>f</i>2(<i>x</i>)", k:kF2, p:TS(a3,kF2,'Fertig',['n']),
+   d:"<p>In der Auswahl von <b>⊞</b> gibt es auch "+DN('□')+": die Vorlage mit <b>Hochzahl</b>.</p><p>Ins erste Feld <b>x</b>, mit <b>tab</b> zur Hochzahl <b>2</b>, mit <b>tab</b> in die Klammer: <b>f(x)</b>.</p>",
+   n:"Die Hochzahl sagt, die wievielte Ableitung berechnet wird."},
   {t:"2. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ″(<i>x</i>) an", k:kF2s, p:TS(a4,kF2s,D2R),
    d:"<p>Tippen Sie <b>f2(x)</b>. Ergebnis: <b>6x − 6</b></p>"},
-  {t:"3. Ableitung", a:"Speichern Sie <i>f</i> ‴ als <i>f</i>3(<i>x</i>)", k:kF3, p:TS(a5,kF3,'Fertig'),
-   d:"<p>Gleiches Muster: <b>f3(x) := "+D+"(f2(x))</b></p>"},
+  {t:"3. Ableitung speichern", a:"Speichern Sie "+fx('f')+" ‴ als <i>f</i>3(<i>x</i>)", k:kF3, p:TS(a5,kF3,'Fertig',['n']),
+   d:"<p>Gleiche Vorlage, jetzt mit Hochzahl <b>3</b>: <b>f3(x) := "+DN(3)+"(f(x))</b></p>"},
   {t:"3. Ableitung anzeigen", a:"Zeigen Sie "+fx('f')+" ‴(<i>x</i>) an", k:kF3s, p:TS(a6,kF3s,D3R),
-   d:"<p>Ergebnis: <b>6</b></p><table class='vgl'><tr><th>Ableitung</th><th>im CAS</th><th>Ergebnis</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x)</td><td>3x² − 6x</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x)</td><td>6x − 6</td></tr><tr><td><i>f</i> ‴(<i>x</i>)</td><td>f3(x)</td><td>6</td></tr></table>",
-   n:"Jede neue Ableitung leitet die vorherige ab: f → f1 → f2 → f3."},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(a7), d:AB("Aufgabe 1",["Funktion <i>g</i> speichern","<i>g</i> ′(<i>x</i>), <i>g</i> ″(<i>x</i>) und <i>g</i> ‴(<i>x</i>) bestimmen und eintragen"])}
+   d:"<p>Ergebnis: <b>6</b></p><table class='vgl'><tr><th>Ableitung</th><th>speichern</th><th>Ergebnis</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x):="+D+"(f(x))</td><td>3x² − 6x</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x):="+DN(2)+"(f(x))</td><td>6x − 6</td></tr><tr><td><i>f</i> ‴(<i>x</i>)</td><td>f3(x):="+DN(3)+"(f(x))</td><td>6</td></tr></table>"},
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(a7), d:AB("Aufgabe 1",["Funktion <i>g</i> speichern","g1, g2 und g3 speichern","<i>g</i> ′(<i>x</i>), <i>g</i> ″(<i>x</i>) und <i>g</i> ‴(<i>x</i>) eintragen"])}
  ]},
  s:{ name:"Ableitung an einer Stelle", start:()=>page(a7), steps:[
-  {t:"Steigung an der Stelle 2", a:"Berechnen Sie "+fx('f')+" ′(2)", k:kA1, p:TS(a7,kA1,'0'),
-   d:"<p>Mit der gespeicherten Ableitung geht es wie bei Funktionswerten: <b>f1(2)</b>.</p><p>Ergebnis: <b>0</b>. Der Graph hat bei <i>x</i> = 2 eine <b>waagerechte Tangente</b>.</p>"},
+  {t:"Stelle in f1 einsetzen", a:"Berechnen Sie "+fx('f')+" ′(2)", k:kA1, p:TS(a7,kA1,'0'),
+   d:"<p><b>Weg 1:</b> Die Ableitung ist als <b>f1</b> gespeichert. Setzen Sie die Stelle ein wie bei Funktionswerten: <b>f1(2)</b>.</p><p>Ergebnis: <b>0</b>. Der Graph hat bei <i>x</i> = 2 eine <b>waagerechte Tangente</b>.</p>"},
   {t:"Negative Stelle", a:"Berechnen Sie "+fx('f')+" ′(−1)", k:kA2, p:TS(b1,kA2,'9'),
    d:"<p>Vorzeichen mit <b>(−)</b>. Ergebnis: <b>9</b> &gt; 0, also <b>steigt</b> der Graph bei <i>x</i> = −1.</p>"},
-  {t:"Kommazahl", a:"Berechnen Sie "+fx('f')+" ′(0,5)", k:kA3, p:TS(b2,kA3,'−2.25'),
-   d:"<p>Komma = <b>Punkt</b>. Ergebnis: <b>−2,25</b> &lt; 0, also <b>fällt</b> der Graph bei <i>x</i> = 0,5.</p>"},
-  {t:"2. Ableitung an einer Stelle", a:"Berechnen Sie "+fx('f')+" ″(3)", k:kA4, p:TS(b3,kA4,'12'),
-   d:"<p>Genauso mit <b>f2</b>: <b>f2(3)</b> = <b>12</b></p>",
+  {t:"Direkt mit dem Strich |", a:"Berechnen Sie "+fx('f')+" ′(0,5) direkt", k:kP1, p:TS(b2,kP1,'−2.25',['d','|']),
+   d:"<p><b>Weg 2:</b> <b>⊞</b> ▸ "+D+", dann <b>x</b>, <b>tab</b>, <b>f(x)</b>. Mit <b>▶</b> aus der Vorlage heraus.</p><p><b>ctrl + =</b> öffnet eine Auswahl: dort <b>|</b> wählen. Dann <b>x=0.5</b>.</p><p>Ergebnis: <b>−2,25</b> &lt; 0, also <b>fällt</b> der Graph.</p>",
+   n:"Der Strich <b>|</b> heißt „mit“: Rechne die Ableitung <b>mit x = 0,5</b>."},
+  {t:"2. Ableitung: Weg 1", a:"Berechnen Sie "+fx('f')+" ″(3)", k:kA4, p:TS(b3,kA4,'12'),
+   d:"<p>Mit der gespeicherten 2. Ableitung: <b>f2(3)</b> = <b>12</b></p>"},
+  {t:"2. Ableitung: Weg 2", a:"Berechnen Sie "+fx('f')+" ″(3) direkt", k:kP2, p:TS(b4,kP2,'12',['n','|']),
+   d:"<p>Vorlage "+DN(2)+" mit Hochzahl <b>2</b>, dann <b>|x=3</b>. Ergebnis: <b>12</b> – beide Wege liefern dasselbe.</p>",
    n:"Merke: <i>f</i> ′(<i>a</i>) &gt; 0 → Graph steigt · <i>f</i> ′(<i>a</i>) &lt; 0 → Graph fällt · <i>f</i> ′(<i>a</i>) = 0 → waagerechte Tangente"},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b4), d:AB("Aufgabe 2 und 3",["Funktion <i>h</i> speichern und ableiten","Steigungen an den Stellen berechnen","steigt, fällt oder waagerecht?","<i>h</i> ″ an zwei Stellen berechnen","Danach: Lösungscode eintragen"])}
- ]},
- d:{ name:"Direkt mit ⊞ und |", start:()=>page(b4), steps:[
-  {t:"Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ′(<i>x</i>) direkt", k:kT1, p:TS(c0,kT1,D1R,['d']),
-   d:"<p>Taste <b>⊞</b> (rechts neben der 9) öffnet eine Auswahl. Gehen Sie mit den <b>Pfeiltasten</b> auf "+D+" (gelb) und drücken Sie <b>●</b>.</p><p>Dann wie vorher: <b>x</b>, <b>tab</b>, <b>f(x)</b>.</p>",
-   n:"Die Lage von "+D+" in der Auswahl kann je nach Betriebssystem etwas anders sein. Suchen Sie das Feld mit d/d□."},
-  {t:"2. Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ″(<i>x</i>) direkt", k:kT2, p:TS(c1,kT2,D2R,['n']),
-   d:"<p>In der Auswahl gibt es auch die Vorlage für die <b>n-te Ableitung</b> (mit Hochzahl).</p><p>Ins erste Feld <b>x</b>, mit <b>tab</b> zur Hochzahl: <b>2</b> = 2. Ableitung. Dann <b>tab</b> und <b>f(x)</b>.</p><p>Ergebnis: <b>6x − 6</b></p>"},
-  {t:"3. Ableitung direkt", a:"Bestimmen Sie "+fx('f')+" ‴(<i>x</i>) direkt", k:kT3, p:TS(c2,kT3,D3R,['n']),
-   d:"<p>Gleiche Vorlage, Hochzahl <b>3</b>. Ergebnis: <b>6</b></p>", n:"So geht auch die 4., 5., … Ableitung: nur die Hochzahl ändern."},
-  {t:"Ableitung an einer Stelle mit |", a:"Berechnen Sie "+fx('f')+" ′(2) direkt", k:kP1, p:TS(c3,kP1,'0',['d','|']),
-   d:"<p>Erst die Ableitung "+D+"(f(x)) eingeben. Mit <b>▶</b> aus der Vorlage heraus.</p><p><b>ctrl + =</b> öffnet eine Auswahl: dort <b>|</b> wählen. Dann <b>x=2</b>.</p><p>Ergebnis: <b>0</b></p>",
-   n:"Der Strich <b>|</b> heißt „mit“: Rechne die Ableitung <b>mit x = 2</b>."},
-  {t:"2. Ableitung an einer Stelle", a:"Berechnen Sie "+fx('f')+" ″(3) direkt", k:kP2, p:TS(c4,kP2,'12',['n','|']),
-   d:"<p>Vorlage mit Hochzahl <b>2</b>, dann <b>|x=3</b>. Ergebnis: <b>12</b></p>"},
-  {t:"Welcher Weg?", k:[], s:()=>page(c5),
-   d:"<table class='vgl'><tr><th></th><th>gespeichert</th><th>direkt</th></tr><tr><td><i>f</i> ′(<i>x</i>)</td><td>f1(x):="+D+"(f(x))</td><td>⊞ ▸ "+D+"(f(x))</td></tr><tr><td><i>f</i> ″(<i>x</i>)</td><td>f2(x):="+D+"(f1(x))</td><td>⊞ ▸ d²/dx²(f(x))</td></tr><tr><td><i>f</i> ′(2)</td><td>f1(2)</td><td>"+D+"(f(x))|x=2</td></tr></table>",
-   n:"Brauchen Sie eine Ableitung oft, ist <b>speichern</b> schneller. Für einen einzelnen Wert ist der <b>direkte</b> Weg schnell."},
-  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(c5), d:AB("Aufgaben 1 bis 3",["Prüfen Sie Ihre Ergebnisse auf dem anderen Weg","Beide Wege müssen dasselbe ergeben","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:()=>page(b5), d:AB("Aufgabe 2 und 3",["Funktion <i>h</i> speichern, h1 und h2 speichern","Steigungen an den Stellen berechnen (Weg 1 oder Weg 2)","steigt, fällt oder waagerecht?","<i>h</i> ″ an zwei Stellen berechnen","Danach: Lösungscode eintragen"])}
  ]}
 };
 
 // ---------- Steuerung ----------
-const ORDER=["a","s","d"];
+const ORDER=["a","s"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"● wählen",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
