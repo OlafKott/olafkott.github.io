@@ -16,7 +16,6 @@ NR = {'Grundlagen':'0',
 
 # Abschnitt der Gliederung für die Fußzeile
 ABSCHNITT = {'0':'Grundlagen','1':'Statistik','2':'Funktionen &amp; Analysis','3':'Gleichungen &amp; Algebra','4':'Stochastik'}
-UNTERTITEL = 'TI-Nspire CAS'
 
 # Blattspezifischer Ausgleich, damit der Inhalt über dem Lösungskasten Platz hat
 EXTRA = {'Funktionsscharen': '.sec{ margin-top:10px !important; }'}
@@ -27,10 +26,10 @@ CSS = '''
 .page-content{ flex:1 1 auto !important; display:flex !important; flex-direction:column !important; }
 .ab-inhalt{ flex:0 0 auto; }
 .ab-inhalt.ab-flex{ display:flex; flex-direction:column; }
-.page-header{ display:flex !important; justify-content:space-between !important; align-items:flex-start !important; border-bottom:3px solid var(--lf) !important; padding-bottom:6px !important; margin:0 0 8px !important; }
-.page-header h1{ font-size:19.5px !important; margin:0 0 2px !important; color:var(--lf) !important; line-height:1.25 !important; }
+.page-header{ display:flex !important; justify-content:space-between !important; align-items:center !important; border-bottom:3px solid var(--lf) !important; padding-bottom:6px !important; margin:0 0 8px !important; }
+.page-header h1{ font-size:19.5px !important; margin:0 !important; color:var(--lf) !important; line-height:1.25 !important; }
 .page-header .sub{ font-size:12.5px !important; color:#444 !important; }
-.page-header img.logo{ height:30px !important; width:auto !important; margin-top:3px !important; }
+.page-header img.logo{ height:30px !important; width:auto !important; margin:0 !important; display:block !important; }
 .ab-nr{ display:inline-block; min-width:22px; height:22px; line-height:22px; padding:0 6px; margin:0 8px 0 0; border-radius:11px; background:var(--lf); color:#fff; font:bold 13px Arial,Helvetica,sans-serif; text-align:center; vertical-align:2px; letter-spacing:.2px; }
 .namebar{ display:flex !important; gap:24px !important; font-size:12.5px !important; color:#555 !important; margin:0 0 9px !important; }
 .code{ display:flex !important; align-items:center !important; gap:4mm !important; border-top:1.4px solid var(--lf) !important; border-bottom:1.4px solid var(--lf) !important; padding:2mm 1mm !important; margin:auto 0 0 !important; break-inside:avoid; flex:0 0 auto !important; }
@@ -108,8 +107,10 @@ def finish(s, folder):
         s = s[:m].rstrip() + '\n' + s[s.rfind('</style>'):]
     i = s.rfind('</style>')
     s = s[:i] + CSS.lstrip('\n') + (EXTRA.get(folder, '') + '\n' if folder in EXTRA else '') + s[i:]
-    # grauer Untertitel unter der Überschrift
-    s = re.sub(r'(<div class="sub">).*?(</div>)', lambda m: m.group(1) + UNTERTITEL + m.group(2), s, flags=re.S)
+    # kein grauer Untertitel unter der Überschrift
+    s = re.sub(r'\s*<div class="sub">.*?</div>', '', s, flags=re.S)
+    # Beschriftung unter dem QR-Code zur Anleitung
+    s = s.replace('fill="#333">Schritt für Schritt</text>', 'fill="#333">Anleitung</text>')
     # rechts in der Fußzeile: Abschnitt der Gliederung (bei mehrseitigen Blättern mit Seitenzahl)
     ab = ABSCHNITT[NR[folder].split('.')[0]]
     pages = s.count('<div class="page-footer">')
