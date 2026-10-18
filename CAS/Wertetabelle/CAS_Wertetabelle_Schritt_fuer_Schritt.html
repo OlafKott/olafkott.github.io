@@ -123,6 +123,7 @@ table.sh.wt td.rn{ width:13px; text-align:center; }
 table.sh.wt tr td:nth-child(2){ width:44px; }
 table.sh.wt tr.hd td{ text-align:center; font-size:10px; }
 table.sh.wt tr.ex td{ height:13px; font-size:8.5px; color:#555; background:#f6f7f9; text-align:center; }
+table.sh.wt.two tr td:nth-child(2){ width:34px; } table.sh.wt.two td{ font-size:9.5px; padding:0 2px; } table.sh.wt.two tr.ex td{ font-size:7.5px; }
 table.sh.wt tr.hl td:not(.rn){ background:#FFE9A8; font-weight:bold; }
 .files{ padding:4px 8px; font-size:11px; }
 .files .hd{ font-weight:bold; border-bottom:1px solid #ccc; padding:2px 2px; display:flex; justify-content:space-between; }
@@ -285,38 +286,54 @@ function rnd(arr,curA,caret){
 Entry.prototype.html=function(caret){ return rnd(this.root,this.top().a,caret!==false); };
 
 // ---------- Graphs-Seite mit Wertetabelle ----------
-const FN=x=>0.5*x*x-x-3;                 // Beispiel der Tour: f1(x)=0.5x²−x−3
-const FTXT='0.5·x<sup>2</sup>−x−3';
 const num=v=>{ let s=(Math.round(v*1e6)/1e6).toString(); return s.replace('-','−'); };
+const COLS=['#1565c0','#c62828'];
+// Eingabe -> JS-Funktion und Textform
+function toJS(arr){ let o='', prev='';
+  arr.forEach(t=>{ if(typeof t!=='string'){ o+='**('+toJS(t.v)+')'; prev=')'; return; }
+    const c=t==='−'?'-':t==='·'?'*':t;
+    if((c==='x'&&/[0-9.x)]/.test(prev))||(/[0-9]/.test(c)&&prev==='x')) o+='*';
+    o+=c; prev=c; });
+  return o; }
+const toTxt=arr=>arr.map(t=>typeof t==='string'?t:'^'+toTxt(t.v)).join('');
+function fnOf(E){ try{ return new Function('x','return '+toJS(E.root)); }catch(e){ return ()=>NaN; } }
+function copyE(E){ const n=new Entry(); n.root=JSON.parse(JSON.stringify(E.root)); n.path=[{a:n.root}]; return n; }
 const TM=["1: Aktionen","2: Wertetabelle"];
 const TW=["1: Spalte löschen","2: Wählen","3: Ausdruck bearbeiten","4: Tabelle entfernen","5: Funktionseinstellungen bearbeiten"];
-function plotSVG(w,h,drawn){
+function plotSVG(w,h,fs){
   const X=x=>(x+10)/20*w, Y=y=>h/2-y*(h/2)/6.67;
   let o=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="position:absolute;left:0;top:0">`;
   o+=`<line x1="0" y1="${Y(0)}" x2="${w}" y2="${Y(0)}" stroke="#555" stroke-width=".8"/><line x1="${X(0)}" y1="0" x2="${X(0)}" y2="${h}" stroke="#555" stroke-width=".8"/>`;
   for(let x=-10;x<=10;x+=2) if(x) o+=`<line x1="${X(x)}" y1="${Y(0)-1.5}" x2="${X(x)}" y2="${Y(0)+1.5}" stroke="#555" stroke-width=".7"/>`;
   for(let y=-6;y<=6;y+=2) if(y) o+=`<line x1="${X(0)-1.5}" y1="${Y(y)}" x2="${X(0)+1.5}" y2="${Y(y)}" stroke="#555" stroke-width=".7"/>`;
   o+=`<text x="${w-3}" y="${Y(0)-3}" font-size="8" text-anchor="end" fill="#555">10</text><text x="${X(0)+3}" y="9" font-size="8" fill="#555">6.67</text>`;
-  if(drawn){ let d=''; for(let i=0;i<=200;i++){ const x=-10+20*i/200, y=FN(x); if(y>7.2) continue; d+=(d?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1); }
-    o+=`<path d="${d}" fill="none" stroke="#1565c0" stroke-width="1.6"/>`; }
+  fs.forEach((E,j)=>{ const f=fnOf(E); let d='', pen=false;
+    for(let i=0;i<=200;i++){ const x=-10+20*i/200, y=f(x); if(!(y<7.5&&y>-7.5)){ pen=false; continue; } d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1); pen=true; }
+    o+=`<path d="${d}" fill="none" stroke="${COLS[j]}" stroke-width="1.6"/>`; });
   return o+'</svg>';
+}
+function entryBar(S){
+  const j=S.eIdx, nm='f'+(j+1)+'(x)=';
+  return `<div style="position:absolute;left:3px;right:3px;bottom:3px;background:#fff;border:1px solid #888;font-size:10.5px;padding:1px 3px;display:flex;gap:2px;white-space:nowrap;overflow:hidden"><span style="color:${COLS[j]}">${nm}</span><span>${S.entry.html()}</span></div>`;
 }
 function graphPage(S){
   let h=topbar(['1.1'],'1.1');
   if(!S.split){
-    h+='<div style="position:absolute;left:0;right:0;top:16px;bottom:0">'+plotSVG(280,194,!!S.f);
-    if(S.f) h+=`<div style="position:absolute;right:6px;top:118px;color:#1565c0;font-size:10.5px">f1(x)=${FTXT}</div>`;
-    if(S.entry) h+=`<div style="position:absolute;left:4px;right:4px;bottom:4px;background:#fff;border:1px solid #888;font-size:11px;padding:1px 4px;display:flex;gap:3px"><span style="color:#1565c0">f1(x)=</span><span>${S.entry.html()}</span></div>`;
+    h+='<div style="position:absolute;left:0;right:0;top:16px;bottom:0">'+plotSVG(280,194,S.fs);
+    S.fs.forEach((E,j)=>{ h+=`<div style="position:absolute;right:6px;top:${118+j*14}px;color:${COLS[j]};font-size:10.5px">f${j+1}(x)=${rnd(E.root,null,false)}</div>`; });
+    if(S.entry) h+=entryBar(S);
     return h+'</div>';
   }
-  // geteilter Bildschirm: links Graph, rechts Tabelle (aktiv)
-  h+='<div style="position:absolute;left:0;width:139px;top:16px;bottom:0;overflow:hidden;border-right:1px solid #aab3bf">'+plotSVG(139,194,true)+'</div>';
-  h+='<div style="position:absolute;left:140px;right:0;top:16px;bottom:0;overflow:hidden;outline:2px solid #3b78c2;outline-offset:-2px">';
-  h+='<table class="sh wt"><tr class="hd"><td class="rn"></td><td>x</td><td>f1(x):=</td></tr><tr class="ex"><td class="rn">▪</td><td></td><td>0.5·x^2−x−3</td></tr>';
+  const act='outline:2px solid #3b78c2;outline-offset:-2px;';
+  h+=`<div style="position:absolute;left:0;width:139px;top:16px;bottom:0;overflow:hidden;border-right:1px solid #aab3bf;${S.foc==='g'?act:''}">`+plotSVG(139,194,S.fs)+(S.entry?entryBar(S):'')+'</div>';
+  h+=`<div style="position:absolute;left:140px;right:0;top:16px;bottom:0;overflow:hidden;${S.foc==='t'?act:''}">`;
+  const F=S.fs.map(fnOf), two=S.fs.length>1;
+  h+=`<table class="sh wt ${two?'two':''}"><tr class="hd"><td class="rn"></td><td>x</td>`+S.fs.map((E,j)=>`<td>f${j+1}(x):=</td>`).join('')+'</tr>';
+  h+='<tr class="ex"><td class="rn">▪</td><td></td>'+S.fs.map(E=>`<td>${toTxt(E.root).replace(/·/g,'·')}</td>`).join('')+'</tr>';
   for(let r=0;r<10;r++){
-    const x=S.start+(S.top+r)*S.step, xv=Math.round(x*1e9)/1e9;
+    const xv=Math.round((S.start+(S.top+r)*S.step)*1e9)/1e9;
     const hl=(S.hl||[]).some(v=>Math.abs(v-xv)<1e-9);
-    h+=`<tr class="${hl?'hl':''}"><td class="rn">${r+1}</td><td class="${r===S.cur?'cur':''}">${num(xv)}</td><td>${num(FN(xv))}</td></tr>`;
+    h+=`<tr class="${hl?'hl':''}"><td class="rn">${r+1}</td><td class="${r===S.cur&&S.foc==='t'?'cur':''}">${num(xv)}</td>`+F.map(f=>`<td>${num(f(xv))}</td>`).join('')+'</tr>';
   }
   h+='</table></div>';
   if(S.menu===1) h+=menus([{items:TM,sel:0}]);
@@ -332,19 +349,28 @@ function graphPage(S){
 }
 // ---------- Simulation: komplette Tastenfolge ab Startbildschirm ----------
 function SIM(keys,opt){
-  const S={scr:'home',entry:null,f:false,split:false,menu:0,dlg:null,start:0,step:1,top:0,cur:0,ctrl:false};
+  const S={scr:'home',entry:null,eIdx:0,fs:[],split:false,foc:'g',menu:0,dlg:null,start:0,step:1,top:0,cur:0,ctrl:false};
   for(const k of keys){
     if(S.scr==='home'){ if(k==='1') S.scr='apps'; continue; }
-    if(S.scr==='apps'){ if(k==='2'){ S.scr='graph'; S.entry=new Entry(); } continue; }
-    if(S.ctrl){ S.ctrl=false; if(k==='t'){ S.split=!S.split; S.top=0; S.cur=0; } continue; }
+    if(S.scr==='apps'){ if(k==='2'){ S.scr='graph'; S.entry=new Entry(); S.eIdx=0; } continue; }
+    if(S.ctrl){ S.ctrl=false;
+      if(k==='t'){ S.split=!S.split; S.top=0; S.cur=0; S.foc=S.split?'t':'g'; S.entry=null; }
+      if(k==='tab'&&S.split){ S.foc=S.foc==='t'?'g':'t'; S.entry=null; }
+      if(k==='g'&&S.foc==='g'){ if(S.entry) S.entry=null; else { S.eIdx=S.fs.length; S.entry=new Entry(); } }
+      continue; }
     if(k==='ctrl'){ S.ctrl=true; continue; }
-    if(S.entry){ if(k==='enter'){ S.f=true; S.entry=null; } else S.entry.key(k); continue; }
+    if(S.entry){
+      if(k==='enter'){ S.fs[S.eIdx]=S.entry; S.entry=null; continue; }
+      if(k==='up'){ if(S.eIdx>0){ S.eIdx--; S.entry=copyE(S.fs[S.eIdx]); } continue; }
+      if(k==='down'){ if(S.eIdx<S.fs.length){ S.eIdx++; S.entry=S.eIdx<S.fs.length?copyE(S.fs[S.eIdx]):new Entry(); } continue; }
+      S.entry.key(k); continue; }
     if(S.dlg){ const D=S.dlg;
       if(k==='tab'){ D.field=1-D.field; D.fresh=true; continue; }
       if(k==='enter'){ S.start=parseFloat(D.v[0].replace('−','-')); S.step=parseFloat(D.v[1].replace('−','-')); S.dlg=null; S.top=0; S.cur=0; continue; }
       const ch=k==='neg'?'−':k; if(D.fresh){ D.v[D.field]=''; D.fresh=false; } D.v[D.field]+=ch; continue; }
     if(S.menu===1){ S.menu=(k==='2')?2:0; continue; }
     if(S.menu===2){ S.menu=0; if(k==='5') S.dlg={v:[num(S.start),num(S.step)],field:0,fresh:true}; continue; }
+    if(S.foc!=='t') continue;
     if(k==='menu'){ S.menu=1; continue; }
     if(k==='up'){ if(S.cur>0) S.cur--; else S.top--; continue; }
     if(k==='down'){ if(S.cur<9) S.cur++; else S.top++; continue; }
@@ -363,10 +389,15 @@ const kTab=["ctrl","t"];
 const kUp=["up","up","up"];
 const kSet=["menu","2","5"];
 const kEin=["neg","2","tab","0",".","5","enter"];
+const kZG=["ctrl","tab"];
+const kEZ=["ctrl","g"];
+const kBe=["up","del","1","enter"];
+const kF2=["neg","x","+","2","enter"];
+const kZT=["ctrl","tab"];
 
 const AB=(nr,items)=>`<div class="ab"><div class="abt"><span>✍</span> Arbeitsblatt: ${nr}</div><ul>${items.map(x=>'<li>'+x+'</li>').join('')}</ul><p>Am eigenen Handheld rechnen, Ergebnisse eintragen, dann <b>Weiter</b>.</p></div>`;
 const FTERM='<i>f</i>(<i>x</i>) = 0,5<i>x</i>² − <i>x</i> − 3';
-const tbl=(rows)=>`<table class="vgl"><tr><th><i>x</i></th>${rows.map(r=>`<td>${r[0]}</td>`).join('')}</tr><tr><th><i>f</i>(<i>x</i>)</th>${rows.map(r=>`<td>${r[1]}</td>`).join('')}</tr></table>`;
+const tbl=(rows,hd)=>{ hd=hd||['<i>f</i>(<i>x</i>)']; return `<table class="vgl"><tr><th><i>x</i></th>${rows.map(r=>`<td>${r[0]}</td>`).join('')}</tr>`+hd.map((h,j)=>`<tr><th>${h}</th>${rows.map(r=>`<td>${r[j+1]}</td>`).join('')}</tr>`).join('')+'</table>'; };
 
 const TRACKS={
  t:{ name:"Wertetabelle erstellen", start:()=>home(''), steps:[
@@ -386,13 +417,31 @@ const TRACKS={
   {t:"Anfang und Schrittweite", a:"Tabellenanfang −2, Tabellenschritt 0,5", k:kEin,
    d:"<p>Tippen Sie <b>(−) 2</b>. Mit <b>tab</b> zum nächsten Feld, dort <b>0.5</b>. Mit <b>enter</b> bestätigen.</p>"+tbl([["−2","1"],["−1,5","−0,375"],["−1","−1,5"],["−0,5","−2,375"],["0","−3"]]),
    n:"Ein Ende gibt es nicht: Mit <b>▼</b> geht die Tabelle immer weiter."},
-  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1 und 2",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen","Aufgabe 2 genauso mit <i>g</i>","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 1",["Neues Dokument mit Graphs (<b>⌂ on ▸ 1 ▸ 2</b>), <i>f</i> eingeben","Wertetabelle mit <b>ctrl + T</b> einblenden","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen"])}
+ ]},
+ b:{ name:"Bearbeiten und 2. Funktion", start:null, steps:[
+  {t:"Zum Graphen wechseln", a:"Wechseln Sie von der Tabelle zum Graphen", k:kZG,
+   d:"<p><b>ctrl + tab</b> springt zwischen Tabelle und Graph hin und her.</p><p>Der <b>blaue Rahmen</b> zeigt, welche Seite gerade aktiv ist.</p>"},
+  {t:"Eingabezeile öffnen", a:"Holen Sie die Eingabezeile zurück", k:kEZ,
+   d:"<p><b>ctrl + G</b> blendet die Eingabezeile ein. Dort steht schon <b>f2(x)=</b> für eine neue Funktion.</p>",
+   n:"Noch einmal <b>ctrl + G</b> blendet die Eingabezeile wieder aus."},
+  {t:"Funktion bearbeiten", a:"Ändern Sie <i>f</i>1 zu 0,5<i>x</i>² − <i>x</i> − 1", k:kBe,
+   d:"<p>Mit <b>▲</b> holen Sie <b>f1</b> in die Eingabezeile. Der Cursor steht am Ende.</p><p><b>del</b> löscht die 3, dann <b>1</b> tippen und <b>enter</b>. Graph und Tabelle ändern sich sofort.</p>",
+   n:"Mit <b>◀</b> und <b>▶</b> kommen Sie auch an Stellen in der Mitte des Terms."},
+  {t:"Eingabezeile wieder öffnen", a:"Öffnen Sie die Eingabezeile für eine 2. Funktion", k:kEZ,
+   d:"<p>Wieder <b>ctrl + G</b>. Jetzt steht dort <b>f2(x)=</b>.</p>"},
+  {t:"2. Funktion eingeben", a:"Geben Sie <i>f</i>2(<i>x</i>) = −<i>x</i> + 2 ein", k:kF2,
+   d:"<p>Das Minus vorne mit <b>(−)</b>, dann <b>x + 2</b> und <b>enter</b>. Ein zweiter Graph erscheint in Rot.</p>"},
+  {t:"Zurück zur Tabelle", a:"Wechseln Sie zur Tabelle", k:kZT,
+   d:"<p><b>ctrl + tab</b>. Die Tabelle hat jetzt eine <b>zweite Spalte</b> für f2.</p>"+tbl([["−2","3","4"],["−1,5","1,625","3,5"],["−1","0,5","3"],["−0,5","−0,375","2,5"],["0","−1","2"]],['<i>f</i>1(<i>x</i>)','<i>f</i>2(<i>x</i>)']),
+   n:"Anfang und Schritt aus den Einstellungen gelten für beide Funktionen."},
+  {t:"Selbst rechnen", k:[], ab:1, d:AB("Aufgabe 2",["Funktion <i>g</i> eingeben: <b>f1 bearbeiten</b> oder als <b>f2</b> dazunehmen","Tabellenanfang und Tabellenschritt einstellen","Werte in die Tabellen eintragen","Danach: Lösungscode eintragen"])}
  ]}
 };
 // Tastenfolgen aneinanderhängen: jeder Schritt beginnt mit dem Zustand am Ende des vorigen
 (function(){
   let pre=[];
-  ["t"].forEach(t=>{
+  ["t","b"].forEach(t=>{
     const T=TRACKS[t], p0=pre.slice();
     if(!T.start) T.start=()=>SIM(p0);
     T.steps.forEach(S=>{
@@ -404,7 +453,7 @@ const TRACKS={
 })();
 
 // ---------- Steuerung ----------
-const ORDER=["t"];
+const ORDER=["t","b"];
 let tr=ORDER[0], st=0, pos=0, lock=false; const done={};
 const $=id=>document.getElementById(id);
 const LBL={tmpl:"⊞",on:"⌂ on",doc:"doc",menu:"menu",enter:"enter",tab:"tab",ctrl:"ctrl",click:"Klick",down:"▼",up:"▲",right:"▶",left:"◀",x2:"x²",neg:"(−)",del:"del",var:"var",esc:"esc","/":"÷","*":"×","-":"−"};
