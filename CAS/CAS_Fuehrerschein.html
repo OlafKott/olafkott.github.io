@@ -6864,7 +6864,7 @@ const TRACKS={
   {t:"Fenster einstellen", a:"Fenster: −2 ≤ <i>x</i> ≤ 4 und −5 ≤ <i>y</i> ≤ 5", k:kWin, p:GS(p1,kWin),
    d:"<p><b>menu ▸ 4: Fenster/Zoom ▸ 1: Fenstereinstellungen</b></p><p>Zahl eintippen, mit <b>tab</b> ins nächste Feld. Die Skalierung (Auto) überspringen Sie mit einem zweiten <b>tab</b>. Zum Schluss <b>enter</b>.</p>",
    n:"Negative Zahlen mit <b>(−)</b>, nicht mit der Minustaste."},
-  {t:"Selbst zeichnen", k:[], ab:1, s:gAfter(p2), d:AB("Aufgabe 1",["Funktion <i>g</i> zeichnen","Fenster einstellen","Graph in das Koordinatensystem skizzieren"])}
+  {t:"Selbst zeichnen", k:[], ab:1, s:gAfter(p2), d:AB("Aufgabe 1",["Funktion <i>g</i> im CAS zeichnen","Fenster wie auf dem Arbeitsblatt einstellen","Graph mit dem Bild auf dem Arbeitsblatt vergleichen"])}
  ]},
  x:{ name:"Fläche mit der x-Achse", start:gAfter(p2), steps:[
   {t:"Fläche oberhalb der x-Achse", a:"Berechnen Sie die Fläche zwischen dem Graphen und der <i>x</i>-Achse von −1 bis 1", k:KP(kI1), full:kI1, pre:p2, p:GP(p2,kI1),
@@ -6875,7 +6875,7 @@ const TRACKS={
   {t:"Gesamtfläche", a:"Wie groß ist die gesamte Fläche zwischen Graph und <i>x</i>-Achse?", k:[], s:gAfter(px2),
    d:"<p>Die beiden Teilflächen werden <b>addiert</b> – jeweils mit Betrag:</p><p>"+FE('4 + 4 = 8')+"</p><p>Achtung: Das Integral von −1 bis 3 in einem Schritt ergibt 4 + (−4) = <b>0</b>. Die Teilflächen heben sich auf – das ist <b>nicht</b> die Fläche.</p><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Nullstellen bestimmen (das sind die Grenzen).<br>2. Für jede Teilfläche das Integral berechnen.<br>3. Beträge addieren.</td></tr></table>",
    n:"Die Nullstellen −1, 1 und 3 finden Sie mit <b>menu ▸ 6 ▸ 1: Nullstelle</b> (siehe „Graphen analysieren“)."},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(px2), d:AB("Aufgabe 2",["Nullstellen von <i>g</i>","beide Teilflächen mit dem Integral","Gesamtfläche"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(px2), d:AB("Aufgabe 1",["Grenzen der Teilflächen <i>A</i><sub>2</sub> und <i>A</i><sub>3</sub>: Nullstellen von <i>g</i>","Integral und Fläche von <i>A</i><sub>2</sub> und <i>A</i><sub>3</sub> in die Tabelle"])}
  ]},
  i:{ name:"Vorgegebenes Intervall", start:gAfter(p2), steps:[
   {t:"Grenzen eintippen", a:"Berechnen Sie "+INT('0','2',FX), k:kT1, p:GS(p2,kT1),
@@ -6888,7 +6888,7 @@ const TRACKS={
   {t:"Zweite Teilfläche", a:"Berechnen Sie "+INT('1','2',FX), k:kT3, p:GS(pi2,kT3),
    d:"<p><b>menu ▸ 6 ▸ 7</b>, untere Schranke <b>1</b>, obere Schranke <b>2</b>.</p><p>Ergebnis: "+INT('1','2',FX)+" = <b>−1,75</b></p><p>Fläche im Intervall [0; 2]: "+FE('1,75 + |−1,75| = 3,5')+"</p>",
    n:"Liegt keine Nullstelle im Intervall, reicht <b>ein</b> Integral – bei negativem Ergebnis den Betrag nehmen."},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pi3), d:AB("Aufgabe 3",["Integral im vorgegebenen Intervall","Nullstelle im Intervall?","Teilflächen und Fläche"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pi3), d:AB("Aufgabe 1",["Teilfläche <i>A</i><sub>1</sub>: untere Grenze −2,5 eintippen","Integral und Fläche von <i>A</i><sub>1</sub>","gesamte markierte Fläche <i>A</i>"])}
  ]},
  z:{ name:"Zwischen zwei Graphen", start:gAfter(p2), steps:[
   {t:"Zweite Funktion", a:"Zeichnen Sie zusätzlich <i>f</i>2(<i>x</i>) = 1 − <i>x</i>²", k:kG2, p:GS(p2,kG2),
@@ -6902,7 +6902,7 @@ const TRACKS={
    d:"<p><b>menu ▸ 6 ▸ 8: Begrenzter Bereich</b>, Grenzen bei <i>x</i> = 1 und <i>x</i> = 2.</p>"+PLAYB+"<p>Ergebnis: "+FE('0,417')+"</p><p>Hier liegt jetzt <i>f</i>2 <b>oben</b> – die Graphen haben bei <i>x</i> = 1 die Seiten getauscht.</p>"},
   {t:"Gesamtfläche", a:"Wie groß ist die gesamte Fläche zwischen den beiden Graphen?", k:[], s:gAfter(pz4),
    d:"<p>Die Teilflächen addieren:</p><p>"+FE('2,667 + 0,417 ≈ 3,08')+"</p><p>Erst mit allen Stellen addieren, dann auf 2 Stellen runden.</p><table class=\"vgl\"><tr><th>Merke</th></tr><tr><td>1. Schnittpunkte bestimmen (das sind die Grenzen).<br>2. Jede Teilfläche mit <b>Begrenzter Bereich</b> berechnen.<br>3. Teilflächen addieren.</td></tr></table>"},
-  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pz4), d:AB("Aufgabe 4",["Schnittpunkte von <i>g</i> und <i>h</i>","beide Teilflächen und Gesamtfläche","Danach: Lösungscode eintragen"])}
+  {t:"Selbst rechnen", k:[], ab:1, s:gAfter(pz4), d:AB("Aufgabe 2",["Schnittpunkte von <i>g</i> und <i>h</i>","Teilflächen <i>A</i><sub>1</sub>, <i>A</i><sub>2</sub> mit Begrenzter Bereich","gesamte markierte Fläche, danach Lösungscode eintragen"])}
  ]}
 };
 
