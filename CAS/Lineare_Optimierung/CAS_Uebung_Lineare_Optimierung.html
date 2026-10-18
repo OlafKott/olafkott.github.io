@@ -162,14 +162,6 @@ function genLP(){
   return null;
 }
 
-const KONTEXT=[
-  {wer:'Schreinerei',a:'Tische',b:'Regale',t:'Woche',res:['Zuschnitt','Montage','Lackierung']},
-  {wer:'Fahrradmanufaktur',a:'Stadträder',b:'Trekkingräder',t:'Woche',res:['Rahmenbau','Montage','Endkontrolle']},
-  {wer:'Bäckerei',a:'Bleche Kuchen',b:'Bleche Brötchen',t:'Tag',res:['Teigmaschine','Ofen','Verpackung']},
-  {wer:'Textilbetrieb',a:'Jacken',b:'Hosen',t:'Tag',res:['Zuschnitt','Nähen','Bügeln']},
-  {wer:'Möbelhersteller',a:'Stühle',b:'Hocker',t:'Tag',res:['Sägen','Schleifen','Lackieren']},
-  {wer:'Leuchtenhersteller',a:'Schreibtischlampen',b:'Stehlampen',t:'Tag',res:['Fertigung','Montage','Verpackung']}
-];
 
 // ---------- Zeichnung (erscheint mit der Lösung) ----------
 const COL=['#1F4E99','#C8102E','#2E7D32'];
@@ -207,11 +199,10 @@ function neu(){
   // Restriktionen in zufälliger Reihenfolge nummerieren
   const ord=[0,1,2].sort(()=>Math.random()-.5); ord.forEach((j,k)=>{ A.L[j].k=k; });
   const Ls=[...A.L].sort((u,v)=>u.k-v.k);
-  const K=pickR(KONTEXT);
   
-  document.getElementById('h').textContent='Aufgabe: '+K.wer;
-  document.getElementById('auftrag').innerHTML=`<span class="var"><span><i>x</i>: ${K.a} pro ${K.t}</span><span><i>y</i>: ${K.b} pro ${K.t}</span><span><i>Z</i>: Deckungsbeitrag pro ${K.t} in €</span></span>Bestimmen Sie mit dem CAS die Mengen mit dem größten Deckungsbeitrag.`;
-  document.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${K.res[l.k]}: ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i>, <i>y</i> ≥ 0</span>';
+  document.getElementById('h').textContent='Aufgabe: Maximum bestimmen';
+  document.getElementById('auftrag').innerHTML='Bestimmen Sie mit dem CAS das Maximum der Zielfunktion unter den Restriktionen.';
+  document.getElementById('restr').innerHTML=Ls.map(l=>`<span><b>(${ROM[l.k]})</b> ${lin(l.a,l.b,l.c)}</span>`).join('')+'<span><i>x</i>, <i>y</i> ≥ 0</span>';
   document.getElementById('term').innerHTML=`Zielfunktion: <i>Z</i>(<i>x</i>,<i>y</i>) = ${A.p}<i>x</i> + ${A.q}<i>y</i> → max`;
   const xm=Math.ceil(Math.max(...A.L.map(l=>l.c/l.a))), ym=Math.ceil(Math.max(...A.L.map(l=>l.c/l.b)));
   document.getElementById('fen').innerHTML=`Fenster-Vorschlag: −1 ≤ <i>x</i> ≤ ${Math.min(xm,A.ECK[4][0]+5)} und −1 ≤ <i>y</i> ≤ ${Math.min(ym,A.ECK[1][1]+5)}`;
@@ -220,7 +211,7 @@ function neu(){
     ' · Ecken: <b>solve(f1(x)=f2(x),x)</b>, Nullstellen und Achsenabschnitte · Zielfunktion: <b>menu ▸ 1 ▸ 1: Definieren</b> <span class="liste">z(x,y)='+A.p+'x+'+A.q+'y</span>, dann <span class="liste">z(…,…)</span> in jeder Ecke.';
   const F=[['x','<i>x</i> =',A.ECK[A.opt][0],'#1F4E99'],['y','<i>y</i> =',A.ECK[A.opt][1],'#C25E00'],['z','<i>Z</i><sub>max</sub> =',A.Z[A.opt],'#C62828']];
   A.felder=F;
-  document.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci">${f[0]==='z'?'<span class="pl">€</span>':''}</span><span class="m"></span><div class="msg"></div></div>`).join('');
+  document.getElementById('felder').innerHTML=F.map(f=>`<div class="f co" id="f_${f[0]}" style="border-left-color:${f[3]}"><label><span class="dot" style="background:${f[3]}"></span>${f[1]}</label><span class="cos"><input id="i_${f[0]}" inputmode="numeric" autocomplete="off" class="ci"></span><span class="m"></span><div class="msg"></div></div>`).join('');
   document.getElementById('score').textContent='';
   document.querySelectorAll('.f input').forEach(i=>i.addEventListener('keydown',e=>{ if(e.key==='Enter') pruefen(); }));
 }
