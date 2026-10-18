@@ -106,7 +106,8 @@ button{ font-family:inherit; }
 .block:hover, .block.open{ border-color:#b8c8e6; box-shadow:0 6px 18px rgba(31,78,153,.12); }
 .bhead{ width:100%; display:flex; align-items:center; gap:12px; padding:12px 14px; border:0; background:none; cursor:pointer; text-align:left; font:inherit; color:var(--ink); }
 .bhead:focus-visible{ outline:2px solid var(--gs2); outline-offset:-2px; border-radius:14px; }
-.bico{ flex:0 0 36px; height:36px; border-radius:10px; background:var(--gsbg); color:var(--gs); display:flex; align-items:center; justify-content:center; }
+.bico{ flex:0 0 36px; height:36px; border-radius:50%; background:var(--gs); color:#fff; font:bold 17px Arial,sans-serif; display:flex; align-items:center; justify-content:center; }
+.tnum.sub{ flex:0 0 auto; min-width:38px; padding:0 7px; height:28px; border-radius:14px; font-size:13.5px; background:var(--gsbg); color:var(--gs); box-shadow:inset 0 0 0 1.5px #b8c8e6; }
 .bico svg{ width:21px; height:21px; }
 .bttl{ flex:1 1 auto; font-size:18px; font-weight:700; line-height:1.25; }
 .bttl small{ display:block; font-size:13px; font-weight:normal; color:var(--mute); margin-top:1px; }
@@ -119,7 +120,7 @@ button{ font-family:inherit; }
 .binner{ overflow:hidden; min-height:0; }
 .btopics{ list-style:none; margin:0; padding:0 10px 10px; display:flex; flex-direction:column; gap:8px; }
 .btopics .topic{ box-shadow:none; border-color:#e6e9ee; animation:none; }
-.block.empty .bico{ background:#f1f3f5; color:#9aa3b0; }
+.block.empty .bico{ background:#c3c9d2; color:#fff; }
 .block.empty .bttl small{ font-style:italic; }
 .bnone{ margin:0; padding:0 16px 14px 62px; font-size:14px; color:var(--mute); }
 /* Gliederung: Buttons rechts neben der Überschrift */
@@ -262,17 +263,17 @@ const BICO={
  stat:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17.5h15"/><rect x="4" y="10" width="3" height="7.5"/><rect x="8.5" y="5" width="3" height="12.5"/><rect x="13" y="8" width="3" height="9.5"/></svg>',
  sto:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="3"/><circle cx="7" cy="7" r="1.1" fill="currentColor"/><circle cx="13" cy="13" r="1.1" fill="currentColor"/><circle cx="10" cy="10" r="1.1" fill="currentColor"/><circle cx="13" cy="7" r="1.1" fill="currentColor"/><circle cx="7" cy="13" r="1.1" fill="currentColor"/></svg>'
 };
-const topicLi=(t,i)=>`<li class="topic" data-t="${t.id}">
-    <div class="tmain"><span class="tnum">${i+1}</span><span class="ttl">${t.title}${t.sub?`<small>${t.sub}</small>`:''}</span></div>
+const topicLi=(t,nr)=>`<li class="topic" data-t="${t.id}">
+    <div class="tmain"><span class="tnum${String(nr).length>2?' sub':''}">${nr}</span><span class="ttl">${t.title}${t.sub?`<small>${t.sub}</small>`:''}</span></div>
     <div class="acts"><button class="act tour" data-go="${t.id}:g">${ICO.tour}<span>Anleitung</span></button><a class="act pdf" href="${pdfUrl(t.id)}" target="_blank" rel="noopener">${ICO.pdf}<span>Arbeitsblatt</span></a>${t.ueb?`<button class="act ueb" data-go="${t.id}:u">${ICO.ueb}<span>Übung</span></button>`:'<span class="act phold" aria-hidden="true"></span>'}</div>
   </li>`;
 const loose=TOPICS.filter(t=>!t.block);
-$('topics').innerHTML=loose.map((t,i)=>topicLi(t,-1)).join('')+BLOCKS.map(b=>{
+$('topics').innerHTML=loose.map(t=>topicLi(t,0)).join('')+BLOCKS.map((b,bi)=>{
   const ts=TOPICS.filter(t=>t.block===b.id);
   const cnt=ts.length?`${ts.length} ${ts.length===1?'Thema':'Themen'}`:'folgt in Kürze';
   return `<li class="block${ts.length?'':' empty'}" data-b="${b.id}">
-    <button class="bhead" type="button" aria-expanded="false"><span class="bico">${BICO[b.id]||''}</span><span class="bttl">${b.title}<small>${cnt}</small></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></span></button>
-    <div class="bbody"><div class="binner">${ts.length?`<ol class="btopics">${ts.map((t,i)=>topicLi(t,i)).join('')}</ol>`:'<p class="bnone">Hier kommen bald Anleitungen, Arbeitsblätter und Übungen dazu.</p>'}</div></div>
+    <button class="bhead" type="button" aria-expanded="false"><span class="bico">${bi+1}</span><span class="bttl">${b.title}<small>${cnt}</small></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 5-5"/></svg></span></button>
+    <div class="bbody"><div class="binner">${ts.length?`<ol class="btopics">${ts.map((t,i)=>topicLi(t,(bi+1)+'.'+(i+1))).join('')}</ol>`:'<p class="bnone">Hier kommen bald Anleitungen, Arbeitsblätter und Übungen dazu.</p>'}</div></div>
   </li>`;}).join('');
 let openB=null;
 function setOpen(b){
