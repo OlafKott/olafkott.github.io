@@ -4,6 +4,8 @@ Aufruf: python3 normalize.py <CAS-Ordner>   (arbeitet auf dem aktuellen Dateista
 NEUES BLATT: Ordner und Gliederungsnummer in NR eintragen, dann normalize.py und mkpdf.py aufrufen."""
 import re, sys, os, subprocess
 from playwright.sync_api import sync_playwright
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kopf import kopf_html, KOPF_CSS
 
 ROOT = os.path.abspath(sys.argv[1])
 # Ordner -> Nummer aus der Gliederung von CAS_Fuehrerschein.html
@@ -108,9 +110,33 @@ def finish(s, folder):
     if m >= 0:
         s = s[:m].rstrip() + '\n' + s[s.rfind('</style>'):]
     i = s.rfind('</style>')
-    s = s[:i] + CSS.lstrip('\n') + (EXTRA.get(folder, '') + '\n' if folder in EXTRA else '') + s[i:]
+    s = s[:i] + CSS.lstrip('\n') + KOPF_CSS + (EXTRA.get(folder, '') + '\n' if folder in EXTRA else '') + s[i:]
     # kein grauer Untertitel unter der Überschrift
     s = re.sub(r'\s*<div class="sub">.*?</div>', '', s, flags=re.S)
+    # Kopfzeile im Stil der Moodle-Kursbilder (alte Kopfzeile + Namenszeile ersetzen bzw. Kopf neu erzeugen)
+    nr = NR[folder]; ab = ABSCHNITT[nr.split('.')[0]]
+    k = 0
+    while True:
+        m = re.search(r'<div class="page-header">|<div(?: data-ziel="[^"]*")? class="kopf[ "]', s[k:])
+        if not m: break
+        a = k + m.start(); e = end_of_div(s, a); blk = s[a:e]
+        if blk.startswith('<div class="page-header">'):
+            title = re.search(r'<h1>(.*?)</h1>', blk, re.S).group(1)
+            title = re.sub(r'<span class="ab-nr">.*?</span>', '', title).replace('CAS-Führerschein: ', '').strip()
+            nb = re.match(r'\s*<div class="namebar">', s[e:])
+            klein = not nb
+            if nb: e = end_of_div(s, e + nb.end() - len('<div class="namebar">'))
+            hmm = 21.4 if not klein else 13.4; ziel = ''
+        else:
+            title = re.search(r'<h1[^>]*>(.*?)</h1>', blk, re.S).group(1)
+            klein = 'class="kopf klein"' in blk
+            hmm = float(re.search(r'height:([\d.]+)mm', blk).group(1))
+            mz = re.search(r' data-ziel="[^"]*"', blk); ziel = mz.group(0) if mz else ''
+        page = s[:a].count('<div class="page')
+        neu = kopf_html(folder, title, nr, ab, LOGO, klein, hmm, uid=f'k{page}')
+        if ziel: neu = neu.replace('<div class="kopf', '<div' + ziel + ' class="kopf', 1)
+        s = s[:a] + neu + s[e:]
+        k = a + len(neu)
     # Beschriftung unter dem QR-Code zur Anleitung
     s = s.replace('fill="#333">Schritt für Schritt</text>', 'fill="#333">Anleitung</text>')
     # rechts in der Fußzeile: Abschnitt der Gliederung (bei mehrseitigen Blättern mit Seitenzahl)
@@ -127,6 +153,36 @@ _top = subprocess.check_output(['git','-C',ROOT,'rev-parse','--show-toplevel'],t
 _g = subprocess.check_output(['git','-C',ROOT,'show','HEAD:'+os.path.relpath(os.path.join(ROOT,'Grundlagen','Arbeitsblatt_CAS_Grundlagen.html'),_top)],text=True)
 LOGO = re.search(r'<img class="logo" src="([^"]+)"', _g).group(1)
 
+NEXT_TOP = """()=>[...document.querySelectorAll('.page')].map(p=>{const P=p.getBoundingClientRect().top;
+  const h=p.querySelector('.kopf,.page-header');let n=h.nextElementSibling;if(n&&n.classList.contains('namebar'))n=n.nextElementSibling;
+  return Math.round((n.getBoundingClientRect().top-P)/3.7795*1000)/1000})"""
+FIT = """()=>[...document.querySelectorAll('.kopf h1')].map(h=>{h.style.fontSize='';const mw=h.parentElement.clientWidth,w=h.scrollWidth;
+  return w>mw?(15*mw/w).toFixed(2):''})"""
+
+def nachlauf(pg, path, ziele):
+    """Titelgröße anpassen und Kopfhöhe so setzen, dass der Inhalt an derselben Stelle beginnt wie vorher."""
+    for _ in range(3):
+        pg.goto('file://' + path)
+        fs = pg.evaluate(FIT); tops = pg.evaluate(NEXT_TOP)
+        s = open(path, encoding='utf-8').read()
+        heads = list(re.finditer(r'<div(?: data-ziel="([\d.]+)")? class="kopf( klein)?" style="height:([\d.]+)mm">', s))
+        out, pos, ok = [], 0, True
+        for i, m in enumerate(heads):
+            ziel = float(m.group(1)) if m.group(1) else ziele[i]
+            h = float(m.group(3)) + (ziel - tops[i])
+            ok &= abs(ziel - tops[i]) < 0.02
+            out.append(s[pos:m.start()] + f'<div data-ziel="{ziel}" class="kopf{m.group(2) or ""}" style="height:{h:.2f}mm">'); pos = m.end()
+        s = ''.join(out) + s[pos:]
+        # Titelgröße
+        hs = list(re.finditer(r'<h1(?: style="font-size:[\d.]+pt")?>', s[s.find('<div data-ziel'):]))
+        base = s.find('<div data-ziel'); out, pos = [], 0
+        for i, m in enumerate(hs):
+            a, b = base + m.start(), base + m.end()
+            out.append(s[pos:a] + (f'<h1 style="font-size:{fs[i]}pt">' if fs[i] else '<h1>')); pos = b
+        s = ''.join(out) + s[pos:]
+        open(path, 'w', encoding='utf-8').write(s)
+        if ok and _ > 0: break
+
 with sync_playwright() as pw:
     b = pw.chromium.launch(); pg = b.new_page(); pg.emulate_media(media='print')
     for folder in NR:
@@ -137,6 +193,11 @@ with sync_playwright() as pw:
         if 'class="ab-inhalt' not in src:
             open(path,'w',encoding='utf-8').write(src)
             src = transform(src, folder, flex_pages(pg, path))
+            open(path,'w',encoding='utf-8').write(src)
+        ziele = []
+        if 'class="page-header"' in src:
+            pg.goto('file://' + path); ziele = pg.evaluate(NEXT_TOP)
         open(path,'w',encoding='utf-8').write(finish(src, folder))
+        nachlauf(pg, path, ziele)
         print('ok', folder, NR[folder])
     b.close()
