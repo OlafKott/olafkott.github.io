@@ -3,6 +3,7 @@
 kopf_html(folder, title_html, nr, abschnitt, logo, klein) liefert das <div class="kopf">.
 Jedes Thema hat ein eigenes Motiv (SCENES). Koordinaten: viewBox 910 breit, 1 Einheit = 0,2 mm."""
 import math
+from kopf_font import B as _FB, BI as _FBI
 
 D = '#0f2347'      # Konturfarbe
 B = '#1F4E99'      # CAS-Blau
@@ -344,17 +345,19 @@ def kopf_html(folder, title_html, nr, abschnitt, logo, klein=False, hmm=21.4, ui
             f'<div class="lg"><img class="logo" src="{logo}" alt="rwb. ahr."></div>{km}</div>')
 
 KOPF_CSS = '''
+@font-face{ font-family:'KopfSerif'; font-weight:bold; font-style:normal; src:url(data:font/woff2;base64,''' + _FB + ''') format('woff2'); }
+@font-face{ font-family:'KopfSerif'; font-weight:bold; font-style:italic; src:url(data:font/woff2;base64,''' + _FBI + ''') format('woff2'); }
 /* ===== Kopfzeile im Stil der Moodle-Kursbilder ===== */
 .kopf{ position:relative; width:100%; margin:-4mm 0 3mm; border:2px solid #1F4E99; border-radius:4mm; overflow:hidden; box-shadow:0 1mm 0 #163a73; flex:0 0 auto; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .kopf .kbg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
-.kopf .ktit{ position:absolute; left:4mm; top:1.5mm; width:87mm; }
+.kopf .ktit{ position:absolute; left:4mm; top:1mm; width:85mm; }
 .kopf .over{ display:inline-block; font-family:Calibri,Carlito,Arial,sans-serif; font-weight:bold; font-size:7pt; line-height:1.3; letter-spacing:.5px; text-transform:uppercase; color:#163a73; background:#fff; border:1.2px solid #0f2347; border-radius:2.5mm; padding:0 2.2mm 0 0; white-space:nowrap; overflow:hidden; }
 .kopf .over b{ display:inline-block; background:#1F4E99; color:#fff; padding:0 1.6mm; margin-right:1.6mm; letter-spacing:.3px; }
-.kopf h1{ font-family:Georgia,Caladea,'DejaVu Serif','Times New Roman',serif; font-weight:bold; color:#1F4E99; font-size:15pt; line-height:1.1; margin:.6mm 0 0; white-space:nowrap; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff,0 0 2px #fff; }
+.kopf h1{ font-family:'KopfSerif',Caladea,Georgia,serif; font-weight:bold; color:#1F4E99; font-size:15pt; line-height:1.05; margin:0; position:relative; top:-.5mm; white-space:nowrap; text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff,0 0 2px #fff; }
 .kopf .lg{ position:absolute; right:3mm; top:2mm; background:#fff; border:1.2px solid #0f2347; border-radius:2.5mm; padding:1.3mm 2.4mm; }
 .kopf .lg .logo{ height:6.4mm; width:auto; display:block; }
-.kopf .km{ position:absolute; left:3mm; right:3mm; bottom:1.6mm; height:5.4mm; background:#fff; border:1.2px solid #0f2347; border-radius:2mm; display:flex; gap:6mm; align-items:flex-end; padding:0 4mm .8mm; font-size:11.5px; color:#444; font-family:Georgia,Caladea,serif; }
-.kopf .km span{ flex:1; border-bottom:1px solid #999; padding-bottom:.2mm; }
+.kopf .km{ position:absolute; left:3mm; right:3mm; bottom:1.5mm; height:5.6mm; background:#fff; border:1.2px solid #0f2347; border-radius:2mm; display:flex; gap:6mm; align-items:flex-end; padding:0 4mm .7mm; font-size:11.5px; color:#444; font-family:Georgia,Caladea,serif; }
+.kopf .km span{ flex:1; border-bottom:1px solid #999; padding-bottom:0; line-height:1; }
 .kopf .km span:first-child{ flex:1.6; }
 .kopf.klein .lg{ top:1.6mm; }
 '''
