@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<title>Tipp zu Aufgabe 12 · Die Schnittpunkte berechnen</title>
+<style>
+:root{ --rwb:#C80046; --rwb-l:#FBEAF0; --ink:#1d1d1f; --ok:#2E7D32; --bad:#B00020; --blue:#1D70B8; --mut:#6B6B6B; --line:#d9d2c5; --cf:#6A5ACD; --cg:#C0392B; --bg:#f1f1f1; }
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; width:100%; height:100%; overflow:hidden; background:var(--bg); }
+body{ font-family:Georgia,'Times New Roman',serif; color:var(--ink); line-height:1.5; touch-action:manipulation; -webkit-text-size-adjust:100%; }
+#app{ position:fixed; left:0; top:0; width:1280px; height:800px; transform-origin:0 0; display:flex; flex-direction:column; background:var(--bg); }
+
+/* Kopfzeile: Fortschritt + Logo */
+.top{ height:66px; flex:0 0 66px; display:flex; align-items:center; gap:18px; padding:0 26px; border-bottom:3px solid var(--rwb); }
+.prog{ flex:1; display:flex; gap:5px; }
+.seg{ flex:1; cursor:pointer; padding:4px 0; min-width:0; }
+.seg .bar{ height:9px; border-radius:5px; background:#dcdcdc; overflow:hidden; }
+.seg .bar i{ display:block; height:100%; width:0; background:var(--rwb); transition:width .3s; }
+.seg .lab{ font-family:Calibri,Arial,sans-serif; font-size:13px; font-weight:bold; color:#8a8a8a; text-align:center; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.seg.done .bar{ background:#eaa3bd; } .seg.done .bar i{ width:100%; }
+.seg.done .lab{ color:var(--rwb); }
+.seg.now .lab{ color:var(--rwb); text-decoration:underline; text-underline-offset:3px; }
+.seg.ok .lab::after{ content:" ✓"; }
+.top img{ height:44px; width:auto; display:block; }
+
+/* Bühne */
+.stage{ flex:1; position:relative; overflow:hidden; }
+.slide{ position:absolute; inset:0; padding:16px 30px 10px; display:none; flex-direction:column; }
+.slide.on{ display:flex; animation:fade .3s ease; }
+@keyframes fade{ from{opacity:0} to{opacity:1} }
+.hid{ visibility:hidden; opacity:0; }
+
+h2.th{ display:flex; align-items:center; gap:12px; margin:0 0 12px; font-size:25px; color:var(--rwb); line-height:1.25; }
+h2.th .no{ background:var(--rwb); color:#fff; font-family:Calibri,Arial,sans-serif; border-radius:50%; min-width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; font-size:18px; padding:0 8px; }
+h2.th small{ font-family:Calibri,Arial,sans-serif; font-size:16px; color:var(--mut); font-weight:normal; margin-left:4px; }
+.card{ background:#fff; border:1px solid var(--line); border-radius:10px; }
+
+/* Fußzeile */
+.bot{ height:66px; flex:0 0 66px; display:flex; align-items:center; gap:12px; padding:0 26px; border-top:1px solid #ddd; font-family:Calibri,Arial,sans-serif; }
+.bot .info{ color:#888; font-size:13.5px; }
+.bot .sp{ flex:1; }
+.bot .cnt{ color:var(--mut); font-size:15px; margin-right:6px; }
+.bot button{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:19px; padding:10px 26px; border-radius:8px; cursor:pointer; border:2px solid var(--rwb); min-height:48px; }
+#bPrev{ background:#fff; color:var(--rwb); } #bNext{ background:var(--rwb); color:#fff; min-width:150px; }
+#bFull{ background:#fff; color:#666; border:1.5px solid #bbb; font-size:14px; padding:6px 12px; min-height:36px; }
+button:disabled{ opacity:.35; cursor:default; }
+#bNext.pulse{ animation:pulse 1.2s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(200,0,70,.5);} 50%{ box-shadow:0 0 0 10px rgba(200,0,70,0);} }
+
+/* allgemeine Elemente */
+.m{ font-family:Cambria,Georgia,serif; white-space:nowrap; }
+.btns{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:12px 0 4px; }
+button.pr,button.sec{ font-family:Calibri,Arial,sans-serif; font-size:17px; font-weight:bold; padding:9px 20px; border-radius:7px; cursor:pointer; border:1.8px solid var(--rwb); min-height:44px; }
+button.pr{ background:var(--rwb); color:#fff; } button.sec{ background:#fff; color:var(--rwb); }
+.fb{ font-family:Calibri,Arial,sans-serif; font-size:18px; font-weight:bold; line-height:1.5; min-height:1.5em; }
+.fb.ok{ color:var(--ok); } .fb.bad{ color:var(--bad); } .fb.info{ color:var(--blue); }
+svg.plot{ width:100%; height:auto; display:block; background:#fff; border:1px solid #ead7da; border-radius:8px; font-family:Georgia,serif; }
+.cf{ color:var(--cf); font-weight:bold; } .cg{ color:var(--cg); font-weight:bold; }
+.abnote{ font-family:Calibri,Arial,sans-serif; font-size:17px; background:#FFF8E8; border:1.5px dashed #E0A800; border-radius:8px; padding:8px 14px; }
+.fr{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; line-height:1.15; font-family:Cambria,Georgia,serif; }
+.fr .nu{ border-bottom:1.6px solid currentColor; padding:0 4px 1px; }
+.fr .de{ padding:1px 4px 0; }
+.sq{ display:inline-flex; align-items:stretch; white-space:nowrap; vertical-align:middle; margin:0 2px 0 3px; }
+.sq .sym{ display:block; width:12px; flex:0 0 12px; }
+.sq .sym svg{ display:block; width:100%; height:100%; overflow:visible; }
+.sq .rad{ display:inline-flex; align-items:center; border-top:1.6px solid currentColor; padding:3px 4px 1px 3px; }
+
+/* Start */
+.startgrid{ flex:1; display:grid; grid-template-columns:430px 1fr; gap:40px; align-items:center; min-height:0; }
+.abprev{ display:flex; flex-direction:column; align-items:center; gap:16px; text-decoration:none; color:inherit; padding:34px 0 0; }
+.abprev .stack{ position:relative; width:300px; margin-right:70px; }
+.abprev .pg{ display:block; position:relative; transition:transform .3s ease; }
+.abprev .pg.back{ position:absolute; inset:0; transform:translate(62px,-28px) rotate(4deg); }
+.abprev .pg.front{ z-index:2; }
+.abprev:hover .pg.back{ transform:translate(105px,-20px) rotate(7deg); }
+.abprev img{ display:block; width:100%; height:auto; background:#fff; box-shadow:0 4px 14px rgba(0,0,0,.25); border-radius:2px; }
+.abprev .pl{ position:absolute; top:8px; right:8px; font-family:Calibri,Arial,sans-serif; font-size:13px; font-weight:bold; background:var(--rwb); color:#fff; border-radius:10px; padding:1px 9px; }
+.abprev .open{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:17px; background:var(--rwb); color:#fff; border-radius:22px; padding:9px 22px; }
+.startr h1{ font-size:46px; color:var(--rwb); margin:0 0 18px; }
+.abhint{ display:flex; gap:14px; align-items:flex-start; background:#FFF8E8; border:1.5px dashed #E0A800; border-radius:10px; padding:12px 16px; font-family:Calibri,Arial,sans-serif; font-size:18px; line-height:1.55; margin-bottom:16px; }
+.abhint .ico{ font-size:30px; line-height:1; }
+.how{ padding:12px 18px; border-top:5px solid var(--rwb); font-family:Calibri,Arial,sans-serif; font-size:18px; line-height:1.6; margin-bottom:22px; }
+.how h4{ margin:0 0 4px; color:var(--rwb); font-size:19px; }
+.bigbtn{ font-size:22px !important; padding:13px 38px !important; border-radius:32px !important; }
+
+/* Quizfrage */
+.qnum{ font-family:Calibri,Arial,sans-serif; font-size:16px; font-weight:bold; color:var(--mut); margin-bottom:4px; }
+.qbody{ flex:1; min-height:0; }
+.qbody.single{ max-width:980px; }
+.qbody.withg{ display:grid; grid-template-columns:560px 1fr; gap:30px; align-items:start; }
+.q{ font-size:25px; margin:4px 0 12px; font-weight:bold; line-height:1.4; }
+.opt{ display:flex; align-items:center; gap:14px; padding:9px 16px; border:2px solid var(--line); border-radius:9px; margin:9px 0; cursor:pointer; background:#fff; font-size:21px; min-height:58px; }
+.opt .mk{ flex:0 0 22px; height:22px; border:2px solid #999; border-radius:50%; }
+.opt .lt{ font-family:Calibri,Arial,sans-serif; font-weight:bold; color:var(--mut); width:20px; }
+.opt.sel{ border-color:var(--blue); background:#EEF5FC; } .opt.sel .mk{ border-color:var(--blue); background:var(--blue); box-shadow:inset 0 0 0 4px #fff; }
+.opt.right{ border-color:var(--ok); background:#EAF5EA; } .opt.right .mk{ border-color:var(--ok); background:var(--ok); box-shadow:inset 0 0 0 4px #fff; }
+.opt.wrong{ border-color:var(--bad); background:#FDECEA; }
+.opt.locked{ cursor:default; }
+
+/* Erklärung */
+h2.eh{ display:flex; align-items:center; gap:12px; margin:0 0 12px; font-size:25px; color:var(--ok); }
+h2.eh .eb{ font-family:Calibri,Arial,sans-serif; background:var(--ok); color:#fff; border-radius:8px; padding:3px 12px; font-size:18px; }
+.ecols{ flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:30px; align-items:start; }
+.ecols.rev{ grid-template-columns:600px minmax(0,1fr); }
+.ecols.full{ grid-template-columns:1fr; }
+.etext{ font-size:19.5px; line-height:1.65; background:#F2F8F2; border-left:5px solid var(--ok); border-radius:6px; padding:12px 18px; }
+.evis{ display:flex; gap:18px; }
+.evis .cap{ font-family:Calibri,Arial,sans-serif; font-size:16px; text-align:center; margin-bottom:4px; }
+.evis .fx{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:24px; text-align:center; margin-top:6px; }
+.evis .vcap{ font-family:Cambria,Georgia,serif; font-size:16.5px; text-align:center; margin-top:5px; }
+.eslide .abnote{ margin-top:16px; }
+.eslide .ecols{ flex:0 0 auto; }
+.fbox{ display:flex; flex-direction:column; gap:12px; width:470px; }
+.fbox > div{ padding:10px 16px; font-size:18px; line-height:1.7; }
+.fbox h5{ margin:0 0 2px; font-family:Calibri,Arial,sans-serif; font-size:18px; color:var(--rwb); }
+.zoomctl{ display:flex; align-items:center; gap:10px; font-family:Calibri,Arial,sans-serif; font-size:17px; background:#F6F1EA; border-radius:8px; padding:8px 14px; margin-top:10px; }
+.zoomctl input[type=range]{ flex:1; accent-color:var(--rwb); height:34px; }
+.zoomctl span{ color:var(--mut); font-size:15px; }
+.zoomctl button{ padding:6px 14px !important; min-height:38px !important; font-size:16px !important; }
+
+/* Präsentationsteile */
+.tcols{ flex:1; min-height:0; display:grid; grid-template-columns:610px minmax(0,1fr); gap:30px; align-items:start; }
+.say{ font-size:19.5px; line-height:1.6; margin:0 0 14px; padding:4px 0 4px 16px; border-left:4px solid #e6d9c6; }
+.res{ margin:12px 0 4px; padding:10px 16px; border:2px solid var(--ok); background:#EAF5EA; border-radius:8px; font-family:Calibri,Arial,sans-serif; font-size:19px; font-weight:bold; color:#1B5E20; }
+.res .m{ font-size:22px; }
+.warn{ background:#FFF4D6; border:1px solid #E0A800; border-radius:8px; padding:10px 16px; font-size:18.5px; line-height:1.6; }
+.warn b.t{ color:#7a5600; display:block; font-family:Calibri,Arial,sans-serif; }
+.eq{ display:grid; grid-template-columns:max-content max-content max-content 1fr; column-gap:12px; row-gap:9px; margin:4px 0 10px 18px; font-family:Cambria,Georgia,serif; font-size:22px; align-items:center; }
+.eq .er{ display:contents; }
+.eq .l{ text-align:right; white-space:nowrap; } .eq .e{ text-align:center; } .eq .r{ white-space:nowrap; }
+.eq .op{ color:var(--blue); font-size:18px; padding-left:22px; white-space:nowrap; }
+.shd{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:19px; color:var(--rwb); margin:12px 0 4px; }
+.shd .m{ color:var(--ink); }
+.side{ font-family:Calibri,Arial,sans-serif; font-size:17.5px; background:#F4F8FC; border:1.6px dashed #8fb3d9; border-radius:9px; padding:10px 16px; color:#21456b; line-height:1.75; margin-bottom:12px; }
+.side b.t{ display:block; color:var(--blue); }
+.side .m{ font-size:20px; color:var(--ink); }
+.ccols{ flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 440px; gap:30px; align-items:start; }
+.task{ border:2px solid var(--rwb); border-radius:10px; padding:12px 18px; background:#fff; }
+.task .tt{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:19px; color:var(--rwb); margin-bottom:4px; }
+.task .ti{ font-family:Calibri,Arial,sans-serif; font-size:17px; line-height:1.55; }
+.inrow{ font-family:Cambria,Georgia,serif; font-size:24px; margin:10px 0 4px; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+input.num{ width:100px; font-family:Cambria,Georgia,serif; font-size:22px; padding:5px 6px; border:2px solid #aaa; border-radius:7px; text-align:center; }
+input.num.ok{ border-color:var(--ok); background:#EAF5EA; } input.num.bad{ border-color:var(--bad); background:#FDECEA; }
+.preview{ font-family:Cambria,Georgia,serif; font-size:20px; color:#444; }
+.tip{ display:none; font-family:Calibri,Arial,sans-serif; font-size:17px; background:#FFF8E8; border-left:5px solid #F2B705; border-radius:5px; padding:8px 14px; margin-top:8px; line-height:1.6; }
+.tip.show{ display:block; }
+.tip .eq{ font-size:19px; margin:4px 0 4px 0; row-gap:5px; }
+.task + .abnote{ margin-top:12px; }
+
+/* Abschluss */
+table.ov{ border-collapse:collapse; width:100%; font-size:19px; background:#fff; }
+table.ov th,table.ov td{ border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:middle; }
+table.ov th{ background:#F6F1EA; font-family:Calibri,Arial,sans-serif; }
+.score{ font-family:Calibri,Arial,sans-serif; font-size:21px; font-weight:bold; color:var(--rwb); margin:0 0 10px; }
+
+/* Hochformat-Hinweis */
+#rot{ display:none; position:fixed; inset:0; z-index:99; background:rgba(255,255,255,.96); align-items:center; justify-content:center; text-align:center; font-family:Calibri,Arial,sans-serif; font-size:24px; color:var(--rwb); padding:30px; }
+@media (orientation:portrait) and (max-width:1100px){ #rot{ display:flex; } }
+
+/* Arbeitsblatt-Hinweis blinkt beim Erscheinen */
+.abnote.blink{ animation:abblink .7s ease-in-out 4; }
+@keyframes abblink{ 0%,100%{ background:#FFF8E8; box-shadow:0 0 0 0 rgba(224,168,0,0); } 50%{ background:#FFD96A; box-shadow:0 0 0 6px rgba(224,168,0,.35); } }
+.abnote{ position:relative; }
+/* Tipp-Karten */
+.tipcards{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:16px; }
+.tipcard{ background:#fff; border:2px solid var(--rwb); border-radius:12px; padding:14px; display:flex; gap:14px; align-items:center; text-decoration:none; color:inherit; }
+.tipcard svg,.tipcard img{ width:118px; height:118px; flex:0 0 118px; }
+.tipcard h4{ margin:0 0 4px; font-family:Calibri,Arial,sans-serif; font-size:20px; color:var(--rwb); }
+.tipcard p{ margin:0 0 8px; font-family:Calibri,Arial,sans-serif; font-size:16px; line-height:1.45; }
+.tipcard .go{ display:inline-block; font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:16px; background:var(--rwb); color:#fff; border-radius:16px; padding:5px 14px; }
+.ecols .card h5{ margin:0 0 2px; font-family:Calibri,Arial,sans-serif; font-size:18px; color:var(--rwb); }
+.ecols .card{ padding:10px 16px; font-size:18px; line-height:1.7; }
+.etext .eq{ margin-left:6px; }
+.etext .shd{ margin-top:8px; }
+
+/* Schrittweise Erklärungen */
+.vs{ display:inline-grid; } .vs>*{ grid-area:1/1; } .l .vs{ justify-items:end; } .r .vs,.op .vs{ justify-items:start; }
+.flash{ animation:flash .6s ease-in-out 3; border-radius:5px; }
+@keyframes flash{ 50%{ background:#FFE066; box-shadow:0 0 0 5px #FFE066; } }
+svg .flash{ animation:sflash .6s ease-in-out 3; }
+@keyframes sflash{ 50%{ opacity:.12; } }
+.opc{ color:var(--blue); font-weight:bold; }
+.add{ color:var(--blue); font-weight:bold; }
+.grp{ background:#FFE9C7; outline:2px solid #E07B00; border-radius:5px; padding:0 3px; }
+.del{ color:#9a9a9a; text-decoration:line-through; text-decoration-color:#B00020; text-decoration-thickness:3px; }
+.rs{ background:#DDF0DD; outline:2px solid #2E7D32; border-radius:5px; padding:0 3px; }
+.mnote{ display:grid; font-family:Calibri,Arial,sans-serif; font-size:17.5px; line-height:1.45; background:#EEF5FC; border-left:5px solid var(--blue); border-radius:6px; padding:7px 12px; margin:2px 0 10px; color:#1b3d63; }
+.mnote>*{ grid-area:1/1; }
+.etext.st > div{ margin:0 0 9px; }
+.etext.st{ font-size:18.5px; line-height:1.55; }
+.big{ font-size:25px; }
+.meq{ row-gap:6px; margin-bottom:6px; }
+
+.grp2{ background:#DCEBFA; outline:2px solid #1D70B8; border-radius:5px; padding:0 3px; }
+
+.aslider{ margin-top:10px; padding:6px 16px 10px; }
+.aslider .arow{ display:flex; align-items:center; gap:16px; }
+.aslider input[type=range]{ flex:1; accent-color:var(--rwb); height:34px; }
+.nlsvg{ width:100%; height:auto; display:block; margin-top:4px; overflow:visible; }
+.astat{ font-family:Calibri,Arial,sans-serif; font-size:18px; background:#F6F1EA; border-radius:6px; padding:6px 12px; margin-top:6px; min-height:2.2em; }
+
+.bincard > div{ margin:12px 0 4px; font-size:17.5px; }
+.bincard h5{ margin-bottom:6px !important; }
+.bincard .bex{ display:block; margin:4px 0 6px 18px; font-size:16.5px; color:#444; line-height:1.6; }
+.bincard .m{ font-size:19px; }
+
+/* Steigungsdreieck wird gezeichnet */
+line.draw{ stroke-dasharray:1; stroke-dashoffset:0; }
+g[data-s]:not(.go) line.draw{ stroke-dashoffset:1; }
+g[data-s].go line.draw{ stroke-dashoffset:1; animation:drawln .7s ease-in-out forwards; animation-delay:var(--d,0s); }
+@keyframes drawln{ to{ stroke-dashoffset:0; } }
+g[data-s]:not(.go) g.late{ opacity:0; }
+g[data-s].go g.late{ opacity:0; animation:latein .3s ease forwards; animation-delay:var(--d,0s); }
+@keyframes latein{ to{ opacity:1; } }
+
+/* Anschlussfrage */
+.angrid{ display:grid; grid-template-columns:minmax(0,1fr) 560px; gap:26px; align-items:start; }
+.anq{ font-weight:bold; font-size:24px; color:var(--rwb); background:#fff; border:2.5px solid var(--rwb); border-radius:10px; padding:8px 14px; margin:4px 0 10px; }
+.plan{ display:grid; grid-template-columns:1fr 34px 1fr 34px 1fr; gap:8px; align-items:stretch; margin-top:8px; }
+.plancard{ position:relative; background:#fff; border:2.5px solid var(--pc); border-radius:12px; padding:10px 14px 10px 54px; font-family:Calibri,Arial,sans-serif; }
+.plancard .pn{ position:absolute; left:12px; top:10px; width:32px; height:32px; border-radius:50%; background:var(--pc); color:#fff; font-weight:bold; font-size:18px; display:flex; align-items:center; justify-content:center; }
+.plancard h4{ margin:0 0 2px; font-size:19px; color:var(--pc); }
+.plancard .pf{ font-size:19px; margin:2px 0 4px; }
+.plancard p{ margin:0; font-size:16px; line-height:1.45; }
+.plancard .pref{ margin-top:4px; font-size:14px; color:#777; font-style:italic; }
+.parr{ display:flex; align-items:center; justify-content:center; font-size:30px; color:#999; }
+
+.pqeq{ font-size:20px; row-gap:5px; margin:6px 0 6px 4px; }
+.pqeq .op{ font-size:16px; padding-left:16px; }
+
+.stephd{ font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:18px; color:var(--rwb); margin:2px 0 2px; }
+
+.problem{ background:#FDECEA; border:2px solid #B00020; border-radius:8px; padding:6px 12px; color:#7a0016; font-size:19px; }
+.plancard p.sub{ line-height:1.55; }
+
+.abprev .pg.back2{ position:absolute; inset:0; transform:translate(118px,-50px) rotate(8deg); }
+.abprev:hover .pg.back2{ transform:translate(180px,-38px) rotate(12deg); }
+.abprev .stack{ margin-right:120px !important; }
+
+.lgrow{ display:flex; align-items:center; gap:12px; }
+.lgk{ display:inline-block; color:#fff; font-family:Calibri,Arial,sans-serif; font-weight:bold; font-size:16px; border-radius:6px; padding:2px 10px; min-width:84px; text-align:center; }
+.rad-hl{ background:#FFF1C9; border-radius:4px; padding:0 3px; }
+.uegrid{ display:grid; grid-template-columns:1fr 470px; gap:40px; align-items:center; flex:1; min-height:0; }
+.uelist{ font-family:Calibri,Arial,sans-serif; font-size:18px; line-height:1.55; padding:10px 18px; }
+.uelist li{ margin:3px 0; }
+</style></head><body>
+<div id="app">
+ <div class="top"><div class="prog" id="prog"></div><img src="data:image/png;base64,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" alt="rwb. ahr."></div>
+ <div class="stage" id="deck">
+<section class="slide" data-g="b1" id="s1">
+ <h2 class="th"><span class="no">💡</span>Beispiel: Schnittpunkte von Gerade und Parabel <small>Vorbereitung</small></h2>
+ <div class="tcols" style="grid-template-columns:minmax(0,1fr) 560px"><div>
+  <div class="shd">Vorbereitung: Die beiden Gleichungen aufschreiben.</div>
+  <div class="eq">
+   <div class="er"><span class="l cf">k(x)</span><span class="e">=</span><span class="r">0,5(x − 1)² − 2</span><span class="op"></span></div>
+   <div class="er"><span class="l cg">l(x)</span><span class="e">=</span><span class="r">x + 1</span><span class="op"></span></div>
+  </div>
+  <div class="shd" data-s="1">Vorbereitung: Die Klammer von k auflösen. <span style="font-weight:normal;color:#555;font-size:16px">(Das hast du bei Aufgabe 11 schon gemacht.)</span></div>
+  <div class="side" data-s="1"><b class="t">Nebenrechnung: 2. binomische Formel</b><span class="m">(a − b)² = a² − 2ab + b²</span><br><span class="m">(x − 1)² = x² − 2x + 1</span></div>
+  <div class="eq" data-s="2">
+   <div class="er"><span class="l">k(x)</span><span class="e">=</span><span class="r">0,5(x² − 2x + 1) − 2</span><span class="op">| ausmultiplizieren</span></div>
+   <div class="er"><span class="l"></span><span class="e">=</span><span class="r">0,5x² − x + 0,5 − 2</span><span class="op"></span></div>
+   <div class="er"><span class="l"></span><span class="e">=</span><span class="r">0,5x² − x − 1,5</span><span class="op"></span></div>
+  </div>
+ </div><div><div id="pS1"></div></div></div>
+</section>
+<section class="slide" data-g="b2" id="s2"></section>
+<section class="slide" data-g="b3" id="s3">
+ <h2 class="th"><span class="no">💡</span>1. Schritt: Gleichsetzen und nach x auflösen <small>Teil 2: pq-Formel</small></h2>
+ <div class="ccols"><div>
+  <div class="shd">p und q ablesen: <span class="m">x² − 4x − 5 = 0</span></div>
+  <div class="eq"><div class="er"><span class="l">p = −4</span><span class="e"></span><span class="r">q = −5</span><span class="op"></span></div></div>
+  <div class="shd" data-s="1">In die pq-Formel einsetzen.</div>
+  <div class="eq">
+   <div class="er" data-s="1"><span class="l">x<sub>1,2</sub></span><span class="e">=</span><span class="r">−FR{−4|2} ± SQ{(FR{−4|2})² − (−5)}</span><span class="op"></span></div>
+   <div class="er" data-s="2"><span class="l"></span><span class="e">=</span><span class="r">2 ± SQ{4 + 5}</span><span class="op"></span></div>
+   <div class="er" data-s="3"><span class="l"></span><span class="e">=</span><span class="r">2 ± SQ{9} = 2 ± 3</span><span class="op"></span></div>
+   <div class="er" data-s="4"><span class="l">x<sub>1</sub></span><span class="e">=</span><span class="r">2 + 3 = 5</span><span class="op"></span></div>
+   <div class="er" data-s="4"><span class="l">x<sub>2</sub></span><span class="e">=</span><span class="r">2 − 3 = −1</span><span class="op"></span></div>
+  </div>
+  <div class="res" data-s="4">Die Schnittstellen sind <span class="m">x<sub>1</sub> = 5</span> und <span class="m">x<sub>2</sub> = −1</span>.</div>
+ </div><div>
+  <div class="side" data-s="2"><b class="t">Vorsicht bei Minuszeichen!</b><span class="m">−FR{−4|2} = −(−2) = 2</span><br><span class="m">(FR{−4|2})² = (−2)² = 4</span><br><span class="m">− (−5) = + 5</span></div>
+  <div class="side" data-s="3"><b class="t">Wurzel</b><span class="m">SQ{9} = 3</span> &nbsp; denn <span class="m">3 · 3 = 9</span></div>
+ </div></div>
+</section>
+<section class="slide" data-g="b4" id="s4">
+ <h2 class="th"><span class="no">💡</span>2. und 3. Schritt <small>Einsetzen und Schnittpunkte aufschreiben</small></h2>
+ <div class="tcols" style="grid-template-columns:minmax(0,1fr) 560px"><div>
+  <div class="shd">2. Schritt: Die Schnittstellen in eine der beiden Funktionen einsetzen. Wir nehmen l.</div>
+  <div class="eq">
+   <div class="er"><span class="l">l(5)</span><span class="e">=</span><span class="r">5 + 1 = 6</span><span class="op"></span></div>
+   <div class="er" data-s="1"><span class="l">l(−1)</span><span class="e">=</span><span class="r">−1 + 1 = 0</span><span class="op"></span></div>
+  </div>
+  <div class="shd" data-s="2">Probe mit k.</div>
+  <div class="eq" data-s="2">
+   <div class="er"><span class="l">k(5)</span><span class="e">=</span><span class="r">0,5 · (5 − 1)² − 2 = 8 − 2 = 6 ✓</span><span class="op"></span></div>
+   <div class="er"><span class="l">k(−1)</span><span class="e">=</span><span class="r">0,5 · (−1 − 1)² − 2 = 2 − 2 = 0 ✓</span><span class="op"></span></div>
+  </div>
+  <div class="shd" data-s="3">3. Schritt: Schnittpunkte aufschreiben.</div><div class="res" data-s="3"><span class="m">S<sub>1</sub>(5 | 6)</span> und <span class="m">S<sub>2</sub>(−1 | 0)</span></div>
+ </div><div><div id="pS4"></div></div></div>
+</section>
+<section class="slide" data-g="chk" id="s5">
+ <h2 class="th"><span class="no">✓</span>Prüfe dein Ergebnis zu Aufgabe 12</h2>
+ <div class="tcols" style="grid-template-columns:minmax(0,1fr) 560px"><div>
+  <div class="task">
+   <div class="tt">Trage deine beiden Schnittpunkte von <span class="cf">f</span> und <span class="cg">g</span> ein.</div>
+   <div class="ti">Die Reihenfolge ist egal.</div>
+   <div class="inrow">S<sub>1</sub>( <input class="num" id="in_x1" placeholder="x" autocomplete="off" autocorrect="off" spellcheck="false"> | <input class="num" id="in_y1" placeholder="y" autocomplete="off" autocorrect="off" spellcheck="false"> )</div>
+   <div class="inrow">S<sub>2</sub>( <input class="num" id="in_x2" placeholder="x" autocomplete="off" autocorrect="off" spellcheck="false"> | <input class="num" id="in_y2" placeholder="y" autocomplete="off" autocorrect="off" spellcheck="false"> )</div>
+   <div class="btns"><button class="pr" onclick="chkS()">Prüfen</button><button class="sec" onclick="showTip('S',1)">Tipp 1</button><button class="sec" onclick="showTip('S',2)">Tipp 2</button></div>
+   <div class="fb" id="fbS"></div>
+   <div class="tip" id="tipS1"><b>Tipp 1:</b> Nach dem Gleichsetzen und Umformen muss <span class="m">x² + 27x + 26 = 0</span> herauskommen.</div>
+   <div class="tip" id="tipS2"><b>Tipp 2:</b> <span class="m">p = 27</span> und <span class="m">q = 26</span>. Rechne mit Brüchen:<br><span class="m">(FR{27|2})² = FR{729|4}</span> &nbsp;und&nbsp; <span class="m">26 = FR{104|4}</span></div>
+  </div>
+  <div class="abnote">📝 <b>Arbeitsblatt, Aufgabe 12:</b> Schreibe die Rechnung auf. Notiere beide Schnittpunkte.</div>
+ </div><div><div id="pS5"></div></div></div>
+</section>
+
+ </div>
+ <div class="bot">
+  <span class="info">Tipp zu Aufgabe 12 · Die Schnittpunkte berechnen · RWB Essen</span>
+  <button id="bFull" onclick="toggleFull()">⛶ Vollbild</button>
+  <span class="sp"></span><span class="cnt" id="cnt"></span>
+  <button id="bPrev" onclick="prev()">◀ zurück</button><button id="bNext" onclick="next()">weiter ▶</button>
+ </div>
+</div>
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(v,d=2)=>{const r=Math.round(v*10**d)/10**d; return (Object.is(r,-0)?0:r).toLocaleString('de-DE',{maximumFractionDigits:d});};
+const FR=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const SQSVG='<span class="sym"><svg viewBox="0 0 12 32" preserveAspectRatio="none"><path d="M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg></span>';
+const SQ=x=>`<span class="sq">${SQSVG}<span class="rad">${x}</span></span>`;
+function expandMath(el){ let h=el.innerHTML, prev;
+  h=h.replace(/FR\{([^{}|]*)\|([^{}]*)\}/g,(m,a,b)=>FR(a,b));
+  do{ prev=h; h=h.replace(/SQ\{([^{}]*)\}/g,(m,a)=>SQ(a)); }while(h!==prev); el.innerHTML=h; }
+$$('section.slide').forEach(expandMath);
+
+/* ---------- Bühne skalieren (wie PowerPoint im Vollbild) ---------- */
+const app=$('#app');
+// Feste Höhe 800, Breite passt sich dem Bildschirm an (1280–1500) – immer Querformat
+function fit(){ const W=window.innerWidth, H=window.innerHeight, cw=Math.round(Math.min(1500,Math.max(1280,800*W/H)));
+  app.style.width=cw+'px'; const s=Math.min(W/cw,H/800);
+  app.style.transform=`translate(${(W-cw*s)/2}px,${(H-800*s)/2}px) scale(${s})`; }
+window.addEventListener('resize',fit); window.addEventListener('orientationchange',()=>setTimeout(fit,300)); fit();
+function toggleFull(){ const d=document, e=d.documentElement;
+  if(d.fullscreenElement||d.webkitFullscreenElement){ (d.exitFullscreen||d.webkitExitFullscreen).call(d); }
+  else { const r=e.requestFullscreen||e.webkitRequestFullscreen; if(r) r.call(e); } }
+if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen)) $('#bFull').style.display='none';
+
+/* ---------- Funktionen ---------- */
+const f=x=>0.25*(x+6)**2-7, g=x=>-3.75*x-4.5, h=x=>-1.5*x+2, p=x=>0.5*(x-2)**2-3;
+const CF='#6A5ACD', CG='#C0392B', CH='#1D70B8', CP='#E07B00', GR='#2E7D32', OR='#E07B00', RW='#C80046';
+
+let pid=0;
+function Plot(hostId,o){
+  const host=document.getElementById(hostId);
+  const W=o.W||640,H=o.H||460,L=o.L??44,R=o.R??28,T=o.T??22,B=o.B??28;
+  const {xmin,xmax,ymin,ymax}=o, id='pl'+(++pid);
+  const sx=x=>L+(x-xmin)/(xmax-xmin)*(W-L-R), sy=y=>T+(ymax-y)/(ymax-ymin)*(H-T-B);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="plot"><defs><clipPath id="${id}c"><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}"/></clipPath><marker id="${id}a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L7,3 L0,6 Z" fill="#333"/></marker></defs><g stroke="#ece4e0" stroke-width="1">`;
+  for(let x=Math.ceil(xmin/o.xg)*o.xg;x<=xmax+1e-9;x+=o.xg) s+=`<line x1="${sx(x)}" y1="${T}" x2="${sx(x)}" y2="${H-B}"/>`;
+  for(let y=Math.ceil(ymin/o.yg)*o.yg;y<=ymax+1e-9;y+=o.yg) s+=`<line x1="${L}" y1="${sy(y)}" x2="${W-R}" y2="${sy(y)}"/>`;
+  s+='</g>';
+  const y0=sy(0), x0=sx(0);
+  s+=`<line x1="${L}" y1="${y0}" x2="${W-R+16}" y2="${y0}" stroke="#333" stroke-width="1.5" marker-end="url(#${id}a)"/>`;
+  s+=`<line x1="${x0}" y1="${H-B}" x2="${x0}" y2="${T-12}" stroke="#333" stroke-width="1.5" marker-end="url(#${id}a)"/>`;
+  s+='<g font-size="15" fill="#333">';
+  for(let x=Math.ceil(xmin/o.xt)*o.xt;x<=xmax+1e-9;x+=o.xt){ if(Math.abs(x)<1e-9) continue; s+=`<line x1="${sx(x)}" y1="${y0-3}" x2="${sx(x)}" y2="${y0+3}" stroke="#333"/><text x="${sx(x)}" y="${y0+16}" text-anchor="middle" paint-order="stroke" stroke="#fff" stroke-width="3">${fmt(x)}</text>`; }
+  for(let y=Math.ceil(ymin/o.yt)*o.yt;y<=ymax+1e-9;y+=o.yt){ if(Math.abs(y)<1e-9) continue; s+=`<line x1="${x0-3}" y1="${sy(y)}" x2="${x0+3}" y2="${sy(y)}" stroke="#333"/><text x="${x0-6}" y="${sy(y)+4}" text-anchor="end" paint-order="stroke" stroke="#fff" stroke-width="3">${fmt(y)}</text>`; }
+  s+=`<text x="${x0-6}" y="${y0+16}" text-anchor="end">0</text>`;
+  s+=`<text x="${W-R+12}" y="${y0-8}" text-anchor="end" font-style="italic">x</text><text x="${x0+9}" y="${T-2}" font-style="italic">y</text></g>`;
+  s+=`<g clip-path="url(#${id}c)"><g id="${id}f"></g></g><g id="${id}t"></g></svg>`;
+  host.innerHTML=s;
+  const P={sx,sy,fg:host.querySelector('#'+id+'f'),tg:host.querySelector('#'+id+'t')};
+  P.path=(fn,a,b,n=300)=>{ const lo=ymin-(ymax-ymin), hi=ymax+(ymax-ymin); let d='';
+    for(let i=0;i<=n;i++){ const x=a+(b-a)*i/n; let y=fn(x); y=Math.max(lo,Math.min(hi,y)); d+=(d?'L':'M')+sx(x).toFixed(1)+','+sy(y).toFixed(1); } return d; };
+  P.fn=(fn,col,w=3,dash='',op=1)=>P.fg.insertAdjacentHTML('beforeend',`<path d="${P.path(fn,xmin,xmax)}" fill="none" stroke="${col}" stroke-width="${w}" opacity="${op}" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linejoin="round"/>`);
+  P.lab=(x,y,t,col,dx=0,dy=0,fs=19)=>P.tg.insertAdjacentHTML('beforeend',`<text x="${sx(x)+dx}" y="${sy(y)+dy}" font-size="${fs}" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${col}" paint-order="stroke" stroke="#fff" stroke-width="4">${t}</text>`);
+  // Ebene, die an einen Schritt gekoppelt ist
+  P.layer=(s,html)=>P.tg.insertAdjacentHTML('beforeend',`<g${s?` data-s="${s}" class="bl"`:''}>${html}</g>`);
+  P.pt=(x,y,col,r=6)=>`<circle cx="${sx(x)}" cy="${sy(y)}" r="${r}" fill="${col}" stroke="#fff" stroke-width="2"/>`;
+  P.txt=(x,y,t,col,dx=0,dy=0,anchor='start',fs=16)=>`<text x="${sx(x)+dx}" y="${sy(y)+dy}" text-anchor="${anchor}" font-size="${fs}" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${col}" paint-order="stroke" stroke="#fff" stroke-width="4">${t}</text>`;
+  P.lnD=(x1,y1,x2,y2,col,w=3,d=0)=>`<line class="draw" pathLength="1" style="--d:${d}s" x1="${sx(x1)}" y1="${sy(y1)}" x2="${sx(x2)}" y2="${sy(y2)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+  P.late=(d,html)=>`<g class="late" style="--d:${d}s">${html}</g>`;
+  P.ln=(x1,y1,x2,y2,col,w=3,dash='')=>`<line x1="${sx(x1)}" y1="${sy(y1)}" x2="${sx(x2)}" y2="${sy(y2)}" stroke="${col}" stroke-width="${w}" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linecap="round"/>`;
+  return P;
+}
+
+
+const WIN={xmin:-14.6,xmax:5.8,ymin:-7.8,ymax:6.4,xg:1,yg:1,xt:2,yt:2};
+function quizGraph(id,o={}){ const P=Plot(id,{...WIN,...o}); P.fn(f,CF); P.fn(g,CG); P.lab(-12.9,5.2,'f',CF,-16,0,22); P.lab(-2.6,5.2,'g',CG,14,0,22); return P; }
+function fbox(P,x,y,col,nu,de,res){ const X=P.sx(x),Y=P.sy(y), F='font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="'+col+'" text-anchor="middle"';
+  return `<rect x="${X-72}" y="${Y-27}" width="144" height="54" rx="7" fill="#fff" stroke="${col}" stroke-width="2"/><text x="${X-44}" y="${Y+6}" font-size="18" ${F}>m =</text><text x="${X-2}" y="${Y-6}" font-size="17" ${F}>${nu}</text><line x1="${X-18}" y1="${Y}" x2="${X+14}" y2="${Y}" stroke="${col}" stroke-width="2"/><text x="${X-2}" y="${Y+19}" font-size="17" ${F}>${de}</text><text x="${X+44}" y="${Y+6}" font-size="18" ${F}>= ${res}</text>`; }
+function box(P,x,y,t,col,w){ const X=P.sx(x),Y=P.sy(y); return `<rect x="${X-w/2}" y="${Y-15}" width="${w}" height="26" rx="6" fill="#fff" stroke="${col}" stroke-width="2"/><text x="${X}" y="${Y+4}" text-anchor="middle" font-size="15" font-weight="bold" font-family="Calibri,Arial,sans-serif" fill="${col}">${t}</text>`; }
+
+/* ---------- Zoom-Graph ---------- */
+const W0={xmin:-14.6,xmax:5.8,ymin:-7.8,ymax:6.4}, W1={xmin:-31,xmax:6.5,ymin:-12,ymax:108};
+const nice=r=>{ const raw=r/12, mag=10**Math.floor(Math.log10(raw)), n=raw/mag; return (n<=1?1:n<=2?2:n<=5?5:10)*mag; };
+function zoomGraph(id,opt){
+  let t=opt.t||0;
+  const draw=()=>{ const e=t<.5?2*t*t:1-(-2*t+2)**2/2;
+    const L=k=>W0[k]+(W1[k]-W0[k])*e, w={xmin:L('xmin'),xmax:L('xmax'),ymin:L('ymin'),ymax:L('ymax')};
+    const xt=nice(w.xmax-w.xmin), yt=nice(w.ymax-w.ymin);
+    const P=Plot(id,{...w,xt,yt,xg:xt/2,yg:yt/2,W:600,H:opt.H||430}); P.fn(f,CF); P.fn(g,CG);
+    const yL=w.ymin+(w.ymax-w.ymin)*(0.88-0.33*e); P.lab(-6-Math.sqrt((yL+7)*4),yL,'f',CF,-20,0,22); P.lab((yL+4.5)/-3.75,yL,'g',CG,12,0,22);
+    if(t>0.02) P.layer(0,`<rect x="${P.sx(W0.xmin)}" y="${P.sy(W0.ymax)}" width="${P.sx(W0.xmax)-P.sx(W0.xmin)}" height="${P.sy(W0.ymin)-P.sy(W0.ymax)}" fill="none" stroke="#888" stroke-dasharray="5 4" opacity="${Math.min(1,t*3)}"/>`);
+    P.layer(0,P.pt(-1,-0.75,'#333',6.5)+(t<0.5?P.txt(-1,-0.75,'S₁','#333',-10,22,'end'):''));
+    if(-26>w.xmin && 93<w.ymax) P.layer(opt.s2step||0,P.pt(-26,93,RW,8)+P.txt(-26,93,opt.s2||'S₂',RW,12,-8,'start',18));
+    if(opt.extra) opt.extra(P,t);
+    if(slides.length) applySteps();
+  };
+  const Z={set(v){t=v;draw();},get t(){return t}}; draw(); return Z;
+}
+function animZoom(Z,slider){ const from=Z.t>0.98?0:Z.t, t0=performance.now(), ms=1800;
+  const step=now=>{ const k=Math.min(1,(now-t0)/ms), v=from+(1-from)*k; Z.set(v); slider.value=Math.round(v*100); if(k<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step); }
+function num(v){ v=String(v).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(',','.'); if(v==='') return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b); } return Number(v); }
+function mark(el,ok){ el.classList.remove('ok','bad'); el.classList.add(ok?'ok':'bad'); }
+function showTip(pre,n){ [1,2,3].forEach(k=>{ const e=$('#tip'+pre+k); if(e) e.classList.toggle('show',k===n); }); }
+function sgnTerm(v){ return v<0?'+ '+fmt(-v,3):'− '+fmt(v,3); }
+
+
+/* Jeder Satz in eine eigene Zeile */
+const SPLIT_SEL='.etext, .say, .side, .warn, .abhint, .how, .fb, .ti, .tip, .res, .card, .tipcard p, .anq, .plancard p';
+const SENT_RE=/([.!?])\s+(?=[A-ZÄÖÜ„(0-9])/g;
+function splitSentences(root){
+  const walk=el=>{ [...el.childNodes].forEach(n=>{
+    if(n.nodeType===1){ if(n.matches('.m,.fr,.sq,.eq,svg,button,input,h4,h5,.opc')) return; walk(n); return; }
+    if(n.nodeType!==3) return;
+    const v=n.nodeValue, cuts=[]; let mm; SENT_RE.lastIndex=0;
+    while((mm=SENT_RE.exec(v))){ const prev=v[mm.index-1]||''; if(/\d/.test(prev)) continue; cuts.push([mm.index+1, mm.index+mm[0].length]); }
+    const frag=document.createDocumentFragment(); let ch=false, pos=0;
+    cuts.forEach(([a,b])=>{ frag.appendChild(document.createTextNode(v.slice(pos,a))); frag.appendChild(document.createElement('br')); pos=b; ch=true; });
+    frag.appendChild(document.createTextNode(v.slice(pos)));
+    const last=frag.lastChild;
+    if(last && last.nodeType===3 && /[.!?]\s+$/.test(last.nodeValue)){ let nx=n.nextSibling; while(nx&&nx.nodeType===3&&!nx.nodeValue.trim()) nx=nx.nextSibling;
+      if(nx && nx.nodeName!=='BR' && !(nx.nodeType===1 && /^(DIV|OL|UL|P)$/.test(nx.nodeName))){ frag.appendChild(document.createElement('br')); ch=true; } }
+    if(ch) n.replaceWith(frag); }); };
+  (root.matches&&root.matches(SPLIT_SEL)?[root]:[]).concat([...root.querySelectorAll(SPLIT_SEL)]).forEach(walk); }
+let _splitting=false;
+const _fbObs=new MutationObserver(ms=>{ if(_splitting) return; _splitting=true; ms.forEach(m=>{ const t=m.target.closest?m.target.closest('.fb'):null; if(t) splitSentences(t); }); _splitting=false; });
+
+/* ---------- Folien-Steuerung ---------- */
+let slides=[], st=[], maxS=[], cur=0, GROUPS=[]; window.answered=window.answered||[]; window.HOOKS=window.HOOKS||{};
+function initDeck(groups){ GROUPS=groups; slides=$$('#deck .slide'); slides.forEach(splitSentences); $$('.fb').forEach(e=>_fbObs.observe(e,{childList:true})); st=slides.map(()=>0); maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s)));
+  $('#prog').innerHTML=GROUPS.map(([g,l])=>`<div class="seg" data-g="${g}"><div class="bar"><i></i></div><div class="lab">${l}</div></div>`).join('');
+  $$('.seg').forEach(s=>s.onclick=()=>go(slides.findIndex(x=>x.dataset.g===s.dataset.g)));
+  slides[0].classList.add('on'); render(); }
+function applySteps(){ const s=slides[cur], n=st[cur];
+  $$('[data-s],[data-u]',s).forEach(e=>{ const a=+(e.dataset.s||0), u=+(e.dataset.u||0); e.classList.toggle('hid', a>n || (u>0 && n>=u)); }); }
+function isVis(e){ return !e.closest('.hid'); }
+function render(){ const s=slides[cur], n=st[cur];
+  applySteps();
+  $$('.abnote',s).forEach(e=>{ const vis=isVis(e);
+    if(vis && !e._shown){ e.classList.remove('blink'); void e.offsetWidth; e.classList.add('blink'); }
+    e._shown=vis; });
+  $$('svg g[data-s]',s).forEach(g=>{ if(!g.querySelector('.draw,.late')) return; const vis=isVis(g);
+    if(vis && !g._shown){ g.classList.remove('go'); void g.getBoundingClientRect(); g.classList.add('go'); }
+    g._shown=vis; });
+  if(HOOKS[s.id]) HOOKS[s.id](n);
+  updateBar(); }
+/* Schrittzähler und Umformungs-Animation */
+function Ctr(){ let k=0; return { n:()=>++k, get k(){return k} }; }
+function morphEq(c, first, trans){
+  const rows=[{l:[[0,0,first[0]]], r:[[0,0,first[1]]], op:[], e:0}], notes=[];
+  trans.forEach(T=>{ const so=c.n(); rows[rows.length-1].op.push([so,0,`<span class="opc bl">${T.op}</span>`]); notes.push([so,T.why]);
+    const stt=['A','B','C'].filter(x=>T[x]), ks=stt.map(()=>c.n()), row={l:[],r:[],op:[],e:ks[0]};
+    stt.forEach((x,i)=>{ const s=ks[i], u=ks[i+1]||0, cl=x==='C'?'bl':''; row.l.push([s,u,T[x][0],cl]); row.r.push([s,u,T[x][1],cl]); notes.push([s,T['t'+x]]); });
+    rows.push(row); });
+  notes.forEach((nt,i)=>nt[2]=notes[i+1]?notes[i+1][0]:0);
+  const V=a=>`<span class="vs">${a.map(([s,u,h,cl=''])=>`<span class="${cl}"${s?` data-s="${s}"`:''}${u?` data-u="${u}"`:''}>${h}</span>`).join('')}</span>`;
+  const eq=rows.map(r=>`<div class="er"><span class="l">${V(r.l)}</span><span class="e"${r.e?` data-s="${r.e}"`:''}>=</span><span class="r">${V(r.r)}</span><span class="op">${V(r.op)}</span></div>`).join('');
+  const note=`<div class="mnote" data-s="${notes[0][0]}">${notes.map(([s,h,u])=>`<span data-s="${s}"${u?` data-u="${u}"`:''}>💬 ${h}</span>`).join('')}</div>`;
+  return {eq:`<div class="eq meq">${eq}</div>`, note:'', last:notes[notes.length-1][0]};
+}
+const ADD=t=>`<span class="add">${t}</span>`, GRP=t=>`<span class="grp">${t}</span>`, DEL=t=>`<span class="del">${t}</span>`, RS=t=>t;
+function updateBar(){ const gi=GROUPS.findIndex(x=>x[0]===slides[cur].dataset.g);
+  $$('.seg').forEach((e,k)=>{ e.classList.toggle('done',k<gi); e.classList.toggle('now',k===gi);
+    if(k===gi){ const inG=slides.map((s,j)=>[s,j]).filter(([s])=>s.dataset.g===e.dataset.g), pos=inG.findIndex(([,j])=>j===cur);
+      const tot=inG.reduce((a,[,j])=>a+maxS[j]+1,0), done=inG.slice(0,pos).reduce((a,[,j])=>a+maxS[j]+1,0)+st[cur]+1;
+      $('i',e).style.width=Math.round(done/tot*100)+'%'; } else if(k>gi) $('i',e).style.width='0'; else $('i',e).style.width=''; });
+  $('#cnt').textContent=`Folie ${cur+1} von ${slides.length}`;
+  $('#bPrev').disabled=cur===0&&st[cur]===0; $('#bNext').disabled=cur===slides.length-1&&st[cur]>=maxS[cur];
+  const q=slides[cur].dataset.q; $('#bNext').classList.toggle('pulse', q!=null && !!answered[+q]); }
+function go(i,atEnd){ if(i<0||i>=slides.length) return; if(document.activeElement) document.activeElement.blur();
+  slides[cur].classList.remove('on'); cur=i; st[cur]=atEnd?maxS[cur]:0;
+  $$('.abnote,.bl,svg g[data-s]',slides[cur]).forEach(e=>e._shown=false); slides[cur].classList.add('on'); render(); }
+function next(){ const s=slides[cur];
+  if(s.dataset.q!=null && !answered[+s.dataset.q]){ const fb=$('.fb',s); fb.className='fb info'; fb.innerHTML='Beantworte zuerst die Frage. Tippe dann auf <b>Prüfen</b>.'; return; }
+  if(st[cur]<maxS[cur]){ st[cur]++; render(); } else go(cur+1); }
+function prev(){ if(st[cur]>0){ st[cur]--; render(); } else go(cur-1,true); }
+document.addEventListener('keydown',e=>{ if(e.target.closest('input')) return;
+  if(['ArrowRight','PageDown'].includes(e.key)){ next(); e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ prev(); e.preventDefault(); } });
+
+//GROUPS [['b1','Vorbereitung'],['b2','1. Schritt: umformen'],['b3','1. Schritt: pq-Formel'],['b4','2. und 3. Schritt'],['chk','Dein Ergebnis prüfen']]
+const k=x=>0.5*(x-1)**2-2, l=x=>x+1;
+const SW={W:600,H:520,xmin:-3.6,xmax:7.6,ymin:-3.6,ymax:8.6,xg:1,yg:1,xt:1,yt:1};
+function exGraph(id){ const P=Plot(id,SW); P.fn(k,CF); P.fn(l,CG); P.lab(-2.6,k(-2.6),'k',CF,10,0,22); P.lab(6.6,l(6.6),'l',CG,-18,6,22); return P; }
+{ const P=exGraph('pS1'); P.layer(0,P.pt(5,6,'#333',6)+P.txt(5,6,'?','#333',10,-8,'start',20)+P.pt(-1,0,'#333',6)+P.txt(-1,0,'?','#333',-10,-8,'end',20)); }
+{ const P=exGraph('pS4');
+  P.layer(0,P.ln(5,6,5,0,OR,2.2,'6 4')+P.ln(5,6,0,6,GR,2.2,'6 4')+P.pt(5,6,RW,7));
+  P.layer(1,P.pt(-1,0,RW,7));
+  P.layer(3,box(P,4.6,7.4,'S₁(5 | 6)',RW,92)+box(P,-1.9,1.2,'S₂(−1 | 0)',RW,100)); }
+quizGraph('pS5',{W:600,H:520});
+function chkS(){ const ids=['in_x1','in_y1','in_x2','in_y2'], v=ids.map(i=>num($('#'+i).value)), fb=$('#fbS'); document.activeElement.blur();
+  if(v.some(isNaN)){ fb.className='fb bad'; fb.textContent='Trage alle vier Werte ein.'; return; }
+  const sols=[[-1,-0.75],[-26,93]], eq=(a,b)=>Math.abs(a[0]-b[0])<0.01&&Math.abs(a[1]-b[1])<0.01;
+  const P1=[v[0],v[1]], P2=[v[2],v[3]];
+  const ok1=sols.some(s=>eq(s,P1)), ok2=sols.some(s=>eq(s,P2))&&!(eq(P1,P2));
+  ids.slice(0,2).forEach(i=>mark($('#'+i),ok1)); ids.slice(2).forEach(i=>mark($('#'+i),ok2));
+  if(ok1&&ok2){ fb.className='fb ok'; fb.innerHTML='Richtig! Beide Schnittpunkte stimmen.'; return; }
+  const xs=[v[0],v[2]].sort((a,b)=>a-b), xok=Math.abs(xs[0]+26)<0.01&&Math.abs(xs[1]+1)<0.01;
+  fb.className='fb bad'; fb.innerHTML=xok?'Die x-Werte stimmen. Prüfe die y-Werte. Setze in f oder g ein.':'Das stimmt noch nicht. Nutze Tipp 1 und Tipp 2.'; }
+
+{ const c=Ctr();
+  const M=morphEq(c,['0,5x² − x − 1,5','x + 1'],[
+   {op:'| · 2',why:'Für die pq-Formel muss vor x² eine <b>1</b> stehen. Aus 0,5x² wird x², wenn wir <b>mal 2</b> rechnen.',
+    A:[`${ADD('2 ·')} (0,5x² − x − 1,5)`,`${ADD('2 ·')} (x + 1)`],tA:'Wir rechnen <b>beide Seiten</b> mal 2. Jeder Summand wird verdoppelt.',
+    C:[RS('x² − 2x − 3'),RS('2x + 2')],tC:'Ausmultipliziert: <b>x² − 2x − 3 = 2x + 2</b>'},
+   {op:'| − 2x − 2',why:'Für die pq-Formel muss rechts eine <b>0</b> stehen. Darum rechnen wir <b>− 2x − 2</b>.',
+    A:[`x² − 2x ${ADD('− 2x')} − 3 ${ADD('− 2')}`,`2x ${ADD('− 2x')} + 2 ${ADD('− 2')}`],tA:'',
+    C:[RS('x² − 4x − 5'),RS('0')],tC:'Geschafft: <b>x² − 4x − 5 = 0</b>. Jetzt passt die pq-Formel!'}]);
+  const sRes=c.n(), sW=c.n();
+  $('#s2').innerHTML=`<h2 class="th"><span class="no">💡</span>1. Schritt: Gleichsetzen und nach x auflösen <small>Teil 1: umformen</small></h2>
+   <div class="ccols"><div class="etext st">
+    <div><b>Gleichsetzen:</b> <span class="m">k(x) = l(x)</span></div>
+    ${M.eq}${M.note}
+    <div data-s="${sRes}"><span class="res bl" style="display:inline-block;margin:0">Diese Gleichung lösen wir mit der pq-Formel.</span></div>
+   </div><div>
+    <div class="warn" data-s="${sW}"><b class="t">Bei Aufgabe 12</b>Dort steht ${FR('1','4')}x². Dann rechnest du <b>mal 4</b>.</div>
+   </div></div>`; }
+
+initDeck([['b1','Vorbereitung'],['b2','1. Schritt: umformen'],['b3','1. Schritt: pq-Formel'],['b4','2. und 3. Schritt'],['chk','Dein Ergebnis prüfen']]);
+</script>
+</body></html>

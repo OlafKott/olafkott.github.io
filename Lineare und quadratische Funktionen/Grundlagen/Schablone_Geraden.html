@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schablone · Übung 3</title><style>
+:root{ --rwb:#C80046; --ink:#1d1d1f; --ok:#2E7D32; --bad:#B00020; --blue:#1D70B8; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:#f1f1f1; font-family:Calibri,Carlito,Arial,sans-serif; color:var(--ink); line-height:1.5; font-size:18px; }
+.top{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 18px; border-bottom:3px solid var(--rwb); background:#f1f1f1; }
+.top h1{ margin:0; font-size:21px; color:var(--rwb); font-family:Georgia,serif; line-height:1.25; } .top img{ height:38px; }
+.wrap{ max-width:900px; margin:0 auto; padding:12px 12px 90px; }
+.pick{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.pick .grp{ width:100%; font-weight:bold; color:#9E0037; font-size:16px; margin-top:4px; }
+.pick button{ font:inherit; font-weight:bold; font-size:19px; min-width:52px; padding:6px 12px; border-radius:10px; border:2px solid var(--rwb); background:#fff; color:var(--rwb); cursor:pointer; }
+.pick button.on{ background:var(--rwb); color:#fff; }
+.card{ background:#fff; border:1px solid #d9d2c5; border-radius:12px; padding:12px 16px; margin:12px 0; overflow-x:auto; }
+.task{ border:2px solid var(--rwb); }
+.task .fx{ font-family:Cambria,Georgia,serif; font-size:21px; }
+.task svg{ display:block; width:100%; max-width:340px; margin:6px auto 0; }
+.eq{ display:grid; grid-template-columns:max-content max-content max-content max-content; column-gap:10px; row-gap:12px; align-items:center; font-family:Cambria,Georgia,serif; font-size:20px; }
+.eq .er{ display:contents; } .eq .l{ text-align:right; white-space:nowrap; } .eq .r{ white-space:nowrap; } .eq .op{ color:var(--blue); padding-left:14px; white-space:nowrap; }
+.eq .gap{ grid-column:1 / -1; height:6px; }
+.ln{ font-family:Cambria,Georgia,serif; font-size:20px; white-space:nowrap; margin:4px 0 14px; }
+input.in{ font-family:Cambria,Georgia,serif; font-size:19px; width:2.7em; height:38px; text-align:center; border:2px dashed #8a8a8a; border-radius:9px; background:#fafafa; padding:0 3px; vertical-align:middle; margin:0 1px; color:inherit; }
+.op input.in{ color:var(--blue); }
+input.in:focus{ outline:none; border-color:var(--rwb); border-style:solid; background:#fff; }
+input.in.ok{ border:2px solid var(--ok); background:#eaf6ea; color:var(--ok); }
+input.in.bad{ border:2px solid var(--bad); background:#fdecee; color:var(--bad); }
+.fr{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 3px; line-height:1.15; }
+.fr .nu{ border-bottom:1.5px solid currentColor; padding:0 3px 2px; } .fr .de{ padding:2px 3px 0; }
+.sq{ display:inline-flex; align-items:stretch; vertical-align:middle; } .sq .sym{ font-size:1.5em; line-height:1.5; } .sq .rad{ border-top:1.5px solid currentColor; padding:3px 2px 0; }
+.bar{ position:fixed; left:0; right:0; bottom:0; background:rgba(241,241,241,.96); border-top:1px solid #d9d2c5; padding:10px; text-align:center; }
+.bar button{ font:inherit; font-weight:bold; font-size:20px; background:var(--rwb); color:#fff; border:none; border-radius:10px; padding:10px 46px; cursor:pointer; }
+#sheet{ display:none; }
+@media (max-width:560px){ .eq{ font-size:18px; column-gap:6px; } input.in{ font-size:17px; width:2.4em; height:34px; } .ln{ font-size:18px; } }
+</style></head><body>
+<div class="top"><h1>Schablone · Übung 3</h1><img src="data:image/png;base64,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" alt="rwb. ahr."></div>
+<div class="wrap">
+ <div class="card"><div class="pick"><button onclick="pick(0)">a)</button><button onclick="pick(1)">b)</button><button onclick="pick(2)">c)</button><button onclick="pick(3)">d)</button><button onclick="pick(4)">e)</button><button onclick="pick(5)">f)</button></div></div>
+ <div class="card task" id="task" style="display:none"></div>
+ <div class="card" id="sheet"></div>
+</div>
+<div class="bar" style="display:none"><button onclick="check()">Prüfen</button></div>
+<script>
+const $=s=>document.querySelector(s);
+const R=x=>Math.round(x*1e6)/1e6;
+const F=n=>{ n=R(n); const s=String(Math.abs(n)).replace('.',','); return (n<0?'−':'')+s; };
+const FR=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const SQ=x=>`<span class="sq"><span class="sym">√</span><span class="rad">${x}</span></span>`;
+const near=(a,b)=>a!==null&&isFinite(a)&&isFinite(b)&&Math.abs(a-b)<1e-6;
+function num(s){
+  s=(s||'').trim().replace(/[−–]/g,'-').replace(/,/g,'.').replace(/\s/g,'');
+  if(s==='-') return -1; if(s==='+') return 1;
+  const m=s.match(/^([-+]?\d*\.?\d+)\/([-+]?\d*\.?\d+)$/); if(m) return (+m[1])/(+m[2]);
+  return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(s) ? +s : NaN;
+}
+const inp=k=>`<input class="in" data-k="${k}" autocomplete="off" autocapitalize="off" spellcheck="false">`;
+const eq=rows=>'<div class="eq">'+rows.map(r=>r==='gap'?'<div class="gap"></div>':`<div class="er"><span class="l">${r[0]}</span><span class="e">${r.length>1?'=':''}</span><span class="r">${r[1]||''}</span><span class="op">${r[2]?'| '+r[2]:''}</span></div>`).join('')+'</div>';
+let T=null;
+function pick(i){
+  T=TASKS[i];
+  document.querySelectorAll('.pick button').forEach((b,j)=>b.classList.toggle('on',j===i));
+  $('#task').innerHTML=HEAD(T); $('#sheet').innerHTML=SHEET(T);
+  $('#task').style.display=$('#sheet').style.display='block'; $('.bar').style.display='block';
+  document.querySelectorAll('#sheet input.in').forEach(el=>{
+    el.addEventListener('input',()=>el.classList.remove('ok','bad'));
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+  });
+}
+function check(){
+  const els=[...document.querySelectorAll('#sheet input.in')], v={};
+  els.forEach(el=>{ v[el.dataset.k]=el.value.trim()===''?null:num(el.value); });
+  const res=CHECK(T,v);
+  els.forEach(el=>{ el.classList.remove('ok','bad'); const k=el.dataset.k; if(v[k]===null) return;
+    el.classList.add(res[k]===true?'ok':'bad'); });
+}
+
+
+const TASKS=[[2,1,-1,7,'2x + 1','−x + 7'],[-3,4,1,-4,'−3x + 4','x − 4'],[0.5,3,-1,0,'0,5x + 3','−x'],[0,4,2,-2,'4','2x − 2'],[-2,5,3,-10,'5 − 2x','3x − 10'],[-2,3,1,-6,'−2x + 3','x − 6']]
+  .map((t,i)=>({l:'abcdef'[i],m1:t[0],b1:t[1],m2:t[2],b2:t[3],fs:t[4],gs:t[5]}));
+const HEAD=T=>`<div class="fx"><b style="color:var(--rwb)">${T.l})</b> &nbsp; f(x) = ${T.fs} &nbsp;&nbsp;&nbsp; g(x) = ${T.gs}</div>`;
+const SHEET=T=>eq([
+  ['f(x)','g(x)'],
+  [`${inp('m1')}x ${inp('b1')}`,`${inp('m2')}x ${inp('b2')}`,`${inp('o1')}x`],
+  [`${inp('A')}x ${inp('b1b')}`,inp('b2b'),inp('o2')],
+  [`${inp('A2')}x`,inp('C'),`: ${inp('o3')}`],
+  ['x',inp('x')],
+  'gap',
+  [`f(${inp('xe')})`,`${inp('me')} · ${inp('xe2')} ${inp('be')}`],
+  ['',inp('y')]
+])+`<div class="ln" style="margin-top:16px">S( ${inp('sx')} | ${inp('sy')} )</div>`;
+function CHECK(T,v){
+  const A=T.m1-T.m2, C=T.b2-T.b1, X=C/A, Y=T.m1*X+T.b1;
+  const t={m1:T.m1,b1:T.b1,m2:T.m2,b2:T.b2,o1:-T.m2,A,b1b:T.b1,b2b:T.b2,o2:-T.b1,A2:A,C,o3:A,x:X,xe:X,me:T.m1,xe2:X,be:T.b1,y:Y,sx:X,sy:Y};
+  const r={}; for(const k in t) r[k]=near(v[k],t[k]); return r;
+}
+
+</script></body></html>
