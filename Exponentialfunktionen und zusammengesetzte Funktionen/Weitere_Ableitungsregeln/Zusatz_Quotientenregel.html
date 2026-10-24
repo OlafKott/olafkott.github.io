@@ -1,46 +1,350 @@
-<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>★ Zusatz: Quotientenregel</title><style>
-:root{--rwb:#C80046;--ink:#1d1d1f;--ok:#2E7D32;--bad:#B00020;--blue:#1D70B8}
-*{box-sizing:border-box}
-body{margin:0;background:#f1f1f1;font-family:Calibri,Carlito,Arial,sans-serif;color:var(--ink);line-height:1.6;font-size:18px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-bottom:3px solid var(--rwb);background:#f1f1f1;position:sticky;top:0;z-index:5}
-.top h1{margin:0;font-size:20px;color:var(--rwb);font-family:Georgia,serif;line-height:1.25}
-.top .logo{height:38px;width:auto;display:block}
-.wrap{max-width:900px;margin:0 auto;padding:12px 10px 90px}
-.card{background:#fff;border:1px solid #d9d2c5;border-radius:12px;padding:12px 16px;margin:0 0 12px}
-.card h3{margin:0 0 8px;color:var(--rwb);font-size:19px;display:flex;align-items:center;gap:9px}
-.card h3 .n{background:var(--rwb);color:#fff;border-radius:50%;min-width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Zusatz: Die Quotientenregel</title><style>.logo{height:44px;width:auto;display:block}
 .m{font-family:Cambria,Caladea,Georgia,serif;white-space:nowrap}
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.12;font-size:.86em}
 .fr .nu{border-bottom:1.5px solid currentColor;padding:0 3px 1px}.fr .de{padding:1px 3px 0}
-.gi{background:#CFEBC8;border-radius:5px;padding:0 3px}
-.go{background:#FBDDBB;border-radius:5px;padding:0 3px}
-.cu{color:#1D70B8;font-weight:bold}.cv{color:#7B3FA0;font-weight:bold}
-.scroll{overflow-x:auto;padding-bottom:4px}
-.eq{display:inline-grid;grid-template-columns:auto auto auto auto;column-gap:10px;row-gap:8px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:20px;margin:6px 0}
-.eq>.l{text-align:right;white-space:nowrap}.eq>.e{text-align:center}.eq>.r{white-space:nowrap}
-.eq>.op{color:#1D70B8;padding-left:12px;white-space:nowrap;font-family:Calibri,Carlito,Arial,sans-serif;font-size:17px}
-.stephd{font-weight:bold;font-size:17px;color:var(--rwb);margin:14px 0 6px;border-left:4px solid var(--rwb);padding-left:8px}
-.resbox{display:inline-block;margin:8px 0 2px;padding:6px 14px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Cambria,Caladea,Georgia,serif;font-size:20px;font-weight:bold}
-.hint1{background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:8px;padding:6px 12px;font-size:17px;margin:8px 0}
-.merk{background:#F1F8F0;border:2px solid #2E7D32;border-radius:10px;padding:8px 14px;margin:8px 0}
-.merk b.t{color:#2E7D32}
-.zus{background:#F6F0FA;border:2px dashed #7B3FA0;border-radius:10px;padding:8px 14px;margin:8px 0}
-.zus b.t{color:#7B3FA0}
-input.gp{font-family:Cambria,Caladea,Georgia,serif;font-size:19px;height:38px;width:70px;padding:1px 3px;border:2px dashed #999;border-radius:8px;text-align:center;background:#fff;vertical-align:middle}
-input.gp.wide{width:120px}
+.vb{color:#1D3FD0}
+.mx{display:inline-grid;grid-template-columns:30px 14px repeat(3,var(--cw)) 22px var(--cw) 14px auto;grid-template-rows:auto repeat(3,var(--rh));align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--mfs,24px);color:#1d1d1f;vertical-align:middle}
+.mx .mh{color:#E07B00;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;font-style:italic;font-size:.74em;text-align:center;line-height:1.2}
+.mx .ml{grid-column:1;color:#9a9a9a;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.58em;font-weight:bold;text-align:right;padding-right:6px}
+.mx .pl,.mx .pr{align-self:stretch;height:100%}.mx .pl svg,.mx .pr svg{display:block;width:100%;height:100%}
+.mx .bar{align-self:stretch;justify-self:center;width:0;border-left:2px solid #1d1d1f;margin:5px 0}
+.mx .mc{text-align:center;white-space:nowrap}
+.mx .v{position:relative;display:inline-block}
+.mx .sp{position:absolute;left:80%;top:-.66em;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.6em;color:#E07B00;font-weight:bold;white-space:nowrap}
+.mx .sp .fr{font-size:.8em}
+.mx .z .v{color:#D32F2F}
+.mx .ma{position:relative;align-self:stretch;width:var(--aw,200px)}
+.mx .af{position:absolute;left:0;display:flex;align-items:center;white-space:nowrap;font-size:.86em}
+.mx .aplus{position:absolute;left:27px;color:#E07B00;font-weight:bold;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.95em;line-height:28px}
+.bx{display:inline-block;border:2px solid;border-radius:6px;padding:0 .2em;line-height:1.15;margin:0 1px}
+.bx.o{border-color:#E8A15A;background:#FDEBD9}.bx.g{border-color:#5DB85F;background:#DDF3DD}.bx.p{border-color:#D63AC8;background:#F9DDF6}
+.mred{color:#D32F2F;font-weight:bold}
+.eq{display:inline-grid;grid-template-columns:auto auto auto auto auto;column-gap:10px;row-gap:5px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,22px)}
+.eq .er{display:contents}
+.eq .lb{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;text-decoration:underline;text-underline-offset:4px;padding-right:4px;white-space:nowrap}
+.eq .lb.rl{text-decoration:none;color:#9a9a9a}
+.eq .l{text-align:right;white-space:nowrap}.eq .e{text-align:center}.eq .r{white-space:nowrap}
+.eq .op{color:#1D70B8;padding-left:12px;white-space:nowrap}
+.eq .un{text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
+.lgs{display:inline-grid;grid-template-columns:repeat(8,auto);column-gap:9px;row-gap:6px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,22px)}
+.lgs .lr{display:contents}.lgs .lr>span{text-align:right;white-space:nowrap}
+.lgs .lb{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:#9a9a9a;font-size:.72em}
+.lgs .lr>span:nth-child(3),.lgs .lr>span:nth-child(5),.lgs .lr>span:nth-child(7){text-align:center}
+
+.cx{color:#E07B00;font-weight:bold}.cy{color:#2E7D32;font-weight:bold}
+.pbk{display:inline-grid;grid-template-columns:auto auto auto auto auto;column-gap:10px;row-gap:4px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,22px)}
+.pbk .pr{display:contents}
+.pbk .pc{white-space:nowrap;padding-right:14px}
+.pbk .pl2{font-family:Cambria,Caladea,Georgia,serif;font-weight:bold;padding-left:14px;white-space:nowrap}
+.ub{position:relative;display:inline-block}
+.ub .brc{position:absolute;left:-2px;right:-2px;top:96%;display:flex;flex-direction:column;align-items:center;line-height:1}
+.ub .brc svg{width:100%;height:12px;display:block}
+.ub .brt{color:#C80046;font-weight:bold;font-size:.9em;margin-top:2px}
+.pbk .l{text-align:right;white-space:nowrap}.pbk .r{white-space:nowrap}
+.pbk .pbsp{grid-column:1/-1;height:10px}
+
+:root{--rwb:#C80046;--rwb-l:#FBEAF0;--ink:#1d1d1f;--ok:#2E7D32;--bad:#B00020;--blue:#1D70B8;--mut:#6B6B6B;--line:#d9d2c5;--bg:#f1f1f1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);line-height:1.55;touch-action:manipulation;-webkit-text-size-adjust:100%}
+#app{position:fixed;left:0;top:0;width:1280px;height:800px;transform-origin:0 0;display:flex;flex-direction:column;background:var(--bg)}
+.top{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:18px;padding:0 26px;border-bottom:3px solid var(--rwb)}
+.prog{flex:1;display:flex;gap:5px}
+.seg{flex:1;cursor:pointer;padding:4px 0;min-width:0}
+.seg .bar{height:9px;border-radius:5px;background:#dcdcdc;overflow:hidden}
+.seg .bar i{display:block;height:100%;width:0;background:var(--rwb);transition:width .3s}
+.seg .lab{font-family:Calibri,Carlito,Arial,sans-serif;font-size:13px;font-weight:bold;color:#8a8a8a;text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.done .bar{background:#eaa3bd}.seg.done .bar i{width:100%}
+.seg.done .lab,.seg.now .lab{color:var(--rwb)}.seg.now .lab{text-decoration:underline;text-underline-offset:3px}
+.top .logo{height:44px}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:16px 34px 10px;display:none;flex-direction:column}
+.slide.on{display:flex;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.th{margin:0 0 12px;font-size:27px;color:var(--rwb);display:flex;align-items:center;gap:12px;line-height:1.2}
+.th .no{background:var(--rwb);color:#fff;font-family:Calibri,Carlito,Arial,sans-serif;border-radius:50%;min-width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;font-size:19px}
+.blick{display:grid;grid-template-columns:1.15fr 1fr .95fr;gap:14px;align-items:start;margin-bottom:6px}
+.blick .bc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.blick h4{margin:0 0 6px;font-family:Calibri,Carlito,Arial,sans-serif;color:var(--rwb);font-size:17px;display:flex;gap:7px;align-items:center}
+.blick h4 span{background:var(--rwb);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.blick .pbk{--efs:15px}.blick .pbk .pbsp{height:6px}
+.blick .mx{--mfs:15px;--aw:118px}
+.blick .mseq{display:flex;flex-direction:column;align-items:flex-start}.blick .down{font-size:17px;line-height:1;padding-left:110px}
+.blick .eq.bs{display:grid;width:max-content;--efs:15px;row-gap:2px;margin-bottom:6px}
+.blick .resbox{display:inline-block;margin-top:4px;padding:4px 12px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Cambria,Caladea,Georgia,serif;font-weight:bold;font-size:18px}
+.cS{color:#2E7D32;font-weight:bold}.cP{color:#1D70B8;font-weight:bold}
+.gone{display:none!important}
+.calcs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 6px}
+.calcs>span{background:#fff;border:1.5px solid #E8A15A;border-radius:8px;padding:2px 10px;font-family:Cambria,Caladea,Georgia,serif;white-space:nowrap}
+.easy{margin:4px 0 0;padding:6px 12px;border-radius:8px;background:#EAF5EA;color:#1B5E20;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.rflash{align-self:stretch;justify-self:stretch;background:rgba(200,0,70,.16);border:2px solid #C80046;border-radius:8px;margin:2px -4px;opacity:0;pointer-events:none}
+.rflash.vis{animation:rfl 2.4s ease-in-out forwards}
+@keyframes rfl{0%{opacity:0}15%{opacity:1}30%{opacity:.1}45%{opacity:1}60%{opacity:.1}75%{opacity:1}100%{opacity:0}}
+.ub .brc.vis{animation:brb 1.8s ease-in-out}
+@keyframes brb{0%,40%,80%{opacity:1}20%,60%{opacity:.15}}
+.mc.vis .goal{display:none}
+.goal{position:absolute;left:-12px;right:-12px;top:-6px;bottom:-6px;display:flex;align-items:center;justify-content:center;visibility:visible;color:#D32F2F;font-weight:bold;border:2.5px dashed #D32F2F;border-radius:10px;background:#FFF0F0;opacity:0;animation:goalb 3s ease-in-out .3s forwards;pointer-events:none}
+@keyframes goalb{0%{opacity:0}12%{opacity:1}25%{opacity:.15}38%{opacity:1}51%{opacity:.15}64%{opacity:1}85%{opacity:1}100%{opacity:0}}
+.abnote.go{animation:blink 1.4s ease-in-out infinite;font-size:20px;padding:12px 18px}
+.bktop{display:flex;gap:24px;align-items:center;margin-bottom:6px}.bktop .say{flex:1;font-size:19px;margin:0}
+.mx.bkm{--mfs:17px}
+.mx.bkm .mh{font-size:16px}
+.bk3{display:grid;grid-template-columns:.8fr 1.25fr 1fr;gap:14px;align-items:start}
+.bkc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-height:290px}
+.bkh{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--rwb);font-size:17px;margin-bottom:4px}
+.bk3 .bsw .eq{--efs:20px;row-gap:6px}
+.bk3 .eqw{margin:4px 0}
+.q.sm{font-size:18px;margin:0}
+.bk3 .btns{margin:6px 0 2px}.bk3 .btns button{font-size:16px;padding:6px 16px}
+.bk3 .fb{font-size:16px}
+input.gp.fixd{border:2px solid #E07B00;background:#FFF3E0}
+.leg{font-family:Calibri,Carlito,Arial,sans-serif;font-size:16px;color:#666;margin-top:6px}
+.say.mini{font-size:19px;margin:8px 0 6px}
+.tcols{flex:1;display:grid;gap:30px;align-items:start;min-height:0}
+.lcol{font-size:20px;line-height:1.55}
+.rcol{display:flex;justify-content:center}
+.ctr{display:flex;flex-direction:column;align-items:center;gap:4px}
+svg.plot{width:100%;height:auto;display:block;background:#fff;border:1px solid #e4dcdf;border-radius:8px}
+.rcol svg.plot{max-height:600px}
+[data-s]:not(.vis){visibility:hidden}
+.vis{animation:fadein .35s ease}
+.say{margin:0 0 12px;padding:4px 0 4px 14px;border-left:4px solid #EAA3BD}
+.say.em{border-left-color:var(--ok);font-weight:bold;color:#1B5E20}
+.res{margin:6px 0 12px;padding:8px 14px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:#1B5E20}
+.res .m{color:var(--ink)}
+.warn{margin:6px 0 12px;padding:8px 14px;background:#FFF4D6;border:1px solid #E0A800;border-radius:8px}
+.banner{margin:8px 0 0;padding:10px 16px;border:2.5px solid #1d1d1f;border-radius:40px;text-align:center;font-family:Calibri,Carlito,Arial,sans-serif;font-size:21px;background:#fff}
+.card{margin:6px 0 12px;padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.bigq{margin:10px 0;padding:12px 16px;border-radius:10px;background:var(--rwb);color:#fff;font-weight:bold;font-size:21px}
+.big{font-size:24px;margin:6px 0}
+.eqw{margin:6px 0 6px 6px}
+.bsw .eq{--efs:23px;row-gap:7px}
+.lgsbox{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 18px;margin:4px 0}
+.lgsbox.sm{display:block;width:max-content;margin:10px 0 6px;--efs:20px}
+.downbig{font-size:32px;line-height:1;color:#1d1d1f;margin:2px 0}
+.mx{--aw:210px}
+.mx.mini{--mfs:19px}
+.mx.mini .ma{display:none}
+/* Start */
+.startgrid{flex:1;display:grid;grid-template-columns:1fr 430px;gap:40px;align-items:center;padding:6px 10px}
+.kick{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);font-size:17px;letter-spacing:.3px}
+.startl h1{font-size:50px;color:var(--rwb);margin:4px 0 0;line-height:1.1}
+.sub1{font-size:28px;margin:2px 0 16px;color:#333}
+.abhint{display:flex;align-items:center;gap:12px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:10px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;margin:10px 0}
+.abhint .ico{font-size:30px}
+.card.how{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.6}
+.card.how h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+button{font-family:Calibri,Carlito,Arial,sans-serif;cursor:pointer}
+button.pr{background:var(--rwb);color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;padding:9px 22px}
+button.pr.big{font-size:22px;padding:12px 36px;border-radius:30px;margin-top:6px}
+button:disabled{opacity:.4;cursor:default}
+.sheetstack{position:relative;cursor:pointer;width:380px;margin:0 auto}
+.sheetstack::before,.sheetstack::after{content:"";position:absolute;inset:0;background:#fff;border:1px solid #d6d6d6;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.sheetstack::before{transform:rotate(-4deg) translate(-10px,6px)}.sheetstack::after{transform:rotate(3deg) translate(8px,4px)}
+.sheetstack img{position:relative;z-index:2;display:block;width:100%;border:1px solid #ccc;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .2s}
+.sheetstack:hover img{transform:translateY(-4px)}
+.sheetlab{position:relative;z-index:3;text-align:center;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--rwb);margin-top:10px;font-size:17px}
+/* Fragen */
+.qbox{font-size:20px}
+.q{font-weight:bold;font-size:21px;line-height:1.45;margin:0 0 8px}
+.qhint{font-family:Calibri,Carlito,Arial,sans-serif;font-size:16px;color:var(--blue);font-weight:bold;margin:-4px 0 6px}
+.opt{display:flex;align-items:center;gap:12px;padding:8px 14px;border:1.8px solid var(--line);border-radius:9px;margin:7px 0;cursor:pointer;background:#fff;font-size:19px;min-height:52px}
+.opt:hover{border-color:#999}
+.opt .mk{flex:0 0 20px;height:20px;border:2px solid #999;border-radius:50%}
+.opt .lt{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);width:18px}
+.opt.sel{border-color:var(--blue);background:#EEF5FC}.opt.sel .mk{border-color:var(--blue);background:var(--blue);box-shadow:inset 0 0 0 3px #fff}
+.opt.right{border-color:var(--ok);background:#EAF5EA}.opt.right .mk{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 3px #fff}
+.opt.wrong{border-color:var(--bad);background:#FDECEA}.opt.wrong .mk{border-color:var(--bad);background:var(--bad);box-shadow:inset 0 0 0 3px #fff}
+.qbox.done .opt{cursor:default}
+.mc.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+.mc.grid2 .opt{margin:3px 0;padding:4px 14px}
+.btns{display:flex;gap:10px;margin:10px 0 4px}
+.qbox.done .btns{display:none}
+.fb{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:1.5;min-height:0}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:var(--mut)}
+.expl{display:none;margin-top:8px;padding:8px 14px;border-left:4px solid var(--ok);background:#F2F8F2;border-radius:5px;font-size:19px;line-height:1.55}
+.qbox.done .expl{display:block;animation:fadein .35s}
+.expl .et{font-family:Calibri,Carlito,Arial,sans-serif;color:var(--ok)}
+.row2{display:flex;gap:24px;align-items:center;margin-top:4px}
+.gbody{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.6}
+.gbody .eq{font-size:22px}
+.ghint{font-size:15px;color:var(--mut)}
+input.gp{font-family:Cambria,Caladea,Georgia,serif;font-size:21px;height:38px;padding:2px 4px;border:2px dashed #999;border-radius:8px;text-align:center;background:#fff;vertical-align:middle}
 input.gp:focus{outline:none;border-style:solid;border-color:var(--blue)}
 input.gp.ok{border:2px solid var(--ok);background:#EAF5EA}input.gp.bad{border:2px solid var(--bad);background:#FDECEA}
-button.pr{font-family:inherit;font-size:18px;font-weight:bold;background:var(--rwb);color:#fff;border:none;border-radius:8px;padding:9px 24px;cursor:pointer}
-button.sec{font-family:inherit;font-size:17px;font-weight:bold;background:#fff;color:#555;border:1.5px solid #bbb;border-radius:8px;padding:8px 18px;cursor:pointer}
-.fb{font-weight:bold;margin-top:8px;min-height:1.4em}.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:#666}
-.sheetimg{display:block;width:100%;max-width:640px;margin:8px auto;border:1px solid #ccc;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-svg.plot{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fff;border:1px solid #e4dcdf;border-radius:8px}
-</style></head><body><div class="top"><h1>★ Zusatz: Quotientenregel</h1><img class="logo" src="data:image/png;base64,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" alt="rwb. ahr."></div><div class="wrap"><div class="zus"><b class="t">★ Freiwillig – für alle, die mehr wissen wollen.</b><br>Für die Prüfung reicht die Produktregel.</div><div class="card"><h3><span class="n">1</span>Die Quotientenregel</h3>Für einen Bruch aus zwei Funktionen gibt es eine eigene Regel:<div class="merk"><span class="m" style="font-size:22px">f(x) = <span class="fr"><span class="nu"><span class="cu">u</span></span><span class="de"><span class="cv">v</span></span></span> &nbsp;⟹&nbsp; f′(x) = <span class="fr"><span class="nu"><span class="cu">u′</span> · <span class="cv">v</span> − <span class="cu">u</span> · <span class="cv">v′</span></span><span class="de"><span class="cv">v</span>²</span></span></span></div>Merkspruch: „NAZ minus ZAN durch N²“ – Nenner mal Ableitung Zähler minus Zähler mal Ableitung Nenner, durch Nenner zum Quadrat.</div><div class="card"><h3><span class="n">2</span>Warum du sie nicht brauchst</h3>Jeder Bruch ist ein Produkt: Durch v teilen ist dasselbe wie mit <span class="m">v<sup>−1</sup></span> malnehmen.<div class="scroll"><div class="eq"><span class="l">f(x)</span><span class="e">=</span><span class="r"><span class="fr"><span class="nu"><span class="cu">u</span></span><span class="de"><span class="cv">v</span></span></span></span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r"><span class="cu">u</span> · <span class="cv">v</span><sup>−1</sup></span><span class="op"></span></div></div>Jetzt reichen <b>Produktregel</b> und <b>Kettenregel</b>. Die Ableitung von <span class="m">v<sup>−1</sup></span> ist mit der Kettenregel <span class="m">v′ · (−1) · v<sup>−2</sup></span>.<div class="scroll"><div class="eq"><span class="l">f′(x)</span><span class="e">=</span><span class="r"><span class="cu">u′</span> · <span class="cv">v</span><sup>−1</sup> + <span class="cu">u</span> · (−<span class="cv">v′</span> · <span class="cv">v</span><sup>−2</sup>)</span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu"><span class="cu">u′</span></span><span class="de"><span class="cv">v</span></span></span> − <span class="fr"><span class="nu"><span class="cu">u</span> · <span class="cv">v′</span></span><span class="de"><span class="cv">v</span>²</span></span></span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu"><span class="cu">u′</span> · <span class="cv">v</span> − <span class="cu">u</span> · <span class="cv">v′</span></span><span class="de"><span class="cv">v</span>²</span></span></span><span class="op">| gleichnamig</span></div></div><div class="merk"><b class="t">Ergebnis:</b> Die Quotientenregel ist nur eine Abkürzung. Sie steckt schon in Produkt- und Kettenregel.</div></div><div class="card"><h3><span class="n">3</span>Bei der e-Funktion ist es noch einfacher</h3>Steht <span class="m">e<sup>x</sup></span> im Nenner, schreibst du einfach <span class="m">e<sup>−x</sup></span>, denn <span class="m"><span class="fr"><span class="nu">1</span><span class="de">e<sup>x</sup></span></span> = e<sup>−x</sup></span>.<div class="stephd">Beispiel: <span class="m">f(x) = <span class="fr"><span class="nu">x + 2</span><span class="de">e<sup>x</sup></span></span></span></div><b>Weg A: Produktregel</b><div class="scroll"><div class="eq"><span class="l">f(x)</span><span class="e">=</span><span class="r">(x + 2) · e<sup>−x</sup></span><span class="op"></span><span class="l">f′(x)</span><span class="e">=</span><span class="r">1 · e<sup>−x</sup> + (x + 2) · (−e<sup>−x</sup>)</span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r">e<sup>−x</sup> · (1 − x − 2)</span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r">e<sup>−x</sup> · (−x − 1)</span><span class="op"></span></div></div><b>Weg B: Quotientenregel</b><div class="scroll"><div class="eq"><span class="l">f′(x)</span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">1 · e<sup>x</sup> − (x + 2) · e<sup>x</sup></span><span class="de">(e<sup>x</sup>)²</span></span></span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">e<sup>x</sup> · (1 − x − 2)</span><span class="de">e<sup>x</sup> · e<sup>x</sup></span></span></span><span class="op"></span><span class="l"></span><span class="e">=</span><span class="r"><span class="fr"><span class="nu">−x − 1</span><span class="de">e<sup>x</sup></span></span></span><span class="op"></span></div></div><div class="resbox">Beide Wege liefern dasselbe: <span class="fr"><span class="nu">−x − 1</span><span class="de">e<sup>x</sup></span></span> = e<sup>−x</sup> · (−x − 1)</div></div><div class="card qs"><h3><span class="n">4</span>Probier es selbst</h3>Leite <span class="m">f(x) = <span class="fr"><span class="nu">3x</span><span class="de">e<sup>2x</sup></span></span> = 3x · e<sup>−2x</sup></span> mit der Produktregel ab.<br><div style="margin:10px 0;line-height:2.5"><span class="m">f′(x) = e<sup>−2x</sup> · (<input class="gp" data-a="-6" inputmode="decimal"> x + <input class="gp" data-a="3" inputmode="decimal">)</span></div><button class="pr" onclick="chk(this)">Prüfen</button><div class="fb"></div></div></div><script>
+.mx input.gp{font-size:20px;height:36px}
+.slide:not(.solved) .aft{visibility:hidden}
+.abnote{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:8px;padding:8px 14px;animation:blink 1.4s ease-in-out 3}
+@keyframes blink{50%{background:#FFE08A}}
+/* Ablauf */
+.flow6{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:4px 0 14px}
+.flow6 .fc{border:1px solid var(--line);border-top:5px solid var(--rwb);border-radius:10px;padding:10px 16px;background:#fff;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.55;min-height:150px}
+.flow6 .fc h4{margin:0 0 6px;font-size:20px;color:var(--rwb);display:flex;gap:9px;align-items:center}
+.flow6 .fc h4 span{background:var(--rwb);color:#fff;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 30px}
+.ulist{display:grid;gap:8px;margin:6px 0 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px}
+.ulist div{background:#fff;border:1px solid var(--line);border-left:5px solid var(--rwb);border-radius:7px;padding:7px 14px}
+.ulist b{display:block;color:var(--rwb)}
+.qrinfo{display:grid;gap:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:17px}
+.qrinfo div{background:#FDF2F6;border:1.5px solid #E8A9C0;border-radius:8px;padding:6px 14px}
+.qrinfo b{display:block;color:var(--rwb)}
+/* Leiste unten */
+.bot{height:58px;flex:0 0 58px;display:flex;align-items:center;gap:12px;padding:0 26px;border-top:1px solid #ddd;font-family:Calibri,Carlito,Arial,sans-serif}
+.bot .info{font-size:14px;color:#888}
+.bot .sp{flex:1}
+.bot .cnt{font-size:15px;color:#777}
+.bot button{font-size:17px;font-weight:bold;padding:8px 20px;border-radius:8px;border:1.5px solid var(--rwb);background:#fff;color:var(--rwb)}
+.bot #bNext{background:var(--rwb);color:#fff}
+.bot #bFull{border-color:#bbb;color:#666;font-size:14px;padding:6px 12px}
+
+.stnote{font-family:Calibri,Carlito,Arial,sans-serif;font-size:16px;color:#666;margin-top:3px}
+.stnote .m{font-size:17px}
+.sm{display:inline-block;border-radius:8px;padding:1px 8px;border:2px solid;margin:2px 0}
+.sm.s1{background:#DCEBFA;border-color:#6FA8DC}.sm.s2{background:#FCE3EC;border-color:#E58BAE}.sm.s3{background:#EDE3F6;border-color:#B48ACF}
+.rule{margin:8px 0;padding:6px 14px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--rwb);border-radius:8px;font-size:19px;line-height:1.6}
+.rule .m{font-size:22px}
+.slide{font-size:21px}
+.slide>.say,.lcol>.say{font-size:21px}
+.th sup{font-size:.6em}
+.gi{background:#CFEBC8;border-radius:6px;padding:0 3px;box-decoration-break:clone}
+.go{background:#FBDDBB;border-radius:6px;padding:0 3px}
+.cu{color:#1D70B8;font-weight:bold}.cv{color:#7B3FA0;font-weight:bold}
+.m sup{font-size:.68em}
+.eqp{display:inline-grid;grid-template-columns:auto auto auto auto;column-gap:12px;row-gap:8px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,24px)}
+.eqp>.l{text-align:right;white-space:nowrap}.eqp>.e{text-align:center}.eqp>.r{white-space:nowrap}
+.eqp>.op{color:#1D70B8;padding-left:12px;white-space:nowrap;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.8em}
+.merk{margin:6px 0 12px;padding:10px 18px;border:2.5px solid #2E7D32;background:#F1F8F0;border-radius:10px}
+.merk h4{margin:0 0 4px;font-family:Calibri,Carlito,Arial,sans-serif;color:#2E7D32;font-size:20px}
+.stp{display:grid;gap:10px;margin:6px 0}
+.stp>div{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-left:5px solid var(--rwb);border-radius:8px;padding:8px 14px;font-size:20px}
+.stp>div>b.n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--rwb);color:#fff;font-family:Calibri,Carlito,Arial,sans-serif;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
+.big2{font-size:34px}
+.lbl{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);font-size:16px}
+.tab{border-collapse:collapse;font-family:Cambria,Caladea,Georgia,serif;font-size:21px;background:#fff}
+.tab td,.tab th{border:1px solid #d9d2c5;padding:6px 14px;text-align:center}
+.tab th{font-family:Calibri,Carlito,Arial,sans-serif;background:#FBEAF0;color:var(--rwb);font-size:18px}
+.abbig{display:flex;gap:28px;align-items:center;margin-top:8px}
+.abbig .abnote{flex:1;text-decoration:none;color:inherit;display:flex;gap:14px;align-items:center}
+.sheetmini{width:260px;flex:0 0 260px;border:1px solid #ccc;border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.18);transform:rotate(-2deg)}
+.zusbox{border:2.5px dashed #7B3FA0;background:#F6F0FA;border-radius:12px;padding:10px 18px;margin:6px 0 12px}
+.zusbox h4{margin:0 0 4px;color:#7B3FA0;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px}
+.tagf{display:inline-block;background:#7B3FA0;color:#fff;border-radius:14px;padding:1px 12px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;font-weight:bold;vertical-align:middle}
+.slider{display:flex;align-items:center;gap:14px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;margin:8px 0}
+.slider input[type=range]{flex:1;accent-color:var(--rwb);height:28px}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.vals>div{background:#fff;border:2px solid var(--line);border-radius:10px;padding:8px 14px;text-align:center}
+.vals .lbl{display:block}
+.vals .vv{font-family:Cambria,Caladea,Georgia,serif;font-size:34px;font-weight:bold}
+.mcard{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 18px;margin:4px 0}
+.opt .oh .m{font-size:21px}
+.sidebox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 16px}
+</style></head><body><div id="app"><div class="top"><div class="prog" id="prog"></div><img class="logo" src="data:image/png;base64,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" alt="rwb. ahr."></div><div class="stage" id="deck"><style>
+.ef,.r1,.r2{white-space:nowrap}
+.swap [data-s]:not(.vis){display:none}
+.ebox{border:2.5px solid #7B3FA0;background:#F6F0FA;border-radius:12px;padding:6px 12px;margin-top:8px}
+.ebox h4{margin:2px 0 4px;color:#7B3FA0;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.ebox.vis{animation:pblink 1.1s ease-in-out 3}
+@keyframes pblink{0%,100%{box-shadow:0 0 0 0 rgba(123,63,160,0)}50%{box-shadow:0 0 0 8px rgba(123,63,160,.45);background:#E9DAF5}}
+.distr{display:block;margin:2px 0 0}
+.why div{margin:3px 0}
+.vk{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:10px 0}
+.vk>div{background:#fff;border:1px solid var(--line);border-top:5px solid var(--rwb);border-radius:10px;padding:10px 14px;text-align:center}
+.vk h4{margin:0 0 6px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;color:var(--rwb)}
+.vk .m{font-size:26px}
+.vk>div.hl{border:2.5px solid var(--rwb);background:#FDF0F4}
+.vk>div.zq{border-top-color:#7B3FA0}.vk>div.zq h4{color:#7B3FA0}
+.mini{margin-top:4px}.mini .btns{display:inline-block;margin:0 0 0 10px}.mini .btns button{font-size:15px;padding:4px 14px}
+.mini .fb{font-size:16px}
+.gen{font-size:17px;color:#555;font-family:Calibri,Carlito,Arial,sans-serif}
+.gen .m{font-size:19px}
+.ov .sheetmini{width:300px;flex:0 0 300px;transform:rotate(-1deg)}.ov .abbig{margin-top:2px}
+.ef{background:#FFE58A;border-radius:6px;padding:0 4px;box-shadow:inset 0 0 0 2px #E0A800}
+.r1{background:#DCEBFA;border-radius:6px;padding:0 4px;box-shadow:inset 0 0 0 2px #6FA8DC}
+.r2{background:#FCE3EC;border-radius:6px;padding:0 4px;box-shadow:inset 0 0 0 2px #E58BAE}
+.stp.tight{gap:7px}.stp.tight>div{padding:6px 14px;font-size:19px}
+.stp .m{font-size:22px}
+.why{margin:8px 0;padding:8px 16px;border:2px solid #E0A800;background:#FFF8E1;border-radius:10px;font-size:19px}
+.why h4{margin:0 0 2px;font-family:Calibri,Carlito,Arial,sans-serif;color:#9A6B00;font-size:19px}
+.tapq{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+.tapq .q{font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;margin-bottom:10px}
+.tapline{font-family:Cambria,Caladea,Georgia,serif;font-size:30px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 12px}
+.tk{cursor:pointer;border:2.5px dashed #9AA5B1;border-radius:10px;padding:2px 12px;background:#F7F9FB;transition:.15s;user-select:none}
+.tk:hover{border-color:var(--rwb)}
+.tk.sel{border-style:solid;border-color:#E0A800;background:#FFE58A}
+.tk.right{border-style:solid;border-color:var(--ok);background:#D9F0D9}
+.tk.bad{border-style:solid;border-color:var(--bad);background:#FBDADA}
+.tapq.done .tk{cursor:default}
+.sumbr{font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;color:#666;display:block;text-align:center;margin-top:-4px}
+.lett{display:inline-block;min-width:34px;text-align:center;font-weight:bold;font-family:Calibri,Carlito,Arial,sans-serif;font-size:24px;color:#fff;background:var(--rwb);border-radius:8px;padding:0 6px;margin-right:8px}
+.qtab{border-collapse:separate;border-spacing:0 8px;font-size:20px}
+.qtab td{padding:4px 10px;vertical-align:middle}
+.qtab td.m{font-size:22px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cmp>div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px}
+.cmp h4{margin:0 0 6px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px}
+</style><style>
+.vgl{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.vgl>div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px}
+.vgl h4{margin:0 0 8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px}
+.vgl .q h4{color:#7B3FA0}.vgl .p h4{color:#1D70B8}
+.vgl .q{border-top:6px solid #7B3FA0}.vgl .p{border-top:6px solid #1D70B8}
+.vgl .row{display:flex;align-items:center;gap:10px;min-height:64px;font-family:Cambria,Caladea,Georgia,serif;font-size:26px;border-bottom:1px dashed #e2dccf;padding:4px 0}
+.vgl .row:last-child{border-bottom:0}
+.vgl .row .lb{flex:0 0 118px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;color:#777}
+.endres{display:inline-block;border:2.5px solid var(--ok);background:#EAF5EA;border-radius:8px;padding:2px 10px}
+</style><section class="slide" data-g="regel"><h2 class="th"><span class="no">★</span><span>Die Quotientenregel <span class="tagf">freiwillig</span></span></h2><div class="say ">Für einen <b>Bruch</b> aus zwei Funktionen gibt es eine eigene Ableitungsregel. Im <b>Zähler</b> steht <span class="cu">u(x)</span>, im <b>Nenner</b> steht <span class="cv">v(x)</span>.</div><div class="zusbox" data-s="0"><h4>Satz: Quotientenregel</h4><div style="text-align:center"><span class="m" style="font-size:30px">f(x) = <span class="fr"><span class="nu"><span class="cu">u(x)</span></span><span class="de"><span class="cv">v(x)</span></span></span> &nbsp;⟹&nbsp; f′(x) = <span class="fr"><span class="nu"><span class="cu">u′(x)</span> · <span class="cv">v(x)</span> − <span class="cu">u(x)</span> · <span class="cv">v′(x)</span></span><span class="de">(<span class="cv">v(x)</span>)²</span></span></span></div></div><div class="say " data-s="1">Erinnert an die Produktregel. Aber: In der Mitte steht ein <b>Minus</b>, und unten steht der Nenner zum <b>Quadrat</b>.</div><div class="say em" data-s="2">Für die Prüfung brauchst du diese Regel <b>nicht</b>. Warum, siehst du am Ende. ▶</div></section><section class="slide" data-g="merk"><h2 class="th"><span class="no">★</span><span>Merksatz: „NAZ minus ZAN durch N²“ <span class="tagf">freiwillig</span></span></h2><div class="tcols" style="grid-template-columns:1.15fr 1fr;gap:22px"><div class="lcol"><div class="sidebox"><table class="qtab"><tr data-s="0"><td><span class="lett">NAZ</span></td><td><b>N</b>enner mal <b>A</b>bleitung des <b>Z</b>ählers</td><td class="m"><span class="cv">v(x)</span> · <span class="cu">u′(x)</span></td></tr><tr data-s="1"><td><span class="lett">−</span></td><td>minus</td><td></td></tr><tr data-s="2"><td><span class="lett">ZAN</span></td><td><b>Z</b>ähler mal <b>A</b>bleitung des <b>N</b>enners</td><td class="m"><span class="cu">u(x)</span> · <span class="cv">v′(x)</span></td></tr><tr data-s="3"><td><span class="lett">N²</span></td><td>durch den <b>N</b>enner zum Quadrat</td><td class="m">(<span class="cv">v(x)</span>)²</td></tr></table></div></div><div class="lcol"><div class="zusbox" data-s="4"><h4>Zusammengesetzt</h4><span class="m" style="font-size:26px">f′(x) = <span class="fr"><span class="nu"><span class="cv">v(x)</span> · <span class="cu">u′(x)</span> − <span class="cu">u(x)</span> · <span class="cv">v′(x)</span></span><span class="de">(<span class="cv">v(x)</span>)²</span></span></span></div><div class="say " data-s="5"><span class="m"><span class="cv">v(x)</span> · <span class="cu">u′(x)</span></span> ist dasselbe wie <span class="m"><span class="cu">u′(x)</span> · <span class="cv">v(x)</span></span>. Beim Malnehmen ist die Reihenfolge egal.</div><div class="say em" data-s="6">Beim <b>Minus</b> ist die Reihenfolge wichtig: zuerst NAZ, dann ZAN abziehen.</div></div></div></section><section class="slide" data-g="quot"><h2 class="th"><span class="no">★</span><span>Beispiel mit der Quotientenregel <span class="tagf">freiwillig</span></span></h2><div class="mcard"><span class="m" style="font-size:26px">f(x) = <span class="fr"><span class="nu"><span class="cu">2x</span></span><span class="de"><span class="cv">e<sup>x</sup></span></span></span></span></div><div class="tcols" style="grid-template-columns:1fr 1.1fr;gap:22px"><div class="lcol"><div class="stp tight"><div data-s="0"><b class="n">1</b><div><b>Zähler und Nenner</b><br><span class="m"><span class="cu">u(x) = 2x</span></span> &nbsp;&nbsp; <span class="m"><span class="cv">v(x) = e<sup>x</sup></span></span></div></div><div data-s="1"><b class="n">2</b><div><b>Ableitungen</b><br><span class="m"><span class="cu">u′(x) = 2</span></span> &nbsp;&nbsp; <span class="m"><span class="cv">v′(x) = e<sup>x</sup></span></span></div></div><div data-s="2"><b class="n">3</b><div><b>Einsetzen</b> in NAZ minus ZAN durch N²<div class="gen">allgemein: <span class="m">f′(x) = <span class="fr"><span class="nu"><span class="cv">v(x)</span> · <span class="cu">u′(x)</span> − <span class="cu">u(x)</span> · <span class="cv">v′(x)</span></span><span class="de">(<span class="cv">v(x)</span>)²</span></span></span></div></div></div></div></div><div class="lcol"><div class="sidebox" data-s="3"><div class="eqp" style="--efs:23px"><span class="l" data-s="3">f′(x)</span><span class="e" data-s="3">=</span><span class="r" data-s="3"><span class="fr"><span class="nu"><span class="cv">e<sup>x</sup></span> · <span class="cu">2</span> − <span class="cu">2x</span> · <span class="cv">e<sup>x</sup></span></span><span class="de">(<span class="cv">e<sup>x</sup></span>)²</span></span></span><span class="op" data-s="3">| ausklammern</span><span class="l" data-s="4"></span><span class="e" data-s="4">=</span><span class="r" data-s="4"><span class="fr"><span class="nu"><span class="ef">e<sup>x</sup></span> · (<span class="r1">2</span> − <span class="r2">2x</span>)</span><span class="de">e<sup>x</sup> · e<sup>x</sup></span></span></span><span class="op" data-s="4">| kürzen</span><span class="l" data-s="5"></span><span class="e" data-s="5">=</span><span class="r" data-s="5"><b><span class="fr"><span class="nu">2 − 2x</span><span class="de">e<sup>x</sup></span></span></b></span><span class="op" data-s="5"></span></div></div><div class="say " data-s="5">Im Zähler steht <span class="ef">e<sup>x</sup></span> in beiden Teilen. Ausklammern, dann einmal e<sup>x</sup> oben und unten kürzen.</div></div></div></section><section class="slide" data-g="prod"><h2 class="th"><span class="no">★</span><span>Derselbe Bruch mit der Produktregel <span class="tagf">freiwillig</span></span></h2><div class="say ">Trick: Durch e<sup>x</sup> teilen ist dasselbe wie mit e<sup>−x</sup> malnehmen, denn <span class="m"><span class="fr"><span class="nu">1</span><span class="de">e<sup>x</sup></span></span> = e<sup>−x</sup></span>.</div><div class="mcard" data-s="0"><span class="m" style="font-size:26px">f(x) = <span class="fr"><span class="nu">2x</span><span class="de">e<sup>x</sup></span></span> = <span class="cu">2x</span> · <span class="cv">e<sup>−x</sup></span></span></div><div class="tcols" style="grid-template-columns:1fr 1.1fr;gap:22px"><div class="lcol"><div class="stp tight"><div data-s="1"><b class="n">1</b><div><b>u(x) und v(x) festlegen</b><br><span class="m"><span class="cu">u(x) = 2x</span></span> &nbsp;&nbsp; <span class="m"><span class="cv">v(x) = e<sup>−x</sup></span></span></div></div><div data-s="2"><b class="n">2</b><div><b>u′(x) und v′(x) bilden</b><br><span class="m"><span class="cu">u′(x) = 2</span></span> &nbsp;&nbsp; <span class="m"><span class="cv">v′(x) = −e<sup>−x</sup></span></span></div></div><div data-s="3"><b class="n">3</b><div><b>Einsetzen</b> in die Produktregel<div class="gen">allgemein: <span class="m">f′(x) = <span class="cu">u′(x)</span> · <span class="cv">v(x)</span> + <span class="cu">u(x)</span> · <span class="cv">v′(x)</span></span></div></div></div></div></div><div class="lcol"><div class="sidebox" data-s="4"><div class="eqp" style="--efs:23px"><span class="l" data-s="4">f′(x)</span><span class="e" data-s="4">=</span><span class="r" data-s="4"><span class="cu">2</span> · <span class="cv">e<sup>−x</sup></span> + <span class="cu">2x</span> · <span class="cv">(−e<sup>−x</sup>)</span></span><span class="op" data-s="4">| ausklammern</span><span class="l" data-s="5"></span><span class="e" data-s="5">=</span><span class="r" data-s="5"><span class="ef">e<sup>−x</sup></span> · (<span class="r1">2</span> − <span class="r2">2x</span>)</span><span class="op" data-s="5">| als Bruch</span><span class="l" data-s="6"></span><span class="e" data-s="6">=</span><span class="r" data-s="6"><b><span class="fr"><span class="nu">2 − 2x</span><span class="de">e<sup>x</sup></span></span></b></span><span class="op" data-s="6"></span></div></div><div class="say " data-s="6">Für den letzten Schritt: <span class="m">e<sup>−x</sup> · (2 − 2x) = <span class="fr"><span class="nu">2 − 2x</span><span class="de">e<sup>x</sup></span></span></span>.<br>Meist reicht aber schon <span class="m">e<sup>−x</sup> · (2 − 2x)</span>.</div></div></div></section><section class="slide" data-g="vgl"><h2 class="th"><span class="no">★</span><span>Beide Wege im Vergleich <span class="tagf">freiwillig</span></span></h2><div class="vgl"><div class="q"><h4>Weg A: Quotientenregel</h4><div class="row" data-s="0"><span class="lb">f(x)</span><span class="m"><span class="fr"><span class="nu">2x</span><span class="de">e<sup>x</sup></span></span></span></div><div class="row" data-s="1"><span class="lb">einsetzen</span><span class="m"><span class="fr"><span class="nu">e<sup>x</sup> · 2 − 2x · e<sup>x</sup></span><span class="de">(e<sup>x</sup>)²</span></span></span></div><div class="row" data-s="2"><span class="lb">ausklammern</span><span class="m"><span class="fr"><span class="nu">e<sup>x</sup> · (2 − 2x)</span><span class="de">e<sup>x</sup> · e<sup>x</sup></span></span></span></div><div class="row" data-s="3"><span class="lb">Ergebnis</span><span class="m"><span class="endres"><span class="fr"><span class="nu">2 − 2x</span><span class="de">e<sup>x</sup></span></span></span></span></div></div><div class="p"><h4>Weg B: Bruch als Produkt + Produktregel</h4><div class="row" data-s="0"><span class="lb">f(x)</span><span class="m">2x · e<sup>−x</sup></span></div><div class="row" data-s="1"><span class="lb">einsetzen</span><span class="m">2 · e<sup>−x</sup> + 2x · (−e<sup>−x</sup>)</span></div><div class="row" data-s="2"><span class="lb">ausklammern</span><span class="m">e<sup>−x</sup> · (2 − 2x)</span></div><div class="row" data-s="3"><span class="lb">Ergebnis</span><span class="m"><span class="endres"><span class="fr"><span class="nu">2 − 2x</span><span class="de">e<sup>x</sup></span></span></span></span></div></div></div><div class="say em" data-s="4"><b>Beide Wege liefern dasselbe Ergebnis.</b> Die Quotientenregel ist nur eine Abkürzung. Mit Produktregel und Kettenregel kommst du immer ans Ziel. Darum brauchst du sie nicht.</div><div class="say " data-s="5">💡 So kannst du Aufgabe 3 a) auf dem Arbeitsblatt auf einem zweiten Weg kontrollieren.</div></section></div><div class="bot"><span class="info">Zusatz: Quotientenregel · freiwillig · RWB Essen</span><button id="bFull" onclick="toggleFull()">⛶ Vollbild</button><span class="sp"></span><span class="cnt" id="cnt"></span><button id="bPrev" onclick="prev()">◀ zurück</button><button id="bNext" onclick="next()">weiter ▶</button></div></div><script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide'); let cur=0; const step=slides.map(()=>0);
+const maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s).filter(n=>!isNaN(n))));
+const GROUPS=[["regel", "Quotientenregel"], ["merk", "Merksatz"], ["quot", "Beispiel"], ["prod", "Mit Produktregel"], ["vgl", "Vergleich"]];
+const prog=$('#prog');
+GROUPS.forEach(([g,t])=>{const d=document.createElement('div');d.className='seg';d.dataset.g=g;d.innerHTML='<div class="bar"><i></i></div><div class="lab">'+t+'</div>';d.onclick=()=>go(slides.findIndex(s=>s.dataset.g===g),0);prog.appendChild(d);});
+function apply(){ const s=slides[cur];
+  $$('[data-s]',s).forEach(e=>{ const n=+e.dataset.s; e.classList.toggle('vis', !isNaN(n)&&n<=step[cur]); });
+  $$('[data-hs]',s).forEach(e=>e.classList.toggle('gone', step[cur]>=+e.dataset.hs));
+  slides.forEach((x,i)=>x.classList.toggle('on',i===cur));
+  const g=s.dataset.g, gi=GROUPS.findIndex(x=>x[0]===g);
+  $$('.seg').forEach((d,i)=>{ d.classList.toggle('done',i<gi); d.classList.toggle('now',i===gi);
+    if(i===gi){ const idx=slides.map((x,j)=>[x,j]).filter(([x])=>x.dataset.g===g).map(([,j])=>j); const k=idx.indexOf(cur); d.querySelector('i').style.width=((k+1)/idx.length*100)+'%'; }
+    else if(i>gi) d.querySelector('i').style.width='0'; });
+  $('#cnt').textContent='Folie '+(cur+1)+' von '+slides.length+(maxS[cur]?' · Schritt '+(step[cur]+1)+' von '+(maxS[cur]+1):'');
+  $('#bPrev').disabled=(cur===0&&step[cur]===0); $('#bNext').disabled=(cur===slides.length-1&&step[cur]>=maxS[cur]);
+}
+function go(i,st){ if(i<0||i>=slides.length) return; cur=i; step[cur]=st==='max'?maxS[cur]:(st||0); apply(); }
+function next(){ if(step[cur]<maxS[cur]){ step[cur]++; apply(); } else go(cur+1,0); }
+function prev(){ if(step[cur]>0){ step[cur]--; apply(); } else go(cur-1,'max'); }
+document.addEventListener('keydown',e=>{ if(e.target.closest('input')) { if(e.key==='Enter'){ const b=e.target.closest('.qbox')?.querySelector('[data-a=chk]'); b&&b.click(); } return; }
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ next(); e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ prev(); e.preventDefault(); } });
+function fit(){ const W=innerWidth,Hh=innerHeight,s=Math.min(W/1280,Hh/800); const app=$('#app'); app.style.transform='scale('+s+')'; app.style.left=((W-1280*s)/2)+'px'; app.style.top=((Hh-800*s)/2)+'px'; }
+addEventListener('resize',fit); fit();
+function toggleFull(){ const d=document; if(!d.fullscreenElement&&!d.webkitFullscreenElement){ const el=d.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen).call(el); } else { (d.exitFullscreen||d.webkitExitFullscreen).call(d); } }
+/* Zahlen lesen */
 function num(v){ v=String(v).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(',','.'); if(v===''||v==='-') return NaN;
   if(v.includes('/')){ const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b); } return Number(v); }
-function chk(btn){ const c=btn.closest('.qs'), fb=c.querySelector('.fb'), ins=[...c.querySelectorAll('input.gp')];
-  if(ins.some(i=>i.value.trim()==='')){ fb.className='fb info'; fb.textContent='Fülle zuerst alle Kästen aus.'; return; }
-  let all=true; ins.forEach(i=>{ const ok=Math.abs(num(i.value)-num(i.dataset.a))<0.006; i.classList.remove('ok','bad'); i.classList.add(ok?'ok':'bad'); if(!ok) all=false; });
-  fb.className='fb '+(all?'ok':'bad'); fb.textContent=all?'Richtig! Weiter mit dem nächsten Schritt.':'Die roten Kästen stimmen noch nicht. Rechne noch einmal nach.'; }
-document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.matches('input.gp')){ e.target.closest('.qs').querySelector('button').click(); } });
+/* Fragen */
+$$('.qbox').forEach(Q=>{
+  const fb=$('.fb',Q), sl=Q.closest('.slide');
+  const finish=()=>{ Q.classList.add('done'); sl.classList.add('solved'); $$('input',Q.closest('.slide')).forEach(i=>i.readOnly=true); };
+  if(Q.classList.contains('mcq')){
+    const opts=$$('.opt',Q);
+    opts.forEach(o=>o.onclick=()=>{ if(Q.classList.contains('done')) return; opts.forEach(x=>x.classList.remove('sel')); o.classList.add('sel'); fb.textContent=''; });
+    $('[data-a=chk]',Q).onclick=()=>{ const sel=opts.find(o=>o.classList.contains('sel'));
+      if(!sel){ fb.className='fb info'; fb.textContent='Wähle zuerst eine Antwort.'; return; }
+      opts.forEach(o=>{ if(o.dataset.ok==='1') o.classList.add('right'); });
+      if(sel.dataset.ok==='1'){ fb.className='fb ok'; fb.innerHTML='Richtig!'; }
+      else { sel.classList.remove('sel'); sel.classList.add('wrong'); fb.className='fb bad'; fb.innerHTML='Leider falsch. '+sel.dataset.fb; }
+      finish(); };
+  } else {
+    $('[data-a=chk]',Q).onclick=()=>{ const ins=$$('input.gp',sl);
+      if(ins.some(i=>i.value.trim()==='')){ fb.className='fb info'; fb.textContent='Fülle zuerst alle Lücken aus.'; return; }
+      let all=true; ins.forEach(i=>{ const ok=Math.abs(num(i.value)-num(i.dataset.a))<1e-9; i.classList.add(ok?'ok':'bad'); if(!ok) all=false; });
+      if(Q.classList.contains('fix')){ ins.forEach(i=>{ if(i.classList.contains('bad')) setTimeout(()=>{ i.value=i.dataset.a; i.classList.remove('bad'); i.classList.add('fixd'); },1400); }); }
+      if(all){ fb.className='fb ok'; fb.textContent='Richtig! Alles stimmt.'; }
+      else if(Q.classList.contains('fix')){ fb.className='fb bad'; fb.textContent='Nicht ganz. Gleich erscheinen die richtigen Werte in Orange.'; finish(); return; }
+      else { fb.className='fb bad'; fb.textContent='Nicht ganz. Die roten Felder stimmen noch nicht. Vergleiche mit der Lösung.'; }
+      finish(); };
+  }
+});
+apply();
+
 </script></body></html>
