@@ -48,5 +48,5 @@ a.node:hover, a.node:focus-visible{ transform:translateY(-3px); box-shadow:0 7px
   </div>
   </div>
 </div>
-<script>(function(){function send(){try{parent.postMessage({grundlagenHeight:document.documentElement.scrollHeight},'*');}catch(e){}}window.addEventListener('load',send);window.addEventListener('resize',send);setTimeout(send,500);})();</script>
+<script>(function(){function h(){var b=document.body,s=getComputedStyle(b);return Math.ceil(b.getBoundingClientRect().height+parseFloat(s.marginTop)+parseFloat(s.marginBottom));}function send(){try{parent.postMessage({grundlagenHeight:h(),rwbFrame:location.pathname},'*');}catch(e){}}window.addEventListener('load',send);window.addEventListener('resize',send);if(window.ResizeObserver){new ResizeObserver(send).observe(document.body);}setTimeout(send,500);})();</script>
 </body></html>

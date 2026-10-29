@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moodle-Einbettung HFH</title><style>
+body{margin:0;padding:24px 16px;background:#f9f8f6;font-family:Georgia,serif;color:#1a1a1a;line-height:1.5}
+.w{max-width:980px;margin:0 auto} h1{color:#C8102E;margin:0 0 4px} .sub{color:#555;margin:0 0 18px}
+.info{background:#fff8e1;border-left:4px solid #d6a300;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:20px;font-size:15px}
+.k{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px 18px;margin-bottom:16px} .k h2{font-size:17px;color:#C8102E;margin:0}
+.u{margin:2px 0 8px;font-size:14px} .u a{color:#1D70B8}
+pre{background:#1f2430;color:#e6e6e6;padding:12px;border-radius:6px;font-size:12.5px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin:0}
+.bar{text-align:right;margin-bottom:6px} button{background:#C8102E;color:#fff;border:0;border-radius:5px;padding:7px 14px;font-family:inherit;font-size:14px;cursor:pointer}
+button.ok{background:#2e7d32}
+</style></head><body><div class="w"><h1>Moodle-Einbettung: HFH Lineare Funktionen</h1>
+<p class="sub">Ein Code pro Übersicht. Die Höhe passt sich automatisch an die Bildschirmbreite an.</p>
+<div class="info"><b>So geht es:</b> Im Moodle-Editor (Textfeld oder Textseite) auf <b>HTML-Ansicht</b> (&lt;/&gt;) umschalten, den Code einfügen, speichern.<br>
+Das Script im Code passt die Höhe an. Falls Moodle das Script entfernt, bleibt die Startgröße stehen. Dann im <code>style</code> die Zahl bei <code>height</code> anpassen.</div>
+<section class="k"><h2>Abschnitt 1: Erlös, Kosten und Gewinn im Polypol</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Erloes_Kosten_Gewinn/Uebersicht_Erloes_Kosten_Gewinn.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(0,this)">Code kopieren</button></div><pre id="c0">&lt;div style=&quot;width:100%;max-width:1100px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-a1&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Erloes_Kosten_Gewinn/Uebersicht_Erloes_Kosten_Gewinn.html&quot; title=&quot;Abschnitt 1: Erlös, Kosten und Gewinn im Polypol&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:1500px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-a1&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Abschnitt 2: Kostenfunktion aufstellen</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Kostenfunktion_aufstellen/Uebersicht_Kostenfunktion.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(1,this)">Code kopieren</button></div><pre id="c1">&lt;div style=&quot;width:100%;max-width:1100px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-a2&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Kostenfunktion_aufstellen/Uebersicht_Kostenfunktion.html&quot; title=&quot;Abschnitt 2: Kostenfunktion aufstellen&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:560px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-a2&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Abschnitt 3: Gewinnschwelle und BEP</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Funktionswerte_und_BEP/Uebersicht_Funktionswerte_und_BEP.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(2,this)">Code kopieren</button></div><pre id="c2">&lt;div style=&quot;width:100%;max-width:1100px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-a3&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Funktionswerte_und_BEP/Uebersicht_Funktionswerte_und_BEP.html&quot; title=&quot;Abschnitt 3: Gewinnschwelle und BEP&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:1510px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-a3&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Abschnitt 4: Marktgleichgewicht</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Marktgleichgewicht/Uebersicht_Marktgleichgewicht.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(3,this)">Code kopieren</button></div><pre id="c3">&lt;div style=&quot;width:100%;max-width:1100px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-a4&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Marktgleichgewicht/Uebersicht_Marktgleichgewicht.html&quot; title=&quot;Abschnitt 4: Marktgleichgewicht&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:1040px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-a4&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Abschnitt 5: Gesamtübung</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Gesamtuebung/Uebersicht_Gesamtuebung.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(4,this)">Code kopieren</button></div><pre id="c4">&lt;div style=&quot;width:100%;max-width:1100px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-a5&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Gesamtuebung/Uebersicht_Gesamtuebung.html&quot; title=&quot;Abschnitt 5: Gesamtübung&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:590px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-a5&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Abschnitt 6: Kann-Liste (Start: digital oder Papier)</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/KannListe/Start_KannListe_Lineare_Funktionen_FHR.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(5,this)">Code kopieren</button></div><pre id="c5">&lt;div style=&quot;width:100%;max-width:900px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-kl&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/KannListe/Start_KannListe_Lineare_Funktionen_FHR.html&quot; title=&quot;Abschnitt 6: Kann-Liste (Start: digital oder Papier)&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:750px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-kl&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Kann-Liste: Übersicht aller Übungen</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/KannListe/uebersicht.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(6,this)">Code kopieren</button></div><pre id="c6">&lt;div style=&quot;width:100%;max-width:1150px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-klu&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/KannListe/uebersicht.html&quot; title=&quot;Kann-Liste: Übersicht aller Übungen&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:1200px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-klu&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section><section class="k"><h2>Lernlandkarte: Lineare Funktionen / Polypol und Marktgleichgewicht</h2><p class="u"><a href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Lernlandkarte_Lineare_Funktionen_Polypol_und_Marktgleichgewicht_HFH.html" target="_blank" rel="noopener">Seite öffnen ↗</a></p><div class="bar"><button onclick="kop(7,this)">Code kopieren</button></div><pre id="c7">&lt;div style=&quot;width:100%;max-width:1700px;margin:0 auto;&quot;&gt;
+&lt;iframe id=&quot;hfh-llk&quot; src=&quot;https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Lernlandkarte_Lineare_Funktionen_Polypol_und_Marktgleichgewicht_HFH.html&quot; title=&quot;Lernlandkarte: Lineare Funktionen / Polypol und Marktgleichgewicht&quot; loading=&quot;lazy&quot; scrolling=&quot;no&quot; style=&quot;display:block;width:100%;height:600px;border:0;overflow:hidden;&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(function(){
+  var f = document.getElementById(&quot;hfh-llk&quot;);
+  window.addEventListener(&quot;message&quot;, function(e){
+    if (!f || e.source !== f.contentWindow || !e.data || !e.data.grundlagenHeight) return;
+    f.style.height = (e.data.grundlagenHeight + 2) + &quot;px&quot;;
+  });
+})();
+&lt;/script&gt;</pre></section></div><script>
+function kop(i,b){var t=document.getElementById('c'+i).textContent;
+(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();})
+.finally(function(){b.textContent='Kopiert ✓';b.className='ok';setTimeout(function(){b.textContent='Code kopieren';b.className='';},1600);});}
+</script></body></html>
