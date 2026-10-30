@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Tipp: Form der Normalparabel</title><style>
+.m{font-family:Cambria,Caladea,Georgia,serif;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.12;font-size:.86em}
+.fr .nu{border-bottom:1.5px solid currentColor;padding:0 3px 1px}.fr .de{padding:1px 3px 0}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}
+.sq .sym{width:.62em;display:inline-block;flex:none}.sq .sym svg{width:100%;height:100%;display:block}
+.sq .rad{border-top:1.5px solid currentColor;padding:2px 3px 0 2px;display:inline-flex;align-items:center}
+.ca{color:#C62828;font-weight:bold}.cb{color:#1D70B8;font-weight:bold}.cc{color:#E07B00;font-weight:bold}
+.cd{color:#6A3FC8;font-weight:bold}.ce{color:#00838F;font-weight:bold}
+.cp{color:#1E8449;font-weight:bold}.cl{color:#1D70B8;font-weight:bold}
+.trap{color:#C62828;font-weight:bold}
+
+:root{--rwb:#1E8449;--rwb-d:#14603A;--rwb-l:#E3F3E9;--ink:#1d1d1f;--ok:#2E7D32;--bad:#B00020;--blue:#1D70B8;--mut:#6B6B6B;--line:#d9d2c5;--bg:#f1f1f1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);line-height:1.55;touch-action:manipulation;-webkit-text-size-adjust:100%}
+#app{position:fixed;left:0;top:0;width:1280px;height:800px;transform-origin:0 0;display:flex;flex-direction:column;background:var(--bg)}
+.top{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:18px;padding:0 26px;border-bottom:3px solid var(--rwb)}
+.prog{flex:1;display:flex;gap:5px}
+.seg{flex:1;cursor:pointer;padding:4px 0;min-width:0}
+.seg .bar{height:9px;border-radius:5px;background:#dcdcdc;overflow:hidden}
+.seg .bar i{display:block;height:100%;width:0;background:var(--rwb);transition:width .3s}
+.seg .lab{font-family:Calibri,Carlito,Arial,sans-serif;font-size:13px;font-weight:bold;color:#8a8a8a;text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.done .bar{background:#A9D8BA}.seg.done .bar i{width:100%}
+.seg.done .lab,.seg.now .lab{color:var(--rwb)}.seg.now .lab{text-decoration:underline;text-underline-offset:3px}
+.top .logo{height:34px;width:auto;display:block}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:16px 34px 10px;display:none;flex-direction:column}
+.slide.on{display:flex;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.th{margin:0 0 12px;font-size:27px;color:var(--rwb);display:flex;align-items:center;gap:12px;line-height:1.2}
+.th .no{background:var(--rwb);color:#fff;font-family:Calibri,Carlito,Arial,sans-serif;border-radius:50%;min-width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;font-size:19px}
+.th small{font-family:Calibri,Carlito,Arial,sans-serif;font-size:17px;color:#777;font-weight:normal}
+[data-s]:not(.vis){visibility:hidden}
+.vis{animation:fadein .35s ease}
+.gone{display:none!important}
+.tcols{flex:1;display:grid;gap:28px;align-items:start;min-height:0}
+.lcol{font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5}
+.rcol{display:flex;flex-direction:column;align-items:center;gap:8px}
+svg.plot{width:100%;height:auto;display:block;background:#fff;border:1px solid #dfe5e0;border-radius:8px}
+.say{margin:0 0 11px;padding:3px 0 3px 14px;border-left:4px solid #A9D8BA;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px}
+.say .m{font-size:21px}
+.say.em{border-left-color:var(--ok);font-weight:bold;color:#1B5E20}
+.res{margin:6px 0 12px;padding:8px 14px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:#1B5E20;font-size:20px}
+.res .m{color:var(--ink)}
+.warn{margin:6px 0 12px;padding:8px 14px;background:#FFF4D6;border:1px solid #E0A800;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.warn b:first-child{color:#8a5a00}
+.trapbox{margin:6px 0 12px;padding:8px 14px;background:#FDECEA;border:2px solid #C62828;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.trapbox b:first-child{color:#C62828}
+.card{margin:6px 0 12px;padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.merk{margin:10px 0 12px;padding:12px 16px 10px;border:2.5px solid var(--rwb);border-radius:12px;background:#FFF;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5;position:relative}
+.merk::before{content:"Merke";position:absolute;top:-13px;left:14px;background:var(--rwb);color:#fff;font-size:14px;font-weight:bold;padding:1px 10px;border-radius:10px;letter-spacing:.5px}
+.merk .m{font-size:23px}
+.merk ul{margin:2px 0 0;padding-left:22px}.merk li{margin:2px 0}
+.feq{font-family:Cambria,Caladea,Georgia,serif;font-size:26px;white-space:nowrap}
+.feq.big{font-size:36px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;line-height:1.5}
+.kc h4{margin:0 0 6px;font-size:21px;display:flex;align-items:center;gap:10px;color:var(--rwb)}
+.kc.t{border-top:6px solid var(--rwb)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:4px 0 10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:4px 0 10px}
+.stp{display:flex;gap:12px;align-items:flex-start;margin:0 0 9px;font-size:19px;font-family:Calibri,Carlito,Arial,sans-serif;line-height:1.5}
+.stp .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--rwb);color:#fff;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
+.stp .m{font-size:21px}
+/* Gleichungen untereinander */
+.eq{display:inline-grid;grid-template-columns:auto auto auto auto;column-gap:10px;row-gap:5px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,23px)}
+.eq .l{text-align:right;white-space:nowrap}.eq .e{text-align:center}.eq .r{white-space:nowrap}
+.eq .op{color:var(--blue);padding-left:14px;white-space:nowrap;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.8em;font-weight:bold}
+.eq .op.g{color:#888;font-weight:normal;font-style:italic}
+/* Wertetabelle */
+.tg{display:grid;font-family:Calibri,Carlito,Arial,sans-serif;font-size:var(--tfs,21px);border-radius:10px;background:#fff;border:1px solid var(--line);padding:6px 10px;width:max-content}
+.tg .tl{font-weight:bold;padding:6px 14px 6px 6px;white-space:nowrap;display:flex;align-items:center;font-family:Cambria,Caladea,Georgia,serif}
+.tg .tc{text-align:center;padding:6px 4px;border-left:1px solid #e6e6e6;font-family:Cambria,Caladea,Georgia,serif;position:relative;min-height:42px}
+.tg .hx{background:#f3f3f3;color:#444}
+.tg .rl{border-top:1px solid #e6e6e6}
+.tg .tc.fx{outline:3px solid #E07B00;outline-offset:-4px;border-radius:8px;background:#FFF1E0}
+.calc{font-family:Cambria,Caladea,Georgia,serif;font-size:20px;line-height:1.6}
+.calc .lb{font-family:Calibri,Carlito,Arial,sans-serif;color:#888;font-size:16px;margin-left:10px}
+/* Start */
+.startgrid{flex:1;display:grid;grid-template-columns:1fr 430px;gap:40px;align-items:center;padding:6px 10px}
+.kick{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);font-size:17px;letter-spacing:.3px}
+.startl h1{font-size:50px;color:var(--rwb);margin:4px 0 0;line-height:1.1}
+.sub1{font-size:28px;margin:2px 0 16px;color:#333}
+.abhint{display:flex;align-items:center;gap:12px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:10px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;margin:10px 0}
+.abhint .ico{font-size:30px}
+.card.how{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.6}
+.card.how h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+button{font-family:Calibri,Carlito,Arial,sans-serif;cursor:pointer}
+button.pr{background:var(--rwb);color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;padding:9px 22px}
+button.pr.big{font-size:22px;padding:12px 36px;border-radius:30px;margin-top:6px}
+button:disabled{opacity:.4;cursor:default}
+/* Fragen */
+.qbox{font-size:20px}
+.q{font-weight:bold;font-size:21px;line-height:1.45;margin:0 0 8px}
+.opt{display:flex;align-items:center;gap:12px;padding:8px 14px;border:1.8px solid var(--line);border-radius:9px;margin:7px 0;cursor:pointer;background:#fff;font-size:19px;min-height:52px;font-family:Calibri,Carlito,Arial,sans-serif}
+.opt:hover{border-color:#999}
+.opt .mk{flex:0 0 20px;height:20px;border:2px solid #999;border-radius:50%}
+.opt .lt{font-weight:bold;color:var(--mut);width:18px}
+.opt.sel{border-color:var(--blue);background:#EEF5FC}.opt.sel .mk{border-color:var(--blue);background:var(--blue);box-shadow:inset 0 0 0 3px #fff}
+.opt.right{border-color:var(--ok);background:#EAF5EA}.opt.right .mk{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 3px #fff}
+.opt.wrong{border-color:var(--bad);background:#FDECEA}.opt.wrong .mk{border-color:var(--bad);background:var(--bad);box-shadow:inset 0 0 0 3px #fff}
+.qbox.done .opt{cursor:default}
+.btns{display:flex;gap:10px;margin:10px 0 4px}
+.qbox.done .btns{display:none}
+.fb{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:1.5}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:var(--mut)}
+.expl{display:none;margin-top:8px;padding:8px 14px;border-left:4px solid var(--ok);background:#F2F8F2;border-radius:5px;font-size:19px;line-height:1.55;font-family:Calibri,Carlito,Arial,sans-serif}
+.qbox.done .expl{display:block;animation:fadein .35s}
+input.gp{font-family:Cambria,Caladea,Georgia,serif;font-size:21px;height:38px;width:70px;padding:2px 4px;border:2px dashed #999;border-radius:8px;text-align:center;background:#fff;vertical-align:middle}
+input.gp:focus{outline:none;border-style:solid;border-color:var(--blue)}
+input.gp.ok{border:2px solid var(--ok);background:#EAF5EA}input.gp.bad{border:2px solid var(--bad);background:#FDECEA}
+.abnote{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:8px;padding:10px 16px;animation:blink 1.4s ease-in-out 3}
+@keyframes blink{50%{background:#FFE08A}}
+/* Schieberegler */
+.sl{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 16px 10px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.sl .row{display:flex;align-items:center;gap:14px;margin:4px 0}
+.sl .row b{min-width:26px;font-family:Cambria,Caladea,Georgia,serif;font-size:22px}
+.sl input[type=range]{flex:1;accent-color:var(--rwb);height:34px}
+.sl .val{min-width:62px;text-align:center;font-family:Cambria,Caladea,Georgia,serif;font-size:22px;font-weight:bold;background:#f5f5f5;border-radius:6px;padding:1px 6px}
+.live{font-family:Cambria,Caladea,Georgia,serif;font-size:28px;text-align:center;margin:4px 0}
+.stat{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#F6F1EA;border-radius:8px;padding:8px 14px;line-height:1.5}
+.chip{display:inline-block;border-radius:14px;padding:1px 12px;font-weight:bold;margin:2px 4px 2px 0;font-size:17px}
+.chip.on{background:var(--rwb);color:#fff}.chip.off{background:#e6e6e6;color:#888}
+.pbtn{display:inline-block;margin:3px 4px 3px 0;padding:4px 12px;border:1.6px solid var(--rwb);border-radius:16px;background:#fff;color:var(--rwb);font-weight:bold;font-size:16px;cursor:pointer;font-family:Calibri,Carlito,Arial,sans-serif}
+/* Bilder */
+.photo{position:relative;border-radius:10px;overflow:hidden;border:1px solid #ccc;background:#fff;line-height:0}
+.photo img{width:100%;display:block}
+.photo svg.ov{position:absolute;inset:0;width:100%;height:100%}
+.cap{font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;color:#666;margin-top:4px;line-height:1.3}
+.src{font-family:Calibri,Carlito,Arial,sans-serif;font-size:12px;color:#888}
+.video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* Leiste unten */
+.bot{height:58px;flex:0 0 58px;display:flex;align-items:center;gap:12px;padding:0 26px;border-top:1px solid #ddd;font-family:Calibri,Carlito,Arial,sans-serif}
+.bot .info{font-size:14px;color:#888}
+.bot .sp{flex:1}
+.bot .cnt{font-size:15px;color:#777}
+.bot button{font-size:17px;font-weight:bold;padding:8px 20px;border-radius:8px;border:1.5px solid var(--rwb);background:#fff;color:var(--rwb)}
+.bot #bNext{background:var(--rwb);color:#fff}
+.bot #bFull{border-color:#bbb;color:#666;font-size:14px;padding:6px 12px}
+.hl{background:#FFF1E0;outline:2.5px solid #E07B00;border-radius:6px;padding:0 4px}
+.box2{display:inline-block;border:2px solid;border-radius:6px;padding:0 .25em;line-height:1.2;margin:0 1px}
+.flow{display:flex;gap:10px;align-items:stretch;margin:6px 0}
+.flow .fc{flex:1;background:#fff;border:1px solid var(--line);border-top:5px solid var(--rwb);border-radius:10px;padding:8px 14px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.45}
+.flow .fc h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+.flow .ar{display:flex;align-items:center;font-size:28px;color:var(--rwb)}
+</style></head><body>
+<div id="app">
+ <div class="top"><div class="prog" id="prog"></div><img class="logo" src="data:image/png;base64,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" alt="RWB Essen"></div>
+ <div class="stage" id="deck">
+<section class="slide" data-g="oben"><h2 class="th"><span class="no">1</span>Nach oben geöffnet</h2><div class="tcols" style="grid-template-columns:1.2fr 1fr"><div class="lcol"><div class="say " data-s="0">Diese Parabel ist <b>verschoben</b>. Hat sie die Form der Normalparabel?</div><div class="say " data-s="0">Starte im <b>Scheitelpunkt S</b>. Das ist der tiefste Punkt.</div><div class="stp" data-s="1"><span class="n">1</span><div><span style="color:#1D70B8"><b>1</b> nach rechts</span>, dann <span style="color:#C62828"><b>1</b> nach oben</span>. <b style="color:#1E8449">✓ Richtig, bei der Normalparabel sind es auch 1.</b></div></div><div class="stp" data-s="2"><span class="n">2</span><div><span style="color:#1D70B8"><b>2</b> nach rechts</span>, dann <span style="color:#C62828"><b>4</b> nach oben</span>. <b style="color:#1E8449">✓ Richtig, bei der Normalparabel sind es auch 4.</b></div></div><div class="res" data-s="3">Ja! Die Parabel hat die <b>Form der Normalparabel</b>. Sie ist nur verschoben.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 296 392" xmlns="http://www.w3.org/2000/svg" style="max-width:400px" ><defs><clipPath id="p139857656788816c"><rect x="18" y="18" width="260" height="356"/></clipPath></defs><rect x="0" y="0" width="296" height="392" fill="#fff"/>
+<path d="M20.0 20V372M52.0 20V372M84.0 20V372M116.0 20V372M148.0 20V372M180.0 20V372M212.0 20V372M244.0 20V372M276.0 20V372M20 372.0H276M20 340.0H276M20 308.0H276M20 276.0H276M20 244.0H276M20 212.0H276M20 180.0H276M20 148.0H276M20 116.0H276M20 84.0H276M20 52.0H276M20 20.0H276" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="12" y1="212.0" x2="290" y2="212.0" stroke="#333" stroke-width="1.6"/>
+<path d="M292,212.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="148.0" y1="380" x2="148.0" y2="6" stroke="#333" stroke-width="1.6"/>
+<path d="M148.0,4 l-4.5,9 h9 z" fill="#333"/>
+<text x="288" y="231.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="157.0" y="14" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="20.0" y1="208.0" x2="20.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="20.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="52.0" y1="208.0" x2="52.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="84.0" y1="208.0" x2="84.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="84.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="116.0" y1="208.0" x2="116.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="116.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="180.0" y1="208.0" x2="180.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="180.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="212.0" y1="208.0" x2="212.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="212.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="244.0" y1="208.0" x2="244.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="276.0" y1="208.0" x2="276.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="276.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="372.0" x2="152.0" y2="372.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="376.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="144.0" y1="340.0" x2="152.0" y2="340.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="344.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="144.0" y1="308.0" x2="152.0" y2="308.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="312.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="144.0" y1="276.0" x2="152.0" y2="276.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="280.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="144.0" y1="244.0" x2="152.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="144.0" y1="180.0" x2="152.0" y2="180.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="184.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="144.0" y1="148.0" x2="152.0" y2="148.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="152.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="144.0" y1="116.0" x2="152.0" y2="116.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="120.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="144.0" y1="84.0" x2="152.0" y2="84.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="88.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="52.0" x2="152.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="144.0" y1="20.0" x2="152.0" y2="20.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="24.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<text x="142.0" y="228.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><path class="crv" d="M86.1,0.7 L87.2,6.9 L88.3,13.0 L89.3,19.1 L90.4,25.1 L91.5,31.1 L92.5,36.9 L93.6,42.7 L94.7,48.4 L95.7,54.1 L96.8,59.7 L97.9,65.2 L98.9,70.6 L100.0,76.0 L101.1,81.3 L102.1,86.5 L103.2,91.7 L104.3,96.8 L105.3,101.8 L106.4,106.7 L107.5,111.6 L108.5,116.4 L109.6,121.1 L110.7,125.8 L111.7,130.4 L112.8,134.9 L113.9,139.3 L114.9,143.7 L116.0,148.0 L117.1,152.2 L118.1,156.4 L119.2,160.5 L120.3,164.5 L121.3,168.4 L122.4,172.3 L123.5,176.1 L124.5,179.9 L125.6,183.5 L126.7,187.1 L127.7,190.6 L128.8,194.1 L129.9,197.5 L130.9,200.8 L132.0,204.0 L133.1,207.2 L134.1,210.3 L135.2,213.3 L136.3,216.2 L137.3,219.1 L138.4,221.9 L139.5,224.7 L140.5,227.3 L141.6,229.9 L142.7,232.4 L143.7,234.9 L144.8,237.3 L145.9,239.6 L146.9,241.8 L148.0,244.0 L149.1,246.1 L150.1,248.1 L151.2,250.1 L152.3,252.0 L153.3,253.8 L154.4,255.5 L155.5,257.2 L156.5,258.8 L157.6,260.3 L158.7,261.8 L159.7,263.2 L160.8,264.5 L161.9,265.7 L162.9,266.9 L164.0,268.0 L165.1,269.0 L166.1,270.0 L167.2,270.9 L168.3,271.7 L169.3,272.4 L170.4,273.1 L171.5,273.7 L172.5,274.3 L173.6,274.7 L174.7,275.1 L175.7,275.4 L176.8,275.7 L177.9,275.9 L178.9,276.0 L180.0,276.0 L181.1,276.0 L182.1,275.9 L183.2,275.7 L184.3,275.4 L185.3,275.1 L186.4,274.7 L187.5,274.3 L188.5,273.7 L189.6,273.1 L190.7,272.4 L191.7,271.7 L192.8,270.9 L193.9,270.0 L194.9,269.0 L196.0,268.0 L197.1,266.9 L198.1,265.7 L199.2,264.5 L200.3,263.2 L201.3,261.8 L202.4,260.3 L203.5,258.8 L204.5,257.2 L205.6,255.5 L206.7,253.8 L207.7,252.0 L208.8,250.1 L209.9,248.1 L210.9,246.1 L212.0,244.0 L213.1,241.8 L214.1,239.6 L215.2,237.3 L216.3,234.9 L217.3,232.4 L218.4,229.9 L219.5,227.3 L220.5,224.7 L221.6,221.9 L222.7,219.1 L223.7,216.2 L224.8,213.3 L225.9,210.3 L226.9,207.2 L228.0,204.0 L229.1,200.8 L230.1,197.5 L231.2,194.1 L232.3,190.6 L233.3,187.1 L234.4,183.5 L235.5,179.9 L236.5,176.1 L237.6,172.3 L238.7,168.4 L239.7,164.5 L240.8,160.5 L241.9,156.4 L242.9,152.2 L244.0,148.0 L245.1,143.7 L246.1,139.3 L247.2,134.9 L248.3,130.4 L249.3,125.8 L250.4,121.1 L251.5,116.4 L252.5,111.6 L253.6,106.7 L254.7,101.8 L255.7,96.8 L256.8,91.7 L257.9,86.5 L258.9,81.3 L260.0,76.0 L261.1,70.6 L262.1,65.2 L263.2,59.7 L264.3,54.1 L265.3,48.4 L266.4,42.7 L267.5,36.9 L268.5,31.1 L269.6,25.1 L270.7,19.1 L271.7,13.0 L272.8,6.9 L273.9,0.7" fill="none" stroke="#1E8449" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p139857656788816c)"/></g><g ><circle cx="180.0" cy="276.0" r="11" fill="none" stroke="#E07B00" stroke-width="2"/><circle cx="180.0" cy="276.0" r="7" fill="#E07B00" stroke="#fff" stroke-width="1.5"/><text x="164.0" y="298.0" text-anchor="end" font-size="15" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#E07B00">S(1 | −2)</text></g><g  data-s="1"><line x1="180.0" y1="276.0" x2="212.0" y2="276.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M202.1,280.8 L212.0,276.0 L202.1,271.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><line x1="212.0" y1="276.0" x2="212.0" y2="244.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M216.8,253.9 L212.0,244.0 L207.2,253.9" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><circle cx="212.0" cy="244.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><line x1="180.0" y1="276.0" x2="244.0" y2="276.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M234.1,280.8 L244.0,276.0 L234.1,271.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><line x1="244.0" y1="276.0" x2="244.0" y2="148.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M248.8,157.9 L244.0,148.0 L239.2,157.9" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><circle cx="244.0" cy="148.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g></svg></div></div></section>
+<section class="slide" data-g="unten"><h2 class="th"><span class="no">2</span>Nach unten geöffnet</h2><div class="tcols" style="grid-template-columns:1.2fr 1fr"><div class="lcol"><div class="say " data-s="0">Diese Parabel ist nach <b>unten</b> geöffnet. Der Scheitelpunkt ist jetzt der <b>höchste</b> Punkt.</div><div class="say " data-s="0">Du gehst genauso nach rechts. Aber dann nach <b>unten</b>.</div><div class="stp" data-s="1"><span class="n">1</span><div><span style="color:#1D70B8"><b>1</b> nach rechts</span>, dann <span style="color:#C62828"><b>1</b> nach unten</span>. <b style="color:#1E8449">✓ Richtig, bei der Normalparabel sind es auch 1.</b></div></div><div class="stp" data-s="2"><span class="n">2</span><div><span style="color:#1D70B8"><b>2</b> nach rechts</span>, dann <span style="color:#C62828"><b>4</b> nach unten</span>. <b style="color:#1E8449">✓ Richtig, bei der Normalparabel sind es auch 4.</b></div></div><div class="res" data-s="3">Ja! Auch diese Parabel hat die <b>Form der Normalparabel</b>. Sie ist gespiegelt und verschoben.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 296 392" xmlns="http://www.w3.org/2000/svg" style="max-width:400px" ><defs><clipPath id="p139857656788816c"><rect x="18" y="18" width="260" height="356"/></clipPath></defs><rect x="0" y="0" width="296" height="392" fill="#fff"/>
+<path d="M20.0 20V372M52.0 20V372M84.0 20V372M116.0 20V372M148.0 20V372M180.0 20V372M212.0 20V372M244.0 20V372M276.0 20V372M20 372.0H276M20 340.0H276M20 308.0H276M20 276.0H276M20 244.0H276M20 212.0H276M20 180.0H276M20 148.0H276M20 116.0H276M20 84.0H276M20 52.0H276M20 20.0H276" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="12" y1="212.0" x2="290" y2="212.0" stroke="#333" stroke-width="1.6"/>
+<path d="M292,212.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="148.0" y1="380" x2="148.0" y2="6" stroke="#333" stroke-width="1.6"/>
+<path d="M148.0,4 l-4.5,9 h9 z" fill="#333"/>
+<text x="288" y="231.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="157.0" y="14" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="20.0" y1="208.0" x2="20.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="20.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="52.0" y1="208.0" x2="52.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="84.0" y1="208.0" x2="84.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="84.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="116.0" y1="208.0" x2="116.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="116.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="180.0" y1="208.0" x2="180.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="180.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="212.0" y1="208.0" x2="212.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="212.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="244.0" y1="208.0" x2="244.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="276.0" y1="208.0" x2="276.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="276.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="372.0" x2="152.0" y2="372.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="376.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="144.0" y1="340.0" x2="152.0" y2="340.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="344.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="144.0" y1="308.0" x2="152.0" y2="308.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="312.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="144.0" y1="276.0" x2="152.0" y2="276.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="280.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="144.0" y1="244.0" x2="152.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="144.0" y1="180.0" x2="152.0" y2="180.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="184.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="144.0" y1="148.0" x2="152.0" y2="148.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="152.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="144.0" y1="116.0" x2="152.0" y2="116.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="120.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="144.0" y1="84.0" x2="152.0" y2="84.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="88.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="52.0" x2="152.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="144.0" y1="20.0" x2="152.0" y2="20.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="24.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<text x="142.0" y="228.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><path class="crv" d="M22.1,391.3 L23.2,385.1 L24.3,379.0 L25.3,372.9 L26.4,366.9 L27.5,360.9 L28.5,355.1 L29.6,349.3 L30.7,343.6 L31.7,337.9 L32.8,332.3 L33.9,326.8 L34.9,321.4 L36.0,316.0 L37.1,310.7 L38.1,305.5 L39.2,300.3 L40.3,295.2 L41.3,290.2 L42.4,285.3 L43.5,280.4 L44.5,275.6 L45.6,270.9 L46.7,266.2 L47.7,261.6 L48.8,257.1 L49.9,252.7 L50.9,248.3 L52.0,244.0 L53.1,239.8 L54.1,235.6 L55.2,231.5 L56.3,227.5 L57.3,223.6 L58.4,219.7 L59.5,215.9 L60.5,212.1 L61.6,208.5 L62.7,204.9 L63.7,201.4 L64.8,197.9 L65.9,194.5 L66.9,191.2 L68.0,188.0 L69.1,184.8 L70.1,181.7 L71.2,178.7 L72.3,175.8 L73.3,172.9 L74.4,170.1 L75.5,167.3 L76.5,164.7 L77.6,162.1 L78.7,159.6 L79.7,157.1 L80.8,154.7 L81.9,152.4 L82.9,150.2 L84.0,148.0 L85.1,145.9 L86.1,143.9 L87.2,141.9 L88.3,140.0 L89.3,138.2 L90.4,136.5 L91.5,134.8 L92.5,133.2 L93.6,131.7 L94.7,130.2 L95.7,128.8 L96.8,127.5 L97.9,126.3 L98.9,125.1 L100.0,124.0 L101.1,123.0 L102.1,122.0 L103.2,121.1 L104.3,120.3 L105.3,119.6 L106.4,118.9 L107.5,118.3 L108.5,117.7 L109.6,117.3 L110.7,116.9 L111.7,116.6 L112.8,116.3 L113.9,116.1 L114.9,116.0 L116.0,116.0 L117.1,116.0 L118.1,116.1 L119.2,116.3 L120.3,116.6 L121.3,116.9 L122.4,117.3 L123.5,117.7 L124.5,118.3 L125.6,118.9 L126.7,119.6 L127.7,120.3 L128.8,121.1 L129.9,122.0 L130.9,123.0 L132.0,124.0 L133.1,125.1 L134.1,126.3 L135.2,127.5 L136.3,128.8 L137.3,130.2 L138.4,131.7 L139.5,133.2 L140.5,134.8 L141.6,136.5 L142.7,138.2 L143.7,140.0 L144.8,141.9 L145.9,143.9 L146.9,145.9 L148.0,148.0 L149.1,150.2 L150.1,152.4 L151.2,154.7 L152.3,157.1 L153.3,159.6 L154.4,162.1 L155.5,164.7 L156.5,167.3 L157.6,170.1 L158.7,172.9 L159.7,175.8 L160.8,178.7 L161.9,181.7 L162.9,184.8 L164.0,188.0 L165.1,191.2 L166.1,194.5 L167.2,197.9 L168.3,201.4 L169.3,204.9 L170.4,208.5 L171.5,212.1 L172.5,215.9 L173.6,219.7 L174.7,223.6 L175.7,227.5 L176.8,231.5 L177.9,235.6 L178.9,239.8 L180.0,244.0 L181.1,248.3 L182.1,252.7 L183.2,257.1 L184.3,261.6 L185.3,266.2 L186.4,270.9 L187.5,275.6 L188.5,280.4 L189.6,285.3 L190.7,290.2 L191.7,295.2 L192.8,300.3 L193.9,305.5 L194.9,310.7 L196.0,316.0 L197.1,321.4 L198.1,326.8 L199.2,332.3 L200.3,337.9 L201.3,343.6 L202.4,349.3 L203.5,355.1 L204.5,360.9 L205.6,366.9 L206.7,372.9 L207.7,379.0 L208.8,385.1 L209.9,391.3" fill="none" stroke="#1E8449" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p139857656788816c)"/></g><g ><circle cx="116.0" cy="116.0" r="11" fill="none" stroke="#E07B00" stroke-width="2"/><circle cx="116.0" cy="116.0" r="7" fill="#E07B00" stroke="#fff" stroke-width="1.5"/><text x="100.0" y="102.0" text-anchor="end" font-size="15" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#E07B00">S(−1 | 3)</text></g><g  data-s="1"><line x1="116.0" y1="116.0" x2="148.0" y2="116.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M138.1,120.8 L148.0,116.0 L138.1,111.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><line x1="148.0" y1="116.0" x2="148.0" y2="148.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M143.2,138.1 L148.0,148.0 L152.8,138.1" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><circle cx="148.0" cy="148.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><line x1="116.0" y1="116.0" x2="180.0" y2="116.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M170.1,120.8 L180.0,116.0 L170.1,111.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><line x1="180.0" y1="116.0" x2="180.0" y2="244.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M175.2,234.1 L180.0,244.0 L184.8,234.1" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><circle cx="180.0" cy="244.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g></svg></div></div></section>
+<section class="slide" data-g="nicht"><h2 class="th"><span class="no">3</span>Nicht die Form der Normalparabel</h2><div class="tcols" style="grid-template-columns:1.2fr 1fr"><div class="lcol"><div class="say " data-s="0">Und diese Parabel? Starte wieder im Scheitelpunkt.</div><div class="stp" data-s="1"><span class="n">1</span><div><span style="color:#1D70B8"><b>1</b> nach rechts</span>, dann <span style="color:#C62828"><b>0,5</b> nach oben</span>. <b style="color:#C62828">✗ Bei der Normalparabel wären es 1.</b></div></div><div class="stp" data-s="2"><span class="n">2</span><div><span style="color:#1D70B8"><b>2</b> nach rechts</span>, dann <span style="color:#C62828"><b>2</b> nach oben</span>. <b style="color:#C62828">✗ Bei der Normalparabel wären es 4.</b></div></div><div class="warn" data-s="3">Nein! Diese Parabel ist <b>breiter</b>. Sie hat <b>nicht</b> die Form der Normalparabel.</div><div class="say " data-s="4">Geht es <b>mehr</b> als 1 und 4 nach oben, dann ist die Parabel <b>schmaler</b>. Auch das ist nicht die Form der Normalparabel.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 296 392" xmlns="http://www.w3.org/2000/svg" style="max-width:400px" ><defs><clipPath id="p139857656788816c"><rect x="18" y="18" width="260" height="356"/></clipPath></defs><rect x="0" y="0" width="296" height="392" fill="#fff"/>
+<path d="M20.0 20V372M52.0 20V372M84.0 20V372M116.0 20V372M148.0 20V372M180.0 20V372M212.0 20V372M244.0 20V372M276.0 20V372M20 372.0H276M20 340.0H276M20 308.0H276M20 276.0H276M20 244.0H276M20 212.0H276M20 180.0H276M20 148.0H276M20 116.0H276M20 84.0H276M20 52.0H276M20 20.0H276" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="12" y1="212.0" x2="290" y2="212.0" stroke="#333" stroke-width="1.6"/>
+<path d="M292,212.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="148.0" y1="380" x2="148.0" y2="6" stroke="#333" stroke-width="1.6"/>
+<path d="M148.0,4 l-4.5,9 h9 z" fill="#333"/>
+<text x="288" y="231.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="157.0" y="14" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="20.0" y1="208.0" x2="20.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="20.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="52.0" y1="208.0" x2="52.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="84.0" y1="208.0" x2="84.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="84.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="116.0" y1="208.0" x2="116.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="116.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="180.0" y1="208.0" x2="180.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="180.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="212.0" y1="208.0" x2="212.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="212.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="244.0" y1="208.0" x2="244.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="276.0" y1="208.0" x2="276.0" y2="216.0" stroke="#333" stroke-width="1.2"/>
+<text x="276.0" y="230.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="372.0" x2="152.0" y2="372.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="376.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="144.0" y1="340.0" x2="152.0" y2="340.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="344.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="144.0" y1="308.0" x2="152.0" y2="308.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="312.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="144.0" y1="276.0" x2="152.0" y2="276.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="280.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="144.0" y1="244.0" x2="152.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="144.0" y1="180.0" x2="152.0" y2="180.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="184.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="144.0" y1="148.0" x2="152.0" y2="148.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="152.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="144.0" y1="116.0" x2="152.0" y2="116.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="120.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="144.0" y1="84.0" x2="152.0" y2="84.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="88.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="144.0" y1="52.0" x2="152.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="144.0" y1="20.0" x2="152.0" y2="20.0" stroke="#333" stroke-width="1.2"/>
+<text x="141.0" y="24.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<text x="142.0" y="228.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><path class="crv" d="M20.0,20.0 L21.1,24.2 L22.1,28.5 L23.2,32.6 L24.3,36.8 L25.3,40.9 L26.4,45.0 L27.5,49.0 L28.5,53.0 L29.6,57.0 L30.7,60.9 L31.7,64.8 L32.8,68.6 L33.9,72.5 L34.9,76.2 L36.0,80.0 L37.1,83.7 L38.1,87.4 L39.2,91.0 L40.3,94.6 L41.3,98.2 L42.4,101.8 L43.5,105.3 L44.5,108.7 L45.6,112.2 L46.7,115.6 L47.7,118.9 L48.8,122.2 L49.9,125.5 L50.9,128.8 L52.0,132.0 L53.1,135.2 L54.1,138.3 L55.2,141.4 L56.3,144.5 L57.3,147.6 L58.4,150.6 L59.5,153.5 L60.5,156.5 L61.6,159.4 L62.7,162.2 L63.7,165.0 L64.8,167.8 L65.9,170.6 L66.9,173.3 L68.0,176.0 L69.1,178.6 L70.1,181.3 L71.2,183.8 L72.3,186.4 L73.3,188.9 L74.4,191.4 L75.5,193.8 L76.5,196.2 L77.6,198.6 L78.7,200.9 L79.7,203.2 L80.8,205.4 L81.9,207.7 L82.9,209.8 L84.0,212.0 L85.1,214.1 L86.1,216.2 L87.2,218.2 L88.3,220.2 L89.3,222.2 L90.4,224.2 L91.5,226.1 L92.5,227.9 L93.6,229.8 L94.7,231.6 L95.7,233.3 L96.8,235.0 L97.9,236.7 L98.9,238.4 L100.0,240.0 L101.1,241.6 L102.1,243.1 L103.2,244.6 L104.3,246.1 L105.3,247.6 L106.4,249.0 L107.5,250.3 L108.5,251.7 L109.6,253.0 L110.7,254.2 L111.7,255.4 L112.8,256.6 L113.9,257.8 L114.9,258.9 L116.0,260.0 L117.1,261.0 L118.1,262.1 L119.2,263.0 L120.3,264.0 L121.3,264.9 L122.4,265.8 L123.5,266.6 L124.5,267.4 L125.6,268.2 L126.7,268.9 L127.7,269.6 L128.8,270.2 L129.9,270.9 L130.9,271.4 L132.0,272.0 L133.1,272.5 L134.1,273.0 L135.2,273.4 L136.3,273.8 L137.3,274.2 L138.4,274.6 L139.5,274.9 L140.5,275.1 L141.6,275.4 L142.7,275.6 L143.7,275.7 L144.8,275.8 L145.9,275.9 L146.9,276.0 L148.0,276.0 L149.1,276.0 L150.1,275.9 L151.2,275.8 L152.3,275.7 L153.3,275.6 L154.4,275.4 L155.5,275.1 L156.5,274.9 L157.6,274.6 L158.7,274.2 L159.7,273.8 L160.8,273.4 L161.9,273.0 L162.9,272.5 L164.0,272.0 L165.1,271.4 L166.1,270.9 L167.2,270.2 L168.3,269.6 L169.3,268.9 L170.4,268.2 L171.5,267.4 L172.5,266.6 L173.6,265.8 L174.7,264.9 L175.7,264.0 L176.8,263.0 L177.9,262.1 L178.9,261.0 L180.0,260.0 L181.1,258.9 L182.1,257.8 L183.2,256.6 L184.3,255.4 L185.3,254.2 L186.4,253.0 L187.5,251.7 L188.5,250.3 L189.6,249.0 L190.7,247.6 L191.7,246.1 L192.8,244.6 L193.9,243.1 L194.9,241.6 L196.0,240.0 L197.1,238.4 L198.1,236.7 L199.2,235.0 L200.3,233.3 L201.3,231.6 L202.4,229.8 L203.5,227.9 L204.5,226.1 L205.6,224.2 L206.7,222.2 L207.7,220.2 L208.8,218.2 L209.9,216.2 L210.9,214.1 L212.0,212.0 L213.1,209.8 L214.1,207.7 L215.2,205.4 L216.3,203.2 L217.3,200.9 L218.4,198.6 L219.5,196.2 L220.5,193.8 L221.6,191.4 L222.7,188.9 L223.7,186.4 L224.8,183.8 L225.9,181.3 L226.9,178.6 L228.0,176.0 L229.1,173.3 L230.1,170.6 L231.2,167.8 L232.3,165.0 L233.3,162.2 L234.4,159.4 L235.5,156.5 L236.5,153.5 L237.6,150.6 L238.7,147.6 L239.7,144.5 L240.8,141.4 L241.9,138.3 L242.9,135.2 L244.0,132.0 L245.1,128.8 L246.1,125.5 L247.2,122.2 L248.3,118.9 L249.3,115.6 L250.4,112.2 L251.5,108.7 L252.5,105.3 L253.6,101.8 L254.7,98.2 L255.7,94.6 L256.8,91.0 L257.9,87.4 L258.9,83.7 L260.0,80.0 L261.1,76.2 L262.1,72.5 L263.2,68.6 L264.3,64.8 L265.3,60.9 L266.4,57.0 L267.5,53.0 L268.5,49.0 L269.6,45.0 L270.7,40.9 L271.7,36.8 L272.8,32.6 L273.9,28.5 L274.9,24.2 L276.0,20.0" fill="none" stroke="#1E8449" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p139857656788816c)"/></g><g ><circle cx="148.0" cy="276.0" r="11" fill="none" stroke="#E07B00" stroke-width="2"/><circle cx="148.0" cy="276.0" r="7" fill="#E07B00" stroke="#fff" stroke-width="1.5"/><text x="132.0" y="298.0" text-anchor="end" font-size="15" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#E07B00">S(0 | −2)</text></g><g  data-s="1"><line x1="148.0" y1="276.0" x2="180.0" y2="276.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M170.1,280.8 L180.0,276.0 L170.1,271.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><line x1="180.0" y1="276.0" x2="180.0" y2="260.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M184.8,269.9 L180.0,260.0 L175.2,269.9" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><circle cx="180.0" cy="260.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><line x1="148.0" y1="276.0" x2="212.0" y2="276.0" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round"/><path d="M202.1,280.8 L212.0,276.0 L202.1,271.2" fill="none" stroke="#1D70B8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><line x1="212.0" y1="276.0" x2="212.0" y2="212.0" stroke="#C62828" stroke-width="3.5" stroke-linecap="round"/><path d="M216.8,221.9 L212.0,212.0 L207.2,221.9" fill="none" stroke="#C62828" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><circle cx="212.0" cy="212.0" r="6" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g></svg></div></div></section>
+<section class="slide" data-g="af"><h2 class="th"><span class="no">4</span>Und in der allgemeinen Form?</h2><div class="say " data-s="0">Was steht in der <b>allgemeinen Form</b> <span class="m">f(x) = <span class="ca">a</span>x² + bx + c</span>, wenn die Parabel die Form der Normalparabel hat?</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:10px"><div class="kc t" data-s="1"><h4>Nach oben geöffnet</h4><div class="feq"><span class="ca">a = 1</span></div><div style="margin:8px 0">Die 1 schreibt man nicht. Vor x² steht <b>keine Zahl</b>.</div><div class="feq">f(x) = x² − 2x − 1</div><div style="color:#777;font-size:17px">Das ist die Parabel von Folie 1.</div></div><div class="kc t" data-s="2"><h4>Nach unten geöffnet</h4><div class="feq"><span class="ca">a = −1</span></div><div style="margin:8px 0">Von −1 schreibt man nur das Minus. Vor x² steht <b>nur ein Minus</b>.</div><div class="feq">f(x) = −x² − 2x + 2</div><div style="color:#777;font-size:17px">Das ist die Parabel von Folie 2.</div></div></div><div class="merk" data-s="3"><b>Form der Normalparabel</b> heißt: <span class="ca">a = 1</span> oder <span class="ca">a = −1</span>.<br>Steht vor x² eine andere Zahl, zum Beispiel <span class="m">2x²</span> oder <span class="m">0,5x²</span>, dann ist die Parabel schmaler oder breiter.</div></section>
+
+ </div>
+ <div class="bot">
+  <span class="info">Tipp: Form der Normalparabel · Vorklasse · RWB Essen</span>
+  <button id="bFull" onclick="toggleFull()">⛶ Vollbild</button>
+  <span class="sp"></span><span class="cnt" id="cnt"></span>
+  <button id="bPrev" onclick="prev()">◀ zurück</button><button id="bNext" onclick="next()">weiter ▶</button>
+ </div>
+</div>
+<script>const GROUPS=[["oben", "Nach oben"], ["unten", "Nach unten"], ["nicht", "Nicht NP"], ["af", "Allgemeine Form"]];
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide'); let cur=0; const step=slides.map(()=>0);
+const maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s).filter(n=>!isNaN(n))));
+const prog=$('#prog');
+GROUPS.forEach(([g,t])=>{const d=document.createElement('div');d.className='seg';d.dataset.g=g;d.innerHTML='<div class="bar"><i></i></div><div class="lab">'+t+'</div>';d.onclick=()=>go(slides.findIndex(s=>s.dataset.g===g),0);prog.appendChild(d);});
+function drawIn(list){ list.forEach(p=>{ let L=0; try{ L=p.getTotalLength(); }catch(e){} if(!L) return;
+  p.getAnimations().forEach(a=>a.cancel()); p.style.strokeDasharray=L+' '+L;
+  const an=p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:Math.min(2400,900+L*1.2),easing:'ease-in-out'});
+  an.onfinish=()=>{ p.style.strokeDasharray=''; }; }); }
+let lastSlide=-1, lastStep=-1;
+function apply(){ const s=slides[cur];
+  const before=new Set($$('[data-s].vis',s));
+  $$('[data-s]',s).forEach(e=>{ const n=+e.dataset.s; e.classList.toggle('vis', !isNaN(n)&&n<=step[cur]); });
+  if(cur!==lastSlide){ requestAnimationFrame(()=>drawIn($$('path.crv',s).filter(p=>{ const h=p.closest('[data-s]'); return !h||h.classList.contains('vis'); }))); }
+  else if(step[cur]>lastStep){ const nw=$$('[data-s].vis',s).filter(e=>!before.has(e)); requestAnimationFrame(()=>drawIn(nw.flatMap(e=>$$('path.crv',e)))); }
+  lastSlide=cur; lastStep=step[cur];
+  $$('[data-hs]',s).forEach(e=>e.classList.toggle('gone', step[cur]>=+e.dataset.hs));
+  slides.forEach((x,i)=>x.classList.toggle('on',i===cur));
+  const g=s.dataset.g, gi=GROUPS.findIndex(x=>x[0]===g);
+  $$('.seg').forEach((d,i)=>{ d.classList.toggle('done',i<gi); d.classList.toggle('now',i===gi);
+    if(i===gi){ const idx=slides.map((x,j)=>[x,j]).filter(([x])=>x.dataset.g===g).map(([,j])=>j); const k=idx.indexOf(cur); d.querySelector('i').style.width=((k+1)/idx.length*100)+'%'; }
+    else if(i>gi) d.querySelector('i').style.width='0'; });
+  $('#cnt').textContent='Folie '+(cur+1)+' von '+slides.length+(maxS[cur]?' · Schritt '+(step[cur]+1)+' von '+(maxS[cur]+1):'');
+  $('#bPrev').disabled=(cur===0&&step[cur]===0); $('#bNext').disabled=(cur===slides.length-1&&step[cur]>=maxS[cur]);
+  if(window.onStep) window.onStep(s,step[cur]);
+}
+function go(i,st){ if(i<0||i>=slides.length) return; cur=i; step[cur]=st==='max'?maxS[cur]:(st||0); apply(); }
+function next(){ if(step[cur]<maxS[cur]){ step[cur]++; apply(); } else go(cur+1,0); }
+function prev(){ if(step[cur]>0){ step[cur]--; apply(); } else go(cur-1,'max'); }
+document.addEventListener('keydown',e=>{ if(e.target.closest('input')) { if(e.key==='Enter'){ const b=e.target.closest('.qbox')?.querySelector('[data-a=chk]'); b&&b.click(); } return; }
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ next(); e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ prev(); e.preventDefault(); } });
+function fit(){ const W=innerWidth,Hh=innerHeight,s=Math.min(W/1280,Hh/800); const app=$('#app'); app.style.transform='scale('+s+')'; app.style.left=((W-1280*s)/2)+'px'; app.style.top=((Hh-800*s)/2)+'px'; }
+addEventListener('resize',fit); fit();
+function toggleFull(){ const d=document; if(!d.fullscreenElement&&!d.webkitFullscreenElement){ const el=d.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen).call(el); } else { (d.exitFullscreen||d.webkitExitFullscreen).call(d); } }
+function num(v){ v=String(v).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(',','.'); if(v===''||v==='-') return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b); } return Number(v); }
+$$('.qbox').forEach(Q=>{
+  const fb=$('.fb',Q), sl=Q.closest('.slide');
+  const finish=()=>{ Q.classList.add('done'); $$('input',Q).forEach(i=>i.readOnly=true); };
+  if(Q.classList.contains('mcq')){
+    const opts=$$('.opt',Q);
+    opts.forEach(o=>o.onclick=()=>{ if(Q.classList.contains('done')) return; opts.forEach(x=>x.classList.remove('sel')); o.classList.add('sel'); fb.textContent=''; });
+    $('[data-a=chk]',Q).onclick=()=>{ const sel=opts.find(o=>o.classList.contains('sel'));
+      if(!sel){ fb.className='fb info'; fb.textContent='Wähle zuerst eine Antwort.'; return; }
+      opts.forEach(o=>{ if(o.dataset.ok==='1') o.classList.add('right'); });
+      if(sel.dataset.ok==='1'){ fb.className='fb ok'; fb.innerHTML='Richtig!'; }
+      else { sel.classList.remove('sel'); sel.classList.add('wrong'); fb.className='fb bad'; fb.innerHTML='Leider falsch. '+(sel.dataset.fb||''); }
+      finish(); };
+  } else {
+    $('[data-a=chk]',Q).onclick=()=>{ const ins=$$('input.gp',Q);
+      if(ins.some(i=>i.value.trim()==='')){ fb.className='fb info'; fb.textContent='Fülle zuerst alle Lücken aus.'; return; }
+      let all=true; ins.forEach(i=>{ const ok=i.dataset.a.split('|').some(a=>Math.abs(num(i.value)-num(a))<1e-9); i.classList.remove('ok','bad'); i.classList.add(ok?'ok':'bad'); if(!ok) all=false; });
+      if(all){ fb.className='fb ok'; fb.textContent='Richtig! Alles stimmt.'; finish(); }
+      else { fb.className='fb bad'; fb.textContent='Nicht ganz. Die roten Felder stimmen noch nicht. Versuche es noch einmal.'; }
+    };
+  }
+});
+/* ---------- Live-Plots (Schieberegler) ---------- */
+function fmt(v){ const r=Math.round(v*100)/100; return (Object.is(r,-0)?0:r).toLocaleString('de-DE',{maximumFractionDigits:2}).replace('-','−'); }
+function LP(id){ const s=document.getElementById(id); const d=s.dataset;
+  const o={xmin:+d.xmin,xmax:+d.xmax,ymin:+d.ymin,ymax:+d.ymax,u:+d.u,pad:+d.pad};
+  o.X=x=>o.pad+(x-o.xmin)*o.u; o.Y=y=>o.pad+(o.ymax-y)*o.u;
+  o.path=f=>{ const n=300, m=(o.ymax-o.ymin)*0.05, lo=o.ymin-30, hi=o.ymax+30; const pts=[]; for(let i=0;i<=n;i++){ const x=o.xmin+(o.xmax-o.xmin)*i/n; pts.push([x,f(x)]); }
+   const ins=pts.map((q,i)=>(q[1]>=o.ymin-m&&q[1]<=o.ymax+m)?i:-1).filter(i=>i>=0); let sel=pts; if(ins.length) sel=pts.slice(Math.max(0,ins[0]-1),ins[ins.length-1]+2);
+   return sel.map((q,i)=>(i?'L':'M')+o.X(q[0]).toFixed(1)+','+o.Y(Math.max(lo,Math.min(hi,q[1]))).toFixed(1)).join(''); };
+  return o; }
+apply();
+
+
+</script></body></html>
