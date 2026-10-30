@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Umformen mit binomischen Formeln</title><style>
+.m{font-family:Cambria,Caladea,Georgia,serif;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.12;font-size:.86em}
+.fr .nu{border-bottom:1.5px solid currentColor;padding:0 3px 1px}.fr .de{padding:1px 3px 0}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}
+.sq .sym{width:.62em;display:inline-block;flex:none}.sq .sym svg{width:100%;height:100%;display:block}
+.sq .rad{border-top:1.5px solid currentColor;padding:2px 3px 0 2px;display:inline-flex;align-items:center}
+.ca{color:#C62828;font-weight:bold}.cb{color:#1D70B8;font-weight:bold}.cc{color:#E07B00;font-weight:bold}
+.cd{color:#6A3FC8;font-weight:bold}.ce{color:#00838F;font-weight:bold}
+.cp{color:#1E8449;font-weight:bold}.cl{color:#1D70B8;font-weight:bold}
+.trap{color:#C62828;font-weight:bold}
+
+:root{--rwb:#1E8449;--rwb-d:#14603A;--rwb-l:#E3F3E9;--ink:#1d1d1f;--ok:#2E7D32;--bad:#B00020;--blue:#1D70B8;--mut:#6B6B6B;--line:#d9d2c5;--bg:#f1f1f1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);line-height:1.55;touch-action:manipulation;-webkit-text-size-adjust:100%}
+#app{position:fixed;left:0;top:0;width:1280px;height:800px;transform-origin:0 0;display:flex;flex-direction:column;background:var(--bg)}
+.top{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:18px;padding:0 26px;border-bottom:3px solid var(--rwb)}
+.prog{flex:1;display:flex;gap:5px}
+.seg{flex:1;cursor:pointer;padding:4px 0;min-width:0}
+.seg .bar{height:9px;border-radius:5px;background:#dcdcdc;overflow:hidden}
+.seg .bar i{display:block;height:100%;width:0;background:var(--rwb);transition:width .3s}
+.seg .lab{font-family:Calibri,Carlito,Arial,sans-serif;font-size:13px;font-weight:bold;color:#8a8a8a;text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.done .bar{background:#A9D8BA}.seg.done .bar i{width:100%}
+.seg.done .lab,.seg.now .lab{color:var(--rwb)}.seg.now .lab{text-decoration:underline;text-underline-offset:3px}
+.top .logo{height:34px;width:auto;display:block}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:16px 34px 10px;display:none;flex-direction:column}
+.slide.on{display:flex;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.th{margin:0 0 12px;font-size:27px;color:var(--rwb);display:flex;align-items:center;gap:12px;line-height:1.2}
+.th .no{background:var(--rwb);color:#fff;font-family:Calibri,Carlito,Arial,sans-serif;border-radius:50%;min-width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;font-size:19px}
+.th small{font-family:Calibri,Carlito,Arial,sans-serif;font-size:17px;color:#777;font-weight:normal}
+[data-s]:not(.vis){visibility:hidden}
+.vis{animation:fadein .35s ease}
+.gone{display:none!important}
+.tcols{flex:1;display:grid;gap:28px;align-items:start;min-height:0}
+.lcol{font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5}
+.rcol{display:flex;flex-direction:column;align-items:center;gap:8px}
+svg.plot{width:100%;height:auto;display:block;background:#fff;border:1px solid #dfe5e0;border-radius:8px}
+.say{margin:0 0 11px;padding:3px 0 3px 14px;border-left:4px solid #A9D8BA;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px}
+.say .m{font-size:21px}
+.say.em{border-left-color:var(--ok);font-weight:bold;color:#1B5E20}
+.res{margin:6px 0 12px;padding:8px 14px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:#1B5E20;font-size:20px}
+.res .m{color:var(--ink)}
+.warn{margin:6px 0 12px;padding:8px 14px;background:#FFF4D6;border:1px solid #E0A800;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.warn b:first-child{color:#8a5a00}
+.trapbox{margin:6px 0 12px;padding:8px 14px;background:#FDECEA;border:2px solid #C62828;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.trapbox b:first-child{color:#C62828}
+.card{margin:6px 0 12px;padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.merk{margin:10px 0 12px;padding:12px 16px 10px;border:2.5px solid var(--rwb);border-radius:12px;background:#FFF;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5;position:relative}
+.merk::before{content:"Merke";position:absolute;top:-13px;left:14px;background:var(--rwb);color:#fff;font-size:14px;font-weight:bold;padding:1px 10px;border-radius:10px;letter-spacing:.5px}
+.merk .m{font-size:23px}
+.merk ul{margin:2px 0 0;padding-left:22px}.merk li{margin:2px 0}
+.feq{font-family:Cambria,Caladea,Georgia,serif;font-size:26px;white-space:nowrap}
+.feq.big{font-size:36px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;line-height:1.5}
+.kc h4{margin:0 0 6px;font-size:21px;display:flex;align-items:center;gap:10px;color:var(--rwb)}
+.kc.t{border-top:6px solid var(--rwb)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:4px 0 10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:4px 0 10px}
+.stp{display:flex;gap:12px;align-items:flex-start;margin:0 0 9px;font-size:19px;font-family:Calibri,Carlito,Arial,sans-serif;line-height:1.5}
+.stp .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--rwb);color:#fff;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
+.stp .m{font-size:21px}
+/* Gleichungen untereinander */
+.eq{display:inline-grid;grid-template-columns:auto auto auto auto;column-gap:10px;row-gap:5px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,23px)}
+.eq .l{text-align:right;white-space:nowrap}.eq .e{text-align:center}.eq .r{white-space:nowrap}
+.eq .op{color:var(--blue);padding-left:14px;white-space:nowrap;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.8em;font-weight:bold}
+.eq .op.g{color:#888;font-weight:normal;font-style:italic}
+/* Wertetabelle */
+.tg{display:grid;font-family:Calibri,Carlito,Arial,sans-serif;font-size:var(--tfs,21px);border-radius:10px;background:#fff;border:1px solid var(--line);padding:6px 10px;width:max-content}
+.tg .tl{font-weight:bold;padding:6px 14px 6px 6px;white-space:nowrap;display:flex;align-items:center;font-family:Cambria,Caladea,Georgia,serif}
+.tg .tc{text-align:center;padding:6px 4px;border-left:1px solid #e6e6e6;font-family:Cambria,Caladea,Georgia,serif;position:relative;min-height:42px}
+.tg .hx{background:#f3f3f3;color:#444}
+.tg .rl{border-top:1px solid #e6e6e6}
+.tg .tc.fx{outline:3px solid #E07B00;outline-offset:-4px;border-radius:8px;background:#FFF1E0}
+.calc{font-family:Cambria,Caladea,Georgia,serif;font-size:20px;line-height:1.6}
+.calc .lb{font-family:Calibri,Carlito,Arial,sans-serif;color:#888;font-size:16px;margin-left:10px}
+/* Start */
+.startgrid{flex:1;display:grid;grid-template-columns:1fr 430px;gap:40px;align-items:center;padding:6px 10px}
+.kick{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);font-size:17px;letter-spacing:.3px}
+.startl h1{font-size:50px;color:var(--rwb);margin:4px 0 0;line-height:1.1}
+.sub1{font-size:28px;margin:2px 0 16px;color:#333}
+.abhint{display:flex;align-items:center;gap:12px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:10px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;margin:10px 0}
+.abhint .ico{font-size:30px}
+.card.how{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.6}
+.card.how h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+button{font-family:Calibri,Carlito,Arial,sans-serif;cursor:pointer}
+button.pr{background:var(--rwb);color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;padding:9px 22px}
+button.pr.big{font-size:22px;padding:12px 36px;border-radius:30px;margin-top:6px}
+button:disabled{opacity:.4;cursor:default}
+/* Fragen */
+.qbox{font-size:20px}
+.q{font-weight:bold;font-size:21px;line-height:1.45;margin:0 0 8px}
+.opt{display:flex;align-items:center;gap:12px;padding:8px 14px;border:1.8px solid var(--line);border-radius:9px;margin:7px 0;cursor:pointer;background:#fff;font-size:19px;min-height:52px;font-family:Calibri,Carlito,Arial,sans-serif}
+.opt:hover{border-color:#999}
+.opt .mk{flex:0 0 20px;height:20px;border:2px solid #999;border-radius:50%}
+.opt .lt{font-weight:bold;color:var(--mut);width:18px}
+.opt.sel{border-color:var(--blue);background:#EEF5FC}.opt.sel .mk{border-color:var(--blue);background:var(--blue);box-shadow:inset 0 0 0 3px #fff}
+.opt.right{border-color:var(--ok);background:#EAF5EA}.opt.right .mk{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 3px #fff}
+.opt.wrong{border-color:var(--bad);background:#FDECEA}.opt.wrong .mk{border-color:var(--bad);background:var(--bad);box-shadow:inset 0 0 0 3px #fff}
+.qbox.done .opt{cursor:default}
+.btns{display:flex;gap:10px;margin:10px 0 4px}
+.qbox.done .btns{display:none}
+.fb{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:1.5}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:var(--mut)}
+.expl{display:none;margin-top:8px;padding:8px 14px;border-left:4px solid var(--ok);background:#F2F8F2;border-radius:5px;font-size:19px;line-height:1.55;font-family:Calibri,Carlito,Arial,sans-serif}
+.qbox.done .expl{display:block;animation:fadein .35s}
+input.gp{font-family:Cambria,Caladea,Georgia,serif;font-size:21px;height:38px;width:70px;padding:2px 4px;border:2px dashed #999;border-radius:8px;text-align:center;background:#fff;vertical-align:middle}
+input.gp:focus{outline:none;border-style:solid;border-color:var(--blue)}
+input.gp.ok{border:2px solid var(--ok);background:#EAF5EA}input.gp.bad{border:2px solid var(--bad);background:#FDECEA}
+.abnote{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:8px;padding:10px 16px;animation:blink 1.4s ease-in-out 3}
+@keyframes blink{50%{background:#FFE08A}}
+/* Schieberegler */
+.sl{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 16px 10px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.sl .row{display:flex;align-items:center;gap:14px;margin:4px 0}
+.sl .row b{min-width:26px;font-family:Cambria,Caladea,Georgia,serif;font-size:22px}
+.sl input[type=range]{flex:1;accent-color:var(--rwb);height:34px}
+.sl .val{min-width:62px;text-align:center;font-family:Cambria,Caladea,Georgia,serif;font-size:22px;font-weight:bold;background:#f5f5f5;border-radius:6px;padding:1px 6px}
+.live{font-family:Cambria,Caladea,Georgia,serif;font-size:28px;text-align:center;margin:4px 0}
+.stat{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#F6F1EA;border-radius:8px;padding:8px 14px;line-height:1.5}
+.chip{display:inline-block;border-radius:14px;padding:1px 12px;font-weight:bold;margin:2px 4px 2px 0;font-size:17px}
+.chip.on{background:var(--rwb);color:#fff}.chip.off{background:#e6e6e6;color:#888}
+.pbtn{display:inline-block;margin:3px 4px 3px 0;padding:4px 12px;border:1.6px solid var(--rwb);border-radius:16px;background:#fff;color:var(--rwb);font-weight:bold;font-size:16px;cursor:pointer;font-family:Calibri,Carlito,Arial,sans-serif}
+/* Bilder */
+.photo{position:relative;border-radius:10px;overflow:hidden;border:1px solid #ccc;background:#fff;line-height:0}
+.photo img{width:100%;display:block}
+.photo svg.ov{position:absolute;inset:0;width:100%;height:100%}
+.cap{font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;color:#666;margin-top:4px;line-height:1.3}
+.src{font-family:Calibri,Carlito,Arial,sans-serif;font-size:12px;color:#888}
+.video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* Leiste unten */
+.bot{height:58px;flex:0 0 58px;display:flex;align-items:center;gap:12px;padding:0 26px;border-top:1px solid #ddd;font-family:Calibri,Carlito,Arial,sans-serif}
+.bot .info{font-size:14px;color:#888}
+.bot .sp{flex:1}
+.bot .cnt{font-size:15px;color:#777}
+.bot button{font-size:17px;font-weight:bold;padding:8px 20px;border-radius:8px;border:1.5px solid var(--rwb);background:#fff;color:var(--rwb)}
+.bot #bNext{background:var(--rwb);color:#fff}
+.bot #bFull{border-color:#bbb;color:#666;font-size:14px;padding:6px 12px}
+.hl{background:#FFF1E0;outline:2.5px solid #E07B00;border-radius:6px;padding:0 4px}
+.box2{display:inline-block;border:2px solid;border-radius:6px;padding:0 .25em;line-height:1.2;margin:0 1px}
+.flow{display:flex;gap:10px;align-items:stretch;margin:6px 0}
+.flow .fc{flex:1;background:#fff;border:1px solid var(--line);border-top:5px solid var(--rwb);border-radius:10px;padding:8px 14px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.45}
+.flow .fc h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+.flow .ar{display:flex;align-items:center;font-size:28px;color:var(--rwb)}
+</style></head><body>
+<div id="app">
+ <div class="top"><div class="prog" id="prog"></div><img class="logo" src="data:image/png;base64,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" alt="RWB Essen"></div>
+ <div class="stage" id="deck">
+<section class="slide" data-g="start"><div class="startgrid"><div class="startl"><div class="kick">Quadratische Funktionen, Teil 4</div><h1>Umformen mit binomischen Formeln</h1><div class="sub1">Von der Scheitelpunktform<br>zur allgemeinen Form</div><div class="abhint"><span class="ico">📓</span><div><b>Nimm dein Heft.</b><br>Schreibe die grünen <b>Merke</b>-Kästen ab.</div></div><div class="card how"><h4>So geht es</h4>Klicke unten rechts auf <b>weiter ▶</b>.<br>Manche Folien kommen in Schritten.<br>Du kannst auch die Pfeiltasten benutzen.</div><button class="pr big" onclick="next()">Start ▶</button></div><div class="startr"><svg viewBox="0 0 430 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"><defs><clipPath id="sclip"><rect x="0" y="0" width="430" height="430" rx="22"/></clipPath></defs><g clip-path="url(#sclip)"><defs><pattern id="sd" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.7" fill="#8FCBA4"/></pattern></defs><rect width="430" height="430" fill="#E8F5EC"/><g opacity=".75"><path d="M215,215 L2215.0,215.0 L2171.3,630.8 Z" fill="#CDEBD7"/><path d="M215,215 L2042.1,1028.5 L1833.0,1390.6 Z" fill="#CDEBD7"/><path d="M215,215 L1553.3,1701.3 L1215.0,1947.1 Z" fill="#CDEBD7"/><path d="M215,215 L833.0,2117.1 L424.1,2204.0 Z" fill="#CDEBD7"/><path d="M215,215 L5.9,2204.0 L-403.0,2117.1 Z" fill="#CDEBD7"/><path d="M215,215 L-785.0,1947.1 L-1123.3,1701.3 Z" fill="#CDEBD7"/><path d="M215,215 L-1403.0,1390.6 L-1612.1,1028.5 Z" fill="#CDEBD7"/><path d="M215,215 L-1741.3,630.8 L-1785.0,215.0 Z" fill="#CDEBD7"/><path d="M215,215 L-1741.3,-200.8 L-1612.1,-598.5 Z" fill="#CDEBD7"/><path d="M215,215 L-1403.0,-960.6 L-1123.3,-1271.3 Z" fill="#CDEBD7"/><path d="M215,215 L-785.0,-1517.1 L-403.0,-1687.1 Z" fill="#CDEBD7"/><path d="M215,215 L5.9,-1774.0 L424.1,-1774.0 Z" fill="#CDEBD7"/><path d="M215,215 L833.0,-1687.1 L1215.0,-1517.1 Z" fill="#CDEBD7"/><path d="M215,215 L1553.3,-1271.3 L1833.0,-960.6 Z" fill="#CDEBD7"/><path d="M215,215 L2042.1,-598.5 L2171.3,-200.8 Z" fill="#CDEBD7"/></g><rect width="430" height="430" fill="url(#sd)" opacity=".32"/></g><rect x="1.5" y="1.5" width="427" height="427" rx="22" fill="none" stroke="#1E8449" stroke-width="3"/><g transform="translate(110,30) rotate(-4 125.0 110.0)"><rect x="0" y="0" width="250" height="220" rx="8" fill="#fff" stroke="#123b22" stroke-width="3"/><rect x="40" y="30" width="110" height="110" fill="#BFE3CC" stroke="#123b22" stroke-width="2"/><rect x="150" y="30" width="60" height="110" fill="#fff" stroke="#123b22" stroke-width="2"/><rect x="40" y="140" width="110" height="60" fill="#fff" stroke="#123b22" stroke-width="2"/><rect x="150" y="140" width="60" height="60" fill="#FFE2BF" stroke="#123b22" stroke-width="2"/><g font-family="Georgia,serif" font-weight="bold" font-size="22" text-anchor="middle" fill="#123b22"><text x="95" y="93">x²</text><text x="180" y="93">3x</text><text x="95" y="178">3x</text><text x="180" y="178">9</text></g></g><g transform="translate(190,268) rotate(5 100.0 55.0)"><rect x="0" y="0" width="200" height="110" rx="8" fill="#fff" stroke="#123b22" stroke-width="2.6"/><rect x="0" y="0" width="200" height="17.6" rx="8" fill="#8ED1A6" stroke="#123b22" stroke-width="2"/><g font-family="Georgia,serif" font-weight="bold" font-size="22" text-anchor="middle"><text x="100.0" y="52.8" fill="#1E8449">(x + 3)²</text><text x="100.0" y="78.1" fill="#123b22">= x² + 6x + 9</text></g></g><g stroke="#123b22" stroke-width="2.2" stroke-linecap="round"><line x1="40" y1="70" x2="58" y2="70"/><line x1="49" y1="61" x2="49" y2="79"/><line x1="392" y1="250" x2="406" y2="250"/><line x1="399" y1="243" x2="399" y2="257"/></g><polygon points="70.0,330.0 73.1,337.6 81.4,338.2 75.1,343.6 77.0,351.7 70.0,347.4 63.0,351.7 64.9,343.6 58.6,338.2 66.9,337.6" fill="#8ED1A6" stroke="#123b22" stroke-width="2.2" stroke-linejoin="round"/></svg></div></div></section>
+<section class="slide" data-g="warum"><h2 class="th"><span class="no">1</span>Warum umformen?</h2><div class="say " data-s="0">Eine Parabel kann man auf zwei Arten aufschreiben:</div><div class="two"><div class="kc t" data-s="1"><h4>Scheitelpunktform</h4><div class="feq">f(x) = (x − 3)² + 2</div>Hier liest du den <b>Scheitelpunkt</b> ab: <span class="m">S(3 | 2)</span></div><div class="kc t" data-s="2"><h4>Allgemeine Form</h4><div class="feq">f(x) = x² − 6x + 11</div>Hier liest du <span class="cc">c</span> ab: Schnittpunkt mit der y-Achse <span class="m">(0 | 11)</span>.<br>Diese Form brauchst du später für die <b>pq-Formel</b>.</div></div><div class="say " data-s="3">Beide Gleichungen beschreiben <b>dieselbe</b> Parabel. Heute lernst du den Weg von der Scheitelpunktform zur allgemeinen Form (lila Pfeil).</div><div data-s="3"><svg viewBox="0 0 760 300" style="width:100%;max-width:760px;display:block;margin:0 auto"><g font-family="Cambria,Georgia,serif" font-size="34" font-weight="bold" fill="#1d1d1f"><text x="20" y="165">f(x) = ax² + bx + c</text><text x="470" y="165">f(x) = a(x − d)² + e</text></g><g font-family="Calibri,Arial" font-size="17" fill="#666"><text x="70" y="200">allgemeine Form</text><text x="520" y="200">Scheitelpunktform</text></g><g><path d="M640,215 Q380,320 120,215" fill="none" stroke="#6A3FC8" stroke-width="4"/><path d="M140,206 L118,214 L134,232" fill="none" stroke="#6A3FC8" stroke-width="4" stroke-linecap="round"/><text x="380" y="292" text-anchor="middle" font-family="Calibri,Arial" font-weight="bold" font-size="21" fill="#6A3FC8">binomische Formel anwenden (heute)</text></g><g><path d="M140,110 Q380,0 640,110" fill="none" stroke="#C62828" stroke-width="3" stroke-dasharray="9 7"/><path d="M618,96 L642,110 L622,126" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round"/><text x="380" y="40" text-anchor="middle" font-family="Calibri,Arial" font-weight="bold" font-size="20" fill="#C62828">quadratische Ergänzung (nur zur Info)</text></g></svg></div></section>
+<section class="slide" data-g="binom"><h2 class="th"><span class="no">2</span>Die binomischen Formeln</h2><div class="tcols" style="grid-template-columns:1.4fr 1fr"><div class="lcol"><div class="merk" data-s="0"><b>Binomische Formeln</b><br><span class="m">1. &nbsp;(a + b)² = a² + 2ab + b²</span><br><span class="m">2. &nbsp;(a − b)² = a² − 2ab + b²</span></div><div class="say " data-s="1">Beispiel: <span class="m">(x + 3)²</span></div><div class="say " data-s="2">Das Quadrat hat 4 Teile: <span class="m">x² + <span style="color:#1D70B8">3x + 3x</span> + <span style="color:#E07B00">9</span></span></div><div class="res" data-s="3">(x + 3)² = x² + 6x + 9</div><div class="trapbox" data-s="4"><b>Achtung, Falle:</b> <span class="m">(x + 3)²</span> ist <b>nicht</b> <span class="m">x² + 9</span>. Der mittlere Teil <span class="m">6x</span> fehlt sonst!</div></div><div class="rcol"><div data-s="1" style="width:100%"><svg viewBox="0 0 320 300" style="width:100%;max-width:320px;display:block;margin:0 auto"><rect x="40" y="30" width="160" height="160" fill="#BFE3CC" stroke="#123b22" stroke-width="2"/><rect x="200" y="30" width="70" height="160" fill="#fff" stroke="#123b22" stroke-width="2"/><rect x="40" y="190" width="160" height="70" fill="#fff" stroke="#123b22" stroke-width="2"/><rect x="200" y="190" width="70" height="70" fill="#FFE2BF" stroke="#123b22" stroke-width="2"/><g font-family="Cambria,Georgia,serif" font-weight="bold" font-size="26" text-anchor="middle" fill="#123b22"><text x="120" y="118">x²</text><text x="235" y="118" fill="#1D70B8">3x</text><text x="120" y="233" fill="#1D70B8">3x</text><text x="235" y="233" fill="#E07B00">9</text></g><g font-family="Calibri,Arial" font-size="18" text-anchor="middle" fill="#555"><text x="120" y="22">x</text><text x="235" y="22">3</text><text x="26" y="115">x</text><text x="26" y="230">3</text></g></svg></div></div></div></section>
+<section class="slide" data-g="binom"><h2 class="th"><span class="no">3</span>Binomische Formeln üben</h2><div class="tcols" style="grid-template-columns:1fr 1fr"><div class="lcol"><div class="eq"><span class="l" data-s="1">(x − 4)²</span><span class="e" data-s="1">=</span><span class="r" data-s="1">x² − 2 · x · 4 + 4²</span><span class="op" data-s="1">2. Formel</span><span class="l" data-s="2"></span><span class="e" data-s="2">=</span><span class="r" data-s="2">x² − 8x + 16</span><span class="op" data-s="2"></span></div><div style="height:14px"></div><div class="eq"><span class="l" data-s="3">(x + 5)²</span><span class="e" data-s="3">=</span><span class="r" data-s="3">x² + 2 · x · 5 + 5²</span><span class="op" data-s="3">1. Formel</span><span class="l" data-s="4"></span><span class="e" data-s="4">=</span><span class="r" data-s="4">x² + 10x + 25</span><span class="op" data-s="4"></span></div></div><div class="rcol"><div class="warn" data-s="2"><b>Merke dir den Trick:</b><br>Die Zahl in der Klammer <b>mal 2</b> → steht vor x.<br>Die Zahl in der Klammer <b>hoch 2</b> → steht am Ende.</div><div class="kc" style="width:100%"><div class="qbox" data-s="5"><div class="q">(x − 3)² = ?</div><div class="feq" style="font-size:22px">x² <input class="gp" data-a="-6" style="width:70px" inputmode="decimal" autocomplete="off"> x <input class="gp" data-a="9" style="width:70px" inputmode="decimal" autocomplete="off"></div><div style="font-family:Calibri,Arial;font-size:16px;color:#555">Schreibe das Vorzeichen mit, zum Beispiel −6.</div><div class="btns"><button class="pr" data-a="chk">Prüfen</button></div><div class="fb"></div></div></div></div></div></section>
+<section class="slide" data-g="bsp"><h2 class="th"><span class="no">4</span>Beispiel 1: ohne Zahl vor der Klammer</h2><div class="say " data-s="0">Forme in die allgemeine Form um:</div><div class="eq" style="--efs:28px"><span class="l" data-s="0">f(x)</span><span class="e" data-s="0">=</span><span class="r" data-s="0">(x − 3)² + 2</span><span class="op" data-s="0"></span><span class="l" data-s="1"></span><span class="e" data-s="1">=</span><span class="r" data-s="1">x² − 6x + 9 + 2</span><span class="op" data-s="1">binomische Formel</span><span class="l" data-s="2"></span><span class="e" data-s="2">=</span><span class="r" data-s="2">x² − 6x + 11</span><span class="op" data-s="2">zusammenfassen</span></div><div class="res" data-s="3">f(x) = x² − 6x + 11 &nbsp; mit a = 1, b = −6, c = 11</div><div class="warn" data-s="4"><b>Probe:</b> Setze x = 3 ein: <span class="m">3² − 6 · 3 + 11 = 9 − 18 + 11 = 2</span>. Das ist e. Der Scheitelpunkt S(3 | 2) passt ✓</div></section>
+<section class="slide" data-g="bsp"><h2 class="th"><span class="no">5</span>Beispiel 2: mit einer Zahl vor der Klammer</h2><div class="say " data-s="0">Jetzt steht eine Zahl vor der Klammer: <span class="ca">a = 2</span>.</div><div class="eq" style="--efs:28px"><span class="l" data-s="0">f(x)</span><span class="e" data-s="0">=</span><span class="r" data-s="0">2(x + 1)² − 5</span><span class="op" data-s="0"></span><span class="l" data-s="1"></span><span class="e" data-s="1">=</span><span class="r" data-s="1">2(x² + 2x + 1) − 5</span><span class="op" data-s="1">1. binomische Formel. Klammer bleibt!</span><span class="l" data-s="2"></span><span class="e" data-s="2">=</span><span class="r" data-s="2">2x² + 4x + 2 − 5</span><span class="op" data-s="2">2. jedes Teil mal 2</span><span class="l" data-s="3"></span><span class="e" data-s="3">=</span><span class="r" data-s="3">2x² + 4x − 3</span><span class="op" data-s="3">3. zusammenfassen</span></div><div class="res" data-s="4">f(x) = 2x² + 4x − 3</div><div class="trapbox" data-s="2"><b>Wichtig:</b> Erst die binomische Formel. Dabei bleibt die <b>Klammer</b> stehen. Dann rechnest du <b>jedes</b> Teil in der Klammer mal a.</div></section>
+<section class="slide" data-g="bsp"><h2 class="th"><span class="no">6</span>Beispiel 3: Minus vor der Klammer</h2><div class="say " data-s="0">Vor der Klammer steht ein Minus: <span class="ca">a = −1</span>.</div><div class="eq" style="--efs:28px"><span class="l" data-s="0">f(x)</span><span class="e" data-s="0">=</span><span class="r" data-s="0">−(x − 2)² + 1</span><span class="op" data-s="0"></span><span class="l" data-s="1"></span><span class="e" data-s="1">=</span><span class="r" data-s="1">−(x² − 4x + 4) + 1</span><span class="op" data-s="1">1. binomische Formel</span><span class="l" data-s="2"></span><span class="e" data-s="2">=</span><span class="r" data-s="2">−x² + 4x − 4 + 1</span><span class="op" data-s="2">2. Minus vor der Klammer: alle Vorzeichen drehen</span><span class="l" data-s="3"></span><span class="e" data-s="3">=</span><span class="r" data-s="3">−x² + 4x − 3</span><span class="op" data-s="3">3. zusammenfassen</span></div><div class="res" data-s="4">f(x) = −x² + 4x − 3</div><div class="trapbox" data-s="2"><b>Vorzeichen-Falle:</b> Ein Minus vor der Klammer dreht <b>jedes</b> Vorzeichen in der Klammer um:<br><span class="m">−(x² − 4x + 4) = −x² + 4x − 4</span></div></section>
+<section class="slide" data-g="schablone"><h2 class="th"><span class="no">7</span>Die Schablone</h2><div class="say " data-s="0">Auf dem Arbeitsblatt hilft dir eine <b>Schablone</b>. Schreibe das <b>Vorzeichen</b> mit in das Kästchen.</div><div class="kc" style="font-size:22px;line-height:2.1"><div class="feq" style="font-size:24px">f(x) = 3(x − 2)² + 1</div><div data-s="1"><b class="cp">Schritt 1</b> &nbsp; <span class="m">f(x) = <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">3</span> · ( x² <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">−4</span>x <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">+4</span> ) <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">+1</span></span></div><div data-s="2"><b class="cp">Schritt 2</b> &nbsp; <span class="m">f(x) = <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">3</span>x² <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">−12</span>x <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">+12</span> <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">+1</span></span></div><div data-s="3"><b class="cp">Schritt 3</b> &nbsp; <span class="m">f(x) = <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">3</span>x² <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">−12</span>x <span class="box2" style="border-color:#A9D8BA;background:#F4FBF6;color:#1D3FD0;min-width:44px;text-align:center">+13</span></span></div></div><div class="warn" data-s="3"><b>Schritt 1:</b> binomische Formel. &nbsp; <b>Schritt 2:</b> jedes Teil mal a. &nbsp; <b>Schritt 3:</b> die Zahlen ohne x zusammenrechnen.</div></section>
+<section class="slide" data-g="rueck"><h2 class="th"><span class="no">8</span>Der Rückweg</h2><div class="say " data-s="0">Den Weg von der allgemeinen Form zurück zur Scheitelpunktform gibt es auch.</div><svg viewBox="0 0 760 300" style="width:100%;max-width:760px;display:block;margin:0 auto"><g font-family="Cambria,Georgia,serif" font-size="34" font-weight="bold" fill="#1d1d1f"><text x="20" y="165">f(x) = ax² + bx + c</text><text x="470" y="165">f(x) = a(x − d)² + e</text></g><g font-family="Calibri,Arial" font-size="17" fill="#666"><text x="70" y="200">allgemeine Form</text><text x="520" y="200">Scheitelpunktform</text></g><g><path d="M640,215 Q380,320 120,215" fill="none" stroke="#6A3FC8" stroke-width="4"/><path d="M140,206 L118,214 L134,232" fill="none" stroke="#6A3FC8" stroke-width="4" stroke-linecap="round"/><text x="380" y="292" text-anchor="middle" font-family="Calibri,Arial" font-weight="bold" font-size="21" fill="#6A3FC8">binomische Formel anwenden (heute)</text></g><g data-s="1"><path d="M140,110 Q380,0 640,110" fill="none" stroke="#C62828" stroke-width="3" stroke-dasharray="9 7"/><path d="M618,96 L642,110 L622,126" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round"/><text x="380" y="40" text-anchor="middle" font-family="Calibri,Arial" font-weight="bold" font-size="20" fill="#C62828">quadratische Ergänzung (nur zur Info)</text></g></svg><div class="warn" data-s="1"><b>Nur zur Info:</b> Der Rückweg heißt <b>quadratische Ergänzung</b>. Den brauchst du in dieser Reihe nicht.</div></section>
+<section class="slide" data-g="jetzt"><h2 class="th"><span class="no">★</span>Jetzt du</h2><div class="qbox mcq"><div class="q">Forme um: f(x) = 3(x − 1)² + 2</div><div class="opt" data-ok="1" data-fb=""><span class="mk"></span><span class="lt">A</span><span>f(x) = 3x² − 6x + 5</span></div><div class="opt" data-ok="0" data-fb="Du hast + 2 vergessen. 3 + 2 = 5."><span class="mk"></span><span class="lt">B</span><span>f(x) = 3x² − 6x + 3</span></div><div class="opt" data-ok="0" data-fb="(x − 1)² = x² − 2x + 1. Mal 3 ergibt −6x."><span class="mk"></span><span class="lt">C</span><span>f(x) = 3x² − 3x + 5</span></div><div class="opt" data-ok="0" data-fb="Bei (x − 1)² steht −2x. Mal 3 ergibt −6x."><span class="mk"></span><span class="lt">D</span><span>f(x) = 3x² + 6x + 5</span></div><div class="btns"><button class="pr" data-a="chk">Prüfen</button></div><div class="fb"></div><div class="expl">3(x² − 2x + 1) + 2 = 3x² − 6x + 3 + 2 = 3x² − 6x + 5</div></div><div class="abnote" style="margin-top:14px">📝 <b>Jetzt bist du dran!</b> Bearbeite das Arbeitsblatt <b>„Umformen mit binomischen Formeln“</b>. Erst mit Schablone, dann ohne.</div></section>
+
+ </div>
+ <div class="bot">
+  <span class="info">Umformen mit binomischen Formeln · Vorklasse · RWB Essen</span>
+  <button id="bFull" onclick="toggleFull()">⛶ Vollbild</button>
+  <span class="sp"></span><span class="cnt" id="cnt"></span>
+  <button id="bPrev" onclick="prev()">◀ zurück</button><button id="bNext" onclick="next()">weiter ▶</button>
+ </div>
+</div>
+<script>const GROUPS=[["start", "Start"], ["warum", "Warum umformen?"], ["binom", "Binomische Formeln"], ["bsp", "Beispiele"], ["schablone", "Schablone"], ["rueck", "Rückweg"], ["jetzt", "Jetzt du"]];
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide'); let cur=0; const step=slides.map(()=>0);
+const maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s).filter(n=>!isNaN(n))));
+const prog=$('#prog');
+GROUPS.forEach(([g,t])=>{const d=document.createElement('div');d.className='seg';d.dataset.g=g;d.innerHTML='<div class="bar"><i></i></div><div class="lab">'+t+'</div>';d.onclick=()=>go(slides.findIndex(s=>s.dataset.g===g),0);prog.appendChild(d);});
+function apply(){ const s=slides[cur];
+  $$('[data-s]',s).forEach(e=>{ const n=+e.dataset.s; e.classList.toggle('vis', !isNaN(n)&&n<=step[cur]); });
+  $$('[data-hs]',s).forEach(e=>e.classList.toggle('gone', step[cur]>=+e.dataset.hs));
+  slides.forEach((x,i)=>x.classList.toggle('on',i===cur));
+  const g=s.dataset.g, gi=GROUPS.findIndex(x=>x[0]===g);
+  $$('.seg').forEach((d,i)=>{ d.classList.toggle('done',i<gi); d.classList.toggle('now',i===gi);
+    if(i===gi){ const idx=slides.map((x,j)=>[x,j]).filter(([x])=>x.dataset.g===g).map(([,j])=>j); const k=idx.indexOf(cur); d.querySelector('i').style.width=((k+1)/idx.length*100)+'%'; }
+    else if(i>gi) d.querySelector('i').style.width='0'; });
+  $('#cnt').textContent='Folie '+(cur+1)+' von '+slides.length+(maxS[cur]?' · Schritt '+(step[cur]+1)+' von '+(maxS[cur]+1):'');
+  $('#bPrev').disabled=(cur===0&&step[cur]===0); $('#bNext').disabled=(cur===slides.length-1&&step[cur]>=maxS[cur]);
+  if(window.onStep) window.onStep(s,step[cur]);
+}
+function go(i,st){ if(i<0||i>=slides.length) return; cur=i; step[cur]=st==='max'?maxS[cur]:(st||0); apply(); }
+function next(){ if(step[cur]<maxS[cur]){ step[cur]++; apply(); } else go(cur+1,0); }
+function prev(){ if(step[cur]>0){ step[cur]--; apply(); } else go(cur-1,'max'); }
+document.addEventListener('keydown',e=>{ if(e.target.closest('input')) { if(e.key==='Enter'){ const b=e.target.closest('.qbox')?.querySelector('[data-a=chk]'); b&&b.click(); } return; }
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ next(); e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ prev(); e.preventDefault(); } });
+function fit(){ const W=innerWidth,Hh=innerHeight,s=Math.min(W/1280,Hh/800); const app=$('#app'); app.style.transform='scale('+s+')'; app.style.left=((W-1280*s)/2)+'px'; app.style.top=((Hh-800*s)/2)+'px'; }
+addEventListener('resize',fit); fit();
+function toggleFull(){ const d=document; if(!d.fullscreenElement&&!d.webkitFullscreenElement){ const el=d.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen).call(el); } else { (d.exitFullscreen||d.webkitExitFullscreen).call(d); } }
+function num(v){ v=String(v).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(',','.'); if(v===''||v==='-') return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b); } return Number(v); }
+$$('.qbox').forEach(Q=>{
+  const fb=$('.fb',Q), sl=Q.closest('.slide');
+  const finish=()=>{ Q.classList.add('done'); $$('input',Q).forEach(i=>i.readOnly=true); };
+  if(Q.classList.contains('mcq')){
+    const opts=$$('.opt',Q);
+    opts.forEach(o=>o.onclick=()=>{ if(Q.classList.contains('done')) return; opts.forEach(x=>x.classList.remove('sel')); o.classList.add('sel'); fb.textContent=''; });
+    $('[data-a=chk]',Q).onclick=()=>{ const sel=opts.find(o=>o.classList.contains('sel'));
+      if(!sel){ fb.className='fb info'; fb.textContent='Wähle zuerst eine Antwort.'; return; }
+      opts.forEach(o=>{ if(o.dataset.ok==='1') o.classList.add('right'); });
+      if(sel.dataset.ok==='1'){ fb.className='fb ok'; fb.innerHTML='Richtig!'; }
+      else { sel.classList.remove('sel'); sel.classList.add('wrong'); fb.className='fb bad'; fb.innerHTML='Leider falsch. '+(sel.dataset.fb||''); }
+      finish(); };
+  } else {
+    $('[data-a=chk]',Q).onclick=()=>{ const ins=$$('input.gp',Q);
+      if(ins.some(i=>i.value.trim()==='')){ fb.className='fb info'; fb.textContent='Fülle zuerst alle Lücken aus.'; return; }
+      let all=true; ins.forEach(i=>{ const ok=i.dataset.a.split('|').some(a=>Math.abs(num(i.value)-num(a))<1e-9); i.classList.remove('ok','bad'); i.classList.add(ok?'ok':'bad'); if(!ok) all=false; });
+      if(all){ fb.className='fb ok'; fb.textContent='Richtig! Alles stimmt.'; finish(); }
+      else { fb.className='fb bad'; fb.textContent='Nicht ganz. Die roten Felder stimmen noch nicht. Versuche es noch einmal.'; }
+    };
+  }
+});
+/* ---------- Live-Plots (Schieberegler) ---------- */
+function fmt(v){ const r=Math.round(v*100)/100; return (Object.is(r,-0)?0:r).toLocaleString('de-DE',{maximumFractionDigits:2}).replace('-','−'); }
+function LP(id){ const s=document.getElementById(id); const d=s.dataset;
+  const o={xmin:+d.xmin,xmax:+d.xmax,ymin:+d.ymin,ymax:+d.ymax,u:+d.u,pad:+d.pad};
+  o.X=x=>o.pad+(x-o.xmin)*o.u; o.Y=y=>o.pad+(o.ymax-y)*o.u;
+  o.path=f=>{ let p=''; const n=300, lo=o.ymin-30, hi=o.ymax+30; for(let i=0;i<=n;i++){ const x=o.xmin+(o.xmax-o.xmin)*i/n; let y=f(x); y=Math.max(lo,Math.min(hi,y)); p+=(i?'L':'M')+o.X(x).toFixed(1)+','+o.Y(y).toFixed(1); } return p; };
+  return o; }
+apply();
+
+
+</script></body></html>

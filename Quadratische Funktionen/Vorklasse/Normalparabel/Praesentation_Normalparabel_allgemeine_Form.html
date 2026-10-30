@@ -1,0 +1,688 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Normalparabel und allgemeine Form</title><style>
+.m{font-family:Cambria,Caladea,Georgia,serif;white-space:nowrap}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.12;font-size:.86em}
+.fr .nu{border-bottom:1.5px solid currentColor;padding:0 3px 1px}.fr .de{padding:1px 3px 0}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}
+.sq .sym{width:.62em;display:inline-block;flex:none}.sq .sym svg{width:100%;height:100%;display:block}
+.sq .rad{border-top:1.5px solid currentColor;padding:2px 3px 0 2px;display:inline-flex;align-items:center}
+.ca{color:#C62828;font-weight:bold}.cb{color:#1D70B8;font-weight:bold}.cc{color:#E07B00;font-weight:bold}
+.cd{color:#6A3FC8;font-weight:bold}.ce{color:#00838F;font-weight:bold}
+.cp{color:#1E8449;font-weight:bold}.cl{color:#1D70B8;font-weight:bold}
+.trap{color:#C62828;font-weight:bold}
+
+:root{--rwb:#1E8449;--rwb-d:#14603A;--rwb-l:#E3F3E9;--ink:#1d1d1f;--ok:#2E7D32;--bad:#B00020;--blue:#1D70B8;--mut:#6B6B6B;--line:#d9d2c5;--bg:#f1f1f1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);line-height:1.55;touch-action:manipulation;-webkit-text-size-adjust:100%}
+#app{position:fixed;left:0;top:0;width:1280px;height:800px;transform-origin:0 0;display:flex;flex-direction:column;background:var(--bg)}
+.top{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:18px;padding:0 26px;border-bottom:3px solid var(--rwb)}
+.prog{flex:1;display:flex;gap:5px}
+.seg{flex:1;cursor:pointer;padding:4px 0;min-width:0}
+.seg .bar{height:9px;border-radius:5px;background:#dcdcdc;overflow:hidden}
+.seg .bar i{display:block;height:100%;width:0;background:var(--rwb);transition:width .3s}
+.seg .lab{font-family:Calibri,Carlito,Arial,sans-serif;font-size:13px;font-weight:bold;color:#8a8a8a;text-align:center;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.done .bar{background:#A9D8BA}.seg.done .bar i{width:100%}
+.seg.done .lab,.seg.now .lab{color:var(--rwb)}.seg.now .lab{text-decoration:underline;text-underline-offset:3px}
+.top .logo{height:34px;width:auto;display:block}
+.stage{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:16px 34px 10px;display:none;flex-direction:column}
+.slide.on{display:flex;animation:fadein .3s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.th{margin:0 0 12px;font-size:27px;color:var(--rwb);display:flex;align-items:center;gap:12px;line-height:1.2}
+.th .no{background:var(--rwb);color:#fff;font-family:Calibri,Carlito,Arial,sans-serif;border-radius:50%;min-width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;font-size:19px}
+.th small{font-family:Calibri,Carlito,Arial,sans-serif;font-size:17px;color:#777;font-weight:normal}
+[data-s]:not(.vis){visibility:hidden}
+.vis{animation:fadein .35s ease}
+.gone{display:none!important}
+.tcols{flex:1;display:grid;gap:28px;align-items:start;min-height:0}
+.lcol{font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5}
+.rcol{display:flex;flex-direction:column;align-items:center;gap:8px}
+svg.plot{width:100%;height:auto;display:block;background:#fff;border:1px solid #dfe5e0;border-radius:8px}
+.say{margin:0 0 11px;padding:3px 0 3px 14px;border-left:4px solid #A9D8BA;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px}
+.say .m{font-size:21px}
+.say.em{border-left-color:var(--ok);font-weight:bold;color:#1B5E20}
+.res{margin:6px 0 12px;padding:8px 14px;border:2px solid var(--ok);background:#EAF5EA;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:#1B5E20;font-size:20px}
+.res .m{color:var(--ink)}
+.warn{margin:6px 0 12px;padding:8px 14px;background:#FFF4D6;border:1px solid #E0A800;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.warn b:first-child{color:#8a5a00}
+.trapbox{margin:6px 0 12px;padding:8px 14px;background:#FDECEA;border:2px solid #C62828;border-radius:8px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.trapbox b:first-child{color:#C62828}
+.card{margin:6px 0 12px;padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.merk{margin:10px 0 12px;padding:12px 16px 10px;border:2.5px solid var(--rwb);border-radius:12px;background:#FFF;font-family:Calibri,Carlito,Arial,sans-serif;font-size:20px;line-height:1.5;position:relative}
+.merk::before{content:"Merke";position:absolute;top:-13px;left:14px;background:var(--rwb);color:#fff;font-size:14px;font-weight:bold;padding:1px 10px;border-radius:10px;letter-spacing:.5px}
+.merk .m{font-size:23px}
+.merk ul{margin:2px 0 0;padding-left:22px}.merk li{margin:2px 0}
+.feq{font-family:Cambria,Caladea,Georgia,serif;font-size:26px;white-space:nowrap}
+.feq.big{font-size:36px}
+.kc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;line-height:1.5}
+.kc h4{margin:0 0 6px;font-size:21px;display:flex;align-items:center;gap:10px;color:var(--rwb)}
+.kc.t{border-top:6px solid var(--rwb)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:4px 0 10px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:4px 0 10px}
+.stp{display:flex;gap:12px;align-items:flex-start;margin:0 0 9px;font-size:19px;font-family:Calibri,Carlito,Arial,sans-serif;line-height:1.5}
+.stp .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--rwb);color:#fff;font-weight:bold;display:inline-flex;align-items:center;justify-content:center;font-size:16px;margin-top:2px}
+.stp .m{font-size:21px}
+/* Gleichungen untereinander */
+.eq{display:inline-grid;grid-template-columns:auto auto auto auto;column-gap:10px;row-gap:5px;align-items:center;font-family:Cambria,Caladea,Georgia,serif;font-size:var(--efs,23px)}
+.eq .l{text-align:right;white-space:nowrap}.eq .e{text-align:center}.eq .r{white-space:nowrap}
+.eq .op{color:var(--blue);padding-left:14px;white-space:nowrap;font-family:Calibri,Carlito,Arial,sans-serif;font-size:.8em;font-weight:bold}
+.eq .op.g{color:#888;font-weight:normal;font-style:italic}
+/* Wertetabelle */
+.tg{display:grid;font-family:Calibri,Carlito,Arial,sans-serif;font-size:var(--tfs,21px);border-radius:10px;background:#fff;border:1px solid var(--line);padding:6px 10px;width:max-content}
+.tg .tl{font-weight:bold;padding:6px 14px 6px 6px;white-space:nowrap;display:flex;align-items:center;font-family:Cambria,Caladea,Georgia,serif}
+.tg .tc{text-align:center;padding:6px 4px;border-left:1px solid #e6e6e6;font-family:Cambria,Caladea,Georgia,serif;position:relative;min-height:42px}
+.tg .hx{background:#f3f3f3;color:#444}
+.tg .rl{border-top:1px solid #e6e6e6}
+.tg .tc.fx{outline:3px solid #E07B00;outline-offset:-4px;border-radius:8px;background:#FFF1E0}
+.calc{font-family:Cambria,Caladea,Georgia,serif;font-size:20px;line-height:1.6}
+.calc .lb{font-family:Calibri,Carlito,Arial,sans-serif;color:#888;font-size:16px;margin-left:10px}
+/* Start */
+.startgrid{flex:1;display:grid;grid-template-columns:1fr 430px;gap:40px;align-items:center;padding:6px 10px}
+.kick{font-family:Calibri,Carlito,Arial,sans-serif;font-weight:bold;color:var(--mut);font-size:17px;letter-spacing:.3px}
+.startl h1{font-size:50px;color:var(--rwb);margin:4px 0 0;line-height:1.1}
+.sub1{font-size:28px;margin:2px 0 16px;color:#333}
+.abhint{display:flex;align-items:center;gap:12px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:10px;padding:10px 16px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;margin:10px 0}
+.abhint .ico{font-size:30px}
+.card.how{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.6}
+.card.how h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+button{font-family:Calibri,Carlito,Arial,sans-serif;cursor:pointer}
+button.pr{background:var(--rwb);color:#fff;border:none;border-radius:8px;font-size:18px;font-weight:bold;padding:9px 22px}
+button.pr.big{font-size:22px;padding:12px 36px;border-radius:30px;margin-top:6px}
+button:disabled{opacity:.4;cursor:default}
+/* Fragen */
+.qbox{font-size:20px}
+.q{font-weight:bold;font-size:21px;line-height:1.45;margin:0 0 8px}
+.opt{display:flex;align-items:center;gap:12px;padding:8px 14px;border:1.8px solid var(--line);border-radius:9px;margin:7px 0;cursor:pointer;background:#fff;font-size:19px;min-height:52px;font-family:Calibri,Carlito,Arial,sans-serif}
+.opt:hover{border-color:#999}
+.opt .mk{flex:0 0 20px;height:20px;border:2px solid #999;border-radius:50%}
+.opt .lt{font-weight:bold;color:var(--mut);width:18px}
+.opt.sel{border-color:var(--blue);background:#EEF5FC}.opt.sel .mk{border-color:var(--blue);background:var(--blue);box-shadow:inset 0 0 0 3px #fff}
+.opt.right{border-color:var(--ok);background:#EAF5EA}.opt.right .mk{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 3px #fff}
+.opt.wrong{border-color:var(--bad);background:#FDECEA}.opt.wrong .mk{border-color:var(--bad);background:var(--bad);box-shadow:inset 0 0 0 3px #fff}
+.qbox.done .opt{cursor:default}
+.btns{display:flex;gap:10px;margin:10px 0 4px}
+.qbox.done .btns{display:none}
+.fb{font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:1.5}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:var(--mut)}
+.expl{display:none;margin-top:8px;padding:8px 14px;border-left:4px solid var(--ok);background:#F2F8F2;border-radius:5px;font-size:19px;line-height:1.55;font-family:Calibri,Carlito,Arial,sans-serif}
+.qbox.done .expl{display:block;animation:fadein .35s}
+input.gp{font-family:Cambria,Caladea,Georgia,serif;font-size:21px;height:38px;width:70px;padding:2px 4px;border:2px dashed #999;border-radius:8px;text-align:center;background:#fff;vertical-align:middle}
+input.gp:focus{outline:none;border-style:solid;border-color:var(--blue)}
+input.gp.ok{border:2px solid var(--ok);background:#EAF5EA}input.gp.bad{border:2px solid var(--bad);background:#FDECEA}
+.abnote{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#FFF8E8;border:1.5px dashed #E0A800;border-radius:8px;padding:10px 16px;animation:blink 1.4s ease-in-out 3}
+@keyframes blink{50%{background:#FFE08A}}
+/* Schieberegler */
+.sl{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 16px 10px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px}
+.sl .row{display:flex;align-items:center;gap:14px;margin:4px 0}
+.sl .row b{min-width:26px;font-family:Cambria,Caladea,Georgia,serif;font-size:22px}
+.sl input[type=range]{flex:1;accent-color:var(--rwb);height:34px}
+.sl .val{min-width:62px;text-align:center;font-family:Cambria,Caladea,Georgia,serif;font-size:22px;font-weight:bold;background:#f5f5f5;border-radius:6px;padding:1px 6px}
+.live{font-family:Cambria,Caladea,Georgia,serif;font-size:28px;text-align:center;margin:4px 0}
+.stat{font-family:Calibri,Carlito,Arial,sans-serif;font-size:19px;background:#F6F1EA;border-radius:8px;padding:8px 14px;line-height:1.5}
+.chip{display:inline-block;border-radius:14px;padding:1px 12px;font-weight:bold;margin:2px 4px 2px 0;font-size:17px}
+.chip.on{background:var(--rwb);color:#fff}.chip.off{background:#e6e6e6;color:#888}
+.pbtn{display:inline-block;margin:3px 4px 3px 0;padding:4px 12px;border:1.6px solid var(--rwb);border-radius:16px;background:#fff;color:var(--rwb);font-weight:bold;font-size:16px;cursor:pointer;font-family:Calibri,Carlito,Arial,sans-serif}
+/* Bilder */
+.photo{position:relative;border-radius:10px;overflow:hidden;border:1px solid #ccc;background:#fff;line-height:0}
+.photo img{width:100%;display:block}
+.photo svg.ov{position:absolute;inset:0;width:100%;height:100%}
+.cap{font-family:Calibri,Carlito,Arial,sans-serif;font-size:15px;color:#666;margin-top:4px;line-height:1.3}
+.src{font-family:Calibri,Carlito,Arial,sans-serif;font-size:12px;color:#888}
+.video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* Leiste unten */
+.bot{height:58px;flex:0 0 58px;display:flex;align-items:center;gap:12px;padding:0 26px;border-top:1px solid #ddd;font-family:Calibri,Carlito,Arial,sans-serif}
+.bot .info{font-size:14px;color:#888}
+.bot .sp{flex:1}
+.bot .cnt{font-size:15px;color:#777}
+.bot button{font-size:17px;font-weight:bold;padding:8px 20px;border-radius:8px;border:1.5px solid var(--rwb);background:#fff;color:var(--rwb)}
+.bot #bNext{background:var(--rwb);color:#fff}
+.bot #bFull{border-color:#bbb;color:#666;font-size:14px;padding:6px 12px}
+.hl{background:#FFF1E0;outline:2.5px solid #E07B00;border-radius:6px;padding:0 4px}
+.box2{display:inline-block;border:2px solid;border-radius:6px;padding:0 .25em;line-height:1.2;margin:0 1px}
+.flow{display:flex;gap:10px;align-items:stretch;margin:6px 0}
+.flow .fc{flex:1;background:#fff;border:1px solid var(--line);border-top:5px solid var(--rwb);border-radius:10px;padding:8px 14px;font-family:Calibri,Carlito,Arial,sans-serif;font-size:18px;line-height:1.45}
+.flow .fc h4{margin:0 0 4px;color:var(--rwb);font-size:19px}
+.flow .ar{display:flex;align-items:center;font-size:28px;color:var(--rwb)}
+</style></head><body>
+<div id="app">
+ <div class="top"><div class="prog" id="prog"></div><img class="logo" src="data:image/png;base64,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" alt="RWB Essen"></div>
+ <div class="stage" id="deck">
+<section class="slide" data-g="start"><div class="startgrid"><div class="startl"><div class="kick">Quadratische Funktionen, Teil 2</div><h1>Normalparabel und allgemeine Form</h1><div class="sub1">Wie sieht die einfachste Parabel aus?<br>Was bedeuten a, b und c?</div><div class="abhint"><span class="ico">📓</span><div><b>Nimm dein Heft.</b><br>Schreibe die grünen <b>Merke</b>-Kästen ab.</div></div><div class="card how"><h4>So geht es</h4>Klicke unten rechts auf <b>weiter ▶</b>.<br>Manche Folien kommen in Schritten.<br>Du kannst auch die Pfeiltasten benutzen.</div><button class="pr big" onclick="next()">Start ▶</button></div><div class="startr"><svg viewBox="0 0 430 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block"><defs><clipPath id="sclip"><rect x="0" y="0" width="430" height="430" rx="22"/></clipPath></defs><g clip-path="url(#sclip)"><defs><pattern id="sd" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.7" fill="#8FCBA4"/></pattern></defs><rect width="430" height="430" fill="#E8F5EC"/><g opacity=".75"><path d="M215,215 L2215.0,215.0 L2171.3,630.8 Z" fill="#CDEBD7"/><path d="M215,215 L2042.1,1028.5 L1833.0,1390.6 Z" fill="#CDEBD7"/><path d="M215,215 L1553.3,1701.3 L1215.0,1947.1 Z" fill="#CDEBD7"/><path d="M215,215 L833.0,2117.1 L424.1,2204.0 Z" fill="#CDEBD7"/><path d="M215,215 L5.9,2204.0 L-403.0,2117.1 Z" fill="#CDEBD7"/><path d="M215,215 L-785.0,1947.1 L-1123.3,1701.3 Z" fill="#CDEBD7"/><path d="M215,215 L-1403.0,1390.6 L-1612.1,1028.5 Z" fill="#CDEBD7"/><path d="M215,215 L-1741.3,630.8 L-1785.0,215.0 Z" fill="#CDEBD7"/><path d="M215,215 L-1741.3,-200.8 L-1612.1,-598.5 Z" fill="#CDEBD7"/><path d="M215,215 L-1403.0,-960.6 L-1123.3,-1271.3 Z" fill="#CDEBD7"/><path d="M215,215 L-785.0,-1517.1 L-403.0,-1687.1 Z" fill="#CDEBD7"/><path d="M215,215 L5.9,-1774.0 L424.1,-1774.0 Z" fill="#CDEBD7"/><path d="M215,215 L833.0,-1687.1 L1215.0,-1517.1 Z" fill="#CDEBD7"/><path d="M215,215 L1553.3,-1271.3 L1833.0,-960.6 Z" fill="#CDEBD7"/><path d="M215,215 L2042.1,-598.5 L2171.3,-200.8 Z" fill="#CDEBD7"/></g><rect width="430" height="430" fill="url(#sd)" opacity=".32"/></g><rect x="1.5" y="1.5" width="427" height="427" rx="22" fill="none" stroke="#1E8449" stroke-width="3"/><g transform="translate(110,30) rotate(-4 145.0 105.0)"><rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#123b22" stroke-width="3"/><line x1="14" y1="190" x2="278" y2="190" stroke="#123b22" stroke-width="2.2"/><path d="M278,186 L285,190 L278,194 Z" fill="#123b22"/><line x1="145" y1="200" x2="145" y2="14" stroke="#123b22" stroke-width="2.2"/><path d="M141,14 L145,7 L149,14 Z" fill="#123b22"/><path d="M71.4,20.7 L73.2,29.1 L75.1,37.2 L76.9,45.2 L78.8,52.9 L80.6,60.4 L82.4,67.7 L84.3,74.8 L86.1,81.7 L88.0,88.3 L89.8,94.8 L91.6,101.0 L93.5,107.1 L95.3,112.9 L97.2,118.5 L99.0,123.9 L100.8,129.1 L102.7,134.0 L104.5,138.8 L106.4,143.3 L108.2,147.7 L110.0,151.8 L111.9,155.7 L113.7,159.4 L115.6,162.9 L117.4,166.2 L119.2,169.3 L121.1,172.1 L122.9,174.8 L124.8,177.2 L126.6,179.4 L128.4,181.4 L130.3,183.2 L132.1,184.8 L134.0,186.2 L135.8,187.4 L137.6,188.3 L139.5,189.0 L141.3,189.6 L143.2,189.9 L145.0,190.0 L146.8,189.9 L148.7,189.6 L150.5,189.0 L152.4,188.3 L154.2,187.4 L156.0,186.2 L157.9,184.8 L159.7,183.2 L161.6,181.4 L163.4,179.4 L165.2,177.2 L167.1,174.8 L168.9,172.1 L170.8,169.3 L172.6,166.2 L174.4,162.9 L176.3,159.4 L178.1,155.7 L180.0,151.8 L181.8,147.7 L183.6,143.3 L185.5,138.8 L187.3,134.0 L189.2,129.1 L191.0,123.9 L192.8,118.5 L194.7,112.9 L196.5,107.1 L198.4,101.0 L200.2,94.8 L202.0,88.3 L203.9,81.7 L205.7,74.8 L207.6,67.7 L209.4,60.4 L211.2,52.9 L213.1,45.2 L214.9,37.2 L216.8,29.1 L218.6,20.7" fill="none" stroke="#1E8449" stroke-width="3.6" stroke-linecap="round"/><circle cx="145" cy="190" r="5" fill="#E07B00" stroke="#123b22" stroke-width="1.4"/></g><g transform="translate(190,268) rotate(5 100.0 55.0)"><rect x="0" y="0" width="200" height="110" rx="8" fill="#fff" stroke="#123b22" stroke-width="2.6"/><rect x="0" y="0" width="200" height="17.6" rx="8" fill="#8ED1A6" stroke="#123b22" stroke-width="2"/><g font-family="Georgia,serif" font-weight="bold" font-size="22" text-anchor="middle"><text x="100.0" y="52.8" fill="#1E8449">f(x) = x²</text><text x="100.0" y="78.1" fill="#123b22">a · x² + c</text></g></g><g stroke="#123b22" stroke-width="2.2" stroke-linecap="round"><line x1="40" y1="70" x2="58" y2="70"/><line x1="49" y1="61" x2="49" y2="79"/><line x1="392" y1="250" x2="406" y2="250"/><line x1="399" y1="243" x2="399" y2="257"/></g><polygon points="70.0,330.0 73.1,337.6 81.4,338.2 75.1,343.6 77.0,351.7 70.0,347.4 63.0,351.7 64.9,343.6 58.6,338.2 66.9,337.6" fill="#8ED1A6" stroke="#123b22" stroke-width="2.2" stroke-linejoin="round"/></svg></div></div></section>
+<section class="slide" data-g="normal"><h2 class="th"><span class="no">1</span>Die Normalparabel</h2><div class="tcols" style="grid-template-columns:1.1fr 1fr"><div class="lcol"><div class="say " data-s="0">Die einfachste quadratische Funktion ist:</div><div class="feq big" style="margin:4px 0 14px 14px">f(x) = x²</div><div class="say " data-s="1"><span class="m">x²</span> heißt: <span class="m">x · x</span>. Man rechnet die Zahl mal sich selbst.</div><div class="say " data-s="2">Beispiel: <span class="m">3² = 3 · 3 = 9</span></div><div class="merk" data-s="3">Die Funktion <span class="m">f(x) = x²</span> heißt <b>Normalparabel</b>.</div></div><div class="rcol"><div class="kc t" style="width:430px" data-s="1"><h4>Warum „quadratisch“?</h4><svg viewBox="0 0 300 170" style="width:100%"><rect x="20" y="20" width="120" height="120" fill="#BFE3CC" stroke="#123b22" stroke-width="2"/><text x="80" y="88" text-anchor="middle" font-family="Cambria,Georgia,serif" font-size="26" font-weight="bold">x · x</text><text x="80" y="160" text-anchor="middle" font-family="Calibri,Arial" font-size="16">x</text><text x="6" y="86" font-family="Calibri,Arial" font-size="16">x</text><text x="168" y="70" font-family="Calibri,Arial" font-size="17">Ein Quadrat hat</text><text x="168" y="92" font-family="Calibri,Arial" font-size="17">die Fläche x · x = x².</text></svg>Darum heißt <span class="m">x²</span> auch „x <b>Quadrat</b>“.</div></div></div></section>
+<section class="slide" data-g="normal"><h2 class="th"><span class="no">2</span>Die Wertetabelle</h2><div class="tcols" style="grid-template-columns:1.35fr 1fr"><div class="lcol"><div class="say " data-s="0">Wir setzen x-Werte ein und rechnen den y-Wert aus.</div><div class="tg" style="grid-template-columns:auto repeat(7,58px)"><div class="tl hx">x</div><div class="tc hx">−3</div><div class="tc hx">−2</div><div class="tc hx">−1</div><div class="tc hx">0</div><div class="tc hx">1</div><div class="tc hx">2</div><div class="tc hx">3</div><div class="tl rl">f(x)</div><div class="tc rl" data-s="1">9</div><div class="tc rl" data-s="2">4</div><div class="tc rl" data-s="3">1</div><div class="tc rl" data-s="4">0</div><div class="tc rl" data-s="5">1</div><div class="tc rl" data-s="5">4</div><div class="tc rl" data-s="5">9</div></div><div style="height:10px"></div><div class="calc" data-s="1">f(−3) = (−3)² = (−3) · (−3) = <b>9</b></div><div class="calc" data-s="2">f(−2) = (−2)² = (−2) · (−2) = <b>4</b></div><div class="calc" data-s="3">f(−1) = (−1)² = (−1) · (−1) = <b>1</b></div><div class="calc" data-s="4">f(0) = 0² = 0 · 0 = <b>0</b></div><div class="calc" data-s="5">f(1) = 1, &nbsp; f(2) = 4, &nbsp; f(3) = 9</div><div class="trapbox" data-s="6"><b>Achtung, Vorzeichen-Falle!</b><br>Setze negative Zahlen in <b>Klammern</b>.<br><span class="m">(−3)² = 9</span>. Minus mal Minus ist Plus.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:360px" ><defs><clipPath id="p140622920636752c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="392.0" x2="332" y2="392.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,392.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="170.0" y1="437" x2="170.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M170.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="411.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="179.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="388.0" x2="22.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="59.0" y1="388.0" x2="59.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="96.0" y1="388.0" x2="96.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="133.0" y1="388.0" x2="133.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="133.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="207.0" y1="388.0" x2="207.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="244.0" y1="388.0" x2="244.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="281.0" y1="388.0" x2="281.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="318.0" y1="388.0" x2="318.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="429.0" x2="174.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="166.0" y1="355.0" x2="174.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="166.0" y1="318.0" x2="174.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="166.0" y1="281.0" x2="174.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="166.0" y1="244.0" x2="174.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="207.0" x2="174.0" y2="207.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="211.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="166.0" y1="170.0" x2="174.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="166.0" y1="133.0" x2="174.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="166.0" y1="96.0" x2="174.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<line x1="166.0" y1="59.0" x2="174.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">9</text>
+<line x1="166.0" y1="22.0" x2="174.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">10</text>
+<text x="164.0" y="408.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g  data-s="1"><circle cx="59.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="51.0" y="51.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(−3|9)</text></g><g  data-s="2"><circle cx="96.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="88.0" y="236.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(−2|4)</text></g><g  data-s="3"><circle cx="133.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="125.0" y="347.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(−1|1)</text></g><g  data-s="4"><circle cx="170.0" cy="392.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="178.0" y="384.0" text-anchor="start" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(0|0)</text></g><g  data-s="5"><circle cx="207.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="215.0" y="347.0" text-anchor="start" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(1|1)</text></g><g  data-s="5"><circle cx="244.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="252.0" y="236.0" text-anchor="start" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(2|4)</text></g><g  data-s="5"><circle cx="281.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/><text x="289.0" y="51.0" text-anchor="start" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#1E8449">(3|9)</text></g></svg></div></div></section>
+<section class="slide" data-g="normal"><h2 class="th"><span class="no">3</span>Der Graph der Normalparabel</h2><div class="tcols" style="grid-template-columns:1.35fr 1fr"><div class="lcol"><div class="say " data-s="0">Die Punkte aus der Tabelle trägst du ins Koordinatensystem ein.</div><div class="say " data-s="1">Dann verbindest du die Punkte mit einer <b>runden Kurve</b>.</div><div class="warn" data-s="2"><b>Tipp:</b> Zeichne <b>ohne</b> Lineal. Unten hat die Parabel <b>keine Spitze</b>. Sie ist rund.</div><div class="res" data-s="3">Das ist die Normalparabel.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:360px" ><defs><clipPath id="p140622920637072c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="392.0" x2="332" y2="392.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,392.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="170.0" y1="437" x2="170.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M170.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="411.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="179.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="388.0" x2="22.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="59.0" y1="388.0" x2="59.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="96.0" y1="388.0" x2="96.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="133.0" y1="388.0" x2="133.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="133.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="207.0" y1="388.0" x2="207.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="244.0" y1="388.0" x2="244.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="281.0" y1="388.0" x2="281.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="318.0" y1="388.0" x2="318.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="429.0" x2="174.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="166.0" y1="355.0" x2="174.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="166.0" y1="318.0" x2="174.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="166.0" y1="281.0" x2="174.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="166.0" y1="244.0" x2="174.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="207.0" x2="174.0" y2="207.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="211.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="166.0" y1="170.0" x2="174.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="166.0" y1="133.0" x2="174.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="166.0" y1="96.0" x2="174.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<line x1="166.0" y1="59.0" x2="174.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">9</text>
+<line x1="166.0" y1="22.0" x2="174.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">10</text>
+<text x="164.0" y="408.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><circle cx="59.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="96.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="133.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="170.0" cy="392.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="207.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="244.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g ><circle cx="281.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="1"><path d="M22.0,-200.0 L23.2,-190.2 L24.5,-180.4 L25.7,-170.8 L26.9,-161.2 L28.2,-151.7 L29.4,-142.3 L30.6,-132.9 L31.9,-123.7 L33.1,-114.5 L34.3,-105.4 L35.6,-96.4 L36.8,-87.5 L38.0,-78.7 L39.3,-69.9 L40.5,-61.2 L41.7,-52.7 L43.0,-44.1 L44.2,-35.7 L45.4,-27.4 L46.7,-19.1 L47.9,-10.9 L49.1,-2.8 L50.4,5.2 L51.6,13.1 L52.8,21.0 L54.1,28.7 L55.3,36.4 L56.5,44.0 L57.8,51.6 L59.0,59.0 L60.2,66.4 L61.5,73.6 L62.7,80.8 L63.9,87.9 L65.2,95.0 L66.4,101.9 L67.6,108.8 L68.9,115.6 L70.1,122.3 L71.3,128.9 L72.6,135.4 L73.8,141.9 L75.0,148.3 L76.3,154.5 L77.5,160.8 L78.7,166.9 L80.0,172.9 L81.2,178.9 L82.4,184.8 L83.7,190.6 L84.9,196.3 L86.1,201.9 L87.4,207.5 L88.6,212.9 L89.8,218.3 L91.1,223.6 L92.3,228.8 L93.5,234.0 L94.8,239.0 L96.0,244.0 L97.2,248.9 L98.5,253.7 L99.7,258.4 L100.9,263.1 L102.2,267.6 L103.4,272.1 L104.6,276.5 L105.9,280.8 L107.1,285.1 L108.3,289.2 L109.6,293.3 L110.8,297.3 L112.0,301.2 L113.3,305.0 L114.5,308.8 L115.7,312.4 L117.0,316.0 L118.2,319.5 L119.4,322.9 L120.7,326.2 L121.9,329.5 L123.1,332.6 L124.4,335.7 L125.6,338.7 L126.8,341.6 L128.1,344.5 L129.3,347.2 L130.5,349.9 L131.8,352.5 L133.0,355.0 L134.2,357.4 L135.5,359.8 L136.7,362.0 L137.9,364.2 L139.2,366.3 L140.4,368.3 L141.6,370.3 L142.9,372.1 L144.1,373.9 L145.3,375.6 L146.6,377.2 L147.8,378.7 L149.0,380.1 L150.3,381.5 L151.5,382.8 L152.7,383.9 L154.0,385.1 L155.2,386.1 L156.4,387.0 L157.7,387.9 L158.9,388.7 L160.1,389.4 L161.4,390.0 L162.6,390.5 L163.8,391.0 L165.1,391.3 L166.3,391.6 L167.5,391.8 L168.8,392.0 L170.0,392.0 L171.2,392.0 L172.5,391.8 L173.7,391.6 L174.9,391.3 L176.2,391.0 L177.4,390.5 L178.6,390.0 L179.9,389.4 L181.1,388.7 L182.3,387.9 L183.6,387.0 L184.8,386.1 L186.0,385.1 L187.3,383.9 L188.5,382.8 L189.7,381.5 L191.0,380.1 L192.2,378.7 L193.4,377.2 L194.7,375.6 L195.9,373.9 L197.1,372.1 L198.4,370.3 L199.6,368.3 L200.8,366.3 L202.1,364.2 L203.3,362.0 L204.5,359.8 L205.8,357.4 L207.0,355.0 L208.2,352.5 L209.5,349.9 L210.7,347.2 L211.9,344.5 L213.2,341.6 L214.4,338.7 L215.6,335.7 L216.9,332.6 L218.1,329.5 L219.3,326.2 L220.6,322.9 L221.8,319.5 L223.0,316.0 L224.3,312.4 L225.5,308.8 L226.7,305.0 L228.0,301.2 L229.2,297.3 L230.4,293.3 L231.7,289.2 L232.9,285.1 L234.1,280.8 L235.4,276.5 L236.6,272.1 L237.8,267.6 L239.1,263.1 L240.3,258.4 L241.5,253.7 L242.8,248.9 L244.0,244.0 L245.2,239.0 L246.5,234.0 L247.7,228.8 L248.9,223.6 L250.2,218.3 L251.4,212.9 L252.6,207.5 L253.9,201.9 L255.1,196.3 L256.3,190.6 L257.6,184.8 L258.8,178.9 L260.0,172.9 L261.3,166.9 L262.5,160.8 L263.7,154.5 L265.0,148.3 L266.2,141.9 L267.4,135.4 L268.7,128.9 L269.9,122.3 L271.1,115.6 L272.4,108.8 L273.6,101.9 L274.8,95.0 L276.1,87.9 L277.3,80.8 L278.5,73.6 L279.8,66.4 L281.0,59.0 L282.2,51.6 L283.5,44.0 L284.7,36.4 L285.9,28.7 L287.2,21.0 L288.4,13.1 L289.6,5.2 L290.9,-2.8 L292.1,-10.9 L293.3,-19.1 L294.6,-27.4 L295.8,-35.7 L297.0,-44.1 L298.3,-52.7 L299.5,-61.2 L300.7,-69.9 L302.0,-78.7 L303.2,-87.5 L304.4,-96.4 L305.7,-105.4 L306.9,-114.5 L308.1,-123.7 L309.4,-132.9 L310.6,-142.3 L311.8,-151.7 L313.1,-161.2 L314.3,-170.8 L315.5,-180.4 L316.8,-190.2 L318.0,-200.0" fill="none" stroke="#1E8449" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622920637072c)"/><text x="276.2" y="145.9" font-size="16" font-family="Cambria,Caladea,Georgia,serif" font-weight="bold" fill="#1E8449">f</text></g></svg></div></div></section>
+<section class="slide" data-g="eig"><h2 class="th"><span class="no">4</span>Eigenschaften der Normalparabel</h2><div class="tcols" style="grid-template-columns:1.35fr 1fr"><div class="lcol"><div class="say " data-s="0">Die Normalparabel hat wichtige Eigenschaften:</div><div class="merk"><ul><li data-s="1">Der <b>tiefste Punkt</b> heißt <b>Scheitelpunkt S</b>.<br>Bei der Normalparabel ist <span class="m">S(0 | 0)</span>.</li><li data-s="2">Die Parabel ist <b>nach oben geöffnet</b>.</li><li data-s="3">Sie ist <b>symmetrisch</b> zur y-Achse.<br>Links und rechts sind die Werte gleich.</li><li data-s="4">Die y-Werte sind <b>nie negativ</b>.</li></ul></div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:360px" ><defs><clipPath id="p140622920568464c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="392.0" x2="332" y2="392.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,392.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="170.0" y1="437" x2="170.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M170.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="411.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="179.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="388.0" x2="22.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="59.0" y1="388.0" x2="59.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="96.0" y1="388.0" x2="96.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="133.0" y1="388.0" x2="133.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="133.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="207.0" y1="388.0" x2="207.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="244.0" y1="388.0" x2="244.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="281.0" y1="388.0" x2="281.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="318.0" y1="388.0" x2="318.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="429.0" x2="174.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="166.0" y1="355.0" x2="174.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="166.0" y1="318.0" x2="174.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="166.0" y1="281.0" x2="174.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="166.0" y1="244.0" x2="174.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="207.0" x2="174.0" y2="207.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="211.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="166.0" y1="170.0" x2="174.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="166.0" y1="133.0" x2="174.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="166.0" y1="96.0" x2="174.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<line x1="166.0" y1="59.0" x2="174.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">9</text>
+<line x1="166.0" y1="22.0" x2="174.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">10</text>
+<text x="164.0" y="408.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><path d="M22.0,-200.0 L23.2,-190.2 L24.5,-180.4 L25.7,-170.8 L26.9,-161.2 L28.2,-151.7 L29.4,-142.3 L30.6,-132.9 L31.9,-123.7 L33.1,-114.5 L34.3,-105.4 L35.6,-96.4 L36.8,-87.5 L38.0,-78.7 L39.3,-69.9 L40.5,-61.2 L41.7,-52.7 L43.0,-44.1 L44.2,-35.7 L45.4,-27.4 L46.7,-19.1 L47.9,-10.9 L49.1,-2.8 L50.4,5.2 L51.6,13.1 L52.8,21.0 L54.1,28.7 L55.3,36.4 L56.5,44.0 L57.8,51.6 L59.0,59.0 L60.2,66.4 L61.5,73.6 L62.7,80.8 L63.9,87.9 L65.2,95.0 L66.4,101.9 L67.6,108.8 L68.9,115.6 L70.1,122.3 L71.3,128.9 L72.6,135.4 L73.8,141.9 L75.0,148.3 L76.3,154.5 L77.5,160.8 L78.7,166.9 L80.0,172.9 L81.2,178.9 L82.4,184.8 L83.7,190.6 L84.9,196.3 L86.1,201.9 L87.4,207.5 L88.6,212.9 L89.8,218.3 L91.1,223.6 L92.3,228.8 L93.5,234.0 L94.8,239.0 L96.0,244.0 L97.2,248.9 L98.5,253.7 L99.7,258.4 L100.9,263.1 L102.2,267.6 L103.4,272.1 L104.6,276.5 L105.9,280.8 L107.1,285.1 L108.3,289.2 L109.6,293.3 L110.8,297.3 L112.0,301.2 L113.3,305.0 L114.5,308.8 L115.7,312.4 L117.0,316.0 L118.2,319.5 L119.4,322.9 L120.7,326.2 L121.9,329.5 L123.1,332.6 L124.4,335.7 L125.6,338.7 L126.8,341.6 L128.1,344.5 L129.3,347.2 L130.5,349.9 L131.8,352.5 L133.0,355.0 L134.2,357.4 L135.5,359.8 L136.7,362.0 L137.9,364.2 L139.2,366.3 L140.4,368.3 L141.6,370.3 L142.9,372.1 L144.1,373.9 L145.3,375.6 L146.6,377.2 L147.8,378.7 L149.0,380.1 L150.3,381.5 L151.5,382.8 L152.7,383.9 L154.0,385.1 L155.2,386.1 L156.4,387.0 L157.7,387.9 L158.9,388.7 L160.1,389.4 L161.4,390.0 L162.6,390.5 L163.8,391.0 L165.1,391.3 L166.3,391.6 L167.5,391.8 L168.8,392.0 L170.0,392.0 L171.2,392.0 L172.5,391.8 L173.7,391.6 L174.9,391.3 L176.2,391.0 L177.4,390.5 L178.6,390.0 L179.9,389.4 L181.1,388.7 L182.3,387.9 L183.6,387.0 L184.8,386.1 L186.0,385.1 L187.3,383.9 L188.5,382.8 L189.7,381.5 L191.0,380.1 L192.2,378.7 L193.4,377.2 L194.7,375.6 L195.9,373.9 L197.1,372.1 L198.4,370.3 L199.6,368.3 L200.8,366.3 L202.1,364.2 L203.3,362.0 L204.5,359.8 L205.8,357.4 L207.0,355.0 L208.2,352.5 L209.5,349.9 L210.7,347.2 L211.9,344.5 L213.2,341.6 L214.4,338.7 L215.6,335.7 L216.9,332.6 L218.1,329.5 L219.3,326.2 L220.6,322.9 L221.8,319.5 L223.0,316.0 L224.3,312.4 L225.5,308.8 L226.7,305.0 L228.0,301.2 L229.2,297.3 L230.4,293.3 L231.7,289.2 L232.9,285.1 L234.1,280.8 L235.4,276.5 L236.6,272.1 L237.8,267.6 L239.1,263.1 L240.3,258.4 L241.5,253.7 L242.8,248.9 L244.0,244.0 L245.2,239.0 L246.5,234.0 L247.7,228.8 L248.9,223.6 L250.2,218.3 L251.4,212.9 L252.6,207.5 L253.9,201.9 L255.1,196.3 L256.3,190.6 L257.6,184.8 L258.8,178.9 L260.0,172.9 L261.3,166.9 L262.5,160.8 L263.7,154.5 L265.0,148.3 L266.2,141.9 L267.4,135.4 L268.7,128.9 L269.9,122.3 L271.1,115.6 L272.4,108.8 L273.6,101.9 L274.8,95.0 L276.1,87.9 L277.3,80.8 L278.5,73.6 L279.8,66.4 L281.0,59.0 L282.2,51.6 L283.5,44.0 L284.7,36.4 L285.9,28.7 L287.2,21.0 L288.4,13.1 L289.6,5.2 L290.9,-2.8 L292.1,-10.9 L293.3,-19.1 L294.6,-27.4 L295.8,-35.7 L297.0,-44.1 L298.3,-52.7 L299.5,-61.2 L300.7,-69.9 L302.0,-78.7 L303.2,-87.5 L304.4,-96.4 L305.7,-105.4 L306.9,-114.5 L308.1,-123.7 L309.4,-132.9 L310.6,-142.3 L311.8,-151.7 L313.1,-161.2 L314.3,-170.8 L315.5,-180.4 L316.8,-190.2 L318.0,-200.0" fill="none" stroke="#1E8449" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622920568464c)"/></g><g  data-s="3"><line x1="170.0" y1="421.6" x2="170.0" y2="29.4" stroke="#E07B00" stroke-width="3" stroke-dasharray="8 6" stroke-linecap="round"/></g><g  data-s="1"><circle cx="170.0" cy="392.0" r="11" fill="none" stroke="#E07B00" stroke-width="2"/><circle cx="170.0" cy="392.0" r="7" fill="#E07B00" stroke="#fff" stroke-width="1.5"/><text x="180.0" y="382.0" text-anchor="start" font-size="16" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#E07B00">S(0|0)</text></g><g  data-s="3"><line x1="96.0" y1="244.0" x2="244.0" y2="244.0" stroke="#1D70B8" stroke-width="2.5" stroke-dasharray="4 4" stroke-linecap="round"/></g><g  data-s="3"><circle cx="96.0" cy="244.0" r="5" fill="#1D70B8" stroke="#fff" stroke-width="1.5"/></g><g  data-s="3"><circle cx="244.0" cy="244.0" r="5" fill="#1D70B8" stroke="#fff" stroke-width="1.5"/></g></svg></div></div></section>
+<section class="slide" data-g="eig"><h2 class="th"><span class="no">5</span>Die Normalparabel schnell zeichnen</h2><div class="tcols" style="grid-template-columns:1.35fr 1fr"><div class="lcol"><div class="say " data-s="0">Vom Scheitelpunkt aus kannst du die Normalparabel schnell zeichnen:</div><div class="stp" data-s="1"><span class="n">1</span><div><span style="color:#1D70B8"><b>1</b> nach rechts</span>, <span style="color:#C62828"><b>1</b> nach oben</span></div></div><div class="stp" data-s="2"><span class="n">2</span><div><span style="color:#1D70B8"><b>2</b> nach rechts</span>, <span style="color:#C62828"><b>4</b> nach oben</span></div></div><div class="stp" data-s="3"><span class="n">3</span><div><span style="color:#1D70B8"><b>3</b> nach rechts</span>, <span style="color:#C62828"><b>9</b> nach oben</span></div></div><div class="say " data-s="4">Links geht es genauso. Die Parabel ist ja symmetrisch.</div><div class="warn" data-s="4"><b>Tipp:</b> So kannst du prüfen, ob ein Graph die Normalparabel ist.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:360px" ><defs><clipPath id="p140622920568768c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="392.0" x2="332" y2="392.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,392.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="170.0" y1="437" x2="170.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M170.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="411.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="179.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="388.0" x2="22.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="59.0" y1="388.0" x2="59.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="96.0" y1="388.0" x2="96.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="133.0" y1="388.0" x2="133.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="133.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="207.0" y1="388.0" x2="207.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="244.0" y1="388.0" x2="244.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="281.0" y1="388.0" x2="281.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="318.0" y1="388.0" x2="318.0" y2="396.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="410.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="429.0" x2="174.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="166.0" y1="355.0" x2="174.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="166.0" y1="318.0" x2="174.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="166.0" y1="281.0" x2="174.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="166.0" y1="244.0" x2="174.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="207.0" x2="174.0" y2="207.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="211.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="166.0" y1="170.0" x2="174.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="166.0" y1="133.0" x2="174.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="166.0" y1="96.0" x2="174.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<line x1="166.0" y1="59.0" x2="174.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">9</text>
+<line x1="166.0" y1="22.0" x2="174.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">10</text>
+<text x="164.0" y="408.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g ><path d="M22.0,-200.0 L23.2,-190.2 L24.5,-180.4 L25.7,-170.8 L26.9,-161.2 L28.2,-151.7 L29.4,-142.3 L30.6,-132.9 L31.9,-123.7 L33.1,-114.5 L34.3,-105.4 L35.6,-96.4 L36.8,-87.5 L38.0,-78.7 L39.3,-69.9 L40.5,-61.2 L41.7,-52.7 L43.0,-44.1 L44.2,-35.7 L45.4,-27.4 L46.7,-19.1 L47.9,-10.9 L49.1,-2.8 L50.4,5.2 L51.6,13.1 L52.8,21.0 L54.1,28.7 L55.3,36.4 L56.5,44.0 L57.8,51.6 L59.0,59.0 L60.2,66.4 L61.5,73.6 L62.7,80.8 L63.9,87.9 L65.2,95.0 L66.4,101.9 L67.6,108.8 L68.9,115.6 L70.1,122.3 L71.3,128.9 L72.6,135.4 L73.8,141.9 L75.0,148.3 L76.3,154.5 L77.5,160.8 L78.7,166.9 L80.0,172.9 L81.2,178.9 L82.4,184.8 L83.7,190.6 L84.9,196.3 L86.1,201.9 L87.4,207.5 L88.6,212.9 L89.8,218.3 L91.1,223.6 L92.3,228.8 L93.5,234.0 L94.8,239.0 L96.0,244.0 L97.2,248.9 L98.5,253.7 L99.7,258.4 L100.9,263.1 L102.2,267.6 L103.4,272.1 L104.6,276.5 L105.9,280.8 L107.1,285.1 L108.3,289.2 L109.6,293.3 L110.8,297.3 L112.0,301.2 L113.3,305.0 L114.5,308.8 L115.7,312.4 L117.0,316.0 L118.2,319.5 L119.4,322.9 L120.7,326.2 L121.9,329.5 L123.1,332.6 L124.4,335.7 L125.6,338.7 L126.8,341.6 L128.1,344.5 L129.3,347.2 L130.5,349.9 L131.8,352.5 L133.0,355.0 L134.2,357.4 L135.5,359.8 L136.7,362.0 L137.9,364.2 L139.2,366.3 L140.4,368.3 L141.6,370.3 L142.9,372.1 L144.1,373.9 L145.3,375.6 L146.6,377.2 L147.8,378.7 L149.0,380.1 L150.3,381.5 L151.5,382.8 L152.7,383.9 L154.0,385.1 L155.2,386.1 L156.4,387.0 L157.7,387.9 L158.9,388.7 L160.1,389.4 L161.4,390.0 L162.6,390.5 L163.8,391.0 L165.1,391.3 L166.3,391.6 L167.5,391.8 L168.8,392.0 L170.0,392.0 L171.2,392.0 L172.5,391.8 L173.7,391.6 L174.9,391.3 L176.2,391.0 L177.4,390.5 L178.6,390.0 L179.9,389.4 L181.1,388.7 L182.3,387.9 L183.6,387.0 L184.8,386.1 L186.0,385.1 L187.3,383.9 L188.5,382.8 L189.7,381.5 L191.0,380.1 L192.2,378.7 L193.4,377.2 L194.7,375.6 L195.9,373.9 L197.1,372.1 L198.4,370.3 L199.6,368.3 L200.8,366.3 L202.1,364.2 L203.3,362.0 L204.5,359.8 L205.8,357.4 L207.0,355.0 L208.2,352.5 L209.5,349.9 L210.7,347.2 L211.9,344.5 L213.2,341.6 L214.4,338.7 L215.6,335.7 L216.9,332.6 L218.1,329.5 L219.3,326.2 L220.6,322.9 L221.8,319.5 L223.0,316.0 L224.3,312.4 L225.5,308.8 L226.7,305.0 L228.0,301.2 L229.2,297.3 L230.4,293.3 L231.7,289.2 L232.9,285.1 L234.1,280.8 L235.4,276.5 L236.6,272.1 L237.8,267.6 L239.1,263.1 L240.3,258.4 L241.5,253.7 L242.8,248.9 L244.0,244.0 L245.2,239.0 L246.5,234.0 L247.7,228.8 L248.9,223.6 L250.2,218.3 L251.4,212.9 L252.6,207.5 L253.9,201.9 L255.1,196.3 L256.3,190.6 L257.6,184.8 L258.8,178.9 L260.0,172.9 L261.3,166.9 L262.5,160.8 L263.7,154.5 L265.0,148.3 L266.2,141.9 L267.4,135.4 L268.7,128.9 L269.9,122.3 L271.1,115.6 L272.4,108.8 L273.6,101.9 L274.8,95.0 L276.1,87.9 L277.3,80.8 L278.5,73.6 L279.8,66.4 L281.0,59.0 L282.2,51.6 L283.5,44.0 L284.7,36.4 L285.9,28.7 L287.2,21.0 L288.4,13.1 L289.6,5.2 L290.9,-2.8 L292.1,-10.9 L293.3,-19.1 L294.6,-27.4 L295.8,-35.7 L297.0,-44.1 L298.3,-52.7 L299.5,-61.2 L300.7,-69.9 L302.0,-78.7 L303.2,-87.5 L304.4,-96.4 L305.7,-105.4 L306.9,-114.5 L308.1,-123.7 L309.4,-132.9 L310.6,-142.3 L311.8,-151.7 L313.1,-161.2 L314.3,-170.8 L315.5,-180.4 L316.8,-190.2 L318.0,-200.0" fill="none" stroke="#9bbca6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622920568768c)"/></g><g ><circle cx="170.0" cy="392.0" r="6" fill="#E07B00" stroke="#fff" stroke-width="1.5"/><text x="160.0" y="384.0" text-anchor="end" font-size="16" font-family="Calibri,Carlito,Arial,sans-serif" font-weight="bold" fill="#E07B00">S</text></g><g  data-s="1"><line x1="170.0" y1="392.0" x2="207.0" y2="392.0" stroke="#1D70B8" stroke-width="3" stroke-linecap="round"/><path d="M197.1,396.8 L207.0,392.0 L197.1,387.2" fill="none" stroke="#1D70B8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><line x1="207.0" y1="392.0" x2="207.0" y2="355.0" stroke="#C62828" stroke-width="3" stroke-linecap="round"/><path d="M211.8,364.9 L207.0,355.0 L202.2,364.9" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="1"><circle cx="207.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="133.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><line x1="170.0" y1="392.0" x2="244.0" y2="392.0" stroke="#1D70B8" stroke-width="3" stroke-linecap="round"/><path d="M234.1,396.8 L244.0,392.0 L234.1,387.2" fill="none" stroke="#1D70B8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><line x1="244.0" y1="392.0" x2="244.0" y2="244.0" stroke="#C62828" stroke-width="3" stroke-linecap="round"/><path d="M248.8,253.9 L244.0,244.0 L239.2,253.9" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="2"><circle cx="244.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="96.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="3"><line x1="170.0" y1="392.0" x2="281.0" y2="392.0" stroke="#1D70B8" stroke-width="3" stroke-linecap="round"/><path d="M271.1,396.8 L281.0,392.0 L271.1,387.2" fill="none" stroke="#1D70B8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="3"><line x1="281.0" y1="392.0" x2="281.0" y2="59.0" stroke="#C62828" stroke-width="3" stroke-linecap="round"/><path d="M285.8,68.9 L281.0,59.0 L276.2,68.9" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g><g  data-s="3"><circle cx="281.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="59.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g></svg></div></div></section>
+<section class="slide" data-g="af"><h2 class="th"><span class="no">6</span>Die allgemeine Form</h2><div class="say " data-s="0">Es gibt viele quadratische Funktionen. Alle haben diese Form:</div><div class="merk" data-s="1"><b>Allgemeine Form</b> einer quadratischen Funktion:<br><div class="feq big" style="margin:6px 0">f(x) = <span class="ca">a</span>x² + <span class="cb">b</span>x + <span class="cc">c</span></div>Wichtig: <span class="ca">a</span> darf nicht 0 sein. Sonst gibt es kein x².</div><div class="three" data-s="2"><div class="kc" data-s="2"><div class="feq" style="font-size:24px">f(x) = <span class="ca">2</span>x² <span class="cb">+ 3</span>x <span class="cc">− 1</span></div><div style="margin-top:6px"><span class="ca">a = 2</span> &nbsp; <span class="cb">b = 3</span> &nbsp; <span class="cc">c = −1</span></div><div style="font-size:16px;color:#555">Das Minus gehört zur Zahl.</div></div><div class="kc" data-s="3"><div class="feq" style="font-size:24px">f(x) = <span class="ca">−</span>x² <span class="cc">+ 4</span></div><div style="margin-top:6px"><span class="ca">a = −1</span> &nbsp; <span class="cb">b = 0</span> &nbsp; <span class="cc">c = 4</span></div><div style="font-size:16px;color:#555">Nur ein Minus vor x²: a = −1.<br>Kein x-Teil: b = 0.</div></div><div class="kc" data-s="4"><div class="feq" style="font-size:24px">f(x) = <span class="ca">0,5</span>x² <span class="cb">− 2</span>x</div><div style="margin-top:6px"><span class="ca">a = 0,5</span> &nbsp; <span class="cb">b = −2</span> &nbsp; <span class="cc">c = 0</span></div><div style="font-size:16px;color:#555">Keine Zahl ohne x: c = 0.</div></div></div><div class="warn" data-s="5"><b>So liest du a, b und c ab:</b> Steht nichts vor x², dann ist a = 1. Das <b>Vorzeichen</b> gehört immer zur Zahl.</div></section>
+<section class="slide" data-g="af"><h2 class="th"><span class="no">7</span>Probiere es aus</h2><div class="say " data-s="0">Lies <span class="ca">a</span>, <span class="cb">b</span> und <span class="cc">c</span> ab. Tippe dann auf <b>Prüfen</b>.</div><div class="two"><div class="kc"><div class="qbox"><div class="q">f(x) = −2x² + x − 5</div><div class="feq" style="font-size:22px">a = <input class="gp" data-a="-2" style="width:70px" inputmode="decimal" autocomplete="off"> &nbsp; b = <input class="gp" data-a="1" style="width:70px" inputmode="decimal" autocomplete="off"> &nbsp; c = <input class="gp" data-a="-5" style="width:70px" inputmode="decimal" autocomplete="off"></div><div class="btns"><button class="pr" data-a="chk">Prüfen</button></div><div class="fb"></div></div></div><div class="kc"><div class="qbox"><div class="q">f(x) = x² − 7</div><div class="feq" style="font-size:22px">a = <input class="gp" data-a="1" style="width:70px" inputmode="decimal" autocomplete="off"> &nbsp; b = <input class="gp" data-a="0" style="width:70px" inputmode="decimal" autocomplete="off"> &nbsp; c = <input class="gp" data-a="-7" style="width:70px" inputmode="decimal" autocomplete="off"></div><div class="btns"><button class="pr" data-a="chk">Prüfen</button></div><div class="fb"></div></div></div></div><div class="warn" data-s="0"><b>Tipp:</b> Fehlt ein Teil, dann ist die Zahl <b>0</b>. Schreibe das Minus mit.</div></section>
+<section class="slide" data-g="wt"><h2 class="th"><span class="no">8</span>Beispiel 1: Wertetabelle und Graph</h2><div class="tcols" style="grid-template-columns:1.45fr 1fr"><div class="lcol"><div class="feq" style="margin:0 0 8px">f(x) = x² − 2x − 3</div><div class="tg" style="grid-template-columns:auto repeat(7,54px);--tfs:20px"><div class="tl hx">x</div><div class="tc hx">−2</div><div class="tc hx">−1</div><div class="tc hx">0</div><div class="tc hx">1</div><div class="tc hx">2</div><div class="tc hx">3</div><div class="tc hx">4</div><div class="tl rl">f(x)</div><div class="tc rl" data-s="1">5</div><div class="tc rl" data-s="2">0</div><div class="tc rl" data-s="3">−3</div><div class="tc rl" data-s="4">−4</div><div class="tc rl" data-s="4">−3</div><div class="tc rl" data-s="4">0</div><div class="tc rl" data-s="4">5</div></div><div style="height:8px"></div><div class="calc" data-s="1">f(−2) = (−2)² − 2 · (−2) − 3 = 4 <span class="trap">+ 4</span> − 3 = <b>5</b></div><div class="calc" data-s="2">f(−1) = (−1)² − 2 · (−1) − 3 = 1 <span class="trap">+ 2</span> − 3 = <b>0</b></div><div class="calc" data-s="3">f(0) = 0² − 2 · 0 − 3 = <b>−3</b></div><div class="calc" data-s="4">f(1) = −4, &nbsp; f(2) = −3, &nbsp; f(3) = 0, &nbsp; f(4) = 5</div><div class="trapbox" data-s="1"><b>Vorzeichen-Falle:</b> <span class="m">− 2 · (−2) = + 4</span>. Minus mal Minus ist Plus.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:370px" ><defs><clipPath id="p140622942547856c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="244.0" x2="332" y2="244.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,244.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="133.0" y1="437" x2="133.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M133.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="263.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="142.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="240.0" x2="22.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="59.0" y1="240.0" x2="59.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="96.0" y1="240.0" x2="96.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="170.0" y1="240.0" x2="170.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="170.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="207.0" y1="240.0" x2="207.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="244.0" y1="240.0" x2="244.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="281.0" y1="240.0" x2="281.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="318.0" y1="240.0" x2="318.0" y2="248.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="262.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="129.0" y1="429.0" x2="137.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="129.0" y1="392.0" x2="137.0" y2="392.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="396.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="129.0" y1="355.0" x2="137.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="129.0" y1="318.0" x2="137.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="129.0" y1="281.0" x2="137.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="129.0" y1="207.0" x2="137.0" y2="207.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="211.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="129.0" y1="170.0" x2="137.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="129.0" y1="133.0" x2="137.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="129.0" y1="96.0" x2="137.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="129.0" y1="59.0" x2="137.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="129.0" y1="22.0" x2="137.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="126.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<text x="127.0" y="260.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g  data-s="1"><circle cx="59.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><circle cx="96.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="3"><circle cx="133.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="170.0" cy="392.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="207.0" cy="355.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="244.0" cy="244.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="281.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="5"><path d="M22.0,-200.0 L23.2,-190.2 L24.5,-180.4 L25.7,-170.8 L26.9,-161.2 L28.2,-151.7 L29.4,-142.3 L30.6,-132.9 L31.9,-123.7 L33.1,-114.5 L34.3,-105.4 L35.6,-96.4 L36.8,-87.5 L38.0,-78.7 L39.3,-69.9 L40.5,-61.2 L41.7,-52.7 L43.0,-44.1 L44.2,-35.7 L45.4,-27.4 L46.7,-19.1 L47.9,-10.9 L49.1,-2.8 L50.4,5.2 L51.6,13.1 L52.8,21.0 L54.1,28.7 L55.3,36.4 L56.5,44.0 L57.8,51.6 L59.0,59.0 L60.2,66.4 L61.5,73.6 L62.7,80.8 L63.9,87.9 L65.2,95.0 L66.4,101.9 L67.6,108.8 L68.9,115.6 L70.1,122.3 L71.3,128.9 L72.6,135.4 L73.8,141.9 L75.0,148.3 L76.3,154.5 L77.5,160.8 L78.7,166.9 L80.0,172.9 L81.2,178.9 L82.4,184.8 L83.7,190.6 L84.9,196.3 L86.1,201.9 L87.4,207.5 L88.6,212.9 L89.8,218.3 L91.1,223.6 L92.3,228.8 L93.5,234.0 L94.8,239.0 L96.0,244.0 L97.2,248.9 L98.5,253.7 L99.7,258.4 L100.9,263.1 L102.2,267.6 L103.4,272.1 L104.6,276.5 L105.9,280.8 L107.1,285.1 L108.3,289.2 L109.6,293.3 L110.8,297.3 L112.0,301.2 L113.3,305.0 L114.5,308.8 L115.7,312.4 L117.0,316.0 L118.2,319.5 L119.4,322.9 L120.7,326.2 L121.9,329.5 L123.1,332.6 L124.4,335.7 L125.6,338.7 L126.8,341.6 L128.1,344.5 L129.3,347.2 L130.5,349.9 L131.8,352.5 L133.0,355.0 L134.2,357.4 L135.5,359.8 L136.7,362.0 L137.9,364.2 L139.2,366.3 L140.4,368.3 L141.6,370.3 L142.9,372.1 L144.1,373.9 L145.3,375.6 L146.6,377.2 L147.8,378.7 L149.0,380.1 L150.3,381.5 L151.5,382.8 L152.7,383.9 L154.0,385.1 L155.2,386.1 L156.4,387.0 L157.7,387.9 L158.9,388.7 L160.1,389.4 L161.4,390.0 L162.6,390.5 L163.8,391.0 L165.1,391.3 L166.3,391.6 L167.5,391.8 L168.8,392.0 L170.0,392.0 L171.2,392.0 L172.5,391.8 L173.7,391.6 L174.9,391.3 L176.2,391.0 L177.4,390.5 L178.6,390.0 L179.9,389.4 L181.1,388.7 L182.3,387.9 L183.6,387.0 L184.8,386.1 L186.0,385.1 L187.3,383.9 L188.5,382.8 L189.7,381.5 L191.0,380.1 L192.2,378.7 L193.4,377.2 L194.7,375.6 L195.9,373.9 L197.1,372.1 L198.4,370.3 L199.6,368.3 L200.8,366.3 L202.1,364.2 L203.3,362.0 L204.5,359.8 L205.8,357.4 L207.0,355.0 L208.2,352.5 L209.5,349.9 L210.7,347.2 L211.9,344.5 L213.2,341.6 L214.4,338.7 L215.6,335.7 L216.9,332.6 L218.1,329.5 L219.3,326.2 L220.6,322.9 L221.8,319.5 L223.0,316.0 L224.3,312.4 L225.5,308.8 L226.7,305.0 L228.0,301.2 L229.2,297.3 L230.4,293.3 L231.7,289.2 L232.9,285.1 L234.1,280.8 L235.4,276.5 L236.6,272.1 L237.8,267.6 L239.1,263.1 L240.3,258.4 L241.5,253.7 L242.8,248.9 L244.0,244.0 L245.2,239.0 L246.5,234.0 L247.7,228.8 L248.9,223.6 L250.2,218.3 L251.4,212.9 L252.6,207.5 L253.9,201.9 L255.1,196.3 L256.3,190.6 L257.6,184.8 L258.8,178.9 L260.0,172.9 L261.3,166.9 L262.5,160.8 L263.7,154.5 L265.0,148.3 L266.2,141.9 L267.4,135.4 L268.7,128.9 L269.9,122.3 L271.1,115.6 L272.4,108.8 L273.6,101.9 L274.8,95.0 L276.1,87.9 L277.3,80.8 L278.5,73.6 L279.8,66.4 L281.0,59.0 L282.2,51.6 L283.5,44.0 L284.7,36.4 L285.9,28.7 L287.2,21.0 L288.4,13.1 L289.6,5.2 L290.9,-2.8 L292.1,-10.9 L293.3,-19.1 L294.6,-27.4 L295.8,-35.7 L297.0,-44.1 L298.3,-52.7 L299.5,-61.2 L300.7,-69.9 L302.0,-78.7 L303.2,-87.5 L304.4,-96.4 L305.7,-105.4 L306.9,-114.5 L308.1,-123.7 L309.4,-132.9 L310.6,-142.3 L311.8,-151.7 L313.1,-161.2 L314.3,-170.8 L315.5,-180.4 L316.8,-190.2 L318.0,-200.0" fill="none" stroke="#1E8449" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622942547856c)"/><text x="292.7" y="28.4" font-size="16" font-family="Cambria,Caladea,Georgia,serif" font-weight="bold" fill="#1E8449">f</text></g></svg></div></div></section>
+<section class="slide" data-g="wt"><h2 class="th"><span class="no">9</span>Beispiel 2: Minus vor x²</h2><div class="tcols" style="grid-template-columns:1.45fr 1fr"><div class="lcol"><div class="feq" style="margin:0 0 8px">f(x) = −x² + 4</div><div class="tg" style="grid-template-columns:auto repeat(7,54px);--tfs:20px"><div class="tl hx">x</div><div class="tc hx">−3</div><div class="tc hx">−2</div><div class="tc hx">−1</div><div class="tc hx">0</div><div class="tc hx">1</div><div class="tc hx">2</div><div class="tc hx">3</div><div class="tl rl">f(x)</div><div class="tc rl" data-s="1">−5</div><div class="tc rl" data-s="2">0</div><div class="tc rl" data-s="3">3</div><div class="tc rl" data-s="4">4</div><div class="tc rl" data-s="4">3</div><div class="tc rl" data-s="4">0</div><div class="tc rl" data-s="4">−5</div></div><div style="height:8px"></div><div class="calc" data-s="1">f(−3) = <span class="trap">−(−3)²</span> + 4 = −9 + 4 = <b>−5</b></div><div class="calc" data-s="2">f(−2) = −(−2)² + 4 = −4 + 4 = <b>0</b></div><div class="calc" data-s="3">f(−1) = −(−1)² + 4 = −1 + 4 = <b>3</b></div><div class="calc" data-s="4">f(0) = 4, &nbsp; f(1) = 3, &nbsp; f(2) = 0, &nbsp; f(3) = −5</div><div class="trapbox" data-s="1"><b>Vorzeichen-Falle:</b> <span class="m">−(−3)² = −9</span>, nicht +9!<br>Erst rechnest du <b>hoch 2</b>. Dann kommt das Minus davor.</div><div class="warn" data-s="4"><b>Taschenrechner:</b> Tippe <span class="m">−(−3)²</span> mit Klammern ein.</div></div><div class="rcol"><svg class="plot" viewBox="0 0 340 451" xmlns="http://www.w3.org/2000/svg" style="max-width:370px" ><defs><clipPath id="p140622920698880c"><rect x="20" y="20" width="300" height="411"/></clipPath></defs><rect x="0" y="0" width="340" height="451" fill="#fff"/>
+<path d="M22.0 22V429M59.0 22V429M96.0 22V429M133.0 22V429M170.0 22V429M207.0 22V429M244.0 22V429M281.0 22V429M318.0 22V429M22 429.0H318M22 392.0H318M22 355.0H318M22 318.0H318M22 281.0H318M22 244.0H318M22 207.0H318M22 170.0H318M22 133.0H318M22 96.0H318M22 59.0H318M22 22.0H318" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="207.0" x2="332" y2="207.0" stroke="#333" stroke-width="1.6"/>
+<path d="M334,207.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="170.0" y1="437" x2="170.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M170.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="330" y="226.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="179.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="203.0" x2="22.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="59.0" y1="203.0" x2="59.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="59.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="96.0" y1="203.0" x2="96.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="96.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="133.0" y1="203.0" x2="133.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="133.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="207.0" y1="203.0" x2="207.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="207.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="244.0" y1="203.0" x2="244.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="244.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="281.0" y1="203.0" x2="281.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="281.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="318.0" y1="203.0" x2="318.0" y2="211.0" stroke="#333" stroke-width="1.2"/>
+<text x="318.0" y="225.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="429.0" x2="174.0" y2="429.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="433.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−6</text>
+<line x1="166.0" y1="392.0" x2="174.0" y2="392.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="396.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="166.0" y1="355.0" x2="174.0" y2="355.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="359.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="166.0" y1="318.0" x2="174.0" y2="318.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="322.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="166.0" y1="281.0" x2="174.0" y2="281.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="285.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="166.0" y1="244.0" x2="174.0" y2="244.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="248.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="166.0" y1="170.0" x2="174.0" y2="170.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="174.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="166.0" y1="133.0" x2="174.0" y2="133.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="137.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="166.0" y1="96.0" x2="174.0" y2="96.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="100.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="166.0" y1="59.0" x2="174.0" y2="59.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="63.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="166.0" y1="22.0" x2="174.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="163.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<text x="164.0" y="223.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g  data-s="1"><circle cx="59.0" cy="392.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="2"><circle cx="96.0" cy="207.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="3"><circle cx="133.0" cy="96.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="170.0" cy="59.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="207.0" cy="96.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="244.0" cy="207.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="4"><circle cx="281.0" cy="392.0" r="5" fill="#1E8449" stroke="#fff" stroke-width="1.5"/></g><g  data-s="5"><path d="M22.0,651.0 L23.2,641.2 L24.5,631.4 L25.7,621.8 L26.9,612.2 L28.2,602.7 L29.4,593.3 L30.6,583.9 L31.9,574.7 L33.1,565.5 L34.3,556.4 L35.6,547.4 L36.8,538.5 L38.0,529.7 L39.3,520.9 L40.5,512.2 L41.7,503.7 L43.0,495.1 L44.2,486.7 L45.4,478.4 L46.7,470.1 L47.9,461.9 L49.1,453.8 L50.4,445.8 L51.6,437.9 L52.8,430.0 L54.1,422.3 L55.3,414.6 L56.5,407.0 L57.8,399.4 L59.0,392.0 L60.2,384.6 L61.5,377.4 L62.7,370.2 L63.9,363.1 L65.2,356.0 L66.4,349.1 L67.6,342.2 L68.9,335.4 L70.1,328.7 L71.3,322.1 L72.6,315.6 L73.8,309.1 L75.0,302.7 L76.3,296.5 L77.5,290.2 L78.7,284.1 L80.0,278.1 L81.2,272.1 L82.4,266.2 L83.7,260.4 L84.9,254.7 L86.1,249.1 L87.4,243.5 L88.6,238.1 L89.8,232.7 L91.1,227.4 L92.3,222.2 L93.5,217.0 L94.8,212.0 L96.0,207.0 L97.2,202.1 L98.5,197.3 L99.7,192.6 L100.9,187.9 L102.2,183.4 L103.4,178.9 L104.6,174.5 L105.9,170.2 L107.1,165.9 L108.3,161.8 L109.6,157.7 L110.8,153.7 L112.0,149.8 L113.3,146.0 L114.5,142.2 L115.7,138.6 L117.0,135.0 L118.2,131.5 L119.4,128.1 L120.7,124.8 L121.9,121.5 L123.1,118.4 L124.4,115.3 L125.6,112.3 L126.8,109.4 L128.1,106.5 L129.3,103.8 L130.5,101.1 L131.8,98.5 L133.0,96.0 L134.2,93.6 L135.5,91.2 L136.7,89.0 L137.9,86.8 L139.2,84.7 L140.4,82.7 L141.6,80.7 L142.9,78.9 L144.1,77.1 L145.3,75.4 L146.6,73.8 L147.8,72.3 L149.0,70.9 L150.3,69.5 L151.5,68.2 L152.7,67.1 L154.0,65.9 L155.2,64.9 L156.4,64.0 L157.7,63.1 L158.9,62.3 L160.1,61.6 L161.4,61.0 L162.6,60.5 L163.8,60.0 L165.1,59.7 L166.3,59.4 L167.5,59.2 L168.8,59.0 L170.0,59.0 L171.2,59.0 L172.5,59.2 L173.7,59.4 L174.9,59.7 L176.2,60.0 L177.4,60.5 L178.6,61.0 L179.9,61.6 L181.1,62.3 L182.3,63.1 L183.6,64.0 L184.8,64.9 L186.0,65.9 L187.3,67.1 L188.5,68.2 L189.7,69.5 L191.0,70.9 L192.2,72.3 L193.4,73.8 L194.7,75.4 L195.9,77.1 L197.1,78.9 L198.4,80.7 L199.6,82.7 L200.8,84.7 L202.1,86.8 L203.3,89.0 L204.5,91.2 L205.8,93.6 L207.0,96.0 L208.2,98.5 L209.5,101.1 L210.7,103.8 L211.9,106.5 L213.2,109.4 L214.4,112.3 L215.6,115.3 L216.9,118.4 L218.1,121.5 L219.3,124.8 L220.6,128.1 L221.8,131.5 L223.0,135.0 L224.3,138.6 L225.5,142.2 L226.7,146.0 L228.0,149.8 L229.2,153.7 L230.4,157.7 L231.7,161.8 L232.9,165.9 L234.1,170.2 L235.4,174.5 L236.6,178.9 L237.8,183.4 L239.1,187.9 L240.3,192.6 L241.5,197.3 L242.8,202.1 L244.0,207.0 L245.2,212.0 L246.5,217.0 L247.7,222.2 L248.9,227.4 L250.2,232.7 L251.4,238.1 L252.6,243.5 L253.9,249.1 L255.1,254.7 L256.3,260.4 L257.6,266.2 L258.8,272.1 L260.0,278.1 L261.3,284.1 L262.5,290.2 L263.7,296.5 L265.0,302.7 L266.2,309.1 L267.4,315.6 L268.7,322.1 L269.9,328.7 L271.1,335.4 L272.4,342.2 L273.6,349.1 L274.8,356.0 L276.1,363.1 L277.3,370.2 L278.5,377.4 L279.8,384.6 L281.0,392.0 L282.2,399.4 L283.5,407.0 L284.7,414.6 L285.9,422.3 L287.2,430.0 L288.4,437.9 L289.6,445.8 L290.9,453.8 L292.1,461.9 L293.3,470.1 L294.6,478.4 L295.8,486.7 L297.0,495.1 L298.3,503.7 L299.5,512.2 L300.7,520.9 L302.0,529.7 L303.2,538.5 L304.4,547.4 L305.7,556.4 L306.9,565.5 L308.1,574.7 L309.4,583.9 L310.6,593.3 L311.8,602.7 L313.1,612.2 L314.3,621.8 L315.5,631.4 L316.8,641.2 L318.0,651.0" fill="none" stroke="#1E8449" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622920698880c)"/><text x="231.8" y="127.5" font-size="16" font-family="Cambria,Caladea,Georgia,serif" font-weight="bold" fill="#1E8449">f</text></g></svg></div></div></section>
+<section class="slide" data-g="pa"><h2 class="th"><span class="no">10</span>Was macht der Parameter a? <small>f(x) = a · x²</small></h2><div class="say " data-s="0">Bewege den Regler. Die gestrichelte Kurve ist die Normalparabel.</div><div class="tcols" style="grid-template-columns:1.1fr 1fr"><div class="lcol"><div class="sl"><div class="live" id="pa_eq">f(x) = 2x²</div><div class="row"><b class="ca">a</b><input type="range" id="pa_r" min="-3" max="3" step="0.1" value="2"><span class="val" id="pa_v">2</span></div><div><span class="pbtn" data-a="2">a = 2</span><span class="pbtn" data-a="1">a = 1</span><span class="pbtn" data-a="0.5">a = 0,5</span><span class="pbtn" data-a="-1">a = −1</span><span class="pbtn" data-a="-0.5">a = −0,5</span><span class="pbtn" data-a="-3">a = −3</span></div></div><div class="stat" id="pa_st"></div><div class="merk" data-s="1"><span class="ca">a</span> &gt; 0: nach <b>oben</b> geöffnet. &nbsp; <span class="ca">a</span> &lt; 0: nach <b>unten</b> geöffnet.<br>Zahl ohne Minus <b>größer als 1</b>: <b>gestreckt</b> (schmaler).<br>Zahl ohne Minus <b>kleiner als 1</b>: <b>gestaucht</b> (breiter).</div></div><div class="rcol"><svg class="plot" style="max-width:440px" viewBox="0 0 328 440" xmlns="http://www.w3.org/2000/svg" style="" id="pa" data-xmin="-5" data-xmax="5" data-ymin="-6" data-ymax="8" data-u="28" data-pad="24"><defs><clipPath id="p140622942599760c"><rect x="22" y="22" width="284" height="396"/></clipPath></defs><rect x="0" y="0" width="328" height="440" fill="#fff"/>
+<path d="M24.0 24V416M52.0 24V416M80.0 24V416M108.0 24V416M136.0 24V416M164.0 24V416M192.0 24V416M220.0 24V416M248.0 24V416M276.0 24V416M304.0 24V416M24 416.0H304M24 388.0H304M24 360.0H304M24 332.0H304M24 304.0H304M24 276.0H304M24 248.0H304M24 220.0H304M24 192.0H304M24 164.0H304M24 136.0H304M24 108.0H304M24 80.0H304M24 52.0H304M24 24.0H304" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="16" y1="248.0" x2="318" y2="248.0" stroke="#333" stroke-width="1.6"/>
+<path d="M320,248.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="164.0" y1="424" x2="164.0" y2="10" stroke="#333" stroke-width="1.6"/>
+<path d="M164.0,8 l-4.5,9 h9 z" fill="#333"/>
+<text x="316" y="267.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="173.0" y="18" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="24.0" y1="244.0" x2="24.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="24.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="52.0" y1="244.0" x2="52.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="80.0" y1="244.0" x2="80.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="80.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="108.0" y1="244.0" x2="108.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="108.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="136.0" y1="244.0" x2="136.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="136.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="192.0" y1="244.0" x2="192.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="192.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="220.0" y1="244.0" x2="220.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="220.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="248.0" y1="244.0" x2="248.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="248.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="276.0" y1="244.0" x2="276.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="276.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="304.0" y1="244.0" x2="304.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="304.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="160.0" y1="416.0" x2="168.0" y2="416.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="420.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−6</text>
+<line x1="160.0" y1="388.0" x2="168.0" y2="388.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="392.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="160.0" y1="360.0" x2="168.0" y2="360.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="364.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="160.0" y1="332.0" x2="168.0" y2="332.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="336.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="160.0" y1="304.0" x2="168.0" y2="304.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="308.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="160.0" y1="276.0" x2="168.0" y2="276.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="280.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="160.0" y1="220.0" x2="168.0" y2="220.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="224.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="160.0" y1="192.0" x2="168.0" y2="192.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="196.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="160.0" y1="164.0" x2="168.0" y2="164.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="168.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="160.0" y1="136.0" x2="168.0" y2="136.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="140.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="160.0" y1="108.0" x2="168.0" y2="108.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="112.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="160.0" y1="80.0" x2="168.0" y2="80.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="84.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="160.0" y1="52.0" x2="168.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="160.0" y1="24.0" x2="168.0" y2="24.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="28.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<text x="158.0" y="264.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><path d="M22.0,-370.0 L23.2,-370.0 L24.3,-370.0 L25.5,-370.0 L26.7,-370.0 L27.8,-370.0 L29.0,-370.0 L30.2,-370.0 L31.3,-363.8 L32.5,-352.9 L33.7,-342.2 L34.8,-331.5 L36.0,-321.0 L37.2,-310.5 L38.3,-300.2 L39.5,-289.9 L40.7,-279.8 L41.8,-269.7 L43.0,-259.8 L44.2,-249.9 L45.3,-240.1 L46.5,-230.4 L47.7,-220.9 L48.8,-211.4 L50.0,-202.0 L51.2,-192.7 L52.3,-183.5 L53.5,-174.4 L54.7,-165.4 L55.8,-156.5 L57.0,-147.8 L58.2,-139.0 L59.3,-130.4 L60.5,-121.9 L61.7,-113.5 L62.8,-105.2 L64.0,-97.0 L65.2,-88.9 L66.3,-80.9 L67.5,-72.9 L68.7,-65.1 L69.8,-57.4 L71.0,-49.8 L72.2,-42.2 L73.3,-34.8 L74.5,-27.4 L75.7,-20.2 L76.8,-13.0 L78.0,-6.0 L79.2,1.0 L80.3,7.8 L81.5,14.6 L82.7,21.2 L83.8,27.8 L85.0,34.2 L86.2,40.6 L87.3,46.9 L88.5,53.1 L89.7,59.1 L90.8,65.1 L92.0,71.0 L93.2,76.8 L94.3,82.5 L95.5,88.1 L96.7,93.6 L97.8,99.0 L99.0,104.2 L100.2,109.5 L101.3,114.6 L102.5,119.6 L103.7,124.5 L104.8,129.3 L106.0,134.0 L107.2,138.6 L108.3,143.1 L109.5,147.6 L110.7,151.9 L111.8,156.1 L113.0,160.2 L114.2,164.3 L115.3,168.2 L116.5,172.1 L117.7,175.8 L118.8,179.5 L120.0,183.0 L121.2,186.5 L122.3,189.8 L123.5,193.1 L124.7,196.2 L125.8,199.3 L127.0,202.2 L128.2,205.1 L129.3,207.9 L130.5,210.6 L131.7,213.1 L132.8,215.6 L134.0,218.0 L135.2,220.3 L136.3,222.5 L137.5,224.6 L138.7,226.6 L139.8,228.5 L141.0,230.2 L142.2,232.0 L143.3,233.6 L144.5,235.1 L145.7,236.5 L146.8,237.8 L148.0,239.0 L149.2,240.1 L150.3,241.1 L151.5,242.1 L152.7,242.9 L153.8,243.6 L155.0,244.2 L156.2,244.8 L157.3,245.2 L158.5,245.6 L159.7,245.8 L160.8,246.0 L162.0,246.0 L163.2,246.0 L164.3,245.8 L165.5,245.6 L166.7,245.2 L167.8,244.8 L169.0,244.2 L170.2,243.6 L171.3,242.9 L172.5,242.1 L173.7,241.1 L174.8,240.1 L176.0,239.0 L177.2,237.8 L178.3,236.5 L179.5,235.1 L180.7,233.6 L181.8,232.0 L183.0,230.2 L184.2,228.5 L185.3,226.6 L186.5,224.6 L187.7,222.5 L188.8,220.3 L190.0,218.0 L191.2,215.6 L192.3,213.1 L193.5,210.6 L194.7,207.9 L195.8,205.1 L197.0,202.2 L198.2,199.3 L199.3,196.2 L200.5,193.1 L201.7,189.8 L202.8,186.5 L204.0,183.0 L205.2,179.5 L206.3,175.8 L207.5,172.1 L208.7,168.2 L209.8,164.3 L211.0,160.2 L212.2,156.1 L213.3,151.9 L214.5,147.6 L215.7,143.1 L216.8,138.6 L218.0,134.0 L219.2,129.3 L220.3,124.5 L221.5,119.6 L222.7,114.6 L223.8,109.5 L225.0,104.2 L226.2,99.0 L227.3,93.6 L228.5,88.1 L229.7,82.5 L230.8,76.8 L232.0,71.0 L233.2,65.1 L234.3,59.1 L235.5,53.1 L236.7,46.9 L237.8,40.6 L239.0,34.2 L240.2,27.8 L241.3,21.2 L242.5,14.6 L243.7,7.8 L244.8,1.0 L246.0,-6.0 L247.2,-13.0 L248.3,-20.2 L249.5,-27.4 L250.7,-34.8 L251.8,-42.2 L253.0,-49.8 L254.2,-57.4 L255.3,-65.1 L256.5,-72.9 L257.7,-80.9 L258.8,-88.9 L260.0,-97.0 L261.2,-105.2 L262.3,-113.5 L263.5,-121.9 L264.7,-130.4 L265.8,-139.0 L267.0,-147.8 L268.2,-156.5 L269.3,-165.4 L270.5,-174.4 L271.7,-183.5 L272.8,-192.7 L274.0,-202.0 L275.2,-211.4 L276.3,-220.9 L277.5,-230.4 L278.7,-240.1 L279.8,-249.9 L281.0,-259.8 L282.2,-269.7 L283.3,-279.8 L284.5,-289.9 L285.7,-300.2 L286.8,-310.5 L288.0,-321.0 L289.2,-331.5 L290.3,-342.2 L291.5,-352.9 L292.7,-363.8 L293.8,-370.0 L295.0,-370.0 L296.2,-370.0 L297.3,-370.0 L298.5,-370.0 L299.7,-370.0 L300.8,-370.0 L302.0,-370.0" fill="none" stroke="#9bbca6" stroke-width="2.5" stroke-dasharray="7 6"/><path id="pa_c" fill="none" stroke="#C62828" stroke-width="3.6" stroke-linecap="round"/></svg></div></div></section>
+<section class="slide" data-g="pc"><h2 class="th"><span class="no">11</span>Was macht der Parameter c? <small>f(x) = x² + c</small></h2><div class="say " data-s="0">Bewege den Regler für c. Achte auf den orangen Punkt.</div><div class="tcols" style="grid-template-columns:1.1fr 1fr"><div class="lcol"><div class="sl"><div class="live" id="pc_eq">f(x) = x² + 3</div><div class="row"><b class="cc">c</b><input type="range" id="pc_r" min="-5" max="5" step="1" value="3"><span class="val" id="pc_v">3</span></div></div><div class="stat" id="pc_st"></div><div class="merk" data-s="1"><span class="cc">c</span> <b>verschiebt</b> die Parabel nach oben oder unten.<br>Der Graph schneidet die <b>y-Achse</b> im Punkt <span class="m">(0 | <span class="cc">c</span>)</span>.</div></div><div class="rcol"><svg class="plot" style="max-width:440px" viewBox="0 0 328 440" xmlns="http://www.w3.org/2000/svg" style="" id="pc" data-xmin="-5" data-xmax="5" data-ymin="-6" data-ymax="8" data-u="28" data-pad="24"><defs><clipPath id="p140622942599760c"><rect x="22" y="22" width="284" height="396"/></clipPath></defs><rect x="0" y="0" width="328" height="440" fill="#fff"/>
+<path d="M24.0 24V416M52.0 24V416M80.0 24V416M108.0 24V416M136.0 24V416M164.0 24V416M192.0 24V416M220.0 24V416M248.0 24V416M276.0 24V416M304.0 24V416M24 416.0H304M24 388.0H304M24 360.0H304M24 332.0H304M24 304.0H304M24 276.0H304M24 248.0H304M24 220.0H304M24 192.0H304M24 164.0H304M24 136.0H304M24 108.0H304M24 80.0H304M24 52.0H304M24 24.0H304" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="16" y1="248.0" x2="318" y2="248.0" stroke="#333" stroke-width="1.6"/>
+<path d="M320,248.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="164.0" y1="424" x2="164.0" y2="10" stroke="#333" stroke-width="1.6"/>
+<path d="M164.0,8 l-4.5,9 h9 z" fill="#333"/>
+<text x="316" y="267.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="173.0" y="18" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="24.0" y1="244.0" x2="24.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="24.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="52.0" y1="244.0" x2="52.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="80.0" y1="244.0" x2="80.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="80.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="108.0" y1="244.0" x2="108.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="108.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="136.0" y1="244.0" x2="136.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="136.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="192.0" y1="244.0" x2="192.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="192.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="220.0" y1="244.0" x2="220.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="220.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="248.0" y1="244.0" x2="248.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="248.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="276.0" y1="244.0" x2="276.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="276.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="304.0" y1="244.0" x2="304.0" y2="252.0" stroke="#333" stroke-width="1.2"/>
+<text x="304.0" y="266.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="160.0" y1="416.0" x2="168.0" y2="416.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="420.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−6</text>
+<line x1="160.0" y1="388.0" x2="168.0" y2="388.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="392.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="160.0" y1="360.0" x2="168.0" y2="360.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="364.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="160.0" y1="332.0" x2="168.0" y2="332.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="336.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="160.0" y1="304.0" x2="168.0" y2="304.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="308.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="160.0" y1="276.0" x2="168.0" y2="276.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="280.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="160.0" y1="220.0" x2="168.0" y2="220.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="224.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="160.0" y1="192.0" x2="168.0" y2="192.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="196.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="160.0" y1="164.0" x2="168.0" y2="164.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="168.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="160.0" y1="136.0" x2="168.0" y2="136.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="140.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="160.0" y1="108.0" x2="168.0" y2="108.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="112.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="160.0" y1="80.0" x2="168.0" y2="80.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="84.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="160.0" y1="52.0" x2="168.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<line x1="160.0" y1="24.0" x2="168.0" y2="24.0" stroke="#333" stroke-width="1.2"/>
+<text x="157.0" y="28.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">8</text>
+<text x="158.0" y="264.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><path d="M22.0,-370.0 L23.2,-370.0 L24.3,-370.0 L25.5,-370.0 L26.7,-370.0 L27.8,-370.0 L29.0,-370.0 L30.2,-370.0 L31.3,-363.8 L32.5,-352.9 L33.7,-342.2 L34.8,-331.5 L36.0,-321.0 L37.2,-310.5 L38.3,-300.2 L39.5,-289.9 L40.7,-279.8 L41.8,-269.7 L43.0,-259.8 L44.2,-249.9 L45.3,-240.1 L46.5,-230.4 L47.7,-220.9 L48.8,-211.4 L50.0,-202.0 L51.2,-192.7 L52.3,-183.5 L53.5,-174.4 L54.7,-165.4 L55.8,-156.5 L57.0,-147.8 L58.2,-139.0 L59.3,-130.4 L60.5,-121.9 L61.7,-113.5 L62.8,-105.2 L64.0,-97.0 L65.2,-88.9 L66.3,-80.9 L67.5,-72.9 L68.7,-65.1 L69.8,-57.4 L71.0,-49.8 L72.2,-42.2 L73.3,-34.8 L74.5,-27.4 L75.7,-20.2 L76.8,-13.0 L78.0,-6.0 L79.2,1.0 L80.3,7.8 L81.5,14.6 L82.7,21.2 L83.8,27.8 L85.0,34.2 L86.2,40.6 L87.3,46.9 L88.5,53.1 L89.7,59.1 L90.8,65.1 L92.0,71.0 L93.2,76.8 L94.3,82.5 L95.5,88.1 L96.7,93.6 L97.8,99.0 L99.0,104.2 L100.2,109.5 L101.3,114.6 L102.5,119.6 L103.7,124.5 L104.8,129.3 L106.0,134.0 L107.2,138.6 L108.3,143.1 L109.5,147.6 L110.7,151.9 L111.8,156.1 L113.0,160.2 L114.2,164.3 L115.3,168.2 L116.5,172.1 L117.7,175.8 L118.8,179.5 L120.0,183.0 L121.2,186.5 L122.3,189.8 L123.5,193.1 L124.7,196.2 L125.8,199.3 L127.0,202.2 L128.2,205.1 L129.3,207.9 L130.5,210.6 L131.7,213.1 L132.8,215.6 L134.0,218.0 L135.2,220.3 L136.3,222.5 L137.5,224.6 L138.7,226.6 L139.8,228.5 L141.0,230.2 L142.2,232.0 L143.3,233.6 L144.5,235.1 L145.7,236.5 L146.8,237.8 L148.0,239.0 L149.2,240.1 L150.3,241.1 L151.5,242.1 L152.7,242.9 L153.8,243.6 L155.0,244.2 L156.2,244.8 L157.3,245.2 L158.5,245.6 L159.7,245.8 L160.8,246.0 L162.0,246.0 L163.2,246.0 L164.3,245.8 L165.5,245.6 L166.7,245.2 L167.8,244.8 L169.0,244.2 L170.2,243.6 L171.3,242.9 L172.5,242.1 L173.7,241.1 L174.8,240.1 L176.0,239.0 L177.2,237.8 L178.3,236.5 L179.5,235.1 L180.7,233.6 L181.8,232.0 L183.0,230.2 L184.2,228.5 L185.3,226.6 L186.5,224.6 L187.7,222.5 L188.8,220.3 L190.0,218.0 L191.2,215.6 L192.3,213.1 L193.5,210.6 L194.7,207.9 L195.8,205.1 L197.0,202.2 L198.2,199.3 L199.3,196.2 L200.5,193.1 L201.7,189.8 L202.8,186.5 L204.0,183.0 L205.2,179.5 L206.3,175.8 L207.5,172.1 L208.7,168.2 L209.8,164.3 L211.0,160.2 L212.2,156.1 L213.3,151.9 L214.5,147.6 L215.7,143.1 L216.8,138.6 L218.0,134.0 L219.2,129.3 L220.3,124.5 L221.5,119.6 L222.7,114.6 L223.8,109.5 L225.0,104.2 L226.2,99.0 L227.3,93.6 L228.5,88.1 L229.7,82.5 L230.8,76.8 L232.0,71.0 L233.2,65.1 L234.3,59.1 L235.5,53.1 L236.7,46.9 L237.8,40.6 L239.0,34.2 L240.2,27.8 L241.3,21.2 L242.5,14.6 L243.7,7.8 L244.8,1.0 L246.0,-6.0 L247.2,-13.0 L248.3,-20.2 L249.5,-27.4 L250.7,-34.8 L251.8,-42.2 L253.0,-49.8 L254.2,-57.4 L255.3,-65.1 L256.5,-72.9 L257.7,-80.9 L258.8,-88.9 L260.0,-97.0 L261.2,-105.2 L262.3,-113.5 L263.5,-121.9 L264.7,-130.4 L265.8,-139.0 L267.0,-147.8 L268.2,-156.5 L269.3,-165.4 L270.5,-174.4 L271.7,-183.5 L272.8,-192.7 L274.0,-202.0 L275.2,-211.4 L276.3,-220.9 L277.5,-230.4 L278.7,-240.1 L279.8,-249.9 L281.0,-259.8 L282.2,-269.7 L283.3,-279.8 L284.5,-289.9 L285.7,-300.2 L286.8,-310.5 L288.0,-321.0 L289.2,-331.5 L290.3,-342.2 L291.5,-352.9 L292.7,-363.8 L293.8,-370.0 L295.0,-370.0 L296.2,-370.0 L297.3,-370.0 L298.5,-370.0 L299.7,-370.0 L300.8,-370.0 L302.0,-370.0" fill="none" stroke="#9bbca6" stroke-width="2.5" stroke-dasharray="7 6"/><path id="pc_c" fill="none" stroke="#E07B00" stroke-width="3.6" stroke-linecap="round"/><circle id="pc_p" r="7" fill="#E07B00" stroke="#fff" stroke-width="2"/><text id="pc_t" font-family="Calibri,Arial" font-weight="bold" font-size="16" fill="#E07B00"></text></svg></div></div></section>
+<section class="slide" data-g="jetzt"><h2 class="th"><span class="no">12</span>a und c am Graphen erkennen</h2><div class="tcols" style="grid-template-columns:1.5fr 1fr"><div class="lcol"><div class="say " data-s="0">Diese Parabel kannst du jetzt beschreiben:</div><div class="stp" data-s="1"><span class="n">1</span><div>Sie ist nach <b>unten</b> geöffnet. Also ist <span class="ca">a</span> negativ.</div></div><div class="stp" data-s="2"><span class="n">2</span><div>Sie ist <b>breiter</b> als die Normalparabel. Sie ist gestaucht.</div></div><div class="stp" data-s="3"><span class="n">3</span><div>Sie schneidet die y-Achse bei <b>2</b>. Also ist <span class="cc">c = 2</span>.</div></div><div class="qbox mcq" data-s="4"><div class="q">Welche Gleichung passt zu der Parabel?</div><div class="opt" data-ok="1" data-fb=""><span class="mk"></span><span class="lt">A</span><span>f(x) = −0,5x² + 2</span></div><div class="opt" data-ok="0" data-fb="Bei a = 0,5 wäre die Parabel nach oben geöffnet."><span class="mk"></span><span class="lt">B</span><span>f(x) = 0,5x² + 2</span></div><div class="opt" data-ok="0" data-fb="a = −2 wäre gestreckt. Die Parabel wäre schmaler."><span class="mk"></span><span class="lt">C</span><span>f(x) = −2x² + 2</span></div><div class="opt" data-ok="0" data-fb="c = −2 hieße: Schnittpunkt mit der y-Achse bei −2."><span class="mk"></span><span class="lt">D</span><span>f(x) = −0,5x² − 2</span></div><div class="btns"><button class="pr" data-a="chk">Prüfen</button></div><div class="fb"></div><div class="expl">Nach unten: a ist negativ. Breiter: a ist zwischen −1 und 0. y-Achse bei 2: c = 2.</div></div></div><div class="rcol"><svg class="plot" viewBox="0 0 284 404" xmlns="http://www.w3.org/2000/svg" style="max-width:340px" ><defs><clipPath id="p140622942599760c"><rect x="20" y="20" width="244" height="364"/></clipPath></defs><rect x="0" y="0" width="284" height="404" fill="#fff"/>
+<path d="M22.0 22V382M52.0 22V382M82.0 22V382M112.0 22V382M142.0 22V382M172.0 22V382M202.0 22V382M232.0 22V382M262.0 22V382M22 382.0H262M22 352.0H262M22 322.0H262M22 292.0H262M22 262.0H262M22 232.0H262M22 202.0H262M22 172.0H262M22 142.0H262M22 112.0H262M22 82.0H262M22 52.0H262M22 22.0H262" stroke="#dbe6f0" stroke-width="1" fill="none"/>
+<line x1="14" y1="232.0" x2="276" y2="232.0" stroke="#333" stroke-width="1.6"/>
+<path d="M278,232.0 l-9,-4.5 v9 z" fill="#333"/>
+<line x1="142.0" y1="390" x2="142.0" y2="8" stroke="#333" stroke-width="1.6"/>
+<path d="M142.0,6 l-4.5,9 h9 z" fill="#333"/>
+<text x="274" y="251.0" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">x</text>
+<text x="151.0" y="16" font-size="15" font-style="italic" font-family="Cambria,Caladea,Georgia,serif" fill="#333">y</text>
+<line x1="22.0" y1="228.0" x2="22.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="22.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="52.0" y1="228.0" x2="52.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="52.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="82.0" y1="228.0" x2="82.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="82.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="112.0" y1="228.0" x2="112.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="112.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="172.0" y1="228.0" x2="172.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="172.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="202.0" y1="228.0" x2="202.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="202.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="232.0" y1="228.0" x2="232.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="232.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="262.0" y1="228.0" x2="262.0" y2="236.0" stroke="#333" stroke-width="1.2"/>
+<text x="262.0" y="250.0" text-anchor="middle" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="138.0" y1="382.0" x2="146.0" y2="382.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="386.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−5</text>
+<line x1="138.0" y1="352.0" x2="146.0" y2="352.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="356.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−4</text>
+<line x1="138.0" y1="322.0" x2="146.0" y2="322.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="326.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−3</text>
+<line x1="138.0" y1="292.0" x2="146.0" y2="292.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="296.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−2</text>
+<line x1="138.0" y1="262.0" x2="146.0" y2="262.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="266.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">−1</text>
+<line x1="138.0" y1="202.0" x2="146.0" y2="202.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="206.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">1</text>
+<line x1="138.0" y1="172.0" x2="146.0" y2="172.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="176.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">2</text>
+<line x1="138.0" y1="142.0" x2="146.0" y2="142.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="146.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">3</text>
+<line x1="138.0" y1="112.0" x2="146.0" y2="112.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="116.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">4</text>
+<line x1="138.0" y1="82.0" x2="146.0" y2="82.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="86.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">5</text>
+<line x1="138.0" y1="52.0" x2="146.0" y2="52.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="56.5" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">6</text>
+<line x1="138.0" y1="22.0" x2="146.0" y2="22.0" stroke="#333" stroke-width="1.2"/>
+<text x="135.0" y="26.6" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">7</text>
+<text x="136.0" y="248.0" text-anchor="end" font-size="13" font-family="Calibri,Carlito,Arial,sans-serif" fill="#333">0</text><g  data-s="4"><path d="M22.0,412.0 L23.0,408.0 L24.0,404.1 L25.0,400.2 L26.0,396.3 L27.0,392.4 L28.0,388.6 L29.0,384.8 L30.0,381.1 L31.0,377.4 L32.0,373.7 L33.0,370.0 L34.0,366.4 L35.0,362.8 L36.0,359.3 L37.0,355.8 L38.0,352.3 L39.0,348.8 L40.0,345.4 L41.0,342.0 L42.0,338.7 L43.0,335.4 L44.0,332.1 L45.0,328.8 L46.0,325.6 L47.0,322.4 L48.0,319.3 L49.0,316.1 L50.0,313.1 L51.0,310.0 L52.0,307.0 L53.0,304.0 L54.0,301.1 L55.0,298.1 L56.0,295.3 L57.0,292.4 L58.0,289.6 L59.0,286.8 L60.0,284.1 L61.0,281.3 L62.0,278.7 L63.0,276.0 L64.0,273.4 L65.0,270.8 L66.0,268.3 L67.0,265.8 L68.0,263.3 L69.0,260.8 L70.0,258.4 L71.0,256.0 L72.0,253.7 L73.0,251.3 L74.0,249.1 L75.0,246.8 L76.0,244.6 L77.0,242.4 L78.0,240.3 L79.0,238.2 L80.0,236.1 L81.0,234.0 L82.0,232.0 L83.0,230.0 L84.0,228.1 L85.0,226.1 L86.0,224.3 L87.0,222.4 L88.0,220.6 L89.0,218.8 L90.0,217.1 L91.0,215.4 L92.0,213.7 L93.0,212.0 L94.0,210.4 L95.0,208.8 L96.0,207.3 L97.0,205.8 L98.0,204.3 L99.0,202.8 L100.0,201.4 L101.0,200.0 L102.0,198.7 L103.0,197.3 L104.0,196.1 L105.0,194.8 L106.0,193.6 L107.0,192.4 L108.0,191.3 L109.0,190.2 L110.0,189.1 L111.0,188.0 L112.0,187.0 L113.0,186.0 L114.0,185.1 L115.0,184.1 L116.0,183.3 L117.0,182.4 L118.0,181.6 L119.0,180.8 L120.0,180.1 L121.0,179.3 L122.0,178.7 L123.0,178.0 L124.0,177.4 L125.0,176.8 L126.0,176.3 L127.0,175.8 L128.0,175.3 L129.0,174.8 L130.0,174.4 L131.0,174.0 L132.0,173.7 L133.0,173.3 L134.0,173.1 L135.0,172.8 L136.0,172.6 L137.0,172.4 L138.0,172.3 L139.0,172.2 L140.0,172.1 L141.0,172.0 L142.0,172.0 L143.0,172.0 L144.0,172.1 L145.0,172.2 L146.0,172.3 L147.0,172.4 L148.0,172.6 L149.0,172.8 L150.0,173.1 L151.0,173.3 L152.0,173.7 L153.0,174.0 L154.0,174.4 L155.0,174.8 L156.0,175.3 L157.0,175.8 L158.0,176.3 L159.0,176.8 L160.0,177.4 L161.0,178.0 L162.0,178.7 L163.0,179.3 L164.0,180.1 L165.0,180.8 L166.0,181.6 L167.0,182.4 L168.0,183.3 L169.0,184.2 L170.0,185.1 L171.0,186.0 L172.0,187.0 L173.0,188.0 L174.0,189.1 L175.0,190.1 L176.0,191.3 L177.0,192.4 L178.0,193.6 L179.0,194.8 L180.0,196.1 L181.0,197.3 L182.0,198.7 L183.0,200.0 L184.0,201.4 L185.0,202.8 L186.0,204.3 L187.0,205.8 L188.0,207.3 L189.0,208.8 L190.0,210.4 L191.0,212.0 L192.0,213.7 L193.0,215.4 L194.0,217.1 L195.0,218.8 L196.0,220.6 L197.0,222.4 L198.0,224.3 L199.0,226.2 L200.0,228.1 L201.0,230.0 L202.0,232.0 L203.0,234.0 L204.0,236.1 L205.0,238.1 L206.0,240.3 L207.0,242.4 L208.0,244.6 L209.0,246.8 L210.0,249.1 L211.0,251.3 L212.0,253.7 L213.0,256.0 L214.0,258.4 L215.0,260.8 L216.0,263.3 L217.0,265.8 L218.0,268.3 L219.0,270.8 L220.0,273.4 L221.0,276.0 L222.0,278.7 L223.0,281.3 L224.0,284.1 L225.0,286.8 L226.0,289.6 L227.0,292.4 L228.0,295.3 L229.0,298.2 L230.0,301.1 L231.0,304.0 L232.0,307.0 L233.0,310.0 L234.0,313.1 L235.0,316.1 L236.0,319.3 L237.0,322.4 L238.0,325.6 L239.0,328.8 L240.0,332.1 L241.0,335.4 L242.0,338.7 L243.0,342.0 L244.0,345.4 L245.0,348.8 L246.0,352.3 L247.0,355.8 L248.0,359.3 L249.0,362.8 L250.0,366.4 L251.0,370.0 L252.0,373.7 L253.0,377.4 L254.0,381.1 L255.0,384.8 L256.0,388.6 L257.0,392.4 L258.0,396.3 L259.0,400.2 L260.0,404.1 L261.0,408.0 L262.0,412.0" fill="none" stroke="#C62828" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#p140622942599760c)"/><text x="235.0" y="314.1" font-size="16" font-family="Cambria,Caladea,Georgia,serif" font-weight="bold" fill="#C62828">?</text></g></svg></div></div></section>
+<section class="slide" data-g="jetzt"><h2 class="th"><span class="no">★</span>Zusammenfassung</h2><div class="merk"><b>Das hast du gelernt:</b><ul><li>Normalparabel: <span class="m">f(x) = x²</span> mit <span class="m">S(0 | 0)</span></li><li>Allgemeine Form: <span class="m">f(x) = <span class="ca">a</span>x² + <span class="cb">b</span>x + <span class="cc">c</span></span></li><li><span class="ca">a</span>: oben oder unten, gestreckt oder gestaucht</li><li><span class="cc">c</span>: Schnittpunkt mit der y-Achse</li></ul></div><div class="abnote">📝 <b>Jetzt bist du dran!</b> Bearbeite das Arbeitsblatt <b>„Normalparabel und allgemeine Form“</b>.<br>Denke an die Klammern bei negativen Zahlen.</div></section>
+
+ </div>
+ <div class="bot">
+  <span class="info">Normalparabel und allgemeine Form · Vorklasse · RWB Essen</span>
+  <button id="bFull" onclick="toggleFull()">⛶ Vollbild</button>
+  <span class="sp"></span><span class="cnt" id="cnt"></span>
+  <button id="bPrev" onclick="prev()">◀ zurück</button><button id="bNext" onclick="next()">weiter ▶</button>
+ </div>
+</div>
+<script>const GROUPS=[["start", "Start"], ["normal", "Normalparabel"], ["eig", "Eigenschaften"], ["af", "Allgemeine Form"], ["wt", "Wertetabelle"], ["pa", "Parameter a"], ["pc", "Parameter c"], ["jetzt", "Jetzt du"]];
+
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const slides=$$('.slide'); let cur=0; const step=slides.map(()=>0);
+const maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s).filter(n=>!isNaN(n))));
+const prog=$('#prog');
+GROUPS.forEach(([g,t])=>{const d=document.createElement('div');d.className='seg';d.dataset.g=g;d.innerHTML='<div class="bar"><i></i></div><div class="lab">'+t+'</div>';d.onclick=()=>go(slides.findIndex(s=>s.dataset.g===g),0);prog.appendChild(d);});
+function apply(){ const s=slides[cur];
+  $$('[data-s]',s).forEach(e=>{ const n=+e.dataset.s; e.classList.toggle('vis', !isNaN(n)&&n<=step[cur]); });
+  $$('[data-hs]',s).forEach(e=>e.classList.toggle('gone', step[cur]>=+e.dataset.hs));
+  slides.forEach((x,i)=>x.classList.toggle('on',i===cur));
+  const g=s.dataset.g, gi=GROUPS.findIndex(x=>x[0]===g);
+  $$('.seg').forEach((d,i)=>{ d.classList.toggle('done',i<gi); d.classList.toggle('now',i===gi);
+    if(i===gi){ const idx=slides.map((x,j)=>[x,j]).filter(([x])=>x.dataset.g===g).map(([,j])=>j); const k=idx.indexOf(cur); d.querySelector('i').style.width=((k+1)/idx.length*100)+'%'; }
+    else if(i>gi) d.querySelector('i').style.width='0'; });
+  $('#cnt').textContent='Folie '+(cur+1)+' von '+slides.length+(maxS[cur]?' · Schritt '+(step[cur]+1)+' von '+(maxS[cur]+1):'');
+  $('#bPrev').disabled=(cur===0&&step[cur]===0); $('#bNext').disabled=(cur===slides.length-1&&step[cur]>=maxS[cur]);
+  if(window.onStep) window.onStep(s,step[cur]);
+}
+function go(i,st){ if(i<0||i>=slides.length) return; cur=i; step[cur]=st==='max'?maxS[cur]:(st||0); apply(); }
+function next(){ if(step[cur]<maxS[cur]){ step[cur]++; apply(); } else go(cur+1,0); }
+function prev(){ if(step[cur]>0){ step[cur]--; apply(); } else go(cur-1,'max'); }
+document.addEventListener('keydown',e=>{ if(e.target.closest('input')) { if(e.key==='Enter'){ const b=e.target.closest('.qbox')?.querySelector('[data-a=chk]'); b&&b.click(); } return; }
+  if(['ArrowRight','PageDown',' '].includes(e.key)){ next(); e.preventDefault(); }
+  if(['ArrowLeft','PageUp'].includes(e.key)){ prev(); e.preventDefault(); } });
+function fit(){ const W=innerWidth,Hh=innerHeight,s=Math.min(W/1280,Hh/800); const app=$('#app'); app.style.transform='scale('+s+')'; app.style.left=((W-1280*s)/2)+'px'; app.style.top=((Hh-800*s)/2)+'px'; }
+addEventListener('resize',fit); fit();
+function toggleFull(){ const d=document; if(!d.fullscreenElement&&!d.webkitFullscreenElement){ const el=d.documentElement; (el.requestFullscreen||el.webkitRequestFullscreen).call(el); } else { (d.exitFullscreen||d.webkitExitFullscreen).call(d); } }
+function num(v){ v=String(v).trim().replace(/[−–]/g,'-').replace(/\s/g,'').replace(',','.'); if(v===''||v==='-') return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); return parseFloat(a)/parseFloat(b); } return Number(v); }
+$$('.qbox').forEach(Q=>{
+  const fb=$('.fb',Q), sl=Q.closest('.slide');
+  const finish=()=>{ Q.classList.add('done'); $$('input',Q).forEach(i=>i.readOnly=true); };
+  if(Q.classList.contains('mcq')){
+    const opts=$$('.opt',Q);
+    opts.forEach(o=>o.onclick=()=>{ if(Q.classList.contains('done')) return; opts.forEach(x=>x.classList.remove('sel')); o.classList.add('sel'); fb.textContent=''; });
+    $('[data-a=chk]',Q).onclick=()=>{ const sel=opts.find(o=>o.classList.contains('sel'));
+      if(!sel){ fb.className='fb info'; fb.textContent='Wähle zuerst eine Antwort.'; return; }
+      opts.forEach(o=>{ if(o.dataset.ok==='1') o.classList.add('right'); });
+      if(sel.dataset.ok==='1'){ fb.className='fb ok'; fb.innerHTML='Richtig!'; }
+      else { sel.classList.remove('sel'); sel.classList.add('wrong'); fb.className='fb bad'; fb.innerHTML='Leider falsch. '+(sel.dataset.fb||''); }
+      finish(); };
+  } else {
+    $('[data-a=chk]',Q).onclick=()=>{ const ins=$$('input.gp',Q);
+      if(ins.some(i=>i.value.trim()==='')){ fb.className='fb info'; fb.textContent='Fülle zuerst alle Lücken aus.'; return; }
+      let all=true; ins.forEach(i=>{ const ok=i.dataset.a.split('|').some(a=>Math.abs(num(i.value)-num(a))<1e-9); i.classList.remove('ok','bad'); i.classList.add(ok?'ok':'bad'); if(!ok) all=false; });
+      if(all){ fb.className='fb ok'; fb.textContent='Richtig! Alles stimmt.'; finish(); }
+      else { fb.className='fb bad'; fb.textContent='Nicht ganz. Die roten Felder stimmen noch nicht. Versuche es noch einmal.'; }
+    };
+  }
+});
+/* ---------- Live-Plots (Schieberegler) ---------- */
+function fmt(v){ const r=Math.round(v*100)/100; return (Object.is(r,-0)?0:r).toLocaleString('de-DE',{maximumFractionDigits:2}).replace('-','−'); }
+function LP(id){ const s=document.getElementById(id); const d=s.dataset;
+  const o={xmin:+d.xmin,xmax:+d.xmax,ymin:+d.ymin,ymax:+d.ymax,u:+d.u,pad:+d.pad};
+  o.X=x=>o.pad+(x-o.xmin)*o.u; o.Y=y=>o.pad+(o.ymax-y)*o.u;
+  o.path=f=>{ let p=''; const n=300, lo=o.ymin-30, hi=o.ymax+30; for(let i=0;i<=n;i++){ const x=o.xmin+(o.xmax-o.xmin)*i/n; let y=f(x); y=Math.max(lo,Math.min(hi,y)); p+=(i?'L':'M')+o.X(x).toFixed(1)+','+o.Y(y).toFixed(1); } return p; };
+  return o; }
+apply();
+
+
+(function(){ const P=LP('pa'); const r=$('#pa_r'), v=$('#pa_v'), eq=$('#pa_eq'), st=$('#pa_st'), c=$('#pa_c');
+ function up(){ let a=+r.value; if(Math.abs(a)<0.05){ a=a<0||Object.is(a,-0)?-0.1:0.1; r.value=a; }
+  c.setAttribute('d',P.path(x=>a*x*x)); v.textContent=fmt(a);
+  const sa=a===1?'':a===-1?'−':fmt(a); eq.innerHTML='f(x) = <span class="ca">'+sa+'</span>x²';
+  const oben=a>0, aa=Math.abs(a); const form=aa>1?'gestreckt':aa<1?'gestaucht':'wie die Normalparabel';
+  st.innerHTML='Öffnung: <span class="chip '+(oben?'on':'off')+'">nach oben</span><span class="chip '+(!oben?'on':'off')+'">nach unten</span><br>Form: '
+   +['gestreckt','gestaucht','wie die Normalparabel'].map(t=>'<span class="chip '+(t===form?'on':'off')+'">'+t+'</span>').join(''); }
+ r.oninput=up; $$('.pbtn[data-a]').forEach(b=>b.onclick=()=>{ r.value=b.dataset.a; up(); }); up(); })();
+(function(){ const P=LP('pc'); const r=$('#pc_r'), v=$('#pc_v'), eq=$('#pc_eq'), st=$('#pc_st'), c=$('#pc_c'), pt=$('#pc_p'), t=$('#pc_t');
+ function up(){ const k=+r.value; c.setAttribute('d',P.path(x=>x*x+k)); v.textContent=fmt(k);
+  eq.innerHTML='f(x) = x²'+(k===0?'':(k>0?' + ':' − ')+'<span class="cc">'+fmt(Math.abs(k))+'</span>');
+  pt.setAttribute('cx',P.X(0)); pt.setAttribute('cy',P.Y(k)); t.setAttribute('x',P.X(0)+12); t.setAttribute('y',P.Y(k)-10); t.textContent='(0 | '+fmt(k)+')';
+  st.innerHTML=k>0?'Die Parabel ist um <b>'+fmt(k)+'</b> nach <b>oben</b> verschoben.':k<0?'Die Parabel ist um <b>'+fmt(-k)+'</b> nach <b>unten</b> verschoben.':'Die Parabel ist <b>nicht</b> verschoben.'; }
+ r.oninput=up; up(); })();
+
+</script></body></html>
