@@ -176,8 +176,17 @@ const slides=$$('.slide'); let cur=0; const step=slides.map(()=>0);
 const maxS=slides.map(s=>Math.max(0,...$$('[data-s]',s).map(e=>+e.dataset.s).filter(n=>!isNaN(n))));
 const prog=$('#prog');
 GROUPS.forEach(([g,t])=>{const d=document.createElement('div');d.className='seg';d.dataset.g=g;d.innerHTML='<div class="bar"><i></i></div><div class="lab">'+t+'</div>';d.onclick=()=>go(slides.findIndex(s=>s.dataset.g===g),0);prog.appendChild(d);});
+function drawIn(list){ list.forEach(p=>{ let L=0; try{ L=p.getTotalLength(); }catch(e){} if(!L) return;
+  p.getAnimations().forEach(a=>a.cancel()); p.style.strokeDasharray=L+' '+L;
+  const an=p.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:Math.min(2400,900+L*1.2),easing:'ease-in-out'});
+  an.onfinish=()=>{ p.style.strokeDasharray=''; }; }); }
+let lastSlide=-1, lastStep=-1;
 function apply(){ const s=slides[cur];
+  const before=new Set($$('[data-s].vis',s));
   $$('[data-s]',s).forEach(e=>{ const n=+e.dataset.s; e.classList.toggle('vis', !isNaN(n)&&n<=step[cur]); });
+  if(cur!==lastSlide){ requestAnimationFrame(()=>drawIn($$('path.crv',s).filter(p=>{ const h=p.closest('[data-s]'); return !h||h.classList.contains('vis'); }))); }
+  else if(step[cur]>lastStep){ const nw=$$('[data-s].vis',s).filter(e=>!before.has(e)); requestAnimationFrame(()=>drawIn(nw.flatMap(e=>$$('path.crv',e)))); }
+  lastSlide=cur; lastStep=step[cur];
   $$('[data-hs]',s).forEach(e=>e.classList.toggle('gone', step[cur]>=+e.dataset.hs));
   slides.forEach((x,i)=>x.classList.toggle('on',i===cur));
   const g=s.dataset.g, gi=GROUPS.findIndex(x=>x[0]===g);
@@ -225,7 +234,9 @@ function fmt(v){ const r=Math.round(v*100)/100; return (Object.is(r,-0)?0:r).toL
 function LP(id){ const s=document.getElementById(id); const d=s.dataset;
   const o={xmin:+d.xmin,xmax:+d.xmax,ymin:+d.ymin,ymax:+d.ymax,u:+d.u,pad:+d.pad};
   o.X=x=>o.pad+(x-o.xmin)*o.u; o.Y=y=>o.pad+(o.ymax-y)*o.u;
-  o.path=f=>{ let p=''; const n=300, lo=o.ymin-30, hi=o.ymax+30; for(let i=0;i<=n;i++){ const x=o.xmin+(o.xmax-o.xmin)*i/n; let y=f(x); y=Math.max(lo,Math.min(hi,y)); p+=(i?'L':'M')+o.X(x).toFixed(1)+','+o.Y(y).toFixed(1); } return p; };
+  o.path=f=>{ const n=300, m=(o.ymax-o.ymin)*0.05, lo=o.ymin-30, hi=o.ymax+30; const pts=[]; for(let i=0;i<=n;i++){ const x=o.xmin+(o.xmax-o.xmin)*i/n; pts.push([x,f(x)]); }
+   const ins=pts.map((q,i)=>(q[1]>=o.ymin-m&&q[1]<=o.ymax+m)?i:-1).filter(i=>i>=0); let sel=pts; if(ins.length) sel=pts.slice(Math.max(0,ins[0]-1),ins[ins.length-1]+2);
+   return sel.map((q,i)=>(i?'L':'M')+o.X(q[0]).toFixed(1)+','+o.Y(Math.max(lo,Math.min(hi,q[1]))).toFixed(1)).join(''); };
   return o; }
 apply();
 
