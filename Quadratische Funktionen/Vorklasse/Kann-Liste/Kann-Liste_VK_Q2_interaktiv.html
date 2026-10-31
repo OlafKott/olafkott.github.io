@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interaktive Kann-Liste – Vorklasse Quartal 2</title>
+<style>
+:root{ --rwb:#1E8449; --ink:#1d1d1f; --line:#A9D8BA; --soft:#EEF7F1; --g:#2E7D3A; --y:#D99A00; --r:#C8102E; }
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:Georgia,'Times New Roman',serif; color:var(--ink); background:#f3f1ee; line-height:1.6; font-size:17px; }
+.wrap{ max-width:760px; margin:0 auto; padding:14px 14px 40px; }
+header.kopf{ display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid var(--rwb); padding-bottom:8px; margin-bottom:12px; }
+header.kopf h1{ font-size:22px; color:var(--rwb); margin:0; line-height:1.25; }
+header.kopf .sub{ font-size:14px; color:#555; }
+header.kopf img{ height:34px; }
+.prog{ display:flex; gap:4px; flex-wrap:wrap; margin:6px 0 14px; }
+.prog button{ width:30px; height:30px; border-radius:50%; border:1.6px solid #bbb; background:#fff; font-size:10.5px;
+  font-family:Calibri,Arial,sans-serif; cursor:pointer; color:#555; padding:0; }
+.prog button.akt{ border-color:var(--rwb); border-width:2.5px; color:var(--rwb); font-weight:bold; }
+.prog button.g{ background:var(--g); border-color:var(--g); color:#fff; }
+.prog button.y{ background:var(--y); border-color:var(--y); color:#fff; }
+.prog button.r{ background:var(--r); border-color:var(--r); color:#fff; }
+.prog button.sum{ width:auto; border-radius:15px; padding:0 10px; }
+.karte{ background:#fff; border-radius:10px; box-shadow:0 1px 6px rgba(0,0,0,.12); padding:18px 20px; }
+.sec{ font-size:14px; color:#fff; background:var(--rwb); display:inline-block; padding:2px 10px; border-radius:4px; margin-bottom:10px; }
+.kann{ background:var(--soft); border-left:5px solid var(--rwb); padding:10px 14px; border-radius:4px; font-size:18px; margin-bottom:16px; }
+.kann .nr{ color:var(--rwb); font-weight:bold; margin-right:6px; }
+h2{ font-size:17px; color:var(--rwb); margin:14px 0 6px; }
+.aufg{ margin:4px 0; }
+.term{ margin:4px 0; } .term.gross{ font-size:20px; margin:8px 0; }
+.medien{ margin:6px 0 10px; }
+.medien svg{ max-width:100%; height:auto; }
+.duo{ display:flex; gap:16px; flex-wrap:wrap; }
+.trio{ display:flex; gap:10px; flex-wrap:wrap; }
+.gcap{ text-align:center; } .gcap svg{ width:190px; } .duo svg{ width:240px; } .medien > svg{ width:300px; } .gcap b{ display:block; color:var(--rwb); font-size:14px; }
+.part{ margin:10px 0; padding:8px 0; border-top:1px dashed #e4dcd0; }
+.part .q{ margin-bottom:5px; }
+.opts{ display:flex; flex-wrap:wrap; gap:8px; }
+.opt{ border:1.6px solid #b9b2a5; background:#fff; border-radius:8px; padding:7px 14px; font:inherit; font-size:16px; cursor:pointer; }
+.opt.sel{ border-color:#1D4ED8; background:#E9F2FB; font-weight:bold; }
+.opt.ok{ border-color:var(--g); background:#E7F4EA; }
+.opt.falsch{ border-color:var(--r); background:#FBEEF0; }
+.num{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.num input{ font:inherit; font-size:18px; width:120px; padding:6px 10px; border:1.8px solid #b9b2a5; border-radius:8px; }
+.num input.ok{ border-color:var(--g); background:#E7F4EA; } .num input.falsch{ border-color:var(--r); background:#FBEEF0; }
+.num .note{ font-size:13px; color:#777; }
+.mark{ font-weight:bold; font-family:Calibri,Arial,sans-serif; }
+.mark.ok{ color:var(--g); } .mark.falsch{ color:var(--r); }
+.knoepfe{ display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 4px; }
+.btn{ font:inherit; font-size:16px; border-radius:8px; padding:8px 16px; cursor:pointer; border:1.8px solid var(--rwb); background:#fff; color:var(--rwb); text-decoration:none; display:inline-block; }
+.btn.voll{ background:var(--rwb); color:#fff; }
+.btn.grau{ border-color:#999; color:#555; }
+.btn:disabled{ opacity:.45; cursor:default; }
+.btn:focus-visible,.opt:focus-visible,.amp button:focus-visible,.prog button:focus-visible{ outline:3px solid #1D4ED8; outline-offset:2px; }
+.box{ border-radius:8px; padding:10px 14px; margin:10px 0; }
+.box.tipp{ background:#FFF8E8; border-left:5px solid #F2B705; }
+.box.loes{ background:#E9F2FB; border-left:5px solid #1D70B8; }
+.box.erg-ok{ background:#E7F4EA; border-left:5px solid var(--g); }
+.box.erg-no{ background:#FBEEF0; border-left:5px solid var(--r); }
+.box b.t{ display:block; margin-bottom:2px; }
+.amp{ display:flex; gap:10px; flex-wrap:wrap; }
+.amp button{ flex:1 1 170px; font:inherit; font-size:15.5px; border-radius:10px; padding:10px; background:#fff; cursor:pointer; border:2px solid; display:flex; align-items:center; gap:9px; text-align:left; }
+.amp .dot{ width:22px; height:22px; border-radius:50%; border:2.5px solid; flex:0 0 auto; }
+.amp .g{ border-color:var(--g); } .amp .y{ border-color:var(--y); } .amp .r{ border-color:var(--r); }
+.amp button.g.sel{ background:#E7F4EA; } .amp button.y.sel{ background:#FFF4D6; } .amp button.r.sel{ background:#FBEEF0; }
+.amp button.sel .dot.g{ background:var(--g); } .amp button.sel .dot.y{ background:var(--y); } .amp button.sel .dot.r{ background:var(--r); }
+.uebung{ display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+.nav{ display:flex; justify-content:space-between; gap:10px; margin-top:18px; }
+table.wt{ border-collapse:collapse; font-family:Calibri,Arial,sans-serif; margin:4px 0; }
+table.wt th,table.wt td{ border:1px solid #8e877a; padding:3px 10px; text-align:center; }
+table.wt th{ background:#f4efe6; }
+table.gl{ border-collapse:collapse; margin:4px 0 4px 4px; }
+table.gl td{ padding:0 3px; white-space:nowrap; }
+table.gl td.l{ text-align:right; } table.gl td.e{ text-align:center; width:16px; }
+table.gl td.op{ color:#777; padding-left:12px; font-size:14px; }
+.cm{ color:#1D4ED8; font-weight:bold; } .cb{ color:#C8102E; font-weight:bold; }
+.cx{ color:#15803D; font-weight:bold; } .cy{ color:#C2410C; font-weight:bold; }
+.fr{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.9em; line-height:1.2; margin:0 2px; }
+.fr > span:first-child{ border-bottom:1px solid currentColor; padding:0 2px; }
+.grau{ color:#666; font-size:.93em; }
+.gridbox{ touch-action:manipulation; }
+.gridbox svg{ max-width:100%; height:auto; cursor:crosshair; border:1px solid #e4dcd0; border-radius:6px; background:#fff; }
+.hinweis{ font-size:14px; color:#666; }
+/* Zusammenfassung */
+.zahlen{ display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 14px; }
+.zahlen div{ flex:1 1 120px; border-radius:10px; padding:10px; text-align:center; color:#fff; font-size:15px; }
+.zahlen b{ display:block; font-size:28px; }
+table.sum{ width:100%; border-collapse:collapse; font-size:15px; }
+table.sum th{ background:#E3F3E9; color:var(--rwb); text-align:left; padding:5px 7px; border:1px solid var(--line); }
+table.sum td{ border:1px solid var(--line); padding:6px 7px; vertical-align:top; }
+table.sum td.nr{ color:var(--rwb); font-weight:bold; white-space:nowrap; }
+.pill{ display:inline-block; border-radius:10px; padding:1px 9px; color:#fff; font-size:13px; font-family:Calibri,Arial,sans-serif; white-space:nowrap; }
+.pill.g{ background:var(--g); } .pill.y{ background:var(--y); } .pill.r{ background:var(--r); } .pill.n{ background:#aaa; }
+.namefeld input{ font:inherit; padding:6px 10px; border:1.8px solid #b9b2a5; border-radius:8px; width:260px; max-width:100%; }
+.intro p{ margin:6px 0; }
+@media print{
+  body{ background:#fff; font-size:12.5px; } .wrap{ max-width:none; padding:0 8mm; }
+  .prog,.nav,.knoepfe,.noprint{ display:none !important; }
+  .karte{ box-shadow:none; padding:0; }
+  table.sum{ font-size:11.5px; } table.sum tr{ break-inside:avoid; }
+  *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  a{ color:inherit; }
+}
+@page{ size:A4 portrait; margin:12mm 0; }
+@media (max-width:560px){ body{ font-size:16px; } .karte{ padding:14px 12px; } header.kopf h1{ font-size:19px; } .prog button{ width:26px; height:26px; font-size:9.5px; } }
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}.sq .sym{width:.62em;display:inline-block;flex:none}.sq .sym svg{width:100%;height:100%;display:block}.sq .rad{border-top:1.4px solid currentColor;padding:1px 2px 0 2px;display:inline-flex;align-items:center}.cp{color:#1D70B8;font-weight:bold}.cq{color:#E07B00;font-weight:bold}.cs{color:#E07B00;font-weight:bold}.ca{color:#C8102E;font-weight:bold}.cf{color:#1E8449;font-weight:bold}.cg{color:#1D70B8;font-weight:bold}.trap{color:#B00020;font-weight:bold}.ou{color:#6A3FC8;font-weight:bold;margin:0 6px}.medien .term.gross{font-family:Cambria,Georgia,serif}</style></head>
+<body><div class="wrap">
+<header class="kopf"><div><h1>Interaktive Kann-Liste</h1><div class="sub">Vorklasse · Quartal 2 · Quadratische Funktionen</div></div><img src="data:image/png;base64,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" alt="RWB Essen"></header>
+<nav class="prog" id="prog" aria-label="Übersicht"></nav>
+<main class="karte" id="karte" aria-live="polite"></main>
+</div>
+<script>
+const ITEMS = [{"nr": "1.1", "sec": "1. Normalparabel und allgemeine Form", "kann": "… die <b>Normalparabel<\/b> f(x) = x² zeichnen und ihre <b>Eigenschaften<\/b> nennen.", "kurz": "die Normalparabel f(x) = x² zeichnen und ihre Eigenschaften nennen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Normalparabel/Praesentation_Normalparabel_allgemeine_Form.html", "ulabel": "Präsentation · Teil 2", "text": "Die Normalparabel ist f(x) = x². Berechnen Sie die Werte. Beantworten Sie die Frage.", "media": "<div class=\"term gross\">f(x) = x²<\/div>", "parts": [{"t": "num", "q": "f(3) =", "a": 9}, {"t": "num", "q": "f(−3) =", "a": 9}, {"t": "mc", "q": "Wo liegt der Scheitelpunkt?", "opts": ["S(1 | 1)", "S(0 | 0)", "S(0 | 1)"], "a": 1}], "hint": "Achtung: (−3)² = (−3) · (−3). Minus mal minus ist plus.", "sol": "f(3) = 3² = 9 und f(−3) = (−3)² = 9.<br>Die Parabel ist symmetrisch. Der Scheitelpunkt ist <b>S(0 | 0)<\/b>."}, {"nr": "1.2", "sec": "1. Normalparabel und allgemeine Form", "kann": "… bei einer quadratischen Funktion f(x) = <b>a<\/b>x² + <b>b<\/b>x + <b>c<\/b> die Zahlen a, b und c <b>ablesen<\/b>.", "kurz": "bei einer quadratischen Funktion f(x) = ax² + bx + c die Zahlen a, b und c ablesen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Normalparabel/AB_Normalparabel_allgemeine_Form.html", "ulabel": "Arbeitsblatt · Teil 2", "text": "Lesen Sie a, b und c ab.", "media": "<div class=\"term gross\">f(x) = 4 − x² + 2x<\/div>", "parts": [{"t": "num", "q": "a =", "a": -1}, {"t": "num", "q": "b =", "a": 2}, {"t": "num", "q": "c =", "a": 4}], "hint": "Sortieren Sie zuerst: x² zuerst, dann x, dann die Zahl. Vor x² steht eine unsichtbare 1.", "sol": "f(x) = 4 − x² + 2x = <b>−1<\/b>x² + <b>2<\/b>x + <b>4<\/b>.<br>Also a = −1, b = 2, c = 4."}, {"nr": "1.3", "sec": "1. Normalparabel und allgemeine Form", "kann": "… erklären, wie <b>a<\/b> und <b>c<\/b> die Parabel verändern.", "kurz": "erklären, wie a und c die Parabel verändern.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Normalparabel/Praesentation_Normalparabel_allgemeine_Form.html", "ulabel": "Präsentation · Teil 2", "text": "Gegeben ist die Funktion", "media": "<div class=\"term gross\">f(x) = −3x² + 2<\/div>", "parts": [{"t": "mc", "q": "Die Parabel ist …", "opts": ["nach oben geöffnet", "nach unten geöffnet"], "a": 1}, {"t": "mc", "q": "Im Vergleich zur Normalparabel ist sie …", "opts": ["schmaler", "breiter", "gleich breit"], "a": 0}, {"t": "num", "q": "Schnittpunkt mit der y-Achse: (0 | ", "a": 2, "note": ")"}], "hint": "Schauen Sie auf a = −3: Vorzeichen und Größe (ohne Minus). c ist die Zahl ohne x.", "sol": "a = −3 &lt; 0: nach <b>unten<\/b> geöffnet. 3 ist größer als 1: <b>schmaler<\/b>.<br>c = 2: Schnittpunkt mit der y-Achse (0 | 2)."}, {"nr": "1.4", "sec": "1. Normalparabel und allgemeine Form", "kann": "… zu einer quadratischen Funktion eine <b>Wertetabelle<\/b> aufstellen und den <b>Graphen<\/b> zeichnen.", "kurz": "zu einer quadratischen Funktion eine Wertetabelle aufstellen und den Graphen zeichnen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Normalparabel/AB_Normalparabel_allgemeine_Form.html", "ulabel": "Arbeitsblatt · Teil 2", "text": "Berechnen Sie die fehlenden Werte der Wertetabelle.", "media": "<div class=\"term gross\">f(x) = −x² + 4x<\/div><table class=\"wt\"><tr><th>x<\/th><td>−1<\/td><td>1<\/td><td>2<\/td><\/tr><tr><th>f(x)<\/th><td>?<\/td><td>?<\/td><td>?<\/td><\/tr><\/table>", "parts": [{"t": "num", "q": "f(−1) =", "a": -5}, {"t": "num", "q": "f(1) =", "a": 3}, {"t": "num", "q": "f(2) =", "a": 4}], "hint": "−x² heißt: erst quadrieren, dann das Minus. −(−1)² = −1.", "sol": "f(−1) = −(−1)² + 4 · (−1) = −1 − 4 = −5<br>f(1) = −1 + 4 = 3<br>f(2) = −4 + 8 = 4"}, {"nr": "2.1", "sec": "2. Die Scheitelpunktform", "kann": "… aus der <b>Scheitelpunktform<\/b> f(x) = a(x − d)² + e den <b>Scheitelpunkt<\/b> ablesen.", "kurz": "aus der Scheitelpunktform f(x) = a(x − d)² + e den Scheitelpunkt ablesen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Scheitelpunktform/Praesentation_Scheitelpunktform.html", "ulabel": "Präsentation · Teil 3", "text": "Lesen Sie den Scheitelpunkt ab.", "media": "<div class=\"term gross\">f(x) = 3(x + 5)² − 2<\/div>", "parts": [{"t": "num", "q": "S(", "a": -5, "note": "x-Wert"}, {"t": "num", "q": "| ", "a": -2, "note": "y-Wert )"}], "hint": "(x + 5) = (x − (−5)). Also ist d = −5.", "sol": "f(x) = 3(x − (−5))² + (−2). Also <b>S(−5 | −2)<\/b>."}, {"nr": "2.2", "sec": "2. Die Scheitelpunktform", "kann": "… die Funktionsgleichung einer Parabel am <b>Graphen<\/b> ablesen.", "kurz": "die Funktionsgleichung einer Parabel am Graphen ablesen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Scheitelpunktform/Tipp_Gleichung_am_Graphen.html", "ulabel": "Beispiel · Teil 3", "text": "Lesen Sie die Gleichung der Parabel ab.", "media": "<svg class=\"g\" viewBox=\"0 0 234 204\" xmlns=\"http://www.w3.org/2000/svg\" style=\"width:60mm;height:auto\" ><defs><clipPath id=\"p4c\"><rect x=\"10\" y=\"10\" width=\"214\" height=\"184\"/><\/clipPath><\/defs><rect x=\"0\" y=\"0\" width=\"234\" height=\"204\" fill=\"#fff\"/>\n<path d=\"M12.0 12V192M42.0 12V192M72.0 12V192M102.0 12V192M132.0 12V192M162.0 12V192M192.0 12V192M222.0 12V192M12 192.0H222M12 162.0H222M12 132.0H222M12 102.0H222M12 72.0H222M12 42.0H222M12 12.0H222\" stroke=\"#dbe6f0\" stroke-width=\"1\" fill=\"none\"/>\n<line x1=\"4\" y1=\"132.0\" x2=\"236\" y2=\"132.0\" stroke=\"#333\" stroke-width=\"1.6\"/>\n<path d=\"M238,132.0 l-9,-4.5 v9 z\" fill=\"#333\"/>\n<line x1=\"162.0\" y1=\"200\" x2=\"162.0\" y2=\"-2\" stroke=\"#333\" stroke-width=\"1.6\"/>\n<path d=\"M162.0,-4 l-4.5,9 h9 z\" fill=\"#333\"/>\n<text x=\"234\" y=\"148.0\" font-size=\"12\" font-style=\"italic\" font-family=\"Cambria,Caladea,Georgia,serif\" fill=\"#333\">x<\/text>\n<text x=\"171.0\" y=\"6\" font-size=\"12\" font-style=\"italic\" font-family=\"Cambria,Caladea,Georgia,serif\" fill=\"#333\">y<\/text>\n<line x1=\"12.0\" y1=\"128.0\" x2=\"12.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"12.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−5<\/text>\n<line x1=\"42.0\" y1=\"128.0\" x2=\"42.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"42.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−4<\/text>\n<line x1=\"72.0\" y1=\"128.0\" x2=\"72.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"72.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−3<\/text>\n<line x1=\"102.0\" y1=\"128.0\" x2=\"102.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"102.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−2<\/text>\n<line x1=\"132.0\" y1=\"128.0\" x2=\"132.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"132.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−1<\/text>\n<line x1=\"192.0\" y1=\"128.0\" x2=\"192.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"192.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">1<\/text>\n<line x1=\"222.0\" y1=\"128.0\" x2=\"222.0\" y2=\"136.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"222.0\" y=\"147.0\" text-anchor=\"middle\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">2<\/text>\n<line x1=\"158.0\" y1=\"192.0\" x2=\"166.0\" y2=\"192.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"195.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−2<\/text>\n<line x1=\"158.0\" y1=\"162.0\" x2=\"166.0\" y2=\"162.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"165.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">−1<\/text>\n<line x1=\"158.0\" y1=\"102.0\" x2=\"166.0\" y2=\"102.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"105.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">1<\/text>\n<line x1=\"158.0\" y1=\"72.0\" x2=\"166.0\" y2=\"72.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"75.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">2<\/text>\n<line x1=\"158.0\" y1=\"42.0\" x2=\"166.0\" y2=\"42.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"45.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">3<\/text>\n<line x1=\"158.0\" y1=\"12.0\" x2=\"166.0\" y2=\"12.0\" stroke=\"#333\" stroke-width=\"1.2\"/>\n<text x=\"155.0\" y=\"15.5\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">4<\/text>\n<text x=\"156.0\" y=\"145.0\" text-anchor=\"end\" font-size=\"10\" font-family=\"Calibri,Carlito,Arial,sans-serif\" fill=\"#333\">0<\/text><g ><path class=\"crv\" d=\"M32.1,204.8 L33.0,200.7 L33.9,196.7 L34.7,192.8 L35.6,188.9 L36.5,185.0 L37.4,181.2 L38.2,177.5 L39.1,173.8 L40.0,170.1 L40.9,166.5 L41.8,163.0 L42.6,159.5 L43.5,156.1 L44.4,152.7 L45.2,149.4 L46.1,146.1 L47.0,142.8 L47.9,139.7 L48.8,136.5 L49.6,133.4 L50.5,130.4 L51.4,127.4 L52.2,124.5 L53.1,121.6 L54.0,118.8 L54.9,116.0 L55.7,113.3 L56.6,110.6 L57.5,108.0 L58.4,105.4 L59.3,102.9 L60.1,100.5 L61.0,98.0 L61.9,95.7 L62.7,93.4 L63.6,91.1 L64.5,88.9 L65.4,86.7 L66.2,84.6 L67.1,82.5 L68.0,80.5 L68.9,78.6 L69.8,76.7 L70.6,74.8 L71.5,73.0 L72.4,71.3 L73.2,69.6 L74.1,67.9 L75.0,66.3 L75.9,64.8 L76.8,63.3 L77.6,61.8 L78.5,60.4 L79.4,59.1 L80.2,57.8 L81.1,56.5 L82.0,55.3 L82.9,54.2 L83.8,53.1 L84.6,52.1 L85.5,51.1 L86.4,50.1 L87.2,49.3 L88.1,48.4 L89.0,47.6 L89.9,46.9 L90.8,46.2 L91.6,45.6 L92.5,45.0 L93.4,44.5 L94.2,44.0 L95.1,43.6 L96.0,43.2 L96.9,42.9 L97.8,42.6 L98.6,42.4 L99.5,42.2 L100.4,42.1 L101.2,42.0 L102.1,42.0 L103.0,42.0 L103.9,42.1 L104.8,42.3 L105.6,42.4 L106.5,42.7 L107.4,43.0 L108.2,43.3 L109.1,43.7 L110.0,44.1 L110.9,44.6 L111.8,45.2 L112.6,45.8 L113.5,46.4 L114.4,47.1 L115.2,47.9 L116.1,48.7 L117.0,49.5 L117.9,50.4 L118.8,51.4 L119.6,52.4 L120.5,53.4 L121.4,54.5 L122.2,55.7 L123.1,56.9 L124.0,58.1 L124.9,59.4 L125.8,60.8 L126.6,62.2 L127.5,63.7 L128.4,65.2 L129.2,66.8 L130.1,68.4 L131.0,70.0 L131.9,71.8 L132.8,73.5 L133.6,75.3 L134.5,77.2 L135.4,79.1 L136.2,81.1 L137.1,83.1 L138.0,85.2 L138.9,87.3 L139.8,89.5 L140.6,91.7 L141.5,94.0 L142.4,96.3 L143.2,98.7 L144.1,101.2 L145.0,103.6 L145.9,106.2 L146.8,108.8 L147.6,111.4 L148.5,114.1 L149.4,116.8 L150.2,119.6 L151.1,122.4 L152.0,125.3 L152.9,128.3 L153.8,131.3 L154.6,134.3 L155.5,137.4 L156.4,140.6 L157.2,143.8 L158.1,147.0 L159.0,150.3 L159.9,153.7 L160.8,157.1 L161.6,160.5 L162.5,164.0 L163.4,167.6 L164.2,171.2 L165.1,174.8 L166.0,178.5 L166.9,182.3 L167.8,186.1 L168.6,190.0 L169.5,193.9 L170.4,197.8 L171.2,201.9\" fill=\"none\" stroke=\"#1E8449\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" clip-path=\"url(#p4c)\"/><\/g><\/svg>", "parts": [{"t": "num", "q": "a =", "a": -1}, {"t": "num", "q": "d =", "a": -2}, {"t": "num", "q": "e =", "a": 3}], "hint": "Der höchste Punkt ist S. Gehen Sie von S aus 1 nach rechts. Dann geht es 1 nach <b>unten<\/b>.", "sol": "S(−2 | 3). 1 nach rechts → 1 nach unten: a = −1.<br>f(x) = −(x + 2)² + 3, also a = −1, d = −2, e = 3."}, {"nr": "2.3", "sec": "2. Die Scheitelpunktform", "kann": "… mit dem <b>Scheitelpunkt<\/b> und einem <b>Punkt<\/b> die Funktionsgleichung aufstellen.", "kurz": "mit dem Scheitelpunkt und einem Punkt die Funktionsgleichung aufstellen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Scheitelpunktform/Tipp_Gleichung_mit_Punkt.html", "ulabel": "Beispiel · Teil 3", "text": "Die Parabel hat den Scheitelpunkt S(2 | −1) und geht durch P(4 | 7). Bestimmen Sie a.", "media": "<div class=\"term gross\">f(x) = a(x − 2)² − 1<\/div>", "parts": [{"t": "num", "q": "a =", "a": 2}], "hint": "Setzen Sie x = 4 und f(x) = 7 ein: 7 = a · (4 − 2)² − 1.", "sol": "<table class=\"gl\"><tr><td class=\"l\">7<\/td><td class=\"e\">=<\/td><td class=\"r\">a · (4 − 2)² − 1<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">7<\/td><td class=\"e\">=<\/td><td class=\"r\">4a − 1<\/td><td class=\"op\">| + 1<\/td><\/tr><tr><td class=\"l\">8<\/td><td class=\"e\">=<\/td><td class=\"r\">4a<\/td><td class=\"op\">| : 4<\/td><\/tr><tr><td class=\"l\">a<\/td><td class=\"e\">=<\/td><td class=\"r\">2<\/td><td class=\"op\"><\/td><\/tr><\/table>f(x) = 2(x − 2)² − 1"}, {"nr": "3.1", "sec": "3. Umformen mit binomischen Formeln", "kann": "… die <b>binomischen Formeln<\/b> anwenden.", "kurz": "die binomischen Formeln anwenden.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Umformen/Praesentation_Umformen_binomische_Formeln.html", "ulabel": "Präsentation · Teil 4", "text": "Lösen Sie die Klammer auf: (x − 5)² = x² + ▢x + ▢", "media": "<div class=\"term gross\">(x − 5)²<\/div>", "parts": [{"t": "num", "q": "Zahl vor x:", "a": -10}, {"t": "num", "q": "Zahl ohne x:", "a": 25}], "hint": "2ab = 2 · x · 5 = 10x. Bei (a − b)² steht ein Minus davor.", "sol": "(x − 5)² = x² − 2 · x · 5 + 5² = x² <b>− 10<\/b>x <b>+ 25<\/b>"}, {"nr": "3.2", "sec": "3. Umformen mit binomischen Formeln", "kann": "… die <b>Scheitelpunktform<\/b> in die <b>allgemeine Form<\/b> umformen.", "kurz": "die Scheitelpunktform in die allgemeine Form umformen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Umformen/Schablone_Umformen.html", "ulabel": "Schablone · Teil 4", "text": "Formen Sie in die allgemeine Form f(x) = ax² + bx + c um.", "media": "<div class=\"term gross\">f(x) = −(x − 3)² + 4<\/div>", "parts": [{"t": "num", "q": "a =", "a": -1}, {"t": "num", "q": "b =", "a": 6}, {"t": "num", "q": "c =", "a": -5}], "hint": "(x − 3)² = x² − 6x + 9. Das Minus davor dreht <b>alle<\/b> Vorzeichen.", "sol": "<table class=\"gl\"><tr><td class=\"l\">f(x)<\/td><td class=\"e\">=<\/td><td class=\"r\">−(x² − 6x + 9) + 4<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\"><\/td><td class=\"e\">=<\/td><td class=\"r\">−x² + 6x − 9 + 4<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\"><\/td><td class=\"e\">=<\/td><td class=\"r\">−x² + 6x − 5<\/td><td class=\"op\"><\/td><\/tr><\/table>"}, {"nr": "4.1", "sec": "4. Quadratische Gleichungen lösen", "kann": "… einfache quadratische Gleichungen durch <b>Wurzelziehen<\/b> lösen.", "kurz": "einfache quadratische Gleichungen durch Wurzelziehen lösen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Praesentation_Quadratische_Gleichungen.html", "ulabel": "Präsentation · Teil 5", "text": "Lösen Sie die Gleichung.", "media": "<div class=\"term gross\">3x² − 75 = 0<\/div>", "parts": [{"t": "num", "q": "x₁ =", "a": 5, "note": "positive Lösung"}, {"t": "num", "q": "x₂ =", "a": -5, "note": "negative Lösung"}], "hint": "+ 75, dann : 3. Dann die Wurzel ziehen.", "sol": "<table class=\"gl\"><tr><td class=\"l\">3x²<\/td><td class=\"e\">=<\/td><td class=\"r\">75<\/td><td class=\"op\">| : 3<\/td><\/tr><tr><td class=\"l\">x²<\/td><td class=\"e\">=<\/td><td class=\"r\">25<\/td><td class=\"op\">| √<\/td><\/tr><tr><td class=\"l\">x₁<\/td><td class=\"e\">=<\/td><td class=\"r\">5 <span class=\"ou\">∨<\/span> x₂ = −5<\/td><td class=\"op\"><\/td><\/tr><\/table>"}, {"nr": "4.2", "sec": "4. Quadratische Gleichungen lösen", "kann": "… quadratische Gleichungen mit der <b>pq-Formel<\/b> lösen.", "kurz": "quadratische Gleichungen mit der pq-Formel lösen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Schablone_pq_Formel.html", "ulabel": "Schablone · Teil 5", "text": "Lösen Sie mit der pq-Formel.", "media": "<div class=\"term gross\">2x² + 4x − 16 = 0<\/div>", "parts": [{"t": "num", "q": "x₁ =", "a": 2, "note": "größere Lösung"}, {"t": "num", "q": "x₂ =", "a": -4, "note": "kleinere Lösung"}], "hint": "Zuerst durch 2 teilen: x² + 2x − 8 = 0. Dann ist p = 2 und q = −8.", "sol": "<table class=\"gl\"><tr><td class=\"l\">x² + 2x − 8<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁,₂<\/td><td class=\"e\">=<\/td><td class=\"r\">−1 ± <span class=\"sq\"><span class=\"sym\"><svg viewBox=\"0 0 12 32\" preserveAspectRatio=\"none\"><path d=\"M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/><\/svg><\/span><span class=\"rad\">1 + 8<\/span><\/span><\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\"><\/td><td class=\"e\">=<\/td><td class=\"r\">−1 ± 3<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁<\/td><td class=\"e\">=<\/td><td class=\"r\">2 <span class=\"ou\">∨<\/span> x₂ = −4<\/td><td class=\"op\"><\/td><\/tr><\/table>"}, {"nr": "4.3", "sec": "4. Quadratische Gleichungen lösen", "kann": "… an der Zahl <b>unter der Wurzel<\/b> erkennen, wie viele Lösungen es gibt.", "kurz": "an der Zahl unter der Wurzel erkennen, wie viele Lösungen es gibt.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Tipp_pq_Formel.html", "ulabel": "Beispiel · Teil 5", "text": "Wie viele Lösungen hat die Gleichung? Berechnen Sie die Zahl unter der Wurzel.", "media": "<div class=\"term gross\">x² − 6x + 9 = 0<\/div>", "parts": [{"t": "num", "q": "Zahl unter der Wurzel:", "a": 0}, {"t": "mc", "q": "Anzahl der Lösungen:", "opts": ["2", "1", "0"], "a": 1}], "hint": "p = −6, q = 9. Unter der Wurzel: (p/2)² − q = (−3)² − 9.", "sol": "(−3)² − 9 = 9 − 9 = 0. Also gibt es genau <b>eine<\/b> Lösung: x = 3."}, {"nr": "4.4", "sec": "4. Quadratische Gleichungen lösen", "kann": "… die <b>Nullstellen<\/b> einer quadratischen Funktion berechnen.", "kurz": "die Nullstellen einer quadratischen Funktion berechnen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/AB_Quadratische_Gleichungen.html", "ulabel": "Arbeitsblatt · Teil 5", "text": "Berechnen Sie die Nullstellen.", "media": "<div class=\"term gross\">f(x) = 0,5x² − 2x<\/div>", "parts": [{"t": "num", "q": "x₁ =", "a": 4, "note": "größere"}, {"t": "num", "q": "x₂ =", "a": 0, "note": "kleinere"}], "hint": "f(x) = 0 setzen. Mal 2: x² − 4x = 0. Hier ist q = 0. Sie können auch x ausklammern.", "sol": "<table class=\"gl\"><tr><td class=\"l\">0,5x² − 2x<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\">| · 2<\/td><\/tr><tr><td class=\"l\">x² − 4x<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x · (x − 4)<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁<\/td><td class=\"e\">=<\/td><td class=\"r\">4 <span class=\"ou\">∨<\/span> x₂ = 0<\/td><td class=\"op\"><\/td><\/tr><\/table>"}, {"nr": "5.1", "sec": "5. Schnittpunkte berechnen", "kann": "… die <b>Schnittpunkte<\/b> einer <b>Parabel<\/b> und einer <b>Geraden<\/b> berechnen.", "kurz": "die Schnittpunkte einer Parabel und einer Geraden berechnen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Schablone_Parabel_Gerade.html", "ulabel": "Schablone · Teil 5", "text": "Berechnen Sie die Schnittpunkte.", "media": "<div class=\"term gross\"><span class=\"cf\">f(x) = x² − 3<\/span> &nbsp; <span class=\"cg\">g(x) = 2x<\/span><\/div>", "parts": [{"t": "num", "q": "S₁: x =", "a": 3}, {"t": "num", "q": "S₁: y =", "a": 6}, {"t": "num", "q": "S₂: x =", "a": -1}, {"t": "num", "q": "S₂: y =", "a": -2}], "hint": "x² − 3 = 2x → x² − 2x − 3 = 0. p = −2, q = −3.", "sol": "<table class=\"gl\"><tr><td class=\"l\">x² − 3<\/td><td class=\"e\">=<\/td><td class=\"r\">2x<\/td><td class=\"op\">| − 2x<\/td><\/tr><tr><td class=\"l\">x² − 2x − 3<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁,₂<\/td><td class=\"e\">=<\/td><td class=\"r\">1 ± <span class=\"sq\"><span class=\"sym\"><svg viewBox=\"0 0 12 32\" preserveAspectRatio=\"none\"><path d=\"M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/><\/svg><\/span><span class=\"rad\">1 + 3<\/span><\/span> = 1 ± 2<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁<\/td><td class=\"e\">=<\/td><td class=\"r\">3 <span class=\"ou\">∨<\/span> x₂ = −1<\/td><td class=\"op\"><\/td><\/tr><\/table>g(3) = 6, g(−1) = −2 → <b>S₁(3 | 6), S₂(−1 | −2)<\/b>"}, {"nr": "5.2", "sec": "5. Schnittpunkte berechnen", "kann": "… die <b>Schnittpunkte<\/b> von <b>zwei Parabeln<\/b> berechnen.", "kurz": "die Schnittpunkte von zwei Parabeln berechnen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Schablone_Parabel_Parabel.html", "ulabel": "Schablone · Teil 5", "text": "Berechnen Sie den Schnittpunkt. Hier fällt x² weg.", "media": "<div class=\"term gross\"><span class=\"cf\">f(x) = x² + 2x<\/span> &nbsp; <span style=\"color:#6A3FC8\">g(x) = x² − 4<\/span><\/div>", "parts": [{"t": "num", "q": "x =", "a": -2}, {"t": "num", "q": "y =", "a": 0}], "hint": "x² + 2x = x² − 4. Ziehen Sie auf beiden Seiten x² ab.", "sol": "<table class=\"gl\"><tr><td class=\"l\">x² + 2x<\/td><td class=\"e\">=<\/td><td class=\"r\">x² − 4<\/td><td class=\"op\">| − x²<\/td><\/tr><tr><td class=\"l\">2x<\/td><td class=\"e\">=<\/td><td class=\"r\">−4<\/td><td class=\"op\">| : 2<\/td><\/tr><tr><td class=\"l\">x<\/td><td class=\"e\">=<\/td><td class=\"r\">−2<\/td><td class=\"op\"><\/td><\/tr><\/table>g(−2) = 4 − 4 = 0 → <b>S(−2 | 0)<\/b>"}, {"nr": "5.3", "sec": "5. Schnittpunkte berechnen", "kann": "… erkennen, ob Parabel und Gerade <b>zwei Schnittpunkte<\/b>, einen <b>Berührpunkt<\/b> oder <b>keinen<\/b> gemeinsamen Punkt haben.", "kurz": "erkennen, ob Parabel und Gerade zwei Schnittpunkte, einen Berührpunkt oder keinen gemeinsamen Punkt haben.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Gleichungen/Praesentation_Parabel_und_Gerade.html", "ulabel": "Präsentation · Teil 5", "text": "Beim Gleichsetzen von f und g entsteht diese Gleichung:", "media": "<div class=\"term gross\">x² − 4x + 4 = 0<\/div>", "parts": [{"t": "mc", "q": "Parabel und Gerade haben …", "opts": ["zwei Schnittpunkte", "einen Berührpunkt", "keinen gemeinsamen Punkt"], "a": 1}], "hint": "Berechnen Sie die Zahl unter der Wurzel: (p/2)² − q = (−2)² − 4.", "sol": "Unter der Wurzel steht (−2)² − 4 = 0. Es gibt genau eine Lösung (x = 2). Also gibt es einen <b>Berührpunkt<\/b>."}, {"nr": "6.1", "sec": "6. Anwendungsaufgaben", "kann": "… in einer <b>Anwendung<\/b> die Funktionsgleichung mit der <b>Scheitelpunktform<\/b> aufstellen.", "kurz": "in einer Anwendung die Funktionsgleichung mit der Scheitelpunktform aufstellen.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Anwendungen/Anwendungen_A2_Schritte.html", "ulabel": "Anwendungen · Teil 6", "text": "Ein Ball fliegt auf einer Parabel. Der höchste Punkt ist S(4 | 5). Der Ball startet in P(0 | 1). Bestimmen Sie a.", "media": "<div class=\"term gross\">h(x) = a(x − 4)² + 5<\/div>", "parts": [{"t": "num", "q": "a =", "a": -0.25, "note": "Bruch erlaubt, z. B. −1/4"}], "hint": "Setzen Sie P(0 | 1) ein: 1 = a · (0 − 4)² + 5.", "sol": "<table class=\"gl\"><tr><td class=\"l\">1<\/td><td class=\"e\">=<\/td><td class=\"r\">a · (0 − 4)² + 5<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">1<\/td><td class=\"e\">=<\/td><td class=\"r\">16a + 5<\/td><td class=\"op\">| − 5<\/td><\/tr><tr><td class=\"l\">−4<\/td><td class=\"e\">=<\/td><td class=\"r\">16a<\/td><td class=\"op\">| : 16<\/td><\/tr><tr><td class=\"l\">a<\/td><td class=\"e\">=<\/td><td class=\"r\">−0,25<\/td><td class=\"op\"><\/td><\/tr><\/table>h(x) = −0,25(x − 4)² + 5"}, {"nr": "6.2", "sec": "6. Anwendungsaufgaben", "kann": "… in einer <b>Anwendung<\/b> Gleichungen lösen und die Lösungen im <b>Sachzusammenhang<\/b> deuten.", "kurz": "in einer Anwendung Gleichungen lösen und die Lösungen im Sachzusammenhang deuten.", "url": "https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Anwendungen/Anwendungen_A3_Schritte.html", "ulabel": "Anwendungen · Teil 6", "text": "Ein Brückenbogen hat die Gleichung f(x) = −0,02x² + 0,96x (in m). Wo ist der Bogen 9,1 m hoch?", "media": "<div class=\"term gross\">−0,02x² + 0,96x = 9,1<\/div>", "parts": [{"t": "num", "q": "x₁ =", "a": 35, "note": "größere Stelle"}, {"t": "num", "q": "x₂ =", "a": 13, "note": "kleinere Stelle"}, {"t": "num", "q": "Abstand der beiden Stellen in m:", "a": 22}], "hint": "− 9,1 und dann : (−0,02). Sie erhalten x² − 48x + 455 = 0. Dann die pq-Formel.", "sol": "<table class=\"gl\"><tr><td class=\"l\">x² − 48x + 455<\/td><td class=\"e\">=<\/td><td class=\"r\">0<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁,₂<\/td><td class=\"e\">=<\/td><td class=\"r\">24 ± <span class=\"sq\"><span class=\"sym\"><svg viewBox=\"0 0 12 32\" preserveAspectRatio=\"none\"><path d=\"M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/><\/svg><\/span><span class=\"rad\">576 − 455<\/span><\/span> = 24 ± 11<\/td><td class=\"op\"><\/td><\/tr><tr><td class=\"l\">x₁<\/td><td class=\"e\">=<\/td><td class=\"r\">35 <span class=\"ou\">∨<\/span> x₂ = 13<\/td><td class=\"op\"><\/td><\/tr><\/table>Abstand: 35 − 13 = <b>22 m<\/b>."}];
+const KEY='kannliste_vk_q2_v1';
+let S={idx:-1,name:'',st:{}};
+try{ const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s&&s.st) S=s; }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){} }
+function st(nr){ if(!S.st[nr]) S.st[nr]={ans:{},checked:false,ok:null,solShown:false,hint:false,amp:null,tries:0}; return S.st[nr]; }
+const $=id=>document.getElementById(id);
+const AMP={g:'Das kann ich sicher.',y:'Ich bin noch unsicher.',r:'Das kann ich noch nicht.'};
+const AMPK={g:'grün',y:'gelb',r:'rot'};
+
+function parseNum(v){
+  if(v==null) return NaN; v=String(v).trim().replace(/\s/g,'').replace(/[−–]/g,'-').replace(/,/g,'.').replace('½','0.5');
+  if(!v) return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); const x=parseFloat(a), y=parseFloat(b); return (isFinite(x)&&isFinite(y)&&y!==0)&&/^-?[\d.]+$/.test(a)&&/^-?[\d.]+$/.test(b)?x/y:NaN; }
+  return /^-?\d*\.?\d+$/.test(v)?parseFloat(v):NaN;
+}
+
+function renderProg(){
+  let h='';
+  ITEMS.forEach((it,i)=>{ const a=(S.st[it.nr]||{}).amp; h+=`<button class="${a||''} ${i===S.idx?'akt':''}" title="${it.nr}" aria-label="Kann ${it.nr}" onclick="go(${i})">${it.nr}</button>`; });
+  h+=`<button class="sum ${S.idx===ITEMS.length?'akt':''}" onclick="go(${ITEMS.length})">Zusammenfassung</button>`;
+  $('prog').innerHTML=h;
+}
+function go(i){ S.idx=i; save(); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function render(){
+  renderProg();
+  if(S.idx<0) return renderIntro();
+  if(S.idx>=ITEMS.length) return renderSummary();
+  const it=ITEMS[S.idx], s=st(it.nr);
+  let h=`<div class="sec">${it.sec}</div>`;
+  h+=`<div class="kann"><span class="nr">${it.nr}</span>Ich kann ${it.kann.replace(/^…\s*/,"")}</div>`;
+  h+=`<h2>Kurzer Check</h2><div class="aufg">${it.text}</div><div class="medien">${it.media||''}</div>`;
+  it.parts.forEach((p,pi)=>{ h+=`<div class="part" id="p${pi}">${partHTML(it,p,pi,s)}</div>`; });
+  h+=`<div class="knoepfe">
+      <button class="btn voll" onclick="check()">Prüfen</button>
+      <button class="btn grau" onclick="toggleHint()">${s.hint?'Tipp ausblenden':'Tipp'}</button>
+      <button class="btn grau" onclick="showSol()">Lösung zeigen</button></div>`;
+  if(s.hint) h+=`<div class="box tipp"><b class="t">Tipp</b>${it.hint}</div>`;
+  if(s.checked) h+= s.ok ? `<div class="box erg-ok"><b class="t">Richtig!</b>Gut gemacht.</div>`
+                         : `<div class="box erg-no"><b class="t">Noch nicht ganz.</b>Die markierten Stellen stimmen noch nicht. Versuchen Sie es noch einmal oder nutzen Sie den Tipp.</div>`;
+  if(s.solShown || s.ok) h+=`<div class="box loes"><b class="t">Lösung</b>${it.sol}</div>`;
+  h+=`<h2>Wie sicher sind Sie?</h2><div class="amp">`+['g','y','r'].map(k=>`<button class="${k} ${s.amp===k?'sel':''}" onclick="setAmp('${k}')"><span class="dot ${k}"></span><span><b>${AMPK[k]}</b><br>${AMP[k]}</span></button>`).join('')+`</div>`;
+  if(s.amp) h+=uebungBox(it,s);
+  h+=`<div class="nav"><button class="btn" onclick="go(${S.idx-1})">‹ Zurück</button>
+      <button class="btn voll" id="weiter" onclick="weiter()">${S.idx===ITEMS.length-1?'Zur Zusammenfassung ›':'Nächste Kann-Aufgabe ›'}</button></div>
+      <div class="hinweis" id="wh" style="text-align:right;min-height:1.4em"></div>`;
+  $('karte').innerHTML=h;
+  if(it.parts.some(p=>p.t==='grid')) it.parts.forEach((p,pi)=>{ if(p.t==='grid') drawGrid(it,p,pi,s); });
+}
+function uebungBox(it,s){
+  const txt = s.amp==='g' ? 'Prima! Wenn Sie möchten, können Sie trotzdem weiterüben.'
+            : 'Üben Sie dieses Thema jetzt gezielt. Die Übung öffnet sich in einem neuen Tab – danach geht es hier weiter.';
+  const cls = s.amp==='g'?'erg-ok':(s.amp==='y'?'tipp':'erg-no');
+  if(!it.url) return `<div class="box ${cls}"><b class="t">Weiterüben</b>Die Übung zu diesem Thema kommt in Stunde 8. Notieren Sie sich die Nummer ${it.nr}.</div>`;
+  return `<div class="box ${cls}"><div class="uebung"><div><b class="t">Weiterüben</b>${txt}</div>
+     <a class="btn ${s.amp==='g'?'':'voll'}" href="${it.url}" target="_blank" rel="noopener">Zur Übung (${it.ulabel.replace(/^.*· /,'')}) ↗</a></div></div>`;
+}
+function partHTML(it,p,pi,s){
+  const a=s.ans[pi]; const res=(s.res||{})[pi];
+  const mark = res===undefined||!s.checked ? '' : (res?'<span class="mark ok">✓</span>':'<span class="mark falsch">✗</span>');
+  if(p.t==='mc'){
+    return `<div class="q">${p.q} ${mark}</div><div class="opts">`+p.opts.map((o,oi)=>{
+      let c=a===oi?'sel':''; if(s.checked&&a===oi) c+= res?' ok':' falsch'; if((s.solShown)&&oi===p.a) c+=' ok';
+      return `<button class="opt ${c}" onclick="pick(${pi},${oi})">${o}</button>`}).join('')+`</div>`;
+  }
+  if(p.t==='multi'){
+    const arr=a||[];
+    return `<div class="q">Mehrere Antworten möglich: ${mark}</div><div class="opts">`+p.opts.map((o,oi)=>{
+      let c=arr.includes(oi)?'sel':''; if(s.solShown&&p.a.includes(oi)) c+=' ok';
+      return `<button class="opt ${c}" onclick="toggleMulti(${pi},${oi})">${arr.includes(oi)?'☑':'☐'} ${o}</button>`}).join('')+`</div>`;
+  }
+  if(p.t==='num'){
+    const cls= s.checked&&res!==undefined ? (res?'ok':'falsch'):'';
+    return `<label class="num"><span>${p.q}</span><input inputmode="decimal" autocomplete="off" class="${cls}" value="${a??''}" oninput="setNum(${pi},this.value)" onkeydown="if(event.key==='Enter')check()"> ${mark} ${p.note?`<span class="note">(${p.note})</span>`:''}</label>`;
+  }
+  if(p.t==='grid'){
+    return `<div class="q">Ihre Punkte: <span id="gp${pi}">${(a||[]).map(q=>'('+String(q[0]).replace('-','−')+' | '+String(q[1]).replace('-','−')+')').join(' und ')||'noch keine'}</span> ${mark}
+      <button class="btn grau" style="padding:3px 10px;font-size:14px;margin-left:6px" onclick="gridReset(${pi})">Punkte löschen</button></div><div class="gridbox" id="g${pi}"></div>`;
+  }
+}
+function pick(pi,oi){ const s=st(ITEMS[S.idx].nr); s.ans[pi]=oi; s.checked=false; save(); render(); }
+function toggleMulti(pi,oi){ const s=st(ITEMS[S.idx].nr); const a=s.ans[pi]||[]; const i=a.indexOf(oi); if(i>=0)a.splice(i,1); else a.push(oi); s.ans[pi]=a; s.checked=false; save(); render(); }
+function setNum(pi,v){ const s=st(ITEMS[S.idx].nr); s.ans[pi]=v; save(); }
+function toggleHint(){ const s=st(ITEMS[S.idx].nr); s.hint=!s.hint; save(); render(); }
+function showSol(){ const s=st(ITEMS[S.idx].nr); s.solShown=true; if(s.ok===null) s.ok=false; save(); render(); }
+function setAmp(k){ const s=st(ITEMS[S.idx].nr); s.amp=k; save(); render(); }
+function weiter(){ const s=st(ITEMS[S.idx].nr); if(!s.amp){ $('wh').textContent='Bitte wählen Sie zuerst eine Ampelfarbe.'; return; } go(S.idx+1); }
+function check(){
+  const it=ITEMS[S.idx], s=st(it.nr); s.res={}; let all=true;
+  it.parts.forEach((p,pi)=>{
+    const a=s.ans[pi]; let r=false;
+    if(p.t==='mc') r= a===p.a;
+    else if(p.t==='multi') r= Array.isArray(a) && a.length===p.a.length && p.a.every(x=>a.includes(x));
+    else if(p.t==='num'){ const v=parseNum(a); r= isFinite(v) && Math.abs(v-p.a)<1e-6; }
+    else if(p.t==='grid'){ r= Array.isArray(a)&&a.length===2 && a.every(q=>Math.abs(p.m*q[0]+p.b-q[1])<1e-9) && (a[0][0]!==a[1][0]); }
+    s.res[pi]=r; if(!r) all=false;
+  });
+  s.checked=true; s.tries++;
+  if(s.firstOk===undefined) s.firstOk=all;
+  if(!s.solShown) s.ok=all; else s.ok = s.ok || all;
+  if(all) s.solvedSelf = !s.solShown;
+  save(); render();
+}
+/* Gitter zum Zeichnen */
+function drawGrid(it,p,pi,s){
+  const u=38, pad=22, W=(p.xmax-p.xmin)*u+2*pad+10, H=(p.ymax-p.ymin)*u+2*pad;
+  const X=x=>pad+(x-p.xmin)*u, Y=y=>pad+(p.ymax-y)*u;
+  let g=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" style="font-family:Georgia,serif">
+   <defs><marker id="gar" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,3.5 L0,7 Z" fill="#333"/></marker></defs>`;
+  for(let x=p.xmin;x<=p.xmax;x++) g+=`<line x1="${X(x)}" y1="${Y(p.ymax)}" x2="${X(x)}" y2="${Y(p.ymin)}" stroke="#dbe6f0"/>`;
+  for(let y=p.ymin;y<=p.ymax;y++) g+=`<line x1="${X(p.xmin)}" y1="${Y(y)}" x2="${X(p.xmax)}" y2="${Y(y)}" stroke="#dbe6f0"/>`;
+  g+=`<line x1="${X(p.xmin)}" y1="${Y(0)}" x2="${X(p.xmax)+14}" y2="${Y(0)}" stroke="#333" stroke-width="1.4" marker-end="url(#gar)"/>`;
+  g+=`<line x1="${X(0)}" y1="${Y(p.ymin)}" x2="${X(0)}" y2="${Y(p.ymax)-14}" stroke="#333" stroke-width="1.4" marker-end="url(#gar)"/>`;
+  g+=`<text x="${X(p.xmax)+10}" y="${Y(0)+18}" font-size="15" font-style="italic">x</text><text x="${X(0)+8}" y="${Y(p.ymax)-4}" font-size="15" font-style="italic">y</text>`;
+  for(let x=p.xmin;x<=p.xmax;x++) if(x) g+=`<text x="${X(x)}" y="${Y(0)+16}" font-size="12" text-anchor="middle">${x<0?'−'+(-x):x}</text>`;
+  for(let y=p.ymin;y<=p.ymax;y++) if(y) g+=`<text x="${X(0)-6}" y="${Y(y)+4}" font-size="12" text-anchor="end">${y<0?'−'+(-y):y}</text>`;
+  const a=s.ans[pi]||[];
+  const lineThrough=(x1,y1,x2,y2,col,dash)=>{ const m=(y2-y1)/(x2-x1), b=y1-m*x1; const pts=[];
+     [p.xmin,p.xmax].forEach(x=>{const y=m*x+b; if(y>=p.ymin-1e-9&&y<=p.ymax+1e-9) pts.push([x,y]);});
+     if(m) [p.ymin,p.ymax].forEach(y=>{const x=(y-b)/m; if(x>=p.xmin&&x<=p.xmax) pts.push([x,y]);});
+     pts.sort((q,r)=>q[0]-r[0]); if(pts.length<2) return '';
+     const A=pts[0],Bp=pts[pts.length-1];
+     return `<line x1="${X(A[0])}" y1="${Y(A[1])}" x2="${X(Bp[0])}" y2="${Y(Bp[1])}" stroke="${col}" stroke-width="2.6" ${dash?'stroke-dasharray="7 5"':''}/>`; };
+  if(s.solShown){ g+=lineThrough(0,p.b,4,p.b+4*p.m,'#2E7D3A',true); }
+  if(a.length===2 && a[0][0]!==a[1][0]) g+=lineThrough(a[0][0],a[0][1],a[1][0],a[1][1],'#1D4ED8',false);
+  a.forEach(q=>{ g+=`<circle cx="${X(q[0])}" cy="${Y(q[1])}" r="6" fill="#C2410C" stroke="#fff" stroke-width="1.5"/>`; });
+  g+=`<rect x="0" y="0" width="${W}" height="${H}" fill="transparent" id="gc${pi}"/></svg>`;
+  const box=$('g'+pi); box.innerHTML=g;
+  if(s.solShown) box.insertAdjacentHTML('beforeend','<div class="hinweis">Grün gestrichelt: die richtige Gerade.</div>');
+  const svg=box.querySelector('svg');
+  svg.addEventListener('click',ev=>{
+    const r=svg.getBoundingClientRect(); const sx=(ev.clientX-r.left)*W/r.width, sy=(ev.clientY-r.top)*H/r.height;
+    const x=Math.round((sx-pad)/u+p.xmin), y=Math.round(p.ymax-(sy-pad)/u);
+    if(x<p.xmin||x>p.xmax||y<p.ymin||y>p.ymax) return;
+    let arr=s.ans[pi]||[]; const k=arr.findIndex(q=>q[0]===x&&q[1]===y);
+    if(k>=0) arr.splice(k,1); else { if(arr.length>=2) arr.shift(); arr.push([x,y]); }
+    s.ans[pi]=arr; s.checked=false; save(); render();
+  });
+}
+function gridReset(pi){ const s=st(ITEMS[S.idx].nr); s.ans[pi]=[]; s.checked=false; save(); render(); }
+
+function renderIntro(){
+  $('karte').innerHTML=`<div class="intro">
+   <div class="kann" style="margin-bottom:10px"><b>Was kann ich schon – was muss ich noch üben?</b></div>
+   <p>Diese Kann-Liste führt Sie durch alle <b>${ITEMS.length} Themen</b> aus Quartal 2: von der Normalparabel bis zu den Anwendungsaufgaben.</p>
+   <p>Auf jeder Seite sehen Sie:</p>
+   <p>1. was Sie können sollen („Ich kann …“),<br>2. eine <b>kurze Aufgabe</b> dazu – mit Tipp und Lösung, wenn Sie nicht weiterkommen,<br>3. die <b>Ampel</b>: Wie sicher sind Sie? <span class="pill g">grün</span> <span class="pill y">gelb</span> <span class="pill r">rot</span><br>4. einen Link zur passenden <b>Übung</b>.</p>
+   <p>Am Ende bekommen Sie eine <b>Zusammenfassung</b>, die Sie ausdrucken oder als PDF speichern können.</p>
+   <p class="namefeld" style="margin-top:12px"><label>Ihr Name (für die Zusammenfassung):<br><input value="${S.name||''}" oninput="S.name=this.value;save()"></label></p>
+   <p class="hinweis">Ihre Antworten werden nur auf diesem Gerät im Browser gespeichert.</p>
+   <div class="nav"><span></span><button class="btn voll" onclick="go(0)">${Object.keys(S.st).length?'Weitermachen':'Los geht’s'} ›</button></div></div>`;
+}
+function renderSummary(){
+  const c={g:0,y:0,r:0,n:0}; let right=0;
+  ITEMS.forEach(it=>{ const s=S.st[it.nr]||{}; c[s.amp||'n']++; if(s.ok&&!s.solShown) right++; });
+  let h=`<h2 style="margin-top:0;font-size:20px">Zusammenfassung${S.name?' – '+S.name.replace(/</g,'&lt;'):''}</h2>
+   <div class="grau">Stand: ${new Date().toLocaleDateString('de-DE')} · Kurz-Checks selbst gelöst: ${right} von ${ITEMS.length}</div>
+   <div class="zahlen"><div style="background:var(--g)"><b>${c.g}</b>sicher</div><div style="background:var(--y)"><b>${c.y}</b>unsicher</div><div style="background:var(--r)"><b>${c.r}</b>noch nicht</div>${c.n?`<div style="background:#aaa"><b>${c.n}</b>nicht bewertet</div>`:''}</div>`;
+  const offen=ITEMS.filter(it=>{const a=(S.st[it.nr]||{}).amp; return a==='r'||a==='y';}).sort((a,b)=>((S.st[a.nr].amp==='r')?0:1)-((S.st[b.nr].amp==='r')?0:1));
+  if(offen.length){
+    h+=`<h2>Das übe ich als Nächstes</h2><p class="grau">Zuerst die roten, dann die gelben Themen.</p><table class="sum"><tr><th>Nr.</th><th>Ich kann …</th><th>Ampel</th><th class="noprint">Übung</th></tr>`;
+    offen.forEach(it=>{ const s=S.st[it.nr];
+      h+=`<tr><td class="nr">${it.nr}</td><td>${it.kurz}</td><td><span class="pill ${s.amp}">${AMPK[s.amp]}</span></td><td class="noprint">${it.url?`<a href="${it.url}" target="_blank" rel="noopener">${it.ulabel}</a>`:'Stunde 8'}</td></tr>`; });
+    h+='</table>';
+  } else if(!c.n) h+=`<div class="box erg-ok"><b class="t">Stark!</b>Sie haben alle Themen mit grün bewertet. Wiederholen Sie trotzdem vor der Klassenarbeit ein paar Übungen.</div>`;
+  h+=`<h2>Alle Themen im Überblick</h2><table class="sum"><tr><th>Nr.</th><th>Ich kann …</th><th>Kurz-Check</th><th>Ampel</th></tr>`;
+  ITEMS.forEach((it,i)=>{ const s=S.st[it.nr]||{};
+    const chk = s.ok&&!s.solShown ? '<span class="pill g">✓ gelöst</span>' : (s.solShown? '<span class="pill n">Lösung angesehen</span>' : (s.checked? '<span class="pill r">✗ nicht gelöst</span>':'<span class="pill n">offen</span>'));
+    h+=`<tr><td class="nr"><a href="#" onclick="go(${i});return false" style="color:inherit">${it.nr}</a></td><td>${it.kurz}</td><td>${chk}</td><td>${s.amp?`<span class="pill ${s.amp}">${AMPK[s.amp]}</span>`:'<span class="pill n">–</span>'}</td></tr>`; });
+  h+=`</table><div class="knoepfe"><button class="btn voll" onclick="window.print()">Drucken / als PDF speichern</button>
+      <button class="btn grau" onclick="go(0)">Von vorne durchgehen</button>
+      <button class="btn grau" onclick="if(confirm('Alle Antworten löschen?')){S={idx:-1,name:S.name,st:{}};save();render();}">Alles zurücksetzen</button></div>`;
+  $('karte').innerHTML=h;
+}
+render();
+</script></body></html>
