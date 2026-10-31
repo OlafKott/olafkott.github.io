@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Montag, 2. November – Druckplan</title>
+<style>
+:root{ --red:#C8102E; --blue:#1D70B8; --grey:#4b5563; --ink:#1d1d1f; --mut:#5b616a; --line:#e3e0da; --bg:#f4f3f0; --ok:#2E7D32; }
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--bg); line-height:1.5; }
+.wrap{ max-width:1320px; margin:0 auto; padding:20px 16px 40px; }
+header{ border-bottom:4px solid var(--red); padding-bottom:10px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; }
+h1{ margin:0; font-size:28px; line-height:1.2; }
+.sub{ color:var(--mut); font-size:15px; }
+h2{ font-size:18px; margin:0 0 12px; }
+.progress{ font-size:14px; color:var(--mut); min-width:180px; text-align:right; }
+.pbar{ height:10px; background:#ddd; border-radius:6px; overflow:hidden; margin-top:4px; }
+.pbar span{ display:block; height:100%; width:0; background:var(--ok); transition:width .3s; }
+.box{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; margin:0 0 22px; }
+
+/* ---------- Druck-Timeline ---------- */
+.tl{ display:grid; grid-template-columns:1fr 1.5fr .8fr .8fr; gap:0; position:relative; }
+.phase{ position:relative; padding:0 14px; min-width:0; }
+.phase:first-child{ padding-left:0; } .phase:last-child{ padding-right:0; }
+.node{ display:flex; align-items:center; gap:10px; margin-bottom:14px; position:relative; }
+.dot{ flex:none; width:34px; height:34px; border-radius:50%; background:var(--ink); color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center; z-index:1; }
+.node .lbl{ position:relative; z-index:1; background:#fff; padding-right:10px; font-weight:700; font-size:16px; line-height:1.2; }
+.node .lbl small{ display:block; font-weight:400; color:var(--mut); font-size:13px; }
+.node::after{ content:""; position:absolute; left:34px; right:-28px; top:16px; height:3px; background:repeating-linear-gradient(90deg,#bbb 0 8px,transparent 8px 14px); z-index:0; }
+.phase:last-child .node::after{ display:none; }
+.list{ display:flex; flex-direction:column; gap:8px; }
+.it{ display:flex; flex-wrap:wrap; row-gap:6px; align-items:center; gap:10px; background:#fff; border:1px solid var(--line); border-left:5px solid var(--grey); border-radius:8px; padding:8px 10px; }
+.it.haw{ border-left-color:var(--red); } .it.han{ border-left-color:var(--blue); } .it.hfh{ border-left-color:var(--red); border-left-style:double; border-left-width:6px; }
+.it.multi{ border-left-color:#7a3d8f; }
+.it input{ width:20px; height:20px; accent-color:var(--ok); flex:none; cursor:pointer; margin:0; }
+.cp{ flex:none; min-width:46px; text-align:center; font-weight:800; font-size:17px; color:var(--ink); background:#f1efea; border-radius:6px; padding:2px 6px; line-height:1.15; }
+.cp small{ display:block; font-size:11px; font-weight:600; color:var(--mut); }
+.it.done .cp{ opacity:.5; }
+.it .nm{ flex:1; min-width:0; font-weight:600; font-size:14.5px; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+.it.done{ background:#f3f8f3; } .it.done .nm{ text-decoration:line-through; color:var(--mut); }
+.btns{ display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-start; flex-basis:100%; padding-left:86px; }
+.btn{ text-decoration:none; font-weight:600; font-size:13px; padding:4px 9px; border-radius:6px; white-space:nowrap; }
+.b-pdf{ background:var(--red); color:#fff; } .b-sol{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); } .b-quiz{ background:#5B3E90; color:#fff; }
+.sep{ font-size:12px; font-weight:700; color:var(--mut); text-transform:uppercase; letter-spacing:.5px; margin:8px 0 0; }
+
+/* ---------- Wochen-Zeitstrahl ---------- */
+.week{ overflow-x:auto; }
+.days{ display:grid; grid-template-columns:repeat(8,minmax(110px,1fr)); min-width:880px; position:relative; }
+.days::before{ content:""; position:absolute; left:0; right:0; top:52px; height:4px; background:var(--ink); border-radius:2px; z-index:1; }
+.day{ text-align:center; padding:0 4px; position:relative; }
+.day .dn{ font-weight:700; font-size:15px; }
+.day .dd{ font-size:13px; color:var(--mut); height:22px; }
+.day .tick{ width:16px; height:16px; border-radius:50%; background:#fff; border:3px solid var(--ink); margin:6px auto 12px; position:relative; z-index:2; }
+.day.we{ background:repeating-linear-gradient(135deg,#f6f5f2 0 6px,#fff 6px 12px); border-radius:8px; }
+.day.we .dn, .day.we .dd{ color:#9a9a9a; }
+.day.today .tick{ background:var(--ok); border-color:var(--ok); }
+.ex{ display:block; border-radius:8px; padding:6px 6px; color:#fff; font-weight:700; font-size:14px; margin:0 0 6px; line-height:1.25; }
+.ex small{ display:block; font-weight:400; font-size:12px; opacity:.95; }
+.ex.haw{ background:var(--red); } .ex.han{ background:var(--blue); }
+.ex.hfh{ background:#fff; color:var(--red); border:2px solid var(--red); }
+.ex.q{ outline:3px dashed #F2B705; outline-offset:2px; }
+.kw{ font-size:12px; color:var(--mut); margin-top:8px; }
+
+footer{ font-size:13px; color:var(--mut); text-align:center; }
+button.reset{ font:inherit; font-size:13px; background:none; border:none; color:var(--blue); cursor:pointer; text-decoration:underline; }
+
+@media (max-width:900px){
+  .tl{ grid-template-columns:1fr; gap:22px; }
+  .phase{ padding:0; }
+  .node::after{ display:none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div><div class="sub">RWB Essen · Mathematik</div><h1>Montag, 2. November 2026</h1></div>
+  <div class="progress"><span id="pcount"></span><div class="pbar"><span id="pfill"></span></div></div>
+</header>
+
+<!-- ================= Druck-Timeline ================= -->
+<div class="box">
+<h2>Druckplan</h2>
+<div class="tl">
+
+  <div class="phase">
+    <div class="node"><div class="dot">1</div><div class="lbl">Vor der 1. Stunde</div></div>
+    <div class="list">
+      <div class="it hfh" data-id="hfh-klausur"><input type="checkbox"><div class="cp">× 8</div><div class="nm">HFH 11 · Klausur Statistik</div>
+        <div class="btns"><a class="btn b-pdf" href="k-0047d0d3a6f1/HFH11_Klausur1_Statistik.pdf" target="_blank">Klausur</a><a class="btn b-sol" href="https://olafkott.github.io/Statistik/Klausuren/HFH_Klausur1_Statistik_Loesung.html" target="_blank">Lösung</a></div></div>
+      <div class="it" data-id="vk-ab"><input type="checkbox"><div class="cp">× 5</div><div class="nm">HVK · Quadratische Funktionen</div>
+        <div class="btns"><a class="btn b-pdf" href="https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Arbeitsblaetter_Quadratische_Funktionen_VK_Q2.pdf" target="_blank">Sammel-PDF</a></div></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="node"><div class="dot">2</div><div class="lbl">Während der HVK</div></div>
+    <div class="list">
+      <div class="sep">Klausuren</div>
+      <div class="it haw" data-id="haw12-klausur"><input type="checkbox"><div class="cp">× 8</div><div class="nm">HAW 12 · Klausur Differentialrechnung</div>
+        <div class="btns"><a class="btn b-pdf" href="k-0047d0d3a6f1/HAW12_Klausur1_Differentialrechnung.pdf" target="_blank">Klausur</a><a class="btn b-sol" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Klausur/HAW12_Klausur1_Loesung.html" target="_blank">Lösung</a></div></div>
+      <div class="it han" data-id="han11-klausur"><input type="checkbox"><div class="cp">× 3</div><div class="nm">HAN 11 · Klausur Statistik</div>
+        <div class="btns"><a class="btn b-pdf" href="k-0047d0d3a6f1/HAN11_Klausur1_Statistik.pdf" target="_blank">Klausur</a><a class="btn b-sol" href="https://olafkott.github.io/Statistik/Klausuren/HAN_Klausur1_Statistik_Loesung.html" target="_blank">Lösung</a></div></div>
+      <div class="it haw" data-id="haw11-klausur"><input type="checkbox"><div class="cp">× 7</div><div class="nm">HAW 11 · Klausur Statistik</div>
+        <div class="btns"><a class="btn b-pdf" href="k-0047d0d3a6f1/HAW11_Klausur1_Statistik.pdf" target="_blank">Klausur</a><a class="btn b-sol" href="https://olafkott.github.io/Statistik/Klausuren/HAW_Klausur1_Statistik_Loesung.html" target="_blank">Lösung</a></div></div>
+      <div class="it han" data-id="han12-klausur"><input type="checkbox"><div class="cp">× 5</div><div class="nm">HAN 12 · Klausur Differentialrechnung</div>
+        <div class="btns"><a class="btn b-pdf" href="k-0047d0d3a6f1/HAN12_Klausur1_Differentialrechnung.pdf" target="_blank">Klausur</a><a class="btn b-sol" href="https://olafkott.github.io/Vertiefung%20der%20Differentialrechnung/Klausur/HAN12_Klausur1_Loesung.html" target="_blank">Lösung</a></div></div>
+      <div class="sep">Arbeitsblätter Q2</div>
+      <div class="it multi" data-id="q2-12"><input type="checkbox"><div class="cp">× 13<small>8 + 5</small></div><div class="nm">HAW 12 + HAN 12 · Exponentialfunktionen</div>
+        <div class="btns"><a class="btn b-pdf" href="sammel/Q2_Jg12_Exponentialfunktionen.pdf" target="_blank">Sammel-PDF</a></div></div>
+      <div class="it multi" data-id="q2-11"><input type="checkbox"><div class="cp">× 10<small>7 + 3</small></div><div class="nm">HAW 11 + HAN 11 · Lineare und quadratische Funktionen</div>
+        <div class="btns"><a class="btn b-pdf" href="sammel/Q2_Jg11_Lineare_und_quadratische_Funktionen.pdf" target="_blank">Sammel-PDF</a></div></div>
+      <div class="it hfh" data-id="q2-hfh"><input type="checkbox"><div class="cp">× 8</div><div class="nm">HFH 11 · Lineare Funktionen</div>
+        <div class="btns"><a class="btn b-pdf" href="https://olafkott.github.io/Lineare%20und%20quadratische%20Funktionen/HFH/Alle_Arbeitsblaetter_Lineare_Funktionen_HFH.pdf" target="_blank">Sammel-PDF</a></div></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="node"><div class="dot">3</div><div class="lbl">Mittagspause</div></div>
+    <div class="list">
+      <div class="it han" data-id="han11-bestimmtheitsmass"><input type="checkbox"><div class="cp">× 3</div><div class="nm">HAN 11 · Bestimmtheitsmaß</div>
+        <div class="btns"><a class="btn b-pdf" href="https://olafkott.github.io/Statistik/Regression/Arbeitsblatt_5.4_Bestimmtheitsmass.pdf" target="_blank">AB</a></div></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="node"><div class="dot">4</div><div class="lbl">Unterricht HAW 12</div></div>
+    <div class="list">
+      <div class="it haw" data-id="quiz"><input type="checkbox"><div class="cp" style="font-size:12px;font-weight:600;color:var(--mut);padding:5px 6px">digital</div><div class="nm">Quiz Differentialrechnung</div>
+        <div class="btns"><a class="btn b-quiz" href="Quiz_Vertiefung_Differentialrechnung_HAW12.html" target="_blank">Quiz</a></div></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ================= Klausurtermine ================= -->
+<div class="box">
+<h2>Klausurtermine</h2>
+<div class="week">
+  <div class="days">
+    <div class="day today"><div class="dn">Mo</div><div class="dd">2.11. · heute</div><div class="tick"></div>
+      <span class="ex hfh">HFH 11<small>Statistik</small></span></div>
+    <div class="day"><div class="dn">Di</div><div class="dd">3.11.</div><div class="tick"></div></div>
+    <div class="day"><div class="dn">Mi</div><div class="dd">4.11.</div><div class="tick"></div>
+      <span class="ex haw">HAW 12<small>Differentialrechnung</small></span></div>
+    <div class="day"><div class="dn">Do</div><div class="dd">5.11.</div><div class="tick"></div></div>
+    <div class="day"><div class="dn">Fr</div><div class="dd">6.11.</div><div class="tick"></div>
+      <span class="ex han">HAN 11<small>Statistik</small></span>
+      <span class="ex haw">HAW 11<small>Statistik</small></span></div>
+    <div class="day we"><div class="dn">Sa</div><div class="dd">7.11.</div><div class="tick"></div></div>
+    <div class="day we"><div class="dn">So</div><div class="dd">8.11.</div><div class="tick"></div></div>
+    <div class="day"><div class="dn">Mo</div><div class="dd">9.11.</div><div class="tick"></div>
+      <span class="ex han">HAN 12<small>Differentialrechnung</small></span></div>
+  </div>
+  <div class="kw">KW 45 (2.–8.11.) · KW 46 ab 9.11.</div>
+</div>
+</div>
+
+<footer>Häkchen bleiben in diesem Browser gespeichert. <button class="reset" id="reset">Zurücksetzen</button></footer>
+</div>
+
+<script>
+(function(){
+  const KEY="druckplan-2026-11-02"; let st={};
+  try{ st=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){}
+  const items=[...document.querySelectorAll(".it[data-id]")];
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} };
+  function upd(){
+    let d=0;
+    items.forEach(it=>{ const on=!!st[it.dataset.id]; it.classList.toggle("done",on); it.querySelector("input").checked=on; if(on)d++; });
+    document.getElementById("pcount").textContent=d+" von "+items.length+" erledigt";
+    document.getElementById("pfill").style.width=(100*d/items.length)+"%";
+  }
+  items.forEach(it=>it.querySelector("input").addEventListener("change",e=>{ st[it.dataset.id]=e.target.checked; save(); upd(); }));
+  document.getElementById("reset").addEventListener("click",()=>{ st={}; save(); upd(); });
+  upd();
+})();
+</script>
+</body>
+</html>
