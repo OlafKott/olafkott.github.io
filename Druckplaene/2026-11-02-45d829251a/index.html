@@ -62,6 +62,21 @@ h2{ font-size:18px; margin:0 0 12px; }
 .ex.q{ outline:3px dashed #F2B705; outline-offset:2px; }
 .kw{ font-size:12px; color:var(--mut); margin-top:8px; }
 
+/* ---------- To-do ---------- */
+.todo{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-flow:row dense; gap:0 24px; }
+.td.c1{ grid-column:1; } .td.c2{ grid-column:2; }
+.td{ display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--line); font-size:14.5px; }
+.td input{ width:18px; height:18px; accent-color:var(--ok); flex:none; margin:0; cursor:pointer; }
+.td .tg{ flex:none; display:flex; gap:4px; }
+.t{ font-size:11.5px; font-weight:700; color:#fff; border-radius:4px; padding:1px 6px; }
+.t.haw{ background:var(--red); } .t.han{ background:var(--blue); } .t.hfh{ background:#fff; color:var(--red); border:1.5px solid var(--red); padding:0 5px; }
+.td.done span.x{ text-decoration:line-through; color:var(--mut); }
+.kl{ grid-column:1/-1; display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 0 2px; font-size:14.5px; }
+.kl label{ display:flex; align-items:center; gap:5px; cursor:pointer; }
+.kl input{ width:18px; height:18px; accent-color:var(--ok); margin:0; }
+.kl label.done .t{ opacity:.4; text-decoration:line-through; }
+@media (max-width:700px){ .todo{ grid-template-columns:1fr; } .td.c1,.td.c2{ grid-column:1; } }
+
 footer{ font-size:13px; color:var(--mut); text-align:center; }
 button.reset{ font:inherit; font-size:13px; background:none; border:none; color:var(--blue); cursor:pointer; text-decoration:underline; }
 
@@ -159,6 +174,28 @@ button.reset{ font:inherit; font-size:13px; background:none; border:none; color:
 </div>
 </div>
 
+
+<!-- ================= To-do ================= -->
+<div class="box">
+<h2>To-do · Material Q2</h2>
+<div class="todo">
+  <label class="td c1" data-id="exp-gl"><input type="checkbox"><span class="tg"><span class="t haw">HAW 12</span><span class="t han">HAN 12</span></span><span class="x">Exponentialgleichungen</span></label>
+  <label class="td c1" data-id="exp-haw"><input type="checkbox"><span class="tg"><span class="t haw">HAW 12</span></span><span class="x">Anwendung: Produktlebenszyklus, weitere Anwendungen</span></label>
+  <label class="td c1" data-id="exp-han"><input type="checkbox"><span class="tg"><span class="t han">HAN 12</span></span><span class="x">Anwendung: z. B. Verlauf von Krankheiten</span></label>
+  <label class="td c2" data-id="haw11-polypol"><input type="checkbox"><span class="tg"><span class="t haw">HAW 11</span></span><span class="x">Polypol (auch quadratische Kosten, Limbacher Schweizer)</span></label>
+  <label class="td c2" data-id="haw11-markt"><input type="checkbox"><span class="tg"><span class="t haw">HAW 11</span></span><span class="x">Marktgleichgewicht</span></label>
+  <label class="td c2" data-id="haw11-monopol"><input type="checkbox"><span class="tg"><span class="t haw">HAW 11</span></span><span class="x">Monopol</span></label>
+  <label class="td c2" data-id="han11-buch"><input type="checkbox"><span class="tg"><span class="t han">HAN 11</span></span><span class="x">Anwendung aus dem Buch</span></label>
+  <div class="kl"><span class="x" style="font-weight:600">Kann-Listen</span>
+    <label data-id="kl-haw11"><input type="checkbox"><span class="t haw">HAW 11</span></label>
+    <label data-id="kl-han11"><input type="checkbox"><span class="t han">HAN 11</span></label>
+    <label data-id="kl-haw12"><input type="checkbox"><span class="t haw">HAW 12</span></label>
+    <label data-id="kl-han12"><input type="checkbox"><span class="t han">HAN 12</span></label>
+    <label data-id="kl-hfh"><input type="checkbox"><span class="t hfh">HFH 11</span></label>
+  </div>
+</div>
+</div>
+
 <footer>Häkchen bleiben in diesem Browser gespeichert. <button class="reset" id="reset">Zurücksetzen</button></footer>
 </div>
 
@@ -176,6 +213,17 @@ button.reset{ font:inherit; font-size:13px; background:none; border:none; color:
   }
   items.forEach(it=>it.querySelector("input").addEventListener("change",e=>{ st[it.dataset.id]=e.target.checked; save(); upd(); }));
   document.getElementById("reset").addEventListener("click",()=>{ st={}; save(); upd(); });
+  upd();
+})();
+</script>
+
+<script>
+(function(){
+  const KEY="todo-q2-2026"; let st={};
+  try{ st=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){}
+  const els=[...document.querySelectorAll(".todo [data-id]")];
+  const upd=()=>els.forEach(el=>{ const on=!!st[el.dataset.id]; el.classList.toggle("done",on); el.querySelector("input").checked=on; });
+  els.forEach(el=>el.querySelector("input").addEventListener("change",e=>{ st[el.dataset.id]=e.target.checked; try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(_){} upd(); }));
   upd();
 })();
 </script>
