@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Übungen Quadratische Funktionen</title><style>
+:root{--g:#1E8449;--gd:#14603A;--soft:#EEF7F1;--line:#A9D8BA;--ok:#2E7D3A;--bad:#C8102E;--y:#D99A00}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;color:#1d1d1f;background:#f3f1ee;line-height:1.6;font-size:17px}
+.wrap{max-width:780px;margin:0 auto;padding:12px 14px 40px}
+header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--g);padding-bottom:8px;margin-bottom:10px;gap:10px}
+header h1{font-size:22px;color:var(--g);margin:0;line-height:1.25}
+header .sub{font-size:14px;color:#555}
+header img{height:34px}
+.menu{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px}
+.menu a{font-family:Calibri,Arial,sans-serif;font-size:13px;text-decoration:none;border:1.5px solid #bbb;color:#555;border-radius:14px;padding:2px 9px;background:#fff}
+.menu a.akt{border-color:var(--g);background:var(--g);color:#fff;font-weight:bold}
+.karte{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.12);padding:18px 20px}
+.kopf2{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-size:14px;color:#fff;background:var(--g);display:inline-block;padding:2px 10px;border-radius:4px}
+.score{font-family:Calibri,Arial,sans-serif;font-size:15px;color:#555}
+.score b{color:var(--g);font-size:18px}
+h2{font-size:20px;color:var(--g);margin:8px 0 6px}
+details.merk{background:var(--soft);border-left:5px solid var(--g);border-radius:4px;padding:6px 12px;margin:8px 0 12px;font-size:16px}
+details.merk summary{cursor:pointer;color:var(--gd);font-weight:bold}
+.aufg{font-size:17.5px;margin:6px 0}
+.term{display:block;font-family:Cambria,Georgia,serif;font-size:21px;margin:8px 0;white-space:nowrap;overflow-x:auto}
+.part{margin:10px 0;padding:8px 0;border-top:1px dashed #e4dcd0}
+.num{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.num input{font:inherit;font-size:18px;width:110px;padding:5px 9px;border:1.8px dashed #C9A100;background:#FFFBE6;border-radius:8px}
+.num input.ok{border:2px solid var(--ok);background:#E7F4EA}.num input.falsch{border:2px solid var(--bad);background:#FBEEF0}
+.num .lab{font-family:Cambria,Georgia,serif;font-size:18px}
+.num .note{font-size:13px;color:#777}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.6px solid #b9b2a5;background:#fff;border-radius:8px;padding:7px 14px;font:inherit;font-size:16px;cursor:pointer;text-align:left}
+.opt.sel{border-color:#1D4ED8;background:#E9F2FB;font-weight:bold}
+.opt.ok{border-color:var(--ok);background:#E7F4EA}.opt.falsch{border-color:var(--bad);background:#FBEEF0}
+.errl{display:block;width:100%;font-family:Cambria,Georgia,serif;font-size:18px;margin:4px 0}
+.errl .ln{display:inline-block;min-width:26px;font-family:Calibri,Arial,sans-serif;font-size:13px;color:#888}
+.zu{display:flex;align-items:center;gap:10px;margin:6px 0;flex-wrap:wrap}
+.zu .zl{font-family:Cambria,Georgia,serif;font-size:19px;min-width:200px}
+.zu select{font:inherit;font-size:16px;padding:4px 8px;border-radius:8px;border:1.8px dashed #C9A100;background:#FFFBE6}
+.zu select.ok{border:2px solid var(--ok);background:#E7F4EA}.zu select.falsch{border:2px solid var(--bad);background:#FBEEF0}
+.graphs{display:flex;gap:10px;flex-wrap:wrap}
+.graphs .gc{text-align:center}.graphs .gc b{display:block;color:var(--g);font-family:Calibri,Arial,sans-serif}
+svg.pl{display:block;max-width:100%;height:auto}
+.knoepfe{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.btn{font:inherit;font-size:16px;border-radius:8px;padding:8px 16px;cursor:pointer;border:1.8px solid var(--g);background:#fff;color:var(--g);text-decoration:none;display:inline-block}
+.btn.voll{background:var(--g);color:#fff}.btn.grau{border-color:#999;color:#555}
+.box{border-radius:8px;padding:10px 14px;margin:10px 0}
+.box.tipp{background:#FFF8E8;border-left:5px solid #F2B705}
+.box.loes{background:#E9F2FB;border-left:5px solid #1D70B8}
+.box.ok{background:#E7F4EA;border-left:5px solid var(--ok)}
+.box.no{background:#FBEEF0;border-left:5px solid var(--bad)}
+.box b.t{display:block;margin-bottom:2px}
+.mark{font-weight:bold;font-family:Calibri,Arial,sans-serif}.mark.ok{color:var(--ok)}.mark.falsch{color:var(--bad)}
+table.gl{border-collapse:collapse;margin:4px 0 4px 4px;font-family:Cambria,Georgia,serif}
+table.gl td{padding:3px 3px;white-space:nowrap;vertical-align:middle}
+table.gl td.l{text-align:right}table.gl td.e{text-align:center;width:18px}table.gl td.op{color:#888;padding-left:14px;font-size:15px}
+.cp{color:#1D70B8;font-weight:bold}.cq{color:#E07B00;font-weight:bold}.cs{color:#E07B00;font-weight:bold}.cf{color:#1E8449;font-weight:bold}.cg{color:#1D70B8;font-weight:bold}.ch{color:#6A3FC8;font-weight:bold}
+.ou{color:#6A3FC8;font-weight:bold;margin:0 14px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.85em;line-height:1.15;margin:0 2px}
+.fr>span:first-child{border-bottom:1.2px solid currentColor;padding:0 2px}
+.sq{display:inline-flex;align-items:stretch;vertical-align:middle}
+.sq .sym{width:.62em;display:inline-block;flex:none}.sq .sym svg{width:100%;height:100%;display:block}
+.sq .rad{border-top:1.5px solid currentColor;padding:2px 3px 0 2px;display:inline-flex;align-items:center}
+.grau{color:#777;font-size:14px}
+.foot{margin-top:14px;font-size:14px;color:#666;font-family:Calibri,Arial,sans-serif}
+@media (max-width:560px){body{font-size:16px}.karte{padding:14px 12px}.term{font-size:19px}.zu .zl{min-width:0}}
+</style></head><body><div class="wrap"><header><div><h1>Übungen zur Kann-Liste</h1><div class="sub">Vorklasse · Quartal 2 · Quadratische Funktionen · jede Aufgabe neu gemischt</div></div><img class="logo" src="data:image/png;base64,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" alt="RWB Essen"></header><nav class="menu" id="menu"></nav><main class="karte" id="karte"></main><div class="foot">Mit „Neue Aufgabe“ bekommen Sie immer neue Zahlen. <a href="https://olafkott.github.io/Quadratische%20Funktionen/Vorklasse/Kann-Liste/Kann-Liste_VK_Q2_interaktiv.html">Zur interaktiven Kann-Liste</a></div></div><script>const SQSVG="<span class=\"sym\"><svg viewBox=\"0 0 12 32\" preserveAspectRatio=\"none\"><path d=\"M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/></svg></span>";const TOPICS=[["1.1", "Normalparabel", "Teil 2"], ["1.2", "a, b und c ablesen", "Teil 2"], ["1.3", "Was machen a und c?", "Teil 2"], ["1.4", "Wertetabelle", "Teil 2"], ["2.1", "Scheitelpunkt ablesen", "Teil 3"], ["2.2", "Gleichung am Graphen", "Teil 3"], ["2.3", "Gleichung mit Scheitelpunkt und Punkt", "Teil 3"], ["3.1", "Binomische Formeln", "Teil 4"], ["3.2", "Scheitelpunktform → allgemeine Form", "Teil 4"], ["4.1", "Wurzelziehen", "Teil 5"], ["4.2", "pq-Formel", "Teil 5"], ["4.3", "Wie viele Lösungen?", "Teil 5"], ["4.4", "Nullstellen", "Teil 5"], ["5.1", "Schnittpunkte berechnen", "Teil 5"], ["5.2", "Schnittpunkt, Berührpunkt oder kein Punkt?", "Teil 5"]];const MERK={"1.1": "Scheitelpunkt <span class=\"cs\">S(0 | 0)<\/span>.<br>Nach <b>oben<\/b> geöffnet.<br><b>Symmetrisch<\/b> zur y-Achse.<div class=\"klein\">Vom Scheitelpunkt: 1 nach rechts → 1 nach oben, 2 nach rechts → 4 nach oben.<\/div>", "1.2": "Die Zahl vor x² ist <b>a<\/b>. Die Zahl vor x ist <b>b<\/b>. Die Zahl ohne x ist <b>c<\/b>.<div class=\"klein\">Das Vorzeichen gehört immer dazu. Steht kein x, ist b = 0.<\/div>", "1.3": "a &gt; 0: nach <b>oben<\/b> geöffnet. a &lt; 0: nach <b>unten<\/b> geöffnet.<br>a größer als 1 (ohne Minus): <b>schmaler<\/b> (gestreckt).<br>a zwischen 0 und 1: <b>breiter<\/b> (gestaucht).<br>c: Schnittpunkt mit der <b>y-Achse<\/b> (0 | c).", "1.4": "1. Jeden x-Wert einsetzen. <b>Klammern<\/b> um negative Zahlen!<br>2. Punkte eintragen.<br>3. Mit einem <b>runden Bogen<\/b> verbinden, nicht mit dem Lineal.", "2.1": "f(x) = a(x − <b>d<\/b>)² + <b>e<\/b> → <span class=\"cs\">S(d | e)<\/span><div class=\"klein\"><span class=\"trap\">Achtung:<\/span> In der Klammer dreht sich das Vorzeichen: (x + 2) → d = −2. Bei e bleibt es.<\/div>", "2.2": "1. Scheitelpunkt <span class=\"cs\">S(d | e)<\/span> ablesen.<br>2. Vom Scheitelpunkt <b>1 nach rechts<\/b>. Wie weit nach oben/unten? Das ist <b>a<\/b>.<br>3. Einsetzen: f(x) = a(x − d)² + e.", "2.3": "1. S in die Scheitelpunktform einsetzen.<br>2. Für x und f(x) den Punkt P einsetzen.<br>3. Nach a auflösen.", "3.1": "(a + b)² = a² + <b>2ab<\/b> + b²<br>(a − b)² = a² − <b>2ab<\/b> + b²<div class=\"klein\"><span class=\"trap\">Achtung:<\/span> (x + 3)² ist <b>nicht<\/b> x² + 9. Das Mittelglied 2ab nicht vergessen!<\/div>", "3.2": "1. Klammer mit der binomischen Formel auflösen. Die große Klammer bleibt!<br>2. a mit <b>jedem<\/b> Glied malnehmen.<br>3. Zahlen zusammenfassen.", "4.1": "Geht, wenn es <b>kein Glied mit x<\/b> gibt (nur x² und eine Zahl).<br>x² allein stellen, dann Wurzel ziehen.<br>Es gibt <b>zwei<\/b> Lösungen: + und −.<div class=\"klein\">x² = −4: keine Lösung. Eine Zahl hoch 2 ist nie negativ.<\/div>", "4.2": "Vor x² muss eine <b>1<\/b> stehen. Sonst zuerst durch a teilen.<br>x₁,₂ = −<span class=\"fr\"><span><span class=\"cp\">p<\/span><\/span><span>2<\/span><\/span> ± <span class=\"sq\"><span class=\"sym\"><svg viewBox=\"0 0 12 32\" preserveAspectRatio=\"none\"><path d=\"M0.6,19 L3.4,16.5 L6.6,30.5 L11.6,0.8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linejoin=\"round\" vector-effect=\"non-scaling-stroke\"/><\/svg><\/span><span class=\"rad\">(<span class=\"fr\"><span><span class=\"cp\">p<\/span><\/span><span>2<\/span><\/span>)² − <span class=\"cq\">q<\/span><\/span><\/span><div class=\"klein\">Vorzeichen von p und q mitnehmen!<\/div>", "4.3": "Unter der Wurzel steht eine …<br><b>positive<\/b> Zahl → 2 Lösungen<br><b>0<\/b> → 1 Lösung<br><b>negative<\/b> Zahl → keine Lösung", "4.4": "Nullstellen: Hier schneidet die Parabel die <b>x-Achse<\/b>.<br>Ansatz: <b>f(x) = 0<\/b>. Dann Wurzelziehen oder pq-Formel.", "5.1": "1. <b>Gleichsetzen<\/b>: f(x) = g(x).<br>2. Alles auf eine Seite: … = 0.<br>3. Lösen (Wurzel oder pq-Formel).<br>4. x-Werte in f oder g einsetzen → y-Werte.<div class=\"klein\">Bei <b>zwei Parabeln<\/b> genauso. Haben beide dasselbe x², fällt x² weg.<\/div>", "5.2": "Nach dem Gleichsetzen und der pq-Formel:<br>2 Lösungen → 2 <b>Schnittpunkte<\/b><br>1 Lösung → 1 <b>Berührpunkt<\/b><br>keine Lösung → <b>kein<\/b> gemeinsamer Punkt"};
+const $=id=>document.getElementById(id);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function fn(v){ v=Math.round(v*10000)/10000; if(Object.is(v,-0)) v=0; return String(v).replace('.',',').replace('-','−'); }
+function sq(x){ return '<span class="sq">'+SQSVG+'<span class="rad">'+x+'</span></span>'; }
+function fr(a,b){ return '<span class="fr"><span>'+a+'</span><span>'+b+'</span></span>'; }
+const OR='<span class="ou">∨</span>';
+function gl(rows){ return '<table class="gl">'+rows.map(r=>'<tr><td class="l">'+r[0]+'</td><td class="e">'+(r[1]===null?'':'=')+'</td><td class="r">'+(r[1]===null?'':r[1])+'</td><td class="op">'+(r[2]||'')+'</td></tr>').join('')+'</table>'; }
+function par(v){ return v<0?'('+fn(v)+')':fn(v); }
+// Term aus Summanden [[koeff, 'x²'|'x'|'']] in gegebener Reihenfolge
+function poly(list){
+  let s=''; let first=true;
+  for(const [k,v] of list){ if(!k) continue;
+    let mag=Math.abs(k), coef=(v&&mag===1)?'':fn(mag);
+    const sign=k<0?'−':'+';
+    if(first){ s+=(k<0?'−':'')+coef+v; first=false; } else s+=' '+sign+' '+coef+v; }
+  return s||'0';
+}
+const T=(a,b,c)=>poly([[a,'x²'],[b,'x'],[c,'']]);
+function inner(d){ return d===0?'x':(d>0?'x − '+fn(d):'x + '+fn(-d)); }
+function spf(a,d,e){ const pre=a===1?'':(a===-1?'−':fn(a)); return pre+'('+inner(d)+')²'+(e?(e>0?' + '+fn(e):' − '+fn(-e)):''); }
+function pqRows(p,q){
+  const D=(p/2)*(p/2)-q, h=-p/2; const rows=[];
+  rows.push(['<span class="cp">p</span>', '<span class="cp">'+fn(p)+'</span>; &nbsp; <span class="cq">q</span> = <span class="cq">'+fn(q)+'</span>']);
+  rows.push(['x<sub>1,2</sub>', fn(h)+' ± '+sq(par(h)+'² '+(q<0?'+ '+fn(-q):'− '+fn(q)))]);
+  rows.push(['', fn(h)+' ± '+sq(fn(D))]);
+  if(D<-1e-9){ rows.push(['', null, 'Unter der Wurzel ist eine negative Zahl → keine Lösung']); return rows; }
+  if(Math.abs(D)<1e-9){ rows.push(['x', fn(h), 'eine Lösung']); return rows; }
+  const r=Math.sqrt(D); rows.push(['', fn(h)+' ± '+fn(r)]); rows.push(['x<sub>1</sub>', fn(h+r)+OR+'x<sub>2</sub> = '+fn(h-r)]);
+  return rows;
+}
+// Koordinatensystem
+function plot(o){
+  const u=o.u||26, P=22, W=(o.x1-o.x0)*u+2*P, H=(o.y1-o.y0)*u+2*P;
+  const X=x=>P+(x-o.x0)*u, Y=y=>P+(o.y1-y)*u;
+  let s='<svg class="pl" viewBox="0 0 '+W+' '+H+'" width="'+(o.w||W)+'" xmlns="http://www.w3.org/2000/svg" font-family="Calibri,Arial,sans-serif"><rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+  let g=''; for(let x=o.x0;x<=o.x1;x++) g+='M'+X(x)+' '+P+'V'+(H-P); for(let y=o.y0;y<=o.y1;y++) g+='M'+P+' '+Y(y)+'H'+(W-P);
+  s+='<path d="'+g+'" stroke="#dbe6f0" stroke-width="1"/>';
+  const ax=o.x0<=0&&o.x1>=0?X(0):X(o.x0), ay=o.y0<=0&&o.y1>=0?Y(0):Y(o.y0);
+  s+='<line x1="'+(P-6)+'" y1="'+ay+'" x2="'+(W-P+10)+'" y2="'+ay+'" stroke="#333" stroke-width="1.5"/><path d="M'+(W-P+12)+','+ay+' l-8,-4 v8z" fill="#333"/>';
+  s+='<line x1="'+ax+'" y1="'+(H-P+6)+'" x2="'+ax+'" y2="'+(P-10)+'" stroke="#333" stroke-width="1.5"/><path d="M'+ax+','+(P-12)+' l-4,8 h8z" fill="#333"/>';
+  if(!o.nolab){ const st=(o.x1-o.x0)>12?2:1;
+    for(let x=o.x0;x<=o.x1;x++) if(x&&x%st===0) s+='<text x="'+X(x)+'" y="'+(ay+14)+'" font-size="11" text-anchor="middle">'+fn(x)+'</text>';
+    for(let y=o.y0;y<=o.y1;y++) if(y&&y%st===0) s+='<text x="'+(ax-5)+'" y="'+(Y(y)+4)+'" font-size="11" text-anchor="end">'+fn(y)+'</text>'; }
+  s+='<clipPath id="c'+(o.id||0)+'"><rect x="'+P+'" y="'+P+'" width="'+(W-2*P)+'" height="'+(H-2*P)+'"/></clipPath>';
+  for(const c of o.fns){ let d=''; for(let i=0;i<=200;i++){ const x=o.x0+(o.x1-o.x0)*i/200, y=c.f(x); d+=(i?'L':'M')+X(x).toFixed(1)+','+Y(Math.max(o.y0-5,Math.min(o.y1+5,y))).toFixed(1); }
+    s+='<path d="'+d+'" fill="none" stroke="'+c.col+'" stroke-width="'+(c.w||3)+'" clip-path="url(#c'+(o.id||0)+')"/>'; }
+  for(const p of (o.pts||[])) s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="5" fill="'+(p[2]||'#E07B00')+'" stroke="#fff" stroke-width="1.5"/>';
+  return s+'</svg>';
+}
+const G='#1E8449', B='#1D70B8', V='#6A3FC8';
+
+// ---------------- Aufgaben-Generatoren ----------------
+const GEN={
+'1.1':()=>{ const xs=shuffle([-3,-2,-1,1,2,3]).slice(0,3);
+  const st=pick([['Der Scheitelpunkt ist S(0 | 0).',0],['Die Normalparabel ist nach unten geöffnet.',1],['f(−2) und f(2) haben denselben Wert.',0],['Die Normalparabel ist symmetrisch zur x-Achse.',1],['Die Normalparabel geht durch den Punkt (3 | 9).',0],['Die Normalparabel geht durch den Punkt (−2 | −4).',1]]);
+  return {q:'Die Normalparabel ist <span class="term">f(x) = x²</span>Berechnen Sie die Funktionswerte. Stimmt die Aussage?',
+   parts:[...xs.map(x=>({t:'num',lab:'f('+fn(x)+') =',a:x*x})),{t:'mc',lab:'„'+st[0]+'“',opts:['stimmt','stimmt nicht'],a:st[1]}],
+   hint:'Negative Zahlen in Klammern: (−3)² = (−3) · (−3) = 9.',
+   sol:xs.map(x=>'f('+fn(x)+') = '+par(x)+'² = '+fn(x*x)).join('<br>')+'<br>Die Aussage '+(st[1]?'stimmt <b>nicht</b>.':'<b>stimmt</b>.')+' <span class="grau">S(0 | 0), nach oben geöffnet, symmetrisch zur y-Achse.</span>'}; },
+'1.2':()=>{ const a=pick([-3,-2,-1,1,2,3,0.5,-0.5,4]), b=pick([-6,-5,-4,-3,-2,-1,0,1,2,3,4,5]), c=pick([-9,-7,-5,-4,-2,0,1,3,4,6,8]);
+  const order=shuffle([[a,'x²'],[b,'x'],[c,'']]);
+  return {q:'Lesen Sie a, b und c ab.<span class="term">f(x) = '+poly(order)+'</span>',
+   parts:[{t:'num',lab:'a =',a:a},{t:'num',lab:'b =',a:b},{t:'num',lab:'c =',a:c}],
+   hint:'Sortieren Sie zuerst: x², dann x, dann die Zahl. Das Vorzeichen gehört dazu. Fehlt ein Glied, ist die Zahl 0.',
+   sol:'f(x) = '+T(a,b,c)+'<br>a = '+fn(a)+', b = '+fn(b)+', c = '+fn(c)}; },
+'1.3':()=>{ const pool=[[2,0],[-1,2],[0.5,-1],[-2,1],[1,-3],[-0.5,3],[3,-2],[0.25,0]];
+  let ch; do{ ch=shuffle(pool).slice(0,3); }while(new Set(ch.map(v=>Math.sign(v[0])+'|'+v[1])).size<3);
+  const L=['A','B','C'], perm=shuffle([0,1,2]);
+  const gr=perm.map((k,i)=>'<div class="gc">'+plot({x0:-4,x1:4,y0:-4,y1:4,u:19,w:170,fns:[{f:x=>ch[k][0]*x*x+ch[k][1],col:G}],id:'g'+i})+'<b>Bild '+L[i]+'</b></div>').join('');
+  return {q:'Ordnen Sie jeder Funktion das passende Bild zu.<div class="graphs">'+gr+'</div>',
+   parts:[{t:'sel',rows:ch.map((v,k)=>({lab:'f(x) = '+T(v[0],0,v[1]),a:perm.indexOf(k)})),opts:L.map(l=>'Bild '+l)}],
+   hint:'Schauen Sie zuerst auf <b>c</b>: Dort schneidet die Parabel die y-Achse. Dann auf das Vorzeichen von <b>a</b>: oben oder unten offen?',
+   sol:ch.map((v,k)=>'f(x) = '+T(v[0],0,v[1])+' → Bild '+L[perm.indexOf(k)]+' <span class="grau">('+(v[0]>0?'nach oben':'nach unten')+', '+(Math.abs(v[0])>1?'schmaler':Math.abs(v[0])<1?'breiter':'wie die Normalparabel')+', y-Achse bei '+fn(v[1])+')</span>').join('<br>')}; },
+'1.4':()=>{ const a=pick([1,-1,2,-2,0.5]), b=R(-4,4), c=R(-5,5); const xs=shuffle([-3,-2,-1,0,1,2,3]).slice(0,3).sort((p,q)=>p-q); const f=x=>a*x*x+b*x+c;
+  return {q:'Berechnen Sie die Werte für die Wertetabelle.<span class="term">f(x) = '+T(a,b,c)+'</span>',
+   parts:xs.map(x=>({t:'num',lab:'f('+fn(x)+') =',a:f(x)})),
+   hint:'Setzen Sie x <b>mit Klammer</b> ein. Erst hoch 2, dann mal a. Bei −x² gilt: −(−2)² = −4.',
+   sol:xs.map(x=>'f('+fn(x)+') = '+fn(a)+' · '+par(x)+'² '+(b<0?'− ':'+ ')+fn(Math.abs(b))+' · '+par(x)+' '+(c<0?'− ':'+ ')+fn(Math.abs(c))+' = '+fn(f(x))).join('<br>')}; },
+'2.1':()=>{ const a=pick([1,-1,2,-2,0.5,3,-3]), d=pick([-5,-4,-3,-2,-1,1,2,3,4,5]), e=R(-6,6);
+  return {q:'Lesen Sie den Scheitelpunkt ab.<span class="term">f(x) = '+spf(a,d,e)+'</span>',
+   parts:[{t:'num',lab:'S(',a:d,note:'x-Wert'},{t:'num',lab:'|',a:e,note:'y-Wert )'}],
+   hint:'f(x) = a(x − <b>d</b>)² + <b>e</b> → S(d | e). In der Klammer dreht sich das Vorzeichen.',
+   sol:'('+inner(d)+') = (x − '+par(d)+'). Also d = '+fn(d)+' und e = '+fn(e)+'.<br><b>S('+fn(d)+' | '+fn(e)+')</b>'}; },
+'2.2':()=>{ const a=pick([1,-1,2,-2,0.5,-0.5]), d=R(-3,3), e=a>0?R(-4,1):R(-1,4); const f=x=>a*(x-d)**2+e;
+  const y0=Math.min(-1,e-(a<0?5:1)), y1=Math.max(1,e+(a>0?5:1));
+  return {q:'Lesen Sie die Gleichung f(x) = a(x − d)² + e ab.'+plot({x0:d-4,x1:d+4,y0:Math.max(-7,y0),y1:Math.min(7,y1),u:30,fns:[{f:f,col:G}],pts:[[d,e]],id:'p'}),
+   parts:[{t:'num',lab:'a =',a:a,note:'Bruch erlaubt'},{t:'num',lab:'d =',a:d},{t:'num',lab:'e =',a:e}],
+   hint:'Der orange Punkt ist S. Gehen Sie von S <b>1 nach rechts</b>. Wie weit geht es nach oben (+) oder unten (−)? Das ist a. Wenn das nicht auf ein Kästchen passt: 2 nach rechts, dann durch 4 teilen.',
+   sol:'S('+fn(d)+' | '+fn(e)+'). 1 nach rechts → '+fn(Math.abs(a))+' nach '+(a>0?'oben':'unten')+': a = '+fn(a)+'.<br><b>f(x) = '+spf(a,d,e)+'</b>'}; },
+'2.3':()=>{ const a=pick([-2,-1,-0.5,0.5,1,2,3]), d=R(-4,4), e=R(-4,4), k=pick([-3,-2,-1,1,2,3]); const px=d+k, py=a*k*k+e;
+  return {q:'Eine Parabel hat den Scheitelpunkt <b>S('+fn(d)+' | '+fn(e)+')</b> und geht durch <b>P('+fn(px)+' | '+fn(py)+')</b>. Bestimmen Sie a.<span class="term">f(x) = a('+inner(d)+')²'+(e?(e>0?' + '+fn(e):' − '+fn(-e)):'')+'</span>',
+   parts:[{t:'num',lab:'a =',a:a,note:'Bruch erlaubt'}],
+   hint:'Setzen Sie x = '+fn(px)+' und f(x) = '+fn(py)+' ein. Dann nach a auflösen.',
+   sol:gl([[fn(py),'a · ('+fn(px)+(d>0?' − '+fn(d):d<0?' + '+fn(-d):'')+')² '+(e<0?'− '+fn(-e):'+ '+fn(e))],[fn(py),fn(k*k)+'a '+(e<0?'− '+fn(-e):'+ '+fn(e)),'| '+(e<0?'+ '+fn(-e):'− '+fn(e))],[fn(py-e),fn(k*k)+'a','| : '+fn(k*k)],['a',fn(a)]])+'<b>f(x) = '+spf(a,d,e)+'</b>'}; },
+'3.1':()=>{ const k=R(1,9), s=pick([1,-1]); const b=2*s*k, c=k*k; const ex='(x '+(s>0?'+':'−')+' '+k+')²';
+  if(Math.random()<0.5) return {q:'Lösen Sie die Klammer auf.<span class="term">'+ex+' = x² + ▢x + ▢</span>',
+   parts:[{t:'num',lab:'Zahl vor x:',a:b},{t:'num',lab:'Zahl ohne x:',a:c}],
+   hint:'(a '+(s>0?'+':'−')+' b)² = a² '+(s>0?'+':'−')+' 2ab + b². Hier ist a = x und b = '+k+'.',
+   sol:ex+' = x² '+(s>0?'+':'−')+' 2 · x · '+k+' + '+k+'² = <b>'+T(1,b,c)+'</b>'};
+  const opts=shuffle([[T(1,b,c),1],[T(1,0,c),0],[T(1,b/2,c),0],[T(1,-b,c),0]]);
+  return {q:'Welche Umformung ist richtig?<span class="term">'+ex+' = ?</span>',parts:[{t:'mc',lab:'',opts:opts.map(o=>o[0]),a:opts.findIndex(o=>o[1])}],
+   hint:'Das Mittelglied 2ab nicht vergessen! Und: 2 · x · '+k+' = '+(2*k)+'x.',
+   sol:ex+' = x² '+(s>0?'+':'−')+' '+(2*k)+'x + '+c+'. <span class="grau">Typischer Fehler: x² + '+c+' (Mittelglied vergessen).</span>'}; },
+'3.2':()=>{ const a=pick([1,-1,2,-2,3,0.5]), d=pick([-4,-3,-2,-1,1,2,3,4]), e=R(-6,6); const b=-2*a*d, c=a*d*d+e;
+  const L0='f(x) = '+spf(a,d,e);
+  if(Math.random()<0.55) return {q:'Formen Sie in die allgemeine Form f(x) = ax² + bx + c um.<span class="term">'+L0+'</span>',
+   parts:[{t:'num',lab:'a =',a:a},{t:'num',lab:'b =',a:b},{t:'num',lab:'c =',a:c}],
+   hint:'1. Binomische Formel: ('+inner(d)+')² = '+T(1,-2*d,d*d)+'. 2. Die große Klammer bleibt. Mal '+fn(a)+' rechnen – bei <b>jedem</b> Glied. 3. Zusammenfassen.',
+   sol:gl([['f(x)',fn(a)+'('+T(1,-2*d,d*d)+')'+(e?(e>0?' + '+fn(e):' − '+fn(-e)):'')],['',T(a,b,a*d*d)+(e?(e>0?' + '+fn(e):' − '+fn(-e)):'')],['',T(a,b,c)]])};
+  let typ=R(0,2); if(typ===1&&a===1) typ=0; if(typ===2&&e===0) typ=0; let L1='('+T(1,-2*d,d*d)+')', l2=[a,b,a*d*d], wrong;
+  if(typ===0){ L1='('+T(1,0,d*d)+')'; l2=[a,0,a*d*d]; wrong=1; }
+  const L2v= typ===1 ? [a,b,d*d] : l2;
+  if(typ===1) wrong=2;
+  const cc = typ===2 ? L2v[2]-e : L2v[2]+e; if(typ===2) wrong=3;
+  const lines=[L0, '= '+fn(a)+L1+(e?(e>0?' + '+fn(e):' − '+fn(-e)):''), '= '+T(L2v[0],L2v[1],L2v[2])+(e?(e>0?' + '+fn(e):' − '+fn(-e)):''), '= '+T(L2v[0],L2v[1],cc)];
+  const why=['Das Mittelglied der binomischen Formel fehlt: ('+inner(d)+')² = '+T(1,-2*d,d*d)+'.','Die Zahl '+fn(d*d)+' wurde nicht mit '+fn(a)+' multipliziert. Richtig: '+fn(a*d*d)+'.','Beim Zusammenfassen ist ein Vorzeichenfehler: '+fn(a*d*d)+(e>=0?' + ':' − ')+fn(Math.abs(e))+' = '+fn(c)+'.'][typ];
+  return {q:'In dieser Rechnung ist <b>ein Fehler</b>. Klicken Sie auf die <b>erste falsche Zeile</b>.',parts:[{t:'err',lines:lines,a:wrong}],
+   hint:'Prüfen Sie Zeile für Zeile: binomische Formel, dann malnehmen, dann zusammenfassen.',
+   sol:'Zeile '+(wrong+1)+' ist falsch. '+why+'<br>Richtig: f(x) = <b>'+T(a,b,c)+'</b>'}; },
+'4.1':()=>{ const a=pick([1,2,3,4,5,0.5]), r=R(1,7);
+  if(Math.random()<0.2){ const c=pick([4,9,16,8,2]); return {q:'Lösen Sie die Gleichung.<span class="term">'+T(a,0,a*c)+' = 0</span>',
+    parts:[{t:'mc',lab:'Wie viele Lösungen hat die Gleichung?',opts:['2 Lösungen','1 Lösung','keine Lösung'],a:2}],
+    hint:'Stellen Sie x² allein. Kann eine Zahl hoch 2 negativ sein?',
+    sol:gl([[T(a,0,a*c),'0','| − '+fn(a*c)],[T(a,0,0),fn(-a*c),a!==1?'| : '+fn(a):''],['x²',fn(-c)]])+'Eine Zahl hoch 2 ist nie negativ. Also gibt es <b>keine Lösung</b>.'}; }
+  const c=-a*r*r; const form=Math.random()<0.5;
+  return {q:'Lösen Sie die Gleichung durch Wurzelziehen.<span class="term">'+(form?T(a,0,c)+' = 0':T(a,0,0)+' = '+fn(-c))+'</span>',
+   parts:[{t:'xs',labs:['x₁ =','x₂ ='],a:[r,-r]}],
+   hint:'x² allein stellen. Dann Wurzel ziehen. Es gibt zwei Lösungen: + und −.',
+   sol:gl([...(form?[[T(a,0,c),'0','| + '+fn(-c)]]:[]),[T(a,0,0),fn(-c),a!==1?'| : '+fn(a):''],...(a!==1?[['x²',fn(r*r),'| √']]:[['x²',fn(r*r),'| √']]),['x<sub>1</sub>',fn(r)+OR+'x<sub>2</sub> = '+fn(-r)]])}; },
+'4.2':()=>{ let r1=R(-8,8), r2=R(-8,8); while(r2===r1) r2=R(-8,8); const a=pick([1,1,1,2,-1,0.5,3]); const b=-a*(r1+r2), c=a*r1*r2, p=-(r1+r2), q=r1*r2;
+  const pre=a!==1?[[T(a,b,c),'0','| : '+par(a)],[T(1,p,q),'0']]:[[T(1,p,q),'0']];
+  if(Math.random()<0.65) return {q:'Lösen Sie mit der pq-Formel.<span class="term">'+T(a,b,c)+' = 0</span>',
+   parts:[{t:'xs',labs:['x₁ =','x₂ ='],a:[r1,r2]}],
+   hint:(a!==1?'Zuerst durch '+fn(a)+' teilen. ':'')+'Dann p und q ablesen – mit Vorzeichen! x₁,₂ = −'+fr('p','2')+' ± '+sq('('+fr('p','2')+')² − q'),
+   sol:gl([...pre,...pqRows(p,q)])};
+  // Fehlersuche
+  let typ=R(0,1); if(q===0) typ=0; if(p===0) typ=1; const h=-p/2, D=h*h-q;
+  const lines=['x² '+(p<0?'− ':'+ ')+fn(Math.abs(p))+'x '+(q<0?'− ':'+ ')+fn(Math.abs(q))+' = 0', 'p = '+fn(p)+'; q = '+fn(q)];
+  let wrong;
+  if(typ===0){ lines.push('x<sub>1,2</sub> = '+fn(-h)+' ± '+sq(par(h)+'² '+(q<0?'+ '+fn(-q):'− '+fn(q)))); wrong=2; }
+  else { lines.push('x<sub>1,2</sub> = '+fn(h)+' ± '+sq(par(h)+'² '+(q<0?'− '+fn(-q):'+ '+fn(q)))); wrong=2; }
+  return {q:'Hier wurde die pq-Formel benutzt. In einer Zeile ist ein Fehler. Klicken Sie auf die <b>falsche Zeile</b>.',parts:[{t:'err',lines:lines,a:wrong}],
+   hint:'Vor dem Bruch steht ein Minus: −p/2. Unter der Wurzel steht „− q“. Achten Sie auf die Vorzeichen.',
+   sol:'Zeile 3 ist falsch. '+(typ===0?'Vor der Wurzel muss −p/2 = '+fn(h)+' stehen, nicht '+fn(-h)+'.':'Unter der Wurzel muss „− q“ stehen. Mit q = '+fn(q)+' ergibt das '+(q<0?'+ '+fn(-q):'− '+fn(q))+'.')+'<br>Richtig:'+gl(pqRows(p,q))}; },
+'4.3':()=>{ const mk=k=>{ const p=2*R(-4,4); const h=-p/2; const D=k===2?pick([1,4,9,16,2,5]):k===1?0:-pick([1,2,3,4,7]); return [p,h*h-D,k]; };
+  const eqs=shuffle([mk(2),mk(1),mk(0)]);
+  return {q:'Wie viele Lösungen hat jede Gleichung? Berechnen Sie die Zahl unter der Wurzel: ('+fr('p','2')+')² − q.',
+   parts:[{t:'sel',rows:eqs.map(e=>({lab:T(1,e[0],e[1])+' = 0',a:[2,1,0].indexOf(e[2])})),opts:['2 Lösungen','1 Lösung','keine Lösung']}],
+   hint:'positiv → 2 Lösungen, 0 → 1 Lösung, negativ → keine Lösung.',
+   sol:eqs.map(e=>T(1,e[0],e[1])+' = 0: &nbsp; '+par(-e[0]/2)+'² − '+par(e[1])+' = '+fn((e[0]/2)**2-e[1])+' → <b>'+['keine Lösung','1 Lösung','2 Lösungen'][e[2]]+'</b>').join('<br>')}; },
+'4.4':()=>{ let r1=R(-6,6), r2=R(-6,6); if(Math.random()<0.3) r2=0; while(r2===r1) r2=R(-6,6); const a=pick([1,-1,2,-2,0.5,-0.5]); const b=-a*(r1+r2), c=a*r1*r2, p=-(r1+r2), q=r1*r2;
+  return {q:'Berechnen Sie die Nullstellen.<span class="term">f(x) = '+T(a,b,c)+'</span>',
+   parts:[{t:'xs',labs:['x₁ =','x₂ ='],a:[r1,r2]}],
+   hint:'Ansatz: f(x) = 0. '+(a!==1?'Durch '+fn(a)+' teilen. ':'')+(q===0?'Hier fehlt die Zahl ohne x: q = 0. Sie können auch x ausklammern.':'Dann die pq-Formel.'),
+   sol:gl([[T(a,b,c),'0',a!==1?'| : '+par(a):''],...(a!==1?[[T(1,p,q),'0']]:[]),...pqRows(p,q)])+'N<sub>1</sub>('+fn(Math.max(r1,r2))+' | 0), N<sub>2</sub>('+fn(Math.min(r1,r2))+' | 0)'}; },
+'5.1':()=>{ const typ=pick(['pg','pg','pp','pp1']);
+  if(typ==='pp1'){ const b1=R(-4,4), c1=R(-5,5); let b2=R(-4,4); while(b2===b1) b2=R(-4,4); const x=R(-3,3); const c2=c1+(b1-b2)*x; const y=x*x+b1*x+c1;
+    return {q:'Berechnen Sie den Schnittpunkt der beiden Parabeln.<span class="term"><span class="cf">f(x) = '+T(1,b1,c1)+'</span> &nbsp; <span class="ch">g(x) = '+T(1,b2,c2)+'</span></span>',
+     parts:[{t:'pts',n:1,a:[[x,y]]}], hint:'Gleichsetzen. Auf beiden Seiten steht x² – es fällt weg. Dann bleibt eine einfache Gleichung.',
+     sol:gl([[T(1,b1,c1),T(1,b2,c2),'| − x²'],[T(0,b1,c1),T(0,b2,c2),'| '+(b2<0?'+ '+fn(-b2):'− '+fn(b2))+'x '+(c1<0?'+ '+fn(-c1):'− '+fn(c1))],[T(0,b1-b2,0),fn(c2-c1),'| : '+par(b1-b2)],['x',fn(x)]])+'f('+fn(x)+') = '+fn(y)+' → <b>S('+fn(x)+' | '+fn(y)+')</b>'}; }
+  let x1=R(-4,4), x2=R(-4,4); while(x2===x1) x2=R(-4,4);
+  const m=R(-3,3), n=R(-4,4), k=typ==='pg'?pick([1,1,2,-1]):pick([2,-2]);
+  const g=[0,m,n]; let fA=k, fB=m-k*(x1+x2), fC=n+k*x1*x2;
+  if(typ==='pp'){ const a2=k>0?-1:1; g[0]=a2; fA=k+a2; g[1]=m; g[2]=n; fB=m-k*(x1+x2); fC=n+k*x1*x2; }
+  const gf=x=>g[0]*x*x+g[1]*x+g[2]; const pts=[[x1,gf(x1)],[x2,gf(x2)]];
+  const dA=fA-g[0], dB=fB-g[1], dC=fC-g[2], p=dB/dA, q=dC/dA;
+  return {q:'Berechnen Sie die Schnittpunkte.<span class="term"><span class="cf">f(x) = '+T(fA,fB,fC)+'</span> &nbsp; <span class="'+(typ==='pg'?'cg':'ch')+'">g(x) = '+T(g[0],g[1],g[2])+'</span></span>',
+   parts:[{t:'pts',n:2,a:pts}],
+   hint:'1. f(x) = g(x). 2. Alles auf eine Seite: '+T(dA,dB,dC)+' = 0. 3. '+(dA!==1?'Durch '+fn(dA)+' teilen, dann ':'')+'pq-Formel. 4. x-Werte in g einsetzen.',
+   sol:gl([[T(fA,fB,fC),T(g[0],g[1],g[2])],[T(dA,dB,dC),'0',dA!==1?'| : '+par(dA):''],...(dA!==1?[[T(1,p,q),'0']]:[]),...pqRows(p,q)])+'g('+fn(x1)+') = '+fn(pts[0][1])+'; g('+fn(x2)+') = '+fn(pts[1][1])+'<br><b>S<sub>1</sub>('+fn(x1)+' | '+fn(pts[0][1])+'), S<sub>2</sub>('+fn(x2)+' | '+fn(pts[1][1])+')</b>'}; },
+'5.2':()=>{ const kind=R(0,2); const r=R(-3,3), b=R(-4,4), c=R(-3,4); const k=[pick([-1,-4,-9,-2]),0,pick([1,2,4,3])][kind];
+  const m=b+2*r, n=c-r*r-k; const f=x=>x*x+b*x+c, gg=x=>m*x+n;
+  return {q:'Haben Parabel und Gerade gemeinsame Punkte?<span class="term"><span class="cf">f(x) = '+T(1,b,c)+'</span> &nbsp; <span class="cg">g(x) = '+T(0,m,n)+'</span></span>',
+   parts:[{t:'mc',lab:'Parabel und Gerade haben …',opts:['zwei Schnittpunkte','einen Berührpunkt','keinen gemeinsamen Punkt'],a:kind===0?0:kind===1?1:2}],
+   hint:'Gleichsetzen und alles auf eine Seite bringen. Dann die Zahl unter der Wurzel berechnen: positiv, 0 oder negativ?',
+   sol:gl([[T(1,b,c),T(0,m,n)],[T(1,b-m,c-n),'0'],...pqRows(b-m,c-n)])+'<b>'+['Zwei Lösungen → zwei Schnittpunkte.','Eine Lösung → ein Berührpunkt.','Keine Lösung → kein gemeinsamer Punkt.'][kind]+'</b>'
+     +plot({x0:r-4,x1:r+4,y0:-4,y1:8,u:20,w:220,fns:[{f:f,col:G},{f:gg,col:B,w:2.5}],id:'s'})}; }
+};
+
+// ---------------- Seite ----------------
+const params=new URLSearchParams(location.search); let TID=params.get('t'); if(!GEN[TID]) TID=TOPICS[0][0];
+const tinfo=TOPICS.find(t=>t[0]===TID);
+let task=null, state={}, score={ok:0,n:0};
+try{ const s=JSON.parse(sessionStorage.getItem('ue2_'+TID)||'null'); if(s) score=s; }catch(e){}
+function parseNum(v){ if(v==null) return NaN; v=String(v).trim().replace(/\s/g,'').replace(/[−–]/g,'-').replace(/,/g,'.'); if(!v) return NaN;
+  if(v.includes('/')){ const [a,b]=v.split('/'); const x=parseFloat(a), y=parseFloat(b); return (/^-?[\d.]+$/.test(a)&&/^-?[\d.]+$/.test(b)&&y)?x/y:NaN; }
+  return /^-?\d*\.?\d+$/.test(v)?parseFloat(v):NaN; }
+function neu(){ task=GEN[TID](); state={ans:{},checked:false,res:{},hint:false,sol:false,counted:false}; render(); }
+function partHTML(p,pi){
+  const res=state.res[pi], cls=k=>state.checked&&res&&res[k]!==undefined?(res[k]?'ok':'falsch'):'';
+  const a=state.ans[pi]||{};
+  if(p.t==='num') return '<label class="num"><span class="lab">'+p.lab+'</span><input inputmode="decimal" autocomplete="off" class="'+cls(0)+'" value="'+(a[0]??'')+'" oninput="setv('+pi+',0,this.value)" onkeydown="if(event.key===\'Enter\')check()">'+(p.note?'<span class="note">('+p.note+')</span>':'')+'</label>';
+  if(p.t==='xs') return p.labs.map((l,k)=>'<label class="num" style="display:inline-flex;margin-right:16px"><span class="lab">'+l+'</span><input inputmode="decimal" autocomplete="off" class="'+cls(k)+'" value="'+(a[k]??'')+'" oninput="setv('+pi+','+k+',this.value)" onkeydown="if(event.key===\'Enter\')check()"></label>').join('')+'<div class="grau">Die Reihenfolge ist egal.</div>';
+  if(p.t==='pts'){ let h=''; for(let i=0;i<p.n;i++) h+='<div class="num" style="margin:4px 0"><span class="lab">S'+(p.n>1?'<sub>'+(i+1)+'</sub>':'')+'(</span><input inputmode="decimal" style="width:80px" class="'+cls(2*i)+'" value="'+(a[2*i]??'')+'" oninput="setv('+pi+','+(2*i)+',this.value)"><span class="lab">|</span><input inputmode="decimal" style="width:80px" class="'+cls(2*i+1)+'" value="'+(a[2*i+1]??'')+'" oninput="setv('+pi+','+(2*i+1)+',this.value)"><span class="lab">)</span></div>';
+    return h+(p.n>1?'<div class="grau">Die Reihenfolge der Punkte ist egal.</div>':''); }
+  if(p.t==='mc') return (p.lab?'<div style="margin-bottom:5px">'+p.lab+'</div>':'')+'<div class="opts">'+p.opts.map((o,oi)=>{ let c=a.v===oi?'sel':''; if(state.checked&&a.v===oi) c+=res&&res[0]?' ok':' falsch'; if(state.sol&&oi===p.a) c+=' ok';
+     return '<button class="opt '+c+'" onclick="setmc('+pi+','+oi+')">'+o+'</button>'; }).join('')+'</div>';
+  if(p.t==='err') return p.lines.map((l,li)=>{ let c=a.v===li?'sel':''; if(state.checked&&a.v===li) c+=res&&res[0]?' ok':' falsch'; if(state.sol&&li===p.a) c+=' ok';
+     return '<button class="opt errl '+c+'" onclick="setmc('+pi+','+li+')"><span class="ln">'+(li+1)+'</span>'+l+'</button>'; }).join('');
+  if(p.t==='sel') return p.rows.map((r,ri)=>'<div class="zu"><span class="zl">'+r.lab+'</span><select class="'+cls(ri)+'" onchange="setv('+pi+','+ri+',this.value)"><option value="">– wählen –</option>'+p.opts.map((o,oi)=>'<option value="'+oi+'" '+(String(a[ri])===String(oi)?'selected':'')+'>'+o+'</option>').join('')+'</select></div>').join('');
+}
+function setv(pi,k,v){ (state.ans[pi]=state.ans[pi]||{})[k]=v; }
+function setmc(pi,v){ state.ans[pi]={v:v}; state.checked=false; render(); }
+function eqs(a,b){ return isFinite(a)&&Math.abs(a-b)<1e-6; }
+function check(){
+  let all=true; state.res={};
+  task.parts.forEach((p,pi)=>{ const a=state.ans[pi]||{}; let r={};
+    if(p.t==='num') r[0]=eqs(parseNum(a[0]),p.a);
+    else if(p.t==='mc'||p.t==='err') r[0]=a.v===p.a;
+    else if(p.t==='sel') p.rows.forEach((row,ri)=>r[ri]=String(a[ri])===String(row.a));
+    else if(p.t==='xs'){ const v=p.labs.map((_,k)=>parseNum(a[k])); const rest=p.a.slice();
+      v.forEach((x,k)=>{ const j=rest.findIndex(t=>eqs(x,t)); r[k]=j>=0; if(j>=0) rest.splice(j,1); }); }
+    else if(p.t==='pts'){ const rest=p.a.map(q=>q.slice());
+      for(let i=0;i<p.n;i++){ const x=parseNum(a[2*i]), y=parseNum(a[2*i+1]); const j=rest.findIndex(q=>eqs(x,q[0])&&eqs(y,q[1]));
+        if(j>=0){ r[2*i]=r[2*i+1]=true; rest.splice(j,1); } else { const jx=rest.findIndex(q=>eqs(x,q[0])); r[2*i]=jx>=0; r[2*i+1]=jx>=0&&eqs(y,rest[jx][1]); } } }
+    state.res[pi]=r; if(Object.values(r).some(v=>!v)||Object.keys(r).length===0) all=false; });
+  state.checked=true; state.ok=all;
+  if(!state.counted&&!state.sol){ score.n++; if(all) score.ok++; state.counted=true; try{ sessionStorage.setItem('ue2_'+TID,JSON.stringify(score)); }catch(e){} }
+  render();
+}
+function render(){
+  let h='<div class="kopf2"><span class="tag">Kann '+TID+' · '+tinfo[2]+'</span><span class="score">Richtig gelöst: <b>'+score.ok+'</b> von '+score.n+'</span></div>';
+  h+='<h2>'+tinfo[1]+'</h2>';
+  h+='<details class="merk"><summary>So geht’s (Merke)</summary>'+(MERK[TID]||'')+'</details>';
+  h+='<div class="aufg">'+task.q+'</div>';
+  task.parts.forEach((p,pi)=>h+='<div class="part">'+partHTML(p,pi)+'</div>');
+  h+='<div class="knoepfe"><button class="btn voll" onclick="check()">Prüfen</button><button class="btn grau" onclick="state.hint=!state.hint;render()">'+(state.hint?'Tipp ausblenden':'Tipp')+'</button>'
+    +'<button class="btn grau" onclick="state.sol=true;render()">Lösung zeigen</button><button class="btn" onclick="neu()">Neue Aufgabe ↻</button></div>';
+  if(state.hint) h+='<div class="box tipp"><b class="t">Tipp</b>'+task.hint+'</div>';
+  if(state.checked) h+=state.ok?'<div class="box ok"><b class="t">Richtig!</b>Sehr gut. Klicken Sie auf „Neue Aufgabe“ und üben Sie weiter.</div>':'<div class="box no"><b class="t">Noch nicht ganz.</b>Die roten Stellen stimmen noch nicht. Versuchen Sie es noch einmal oder nutzen Sie den Tipp.</div>';
+  if(state.sol||state.ok) h+='<div class="box loes"><b class="t">Lösung</b>'+task.sol+'</div>';
+  $('karte').innerHTML=h;
+}
+$('menu').innerHTML=TOPICS.map(t=>'<a href="?t='+t[0]+'" class="'+(t[0]===TID?'akt':'')+'" title="'+t[1]+'">'+t[0]+'</a>').join('');
+document.title='Übung '+TID+': '+tinfo[1];
+neu();
+</script></body></html>
