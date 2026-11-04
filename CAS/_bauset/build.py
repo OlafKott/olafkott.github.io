@@ -28,7 +28,7 @@ out = (shell.replace('{{BASECSS}}', (W/'base.css').read_text())
             .replace('{{CALC}}', (W/'calc.html').read_text())
             .replace('{{LOGO}}', logo)
             .replace('{{MODULES}}', '\n'.join(mods))
-            .replace('{{TOPICS}}', json.dumps([dict(id=t['id'],pdf=f"Arbeitsblatt_fx991_{t['pdf']}.pdf",app=t['app_cw']) for t in TOPICS if t['id'] in ids])))
+            .replace('{{TOPICS}}', json.dumps([dict(id=t['id'],pdf=f"Arbeitsblatt_fx991_CW_X_{t['pdf']}.pdf",app=t['app_cw']) for t in TOPICS if t['id'] in ids])))
 assert '{{' not in out.replace('${', '')  or True
 dst = W/'out'/'fx991CW_Taschenrechner.html'
 dst.parent.mkdir(exist_ok=True)

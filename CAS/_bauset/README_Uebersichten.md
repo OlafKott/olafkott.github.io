@@ -30,7 +30,14 @@ Im `<script>` stehen Module, eines pro Anleitung und eines pro Übung:
 - Themenliste und Reihenfolge: `topics.py` im Bauset. `app` ist die Nummer der App, die im Display markiert wird, wenn man über das Thema fährt.
   - CW: 0 Berechnung, 1 Statistik, 2 Verteilung, 4 Wertetab., 5 Gleichung
   - X: 0 Berechnungen, 3 Matrizen, 5 Statistik, 6 Verteilungen, 8 Wertetabelle, 9 Gleichungen
-- PDF-Links: `https://olafkott.github.io/CAS/fx991/Arbeitsblatt_fx991_<Thema>.pdf` (CW) bzw. `Arbeitsblatt_fx991DEX_<Thema>.pdf` (X).
+- PDF-Links (seit 04.11.2026, beide Übersichten und `CAS/fx991/index.html`): **ein gemeinsames Arbeitsblatt je Thema** `https://olafkott.github.io/CAS/fx991/Arbeitsblatt_fx991_CW_X_<Thema>.pdf` – für CW und X derselbe Link.
+
+## Gemeinsame Arbeitsblätter CW/X (seit 04.11.2026)
+- Die Aufgaben sind bei CW und X identisch, deshalb gibt es je Thema nur noch ein Arbeitsblatt: oben **zwei QR-Codes** in den Rechner-Rahmen (CW schwarz mit goldener Taste → `fx991_<T>_Schritt_fuer_Schritt.html`, X ohne goldene Taste → `fx991DEX_<T>_Schritt_fuer_Schritt.html`). Modellabhängige Tastenfolgen stehen nicht mehr auf dem Blatt, sondern nur in der Anleitung; der Hinweiskasten enthält einen modellneutralen Tipp.
+- Unten: Lösung → `Loesung_fx991_CW_X_<T>.html`, Übung → `fx991_CW_X_Uebung_<T>.html` (Übung ohne Modellangabe).
+- Erzeugt mit `python3 _bauset/mk_cw_x.py` aus den CW- und X-Einzelblättern (Untertitel und Tipps je Thema in `TOPICS` dort). Verschlüsselte Lösungen (Grundlagen 8692, Lage_Streuung 6241) werden entschlüsselt, umgebaut und mit demselben Code neu verschlüsselt. Danach PDFs per Chromium-Druck (A4) und `python3 _bauset/mk_cw_x_gesamt.py` → `CAS/fx991/Taschenrechner_Fuehrerschein_Arbeitsblaetter_CW_X.pdf` (alle Blätter, mit Lesezeichen).
+- Neues Thema: CW- und X-Blatt wie bisher bauen, Thema in `TOPICS` von `mk_cw_x.py` ergänzen, Skripte erneut laufen lassen.
+- Die alten Einzelblätter `Arbeitsblatt_fx991_<T>` / `Arbeitsblatt_fx991DEX_<T>` bleiben liegen, damit QR-Codes auf bereits gedruckten Blättern weiter funktionieren.
 
 ## „Aktualisiere alles“ – Ablauf
 1. Repo `OlafKott/olafkott.github.io` einbinden und klonen, `CAS/_bauset/` nach `/home/claude/work` kopieren.

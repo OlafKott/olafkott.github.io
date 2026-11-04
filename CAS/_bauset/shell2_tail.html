@@ -51,9 +51,9 @@ const HASU=(m,t)=>!!UEB[gid(m,t)];
 const HASPDF=(m,t)=>!(NOPDF[m]||[]).includes(t);
 const NOPDF={{NOPDF}};
 const MODEL={
- cw:{name:'fx-991DE CW', pre:'',    pdf:'Arbeitsblatt_fx991_',    app:{{APP_CW}},
+ cw:{name:'fx-991DE CW', pre:'',    pdf:'Arbeitsblatt_fx991_CW_X_',    app:{{APP_CW}},
      apps:["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung"], homeMode:'home'},
- dx:{name:'fx-991DE X',  pre:'dx_', pdf:'Arbeitsblatt_fx991DEX_', app:{{APP_DX}},
+ dx:{name:'fx-991DE X',  pre:'dx_', pdf:'Arbeitsblatt_fx991_CW_X_', app:{{APP_DX}},
      apps:["Berechnungen","Komplexe Zahlen","Basis-N","Matrizen","Vektoren","Statistik","Verteilungen","Tabellenkalk.","Wertetabelle","Gleichungen"], homeMode:'menu'}
 };
 const gid=(m,t)=>MODEL[m].pre+t;

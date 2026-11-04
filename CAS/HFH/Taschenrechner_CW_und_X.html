@@ -15362,9 +15362,9 @@ const HASU=(m,t)=>!!UEB[gid(m,t)];
 const HASPDF=(m,t)=>!(NOPDF[m]||[]).includes(t);
 const NOPDF={"cw": [], "dx": []};
 const MODEL={
- cw:{name:'fx-991DE CW', pre:'',    pdf:'Arbeitsblatt_fx991_',    app:{"grund": 0, "stat": 1, "funk": 0, "gl": 5, "wt": 4, "abl": 0, "int": 0, "lgs": 5, "stufe": 0, "mat": 0, "kombi": 0, "binom": 2},
+ cw:{name:'fx-991DE CW', pre:'',    pdf:'Arbeitsblatt_fx991_CW_X_',    app:{"grund": 0, "stat": 1, "funk": 0, "gl": 5, "wt": 4, "abl": 0, "int": 0, "lgs": 5, "stufe": 0, "mat": 0, "kombi": 0, "binom": 2},
      apps:["Berechnung","Statistik","Verteilung","Tabellenk.","Wertetab.","Gleichung"], homeMode:'home'},
- dx:{name:'fx-991DE X',  pre:'dx_', pdf:'Arbeitsblatt_fx991DEX_', app:{"grund": 0, "stat": 5, "funk": 0, "gl": 9, "wt": 8, "abl": 0, "int": 0, "lgs": 9, "stufe": 3, "mat": 3, "kombi": 0, "binom": 6},
+ dx:{name:'fx-991DE X',  pre:'dx_', pdf:'Arbeitsblatt_fx991_CW_X_', app:{"grund": 0, "stat": 5, "funk": 0, "gl": 9, "wt": 8, "abl": 0, "int": 0, "lgs": 9, "stufe": 3, "mat": 3, "kombi": 0, "binom": 6},
      apps:["Berechnungen","Komplexe Zahlen","Basis-N","Matrizen","Vektoren","Statistik","Verteilungen","Tabellenkalk.","Wertetabelle","Gleichungen"], homeMode:'menu'}
 };
 const gid=(m,t)=>MODEL[m].pre+t;
