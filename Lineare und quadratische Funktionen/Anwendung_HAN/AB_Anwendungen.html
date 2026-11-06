@@ -133,13 +133,24 @@ table.tbl6{border-collapse:collapse;font-size:10pt}
 .hf-sol.on{display:block}
 .hf-sol .hf-t{font-weight:bold;color:#1D3FD0;font-size:9.5pt;margin-bottom:1mm}
 .hf-sol .card{background:#fff;border:1px solid #d9d2c5;border-radius:12px;padding:8px 14px 10px;overflow-x:auto}
-.hf-sol .eqg{font-size:12.5pt;row-gap:2mm;margin-left:1mm}
+.hf-sol .eqg{font-size:11.5pt;row-gap:2mm;margin-left:0;grid-template-columns:max-content max-content minmax(0,max-content) minmax(16mm,1fr);column-gap:1.8mm}
+.hf-sol .eqg .r,.hf-sol .eqg .l{white-space:normal}.hf-sol .eqg{grid-template-columns:minmax(0,max-content) max-content minmax(0,max-content) minmax(12mm,1fr)!important}
+.hf-sol .eqg .c{white-space:normal;max-width:none;font-size:9pt;line-height:1.2;padding-left:1.5mm}
+.hf-sol .card{padding:6px 8px 8px}
+.hf-sol .mxw{font-size:10.5pt}
+.hf-sol .mxg{column-gap:2.2mm;padding:0 2mm 0 1mm;grid-template-columns:repeat(3,minmax(7mm,auto)) 2mm minmax(7mm,auto)}
+.hf-sol .mxa{width:20mm}
+.hf-sol .mxa .af{font-size:9pt;left:7.5mm}
+.hf-sol .mxa .aplus{left:5.6mm}
+.hf-sol .mxg .spx{font-size:.55em}
+.hf-sol .down{padding-left:28mm}
+.hf-sol .resbox{font-size:11.5pt}
 .hf-sol .eqt{font-size:10.5pt}
 .stephd{font-weight:bold;font-size:10.5pt;color:#C80046;margin:3mm 0 1.2mm;border-left:4px solid #C80046;padding-left:2mm;font-family:Calibri,Carlito,Arial,sans-serif}
 .stephd:first-child{margin-top:.5mm}
 .resbox{display:inline-block;margin:2.5mm 0 1mm;padding:1.6mm 4mm;border:2px solid #1D3FD0;background:#EEF2FC;color:#1D3FD0;border-radius:8px;font-family:Cambria,Caladea,Georgia,serif;font-size:12.5pt;font-weight:bold}
 .tbl6 td.sv{display:table-cell;border-bottom:1px solid #9a9a9a;min-height:0}
-.viz{margin:2mm 0 1mm;border:1px solid #eadde2;border-radius:6px;display:inline-block;padding:1mm;background:#fff}.viz svg{display:block;max-width:100%;height:auto}
+.viz svg{width:100%!important}.viz{width:100%;box-sizing:border-box;margin:2mm 0 1mm;border:1px solid #eadde2;border-radius:6px;display:inline-block;padding:1mm;background:#fff}.viz svg{display:block;max-width:100%;height:auto}
 .sol-stamp{position:absolute;right:3mm;top:-3mm;background:#1D3FD0;color:#fff;font-weight:bold;font-size:9pt;border-radius:3mm;padding:.3mm 3mm;z-index:2}
 @media print{.hf-btn{display:none}}
 svg.g{display:block;height:auto}
