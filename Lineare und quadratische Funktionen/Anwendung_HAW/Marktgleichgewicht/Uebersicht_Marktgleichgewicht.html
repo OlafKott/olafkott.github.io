@@ -118,5 +118,4 @@ a.node:active{ transform:translateY(1px); box-shadow:0 1px 0 #9E0037; }
   <div class="more">🔒 Die Lösung öffnest du mit dem QR-Code unten auf Seite 3. Den Code bekommst du aus deinen Ergebnissen.</div></div>
 
 </div>
-<script>(function(){function send(){try{parent.postMessage({mggHeight:document.documentElement.scrollHeight},'*');}catch(e){}}window.addEventListener('load',send);window.addEventListener('resize',send);setTimeout(send,500);})();</script>
-</body></html>
+<script>(function(){function h(){var b=document.body,s=getComputedStyle(b);return Math.ceil(b.getBoundingClientRect().height+parseFloat(s.marginTop)+parseFloat(s.marginBottom));}function send(){try{var o={};o["mggHeight"]=h();parent.postMessage(o,"*");}catch(e){}}window.addEventListener("load",send);window.addEventListener("resize",send);if(window.ResizeObserver){new ResizeObserver(send).observe(document.body);}setTimeout(send,500);})();</script></body></html>
