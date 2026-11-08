@@ -70,7 +70,7 @@ h2 { font-size: 12.5pt; margin: 5mm 0 2mm; color: var(--c); }
 table { width: 100%; border-collapse: collapse; font-size: 10pt; }
 th, td { border: 0.3mm solid #8a8a8a; padding: 1.6mm 2mm; vertical-align: top; text-align: left; }
 th { background: var(--bg); font-weight: bold; }
-td.leer { height: 10mm; }
+td.leer { height: 6.6mm; }
 td.mitte, th.mitte { text-align: center; vertical-align: middle; }
 .klein { font-size: 9pt; color: #555; }
 .legende { font-size: 9.5pt; margin-top: 2mm; color: #333; }
@@ -154,16 +154,16 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
   /* ---------- 1 Terminwächter ---------- */
   const termin = seite("termin", "Terminwächter", "Zeitplan und Fortschrittsliste", `
     <div class="auftrag"><p>Sie behalten die Deadlines im Blick. Erinnern Sie die Gruppe <b>zwei Tage vor</b> jeder Deadline.</p>
-      <p>Tragen Sie jede Woche ein, wie weit jedes Mitglied ist.</p></div>
+      <p>Tragen Sie jede Woche ein, wie weit jedes Mitglied ist.</p><p>Am <b>Ende jeder Stunde</b> fragen Sie: Schaffen wir es bis Freitag? Wenn nicht, legen Sie gemeinsam fest, <b>bis wohin</b> jeder <b>zu Hause</b> weiterarbeitet. Fragen klären Sie in der nächsten Stunde.</p></div>
     <h2>Zeitplan</h2>
-    <table><tr><th style="width:12%">Kapitel</th><th>Thema</th><th style="width:22%">fertig bis</th><th style="width:22%">erinnert am</th></tr>
-      ${K.map(k => `<tr><td class="mitte">${k.nr}</td><td>${k.titel}</td><td>${k.deadline}</td><td></td></tr>`).join("")}
-    </table>
+    <table class="eng"><tr><th style="width:20%"></th>${K.map(k => `<th class="mitte">Kapitel ${k.nr}</th>`).join("")}</tr><tr><td>fertig bis</td>${K.map(k => `<td class="mitte"><b>${k.deadline}</b></td>`).join("")}</tr><tr><td>erinnert am</td>${K.map(() => `<td style="height:7mm"></td>`).join("")}</tr></table>
     <h2>Fortschrittsliste</h2>
     <table><tr><th>Name</th>${K.map(k => `<th class="mitte">Kap. ${k.nr}</th>`).join("")}</tr>
       ${rep(n, () => `<tr><td class="leer"></td>${K.map(() => `<td></td>`).join("")}</tr>`)}
     </table>
     <div class="legende"><b>✓</b> fertig &nbsp;·&nbsp; <b>½</b> angefangen &nbsp;·&nbsp; <b>–</b> noch nicht begonnen</div>
+    <h2>Check am Stundenende</h2>
+    <table><tr><th style="width:16%">Datum</th><th class="mitte" style="width:22%">Bis Freitag fertig?</th><th>Wenn nicht: zu Hause bis …</th></tr>${rep(3, () => `<tr><td style="height:6mm"></td><td class="mitte klein">ja &nbsp;/&nbsp; nein</td><td></td></tr>`)}</table>
     <h2>Heft des Heftprüfers</h2>
     <table><tr>${K.map(k => `<th class="mitte">Kap. ${k.nr}</th>`).join("")}</tr>
       <tr>${K.map(() => `<td class="leer mitte klein">geprüft am</td>`).join("")}</tr></table>`);
