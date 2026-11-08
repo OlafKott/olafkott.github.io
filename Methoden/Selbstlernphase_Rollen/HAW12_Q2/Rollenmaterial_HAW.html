@@ -20,13 +20,14 @@
 const EINSTELLUNGEN = {
   thema:    "Exponentialfunktionen und zusammengesetzte Funktionen",
   klasse:   "HAW 12",
-  zeitraum: "9.11. – 4.12.2026",
+  zeitraum: "9.11. – 11.12.2026",
   personen: 4,
   kapitel: [
     { nr: 1, titel: "Natürliche Exponentialfunktion", blaetter: ["Wachstum und Zerfall", "Die e-Funktion"], deadline: "Fr 13.11.", aufgaben: "AB Wachstum und Zerfall, Übung e-Funktion" },
     { nr: 2, titel: "Verkettung, e-Funktion ableiten", blaetter: ["Verkettung von Funktionen", "Die e-Funktion ableiten"], deadline: "Fr 20.11.", aufgaben: "Übung Verkettung S. 1 und 2, Übung e-Funktion ableiten" },
-    { nr: 3, titel: "Kettenregel, Produktregel", blaetter: ["Die Kettenregel", "Die Produktregel"], deadline: "Fr 27.11.", aufgaben: "Übung Kettenregel, Übung Produktregel (2 Seiten), Ableitungs-Training" },
-    { nr: 4, titel: "Produktlebenszyklus", blaetter: ["Der Produktlebenszyklus"], deadline: "Fr 4.12.", aufgaben: "Übung Produktlebenszyklus (3 Seiten)" },
+    { nr: 3, titel: "Kettenregel", blaetter: ["Die Kettenregel"], deadline: "Fr 27.11.", aufgaben: "Übung Kettenregel" },
+    { nr: 4, titel: "Produktregel", blaetter: ["Die Produktregel"], deadline: "Fr 4.12.", aufgaben: "Übung Produktregel (2 Seiten), Ableitungs-Training" },
+    { nr: 5, titel: "Produktlebenszyklus", blaetter: ["Der Produktlebenszyklus"], deadline: "Fr 11.12.", aufgaben: "Übung Produktlebenszyklus (3 Seiten)" },
   ],
 };
 /* ============================================================= */
@@ -85,7 +86,7 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
 
 
 @media print { body { background: #fff; } .seite { margin: 0; } }
-
+.hk tr.kz td { background: var(--c); color:#fff; padding:0.9mm 2mm; font-size:9.5pt; border-color:#1d1d1f; } .hk tr.kz td b { color:#fff; }
 .seite { padding: 11mm 13mm 12mm; }
 .page-container { height: calc(297mm - 23mm) !important; min-height: 0 !important; }
 .page-content { flex: 1 1 auto; min-height: 0; overflow: hidden; }
@@ -112,11 +113,11 @@ h2 { margin: 3.4mm 0 1.6mm !important; }
 .tl .lbl { font:bold 8pt Calibri,Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--c); margin-bottom:1mm; }
 .tl .track { position:relative; display:flex; justify-content:space-between; }
 .tl .track::before { content:""; position:absolute; left:4mm; right:4mm; top:3.4mm; height:1.1mm; background:repeating-linear-gradient(90deg,var(--c) 0 3mm,transparent 3mm 4.5mm); }
-.tl .st { position:relative; z-index:1; text-align:center; width:32mm; }
+.tl .st { position:relative; z-index:1; text-align:center; width:25mm; }
 .tl .st .dot { width:7.8mm; height:7.8mm; margin:0 auto; border-radius:50%; background:var(--c); color:#fff; border:0.45mm solid #1d1d1f; font:bold 11pt/7mm Calibri,Arial,sans-serif; box-shadow:.5mm .5mm 0 #1d1d1f; }
 .tl .st .k { font:9pt/1.2 Calibri,Arial,sans-serif; color:#333; margin-top:1mm; }
 .tl .st .k b { display:block; font-size:10pt; color:#1d1d1f; }
-.tl .st .k .ab { display:block; font-size:8.3pt; line-height:1.25; }
+.tl .st .k .ab { display:block; font-size:8pt; line-height:1.2; }
 .tl .st .k .ab::before { content:"▸ "; color:var(--c); }
 .tl .tk { flex:0 0 52mm; display:flex; align-items:center; gap:2.5mm; padding:2mm 3mm; border-left:0.6mm dashed #1d1d1f; background:#fff; }
 .tl .tk img { width:18mm; height:18mm; display:block; flex:0 0 18mm; }
@@ -186,9 +187,7 @@ h2 { margin: 3.4mm 0 1.6mm !important; }
   const heft = seite("heft", "Heftprüfer", "Checkliste für die Hefte", `
     <div class="auftrag"><p>Prüfen Sie <b>vor jeder Deadline</b> alle Hefte Ihrer Gruppe. Tragen Sie die Namen in die erste Spalte ein und setzen Sie ein Häkchen, wenn alles stimmt.</p>
       <p>Fehlt etwas? Sagen Sie es freundlich und konkret: „In Nr. 3 fehlt der Ansatz.“</p></div>
-    ${K.map(k => `<div class="kapitelblock"><h2>Kapitel ${k.nr}: ${k.titel} <span class="klein">· Aufgaben: ${k.aufgaben} · bis ${k.deadline}</span></h2>
-      <table class="eng"><tr><th style="width:30%">Name</th>${checks.map(c => `<th class="mitte">${c}</th>`).join("")}</tr>
-      ${rep(n, () => `<tr><td style="height:4.6mm"></td>${checks.map(() => `<td></td>`).join("")}</tr>`)}</table></div>`).join("")}`);
+    <table class="eng hk"><tr><th style="width:30%">Name</th>${checks.map(c => `<th class="mitte">${c}</th>`).join("")}</tr>${K.map(k => `<tr class="kz"><td colspan="${checks.length+1}"><b>${k.nr} · bis ${k.deadline}:</b> ${k.blaetter.join(", ")}</td></tr>${rep(n, () => `<tr><td style="height:5mm"></td>${checks.map(() => `<td></td>`).join("")}</tr>`)}`).join("")}</table>`);
 
   /* ---------- 3 Erklär-Checker ---------- */
   const erkl = n < 4 ? "" : seite("erkl", "Erklär-Checker", "Erklär-Protokoll", `
