@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>Lösungscodes · Exponentialfunktionen · HAW 12</title><style>
+:root{--rwb:#C80046;--rwb-d:#8E0032;--ink:#1d1d1f;--bg:#FBEAF0}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:var(--bg);background-image:radial-gradient(rgba(200,0,70,.13) 1.2px,transparent 1.3px);background-size:14px 14px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+.hero{position:relative;border:3px solid #1d1d1f;border-radius:18px;overflow:hidden;box-shadow:6px 6px 0 #1d1d1f;background:#f7c6d6;aspect-ratio:16/9;max-height:440px;width:100%}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .tx{position:absolute;left:4%;top:50%;transform:translateY(-50%);max-width:44%}
+.badge{display:inline-block;background:#fff;border:3px solid #1d1d1f;border-radius:12px;padding:6px 14px;box-shadow:4px 4px 0 #1d1d1f;font:700 clamp(14px,2.3vw,22px) Calibri,Arial,sans-serif;color:var(--rwb)}
+.hero h1{margin:12px 0 8px;font:900 italic clamp(26px,5.4vw,56px)/1.02 'Arial Black',Impact,Calibri,sans-serif;color:var(--rwb);text-transform:uppercase;text-shadow:3px 3px 0 #1d1d1f;-webkit-text-stroke:1px #1d1d1f}
+.hero .pill{display:inline-block;background:var(--rwb);color:#fff;border:3px solid #1d1d1f;border-radius:14px;padding:4px 14px;box-shadow:4px 4px 0 #1d1d1f;font:700 clamp(13px,2.1vw,20px) Calibri,Arial,sans-serif}
+.info{margin:22px 0 18px;background:#fff;border:2.5px solid #1d1d1f;border-radius:14px;box-shadow:4px 4px 0 #1d1d1f;padding:12px 18px;font-size:18px}
+.info b{color:var(--rwb)}
+.now{font:14px Calibri,Arial,sans-serif;color:#6b6b6b;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:18px}
+.card{background:#fff;border:3px solid #1d1d1f;border-radius:16px;box-shadow:5px 5px 0 #1d1d1f;overflow:hidden}
+.card .hd{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--rwb);color:#fff;border-bottom:3px solid #1d1d1f}
+.card .hd .ic{font-size:28px;line-height:1}
+.card .hd h2{margin:0;font:800 23px Calibri,Arial,sans-serif}
+.card .hd .sub{font:15px Calibri,Arial,sans-serif;opacity:.92}
+.card.locked .hd{background:#6b5a62}
+.card .bd{padding:12px 16px 16px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1.5px dashed #e3cdd6;font-size:18px}
+.row:last-child{border-bottom:0}
+.code{font:800 26px 'Courier New',monospace;letter-spacing:.18em;background:#FFF4D6;border:2.5px solid #1d1d1f;border-radius:10px;padding:2px 12px;box-shadow:3px 3px 0 #1d1d1f;white-space:nowrap}
+.card.locked .code{background:#eee;color:#999;filter:blur(.5px)}
+.lockbox{margin-top:10px;text-align:center;font:17px Calibri,Arial,sans-serif;color:#4a3a42;background:#f6eef1;border-radius:10px;padding:8px}
+.lockbox .cd{display:block;font:800 22px Calibri,Arial,sans-serif;color:var(--rwb);margin-top:2px}
+.card.open{animation:pop .6s ease}@keyframes pop{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+.rule{margin-top:22px;background:#fff;border:2.5px solid #1d1d1f;border-radius:14px;box-shadow:4px 4px 0 #1d1d1f;padding:12px 18px;font-size:17px}
+.rule h3{margin:0 0 6px;font:800 19px Calibri,Arial,sans-serif;color:var(--rwb)}
+.rule ol{margin:0;padding-left:22px}
+footer{margin-top:26px;text-align:center;font:13px Calibri,Arial,sans-serif;color:#7a6a72}
+@media (max-width:640px){.hero{aspect-ratio:auto;height:auto}.hero img{position:static;display:block;height:auto}.hero .tx{position:static;transform:none;max-width:none;padding:14px 16px 16px;background:#fff;border-top:3px solid #1d1d1f}.hero h1{font-size:30px}}
+</style></head><body><div class="wrap">
+<div class="hero"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3Im0Ox3gj1f2vj5QCiJnkZdETZf/hf_20261108_162222_f1e6282d-4f00-4224-ac64-7c7575f5ba3e.png" alt="" onerror="this.remove()"><div class="tx"><span class="badge">HAW 12 · Selbstlernphase</span><h1>Lösungs&shy;codes</h1><span class="pill">Exponentialfunktionen</span></div></div>
+<div class="info">Jeden <b>Freitag um 13:00 Uhr</b> wird der Code der Woche aufgedeckt. Die Codes der Vorwochen bleiben sichtbar.<div class="now" id="now"></div></div>
+<div class="grid" id="grid"></div>
+<div class="rule"><h3>Erst rechnen, dann aufdecken</h3><ol><li>Der Code ergibt sich aus euren eigenen Ergebnissen – probiert ihn zuerst selbst.</li><li>Passt er nicht: Fehler suchen – mit Tipp, Schablone und Gruppe.</li><li>Erst nach der Frist hier nachsehen. Was unklar bleibt, kommt auf die Fragenliste.</li></ol></div>
+<footer>RWB Essen · Mathematik · Exponentialfunktionen und zusammengesetzte Funktionen · HAW 12</footer></div>
+<script>
+const D=[{"t": "Woche 1", "s": "Natürliche Exponentialfunktion · Zusammengesetzte Funktionen", "u": "2026-11-13T12:00:00Z", "l": "Fr 13.11., 13:00 Uhr", "c": [["Arbeitsblatt Wachstum und Zerfall", "==QFXBEQ"], ["Übung Die e-Funktion", "==wHWFUR"], ["Übung Verkettung, Seite 1", "==QGaJUQ"], ["Übung Verkettung, Seite 2", "==wGRVkR"]]}, {"t": "Woche 2", "s": "e-Funktion ableiten · Kettenregel", "u": "2026-11-20T12:00:00Z", "l": "Fr 20.11., 13:00 Uhr", "c": [["Übung e-Funktion ableiten", "==gHRVkR"], ["Übung Kettenregel", "==wGRRER"]]}, {"t": "Woche 3", "s": "Produktregel", "u": "2026-11-27T12:00:00Z", "l": "Fr 27.11., 13:00 Uhr", "c": [["Übung Produktregel", "==wHUNUQ"]]}, {"t": "Woche 4", "s": "Produktlebenszyklus", "u": "2026-12-04T12:00:00Z", "l": "Fr 4.12., 13:00 Uhr", "c": [["Übung Produktlebenszyklus", "==AHQVkS"]]}];
+const S="rwb-haw12-q2";
+const dec=x=>{const b=atob(x.split('').reverse().join(''));let s='';for(let i=0;i<b.length;i++)s+=String.fromCharCode(b.charCodeAt(i)^S.charCodeAt(i%S.length));return s;};
+let off=0; // Abweichung Geraeteuhr -> Serverzeit
+const now=()=>Date.now()+off;
+async function sync(){try{const r=await fetch(location.href.split('#')[0]+'?t='+Date.now(),{method:'HEAD',cache:'no-store'});const d=r.headers.get('Date');if(d){const t=Date.parse(d);if(!isNaN(t))off=t-Date.now();}}catch(e){}}
+function fmt(ms){const s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60;
+ return (d?d+' Tg. ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
+const state=D.map(()=>null);
+function render(){const g=document.getElementById('grid'),t=now();
+ D.forEach((w,i)=>{const open=t>=Date.parse(w.u);let c=document.getElementById('w'+i);
+  if(!c){c=document.createElement('div');c.id='w'+i;g.appendChild(c);}
+  if(state[i]!==open){state[i]=open;c.className='card '+(open?'open':'locked');
+   c.innerHTML='<div class="hd"><span class="ic">'+(open?'🔓':'🔒')+'</span><div><h2>'+w.t+'</h2><div class="sub">'+w.s+'</div></div></div><div class="bd">'+
+   w.c.map(([n,x])=>'<div class="row"><span>'+n+'</span><span class="code">'+(open?dec(x):'••••')+'</span></div>').join('')+
+   (open?'':'<div class="lockbox">Wird aufgedeckt am <b>'+w.l+'</b><span class="cd" data-cd="'+i+'"></span></div>')+'</div>';}
+  const cd=c.querySelector('[data-cd]'); if(cd) cd.textContent='noch '+fmt(Date.parse(w.u)-t);
+ });
+ document.getElementById('now').textContent='Stand: '+new Date(t).toLocaleString('de-DE',{timeZone:'Europe/Berlin',weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+' Uhr';}
+render(); sync().then(render); setInterval(render,1000); setInterval(()=>sync(),300000);
+</script></body></html>

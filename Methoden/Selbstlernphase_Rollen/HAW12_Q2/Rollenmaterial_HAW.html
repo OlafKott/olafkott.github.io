@@ -47,6 +47,14 @@ body { background: #e8e8e8; font-family: Calibri, "Segoe UI", Arial, sans-serif;
 
 .kopf { display: flex; align-items: center; gap: 6mm; border-bottom: 0.8mm solid var(--c); padding-bottom: 3mm; }
 .kopf img { height: 12mm; }
+.zs { display:flex; align-items:center; gap:4mm; margin:3mm 0 0; }
+.zk { flex:1; display:flex; align-items:center; gap:1.5mm; }
+.zk div { flex:1; border:0.4mm solid var(--c); background:var(--bg); border-radius:1.5mm; padding:1mm 2mm; font-size:9.5pt; line-height:1.25; text-align:center; }
+.zk div b { color:var(--c); display:block; }
+.zk i { font-style:normal; color:var(--c); font-weight:bold; }
+.zq { display:flex; align-items:center; gap:2mm; font-size:8.5pt; line-height:1.25; color:#333; }
+.zq img { width:17mm; height:17mm; }
+.kapitelblock h2 { margin: 1.4mm 0 0.6mm !important; }
 .kopf img.rimg { height: 26mm; width: 38.7mm; object-fit: cover; border-radius: 1.5mm; border: 0.4mm solid #14110f; }
 .kopf .tx { flex: 1; }
 .kopf .rolle { font-size: 9pt; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
@@ -103,6 +111,7 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
     return `<div class="seite" style="--c:${s.c};--bg:${s.bg}"><div class="page-container"><div class="page-content">
       <div class="kopf"><img class="rimg" src="${s.img || ""}" alt=""><div class="tx">
         <div class="rolle">${rolle}</div><h1>${titel}</h1></div><img src="${LOGO}" alt="RWB Essen"></div>
+      <div class="zs"><div class="zk">${K.map(k => `<div><b>Kap. ${k.nr}</b><span>bis ${k.deadline}</span></div>`).join('<i>›</i>')}</div><div class="zq"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzIiIGhlaWdodD0iMTcyIiBjbGFzcz0ic2Vnbm8iPjxwYXRoIHRyYW5zZm9ybT0ic2NhbGUoNCkiIGNsYXNzPSJxcmxpbmUiIHN0cm9rZT0iIzFjMWMxYyIgZD0iTTEgMS41aDdtMSAwaDNtMSAwaDRtMiAwaDFtMiAwaDNtMiAwaDJtNCAwaDFtMSAwaDdtLTQxIDFoMW01IDBoMW0zIDBoMW0xIDBoMm0xIDBoMm0xIDBoMm0xIDBoMm0yIDBoMW00IDBoMm0yIDBoMW01IDBoMW0tNDEgMWgxbTEgMGgzbTEgMGgxbTMgMGgybTIgMGgybTEgMGgzbTIgMGgxbTMgMGgxbTEgMGg1bTEgMGgxbTEgMGgzbTEgMGgxbS00MSAxaDFtMSAwaDNtMSAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDNtMyAwaDFtMSAwaDFtMSAwaDNtNiAwaDFtMSAwaDNtMSAwaDFtLTQxIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoMm0xIDBoMW0yIDBoMm0zIDBoMW0xIDBoMW0yIDBoNG0yIDBoMW0xIDBoMW0xIDBoM20xIDBoMW0tNDEgMWgxbTUgMGgxbTEgMGgybTIgMGgybTEgMGgzbTEgMGgxbTQgMGgxbTQgMGgxbTEgMGgybTEgMGgxbTUgMGgxbS00MSAxaDdtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDdtLTMzIDFoMW0xIDBoMW0xIDBoMW0yIDBoMW0xIDBoMW0xIDBoMW0xIDBoMW00IDBoMW0xIDBoNW0tMzMgMWgxbTMgMGgxbTEgMGg0bTIgMGgxbTIgMGgzbTEgMGg0bTEgMGgxbTQgMGgxbTIgMGg2bTIgMGgxbS00MSAxaDFtMSAwaDFtMSAwaDFtMiAwaDZtMSAwaDFtMyAwaDFtMSAwaDRtMSAwaDFtMSAwaDRtMyAwaDFtMSAwaDJtMSAwaDFtLTQwIDFoMW0yIDBoMW0xIDBoM20yIDBoNm0xIDBoMm00IDBoM20xIDBoMW0yIDBoMW0xIDBoMW0xIDBoM20zIDBoMW0tNDEgMWgzbTIgMGgxbTEgMGgxbTEgMGgxbTEgMGgxbTMgMGgxbTEgMGgzbTEgMGgybTEgMGgxbTEgMGgxbTEgMGg1bTMgMGgybS0zNiAxaDFtMiAwaDJtMiAwaDJtOCAwaDRtNCAwaDFtLTI4IDFoMm0xIDBoMW0zIDBoNW0xIDBoMm0xIDBoMm0xIDBoMW0yIDBoMW0xIDBoMW0yIDBoMm0yIDBoMW0xIDBoNG0zIDBoMW0tMzggMWg0bTQgMGgxbTYgMGgybTEgMGgxbTEgMGg3bTIgMGg0bTEgMGgxbTIgMGgxbS00MSAxaDZtMyAwaDRtMiAwaDFtMSAwaDVtMSAwaDFtMiAwaDJtMSAwaDRtMiAwaDNtLTM3IDFoMW0yIDBoMW0xIDBoMm0xIDBoM20xIDBoMW0xIDBoM20yIDBoM20yIDBoMW0yIDBoM200IDBoMW0xIDBoMW0xIDBoMm0tNDEgMWgxbTEgMGgxbTEgMGgybTEgMGgxbTMgMGgxbTIgMGgxbTEgMGgzbTQgMGgxbTIgMGgybTMgMGgxbTEgMGg0bS0zNSAxaDFtMiAwaDRtMSAwaDFtMSAwaDFtMSAwaDFtMyAwaDFtMSAwaDVtMSAwaDJtNCAwaDFtMiAwaDFtNCAwaDFtLTM3IDFoMm0xIDBoMW0zIDBoMm0xIDBoMW0xIDBoMW0yIDBoMW0xIDBoMW0xIDBoMm0yIDBoM201IDBoMW0xIDBoMW0tMzMgMWgzbTEgMGgxbTMgMGgxbTEgMGgxbTMgMGgxbTUgMGgybTIgMGg1bTEgMGgzbTEgMGgybS00MSAxaDFtMiAwaDJtMiAwaDFtMiAwaDFtMyAwaDVtMyAwaDJtMSAwaDZtMyAwaDNtMyAwaDFtLTQxIDFoMm0xIDBoMW0xIDBoMm0yIDBoMW0yIDBoMW0xIDBoMW0yIDBoMW0yIDBoMm0xIDBoMm0xIDBoNW0xIDBoMW00IDBoMm0xIDBoMW0tMzkgMWgxbTIgMGgxbTIgMGgybTEgMGg0bTIgMGgybTIgMGg0bTIgMGgxbTEgMGgxbTIgMGgxbTIgMGgxbTEgMGgxbS0zNSAxaDFtMiAwaDNtMSAwaDRtMiAwaDJtMSAwaDRtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDNtMyAwaDRtLTM5IDFoNG00IDBoMW0xIDBoM20xIDBoM200IDBoMW0xIDBoMW0xIDBoMm0xIDBoMW0xIDBoMW0yIDBoMm0xIDBoM20tMzYgMWgybTggMGgxbTIgMGgxbTEgMGg0bTIgMGgzbTMgMGgzbTUgMGgxbS0zOSAxaDNtNCAwaDFtNSAwaDFtMSAwaDJtMSAwaDNtMSAwaDFtNCAwaDRtMSAwaDFtMiAwaDFtMiAwaDFtLTM3IDFoMW0xIDBoMW0zIDBoMm0xIDBoMW01IDBoMW0xIDBoNG0zIDBoMm05IDBoMW0tNDAgMWgxbTEgMGgxbTIgMGgxbTEgMGgxbTMgMGgybTEgMGgxbTQgMGgzbTQgMGgzbTEgMGgybTEgMGg0bTEgMGgxbTEgMGgxbS0zOSAxaDJtMSAwaDNtMSAwaDFtMSAwaDJtMSAwaDJtMSAwaDJtMSAwaDFtNSAwaDNtNCAwaDFtMSAwaDFtMSAwaDFtMiAwaDFtLTM4IDFoM20xIDBoMW0zIDBoMW0zIDBoMW0xIDBoMW0zIDBoMm0xIDBoMW0yIDBoM20xIDBoMW0xIDBoMW0zIDBoMW0xIDBoMW0tNDAgMWgzbTMgMGgxbTEgMGgxbTEgMGgxbTEgMGg2bTEgMGgxbTEgMGg0bTIgMGgybTIgMGg2bS0yOSAxaDNtMiAwaDJtMSAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDJtMSAwaDJtMSAwaDJtMyAwaDFtMyAwaDFtLTQxIDFoN20xIDBoMW0yIDBoMW0zIDBoM20yIDBoMW0yIDBoMm0yIDBoMW0yIDBoMW0xIDBoMW0xIDBoMW0xIDBoMW0yIDBoMm0tNDEgMWgxbTUgMGgxbTQgMGg0bTIgMGg0bTEgMGgxbTEgMGgxbTQgMGgxbTEgMGgybTMgMGgybS0zOCAxaDFtMSAwaDNtMSAwaDFtMSAwaDFtMSAwaDFtMiAwaDRtMSAwaDNtMSAwaDZtMSAwaDFtMSAwaDdtMSAwaDJtLTQxIDFoMW0xIDBoM20xIDBoMW0yIDBoNW0yIDBoMW00IDBoMW0xIDBoMW0xIDBoNG0xIDBoM20yIDBoMW0xIDBoMW0xIDBoMW0tNDAgMWgxbTEgMGgzbTEgMGgxbTQgMGgybTQgMGgxbTMgMGgzbTIgMGgybTEgMGgxbTIgMGgybTYgMGgxbS00MSAxaDFtNSAwaDFtMiAwaDNtMSAwaDFtMSAwaDJtNCAwaDRtMiAwaDFtMSAwaDJtMSAwaDFtMSAwaDJtMSAwaDFtMSAwaDJtLTQxIDFoN20xIDBoMW00IDBoM20xIDBoMW0zIDBoNG0xIDBoMW0yIDBoMW0yIDBoMW0yIDBoNSIvPjwvc3ZnPgo=" alt="QR"><span>Lösungscodes<br>jeden Fr ab 13:00</span></div></div>
       <div class="meta"><span><b>Name:</b> </span><span style="flex:0 0 25mm"><b>Klasse:</b> ${E.klasse}</span><span style="flex:0 0 30mm"><b>Gruppe:</b> </span></div>
       ${inhalt}
     </div><div class="page-footer"><span>RWB Essen · Exponentialfunktionen · Selbstlernphase ${E.zeitraum}</span><span>${rolle}</span></div></div></div>`;
@@ -137,7 +146,7 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
       <p>Fehlt etwas? Sagen Sie es freundlich und konkret: „In Nr. 3 fehlt der Ansatz.“</p></div>
     ${K.map(k => `<div class="kapitelblock"><h2>Kapitel ${k.nr}: ${k.titel} <span class="klein">· Aufgaben: ${k.aufgaben} · bis ${k.deadline}</span></h2>
       <table class="eng"><tr><th style="width:30%">Name</th>${checks.map(c => `<th class="mitte">${c}</th>`).join("")}</tr>
-      ${rep(n, () => `<tr><td style="height:6.6mm"></td>${checks.map(() => `<td></td>`).join("")}</tr>`)}</table></div>`).join("")}`);
+      ${rep(n, () => `<tr><td style="height:5.4mm"></td>${checks.map(() => `<td></td>`).join("")}</tr>`)}</table></div>`).join("")}`);
 
   /* ---------- 3 Erklär-Checker ---------- */
   const erkl = n < 4 ? "" : seite("erkl", "Erklär-Checker", "Erklär-Protokoll", `
@@ -148,7 +157,7 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
       „Was wäre, wenn sich die Zahl ändert?“ &nbsp;·&nbsp; „Kannst du das an der Skizze zeigen?“</div>
     <h2>Protokoll</h2>
     <table><tr><th style="width:9%">Kap.</th><th style="width:15%">Datum</th><th style="width:22%">Wer erklärt?</th><th>Welche Aufgabe?</th><th class="mitte" style="width:13%">sitzt ✓</th><th class="mitte" style="width:15%">nochmal ↻</th></tr>
-      ${rep(Math.min(K.length * n, 14), () => `<tr><td class="leer"></td><td></td><td></td><td></td><td></td><td></td></tr>`)}
+      ${rep(11, () => `<tr><td class="leer"></td><td></td><td></td><td></td><td></td><td></td></tr>`)}
     </table>`);
 
   /* ---------- 4 Kundschafter ---------- */
@@ -157,7 +166,7 @@ table.eng td, table.eng th { padding: 0.6mm 2mm; line-height: 1.35; }
       <p>Erklären Sie die Antwort danach Ihrer Gruppe.</p></div>
     <div class="leiter"><div><b>1</b> Selbst versuchen – als Gruppe</div><div><b>2</b> Andere Gruppe fragen</div><div><b>3</b> Auf der Liste lassen – wir klären es ab dem 13.12.</div></div>
     <table><tr><th style="width:7%">Nr.</th><th style="width:15%">Kap. / Aufg.</th><th>Unsere Frage</th><th class="mitte" style="width:15%">andere Gruppe gefragt ✓</th><th style="width:26%">Antwort – Gruppe informiert ✓</th></tr>
-      ${rep(11, i => `<tr><td class="mitte" style="height:14mm">${i + 1}</td><td></td><td></td><td></td><td></td></tr>`)}
+      ${rep(9, i => `<tr><td class="mitte" style="height:14mm">${i + 1}</td><td></td><td></td><td></td><td></td></tr>`)}
     </table>`);
 
   /* ---------- 5 Fehlerdetektiv (nur 5er-Gruppe) ---------- */
